@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210804;
+namespace RectorPrefix20210805;
 
 if (\class_exists('SC_mod_web_ts_index')) {
     return;

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer;
 
-use RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor;
-use RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\Preprocessing\StandardPreprocessor;
-class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface
+use RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor;
+use RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Preprocessing\StandardPreprocessor;
+class Tokenizer implements \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface
 {
     const TOKEN_WHITESPACE = ',^[ \\t\\n]+,s';
     const TOKEN_COMMENT_ONELINE = ',^(#|/)[^\\n]*,';
@@ -53,10 +53,10 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param string            $eolChar      Line ending to use for tokenizing.
      * @param Preprocessor|null $preprocessor Option to preprocess file contents before actual tokenizing
      */
-    public function __construct(string $eolChar = "\n", ?\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor $preprocessor = null)
+    public function __construct(string $eolChar = "\n", ?\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor $preprocessor = null)
     {
         if ($preprocessor === null) {
-            $preprocessor = new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\Preprocessing\StandardPreprocessor($eolChar);
+            $preprocessor = new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Preprocessing\StandardPreprocessor($eolChar);
         }
         $this->eolChar = $eolChar;
         $this->preprocessor = $preprocessor;
@@ -69,39 +69,39 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
     public function tokenizeString($inputString) : array
     {
         $inputString = $this->preprocessor->preprocess($inputString);
-        $tokens = new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder();
-        $state = new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder();
+        $tokens = new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder();
+        $state = new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder();
         $lines = \explode($this->eolChar, $inputString);
-        $scanner = new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\Scanner($lines);
+        $scanner = new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Scanner($lines);
         foreach ($scanner as $line) {
             $column = 1;
             if ($this->tokenizeMultilineToken($tokens, $state, $line)) {
                 continue;
             }
             if (\trim($line->value()) === '') {
-                $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_EMPTY_LINE, $this->eolChar, $line->index());
+                $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_EMPTY_LINE, $this->eolChar, $line->index());
                 continue;
             }
             if ($tokens->count() !== 0) {
-                $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $this->eolChar, (int) ($line->index() - 1));
+                $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $this->eolChar, (int) ($line->index() - 1));
                 $column += 1;
             }
             if ($matches = $line->scan(self::TOKEN_WHITESPACE)) {
-                $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $matches[0], $line->index());
+                $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $matches[0], $line->index());
                 $column += \strlen($matches[0]);
             }
             if ($line->peek(self::TOKEN_COMMENT_MULTILINE_BEGIN)) {
-                $state->startMultilineToken(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_MULTILINE, $line->value(), $line->index(), $column);
+                $state->startMultilineToken(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_MULTILINE, $line->value(), $line->index(), $column);
                 continue;
             }
             if ($this->tokenizeSimpleStatements($tokens, $line) || $this->tokenizeObjectOperation($tokens, $state, $line) || $line->length() === 0) {
                 continue;
             }
-            throw new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenizerException('Cannot tokenize line "' . $line . '"', 1403084444, null, $line->index());
+            throw new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenizerException('Cannot tokenize line "' . $line . '"', 1403084444, null, $line->index());
         }
         $currentTokenType = $state->currentTokenType();
         if ($currentTokenType !== null) {
-            throw new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenizerException("Unterminated {$currentTokenType}!", 1403084445, null, \count($lines) - 1);
+            throw new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenizerException("Unterminated {$currentTokenType}!", 1403084445, null, \count($lines) - 1);
         }
         return $tokens->build()->getArrayCopy();
     }
@@ -126,19 +126,19 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
     {
         switch ($operator) {
             case '=':
-                return \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_ASSIGNMENT;
+                return \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_ASSIGNMENT;
             case '<':
-                return \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_COPY;
+                return \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_COPY;
             case '=<':
-                return \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_REFERENCE;
+                return \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_REFERENCE;
             case ':=':
-                return \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_MODIFY;
+                return \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_MODIFY;
             case '>':
-                return \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_DELETE;
+                return \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OPERATOR_DELETE;
         }
         // It should not be possible in any case to reach this point
         // @codeCoverageIgnoreStart
-        throw new \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\UnknownOperatorException('Unknown binary operator "' . $operator . '"!');
+        throw new \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\UnknownOperatorException('Unknown binary operator "' . $operator . '"!');
         // @codeCoverageIgnoreEnd
     }
     /**
@@ -147,30 +147,30 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param $currentLine
      * @throws UnknownOperatorException
      */
-    private function tokenizeBinaryObjectOperation(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, array $matches, int $currentLine) : void
+    private function tokenizeBinaryObjectOperation(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, array $matches, int $currentLine) : void
     {
         $tokens->append($this->getTokenTypeForBinaryOperator($matches[3]), $matches[3], $currentLine);
         if ($matches[4]) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $matches[4], $currentLine);
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $matches[4], $currentLine);
         }
         if (($matches[3] === '<' || $matches[3] === '=<') && \preg_match(self::TOKEN_OBJECT_REFERENCE, $matches[5])) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER, $matches[5], $currentLine);
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER, $matches[5], $currentLine);
             return;
         }
         if ($matches[3] == ':=' && \preg_match(self::TOKEN_OBJECT_MODIFIER, $matches[5], $subMatches)) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_MODIFIER, $matches[5], $currentLine, $subMatches);
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_MODIFIER, $matches[5], $currentLine, $subMatches);
             return;
         }
         if (\preg_match(self::TOKEN_OBJECT_NAME, $matches[5])) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_CONSTRUCTOR, $matches[5], $currentLine);
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_CONSTRUCTOR, $matches[5], $currentLine);
             return;
         }
         if ($matches[3] == '>' && \preg_match(self::TOKEN_COMMENT_ONELINE, $matches[5])) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_ONELINE, $matches[5], $currentLine);
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_ONELINE, $matches[5], $currentLine);
             return;
         }
         if (\strlen($matches[5])) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_RIGHTVALUE, $matches[5], $currentLine);
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_RIGHTVALUE, $matches[5], $currentLine);
             return;
         }
     }
@@ -180,13 +180,13 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param ScannerLine           $line
      * @return bool
      */
-    private function tokenizeMultilineToken(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
+    private function tokenizeMultilineToken(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
     {
-        if ($state->currentTokenType() === \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_MULTILINE) {
+        if ($state->currentTokenType() === \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_MULTILINE) {
             $this->tokenizeMultilineComment($tokens, $state, $line);
             return \true;
         }
-        if ($state->currentTokenType() === \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_RIGHTVALUE_MULTILINE) {
+        if ($state->currentTokenType() === \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_RIGHTVALUE_MULTILINE) {
             $this->tokenizeMultilineAssignment($tokens, $state, $line);
             return \true;
         }
@@ -198,7 +198,7 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param ScannerLine           $line
      * @return void
      */
-    private function tokenizeMultilineComment(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
+    private function tokenizeMultilineComment(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
     {
         if ($matches = $line->scan(self::TOKEN_WHITESPACE)) {
             $state->appendToToken($matches[0]);
@@ -215,7 +215,7 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param $state
      * @param $line
      */
-    private function tokenizeMultilineAssignment(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
+    private function tokenizeMultilineAssignment(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : void
     {
         if ($line->peek(',^\\s*\\),')) {
             $token = $state->endMultilineToken();
@@ -229,9 +229,9 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param ScannerLine        $line
      * @return bool
      */
-    private function tokenizeSimpleStatements(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
+    private function tokenizeSimpleStatements(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
     {
-        $simpleTokens = [self::TOKEN_COMMENT_ONELINE => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_ONELINE, self::TOKEN_NESTING_END => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_BRACE_CLOSE, self::TOKEN_CONDITION_ELSE => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION_ELSE, self::TOKEN_CONDITION_END => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION_END, self::TOKEN_CONDITION => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION, self::TOKEN_INCLUDE_STATEMENT => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_INCLUDE, self::TOKEN_INCLUDE_NEW_STATEMENT => \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_INCLUDE_NEW];
+        $simpleTokens = [self::TOKEN_COMMENT_ONELINE => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_COMMENT_ONELINE, self::TOKEN_NESTING_END => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_BRACE_CLOSE, self::TOKEN_CONDITION_ELSE => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION_ELSE, self::TOKEN_CONDITION_END => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION_END, self::TOKEN_CONDITION => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_CONDITION, self::TOKEN_INCLUDE_STATEMENT => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_INCLUDE, self::TOKEN_INCLUDE_NEW_STATEMENT => \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_INCLUDE_NEW];
         foreach ($simpleTokens as $pattern => $type) {
             if ($matches = $line->scan($pattern)) {
                 $tokens->append($type, $matches[0], $line->index(), $matches);
@@ -246,20 +246,20 @@ class Tokenizer implements \RectorPrefix20210804\Helmich\TypoScriptParser\Tokeni
      * @param $line
      * @return bool
      */
-    private function tokenizeObjectOperation(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
+    private function tokenizeObjectOperation(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder $tokens, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\MultilineTokenBuilder $state, \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\ScannerLine $line) : bool
     {
         if ($matches = $line->scan(self::TOKEN_OPERATOR_LINE)) {
-            $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER, $matches[1], $line->index());
+            $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_OBJECT_IDENTIFIER, $matches[1], $line->index());
             if ($matches[2]) {
-                $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $matches[2], $line->index());
+                $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_WHITESPACE, $matches[2], $line->index());
             }
             $operators = ['=', ':=', '<', '<=', '>', '=<'];
             if (\in_array($matches[3], $operators)) {
                 $this->tokenizeBinaryObjectOperation($tokens, $matches, $line->index());
             } elseif ($matches[3] == '{') {
-                $tokens->append(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_BRACE_OPEN, $matches[3], $line->index());
+                $tokens->append(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_BRACE_OPEN, $matches[3], $line->index());
             } elseif ($matches[3] == '(') {
-                $state->startMultilineToken(\RectorPrefix20210804\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_RIGHTVALUE_MULTILINE, '', $line->index(), $tokens->currentColumn());
+                $state->startMultilineToken(\RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\TokenInterface::TYPE_RIGHTVALUE_MULTILINE, '', $line->index(), $tokens->currentColumn());
             }
             return \true;
         }

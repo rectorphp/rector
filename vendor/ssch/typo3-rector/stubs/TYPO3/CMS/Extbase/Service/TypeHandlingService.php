@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210804\TYPO3\CMS\Extbase\Service;
+namespace RectorPrefix20210805\TYPO3\CMS\Extbase\Service;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Service\\TypeHandlingService')) {
     return;

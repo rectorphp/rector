@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210804;
+namespace RectorPrefix20210805;
 
 if (\class_exists('Tx_Extbase_SignalSlot_Dispatcher')) {
     return;

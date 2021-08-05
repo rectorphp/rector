@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210804;
+namespace RectorPrefix20210805;
 
-use RectorPrefix20210804\Nette\Utils\Json;
+use RectorPrefix20210805\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\Configuration\Option;
@@ -11,8 +11,8 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20210804\Symplify\PackageBuilder\Console\ShellCode;
-use RectorPrefix20210804\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210805\Symplify\PackageBuilder\Console\ShellCode;
+use RectorPrefix20210805\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost
@@ -21,13 +21,13 @@ use RectorPrefix20210804\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 \gc_disable();
 \define('__RECTOR_RUNNING__', \true);
 // Require Composer autoload.php
-$autoloadIncluder = new \RectorPrefix20210804\AutoloadIncluder();
+$autoloadIncluder = new \RectorPrefix20210805\AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 // load extracted PHPStan with its own preload.php
 $extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php';
 if (\file_exists($extractedPhpstanAutoload)) {
     require_once $extractedPhpstanAutoload;
-} elseif (\RectorPrefix20210804\should_include_preload()) {
+} elseif (\RectorPrefix20210805\should_include_preload()) {
     require_once __DIR__ . '/../preload.php';
 }
 require_once __DIR__ . '/../src/constants.php';
@@ -43,18 +43,18 @@ try {
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (\Throwable $throwable) {
     // for json output
-    $argvInput = new \RectorPrefix20210804\Symfony\Component\Console\Input\ArgvInput();
+    $argvInput = new \RectorPrefix20210805\Symfony\Component\Console\Input\ArgvInput();
     $outputFormat = $argvInput->getParameterOption('--' . \Rector\Core\Configuration\Option::OUTPUT_FORMAT);
     // report fatal error in json format
     if ($outputFormat === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
-        echo \RectorPrefix20210804\Nette\Utils\Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
+        echo \RectorPrefix20210805\Nette\Utils\Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
     } else {
         // report fatal errors in console format
-        $symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210804\Symplify\PackageBuilder\Reflection\PrivatesCaller());
+        $symfonyStyleFactory = new \Rector\Core\Console\Style\SymfonyStyleFactory(new \RectorPrefix20210805\Symplify\PackageBuilder\Reflection\PrivatesCaller());
         $symfonyStyle = $symfonyStyleFactory->create();
         $symfonyStyle->error($throwable->getMessage());
     }
-    exit(\RectorPrefix20210804\Symplify\PackageBuilder\Console\ShellCode::ERROR);
+    exit(\RectorPrefix20210805\Symplify\PackageBuilder\Console\ShellCode::ERROR);
 }
 /** @var ConsoleApplication $application */
 $application = $container->get(\Rector\Core\Console\ConsoleApplication::class);
@@ -109,7 +109,7 @@ final class AutoloadIncluder
         require_once $filePath;
     }
 }
-\class_alias('RectorPrefix20210804\\AutoloadIncluder', 'AutoloadIncluder', \false);
+\class_alias('RectorPrefix20210805\\AutoloadIncluder', 'AutoloadIncluder', \false);
 // load local php-parser only in prefixed version or development repository
 function should_include_preload() : bool
 {

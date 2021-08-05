@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210804;
+namespace RectorPrefix20210805;
 
 if (\interface_exists('tx_form_System_Postprocessor_Interface')) {
     return;

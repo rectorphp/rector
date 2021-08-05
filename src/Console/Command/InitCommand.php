@@ -8,15 +8,15 @@ use Rector\Core\Contract\Template\TemplateResolverInterface;
 use Rector\Core\Exception\Template\TemplateTypeNotFoundException;
 use Rector\Core\Template\DefaultResolver;
 use Stringable;
-use RectorPrefix20210804\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210804\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210804\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210804\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210804\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210804\Symplify\PackageBuilder\Console\ShellCode;
-use RectorPrefix20210804\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20210804\Symplify\SmartFileSystem\SmartFileSystem;
-final class InitCommand extends \RectorPrefix20210804\Symfony\Component\Console\Command\Command
+use RectorPrefix20210805\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210805\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210805\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210805\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210805\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210805\Symplify\PackageBuilder\Console\ShellCode;
+use RectorPrefix20210805\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20210805\Symplify\SmartFileSystem\SmartFileSystem;
+final class InitCommand extends \RectorPrefix20210805\Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Symplify\SmartFileSystem\FileSystemGuard
@@ -37,7 +37,7 @@ final class InitCommand extends \RectorPrefix20210804\Symfony\Component\Console\
     /**
      * @param TemplateResolverInterface[] $templateResolvers
      */
-    public function __construct(\RectorPrefix20210804\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20210804\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210804\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $templateResolvers)
+    public function __construct(\RectorPrefix20210805\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20210805\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210805\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $templateResolvers)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->smartFileSystem = $smartFileSystem;
@@ -48,7 +48,7 @@ final class InitCommand extends \RectorPrefix20210804\Symfony\Component\Console\
     protected function configure() : void
     {
         $this->setDescription('Generate rector.php configuration file');
-        $this->addOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE, null, \RectorPrefix20210804\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.', \Rector\Core\Template\DefaultResolver::TYPE);
+        $this->addOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE, null, \RectorPrefix20210805\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.', \Rector\Core\Template\DefaultResolver::TYPE);
     }
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
@@ -67,7 +67,7 @@ final class InitCommand extends \RectorPrefix20210804\Symfony\Component\Console\
             $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
             $this->symfonyStyle->success('"rector.php" config file was added');
         }
-        return \RectorPrefix20210804\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+        return \RectorPrefix20210805\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
     }
     private function resolveTemplateFilePathByType(string $templateType) : string
     {

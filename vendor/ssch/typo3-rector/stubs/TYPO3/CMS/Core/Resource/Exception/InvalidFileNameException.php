@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210804\TYPO3\CMS\Core\Resource\Exception;
+namespace RectorPrefix20210805\TYPO3\CMS\Core\Resource\Exception;
 
 use Exception;
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileNameException')) {

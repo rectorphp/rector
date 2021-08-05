@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210804\Symfony\Component\HttpFoundation\Session\Storage;
+namespace RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage;
 
-use RectorPrefix20210804\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210805\Symfony\Component\HttpFoundation\Request;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210804\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage::class);
+\class_exists(\RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage::class);
 /**
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
-class NativeSessionStorageFactory implements \RectorPrefix20210804\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
+class NativeSessionStorageFactory implements \RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
 {
     private $options;
     private $handler;
@@ -25,16 +25,16 @@ class NativeSessionStorageFactory implements \RectorPrefix20210804\Symfony\Compo
     /**
      * @see NativeSessionStorage constructor.
      */
-    public function __construct(array $options = [], $handler = null, \RectorPrefix20210804\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null, bool $secure = \false)
+    public function __construct(array $options = [], $handler = null, \RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null, bool $secure = \false)
     {
         $this->options = $options;
         $this->handler = $handler;
         $this->metaBag = $metaBag;
         $this->secure = $secure;
     }
-    public function createStorage(?\RectorPrefix20210804\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210804\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+    public function createStorage(?\RectorPrefix20210805\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
     {
-        $storage = new \RectorPrefix20210804\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage($this->options, $this->handler, $this->metaBag);
+        $storage = new \RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage($this->options, $this->handler, $this->metaBag);
         if ($this->secure && $request && $request->isSecure()) {
             $storage->setOptions(['cookie_secure' => \true]);
         }
