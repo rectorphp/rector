@@ -17,19 +17,24 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeFactory
 {
     public function __construct(
-        private UnionTypeFactory $unionTypeFactory
+        private UnionTypeFactory $unionTypeFactory,
+        private PhpVersionProvider $phpVersionProvider
     ) {
     }
 
@@ -165,6 +170,22 @@ final class TypeFactory
     private function normalizeObjectTypes(Type $type): Type
     {
         return TypeTraverser::map($type, function (Type $traversedType, callable $traverseCallback): Type {
+            if ($this->isStatic($traversedType) && $this->phpVersionProvider->isAtLeastPhpVersion(
+                PhpVersionFeature::STATIC_RETURN_TYPE
+            )) {
+                /** @var ObjectType $traversedType */
+                return new ThisType($traversedType->getClassName());
+            }
+
+            if ($this->isStatic($traversedType)) {
+                return new MixedType();
+            }
+
+            if ($this->isSelf($traversedType)) {
+                /** @var ObjectType $traversedType */
+                return new SelfObjectType($traversedType->getClassName());
+            }
+
             if ($traversedType instanceof ShortenedObjectType) {
                 return new FullyQualifiedObjectType($traversedType->getFullyQualifiedName());
             }
@@ -175,5 +196,15 @@ final class TypeFactory
 
             return $traverseCallback($traversedType);
         });
+    }
+
+    private function isStatic(Type $type): bool
+    {
+        return $type instanceof ObjectType && $type->getClassName() === 'static';
+    }
+
+    private function isSelf(Type $type): bool
+    {
+        return $type instanceof ObjectType && $type->getClassName() === 'self';
     }
 }
