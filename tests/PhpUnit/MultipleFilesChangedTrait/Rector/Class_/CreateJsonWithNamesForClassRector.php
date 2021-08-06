@@ -21,6 +21,9 @@ final class CreateJsonWithNamesForClassRector extends AbstractRector
         return new RuleDefinition('Creates json with names for class', []);
     }
 
+    /**
+     * @return array<class-string<Node>>
+     */
     public function getNodeTypes(): array
     {
         return [Class_::class];

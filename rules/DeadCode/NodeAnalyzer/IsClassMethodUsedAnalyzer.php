@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Array_;
@@ -13,6 +12,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -144,7 +144,7 @@ final class IsClassMethodUsedAnalyzer
 
     private function isPrivateAbstractMethodInTrait(ClassMethod $classMethod, ?string $classMethodName): bool
     {
-        if (null === $classMethodName) {
+        if ($classMethodName === null) {
             return false;
         }
 
@@ -154,7 +154,7 @@ final class IsClassMethodUsedAnalyzer
         }
 
         $classReflection = $scope->getClassReflection();
-        if (null === $classReflection) {
+        if (! $classReflection instanceof ClassReflection) {
             return false;
         }
 

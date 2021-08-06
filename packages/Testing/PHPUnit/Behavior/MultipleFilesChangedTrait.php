@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Testing\PHPUnit\Behavior;
 
+use Nette\Utils\FileSystem;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -31,14 +32,14 @@ trait MultipleFilesChangedTrait
         if (trim($expectedContent)) {
             $fixtureContent .= $separator . $expectedContent;
         }
-        file_put_contents($fixturePath, $fixtureContent);
+        FileSystem::write($fixturePath, $fixtureContent);
         $newFileInfo = new SmartFileInfo($fixturePath);
         $this->doTestFileInfo($newFileInfo, $allowMatches);
 
         $this->checkAdditionalChanges($expectedFileChanges);
 
         if (file_exists($fixturePath)) {
-            unlink($fixturePath);
+            FileSystem::delete($fixturePath);
         }
     }
 
@@ -59,7 +60,7 @@ trait MultipleFilesChangedTrait
             $input = isset($additionalFileChange[1]) ? trim($additionalFileChange[1]) : null;
             if ($input) {
                 $this->createFixtureDir($fullPath);
-                file_put_contents($fullPath, $input);
+                FileSystem::write($fullPath, $input);
             }
 
             $expectedFileChanges[$fullPath] = isset($additionalFileChange[2]) ? trim($additionalFileChange[2]) : '';
@@ -84,7 +85,7 @@ trait MultipleFilesChangedTrait
             $realFileContent = $addedFile ? trim($addedFile->getFileContent()) : null;
             $this->assertSame($expectedFileChange, $realFileContent);
             if (file_exists($path)) {
-                unlink($path);
+                FileSystem::delete($path);
             }
         }
     }
