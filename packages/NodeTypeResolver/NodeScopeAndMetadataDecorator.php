@@ -10,7 +10,6 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeCollector\NodeVisitor\NodeCollectorNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FileNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
@@ -24,7 +23,6 @@ final class NodeScopeAndMetadataDecorator
         private CloningVisitor $cloningVisitor,
         private FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         private NamespaceNodeVisitor $namespaceNodeVisitor,
-        private NodeCollectorNodeVisitor $nodeCollectorNodeVisitor,
         private PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         private StatementNodeVisitor $statementNodeVisitor,
         private NodeConnectingVisitor $nodeConnectingVisitor,
@@ -78,7 +76,6 @@ final class NodeScopeAndMetadataDecorator
         // this split is needed, so nodes have names, classes and namespaces
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->statementNodeVisitor);
-        $nodeTraverser->addVisitor($this->nodeCollectorNodeVisitor);
 
         return $nodeTraverser->traverse($nodes);
     }

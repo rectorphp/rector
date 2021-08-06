@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Core\NodeManipulator;
+namespace Rector\Core\NodeManipulator\Dependency;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -15,16 +15,14 @@ use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class ChildAndParentClassManipulator
+final class DependencyClassMethodDecorator
 {
     public function __construct(
         private NodeFactory $nodeFactory,
         private NodeNameResolver $nodeNameResolver,
-        private NodeRepository $nodeRepository,
         private PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
         private ReflectionProvider $reflectionProvider,
         private AstResolver $astResolver,
@@ -35,8 +33,11 @@ final class ChildAndParentClassManipulator
     /**
      * Add "parent::__construct(X, Y, Z)" where needed
      */
-    public function completeParentConstructor(Class_ $class, ClassMethod $classMethod, Scope $scope): void
-    {
+    public function decorateConstructorWithParentDependencies(
+        Class_ $class,
+        ClassMethod $classMethod,
+        Scope $scope
+    ): void {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
             return;
@@ -65,38 +66,6 @@ final class ChildAndParentClassManipulator
             $this->completeParentConstructorBasedOnParentNode($classMethod, $parentConstructorClassMethod);
 
             break;
-        }
-    }
-
-    public function completeChildConstructors(Class_ $class, ClassMethod $constructorClassMethod): void
-    {
-        $className = $this->nodeNameResolver->getName($class);
-        if ($className === null) {
-            return;
-        }
-
-        $childClasses = $this->nodeRepository->findChildrenOfClass($className);
-
-        foreach ($childClasses as $childClass) {
-            $childConstructorClassMethod = $childClass->getMethod(MethodName::CONSTRUCT);
-            if (! $childConstructorClassMethod instanceof ClassMethod) {
-                continue;
-            }
-
-            // replicate parent parameters
-            $childConstructorClassMethod->params = array_merge(
-                $constructorClassMethod->params,
-                $childConstructorClassMethod->params
-            );
-
-            $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams(
-                $constructorClassMethod->params
-            );
-
-            $childConstructorClassMethod->stmts = array_merge(
-                [new Expression($parentConstructCallNode)],
-                (array) $childConstructorClassMethod->stmts
-            );
         }
     }
 

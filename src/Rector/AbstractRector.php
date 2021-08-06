@@ -37,7 +37,6 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Validation\InfiniteLoopValidator;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -93,8 +92,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     protected VisibilityManipulator $visibilityManipulator;
 
     protected ValueResolver $valueResolver;
-
-    protected NodeRepository $nodeRepository;
 
     protected BetterNodeFinder $betterNodeFinder;
 
@@ -161,7 +158,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         CurrentNodeProvider $currentNodeProvider,
         Skipper $skipper,
         ValueResolver $valueResolver,
-        NodeRepository $nodeRepository,
         BetterNodeFinder $betterNodeFinder,
         NodeComparator $nodeComparator,
         CurrentFileProvider $currentFileProvider,
@@ -189,7 +185,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->currentNodeProvider = $currentNodeProvider;
         $this->skipper = $skipper;
         $this->valueResolver = $valueResolver;
-        $this->nodeRepository = $nodeRepository;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
