@@ -4,20 +4,12 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer;
-use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,17 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
+     * @var \Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer
      */
-    private $arrayCallableMethodMatcher;
-    /**
-     * @var \Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer
-     */
-    private $callCollectionAnalyzer;
-    public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer $callCollectionAnalyzer)
+    private $isClassMethodUsedAnalyzer;
+    public function __construct(\Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer)
     {
-        $this->arrayCallableMethodMatcher = $arrayCallableMethodMatcher;
-        $this->callCollectionAnalyzer = $callCollectionAnalyzer;
+        $this->isClassMethodUsedAnalyzer = $isClassMethodUsedAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -81,21 +68,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
-            return null;
-        }
-        $classMethodName = $this->nodeNameResolver->getName($node);
-        // 1. direct normal calls
-        if ($this->isClassMethodCalledInLocalMethodCall($class, $classMethodName)) {
-            return null;
-        }
-        // 2. direct static calls
-        if ($this->isClassMethodUsedInLocalStaticCall($class, $classMethodName)) {
-            return null;
-        }
-        // 3. magic array calls!
-        if ($this->isClassMethodCalledInLocalArrayCall($class, $node)) {
+        if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node)) {
             return null;
         }
         $this->removeNode($node);
@@ -130,68 +103,5 @@ CODE_SAMPLE
             return \true;
         }
         return $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CALL);
-    }
-    private function isClassMethodUsedInLocalStaticCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
-    {
-        $className = $this->getName($class);
-        /** @var StaticCall[] $staticCalls */
-        $staticCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\StaticCall::class);
-        return $this->callCollectionAnalyzer->isExists($staticCalls, $classMethodName, $className);
-    }
-    private function isClassMethodCalledInLocalMethodCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
-    {
-        $className = $this->getName($class);
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\MethodCall::class);
-        return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);
-    }
-    private function isInArrayMap(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Array_ $array) : bool
-    {
-        $parentFuncCall = $this->betterNodeFinder->findParentType($array, \PhpParser\Node\Expr\FuncCall::class);
-        if (!$parentFuncCall instanceof \PhpParser\Node\Expr\FuncCall) {
-            return \false;
-        }
-        if (!$this->nodeNameResolver->isName($parentFuncCall->name, 'array_map')) {
-            return \false;
-        }
-        if (\count($array->items) !== 2) {
-            return \false;
-        }
-        if (!$array->items[1] instanceof \PhpParser\Node\Expr\ArrayItem) {
-            return \false;
-        }
-        $value = $this->valueResolver->getValue($array->items[1]->value);
-        if (!\is_string($value)) {
-            return \false;
-        }
-        return $class->getMethod($value) instanceof \PhpParser\Node\Stmt\ClassMethod;
-    }
-    private function isClassMethodCalledInLocalArrayCall(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        /** @var Array_[] $arrays */
-        $arrays = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\Array_::class);
-        foreach ($arrays as $array) {
-            if ($this->isInArrayMap($class, $array)) {
-                return \true;
-            }
-            $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
-            if ($this->shouldSkipArrayCallable($class, $arrayCallable)) {
-                continue;
-            }
-            // the method is used
-            /** @var ArrayCallable $arrayCallable */
-            if ($this->nodeNameResolver->isName($classMethod->name, $arrayCallable->getMethod())) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function shouldSkipArrayCallable(\PhpParser\Node\Stmt\Class_ $class, ?\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable) : bool
-    {
-        if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
-            return \true;
-        }
-        // is current class method?
-        return !$this->isName($class, $arrayCallable->getClass());
     }
 }

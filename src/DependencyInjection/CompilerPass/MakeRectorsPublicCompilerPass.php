@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20210805\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210805\Symfony\Component\DependencyInjection\ContainerBuilder;
-final class MakeRectorsPublicCompilerPass implements \RectorPrefix20210805\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+use RectorPrefix20210806\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210806\Symfony\Component\DependencyInjection\ContainerBuilder;
+final class MakeRectorsPublicCompilerPass implements \RectorPrefix20210806\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder

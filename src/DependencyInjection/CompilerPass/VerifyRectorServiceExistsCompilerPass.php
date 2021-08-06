@@ -6,9 +6,9 @@ namespace Rector\Core\DependencyInjection\CompilerPass;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20210805\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210805\Symfony\Component\DependencyInjection\ContainerBuilder;
-final class VerifyRectorServiceExistsCompilerPass implements \RectorPrefix20210805\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+use RectorPrefix20210806\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210806\Symfony\Component\DependencyInjection\ContainerBuilder;
+final class VerifyRectorServiceExistsCompilerPass implements \RectorPrefix20210806\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder

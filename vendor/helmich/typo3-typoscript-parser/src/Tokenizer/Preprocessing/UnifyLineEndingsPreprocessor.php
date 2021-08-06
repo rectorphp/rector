@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
+namespace RectorPrefix20210806\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
 
 /**
  * Preprocessor that unifies line endings for a file
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class UnifyLineEndingsPreprocessor implements \RectorPrefix20210805\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class UnifyLineEndingsPreprocessor implements \RectorPrefix20210806\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
 {
     /** @var string */
     private $eolCharacter;

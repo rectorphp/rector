@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210805;
+namespace RectorPrefix20210806;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Format_CropViewHelper')) {
     return;

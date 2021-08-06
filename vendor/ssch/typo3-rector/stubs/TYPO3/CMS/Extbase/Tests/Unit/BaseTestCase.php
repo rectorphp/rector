@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210805\TYPO3\CMS\Extbase\Tests\Unit;
+namespace RectorPrefix20210806\TYPO3\CMS\Extbase\Tests\Unit;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Tests\\Unit\\BaseTestCase')) {
     return;

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210805\Idiosyncratic\EditorConfig;
+namespace RectorPrefix20210806\Idiosyncratic\EditorConfig;
 
-use RectorPrefix20210805\PHPUnit\Framework\TestCase;
+use RectorPrefix20210806\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class EditorConfigTest extends \RectorPrefix20210805\PHPUnit\Framework\TestCase
+class EditorConfigTest extends \RectorPrefix20210806\PHPUnit\Framework\TestCase
 {
     public function testResolvingConfigForPath() : void
     {
-        $ec = new \RectorPrefix20210805\Idiosyncratic\EditorConfig\EditorConfig();
+        $ec = new \RectorPrefix20210806\Idiosyncratic\EditorConfig\EditorConfig();
         $config = $ec->getConfigForPath(__FILE__);
         $this->assertEquals(4, $config['indent_size']->getValue());
         $config = $ec->printConfigForPath(__DIR__ . '/data/testfile.php');

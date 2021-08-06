@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210805\Symplify\Skipper\SkipVoter;
+namespace RectorPrefix20210806\Symplify\Skipper\SkipVoter;
 
-use RectorPrefix20210805\Symplify\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix20210805\Symplify\Skipper\Matcher\FileInfoMatcher;
-use RectorPrefix20210805\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver;
+use RectorPrefix20210806\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20210806\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix20210806\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class MessageSkipVoter implements \RectorPrefix20210805\Symplify\Skipper\Contract\SkipVoterInterface
+final class MessageSkipVoter implements \RectorPrefix20210806\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver
@@ -17,7 +17,7 @@ final class MessageSkipVoter implements \RectorPrefix20210805\Symplify\Skipper\C
      * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
-    public function __construct(\RectorPrefix20210805\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver $skippedMessagesResolver, \RectorPrefix20210805\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
+    public function __construct(\RectorPrefix20210806\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver $skippedMessagesResolver, \RectorPrefix20210806\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
     {
         $this->skippedMessagesResolver = $skippedMessagesResolver;
         $this->fileInfoMatcher = $fileInfoMatcher;

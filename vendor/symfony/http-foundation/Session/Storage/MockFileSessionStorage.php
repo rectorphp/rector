@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage;
+namespace RectorPrefix20210806\Symfony\Component\HttpFoundation\Session\Storage;
 
 /**
  * MockFileSessionStorage is used to mock sessions for
@@ -21,13 +21,13 @@ namespace RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage;
  *
  * @author Drak <drak@zikula.org>
  */
-class MockFileSessionStorage extends \RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage
+class MockFileSessionStorage extends \RectorPrefix20210806\Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage
 {
     private $savePath;
     /**
      * @param string $savePath Path of directory to save session files
      */
-    public function __construct(string $savePath = null, string $name = 'MOCKSESSID', \RectorPrefix20210805\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
+    public function __construct(string $savePath = null, string $name = 'MOCKSESSID', \RectorPrefix20210806\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
     {
         if (null === $savePath) {
             $savePath = \sys_get_temp_dir();

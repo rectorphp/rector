@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210805\Symfony\Component\HttpKernel\Controller;
+namespace RectorPrefix20210806\Symfony\Component\HttpKernel\Controller;
 
-use RectorPrefix20210805\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210805\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20210806\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210806\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableArgumentResolver implements \RectorPrefix20210805\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
+class TraceableArgumentResolver implements \RectorPrefix20210806\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface
 {
     private $resolver;
     private $stopwatch;
-    public function __construct(\RectorPrefix20210805\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $resolver, \RectorPrefix20210805\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
+    public function __construct(\RectorPrefix20210806\Symfony\Component\HttpKernel\Controller\ArgumentResolverInterface $resolver, \RectorPrefix20210806\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
     {
         $this->resolver = $resolver;
         $this->stopwatch = $stopwatch;

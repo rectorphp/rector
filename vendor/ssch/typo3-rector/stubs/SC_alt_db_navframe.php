@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210805;
+namespace RectorPrefix20210806;
 
 if (\class_exists('SC_alt_db_navframe')) {
     return;

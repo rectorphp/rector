@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210805\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210806\Symfony\Contracts\Service\Attribute\Required;
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
     /**
@@ -35,7 +35,7 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         }
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210805\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
+                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20210806\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
                     return \true;
                 }
             }

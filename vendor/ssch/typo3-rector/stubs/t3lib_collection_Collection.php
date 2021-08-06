@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210805;
+namespace RectorPrefix20210806;
 
 if (\class_exists('t3lib_collection_Collection')) {
     return;
