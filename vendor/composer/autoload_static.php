@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit023a10cf85b690bf9054bda8136dfcef
+class ComposerStaticInit6880bc14858460aa28c80d26ae6211b8
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2204,7 +2204,6 @@ class ComposerStaticInit023a10cf85b690bf9054bda8136dfcef
         'Rector\\Core\\NodeManipulator\\ArrayManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayManipulator.php',
         'Rector\\Core\\NodeManipulator\\AssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/AssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\BinaryOpManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/BinaryOpManipulator.php',
-        'Rector\\Core\\NodeManipulator\\ChildAndParentClassManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ChildAndParentClassManipulator.php',
         'Rector\\Core\\NodeManipulator\\ClassConstManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassConstManipulator.php',
         'Rector\\Core\\NodeManipulator\\ClassDependencyManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassDependencyManipulator.php',
         'Rector\\Core\\NodeManipulator\\ClassInsertManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassInsertManipulator.php',
@@ -2212,6 +2211,7 @@ class ComposerStaticInit023a10cf85b690bf9054bda8136dfcef
         'Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassMethodAssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\ClassMethodManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassMethodManipulator.php',
         'Rector\\Core\\NodeManipulator\\ClassMethodPropertyFetchManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassMethodPropertyFetchManipulator.php',
+        'Rector\\Core\\NodeManipulator\\Dependency\\DependencyClassMethodDecorator' => __DIR__ . '/../..' . '/src/NodeManipulator/Dependency/DependencyClassMethodDecorator.php',
         'Rector\\Core\\NodeManipulator\\ForeachManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ForeachManipulator.php',
         'Rector\\Core\\NodeManipulator\\FuncCallManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/FuncCallManipulator.php',
         'Rector\\Core\\NodeManipulator\\FunctionLikeManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/FunctionLikeManipulator.php',
@@ -2766,8 +2766,6 @@ class ComposerStaticInit023a10cf85b690bf9054bda8136dfcef
         'Rector\\Nette\\ValueObject\\TemplateParametersAssigns' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/TemplateParametersAssigns.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\BooleanAndAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php',
-        'Rector\\NodeCollector\\NodeCollector\\NodeRepository' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeCollector/NodeRepository.php',
-        'Rector\\NodeCollector\\NodeVisitor\\NodeCollectorNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeVisitor/NodeCollectorNodeVisitor.php',
         'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => __DIR__ . '/../..' . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallable.php',
@@ -3848,9 +3846,9 @@ class ComposerStaticInit023a10cf85b690bf9054bda8136dfcef
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit023a10cf85b690bf9054bda8136dfcef::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit023a10cf85b690bf9054bda8136dfcef::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit023a10cf85b690bf9054bda8136dfcef::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6880bc14858460aa28c80d26ae6211b8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6880bc14858460aa28c80d26ae6211b8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6880bc14858460aa28c80d26ae6211b8::$classMap;
 
         }, null, ClassLoader::class);
     }

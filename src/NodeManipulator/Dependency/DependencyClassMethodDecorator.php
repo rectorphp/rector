@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeManipulator;
+namespace Rector\Core\NodeManipulator\Dependency;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
@@ -14,10 +14,9 @@ use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeCollector\NodeCollector\NodeRepository;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20210806\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class ChildAndParentClassManipulator
+final class DependencyClassMethodDecorator
 {
     /**
      * @var \Rector\Core\PhpParser\Node\NodeFactory
@@ -27,10 +26,6 @@ final class ChildAndParentClassManipulator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @var \Rector\NodeCollector\NodeCollector\NodeRepository
-     */
-    private $nodeRepository;
     /**
      * @var \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner
      */
@@ -47,11 +42,10 @@ final class ChildAndParentClassManipulator
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeCollector\NodeCollector\NodeRepository $nodeRepository, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20210806\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20210806\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeRepository = $nodeRepository;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
         $this->reflectionProvider = $reflectionProvider;
         $this->astResolver = $astResolver;
@@ -60,7 +54,7 @@ final class ChildAndParentClassManipulator
     /**
      * Add "parent::__construct(X, Y, Z)" where needed
      */
-    public function completeParentConstructor(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : void
+    public function decorateConstructorWithParentDependencies(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : void
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -81,24 +75,6 @@ final class ChildAndParentClassManipulator
             }
             $this->completeParentConstructorBasedOnParentNode($classMethod, $parentConstructorClassMethod);
             break;
-        }
-    }
-    public function completeChildConstructors(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $constructorClassMethod) : void
-    {
-        $className = $this->nodeNameResolver->getName($class);
-        if ($className === null) {
-            return;
-        }
-        $childClasses = $this->nodeRepository->findChildrenOfClass($className);
-        foreach ($childClasses as $childClass) {
-            $childConstructorClassMethod = $childClass->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-            if (!$childConstructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
-                continue;
-            }
-            // replicate parent parameters
-            $childConstructorClassMethod->params = \array_merge($constructorClassMethod->params, $childConstructorClassMethod->params);
-            $parentConstructCallNode = $this->nodeFactory->createParentConstructWithParams($constructorClassMethod->params);
-            $childConstructorClassMethod->stmts = \array_merge([new \PhpParser\Node\Stmt\Expression($parentConstructCallNode)], (array) $childConstructorClassMethod->stmts);
         }
     }
     private function completeParentConstructorBasedOnParentNode(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Stmt\ClassMethod $parentClassMethod) : void
