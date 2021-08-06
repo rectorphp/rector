@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SystemEnvironmentBuilderConstantsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private const MAP_CONSTANTS_TO_STRING = ['TYPO3_URL_MAILINGLISTS' => 'http://lists.typo3.org/cgi-bin/mailman/listinfo', 'TYPO3_URL_DOCUMENTATION' => 'https://typo3.org/documentation/', 'TYPO3_URL_DOCUMENTATION_TSREF' => 'https://docs.typo3.org/typo3cms/TyposcriptReference/', 'TYPO3_URL_DOCUMENTATION_TSCONFIG' => 'https://docs.typo3.org/typo3cms/TSconfigReference/', 'TYPO3_URL_CONSULTANCY' => 'https://typo3.org/support/professional-services/', 'TYPO3_URL_CONTRIBUTE' => 'https://typo3.org/contribute/', 'TYPO3_URL_SECURITY' => 'https://typo3.org/teams/security/', 'TYPO3_URL_DOWNLOAD' => 'https://typo3.org/download/', 'TYPO3_URL_SYSTEMREQUIREMENTS' => 'https://typo3.org/typo3-cms/overview/requirements/', 'TAB' => "\t", 'NUL' => "\0", 'SUB' => '26', 'T3_ERR_SV_GENERAL' => 'ERROR_GENERAL', 'T3_ERR_SV_NOT_AVAIL' => 'ERROR_SERVICE_NOT_AVAILABLE', 'T3_ERR_SV_WRONG_SUBTYPE' => 'ERROR_WRONG_SUBTYPE', 'T3_ERR_SV_NO_INPUT' => 'ERROR_NO_INPUT', 'T3_ERR_SV_FILE_NOT_FOUND' => 'ERROR_FILE_NOT_FOUND', 'T3_ERR_SV_FILE_READ' => 'ERROR_FILE_NOT_READABLE', 'T3_ERR_SV_FILE_WRITE' => 'ERROR_FILE_NOT_WRITEABLE', 'T3_ERR_SV_PROG_NOT_FOUND' => 'ERROR_PROGRAM_NOT_FOUND', 'T3_ERR_SV_PROG_FAILED' => 'ERROR_PROGRAM_FAILED'];
     /**

@@ -31,6 +31,10 @@ final class SetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const CODING_STYLE_ADVANCED = __DIR__ . '/../../../config/set/coding-style-advanced.php';
+    /**
+     * @var string
+     */
     public const DEAD_CODE = __DIR__ . '/../../../config/set/dead-code.php';
     /**
      * @var string

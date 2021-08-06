@@ -18,6 +18,7 @@ You can use typo3-rector in various ways:
 - add ClassAliasMap in case you're upgrading 2 versions to provide old classes to migrate
 - apply rulesets stepwise by version; first TCA only, then full set or combined
 - apply rulesets stepwise to your packages or multiple packages at once
+- don't use class aliases for Nimut Testing Framework
 
 ### Starting
 Starting with an upgrade should start with installing typo3-rector and checking for the rector rules/sets of your current version, not the one you're targeting.
@@ -71,6 +72,23 @@ Both of that is reason to gather multiple packages for a combined TCA run with t
         __DIR__ . '/packages/package_thesecond',
         __DIR__ . '/packages/package_thirdone',
     ]);
+```
+### Migrating Testing Framework
+
+Do not use any class alias like
+
+```php
+use Nimut\TestingFramework\TestCase\FunctionalTestCase as TestCase;
+
+abstract class AbstractContentElement extends TestCase
+```
+
+This will only work partially, resolve them beforehand:
+
+```php
+use Nimut\TestingFramework\TestCase\FunctionalTestCase;
+
+abstract class AbstractContentElement extends FunctionalTestCase
 ```
 
 ---

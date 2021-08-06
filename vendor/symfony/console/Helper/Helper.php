@@ -147,7 +147,7 @@ abstract class Helper implements \RectorPrefix20210806\Symfony\Component\Console
         // remove <...> formatting
         $string = $formatter->format($string ?? '');
         // remove already formatted characters
-        $string = \preg_replace("/\33\\[[^m]*m/", '', $string);
+        $string = \preg_replace("/\33\\[[^m]*m/", '', $string ?? '');
         $formatter->setDecorated($isDecorated);
         return $string;
     }

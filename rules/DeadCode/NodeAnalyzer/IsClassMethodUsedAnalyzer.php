@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -140,7 +141,7 @@ final class IsClassMethodUsedAnalyzer
     }
     private function isPrivateAbstractMethodInTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?string $classMethodName) : bool
     {
-        if (null === $classMethodName) {
+        if ($classMethodName === null) {
             return \false;
         }
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -148,7 +149,7 @@ final class IsClassMethodUsedAnalyzer
             return \false;
         }
         $classReflection = $scope->getClassReflection();
-        if (null === $classReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         $traits = $this->astResolver->parseClassReflectionTraits($classReflection);

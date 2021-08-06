@@ -16,7 +16,7 @@ final class DefaultSwitchFluidRector implements \Ssch\TYPO3Rector\Contract\FileP
     /**
      * @var string
      */
-    private const PATTERN = '#<f:case default="(1|true)">(.*)</f:case>#';
+    private const PATTERN = '#<f:case default="(1|true)">(.*)<\\/f:case>#imsU';
     /**
      * @var string
      */

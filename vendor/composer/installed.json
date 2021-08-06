@@ -1668,17 +1668,17 @@
         },
         {
             "name": "ssch\/typo3-rector",
-            "version": "v0.11.22",
-            "version_normalized": "0.11.22.0",
+            "version": "v0.11.23",
+            "version_normalized": "0.11.23.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "6a26fcbf5bdbe60b77037f576e86d1c9bc560a87"
+                "reference": "ebe86cfb57972a9092eb385e5025190c06bbcfc6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/6a26fcbf5bdbe60b77037f576e86d1c9bc560a87",
-                "reference": "6a26fcbf5bdbe60b77037f576e86d1c9bc560a87",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/ebe86cfb57972a9092eb385e5025190c06bbcfc6",
+                "reference": "ebe86cfb57972a9092eb385e5025190c06bbcfc6",
                 "shasum": ""
             },
             "require": {
@@ -1704,7 +1704,7 @@
                 "symplify\/rule-doc-generator": "^9.4.22",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-07-17T17:04:11+00:00",
+            "time": "2021-08-06T15:18:22+00:00",
             "type": "rector-extension",
             "extra": {
                 "rector": {
@@ -1736,7 +1736,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.22"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.23"
             },
             "funding": [
                 {
@@ -1835,12 +1835,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "77c4d551ec36efc532f026be3970d9641061e3b8"
+                "reference": "37e6cca375ed4cca2a82c81487cd077520f6cab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/77c4d551ec36efc532f026be3970d9641061e3b8",
-                "reference": "77c4d551ec36efc532f026be3970d9641061e3b8",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/37e6cca375ed4cca2a82c81487cd077520f6cab2",
+                "reference": "37e6cca375ed4cca2a82c81487cd077520f6cab2",
                 "shasum": ""
             },
             "require": {
@@ -1878,7 +1878,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2021-08-04T21:20:46+00:00",
+            "time": "2021-08-04T23:50:27+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -1938,12 +1938,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "5a825e4b386066167a8b55487091cb62beec74c2"
+                "reference": "a665946279f566d94ed5eb98999cfa65c6fa5a78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/5a825e4b386066167a8b55487091cb62beec74c2",
-                "reference": "5a825e4b386066167a8b55487091cb62beec74c2",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/a665946279f566d94ed5eb98999cfa65c6fa5a78",
+                "reference": "a665946279f566d94ed5eb98999cfa65c6fa5a78",
                 "shasum": ""
             },
             "require": {
@@ -1976,7 +1976,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-07-23T15:55:36+00:00",
+            "time": "2021-08-02T16:16:27+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -2005,7 +2005,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v5.3.4"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/5.3"
             },
             "funding": [
                 {

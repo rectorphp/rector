@@ -8,7 +8,7 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
-use Ssch\TYPO3Rector\FileProcessor\TypoScript\Visitors\FileIncludeToImportStatementVisitor;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\FileIncludeToImportStatementTypoScriptRector;
 use Ssch\TYPO3Rector\Rector\v9\v0\InjectAnnotationRector;
 use Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
@@ -111,5 +111,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ExtensionComposerRector::class);
 
     // Do you want to modernize your TypoScript include statements for files and move from <INCLUDE /> to @import use the FileIncludeToImportStatementVisitor
-    // $services->set(FileIncludeToImportStatementVisitor::class);
+    // $services->set(FileIncludeToImportStatementTypoScriptRector::class);
 };

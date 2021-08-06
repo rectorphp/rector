@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Helper;
 
-use UnexpectedValueException;
+use InvalidArgumentException;
 final class ArrayUtility
 {
     /**
@@ -11,10 +11,10 @@ final class ArrayUtility
      */
     public static function trimExplode(string $delimiter, string $string, bool $removeEmptyValues = \false, int $limit = 0) : array
     {
-        $result = \explode($delimiter, $string);
-        if (\false === $result) {
-            throw new \UnexpectedValueException(\sprintf('String %s could not be exploded by %s', $string, $delimiter));
+        if ('' === $delimiter) {
+            throw new \InvalidArgumentException('Please define a correct delimiter');
         }
+        $result = \explode($delimiter, $string);
         if ($removeEmptyValues) {
             $temp = [];
             foreach ($result as $value) {
