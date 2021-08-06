@@ -64,11 +64,14 @@ trait MultipleFilesChangedTrait
         $addedFilesWithContent = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
         $addedFiles = [];
         foreach ($addedFilesWithContent as $addedFileWithContent) {
-            $addedFiles[$addedFileWithContent->getFilePath()] = $addedFileWithContent;
+            [, $addedFilePathWithContentFilePath] = \explode('_temp_fixture_easy_testing', $addedFileWithContent->getFilePath());
+            $addedFiles[$addedFilePathWithContentFilePath] = $addedFileWithContent;
         }
         foreach ($expectedFileChanges as $path => $expectedFileChange) {
-            $addedFile = $addedFiles[$path] ?? null;
-            $this->assertSame($path, $addedFile ? $addedFile->getFilePath() : null);
+            [, $relativePath] = \explode('_temp_fixture_easy_testing', $path);
+            $addedFile = $addedFiles[$relativePath] ?? null;
+            [, $addedFilePathWithContentFilePath] = $addedFile ? \explode('_temp_fixture_easy_testing', $addedFile->getFilePath()) : null;
+            $this->assertSame($relativePath, $addedFilePathWithContentFilePath);
             $realFileContent = $addedFile ? \trim($addedFile->getFileContent()) : null;
             $this->assertSame($expectedFileChange, $realFileContent);
             if (\file_exists($path)) {
