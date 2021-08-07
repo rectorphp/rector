@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
@@ -109,6 +110,10 @@ CODE_SAMPLE
     private function getScope(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Analyser\Scope
     {
         if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
+            return null;
+        }
+        $parentArg = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Arg::class);
+        if ($parentArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $scope = $methodCall->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
