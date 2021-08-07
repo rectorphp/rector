@@ -10,6 +10,7 @@ use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -80,7 +81,12 @@ CODE_SAMPLE
         if (!$this->isUselessBeforeForeachCheck($node)) {
             return null;
         }
-        return $node->stmts[0];
+        $stmt = $node->stmts[0];
+        $ifComments = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS) ?? [];
+        $stmtComments = $stmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS) ?? [];
+        $comments = \array_merge($ifComments, $stmtComments);
+        $stmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $comments);
+        return $stmt;
     }
     private function isUselessBeforeForeachCheck(\PhpParser\Node\Stmt\If_ $if) : bool
     {
