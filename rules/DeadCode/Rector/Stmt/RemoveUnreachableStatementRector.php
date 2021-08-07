@@ -128,7 +128,7 @@ CODE_SAMPLE
             if ($node->name instanceof \PhpParser\Node\Expr\StaticCall) {
                 return \false;
             }
-            return $this->isName($node->name, 'markTestSkipped');
+            return $this->isNames($node->name, ['markTestSkipped', 'markTestIncomplete']);
         });
     }
     /**
