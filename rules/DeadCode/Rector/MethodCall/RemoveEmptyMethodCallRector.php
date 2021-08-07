@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
@@ -120,6 +121,11 @@ CODE_SAMPLE
     private function getScope(MethodCall $methodCall): ?Scope
     {
         if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
+            return null;
+        }
+
+        $parentArg = $this->betterNodeFinder->findParentType($methodCall, Arg::class);
+        if ($parentArg instanceof Arg) {
             return null;
         }
 
