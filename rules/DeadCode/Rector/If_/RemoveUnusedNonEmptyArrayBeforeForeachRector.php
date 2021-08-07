@@ -11,6 +11,7 @@ use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -81,7 +82,15 @@ CODE_SAMPLE
             return null;
         }
 
-        return $node->stmts[0];
+        $stmt = $node->stmts[0];
+
+        $ifComments = $node->getAttribute(AttributeKey::COMMENTS) ?? [];
+        $stmtComments = $stmt->getAttribute(AttributeKey::COMMENTS) ?? [];
+
+        $comments = array_merge($ifComments, $stmtComments);
+        $stmt->setAttribute(AttributeKey::COMMENTS, $comments);
+
+        return $stmt;
     }
 
     private function isUselessBeforeForeachCheck(If_ $if): bool
