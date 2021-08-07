@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -19,7 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadStmtRector extends AbstractRector
 {
     public function __construct(
-        private LivingCodeManipulator $livingCodeManipulator
+        private LivingCodeManipulator $livingCodeManipulator,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private ReflectionResolver $reflectionResolver
     ) {
     }
 
@@ -53,6 +60,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
+        if ($this->hasGetMagic($node)) {
+            return null;
+        }
+
         $livingCode = $this->livingCodeManipulator->keepLivingCodeFromExpr($node->expr);
         if ($livingCode === []) {
             return $this->removeNodeAndKeepComments($node);
@@ -73,6 +84,23 @@ CODE_SAMPLE
         $newNodes[] = $node;
 
         return $newNodes;
+    }
+
+    private function hasGetMagic(Expression $expression): bool
+    {
+        if (! $this->propertyFetchAnalyzer->isPropertyFetch($expression->expr)) {
+            return false;
+        }
+
+        /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */
+        $propertyFetch = $expression->expr;
+        $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
+
+        /**
+         *  property not found assume has class has __get method
+         *  that can call non-defined property, that can have some special handling, eg: throw on special case
+         */
+        return ! $phpPropertyReflection instanceof PhpPropertyReflection;
     }
 
     private function removeNodeAndKeepComments(Expression $expression): ?Node
