@@ -161,7 +161,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isName($node->name, 'markTestSkipped');
+            return $this->isNames($node->name, ['markTestSkipped', 'markTestIncomplete']);
         });
     }
 
