@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210806;
+namespace RectorPrefix20210807;
 
 if (\class_exists('tx_cms_layout_tt_content_drawItemHook')) {
     return;

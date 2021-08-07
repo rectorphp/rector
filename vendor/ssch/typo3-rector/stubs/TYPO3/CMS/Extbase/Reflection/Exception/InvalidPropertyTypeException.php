@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210806\TYPO3\CMS\Extbase\Reflection\Exception;
+namespace RectorPrefix20210807\TYPO3\CMS\Extbase\Reflection\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Reflection\\Exception\\InvalidPropertyTypeException')) {
     return;

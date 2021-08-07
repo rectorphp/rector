@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210806;
+namespace RectorPrefix20210807;
 
 if (\class_exists('t3lib_contextmenu_extdirect_ContextMenu')) {
     return;

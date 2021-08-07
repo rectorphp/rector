@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210806\Symfony\Contracts\Service\Attribute;
+namespace RectorPrefix20210807\Symfony\Contracts\Service\Attribute;
 
 /**
  * A required dependency.

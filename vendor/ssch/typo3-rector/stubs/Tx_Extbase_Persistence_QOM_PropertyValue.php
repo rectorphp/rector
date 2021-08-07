@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210806;
+namespace RectorPrefix20210807;
 
 if (\class_exists('Tx_Extbase_Persistence_QOM_PropertyValue')) {
     return;
