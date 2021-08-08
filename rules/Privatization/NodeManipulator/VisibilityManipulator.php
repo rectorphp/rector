@@ -109,9 +109,9 @@ final class VisibilityManipulator
         $node->flags -= Class_::MODIFIER_FINAL;
     }
 
-    public function removeAbstract(ClassMethod $node): void
+    public function removeAbstract(ClassMethod $classMethod): void
     {
-        $node->flags -= Class_::MODIFIER_ABSTRACT;
+        $classMethod->flags -= Class_::MODIFIER_ABSTRACT;
     }
 
     public function makeReadonly(Property | Param $node): void

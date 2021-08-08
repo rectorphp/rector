@@ -16,7 +16,8 @@ final class PhpParserLexerFactory
     {
         return new Emulative([
             'usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'],
-            'phpVersion' => PHP_VERSION,
+            // do not set php version, so we have a lexer that can parse any PHP version available,
+            // helps with issues like https://github.com/rectorphp/rector/issues/6593
         ]);
     }
 }

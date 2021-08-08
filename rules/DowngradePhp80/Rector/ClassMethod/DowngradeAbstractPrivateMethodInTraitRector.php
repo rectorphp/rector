@@ -65,21 +65,17 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function shouldSkip(ClassMethod $node): bool
+    private function shouldSkip(ClassMethod $classMethod): bool
     {
-        if (! $node->isAbstract()) {
+        if (! $classMethod->isAbstract()) {
             return true;
         }
 
-        if (! $node->isPrivate()) {
+        if (! $classMethod->isPrivate()) {
             return true;
         }
 
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (! $parent instanceof Trait_) {
-            return true;
-        }
-
-        return false;
+        $parent = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+        return ! $parent instanceof Trait_;
     }
 }
