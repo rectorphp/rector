@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210807;
+namespace RectorPrefix20210808;
 
 if (\interface_exists('Tx_Fluid_Core_Rendering_RenderingContextInterface')) {
     return;

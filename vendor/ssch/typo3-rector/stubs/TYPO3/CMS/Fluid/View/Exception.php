@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210807\TYPO3\CMS\Fluid\View;
+namespace RectorPrefix20210808\TYPO3\CMS\Fluid\View;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\View\\Exception')) {
     return;

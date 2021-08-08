@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210807\Symfony\Component\Process\Exception;
+namespace RectorPrefix20210808\Symfony\Component\Process\Exception;
 
 /**
  * LogicException for the Process Component.
  *
  * @author Romain Neutron <imprec@gmail.com>
  */
-class LogicException extends \LogicException implements \RectorPrefix20210807\Symfony\Component\Process\Exception\ExceptionInterface
+class LogicException extends \LogicException implements \RectorPrefix20210808\Symfony\Component\Process\Exception\ExceptionInterface
 {
 }

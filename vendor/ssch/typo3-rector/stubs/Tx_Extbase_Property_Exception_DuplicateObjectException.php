@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210807;
+namespace RectorPrefix20210808;
 
 if (\class_exists('Tx_Extbase_Property_Exception_DuplicateObjectException')) {
     return;

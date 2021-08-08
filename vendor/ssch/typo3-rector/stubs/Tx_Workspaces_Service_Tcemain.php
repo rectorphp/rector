@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210807;
+namespace RectorPrefix20210808;
 
 if (\class_exists('Tx_Workspaces_Service_Tcemain')) {
     return;

@@ -1,4 +1,4 @@
-# 475 Rules Overview
+# 474 Rules Overview
 
 <br>
 
@@ -11,8 +11,6 @@
 - [Carbon](#carbon) (2)
 
 - [CodeQuality](#codequality) (68)
-
-- [CodeQualityStrict](#codequalitystrict) (1)
 
 - [CodingStyle](#codingstyle) (38)
 
@@ -1813,24 +1811,6 @@ Use ===/!== over ==/!=, it values have the same type
 
 <br>
 
-## CodeQualityStrict
-
-### MoveVariableDeclarationNearReferenceRector
-
-Move variable declaration near its reference
-
-- class: [`Rector\CodeQualityStrict\Rector\Variable\MoveVariableDeclarationNearReferenceRector`](../rules/CodeQualityStrict/Rector/Variable/MoveVariableDeclarationNearReferenceRector.php)
-
-```diff
--$var = 1;
- if ($condition === null) {
-+    $var = 1;
-     return $var;
- }
-```
-
-<br>
-
 ## CodingStyle
 
 ### AddArrayDefaultToArrayPropertyRector
@@ -2266,6 +2246,7 @@ Changes `$this->...` and static:: to self:: or vise versa for given types
 - class: [`Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`](../rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php)
 
 ```php
+use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -2276,10 +2257,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->call('configure', [[
-            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => ValueObjectInliner::inline([
-                PreferenceSelfThis::PREFER_SELF(),
-            ]),
-        ]]);
+            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
+                TestCase::class => ValueObjectInliner::inline(PreferenceSelfThis::PREFER_SELF()),
+
+            ], ]]);
 };
 ```
 
@@ -9321,7 +9302,6 @@ Replaces defined class constants in their calls.
 ```php
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
-use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -9331,7 +9311,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameClassConstFetchRector::class)
         ->call('configure', [[
             RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => ValueObjectInliner::inline([
-                new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
                 new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
             ]),
         ]]);
@@ -10062,7 +10041,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ClassConstFetchToValueRector::class)
         ->call('configure', [[
             ClassConstFetchToValueRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
-                new ClassConstFetchToValue('Nette\Configurator', 'DEVELOPMENT', 'development'),
                 new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
             ]),
         ]]);
@@ -11642,7 +11620,7 @@ Change `@param` types to type declarations if not a BC-break
 - class: [`Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector`](../rules/TypeDeclaration/Rector/FunctionLike/ParamTypeDeclarationRector.php)
 
 ```diff
- class ParentClass
+ abstract class VendorParentClass
  {
      /**
       * @param int $number
@@ -11652,7 +11630,7 @@ Change `@param` types to type declarations if not a BC-break
      }
  }
 
- final class ChildClass extends ParentClass
+ final class ChildClass extends VendorParentClass
  {
      /**
       * @param int $number
