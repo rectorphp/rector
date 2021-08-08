@@ -114,7 +114,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
     {
         $firstReturnedExpr = $returns[0]->expr;
         if (!$firstReturnedExpr instanceof \PhpParser\Node\Expr\Array_) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return new \PHPStan\Type\MixedType();
         }
         $paramOnPositionTypes = $this->resolveParamOnPositionTypes($firstReturnedExpr, $parameterPosition);
         if ($paramOnPositionTypes === []) {
