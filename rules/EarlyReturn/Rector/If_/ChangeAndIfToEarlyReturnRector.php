@@ -213,6 +213,9 @@ CODE_SAMPLE
             return $nextNode instanceof \PhpParser\Node\Stmt\Return_;
         }
         $parent = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node) {
+            return \false;
+        }
         if ($parent instanceof \PhpParser\Node\Stmt\If_) {
             return $this->isLastIfOrBeforeLastReturn($parent);
         }
