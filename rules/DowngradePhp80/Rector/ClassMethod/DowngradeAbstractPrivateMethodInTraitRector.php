@@ -51,18 +51,15 @@ CODE_SAMPLE
         $node->stmts = [];
         return $node;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (!$node->isAbstract()) {
+        if (!$classMethod->isAbstract()) {
             return \true;
         }
-        if (!$node->isPrivate()) {
+        if (!$classMethod->isPrivate()) {
             return \true;
         }
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parent instanceof \PhpParser\Node\Stmt\Trait_) {
-            return \true;
-        }
-        return \false;
+        $parent = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return !$parent instanceof \PhpParser\Node\Stmt\Trait_;
     }
 }

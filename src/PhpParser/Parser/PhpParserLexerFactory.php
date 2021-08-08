@@ -12,6 +12,6 @@ final class PhpParserLexerFactory
 {
     public function create() : \PhpParser\Lexer\Emulative
     {
-        return new \PhpParser\Lexer\Emulative(['usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos'], 'phpVersion' => \PHP_VERSION]);
+        return new \PhpParser\Lexer\Emulative(['usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos']]);
     }
 }
