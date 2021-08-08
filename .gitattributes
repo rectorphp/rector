@@ -17,12 +17,9 @@ CODE_OF_CONDUCT.md export-ignore
 # exclude only root dirs, otherwise nette/utils is removed - see https://github.com/TomasVotruba/tomasvotruba.com/pull/1197/checks?check_run_id=2577329283
 /stubs export-ignore
 
-Dockerfile export-ignore
 docs/images export-ignore
-.docker export-ignore
 .github export-ignore
 /e2e export-ignore
-.dockerignore export-ignore
 
 # testing Windows spaces - https://help.github.com/en/github/using-git/configuring-git-to-handle-line-endings
 packages/better-php-doc-parser/tests/PhpDocInfo/PhpDocInfoPrinter/FixtureBasic/with_spac.txt text eol=crlf
