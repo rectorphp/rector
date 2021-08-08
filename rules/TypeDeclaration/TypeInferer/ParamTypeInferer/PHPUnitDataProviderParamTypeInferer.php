@@ -112,7 +112,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         $firstReturnedExpr = $returns[0]->expr;
 
         if (! $firstReturnedExpr instanceof Array_) {
-            throw new ShouldNotHappenException();
+            return new MixedType();
         }
 
         $paramOnPositionTypes = $this->resolveParamOnPositionTypes($firstReturnedExpr, $parameterPosition);
