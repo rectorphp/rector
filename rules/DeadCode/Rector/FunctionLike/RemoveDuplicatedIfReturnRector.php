@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Rector\AbstractRector;
@@ -28,6 +29,7 @@ final class RemoveDuplicatedIfReturnRector extends AbstractRector
     public function __construct(
         private IfManipulator $ifManipulator,
         private ModifiedVariableNamesCollector $modifiedVariableNamesCollector,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
         NodeComparator $nodeComparator
     ) {
         $this->nodeComparator = $nodeComparator;
@@ -128,6 +130,14 @@ CODE_SAMPLE
             }
 
             /** @var If_ $stmt */
+            $isFoundPropertyFetch = (bool) $this->betterNodeFinder->findFirst(
+                $stmt->cond,
+                fn (Node $node): bool => $this->propertyFetchAnalyzer->isPropertyFetch($node)
+            );
+            if ($isFoundPropertyFetch) {
+                continue;
+            }
+
             $hash = $this->nodeComparator->printWithoutComments($stmt);
             $ifWithOnlyReturnsByHash[$hash][] = $stmt;
         }
