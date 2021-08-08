@@ -235,6 +235,10 @@ CODE_SAMPLE
         }
 
         $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return false;
+        }
+
         if ($parent instanceof If_) {
             return $this->isLastIfOrBeforeLastReturn($parent);
         }
