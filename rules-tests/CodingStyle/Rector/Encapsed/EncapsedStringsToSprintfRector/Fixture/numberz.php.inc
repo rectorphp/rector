@@ -20,7 +20,7 @@ final class Numberz
 {
     public function run(string $format, int $value, float $money)
     {
-        return sprintf('Format %s from %s to %s', $format, $value, $money);
+        return sprintf('Format %s from %d to %s', $format, $value, $money);
     }
 }
 

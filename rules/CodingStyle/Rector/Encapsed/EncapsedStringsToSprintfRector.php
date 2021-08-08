@@ -17,6 +17,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,6 +28,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class EncapsedStringsToSprintfRector extends AbstractRector
 {
+    /**
+     * @var array<string, array<class-string<Type>>>
+     */
+    private const FORMAT_SPECIFIERS = [
+        '%s' => ['PHPStan\Type\StringType'],
+        '%d' => [
+            'PHPStan\Type\Constant\ConstantIntegerType',
+            'PHPStan\Type\IntegerRangeType',
+            'PHPStan\Type\IntegerType',
+        ],
+    ];
+
     private string $sprintfFormat = '';
 
     /**
@@ -105,7 +118,20 @@ CODE_SAMPLE
 
     private function collectExpr(Expr $expr): void
     {
-        $this->sprintfFormat .= '%s';
+        $type = $this->nodeTypeResolver->resolve($expr);
+        $found = false;
+
+        foreach (self::FORMAT_SPECIFIERS as $key => $types) {
+            if (in_array($type::class, $types, true)) {
+                $this->sprintfFormat .= $key;
+                $found = true;
+                break;
+            }
+        }
+
+        if (! $found) {
+            $this->sprintfFormat .= '%s';
+        }
 
         // remove: ${wrap} → $wrap
         if ($expr instanceof Variable) {
