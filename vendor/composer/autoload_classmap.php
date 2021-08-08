@@ -2162,6 +2162,7 @@ return array(
     'Rector\\DowngradePhp80\\NodeAnalyzer\\UnnamedArgumentResolver' => $baseDir . '/rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php',
     'Rector\\DowngradePhp80\\Rector\\Catch_\\DowngradeNonCapturingCatchesRector' => $baseDir . '/rules/DowngradePhp80/Rector/Catch_/DowngradeNonCapturingCatchesRector.php',
     'Rector\\DowngradePhp80\\Rector\\ClassConstFetch\\DowngradeClassOnObjectToGetClassRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassConstFetch/DowngradeClassOnObjectToGetClassRector.php',
+    'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeAbstractPrivateMethodInTraitRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeAbstractPrivateMethodInTraitRector.php',
     'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeStaticTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector' => $baseDir . '/rules/DowngradePhp80/Rector/ClassMethod/DowngradeTrailingCommasInParamUseRector.php',
     'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradeAttributeToAnnotationRector' => $baseDir . '/rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php',

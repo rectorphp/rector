@@ -116,6 +116,10 @@ final class VisibilityManipulator
     {
         $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL;
     }
+    public function removeAbstract(\PhpParser\Node\Stmt\ClassMethod $node) : void
+    {
+        $node->flags -= \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT;
+    }
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
