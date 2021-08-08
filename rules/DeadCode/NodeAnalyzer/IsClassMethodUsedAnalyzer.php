@@ -73,8 +73,8 @@ final class IsClassMethodUsedAnalyzer
         if ($this->isClassMethodCalledInLocalArrayCall($class, $classMethod)) {
             return \true;
         }
-        // 4. abstract private method from trait (PHP 8.0+)
-        return $this->isPrivateAbstractMethodInTrait($classMethod, $classMethodName);
+        // 4. private method exists in trait and is overwritten by the class
+        return $this->doesMethodExistInTrait($classMethod, $classMethodName);
     }
     private function isClassMethodUsedInLocalStaticCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
     {
@@ -139,7 +139,7 @@ final class IsClassMethodUsedAnalyzer
         // is current class method?
         return !$this->nodeNameResolver->isName($class, $arrayCallable->getClass());
     }
-    private function isPrivateAbstractMethodInTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?string $classMethodName) : bool
+    private function doesMethodExistInTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?string $classMethodName) : bool
     {
         if ($classMethodName === null) {
             return \false;
@@ -158,9 +158,7 @@ final class IsClassMethodUsedAnalyzer
             if (!$method instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 continue;
             }
-            if ($method->isAbstract()) {
-                return \true;
-            }
+            return \true;
         }
         return \false;
     }
