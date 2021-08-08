@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;

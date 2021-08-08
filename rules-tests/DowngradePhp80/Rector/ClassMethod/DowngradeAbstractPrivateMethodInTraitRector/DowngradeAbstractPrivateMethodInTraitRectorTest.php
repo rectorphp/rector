@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeAbstractPrivateMethodInTraitRector;
 
 use Iterator;
@@ -11,7 +10,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class DowngradeAbstractPrivateMethodInTraitRectorTest extends AbstractRectorTestCase
 {
-
     /**
      * @requires PHP 8.0
      * @dataProvider provideData()
