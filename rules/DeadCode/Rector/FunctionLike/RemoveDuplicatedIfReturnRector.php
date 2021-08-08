@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
-use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Rector\AbstractRector;
@@ -32,15 +31,10 @@ final class RemoveDuplicatedIfReturnRector extends \Rector\Core\Rector\AbstractR
      * @var \Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector
      */
     private $modifiedVariableNamesCollector;
-    /**
-     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
-     */
-    private $propertyFetchAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector $modifiedVariableNamesCollector, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector $modifiedVariableNamesCollector, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->modifiedVariableNamesCollector = $modifiedVariableNamesCollector;
-        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeComparator = $nodeComparator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -119,12 +113,6 @@ CODE_SAMPLE
                 continue;
             }
             /** @var If_ $stmt */
-            $isFoundPropertyFetch = (bool) $this->betterNodeFinder->findFirst($stmt->cond, function (\PhpParser\Node $node) : bool {
-                return $this->propertyFetchAnalyzer->isPropertyFetch($node);
-            });
-            if ($isFoundPropertyFetch) {
-                continue;
-            }
             $hash = $this->nodeComparator->printWithoutComments($stmt);
             $ifWithOnlyReturnsByHash[$hash][] = $stmt;
         }
