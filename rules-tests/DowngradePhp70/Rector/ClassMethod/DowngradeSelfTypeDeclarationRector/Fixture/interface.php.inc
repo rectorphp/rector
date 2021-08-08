@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
 
 interface WithSelfInterface
 {
@@ -11,7 +11,7 @@ interface WithSelfInterface
 -----
 <?php
 
-namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
 
 interface WithSelfInterface
 {

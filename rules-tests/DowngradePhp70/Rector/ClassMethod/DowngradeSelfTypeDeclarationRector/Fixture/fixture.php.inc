@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
 
 class Fixture
 {
@@ -14,7 +14,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
 
 class Fixture
 {

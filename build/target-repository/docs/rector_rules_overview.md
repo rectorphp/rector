@@ -1,4 +1,4 @@
-# 474 Rules Overview
+# 475 Rules Overview
 
 <br>
 
@@ -24,7 +24,7 @@
 
 - [DowngradePhp53](#downgradephp53) (1)
 
-- [DowngradePhp70](#downgradephp70) (9)
+- [DowngradePhp70](#downgradephp70) (10)
 
 - [DowngradePhp71](#downgradephp71) (9)
 
@@ -32,9 +32,9 @@
 
 - [DowngradePhp73](#downgradephp73) (6)
 
-- [DowngradePhp74](#downgradephp74) (11)
+- [DowngradePhp74](#downgradephp74) (10)
 
-- [DowngradePhp80](#downgradephp80) (17)
+- [DowngradePhp80](#downgradephp80) (18)
 
 - [DowngradePhp81](#downgradephp81) (1)
 
@@ -4333,6 +4333,25 @@ Remove the type params and return type, add `@param` and `@return` tags instead
 
 <br>
 
+### DowngradeSelfTypeDeclarationRector
+
+Remove "self" return type, add a `"@return` self" tag instead
+
+- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function foo(): self
++    public function foo()
+     {
+         return $this;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeSessionStartArrayOptionsRector
 
 Move array option of session_start($options) to before statement's `ini_set()`
@@ -5014,25 +5033,6 @@ Remove "_" as thousands separator in numbers
 
 <br>
 
-### DowngradeSelfTypeDeclarationRector
-
-Remove "self" return type, add a `"@return` self" tag instead
-
-- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](../rules/DowngradePhp74/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function foo(): self
-+    public function foo()
-     {
-         return $this;
-     }
- }
-```
-
-<br>
-
 ### DowngradeStripTagsCallWithArrayRector
 
 Convert 2nd param to `strip_tags` from array to string
@@ -5083,6 +5083,22 @@ Changes property type definition from type definitions to `@var` annotations.
 <br>
 
 ## DowngradePhp80
+
+### DowngradeAbstractPrivateMethodInTraitRector
+
+Remove "abstract" from private methods in traits and adds an empty function body
+
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeAbstractPrivateMethodInTraitRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeAbstractPrivateMethodInTraitRector.php)
+
+```diff
+ trait SomeTrait
+ {
+-    abstract private function someAbstractPrivateFunction();
++    private function someAbstractPrivateFunction() {}
+ }
+```
+
+<br>
 
 ### DowngradeAttributeToAnnotationRector
 

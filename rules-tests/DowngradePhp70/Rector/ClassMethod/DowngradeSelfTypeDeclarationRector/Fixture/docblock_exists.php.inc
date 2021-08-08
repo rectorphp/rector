@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
 
 class DocblockExists {
     /**
@@ -16,7 +16,7 @@ class DocblockExists {
 -----
 <?php
 
-namespace Rector\Tests\DowngradePhp74\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
+namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector\Fixture;
 
 class DocblockExists {
     /**
