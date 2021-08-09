@@ -8,12 +8,15 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer;
 use Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer;
 use Rector\CodeQuality\NodeFactory\MissingPropertiesFactory;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Rector\AbstractRector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -31,7 +34,8 @@ final class CompleteDynamicPropertiesRector extends AbstractRector
         private LocalPropertyAnalyzer $localPropertyAnalyzer,
         private ClassLikeAnalyzer $classLikeAnalyzer,
         private ReflectionProvider $reflectionProvider,
-        private ClassAnalyzer $classAnalyzer
+        private ClassAnalyzer $classAnalyzer,
+        private PropertyPresenceChecker $propertyPresenceChecker
     ) {
     }
 
@@ -105,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertiesToComplete = $this->filterOutExistingProperties($classReflection, $propertiesToComplete);
+        $propertiesToComplete = $this->filterOutExistingProperties($node, $classReflection, $propertiesToComplete);
 
         $newProperties = $this->missingPropertiesFactory->create(
             $fetchedLocalPropertyNameToTypes,
@@ -160,13 +164,31 @@ CODE_SAMPLE
      * @param string[] $propertiesToComplete
      * @return string[]
      */
-    private function filterOutExistingProperties(ClassReflection $classReflection, array $propertiesToComplete): array
+    private function filterOutExistingProperties(
+        Class_ $class,
+        ClassReflection $classReflection,
+        array $propertiesToComplete
+    ): array
     {
         $missingPropertyNames = [];
 
+        $className = $classReflection->getName();
         // remove other properties that are accessible from this scope
         foreach ($propertiesToComplete as $propertyToComplete) {
             if ($classReflection->hasProperty($propertyToComplete)) {
+                continue;
+            }
+
+            $propertyMetadata = new PropertyMetadata(
+                $propertyToComplete,
+                new ObjectType($className),
+                Class_::MODIFIER_PRIVATE
+            );
+            $hasClassContextProperty = $this->propertyPresenceChecker->hasClassContextProperty(
+                $class,
+                $propertyMetadata
+            );
+            if ($hasClassContextProperty) {
                 continue;
             }
 
