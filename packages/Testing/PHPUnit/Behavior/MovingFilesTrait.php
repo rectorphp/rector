@@ -78,13 +78,19 @@ trait MovingFilesTrait
     private function resolveAddedFilePathsWithContents(): array
     {
         $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
+        $nodesWithFileDestinationPrinter = $this->getService(NodesWithFileDestinationPrinter::class);
+
+        $movedFiles = $this->removedAndAddedFilesCollector->getMovedFiles();
+        foreach ($movedFiles as $movedFile) {
+            $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($movedFile);
+            $addedFilePathsWithContents[] = new AddedFileWithContent($movedFile->getNewFilePath(), $fileContent);
+        }
 
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
         if ($addedFilesWithNodes === []) {
             return $addedFilePathsWithContents;
         }
 
-        $nodesWithFileDestinationPrinter = $this->getService(NodesWithFileDestinationPrinter::class);
         foreach ($addedFilesWithNodes as $addedFileWithNode) {
             $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNode);
             $addedFilePathsWithContents[] = new AddedFileWithContent($addedFileWithNode->getFilePath(), $fileContent);
