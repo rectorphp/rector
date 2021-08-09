@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210808;
+namespace RectorPrefix20210809;
 
 if (\interface_exists('Tx_Extbase_Property_PropertyMappingConfigurationInterface')) {
     return;

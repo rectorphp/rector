@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
-use RectorPrefix20210808\Nette\Utils\Strings;
+use RectorPrefix20210809\Nette\Utils\Strings;
 final class DocBlockInliner
 {
     /**
@@ -18,7 +18,7 @@ final class DocBlockInliner
     private const NEWLINE_MIDDLE_DOC_REGEX = "#\n \\* #";
     public function inline(string $docContent) : string
     {
-        $docContent = \RectorPrefix20210808\Nette\Utils\Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
-        return \RectorPrefix20210808\Nette\Utils\Strings::replace($docContent, self::NEWLINE_CLOSING_DOC_REGEX, ' */');
+        $docContent = \RectorPrefix20210809\Nette\Utils\Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
+        return \RectorPrefix20210809\Nette\Utils\Strings::replace($docContent, self::NEWLINE_CLOSING_DOC_REGEX, ' */');
     }
 }

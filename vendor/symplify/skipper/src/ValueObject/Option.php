@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210808\Symplify\Skipper\ValueObject;
+namespace RectorPrefix20210809\Symplify\Skipper\ValueObject;
 
 final class Option
 {

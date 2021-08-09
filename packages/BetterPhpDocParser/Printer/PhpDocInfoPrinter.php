@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
-use RectorPrefix20210808\Nette\Utils\Strings;
+use RectorPrefix20210809\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -21,7 +21,7 @@ use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20210808\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210809\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
  */
@@ -140,7 +140,7 @@ final class PhpDocInfoPrinter
         $this->currentTokenPosition = 0;
         $phpDocString = $this->printPhpDocNode($phpDocNode);
         // hotfix of extra space with callable ()
-        return \RectorPrefix20210808\Nette\Utils\Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
+        return \RectorPrefix20210809\Nette\Utils\Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
     }
     public function getCurrentPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
@@ -163,11 +163,11 @@ final class PhpDocInfoPrinter
         }
         $output = $this->printEnd($output);
         // fix missing start
-        if (!\RectorPrefix20210808\Nette\Utils\Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
+        if (!\RectorPrefix20210809\Nette\Utils\Strings::match($output, self::DOCBLOCK_START_REGEX) && $output) {
             $output = '/**' . $output;
         }
         // fix missing end
-        if (\RectorPrefix20210808\Nette\Utils\Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && !\RectorPrefix20210808\Nette\Utils\Strings::match($output, self::CLOSING_DOCBLOCK_REGEX)) {
+        if (\RectorPrefix20210809\Nette\Utils\Strings::match($output, self::OPENING_DOCBLOCK_REGEX) && $output && !\RectorPrefix20210809\Nette\Utils\Strings::match($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
         return $output;
@@ -189,7 +189,7 @@ final class PhpDocInfoPrinter
             if ($phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode && $shouldReprintChildNode) {
                 $printedNode = (string) $phpDocChildNode;
                 // remove extra space between tags
-                $printedNode = \RectorPrefix20210808\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
+                $printedNode = \RectorPrefix20210809\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
                 return self::NEWLINE_WITH_ASTERISK . $printedNode;
             }
         }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210808\Psr\EventDispatcher;
+namespace RectorPrefix20210809\Psr\EventDispatcher;
 
 /**
  * Defines a dispatcher for events.

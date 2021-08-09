@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210808\Psr\Log;
+namespace RectorPrefix20210809\Psr\Log;
 
 /**
  * This Logger can be used to avoid conditional log calls.
@@ -10,7 +10,7 @@ namespace RectorPrefix20210808\Psr\Log;
  * is a good way to avoid littering your code with `if ($this->logger) { }`
  * blocks.
  */
-class NullLogger extends \RectorPrefix20210808\Psr\Log\AbstractLogger
+class NullLogger extends \RectorPrefix20210809\Psr\Log\AbstractLogger
 {
     /**
      * Logs with an arbitrary level.

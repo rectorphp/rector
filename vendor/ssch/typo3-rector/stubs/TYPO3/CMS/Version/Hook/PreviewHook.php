@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210808\TYPO3\CMS\Version\Hook;
+namespace RectorPrefix20210809\TYPO3\CMS\Version\Hook;
 
 if (\class_exists('TYPO3\\CMS\\Version\\Hook\\PreviewHook')) {
     return;

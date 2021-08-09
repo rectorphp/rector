@@ -29,7 +29,7 @@ final class SideEffectNodeDetector
     /**
      * @var array<class-string<Expr>>
      */
-    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
