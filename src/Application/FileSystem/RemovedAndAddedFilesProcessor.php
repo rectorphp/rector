@@ -39,6 +39,7 @@ final class RemovedAndAddedFilesProcessor
     {
         $this->processAddedFilesWithContent($configuration);
         $this->processAddedFilesWithNodes($configuration);
+        $this->processMovedFilesWithNodes($configuration);
         $this->processDeletedFiles($configuration);
     }
     private function processDeletedFiles(\Rector\Core\ValueObject\Configuration $configuration) : void
@@ -78,6 +79,20 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $this->smartFileSystem->dumpFile($addedFileWithNode->getFilePath(), $fileContent);
                 $message = \sprintf('File "%s" was added', $addedFileWithNode->getFilePath());
+                $this->symfonyStyle->note($message);
+            }
+        }
+    }
+    private function processMovedFilesWithNodes(\Rector\Core\ValueObject\Configuration $configuration) : void
+    {
+        foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedFile) {
+            $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination($movedFile);
+            if ($configuration->isDryRun()) {
+                $message = \sprintf('File "%s" will be moved to "%s"', $movedFile->getFilePath(), $movedFile->getNewFilePath());
+                $this->symfonyStyle->note($message);
+            } else {
+                $this->smartFileSystem->dumpFile($movedFile->getNewFilePath(), $fileContent);
+                $message = \sprintf('File "%s" was moved to "%s"', $movedFile->getFilePath(), $movedFile->getNewFilePath());
                 $this->symfonyStyle->note($message);
             }
         }

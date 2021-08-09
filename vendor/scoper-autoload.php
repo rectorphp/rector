@@ -9,8 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210809\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit9d30aab197e6b91f11e4317899373676', false) && !interface_exists('ComposerAutoloaderInit9d30aab197e6b91f11e4317899373676', false) && !trait_exists('ComposerAutoloaderInit9d30aab197e6b91f11e4317899373676', false)) {
-    spl_autoload_call('RectorPrefix20210809\ComposerAutoloaderInit9d30aab197e6b91f11e4317899373676');
+if (!class_exists('ComposerAutoloaderInit5ac7f6d3155d290b95745e768df725ae', false) && !interface_exists('ComposerAutoloaderInit5ac7f6d3155d290b95745e768df725ae', false) && !trait_exists('ComposerAutoloaderInit5ac7f6d3155d290b95745e768df725ae', false)) {
+    spl_autoload_call('RectorPrefix20210809\ComposerAutoloaderInit5ac7f6d3155d290b95745e768df725ae');
 }
 if (!class_exists('AjaxLogin', false) && !interface_exists('AjaxLogin', false) && !trait_exists('AjaxLogin', false)) {
     spl_autoload_call('RectorPrefix20210809\AjaxLogin');
@@ -3305,9 +3305,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210809\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire9d30aab197e6b91f11e4317899373676')) {
-    function composerRequire9d30aab197e6b91f11e4317899373676() {
-        return \RectorPrefix20210809\composerRequire9d30aab197e6b91f11e4317899373676(...func_get_args());
+if (!function_exists('composerRequire5ac7f6d3155d290b95745e768df725ae')) {
+    function composerRequire5ac7f6d3155d290b95745e768df725ae() {
+        return \RectorPrefix20210809\composerRequire5ac7f6d3155d290b95745e768df725ae(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {

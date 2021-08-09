@@ -1914,6 +1914,7 @@ return array(
     'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => $baseDir . '/src/ValueObjectFactory/Application/FileFactory.php',
     'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => $baseDir . '/src/ValueObjectFactory/ProcessResultFactory.php',
     'Rector\\Core\\ValueObject\\Application\\File' => $baseDir . '/src/ValueObject/Application/File.php',
+    'Rector\\Core\\ValueObject\\Application\\MovedFile' => $baseDir . '/src/ValueObject/Application/MovedFile.php',
     'Rector\\Core\\ValueObject\\Application\\RectorError' => $baseDir . '/src/ValueObject/Application/RectorError.php',
     'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => $baseDir . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
     'Rector\\Core\\ValueObject\\Configuration' => $baseDir . '/src/ValueObject/Configuration.php',
