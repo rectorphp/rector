@@ -92,6 +92,7 @@ final class RemovedAndAddedFilesProcessor
                 $this->symfonyStyle->note($message);
             } else {
                 $this->smartFileSystem->dumpFile($movedFile->getNewFilePath(), $fileContent);
+                $this->smartFileSystem->remove($movedFile->getFilePath());
                 $message = \sprintf('File "%s" was moved to "%s"', $movedFile->getFilePath(), $movedFile->getNewFilePath());
                 $this->symfonyStyle->note($message);
             }
