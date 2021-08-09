@@ -34,6 +34,7 @@ final class SideEffectNodeDetector
      */
     private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [
         MethodCall::class,
+        New_::class,
         NullsafeMethodCall::class,
         StaticCall::class,
     ];
