@@ -66,11 +66,16 @@ trait MovingFilesTrait
     private function resolveAddedFilePathsWithContents() : array
     {
         $addedFilePathsWithContents = $this->removedAndAddedFilesCollector->getAddedFilesWithContent();
+        $nodesWithFileDestinationPrinter = $this->getService(\Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter::class);
+        $movedFiles = $this->removedAndAddedFilesCollector->getMovedFiles();
+        foreach ($movedFiles as $movedFile) {
+            $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($movedFile);
+            $addedFilePathsWithContents[] = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($movedFile->getNewFilePath(), $fileContent);
+        }
         $addedFilesWithNodes = $this->removedAndAddedFilesCollector->getAddedFilesWithNodes();
         if ($addedFilesWithNodes === []) {
             return $addedFilePathsWithContents;
         }
-        $nodesWithFileDestinationPrinter = $this->getService(\Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter::class);
         foreach ($addedFilesWithNodes as $addedFileWithNode) {
             $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNode);
             $addedFilePathsWithContents[] = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($addedFileWithNode->getFilePath(), $fileContent);
