@@ -6,6 +6,7 @@ namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
@@ -82,6 +83,11 @@ final class PropertyNaming
         }
 
         $className = $this->nodeTypeResolver->getFullyQualifiedClassName($type);
+
+        // generic types are usually mix of parent type and specific type - various way to handle it
+        if ($type instanceof GenericObjectType) {
+            return null;
+        }
 
         foreach (self::EXCLUDED_CLASSES as $excludedClass) {
             if (Strings::match($className, $excludedClass)) {
