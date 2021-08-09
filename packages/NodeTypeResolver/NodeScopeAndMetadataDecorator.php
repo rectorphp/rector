@@ -18,6 +18,14 @@ use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 final class NodeScopeAndMetadataDecorator
 {
     /**
+     * @var string
+     */
+    private const OPTION_PRESERVE_ORIGINAL_NAMES = 'preserveOriginalNames';
+    /**
+     * @var string
+     */
+    private const OPTION_REPLACE_NODES = 'replaceNodes';
+    /**
      * @var \PhpParser\NodeVisitor\CloningVisitor
      */
     private $cloningVisitor;
@@ -63,9 +71,9 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $nodeTraverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver(null, [
-            'preserveOriginalNames' => \true,
+            self::OPTION_PRESERVE_ORIGINAL_NAMES => \true,
             // required by PHPStan
-            'replaceNodes' => \true,
+            self::OPTION_REPLACE_NODES => \true,
         ]));
         /** @var Stmt[] $nodes */
         $nodes = $nodeTraverser->traverse($nodes);
@@ -73,9 +81,9 @@ final class NodeScopeAndMetadataDecorator
         $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $preservingNameResolver = new \PhpParser\NodeVisitor\NameResolver(null, [
-            'preserveOriginalNames' => \true,
+            self::OPTION_PRESERVE_ORIGINAL_NAMES => \true,
             // this option would override old non-fqn-namespaced nodes otherwise, so it needs to be disabled
-            'replaceNodes' => \false,
+            self::OPTION_REPLACE_NODES => \false,
         ]);
         $nodeTraverser->addVisitor($preservingNameResolver);
         $nodes = $nodeTraverser->traverse($nodes);
