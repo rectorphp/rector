@@ -19,6 +19,16 @@ use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 
 final class NodeScopeAndMetadataDecorator
 {
+    /**
+     * @var string
+     */
+    private const OPTION_PRESERVE_ORIGINAL_NAMES = 'preserveOriginalNames';
+
+    /**
+     * @var string
+     */
+    private const OPTION_REPLACE_NODES = 'replaceNodes';
+
     public function __construct(
         private CloningVisitor $cloningVisitor,
         private FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
@@ -38,9 +48,9 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
-            'preserveOriginalNames' => true,
+            self::OPTION_PRESERVE_ORIGINAL_NAMES => true,
             // required by PHPStan
-            'replaceNodes' => true,
+            self::OPTION_REPLACE_NODES => true,
         ]));
 
         /** @var Stmt[] $nodes */
@@ -52,9 +62,9 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser = new NodeTraverser();
 
         $preservingNameResolver = new NameResolver(null, [
-            'preserveOriginalNames' => true,
+            self::OPTION_PRESERVE_ORIGINAL_NAMES => true,
             // this option would override old non-fqn-namespaced nodes otherwise, so it needs to be disabled
-            'replaceNodes' => false,
+            self::OPTION_REPLACE_NODES => false,
         ]);
 
         $nodeTraverser->addVisitor($preservingNameResolver);
