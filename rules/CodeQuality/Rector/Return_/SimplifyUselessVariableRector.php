@@ -13,6 +13,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,7 +27,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyUselessVariableRector extends AbstractRector
 {
     public function __construct(
-        private AssignAndBinaryMap $assignAndBinaryMap
+        private AssignAndBinaryMap $assignAndBinaryMap,
+        private VariableAnalyzer $variableAnalyzer
     ) {
     }
 
@@ -125,6 +127,7 @@ CODE_SAMPLE
             return true;
         }
 
+        /** @var Variable $variableNode */
         $variableNode = $return->expr;
 
         $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -145,7 +148,12 @@ CODE_SAMPLE
         if (! $this->nodeComparator->areNodesEqual($previousNode->var, $variableNode)) {
             return true;
         }
-        return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
+
+        if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
+            return true;
+        }
+
+        return $this->variableAnalyzer->isStatic($variableNode);
     }
 
     private function hasSomeComment(Expr $expr): bool
