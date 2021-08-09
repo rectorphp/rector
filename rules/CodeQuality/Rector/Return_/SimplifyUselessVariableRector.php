@@ -12,6 +12,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,9 +28,14 @@ final class SimplifyUselessVariableRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
-    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
+     */
+    private $variableAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->variableAnalyzer = $variableAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -105,6 +111,7 @@ CODE_SAMPLE
         if ($this->hasByRefReturn($return)) {
             return \true;
         }
+        /** @var Variable $variableNode */
         $variableNode = $return->expr;
         $previousExpression = $return->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
         if (!$previousExpression instanceof \PhpParser\Node) {
@@ -122,7 +129,10 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($previousNode->var, $variableNode)) {
             return \true;
         }
-        return $this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode);
+        if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
+            return \true;
+        }
+        return $this->variableAnalyzer->isStatic($variableNode);
     }
     private function hasSomeComment(\PhpParser\Node\Expr $expr) : bool
     {

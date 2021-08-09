@@ -1838,6 +1838,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => $baseDir . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyPresenceChecker' => $baseDir . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
+    'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariableAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariadicAnalyzer.php',
     'Rector\\Core\\NodeFactory\\ClassWithPublicPropertiesFactory' => $baseDir . '/src/NodeFactory/ClassWithPublicPropertiesFactory.php',
     'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => $baseDir . '/src/NodeManipulator/ArrayDestructVariableFilter.php',
