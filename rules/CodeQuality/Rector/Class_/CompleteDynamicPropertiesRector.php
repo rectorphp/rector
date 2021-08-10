@@ -168,8 +168,7 @@ CODE_SAMPLE
         Class_ $class,
         ClassReflection $classReflection,
         array $propertiesToComplete
-    ): array
-    {
+    ): array {
         $missingPropertyNames = [];
 
         $className = $classReflection->getName();

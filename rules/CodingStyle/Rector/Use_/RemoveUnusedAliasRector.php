@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Use_;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -179,7 +181,19 @@ CODE_SAMPLE
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use ($name): bool {
+        return (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use (
+            $name,
+            $loweredAliasName
+        ): bool {
+            if ($node instanceof FullyQualified) {
+                $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
+                if ($originalName instanceof Name) {
+                    $loweredOriginalName = strtolower($originalName->toString());
+                    $loweredOriginalNameNamespace = Strings::before($loweredOriginalName, '\\');
+                    return $loweredAliasName === $loweredOriginalNameNamespace;
+                }
+            }
+
             if (! $node instanceof ClassConstFetch) {
                 return false;
             }
