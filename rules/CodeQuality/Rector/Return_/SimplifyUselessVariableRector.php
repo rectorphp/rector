@@ -153,7 +153,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->variableAnalyzer->isStatic($variableNode);
+        return $this->variableAnalyzer->isStaticOrGlobal($variableNode);
     }
 
     private function hasSomeComment(Expr $expr): bool
