@@ -41,6 +41,16 @@ final class ConditionSearcher
                 return false;
             }
         }
+
+        $isInCond = (bool) $this->betterNodeFinder->findFirst(
+            $if->cond,
+            fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($varNode, $subNode)
+        );
+
+        if ($isInCond) {
+            return false;
+        }
+
         return $this->hasVariableRedeclaration($varNode, $elseNode->stmts);
     }
 
