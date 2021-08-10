@@ -132,7 +132,7 @@ CODE_SAMPLE
         if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
             return \true;
         }
-        return $this->variableAnalyzer->isStatic($variableNode);
+        return $this->variableAnalyzer->isStaticOrGlobal($variableNode);
     }
     private function hasSomeComment(\PhpParser\Node\Expr $expr) : bool
     {

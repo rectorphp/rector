@@ -9,8 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210810\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInitfbd7c5add9d8138f9f672e62d43f427f', false) && !interface_exists('ComposerAutoloaderInitfbd7c5add9d8138f9f672e62d43f427f', false) && !trait_exists('ComposerAutoloaderInitfbd7c5add9d8138f9f672e62d43f427f', false)) {
-    spl_autoload_call('RectorPrefix20210810\ComposerAutoloaderInitfbd7c5add9d8138f9f672e62d43f427f');
+if (!class_exists('ComposerAutoloaderInit587b2d1b866607bd8298e2682506d33b', false) && !interface_exists('ComposerAutoloaderInit587b2d1b866607bd8298e2682506d33b', false) && !trait_exists('ComposerAutoloaderInit587b2d1b866607bd8298e2682506d33b', false)) {
+    spl_autoload_call('RectorPrefix20210810\ComposerAutoloaderInit587b2d1b866607bd8298e2682506d33b');
 }
 if (!class_exists('AjaxLogin', false) && !interface_exists('AjaxLogin', false) && !trait_exists('AjaxLogin', false)) {
     spl_autoload_call('RectorPrefix20210810\AjaxLogin');
@@ -3305,9 +3305,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210810\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequirefbd7c5add9d8138f9f672e62d43f427f')) {
-    function composerRequirefbd7c5add9d8138f9f672e62d43f427f() {
-        return \RectorPrefix20210810\composerRequirefbd7c5add9d8138f9f672e62d43f427f(...func_get_args());
+if (!function_exists('composerRequire587b2d1b866607bd8298e2682506d33b')) {
+    function composerRequire587b2d1b866607bd8298e2682506d33b() {
+        return \RectorPrefix20210810\composerRequire587b2d1b866607bd8298e2682506d33b(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
