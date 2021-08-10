@@ -75,8 +75,6 @@ parameters:
 
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
-        - '#Property PhpParser\\Node\\Stmt\\Namespace_\:\:\$stmts \(array<PhpParser\\Node\\Stmt\>\) does not accept array<PhpParser\\Node\>#'
-
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 9#'
 
         -
@@ -134,8 +132,6 @@ parameters:
         -
             message: '#Function "dump\(\)" cannot be used/left in the code#'
             path: tests/debug_functions.php
-
-        - '#Parameter \#1 \$node of method Rector\\DeadCode\\Rector\\Plus\\RemoveDeadZeroAndOneOperationRector\:\:refactor\(\) expects PhpParser\\Node\\Expr\\AssignOp\\Div\|PhpParser\\Node\\Expr\\AssignOp\\Minus\|PhpParser\\Node\\Expr\\AssignOp\\Mul\|PhpParser\\Node\\Expr\\AssignOp\\Plus\|PhpParser\\Node\\Expr\\BinaryOp\\Div\|PhpParser\\Node\\Expr\\BinaryOp\\Minus\|PhpParser\\Node\\Expr\\BinaryOp\\Mul\|PhpParser\\Node\\Expr\\BinaryOp\\Plus, PhpParser\\Node\\Expr\\AssignOp\|PhpParser\\Node\\Expr\\BinaryOp given#'
 
         # symplify 9
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
@@ -496,18 +492,10 @@ parameters:
         - '#Method "decorateReturnWithSpecificType\(\)" returns bool type, so the name should start with is/has/was#'
         - '#Method "resolveObjectType\(\)" returns bool type, so the name should start with is/has/was#'
 
-        - '#Method "(equal|match)(.*?)\(\)" returns bool type, so the name should start with is/has/was#'
-
         -
             message: '#Use dependency injection instead of dependency juggling#'
             paths:
                 - packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider
-
-        # resolve later
-        -
-            message: '#Use explicit names over dynamic ones#'
-            paths:
-                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
 
         # native filesystem calls, required for performance reasons
         -
