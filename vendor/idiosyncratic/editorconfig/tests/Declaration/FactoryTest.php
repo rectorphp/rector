@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210809\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20210810\Idiosyncratic\EditorConfig\Declaration;
 
 use DomainException;
-use RectorPrefix20210809\PHPUnit\Framework\TestCase;
+use RectorPrefix20210810\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class FactoryTest extends \RectorPrefix20210809\PHPUnit\Framework\TestCase
+class FactoryTest extends \RectorPrefix20210810\PHPUnit\Framework\TestCase
 {
     public function testOfficialDeclarations()
     {
         $declarations = ['indent_style' => 'space', 'indent_size' => '4', 'tab_width' => '4', 'end_of_line' => 'lf', 'charset' => 'utf-8', 'trim_trailing_whitespace' => 'true', 'insert_final_newline' => 'false', 'max_line_length' => 'off'];
-        $factory = new \RectorPrefix20210809\Idiosyncratic\EditorConfig\Declaration\Factory();
+        $factory = new \RectorPrefix20210810\Idiosyncratic\EditorConfig\Declaration\Factory();
         foreach ($declarations as $key => $value) {
             $declaration = $factory->getDeclaration($key, $value);
             $this->assertEquals($key, $declaration->getName());
@@ -19,14 +19,14 @@ class FactoryTest extends \RectorPrefix20210809\PHPUnit\Framework\TestCase
     }
     public function testUnsetDeclaration()
     {
-        $factory = new \RectorPrefix20210809\Idiosyncratic\EditorConfig\Declaration\Factory();
+        $factory = new \RectorPrefix20210810\Idiosyncratic\EditorConfig\Declaration\Factory();
         $indentSize = $factory->getDeclaration('indent_size', 'unset');
-        $this->assertInstanceOf(\RectorPrefix20210809\Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration::class, $indentSize);
+        $this->assertInstanceOf(\RectorPrefix20210810\Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration::class, $indentSize);
     }
     public function testUnknownDeclaration()
     {
-        $factory = new \RectorPrefix20210809\Idiosyncratic\EditorConfig\Declaration\Factory();
+        $factory = new \RectorPrefix20210810\Idiosyncratic\EditorConfig\Declaration\Factory();
         $justification = $factory->getDeclaration('justification', 'left');
-        $this->assertInstanceOf(\RectorPrefix20210809\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration::class, $justification);
+        $this->assertInstanceOf(\RectorPrefix20210810\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration::class, $justification);
     }
 }

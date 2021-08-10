@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix20210809\Nette\Utils\Strings;
+use RectorPrefix20210810\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -70,7 +70,7 @@ CODE_SAMPLE
         }
         foreach ($patterns as $pattern) {
             foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
-                $pattern->value = \RectorPrefix20210809\Nette\Utils\Strings::replace($pattern->value, '#' . \preg_quote($complexPattern, '#') . '#', $simple);
+                $pattern->value = \RectorPrefix20210810\Nette\Utils\Strings::replace($pattern->value, '#' . \preg_quote($complexPattern, '#') . '#', $simple);
             }
         }
         return $node;

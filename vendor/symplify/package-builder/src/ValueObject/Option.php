@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210809\Symplify\PackageBuilder\ValueObject;
+namespace RectorPrefix20210810\Symplify\PackageBuilder\ValueObject;
 
 final class Option
 {

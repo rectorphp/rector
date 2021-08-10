@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210809;
+namespace RectorPrefix20210810;
 
 return [
     'TYPO3\\CMS\\Fluid\\Core\\Compiler\\TemplateCompiler' => 'TYPO3Fluid\\Fluid\\Core\\Compiler\\TemplateCompiler',

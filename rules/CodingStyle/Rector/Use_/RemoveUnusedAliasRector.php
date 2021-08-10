@@ -3,9 +3,11 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Use_;
 
+use RectorPrefix20210810\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -160,7 +162,15 @@ CODE_SAMPLE
         if (\in_array($loweredAliasName, $this->resolvedDocPossibleAliases, \true)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($use, function (\PhpParser\Node $node) use($name) : bool {
+        return (bool) $this->betterNodeFinder->findFirstNext($use, function (\PhpParser\Node $node) use($name, $loweredAliasName) : bool {
+            if ($node instanceof \PhpParser\Node\Name\FullyQualified) {
+                $originalName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
+                if ($originalName instanceof \PhpParser\Node\Name) {
+                    $loweredOriginalName = \strtolower($originalName->toString());
+                    $loweredOriginalNameNamespace = \RectorPrefix20210810\Nette\Utils\Strings::before($loweredOriginalName, '\\');
+                    return $loweredAliasName === $loweredOriginalNameNamespace;
+                }
+            }
             if (!$node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
                 return \false;
             }

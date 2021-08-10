@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210809\Symfony\Component\Console\Helper;
+namespace RectorPrefix20210810\Symfony\Component\Console\Helper;
 
-use RectorPrefix20210809\Symfony\Component\Console\Descriptor\DescriptorInterface;
-use RectorPrefix20210809\Symfony\Component\Console\Descriptor\JsonDescriptor;
-use RectorPrefix20210809\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
-use RectorPrefix20210809\Symfony\Component\Console\Descriptor\TextDescriptor;
-use RectorPrefix20210809\Symfony\Component\Console\Descriptor\XmlDescriptor;
-use RectorPrefix20210809\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210809\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210810\Symfony\Component\Console\Descriptor\DescriptorInterface;
+use RectorPrefix20210810\Symfony\Component\Console\Descriptor\JsonDescriptor;
+use RectorPrefix20210810\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
+use RectorPrefix20210810\Symfony\Component\Console\Descriptor\TextDescriptor;
+use RectorPrefix20210810\Symfony\Component\Console\Descriptor\XmlDescriptor;
+use RectorPrefix20210810\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210810\Symfony\Component\Console\Output\OutputInterface;
 /**
  * This class adds helper method to describe objects in various formats.
  *
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class DescriptorHelper extends \RectorPrefix20210809\Symfony\Component\Console\Helper\Helper
+class DescriptorHelper extends \RectorPrefix20210810\Symfony\Component\Console\Helper\Helper
 {
     /**
      * @var DescriptorInterface[]
@@ -30,7 +30,7 @@ class DescriptorHelper extends \RectorPrefix20210809\Symfony\Component\Console\H
     private $descriptors = [];
     public function __construct()
     {
-        $this->register('txt', new \RectorPrefix20210809\Symfony\Component\Console\Descriptor\TextDescriptor())->register('xml', new \RectorPrefix20210809\Symfony\Component\Console\Descriptor\XmlDescriptor())->register('json', new \RectorPrefix20210809\Symfony\Component\Console\Descriptor\JsonDescriptor())->register('md', new \RectorPrefix20210809\Symfony\Component\Console\Descriptor\MarkdownDescriptor());
+        $this->register('txt', new \RectorPrefix20210810\Symfony\Component\Console\Descriptor\TextDescriptor())->register('xml', new \RectorPrefix20210810\Symfony\Component\Console\Descriptor\XmlDescriptor())->register('json', new \RectorPrefix20210810\Symfony\Component\Console\Descriptor\JsonDescriptor())->register('md', new \RectorPrefix20210810\Symfony\Component\Console\Descriptor\MarkdownDescriptor());
     }
     /**
      * Describes an object if supported.
@@ -48,7 +48,7 @@ class DescriptorHelper extends \RectorPrefix20210809\Symfony\Component\Console\H
     {
         $options = \array_merge(['raw_text' => \false, 'format' => 'txt'], $options);
         if (!isset($this->descriptors[$options['format']])) {
-            throw new \RectorPrefix20210809\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Unsupported format "%s".', $options['format']));
+            throw new \RectorPrefix20210810\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Unsupported format "%s".', $options['format']));
         }
         $descriptor = $this->descriptors[$options['format']];
         $descriptor->describe($output, $object, $options);

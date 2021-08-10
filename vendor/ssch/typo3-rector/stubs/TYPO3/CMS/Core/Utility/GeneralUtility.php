@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210809\TYPO3\CMS\Core\Utility;
+namespace RectorPrefix20210810\TYPO3\CMS\Core\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
     return;

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210809\Symplify\SymplifyKernel\DependencyInjection\Extension;
+namespace RectorPrefix20210810\Symplify\SymplifyKernel\DependencyInjection\Extension;
 
-use RectorPrefix20210809\Symfony\Component\Config\FileLocator;
-use RectorPrefix20210809\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210809\Symfony\Component\DependencyInjection\Extension\Extension;
-use RectorPrefix20210809\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-final class SymplifyKernelExtension extends \RectorPrefix20210809\Symfony\Component\DependencyInjection\Extension\Extension
+use RectorPrefix20210810\Symfony\Component\Config\FileLocator;
+use RectorPrefix20210810\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210810\Symfony\Component\DependencyInjection\Extension\Extension;
+use RectorPrefix20210810\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+final class SymplifyKernelExtension extends \RectorPrefix20210810\Symfony\Component\DependencyInjection\Extension\Extension
 {
     /**
      * @param string[] $configs
@@ -15,7 +15,7 @@ final class SymplifyKernelExtension extends \RectorPrefix20210809\Symfony\Compon
      */
     public function load($configs, $containerBuilder) : void
     {
-        $phpFileLoader = new \RectorPrefix20210809\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210809\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
+        $phpFileLoader = new \RectorPrefix20210810\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210810\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
         $phpFileLoader->load('common-config.php');
     }
 }

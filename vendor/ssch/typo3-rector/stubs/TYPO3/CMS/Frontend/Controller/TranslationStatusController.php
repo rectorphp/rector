@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210809\TYPO3\CMS\Frontend\Controller;
+namespace RectorPrefix20210810\TYPO3\CMS\Frontend\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Frontend\\Controller\\TranslationStatusController')) {
     return;
