@@ -46,7 +46,8 @@ final class FormatPerservingPrinter
     }
     public function printParsedStmstAndTokens(\Rector\Core\ValueObject\Application\File $file) : string
     {
-        return $this->printToFile($file->getSmartFileInfo(), $file->getNewStmts(), $file->getOldStmts(), $file->getOldTokens());
+        $newStmts = $this->resolveNewStmts($file);
+        return $this->printToFile($file->getSmartFileInfo(), $newStmts, $file->getOldStmts(), $file->getOldTokens());
     }
     /**
      * @return Stmt[]|mixed[]
