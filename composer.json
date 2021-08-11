@@ -62,6 +62,7 @@
         "symplify/easy-ci": "^9.4.23",
         "symplify/easy-coding-standard": "^9.4.7",
         "symplify/easy-testing": "^9.4.24",
+        "symplify/monorepo-builder": "^9.4",
         "symplify/phpstan-extensions": "^9.4.24",
         "symplify/phpstan-rules": "^9.4.24",
         "symplify/rule-doc-generator": "^9.4.24",
@@ -135,7 +136,8 @@
             "vendor/bin/ecs check-markdown build/target-repository/docs/rector_rules_overview.md --ansi --fix"
         ],
         "rector": "bin/rector process --ansi",
-        "preload": "php build/build-preload.php ."
+        "preload": "php build/build-preload.php .",
+        "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
         "branch-alias": {
