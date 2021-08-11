@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
@@ -95,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->shouldSkipClassMethod($classLike, $node)) {
+        if ($this->shouldSkipClassMethod($classLike, $node, $type)) {
             return null;
         }
 
@@ -137,8 +138,11 @@ CODE_SAMPLE
         return $scope;
     }
 
-    private function shouldSkipClassMethod(Class_ | Trait_ | Interface_ $classLike, MethodCall $methodCall): bool
-    {
+    private function shouldSkipClassMethod(
+        Class_ | Trait_ | Interface_ $classLike,
+        MethodCall $methodCall,
+        TypeWithClassName $typeWithClassName
+    ): bool {
         if (! $classLike instanceof Class_) {
             return true;
         }
@@ -157,7 +161,16 @@ CODE_SAMPLE
             return true;
         }
 
-        return (array) $classMethod->stmts !== [];
+        if ((array) $classMethod->stmts !== []) {
+            return true;
+        }
+
+        $class = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        return $typeWithClassName instanceof ThisType && ! $class->isFinal() && ! $classMethod->isPrivate();
     }
 
     private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall): MethodCall | ConstFetch
