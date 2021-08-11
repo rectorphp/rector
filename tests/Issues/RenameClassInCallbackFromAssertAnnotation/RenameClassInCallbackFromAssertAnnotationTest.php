@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class RenameClassInCallbackFromAssertAnnotationTest extends AbstractRectorTestCase
+final class RenameClassInCallbackFromAssertAnnotationTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
