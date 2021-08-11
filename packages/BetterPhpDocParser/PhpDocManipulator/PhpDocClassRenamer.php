@@ -8,6 +8,7 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 final class PhpDocClassRenamer
 {
     /**
@@ -40,14 +41,15 @@ final class PhpDocClassRenamer
             return;
         }
         $callback = $assertChoiceTagValueNode->getValueWithoutQuotes('callback');
-        if ($callback === null) {
+        if (!$callback instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
             return;
         }
+        $callbackClass = $callback->getValueWithoutQuotes(0);
         foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if ($callback[0] !== $oldClass) {
+            if ($callbackClass !== $oldClass) {
                 continue;
             }
-            $callback[0] = $newClass;
+            $callback->changeValue('0', $newClass);
             $assertChoiceTagValueNode->changeValue('callback', $callback);
             break;
         }
