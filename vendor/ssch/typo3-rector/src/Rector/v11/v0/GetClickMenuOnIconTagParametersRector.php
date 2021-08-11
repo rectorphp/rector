@@ -33,7 +33,7 @@ final class GetClickMenuOnIconTagParametersRector extends \Rector\Core\Rector\Ab
         if (!$this->isName($node->name, 'wrapClickMenuOnIcon')) {
             return null;
         }
-        if (!\count($node->args) > 3) {
+        if (([] === $node->args) > 3) {
             return null;
         }
         $returnTagParameters = isset($node->args[6]) ? $this->valueResolver->getValue($node->args[6]->value) : \false;

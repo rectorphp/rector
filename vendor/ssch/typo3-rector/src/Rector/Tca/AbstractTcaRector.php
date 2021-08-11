@@ -103,7 +103,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
                 continue;
             }
             $columnName = $columnArrayItem->key;
-            if (null === $columnName) {
+            if (!$columnName instanceof \PhpParser\Node\Expr) {
                 continue;
             }
             $columnTca = $columnArrayItem->value;
@@ -125,11 +125,11 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
     protected function isSingleTcaColumn(\PhpParser\Node\Expr\ArrayItem $arrayItem) : bool
     {
         $labelNode = $this->extractArrayItemByKey($arrayItem->value, self::LABEL);
-        if (null === $labelNode) {
+        if (!$labelNode instanceof \PhpParser\Node\Expr\ArrayItem) {
             return \false;
         }
         $configNode = $this->extractArrayItemByKey($arrayItem->value, self::CONFIG);
-        if (null === $configNode) {
+        if (!$configNode instanceof \PhpParser\Node\Expr\ArrayItem) {
             return \false;
         }
         $typeNode = $this->extractArrayItemByKey($configNode->value, self::TYPE);
@@ -158,7 +158,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
                 continue;
             }
             $typeKey = $typeItem->key;
-            if (null === $typeKey) {
+            if (!$typeKey instanceof \PhpParser\Node\Expr) {
                 continue;
             }
             $typeConfig = $typeItem->value;
@@ -189,7 +189,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
     {
         $positionOfTypeInConfig = 0;
         foreach ($array->items as $configNode) {
-            if (null === $configNode) {
+            if (!$configNode instanceof \PhpParser\Node\Expr\ArrayItem) {
                 break;
             }
             if (null === $configNode->key || $this->valueResolver->getValue($configNode->key) === $key) {

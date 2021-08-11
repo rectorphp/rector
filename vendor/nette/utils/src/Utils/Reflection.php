@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210810\Nette\Utils;
+namespace RectorPrefix20210811\Nette\Utils;
 
-use RectorPrefix20210810\Nette;
+use RectorPrefix20210811\Nette;
 /**
  * PHP reflection helpers.
  */
@@ -99,9 +99,9 @@ final class Reflection
                 }
                 return $types;
             }
-            throw new \RectorPrefix20210810\Nette\InvalidStateException('The ' . self::toString($reflection) . ' is not expected to have a union type.');
+            throw new \RectorPrefix20210811\Nette\InvalidStateException('The ' . self::toString($reflection) . ' is not expected to have a union type.');
         } else {
-            throw new \RectorPrefix20210810\Nette\InvalidStateException('Unexpected type of ' . self::toString($reflection));
+            throw new \RectorPrefix20210811\Nette\InvalidStateException('Unexpected type of ' . self::toString($reflection));
         }
     }
     /**
@@ -211,7 +211,7 @@ final class Reflection
         } elseif ($ref instanceof \ReflectionParameter) {
             return '$' . $ref->name . ' in ' . self::toString($ref->getDeclaringFunction());
         } else {
-            throw new \RectorPrefix20210810\Nette\InvalidArgumentException();
+            throw new \RectorPrefix20210811\Nette\InvalidArgumentException();
         }
     }
     /**
@@ -225,7 +225,7 @@ final class Reflection
     {
         $lower = \strtolower($name);
         if (empty($name)) {
-            throw new \RectorPrefix20210810\Nette\InvalidArgumentException('Class name must not be empty.');
+            throw new \RectorPrefix20210811\Nette\InvalidArgumentException('Class name must not be empty.');
         } elseif (isset(self::BUILTIN_TYPES[$lower])) {
             return $lower;
         } elseif ($lower === 'self' || $lower === 'static') {
@@ -250,7 +250,7 @@ final class Reflection
     public static function getUseStatements($class) : array
     {
         if ($class->isAnonymous()) {
-            throw new \RectorPrefix20210810\Nette\NotImplementedException('Anonymous classes are not supported.');
+            throw new \RectorPrefix20210811\Nette\NotImplementedException('Anonymous classes are not supported.');
         }
         static $cache = [];
         if (!isset($cache[$name = $class->name])) {

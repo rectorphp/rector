@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Helper\Database\Refactorings;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -28,7 +29,7 @@ final class DatabaseConnectionExecTruncateTableRefactoring implements \Ssch\TYPO
     public function refactor($oldNode) : array
     {
         $tableArgument = \array_shift($oldNode->args);
-        if (null === $tableArgument) {
+        if (!$tableArgument instanceof \PhpParser\Node\Arg) {
             return [];
         }
         $connectionAssignment = $this->connectionCallFactory->createConnectionCall($tableArgument);

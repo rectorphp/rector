@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210810\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser\Traverser;
 
-use RectorPrefix20210810\Helmich\TypoScriptParser\Parser\AST\Statement;
+use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Interface Visitor
  *

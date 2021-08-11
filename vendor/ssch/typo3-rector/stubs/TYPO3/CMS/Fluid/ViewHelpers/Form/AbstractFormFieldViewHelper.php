@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210810\TYPO3\CMS\Fluid\ViewHelpers\Form;
+namespace RectorPrefix20210811\TYPO3\CMS\Fluid\ViewHelpers\Form;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\ViewHelpers\\Form\\AbstractFormFieldViewHelper')) {
     return;

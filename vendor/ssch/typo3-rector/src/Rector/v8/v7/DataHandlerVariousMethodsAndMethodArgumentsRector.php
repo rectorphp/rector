@@ -39,7 +39,7 @@ final class DataHandlerVariousMethodsAndMethodArgumentsRector extends \Rector\Co
             /** @var Arg[] $args */
             $args = $node->args;
             $firstArgument = \array_shift($args);
-            if (null === $firstArgument) {
+            if (!$firstArgument instanceof \PhpParser\Node\Arg) {
                 return null;
             }
             return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PATH_site')), $firstArgument->value);

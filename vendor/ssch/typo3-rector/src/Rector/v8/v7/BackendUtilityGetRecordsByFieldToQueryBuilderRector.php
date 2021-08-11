@@ -100,7 +100,7 @@ CODE_SAMPLE
             return;
         }
         $tableArgument = $node->args[0];
-        if (null === $queryBuilderArgument || 'null' === $this->valueResolver->getValue($queryBuilderArgument->value)) {
+        if (!$queryBuilderArgument instanceof \PhpParser\Node\Arg || 'null' === $this->valueResolver->getValue($queryBuilderArgument->value)) {
             $table = $this->valueResolver->getValue($tableArgument->value);
             if (null === $table) {
                 $table = $tableArgument;
@@ -142,7 +142,7 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($deletedRestrictionNode, $positionNode);
             return;
         }
-        if (null === $useDeleteClauseArgument) {
+        if (!$useDeleteClauseArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
         $ifNode = new \PhpParser\Node\Stmt\If_($useDeleteClauseArgument->value);
@@ -167,7 +167,7 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($whereClauseNode, $positionNode);
             return;
         }
-        if (null === $whereClauseArgument) {
+        if (!$whereClauseArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
         $ifNode = new \PhpParser\Node\Stmt\If_($whereClauseArgument->value);
@@ -186,7 +186,7 @@ CODE_SAMPLE
             $this->addNodeBeforeNode($groupByNode, $positionNode);
             return;
         }
-        if (null === $groupByArgument) {
+        if (!$groupByArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
         $ifNode = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BinaryOp\NotIdentical($groupByArgument->value, new \PhpParser\Node\Scalar\String_('')));
@@ -200,7 +200,7 @@ CODE_SAMPLE
         if ('' === $orderBy || 'null' === $orderBy) {
             return;
         }
-        if (null === $orderByArgument) {
+        if (!$orderByArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
         $orderByNode = new \PhpParser\Node\Stmt\Foreach_($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Database\\Query\\QueryHelper', 'parseOrderBy', [$orderByArgument->value]), new \PhpParser\Node\Expr\Variable('orderPair'));
@@ -221,7 +221,7 @@ CODE_SAMPLE
         if ('' === $limit) {
             return;
         }
-        if (null === $limitArgument) {
+        if (!$limitArgument instanceof \PhpParser\Node\Arg) {
             return;
         }
         $limitNode = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createFuncCall('strpos', [$limitArgument->value, ',']));

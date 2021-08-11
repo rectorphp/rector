@@ -39,7 +39,7 @@ final class RefactorIdnaEncodeMethodToNativeFunctionRector extends \Rector\Core\
             return null;
         }
         $arguments = $node->args;
-        if (0 === \count($arguments)) {
+        if ([] === $arguments) {
             return null;
         }
         $firstArgumentValue = $this->valueResolver->getValue($arguments[0]->value);

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Helper\Database\Refactorings;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
@@ -31,7 +32,7 @@ final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3R
     {
         $tableArgument = \array_shift($oldNode->args);
         $dataArgument = \array_shift($oldNode->args);
-        if (null === $tableArgument || null === $dataArgument) {
+        if (!$tableArgument instanceof \PhpParser\Node\Arg || !$dataArgument instanceof \PhpParser\Node\Arg) {
             return [];
         }
         $connectionAssignment = $this->connectionCallFactory->createConnectionCall($tableArgument);

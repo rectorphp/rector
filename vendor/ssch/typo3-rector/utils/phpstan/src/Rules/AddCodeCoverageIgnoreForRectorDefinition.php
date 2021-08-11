@@ -3,9 +3,11 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\PHPStan\Rules;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\Rule;
 use PHPStan\ShouldNotHappenException;
 use PHPStan\Type\FileTypeMapper;
@@ -44,7 +46,7 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
             throw new \PHPStan\ShouldNotHappenException();
         }
         $classReflection = $scope->getClassReflection();
-        if (null === $classReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
         if (!$classReflection->isSubclassOf(\Rector\Core\Contract\Rector\PhpRectorInterface::class)) {
@@ -56,7 +58,7 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
         }
         $className = $classReflection->getName();
         $docComment = $node->getDocComment();
-        if (null === $docComment) {
+        if (!$docComment instanceof \PhpParser\Comment\Doc) {
             return [\sprintf(self::ERROR_MESSAGE, $className)];
         }
         $resolvedPhpDoc = $this->fileTypeMapper->getResolvedPhpDoc($scope->getFile(), $classReflection->getName(), null, $methodName, $docComment->getText());

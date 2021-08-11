@@ -31,7 +31,7 @@ final class BackendUtilityGetModuleUrlRector extends \Rector\Core\Rector\Abstrac
         /** @var Arg[] $args */
         $args = $node->args;
         $firstArgument = \array_shift($args);
-        if (null === $firstArgument) {
+        if (!$firstArgument instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $secondArgument = \array_shift($args);

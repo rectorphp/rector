@@ -82,7 +82,7 @@ final class MigrateSelectShowIconTableRector extends \Rector\Core\Rector\Abstrac
                     }
                     if ($this->shouldAddFieldWizard($configItemValue)) {
                         $fieldWizard = $this->extractArrayItemByKey($configValue->value, 'fieldWizard');
-                        if (null === $fieldWizard) {
+                        if (!$fieldWizard instanceof \PhpParser\Node\Expr\ArrayItem) {
                             $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray(['selectIcons' => [self::DISABLED => \false]]), new \PhpParser\Node\Scalar\String_('fieldWizard'));
                         } elseif (($selectIcons = $this->extractSubArrayByKey($fieldWizard->value, 'selectIcons')) !== null) {
                             if (null === $this->extractArrayItemByKey($selectIcons, self::DISABLED)) {

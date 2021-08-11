@@ -111,7 +111,7 @@ CODE_SAMPLE
             return null;
         }
         $responseNode = $this->createResponse($node);
-        if (null === $responseNode) {
+        if (!$responseNode instanceof \PhpParser\Node) {
             return null;
         }
         $this->addNodeBeforeNode($responseNode, $positionNode);

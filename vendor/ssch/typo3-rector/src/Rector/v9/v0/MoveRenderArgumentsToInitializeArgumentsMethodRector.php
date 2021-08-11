@@ -58,7 +58,7 @@ final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector
         }
         // Check if the ViewHelper has a render method with params, if not return immediately
         $renderMethod = $node->getMethod('render');
-        if (null === $renderMethod) {
+        if (!$renderMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         if ([] === $renderMethod->getParams()) {

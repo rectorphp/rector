@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210810\Symfony\Component\Config\Builder;
+namespace RectorPrefix20210811\Symfony\Component\Config\Builder;
 
 /**
  * Build PHP classes to generate config.
@@ -121,15 +121,15 @@ BODY
      */
     public function addMethod($name, $body, $params = []) : void
     {
-        $this->methods[] = new \RectorPrefix20210810\Symfony\Component\Config\Builder\Method(\strtr($body, ['NAME' => $this->camelCase($name)] + $params));
+        $this->methods[] = new \RectorPrefix20210811\Symfony\Component\Config\Builder\Method(\strtr($body, ['NAME' => $this->camelCase($name)] + $params));
     }
     /**
      * @param string $name
      * @param string|null $classType
      */
-    public function addProperty($name, $classType = null) : \RectorPrefix20210810\Symfony\Component\Config\Builder\Property
+    public function addProperty($name, $classType = null) : \RectorPrefix20210811\Symfony\Component\Config\Builder\Property
     {
-        $property = new \RectorPrefix20210810\Symfony\Component\Config\Builder\Property($name, $this->camelCase($name));
+        $property = new \RectorPrefix20210811\Symfony\Component\Config\Builder\Property($name, $this->camelCase($name));
         if (null !== $classType) {
             $property->setType($classType);
         }

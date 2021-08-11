@@ -48,7 +48,7 @@ final class MigrateOptionsOfTypeGroupRector extends \Rector\Core\Rector\Abstract
             return null;
         }
         $columns = $this->extractSubArrayByKey($node->expr, 'columns');
-        if (null === $columns) {
+        if (!$columns instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;

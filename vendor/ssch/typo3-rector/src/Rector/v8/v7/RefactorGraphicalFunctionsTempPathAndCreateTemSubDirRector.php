@@ -25,7 +25,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210810\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
+use RectorPrefix20210811\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80514-GraphicalFunctions-tempPathAndCreateTempSubDir.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector\RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRectorTest
@@ -86,7 +86,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, self::CREATE_TEMP_SUB_DIR)) {
             return null;
         }
-        if (0 === \count($node->args)) {
+        if ([] === $node->args) {
             return null;
         }
         $argumentValue = $this->valueResolver->getValue($node->args[0]->value);
@@ -102,7 +102,7 @@ CODE_SAMPLE
         $ifIsPartOfStr->else->stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::TMP_PATH), new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PATH_site')), new \PhpParser\Node\Expr\Variable(self::TEMP_PATH))));
         $anonymousFunction->stmts[] = $ifIsPartOfStr;
         $concatTempPathAndDirName = $this->nodeFactory->createConcat([new \PhpParser\Node\Expr\Variable(self::TMP_PATH), new \PhpParser\Node\Expr\Variable('dirName')]);
-        if (null === $concatTempPathAndDirName) {
+        if (!$concatTempPathAndDirName instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             return null;
         }
         $isDirFunc = new \PhpParser\Node\Expr\ErrorSuppress($this->nodeFactory->createFuncCall('is_dir', [$concatTempPathAndDirName]));

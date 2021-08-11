@@ -94,7 +94,7 @@ CODE_SAMPLE
             return null;
         }
         $columns = $this->extractSubArrayByKey($node->expr, 'columns');
-        if (null === $columns) {
+        if (!$columns instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $columnNamesWithTypeGroupAndInternalTypeDb = [];
@@ -114,7 +114,7 @@ CODE_SAMPLE
         }
         // now check columnsOverrides of all type=group, internal_type=db fields:
         $types = $this->extractSubArrayByKey($node->expr, 'types');
-        if (null === $types) {
+        if (!$types instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         foreach ($this->extractColumnConfig($types, 'columnsOverrides') as $columnOverride) {
@@ -123,11 +123,11 @@ CODE_SAMPLE
             }
             foreach ($columnNamesWithTypeGroupAndInternalTypeDb as $columnName => $columnConfig) {
                 $overrideForColumn = $this->extractSubArrayByKey($columnOverride, $columnName);
-                if (null === $overrideForColumn) {
+                if (!$overrideForColumn instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 $configOverride = $this->extractSubArrayByKey($overrideForColumn, 'config');
-                if (null === $configOverride) {
+                if (!$configOverride instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 if ($this->refactorWizards($configOverride)) {
@@ -142,7 +142,7 @@ CODE_SAMPLE
     private function refactorWizards(\PhpParser\Node\Expr\Array_ $config) : bool
     {
         $wizardsArrayItem = $this->extractArrayItemByKey($config, 'wizards');
-        if (null === $wizardsArrayItem) {
+        if (!$wizardsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return \false;
         }
         $wizards = $wizardsArrayItem->value;

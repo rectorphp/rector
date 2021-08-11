@@ -18,8 +18,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210810\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210810\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20210811\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210811\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -75,7 +75,7 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
             }
             /** @var string $variableName */
             $variableName = $this->getName($property);
-            $paramBuilder = new \RectorPrefix20210810\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($variableName);
+            $paramBuilder = new \RectorPrefix20210811\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($variableName);
             $varType = $propertyPhpDocInfo->getVarType();
             if (!$varType instanceof \PHPStan\Type\ObjectType) {
                 continue;
@@ -93,7 +93,7 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
             // Add new line and then the method
             $injectMethods[] = new \PhpParser\Node\Stmt\Nop();
             $methodAlreadyExists = $node->getMethod($this->createInjectMethodName($variableName));
-            if (null === $methodAlreadyExists) {
+            if (!$methodAlreadyExists instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 $injectMethods[] = $this->createInjectClassMethod($variableName, $param, $assign);
             }
         }
@@ -129,7 +129,7 @@ CODE_SAMPLE
     private function createInjectClassMethod(string $variableName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Assign $assign) : \PhpParser\Node\Stmt\ClassMethod
     {
         $injectMethodName = $this->createInjectMethodName($variableName);
-        $injectMethodBuilder = new \RectorPrefix20210810\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($injectMethodName);
+        $injectMethodBuilder = new \RectorPrefix20210811\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($injectMethodName);
         $injectMethodBuilder->makePublic();
         $injectMethodBuilder->addParam($param);
         $injectMethodBuilder->setReturnType('void');

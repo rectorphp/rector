@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210810\TYPO3\CMS\Scheduler;
+namespace RectorPrefix20210811\TYPO3\CMS\Scheduler;
 
-use RectorPrefix20210810\TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
+use RectorPrefix20210811\TYPO3\CMS\Scheduler\Controller\SchedulerModuleController;
 if (\interface_exists('TYPO3\\CMS\\Scheduler\\AdditionalFieldProviderInterface')) {
     return;
 }

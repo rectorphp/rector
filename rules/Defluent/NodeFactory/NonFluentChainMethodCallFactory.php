@@ -3,7 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Defluent\NodeFactory;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
@@ -58,9 +60,9 @@ final class NonFluentChainMethodCallFactory
     }
     /**
      * @param MethodCall[] $chainMethodCalls
-     * @return Assign[]|MethodCall[]|Return_[]
+     * @return Assign[]|Cast[]|MethodCall[]|Return_[]
      */
-    public function createFromAssignObjectAndMethodCalls(\Rector\Defluent\ValueObject\AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls, string $kind) : array
+    public function createFromAssignObjectAndMethodCalls(\Rector\Defluent\ValueObject\AssignAndRootExpr $assignAndRootExpr, array $chainMethodCalls, string $kind, ?\PhpParser\Node $node = null) : array
     {
         $nodesToAdd = [];
         $isNewNodeNeeded = $this->isNewNodeNeeded($assignAndRootExpr);
@@ -71,6 +73,13 @@ final class NonFluentChainMethodCallFactory
         $nodesToAdd = \array_merge($nodesToAdd, $decoupledMethodCalls);
         if ($assignAndRootExpr->getSilentVariable() !== null && $kind !== \Rector\Defluent\ValueObject\FluentCallsKind::IN_ARGS) {
             $nodesToAdd[] = $assignAndRootExpr->getReturnSilentVariable();
+        }
+        if ($node instanceof \PhpParser\Node\Expr\Cast) {
+            \end($nodesToAdd);
+            $lastNodeToAdd = $nodesToAdd[\key($nodesToAdd)];
+            $cast = \get_class($node);
+            \end($nodesToAdd);
+            $nodesToAdd[\key($nodesToAdd)] = new $cast($lastNodeToAdd);
         }
         return $nodesToAdd;
     }

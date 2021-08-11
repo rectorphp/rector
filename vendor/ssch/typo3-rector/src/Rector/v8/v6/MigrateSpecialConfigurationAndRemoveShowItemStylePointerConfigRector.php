@@ -77,7 +77,7 @@ CODE_SAMPLE
             return;
         }
         $defaultExtras = $this->extractArrayValueByKey($columnTca, 'defaultExtras');
-        if (null === $defaultExtras) {
+        if (!$defaultExtras instanceof \PhpParser\Node\Expr) {
             return;
         }
         $this->defaultExtrasFromColumns[$this->valueResolver->getValue($columnName)] = $this->valueResolver->getValue($defaultExtras);

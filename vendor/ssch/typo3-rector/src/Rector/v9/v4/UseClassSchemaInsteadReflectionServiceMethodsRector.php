@@ -24,13 +24,14 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85004-DeprecateMethodsInReflectionService.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\UseClassSchemaInsteadReflectionServiceMethodsRector\UseClassSchemaInsteadReflectionServiceMethodsRectorTest
  */
-final class UseClassSchemaInsteadReflectionServiceMethodsRector extends \Rector\Core\Rector\AbstractRector
+final class UseClassSchemaInsteadReflectionServiceMethodsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -97,7 +98,7 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, ['getClassPropertyNames', 'getPropertyTagsValues', 'getPropertyTagValues', 'getClassTagsValues', 'getClassTagValues', 'getMethodTagsValues', self::HAS_METHOD, 'getMethodParameters', 'isClassTaggedWith', 'isPropertyTaggedWith'])) {
             return null;
         }
-        if (0 === \count($node->args)) {
+        if ([] === $node->args) {
             return null;
         }
         $nodeName = $this->getName($node->name);
@@ -133,11 +134,12 @@ CODE_SAMPLE
         }
         return $this->refactorIsPropertyTaggedWith($node);
     }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
+    }
     private function refactorGetPropertyTagsValuesMethod(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         if (!isset($node->args[1])) {
             return null;
         }
@@ -154,9 +156,6 @@ CODE_SAMPLE
     }
     private function refactorGetPropertyTagValuesMethod(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         if (!isset($node->args[1])) {
             return null;
         }
@@ -175,9 +174,6 @@ CODE_SAMPLE
     }
     private function refactorGetClassTagValues(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         if (!isset($node->args[1])) {
             return null;
         }
@@ -185,9 +181,6 @@ CODE_SAMPLE
     }
     private function refactorGetMethodTagsValues(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         if (!isset($node->args[1])) {
             return null;
         }
@@ -202,9 +195,6 @@ CODE_SAMPLE
     }
     private function refactorGetMethodParameters(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node
     {
-        if (!$this->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE)) {
-            return null;
-        }
         if (!isset($node->args[1])) {
             return null;
         }

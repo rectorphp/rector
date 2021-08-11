@@ -72,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
         $extEmConf = $this->createExtensionKeyFromFolder($fileInfo);
-        if (null === $extEmConf) {
+        if (!$extEmConf instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return null;
         }
         if ($this->isAssignment($node)) {

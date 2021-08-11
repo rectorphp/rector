@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v7\v5;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -52,7 +53,7 @@ CODE_SAMPLE
     protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
         $config = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (null === $config) {
+        if (!$config instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
         $item = $this->extractArrayItemByKey($config, 'iconsInOptionTags');

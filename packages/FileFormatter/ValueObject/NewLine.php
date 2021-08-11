@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\ValueObject;
 
-use RectorPrefix20210810\Nette\Utils\Strings;
+use RectorPrefix20210811\Nette\Utils\Strings;
 use const PHP_EOL;
 use Rector\FileFormatter\Exception\InvalidNewLineStringException;
 use Stringable;
@@ -56,7 +56,7 @@ final class NewLine
      */
     public static function fromSingleCharacter($content)
     {
-        $matches = \RectorPrefix20210810\Nette\Utils\Strings::match($content, self::VALID_NEWLINE_REGEX);
+        $matches = \RectorPrefix20210811\Nette\Utils\Strings::match($content, self::VALID_NEWLINE_REGEX);
         if ($matches === null) {
             throw \Rector\FileFormatter\Exception\InvalidNewLineStringException::fromString($content);
         }
@@ -68,7 +68,7 @@ final class NewLine
      */
     public static function fromContent($content)
     {
-        $match = \RectorPrefix20210810\Nette\Utils\Strings::match($content, self::NEWLINE_REGEX);
+        $match = \RectorPrefix20210811\Nette\Utils\Strings::match($content, self::NEWLINE_REGEX);
         if (isset($match['newLine'])) {
             return self::fromSingleCharacter($match['newLine']);
         }

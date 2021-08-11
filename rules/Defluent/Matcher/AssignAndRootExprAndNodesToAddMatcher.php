@@ -11,6 +11,7 @@ use Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\Defluent\Skipper\FluentMethodCallSkipper;
 use Rector\Defluent\ValueObject\AssignAndRootExpr;
 use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class AssignAndRootExprAndNodesToAddMatcher
 {
     /**
@@ -54,7 +55,8 @@ final class AssignAndRootExprAndNodesToAddMatcher
         if ($this->fluentMethodCallSkipper->shouldSkipMethodCalls($assignAndRootExpr, $chainMethodCalls)) {
             return null;
         }
-        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls($assignAndRootExpr, $chainMethodCalls, $kind);
+        $parentMethodCall = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromAssignObjectAndMethodCalls($assignAndRootExpr, $chainMethodCalls, $kind, $parentMethodCall);
         return new \Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd($assignAndRootExpr, $nodesToAdd);
     }
 }
