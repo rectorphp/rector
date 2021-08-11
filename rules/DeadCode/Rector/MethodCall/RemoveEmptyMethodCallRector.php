@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
@@ -90,7 +91,7 @@ CODE_SAMPLE
         if ($classLike === null) {
             return null;
         }
-        if ($this->shouldSkipClassMethod($classLike, $node)) {
+        if ($this->shouldSkipClassMethod($classLike, $node, $type)) {
             return null;
         }
         // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
@@ -125,7 +126,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
-    private function shouldSkipClassMethod($classLike, \PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkipClassMethod($classLike, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Type\TypeWithClassName $typeWithClassName) : bool
     {
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
@@ -141,7 +142,14 @@ CODE_SAMPLE
         if ($classMethod->isAbstract()) {
             return \true;
         }
-        return (array) $classMethod->stmts !== [];
+        if ((array) $classMethod->stmts !== []) {
+            return \true;
+        }
+        $class = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        return $typeWithClassName instanceof \PHPStan\Type\ThisType && !$class->isFinal() && !$classMethod->isPrivate();
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ConstFetch
