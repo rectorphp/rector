@@ -30,9 +30,14 @@ final class InvertedIfFactory
     public function createFromConditions(If_ $if, array $conditions, Return_ $return): array
     {
         $ifs = [];
-        $stmt = $this->contextAnalyzer->isInLoop($if) && ! $this->getIfNextReturn($if)
+        $ifNextReturn = $this->getIfNextReturn($if);
+        $stmt = $this->contextAnalyzer->isInLoop($if) && ! $ifNextReturn
             ? [new Continue_()]
             : [$return];
+
+        if ($ifNextReturn instanceof Return_) {
+            $stmt[0]->setAttribute(AttributeKey::COMMENTS, $ifNextReturn->getAttribute(AttributeKey::COMMENTS));
+        }
 
         $getNextReturnExpr = $this->getNextReturnExpr($if);
         if ($getNextReturnExpr instanceof Return_) {
