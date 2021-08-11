@@ -6,6 +6,7 @@ namespace Rector\Defluent\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -85,10 +86,39 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $nodesToAdd = $assignAndRootExprAndNodesToAdd->getNodesToAdd();
+
+        if ($currentStatement instanceof Return_) {
+            $lastNodeToAdd = end($nodesToAdd);
+
+            if (! $lastNodeToAdd) {
+                return null;
+            }
+
+            if (! $lastNodeToAdd instanceof Return_) {
+                $nodesToAdd[array_key_last($nodesToAdd)] = new Return_($lastNodeToAdd);
+            }
+        }
+
+        $this->removeCurrentNode($node);
+        $this->addNodesAfterNode($nodesToAdd, $node);
 
         return null;
+    }
+
+    private function removeCurrentNode(MethodCall $methodCall): void
+    {
+        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        while ($parent instanceof Cast) {
+            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $parent instanceof Cast) {
+                $this->fluentNodeRemover->removeCurrentNode($parent);
+                return;
+            }
+        }
+
+        $this->fluentNodeRemover->removeCurrentNode($methodCall);
     }
 
     /**
