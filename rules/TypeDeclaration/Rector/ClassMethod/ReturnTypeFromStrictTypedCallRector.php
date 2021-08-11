@@ -135,6 +135,10 @@ CODE_SAMPLE
     private function processArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction) : ?\PhpParser\Node\Expr\ArrowFunction
     {
         $resolvedType = $this->nodeTypeResolver->resolve($arrowFunction->expr);
+        // void type is not accepted for arrow functions - https://www.php.net/manual/en/functions.arrow.php#125673
+        if ($resolvedType instanceof \PHPStan\Type\VoidType) {
+            return null;
+        }
         $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
         if (!$returnType instanceof \PhpParser\Node) {
             return null;
