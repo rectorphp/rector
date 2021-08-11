@@ -16,6 +16,8 @@ final class StaticEasyPrefixer
         'Symplify\SmartFileSystem\SmartFileInfo',
         // for ComposerJson because it is part of the public API. I.e. ComposerRectorInterface
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
+        // for usage in Helmich\TypoScriptParser\Parser\Traverser\Visitor
+        'Helmich\TypoScriptParser\Parser\AST\Statement',
     ];
 
     /**
