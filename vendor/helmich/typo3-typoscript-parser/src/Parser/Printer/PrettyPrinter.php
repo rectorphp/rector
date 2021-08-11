@@ -17,7 +17,7 @@ use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator\Copy;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator\Delete;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator\Modification;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator\Reference;
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20210811\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Printer class that generates TypoScript code from an AST

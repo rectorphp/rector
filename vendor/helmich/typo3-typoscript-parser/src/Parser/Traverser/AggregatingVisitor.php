@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser\Traverser;
 
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Class AggregatingVisitor
  *
@@ -36,7 +36,7 @@ class AggregatingVisitor implements \RectorPrefix20210811\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function enterNode(\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->enterNode($statement);
@@ -46,7 +46,7 @@ class AggregatingVisitor implements \RectorPrefix20210811\Helmich\TypoScriptPars
      * @param Statement $statement
      * @return void
      */
-    public function exitNode(\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function exitNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         foreach ($this->visitors as $visitor) {
             $visitor->exitNode($statement);

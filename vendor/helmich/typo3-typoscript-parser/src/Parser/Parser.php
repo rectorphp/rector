@@ -5,7 +5,7 @@ namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser;
 
 use ArrayObject;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Builder;
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface;
 /**

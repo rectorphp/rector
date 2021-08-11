@@ -30,3 +30,10 @@ abstract class Statement
         $this->sourceLine = $sourceLine;
     }
 }
+/**
+ * Abstract TypoScript statement.
+ *
+ * @package    Helmich\TypoScriptParser
+ * @subpackage Parser\AST
+ */
+\class_alias('RectorPrefix20210811\\Helmich\\TypoScriptParser\\Parser\\AST\\Statement', 'Helmich\\TypoScriptParser\\Parser\\AST\\Statement', \false);

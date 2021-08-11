@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 use LogicException;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -34,7 +34,7 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
         $this->currentFileProvider = $currentFileProvider;
         $this->conditionMatchers = $conditionMatchers;
     }
-    public function enterNode(\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         if (!$statement instanceof \RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
             return;

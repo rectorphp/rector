@@ -9,8 +9,11 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210811\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit596b0a03f508e848688c69da047c1ec0', false) && !interface_exists('ComposerAutoloaderInit596b0a03f508e848688c69da047c1ec0', false) && !trait_exists('ComposerAutoloaderInit596b0a03f508e848688c69da047c1ec0', false)) {
-    spl_autoload_call('RectorPrefix20210811\ComposerAutoloaderInit596b0a03f508e848688c69da047c1ec0');
+if (!class_exists('ComposerAutoloaderInit1dbbc4d16f74bc21c565afa668c84ef2', false) && !interface_exists('ComposerAutoloaderInit1dbbc4d16f74bc21c565afa668c84ef2', false) && !trait_exists('ComposerAutoloaderInit1dbbc4d16f74bc21c565afa668c84ef2', false)) {
+    spl_autoload_call('RectorPrefix20210811\ComposerAutoloaderInit1dbbc4d16f74bc21c565afa668c84ef2');
+}
+if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
+    spl_autoload_call('RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement');
 }
 if (!class_exists('AjaxLogin', false) && !interface_exists('AjaxLogin', false) && !trait_exists('AjaxLogin', false)) {
     spl_autoload_call('RectorPrefix20210811\AjaxLogin');
@@ -3305,9 +3308,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210811\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire596b0a03f508e848688c69da047c1ec0')) {
-    function composerRequire596b0a03f508e848688c69da047c1ec0() {
-        return \RectorPrefix20210811\composerRequire596b0a03f508e848688c69da047c1ec0(...func_get_args());
+if (!function_exists('composerRequire1dbbc4d16f74bc21c565afa668c84ef2')) {
+    function composerRequire1dbbc4d16f74bc21c565afa668c84ef2() {
+        return \RectorPrefix20210811\composerRequire1dbbc4d16f74bc21c565afa668c84ef2(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {

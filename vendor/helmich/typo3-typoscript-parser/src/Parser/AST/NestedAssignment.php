@@ -21,7 +21,7 @@ namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class NestedAssignment extends \RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement
+class NestedAssignment extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The object to operate on.

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser;
 
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 interface ParserInterface
 {
     /**

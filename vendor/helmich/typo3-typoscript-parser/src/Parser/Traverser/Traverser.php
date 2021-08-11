@@ -5,7 +5,7 @@ namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser\Traverser;
 
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Class Traverser
  *

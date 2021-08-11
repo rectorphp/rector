@@ -4,14 +4,14 @@ declare (strict_types=1);
 namespace RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator;
 
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Abstract base class for statements with unary operators.
  *
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-abstract class UnaryOperator extends \RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement
+abstract class UnaryOperator extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The object the operator should be applied on.

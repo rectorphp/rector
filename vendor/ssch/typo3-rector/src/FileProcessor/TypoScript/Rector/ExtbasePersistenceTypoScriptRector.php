@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20210811\Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
@@ -46,7 +46,7 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
         $this->filename = \getcwd() . '/Configuration_Extbase_Persistence_Classes.php';
         $this->fileTemplate = $templateFinder->getExtbasePersistenceConfiguration();
     }
-    public function enterNode(\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         if (!$statement instanceof \RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;

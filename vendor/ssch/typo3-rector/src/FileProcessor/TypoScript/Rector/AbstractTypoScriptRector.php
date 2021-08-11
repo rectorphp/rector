@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector;
 
-use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement;
+use Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20210811\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface;
 abstract class AbstractTypoScriptRector implements \RectorPrefix20210811\Helmich\TypoScriptParser\Parser\Traverser\Visitor, \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface
@@ -23,10 +23,10 @@ abstract class AbstractTypoScriptRector implements \RectorPrefix20210811\Helmich
     public function enterTree(array $statements) : void
     {
     }
-    public function enterNode(\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
-    public function exitNode(\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    public function exitNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
     public function exitTree(array $statements) : void
@@ -36,11 +36,11 @@ abstract class AbstractTypoScriptRector implements \RectorPrefix20210811\Helmich
     {
         return $this->hasChanged;
     }
-    public function getOriginalStatement() : ?\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement
+    public function getOriginalStatement() : ?\Helmich\TypoScriptParser\Parser\AST\Statement
     {
         return $this->originalStatement;
     }
-    public function getNewStatement() : ?\RectorPrefix20210811\Helmich\TypoScriptParser\Parser\AST\Statement
+    public function getNewStatement() : ?\Helmich\TypoScriptParser\Parser\AST\Statement
     {
         return $this->newStatement;
     }
