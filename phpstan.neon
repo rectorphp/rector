@@ -524,3 +524,7 @@ parameters:
 
         # resolve later
         -  '#Variables "\$(.*?)" are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+
+        -
+            message: '#Instead of array shape, use value object with specific types in constructor and getters#'
+            path: src/NodeFactory/ClassWithPublicPropertiesFactory.php #26
