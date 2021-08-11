@@ -39,7 +39,11 @@ final class InvertedIfFactory
     public function createFromConditions(\PhpParser\Node\Stmt\If_ $if, array $conditions, \PhpParser\Node\Stmt\Return_ $return) : array
     {
         $ifs = [];
-        $stmt = $this->contextAnalyzer->isInLoop($if) && !$this->getIfNextReturn($if) ? [new \PhpParser\Node\Stmt\Continue_()] : [$return];
+        $ifNextReturn = $this->getIfNextReturn($if);
+        $stmt = $this->contextAnalyzer->isInLoop($if) && !$ifNextReturn ? [new \PhpParser\Node\Stmt\Continue_()] : [$return];
+        if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
+            $stmt[0]->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $ifNextReturn->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
+        }
         $getNextReturnExpr = $this->getNextReturnExpr($if);
         if ($getNextReturnExpr instanceof \PhpParser\Node\Stmt\Return_) {
             $return->expr = $getNextReturnExpr->expr;
