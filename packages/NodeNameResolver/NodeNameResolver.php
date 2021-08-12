@@ -71,6 +71,27 @@ final class NodeNameResolver
         return false;
     }
 
+    public function isCaseSensitiveName(Node $node, string $name): bool
+    {
+        if ($name === '') {
+            return false;
+        }
+
+        if ($node instanceof MethodCall) {
+            return false;
+        }
+        if ($node instanceof StaticCall) {
+            return false;
+        }
+
+        $resolvedName = $this->getName($node);
+        if ($resolvedName === null) {
+            return false;
+        }
+
+        return $name === $resolvedName;
+    }
+
     public function getName(Node | string $node): ?string
     {
         if (is_string($node)) {
