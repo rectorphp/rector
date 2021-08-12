@@ -67,14 +67,7 @@ CODE_SAMPLE
         if ($this->doesLastStatementBreakFlow($node)) {
             return null;
         }
-        // to avoid repetitive If_ creation when used along with ChangeOrIfReturnToEarlyReturnRector
-        // @see https://github.com/rectorphp/rector-src/pull/651
-        if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            return null;
-        }
-        // to avoid repetitive flipped elseif above return when used along with ChangeAndIfReturnToEarlyReturnRector
-        // @see https://github.com/rectorphp/rector-src/pull/654
-        if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd && \count($node->elseifs) > 1) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
         if ($node->elseifs !== []) {
@@ -104,6 +97,17 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
+    {
+        // to avoid repetitive If_ creation when used along with ChangeOrIfReturnToEarlyReturnRector
+        // @see https://github.com/rectorphp/rector-src/pull/651
+        if ($if->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr && $if->elseifs !== []) {
+            return \true;
+        }
+        // to avoid repetitive flipped elseif above return when used along with ChangeAndIfReturnToEarlyReturnRector
+        // @see https://github.com/rectorphp/rector-src/pull/654
+        return $if->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd && \count($if->elseifs) > 1;
     }
     /**
      * @return ElseIf_[]

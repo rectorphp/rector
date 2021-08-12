@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php81\NodeFactory;
 
-use RectorPrefix20210812\Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -49,8 +48,8 @@ final class EnumFactory
         $shortClassName = $this->nodeNameResolver->getShortName($class);
         $enum = new \PhpParser\Node\Stmt\Enum_($shortClassName);
         // constant to cases
-        $classDocInfo = $this->phpDocInfoFactory->createFromNode($class);
-        $docBlockMethods = ($classDocInfo2 = $classDocInfo) ? $classDocInfo2->getTagsByName('@method') : null;
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
+        $docBlockMethods = ($phpDocInfo2 = $phpDocInfo) ? $phpDocInfo2->getTagsByName('@method') : null;
         if ($docBlockMethods !== null) {
             foreach ($docBlockMethods as $docBlockMethod) {
                 $enum->stmts[] = $this->createEnumCaseFromDocComment($docBlockMethod);
@@ -67,12 +66,12 @@ final class EnumFactory
         $enumCase->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
         return $enumCase;
     }
-    private function createEnumCaseFromDocComment(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $docTagNode) : \PhpParser\Node\Stmt\EnumCase
+    private function createEnumCaseFromDocComment(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : \PhpParser\Node\Stmt\EnumCase
     {
         /**
          * @var MethodTagValueNode $nodeValue
          */
-        $nodeValue = $docTagNode->value;
+        $nodeValue = $phpDocTagNode->value;
         return new \PhpParser\Node\Stmt\EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
     }
 }
