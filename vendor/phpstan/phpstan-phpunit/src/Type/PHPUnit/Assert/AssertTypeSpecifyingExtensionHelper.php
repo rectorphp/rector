@@ -173,6 +173,8 @@ class AssertTypeSpecifyingExtensionHelper
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name($functionName), [$value]);
             }, 'ArrayHasKey' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $key, \PhpParser\Node\Arg $array) : FuncCall {
                 return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_key_exists'), [$key, $array]);
+            }, 'ObjectHasAttribute' => function (\PHPStan\Analyser\Scope $scope, \PhpParser\Node\Arg $property, \PhpParser\Node\Arg $object) : FuncCall {
+                return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('property_exists'), [$object, $property]);
             }];
         }
         return self::$resolvers;

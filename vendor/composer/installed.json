@@ -899,22 +899,22 @@
         },
         {
             "name": "phpstan\/phpstan-phpunit",
-            "version": "0.12.21",
-            "version_normalized": "0.12.21.0",
+            "version": "0.12.22",
+            "version_normalized": "0.12.22.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan-phpunit.git",
-                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7"
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/6aaff1196c4f808769774b49a94a60e5fdf18de7",
-                "reference": "6aaff1196c4f808769774b49a94a60e5fdf18de7",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
+                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
-                "phpstan\/phpstan": "^0.12.86"
+                "phpstan\/phpstan": "^0.12.92"
             },
             "conflict": {
                 "phpunit\/phpunit": "<7.0"
@@ -924,7 +924,7 @@
                 "phpstan\/phpstan-strict-rules": "^0.12.6",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-07-14T10:48:30+00:00",
+            "time": "2021-08-12T10:53:43+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "branch-alias": {
@@ -950,7 +950,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/0.12.21"
+                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/0.12.22"
             },
             "install-path": "..\/phpstan\/phpstan-phpunit"
         },
