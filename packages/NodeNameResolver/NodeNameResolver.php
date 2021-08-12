@@ -83,6 +83,23 @@ final class NodeNameResolver
         }
         return \false;
     }
+    public function isCaseSensitiveName(\PhpParser\Node $node, string $name) : bool
+    {
+        if ($name === '') {
+            return \false;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+            return \false;
+        }
+        $resolvedName = $this->getName($node);
+        if ($resolvedName === null) {
+            return \false;
+        }
+        return $name === $resolvedName;
+    }
     /**
      * @param \PhpParser\Node|string $node
      */

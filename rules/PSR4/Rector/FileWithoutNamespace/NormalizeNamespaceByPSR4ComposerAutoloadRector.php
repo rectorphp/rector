@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
         // is namespace and already correctly named?
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->isName($node, $expectedNamespace)) {
+        if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->nodeNameResolver->isCaseSensitiveName($node, $expectedNamespace)) {
             return null;
         }
         // to put declare_strict types on correct place
