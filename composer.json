@@ -58,6 +58,7 @@
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.3.3",
         "rector/rector-generator": "^0.3",
+        "spatie/enum": "^3.9",
         "symplify/coding-standard": "^9.4.28",
         "symplify/easy-ci": "^9.4.28",
         "symplify/easy-coding-standard": "^9.4.28",
