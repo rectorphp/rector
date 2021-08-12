@@ -2765,6 +2765,7 @@ return array(
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
     'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => $baseDir . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
     'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
+    'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
     'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
     'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => $baseDir . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
     'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => $baseDir . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
