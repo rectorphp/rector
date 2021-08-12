@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class IssueReturnBeforeElseIfTest extends AbstractRectorTestCase
+final class IssueReturnBeforeElseIfOrTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -28,6 +28,6 @@ final class IssueReturnBeforeElseIfTest extends AbstractRectorTestCase
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/configured_rule.php';
+        return __DIR__ . '/config/configured_rule_or.php';
     }
 }
