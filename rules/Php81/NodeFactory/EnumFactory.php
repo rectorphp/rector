@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Php81\NodeFactory;
 
-use Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -44,8 +43,8 @@ final class EnumFactory
         $enum = new Enum_($shortClassName);
 
         // constant to cases
-        $classDocInfo = $this->phpDocInfoFactory->createFromNode($class);
-        $docBlockMethods = $classDocInfo?->getTagsByName('@method');
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
+        $docBlockMethods = $phpDocInfo?->getTagsByName('@method');
         if ($docBlockMethods !== null) {
             foreach ($docBlockMethods as $docBlockMethod) {
                 $enum->stmts[] = $this->createEnumCaseFromDocComment($docBlockMethod);
@@ -67,12 +66,12 @@ final class EnumFactory
         return $enumCase;
     }
 
-    private function createEnumCaseFromDocComment(PhpDocTagNode $docTagNode): EnumCase
+    private function createEnumCaseFromDocComment(PhpDocTagNode $phpDocTagNode): EnumCase
     {
         /**
          * @var MethodTagValueNode $nodeValue
          */
-        $nodeValue = $docTagNode->value;
+        $nodeValue = $phpDocTagNode->value;
         return new EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
     }
 }

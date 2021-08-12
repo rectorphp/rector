@@ -79,15 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // to avoid repetitive If_ creation when used along with ChangeOrIfReturnToEarlyReturnRector
-        // @see https://github.com/rectorphp/rector-src/pull/651
-        if ($node->cond instanceof BooleanOr) {
-            return null;
-        }
-
-        // to avoid repetitive flipped elseif above return when used along with ChangeAndIfReturnToEarlyReturnRector
-        // @see https://github.com/rectorphp/rector-src/pull/654
-        if ($node->cond instanceof BooleanAnd && count($node->elseifs) > 1) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
 
@@ -125,6 +117,19 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function shouldSkip(If_ $if): bool
+    {
+        // to avoid repetitive If_ creation when used along with ChangeOrIfReturnToEarlyReturnRector
+        // @see https://github.com/rectorphp/rector-src/pull/651
+        if ($if->cond instanceof BooleanOr && $if->elseifs !== []) {
+            return true;
+        }
+
+        // to avoid repetitive flipped elseif above return when used along with ChangeAndIfReturnToEarlyReturnRector
+        // @see https://github.com/rectorphp/rector-src/pull/654
+        return $if->cond instanceof BooleanAnd && count($if->elseifs) > 1;
     }
 
     /**
