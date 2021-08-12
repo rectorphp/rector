@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210811;
+namespace RectorPrefix20210812;
 
 if (\class_exists('Tx_Extbase_Security_Exception_InvalidArgumentForRequestHashGeneration')) {
     return;

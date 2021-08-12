@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210811\TYPO3\CMS\Backend\Clipboard;
+namespace RectorPrefix20210812\TYPO3\CMS\Backend\Clipboard;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Clipboard\\ClipBoard')) {
     return;

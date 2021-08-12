@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp73\Tokenizer;
 
-use RectorPrefix20210811\Nette\Utils\Strings;
+use RectorPrefix20210812\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 final class FollowedByCommaAnalyzer
@@ -15,7 +15,7 @@ final class FollowedByCommaAnalyzer
         while (isset($oldTokens[$nextTokenPosition])) {
             $currentToken = $oldTokens[$nextTokenPosition];
             // only space
-            if (\is_array($currentToken) || \RectorPrefix20210811\Nette\Utils\Strings::match($currentToken, '#\\s+#')) {
+            if (\is_array($currentToken) || \RectorPrefix20210812\Nette\Utils\Strings::match($currentToken, '#\\s+#')) {
                 ++$nextTokenPosition;
                 continue;
             }

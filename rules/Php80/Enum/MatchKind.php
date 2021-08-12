@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Php80\Enum;
 
-use RectorPrefix20210811\MyCLabs\Enum\Enum;
+use RectorPrefix20210812\MyCLabs\Enum\Enum;
 /**
  * @method static MatchKind NORMAL()
  * @method static MatchKind ASSIGN()
  * @method static MatchKind RETURN()
  * @method static MatchKind THROW()
  */
-final class MatchKind extends \RectorPrefix20210811\MyCLabs\Enum\Enum
+final class MatchKind extends \RectorPrefix20210812\MyCLabs\Enum\Enum
 {
     /**
      * @var string

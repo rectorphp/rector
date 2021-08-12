@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210811;
+namespace RectorPrefix20210812;
 
 if (\class_exists('t3lib_l10n_exception_FileNotFound')) {
     return;
