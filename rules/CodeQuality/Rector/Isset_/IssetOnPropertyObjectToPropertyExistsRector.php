@@ -104,7 +104,7 @@ CODE_SAMPLE
 
                 $classReflection = $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
 
-                if (! $classReflection->hasProperty($propertyFetchName)) {
+                if (! $classReflection->hasProperty($propertyFetchName) || $classReflection->isBuiltIn()) {
                     $newNodes[] = $this->replaceToPropertyExistsWithNullCheck(
                         $issetVar->var,
                         $propertyFetchName,
