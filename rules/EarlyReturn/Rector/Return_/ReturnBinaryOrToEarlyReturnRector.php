@@ -85,11 +85,11 @@ CODE_SAMPLE
         if ($ifs === []) {
             return null;
         }
+        if (!$this->callAnalyzer->doesIfHasObjectCall($ifs)) {
+            return null;
+        }
         $this->mirrorComments($ifs[0], $node);
         foreach ($ifs as $if) {
-            if (!$this->callAnalyzer->isObjectCall($if->cond)) {
-                return null;
-            }
             $this->addNodeBeforeNode($if, $node);
         }
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
