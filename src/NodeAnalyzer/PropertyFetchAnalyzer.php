@@ -162,7 +162,13 @@ final class PropertyFetchAnalyzer
                 if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                     return \false;
                 }
-                return $kindPropertyFetch === \get_class($node->var) && $this->nodeNameResolver->isName($node->var, $propertyName) && $this->nodeComparator->areNodesEqual($node->expr, $paramVariable);
+                if ($kindPropertyFetch !== \get_class($node->var)) {
+                    return \false;
+                }
+                if (!$this->nodeNameResolver->isName($node->var, $propertyName)) {
+                    return \false;
+                }
+                return $this->nodeComparator->areNodesEqual($node->expr, $paramVariable);
             });
             if ($isAssignWithParamVarName !== null) {
                 return \true;

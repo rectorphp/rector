@@ -149,7 +149,13 @@ CODE_SAMPLE
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        return $typeWithClassName instanceof \PHPStan\Type\ThisType && !$class->isFinal() && !$classMethod->isPrivate();
+        if (!$typeWithClassName instanceof \PHPStan\Type\ThisType) {
+            return \false;
+        }
+        if ($class->isFinal()) {
+            return \false;
+        }
+        return !$classMethod->isPrivate();
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ConstFetch
