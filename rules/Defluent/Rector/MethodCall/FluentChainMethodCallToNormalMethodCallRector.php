@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher;
@@ -74,6 +75,11 @@ CODE_SAMPLE
         }
 
         if ($this->methodCallSkipAnalyzer->shouldSkipMethodCallIncludingNew($node)) {
+            return null;
+        }
+
+        $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        if (! $currentStatement instanceof Expression && ! $currentStatement instanceof Return_) {
             return null;
         }
 
