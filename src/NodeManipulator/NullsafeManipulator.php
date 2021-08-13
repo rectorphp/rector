@@ -17,7 +17,7 @@ final class NullsafeManipulator
     public function processNullSafeExpr(Expr $expr): NullsafeMethodCall | NullsafePropertyFetch | null
     {
         if ($expr instanceof MethodCall) {
-            return new NullsafeMethodCall($expr->var, $expr->name);
+            return new NullsafeMethodCall($expr->var, $expr->name, $expr->args);
         }
 
         if ($expr instanceof PropertyFetch) {
@@ -36,7 +36,7 @@ final class NullsafeManipulator
         $parentIdentifier = $nextExprIdentifier->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parentIdentifier instanceof MethodCall || $parentIdentifier instanceof NullsafeMethodCall) {
-            return new NullsafeMethodCall($expr, $nextExprIdentifier);
+            return new NullsafeMethodCall($expr, $nextExprIdentifier, $parentIdentifier->args);
         }
 
         return new NullsafePropertyFetch($expr, $nextExprIdentifier);
