@@ -18,6 +18,7 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
@@ -44,12 +45,17 @@ final class RemoveDeadInstanceOfRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver)
+    /**
+     * @var \Rector\NodeNestingScope\ContextAnalyzer
+     */
+    private $contextAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->promotedPropertyResolver = $promotedPropertyResolver;
+        $this->contextAnalyzer = $contextAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -95,6 +101,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
+            return null;
+        }
+        if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
         }
         if ($node->cond instanceof \PhpParser\Node\Expr\BooleanNot && $node->cond->expr instanceof \PhpParser\Node\Expr\Instanceof_) {
