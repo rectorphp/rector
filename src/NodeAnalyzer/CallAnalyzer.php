@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\If_;
 
 final class CallAnalyzer
 {
@@ -33,6 +34,20 @@ final class CallAnalyzer
 
         foreach (self::OBJECT_CALL_TYPES as $objectCallType) {
             if (is_a($expr, $objectCallType, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param If_[] $ifs
+     */
+    public function doesIfHasObjectCall(array $ifs): bool
+    {
+        foreach ($ifs as $if) {
+            if ($this->isObjectCall($if->cond)) {
                 return true;
             }
         }
