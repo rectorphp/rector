@@ -6,6 +6,7 @@ namespace Rector\DeadCode\PhpDoc;
 use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadReturnTagValueNodeAnalyzer
 {
@@ -27,6 +28,9 @@ final class DeadReturnTagValueNodeAnalyzer
             return \false;
         }
         if ($returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+            return \false;
+        }
+        if ($returnTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode) {
             return \false;
         }
         return $returnTagValueNode->description === '';
