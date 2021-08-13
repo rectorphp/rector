@@ -89,11 +89,6 @@ CODE_SAMPLE
         if ($realClassName === $fullyQualifiedName) {
             return null;
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        $hasFunction = $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name\FullyQualified($fullyQualifiedName), $scope);
-        if ($hasFunction) {
-            return null;
-        }
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // do not FQN use imports
         if ($parent instanceof \PhpParser\Node\Stmt\UseUse) {

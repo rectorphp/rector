@@ -7,7 +7,6 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadParamTagValueNodeAnalyzer
@@ -38,9 +37,6 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         if ($paramTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
-            return \false;
-        }
-        if ($paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode) {
             return \false;
         }
         return $paramTagValueNode->description === '';
