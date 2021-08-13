@@ -38,7 +38,7 @@ abstract class Helper implements \RectorPrefix20210813\Symfony\Component\Console
     /**
      * Returns the length of a string, using mb_strwidth if it is available.
      *
-     * @deprecated since 5.3
+     * @deprecated since Symfony 5.3
      *
      * @return int The length of the string
      * @param string|null $string
@@ -127,7 +127,7 @@ abstract class Helper implements \RectorPrefix20210813\Symfony\Component\Console
         return \sprintf('%d B', $memory);
     }
     /**
-     * @deprecated since 5.3
+     * @deprecated since Symfony 5.3
      * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      * @param string|null $string
      */
