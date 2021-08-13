@@ -19,6 +19,7 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
@@ -34,7 +35,8 @@ final class RemoveDeadInstanceOfRector extends AbstractRector
         private IfManipulator $ifManipulator,
         private PropertyFetchAnalyzer $propertyFetchAnalyzer,
         private ConstructorAssignDetector $constructorAssignDetector,
-        private PromotedPropertyResolver $promotedPropertyResolver
+        private PromotedPropertyResolver $promotedPropertyResolver,
+        private ContextAnalyzer $contextAnalyzer
     ) {
     }
 
@@ -90,6 +92,10 @@ CODE_SAMPLE
         }
 
         if (! $this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
+            return null;
+        }
+
+        if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
         }
 
