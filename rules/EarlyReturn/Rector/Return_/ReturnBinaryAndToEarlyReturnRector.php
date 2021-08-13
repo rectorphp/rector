@@ -79,12 +79,12 @@ CODE_SAMPLE
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
 
+        if (! $this->callAnalyzer->doesIfHasObjectCall($ifNegations)) {
+            return null;
+        }
+
         $this->mirrorComments($ifNegations[0], $node);
         foreach ($ifNegations as $ifNegation) {
-            if (! $this->callAnalyzer->isObjectCall($ifNegation->cond)) {
-                return null;
-            }
-
             $this->addNodeBeforeNode($ifNegation, $node);
         }
 

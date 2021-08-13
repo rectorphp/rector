@@ -188,11 +188,13 @@ final class PropertyFetchAnalyzer
                 if (! $node instanceof Assign) {
                     return false;
                 }
-
-                return $kindPropertyFetch === $node->var::class && $this->nodeNameResolver->isName(
-                    $node->var,
-                    $propertyName
-                ) && $this->nodeComparator->areNodesEqual($node->expr, $paramVariable);
+                if ($kindPropertyFetch !== $node->var::class) {
+                    return false;
+                }
+                if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
+                    return false;
+                }
+                return $this->nodeComparator->areNodesEqual($node->expr, $paramVariable);
             });
 
             if ($isAssignWithParamVarName !== null) {
