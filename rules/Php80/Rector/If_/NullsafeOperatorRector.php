@@ -7,10 +7,12 @@ namespace Rector\Php80\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -168,10 +170,49 @@ CODE_SAMPLE
         }
 
         if (! $nextNode instanceof If_) {
+            $nullSafe = $this->verifyDefaultValueInElse($if, $nullSafe, $assign);
+            if ($nullSafe === null) {
+                return null;
+            }
+
             return new Assign($assign->var, $nullSafe);
         }
 
         return $this->processNullSafeOperatorNotIdentical($nextNode, $nullSafe);
+    }
+
+    private function verifyDefaultValueInElse(
+        If_ $if,
+        NullsafeMethodCall | NullsafePropertyFetch $nullSafe,
+        Assign $assign
+    ): NullsafeMethodCall | NullsafePropertyFetch | Coalesce | null {
+        if (! $if->else instanceof Else_) {
+            return $nullSafe;
+        }
+
+        if (count($if->else->stmts) !== 1) {
+            return null;
+        }
+
+        $expression = $if->else->stmts[0];
+        if (! $expression instanceof Expression) {
+            return null;
+        }
+
+        $expressionAssign = $expression->expr;
+        if (! $expressionAssign instanceof Assign) {
+            return null;
+        }
+
+        if (! $this->nodeComparator->areNodesEqual($expressionAssign->var, $assign->var)) {
+            return null;
+        }
+
+        if ($this->valueResolver->isNull($expressionAssign->expr)) {
+            return $nullSafe;
+        }
+
+        return new Coalesce($nullSafe, $expressionAssign->expr);
     }
 
     private function processAssign(Assign $assign, Expression $prevExpression, Node $nextNode, bool $isStartIf): ?Node
