@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher;
@@ -73,6 +74,10 @@ CODE_SAMPLE
             return null;
         }
         if ($this->methodCallSkipAnalyzer->shouldSkipMethodCallIncludingNew($node)) {
+            return null;
+        }
+        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStatement instanceof \PhpParser\Node\Stmt\Expression && !$currentStatement instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
         $assignAndRootExprAndNodesToAdd = $this->assignAndRootExprAndNodesToAddMatcher->match($node, \Rector\Defluent\ValueObject\FluentCallsKind::NORMAL);
