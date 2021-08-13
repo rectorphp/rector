@@ -8,6 +8,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
@@ -39,6 +40,10 @@ final class DeadParamTagValueNodeAnalyzer
         }
 
         if ($paramTagValueNode->type instanceof GenericTypeNode) {
+            return false;
+        }
+
+        if ($paramTagValueNode->type instanceof SpacingAwareCallableTypeNode) {
             return false;
         }
 
