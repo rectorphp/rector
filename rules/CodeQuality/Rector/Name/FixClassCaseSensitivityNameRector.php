@@ -101,6 +101,12 @@ CODE_SAMPLE
             return null;
         }
 
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $hasFunction = $this->reflectionProvider->hasFunction(new FullyQualified($fullyQualifiedName), $scope);
+        if ($hasFunction) {
+            return null;
+        }
+
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         // do not FQN use imports
