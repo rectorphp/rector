@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210812;
+namespace RectorPrefix20210813;
 
 use Ssch\TYPO3Rector\FileProcessor\Resources\Icons\IconsFileProcessor;
 use Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector\IconsRector;

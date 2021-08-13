@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210812\\Symfony\\Component\\Finder\\": ""
+            "RectorPrefix20210813\\Symfony\\Component\\Finder\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

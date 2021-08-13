@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210812\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace RectorPrefix20210813\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use RectorPrefix20210812\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210812\Symfony\Component\HttpFoundation\Session\SessionInterface;
-use RectorPrefix20210812\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix20210812\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use RectorPrefix20210813\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210813\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use RectorPrefix20210813\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use RectorPrefix20210813\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Yields the Session.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class SessionValueResolver implements \RectorPrefix20210812\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class SessionValueResolver implements \RectorPrefix20210813\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
 {
     /**
      * {@inheritdoc}
@@ -32,7 +32,7 @@ final class SessionValueResolver implements \RectorPrefix20210812\Symfony\Compon
             return \false;
         }
         $type = $argument->getType();
-        if (\RectorPrefix20210812\Symfony\Component\HttpFoundation\Session\SessionInterface::class !== $type && !\is_subclass_of($type, \RectorPrefix20210812\Symfony\Component\HttpFoundation\Session\SessionInterface::class)) {
+        if (\RectorPrefix20210813\Symfony\Component\HttpFoundation\Session\SessionInterface::class !== $type && !\is_subclass_of($type, \RectorPrefix20210813\Symfony\Component\HttpFoundation\Session\SessionInterface::class)) {
             return \false;
         }
         return $request->getSession() instanceof $type;
