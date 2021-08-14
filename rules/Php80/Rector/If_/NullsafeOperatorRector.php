@@ -110,20 +110,17 @@ CODE_SAMPLE
         }
         $prevNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
         $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$prevNode instanceof \PhpParser\Node) {
-            return null;
-        }
         if (!$nextNode instanceof \PhpParser\Node) {
             return null;
         }
         if (!$prevNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        if (!$this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevNode->expr)) {
-            return null;
-        }
         $prevExpr = $prevNode->expr;
         if (!$prevExpr instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        if (!$this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevExpr)) {
             return null;
         }
         return $this->processAssign($prevExpr, $prevNode, $nextNode, $isStartIf);
@@ -196,10 +193,26 @@ CODE_SAMPLE
     }
     private function processAssign(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $prevExpression, \PhpParser\Node $nextNode, bool $isStartIf) : ?\PhpParser\Node
     {
-        if ($assign instanceof \PhpParser\Node\Expr\Assign && \property_exists($assign->expr, self::NAME) && \property_exists($nextNode, 'expr') && \property_exists($nextNode->expr, self::NAME)) {
+        if ($this->shouldProcessAssignInCurrentNode($assign, $nextNode)) {
             return $this->processAssignInCurrentNode($assign, $prevExpression, $nextNode, $isStartIf);
         }
         return $this->processAssignMayInNextNode($nextNode);
+    }
+    private function shouldProcessAssignInCurrentNode(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node $nextNode) : bool
+    {
+        if (!\property_exists($assign->expr, self::NAME)) {
+            return \false;
+        }
+        if (!\property_exists($nextNode, 'expr')) {
+            return \false;
+        }
+        if (!\property_exists($nextNode->expr, self::NAME)) {
+            return \false;
+        }
+        if ($this->valueResolver->isNull($nextNode->expr)) {
+            return \false;
+        }
+        return \true;
     }
     private function processIfMayInNextNode(?\PhpParser\Node $nextNode = null) : ?\PhpParser\Node
     {
