@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Defluent\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest;
+namespace Rector\Tests\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class InArgChainFluentMethodCallToStandaloneMethodCallRectorTest extends AbstractRectorTestCase
+final class InArgFluentChainMethodCallToStandaloneMethodCallRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

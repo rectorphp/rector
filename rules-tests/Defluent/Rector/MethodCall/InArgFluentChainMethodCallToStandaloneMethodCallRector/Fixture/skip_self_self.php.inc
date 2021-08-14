@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Tests\Defluent\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Fixture;
+namespace Rector\Tests\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector\Fixture;
 
 use DateTime;
 use DateTimeZone;
-use Rector\Tests\Defluent\Rector\MethodCall\InArgChainFluentMethodCallToStandaloneMethodCallRectorTest\Source\SetGetDateTime;
+use Rector\Tests\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector\Source\SetGetDateTime;
 use Nette\Utils\DateTime as NetteDateTime;
 
 final class SkipSelfSelf
