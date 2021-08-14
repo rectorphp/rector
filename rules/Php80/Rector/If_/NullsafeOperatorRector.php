@@ -122,10 +122,6 @@ CODE_SAMPLE
         $prevNode = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
         $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
 
-        if (! $prevNode instanceof Node) {
-            return null;
-        }
-
         if (! $nextNode instanceof Node) {
             return null;
         }
@@ -134,12 +130,12 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevNode->expr)) {
+        $prevExpr = $prevNode->expr;
+        if (! $prevExpr instanceof Assign) {
             return null;
         }
 
-        $prevExpr = $prevNode->expr;
-        if (! $prevExpr instanceof Assign) {
+        if (! $this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevExpr)) {
             return null;
         }
 
@@ -229,14 +225,28 @@ CODE_SAMPLE
 
     private function processAssign(Assign $assign, Expression $prevExpression, Node $nextNode, bool $isStartIf): ?Node
     {
-        if ($assign instanceof Assign && property_exists(
-            $assign->expr,
-            self::NAME
-        ) && property_exists($nextNode, 'expr') && property_exists($nextNode->expr, self::NAME)) {
+        if ($this->shouldProcessAssignInCurrentNode($assign, $nextNode)) {
             return $this->processAssignInCurrentNode($assign, $prevExpression, $nextNode, $isStartIf);
         }
-
         return $this->processAssignMayInNextNode($nextNode);
+    }
+
+    private function shouldProcessAssignInCurrentNode(Assign $assign, Node $nextNode): bool
+    {
+        if (! property_exists($assign->expr, self::NAME)) {
+            return false;
+        }
+        if (! property_exists($nextNode, 'expr')) {
+            return false;
+        }
+        if (! property_exists($nextNode->expr, self::NAME)) {
+            return false;
+        }
+        if ($this->valueResolver->isNull($nextNode->expr)) {
+            return false;
+        }
+
+        return true;
     }
 
     private function processIfMayInNextNode(?Node $nextNode = null): ?Node
