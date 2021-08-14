@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210813;
+namespace RectorPrefix20210814;
 
 use Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

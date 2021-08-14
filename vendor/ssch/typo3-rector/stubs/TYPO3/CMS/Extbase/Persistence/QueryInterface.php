@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210813\TYPO3\CMS\Extbase\Persistence;
+namespace RectorPrefix20210814\TYPO3\CMS\Extbase\Persistence;
 
 if (\interface_exists('TYPO3\\CMS\\Extbase\\Persistence\\QueryInterface')) {
     return;

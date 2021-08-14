@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210813\Symplify\Astral\NodeValue;
+namespace RectorPrefix20210814\Symplify\Astral\NodeValue;
 
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
@@ -19,10 +19,10 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PhpParser\Node\Stmt\ClassLike;
 use ReflectionClassConstant;
-use RectorPrefix20210813\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix20210813\Symplify\Astral\Naming\SimpleNameResolver;
-use RectorPrefix20210813\Symplify\Astral\NodeFinder\SimpleNodeFinder;
-use RectorPrefix20210813\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210814\Symplify\Astral\Exception\ShouldNotHappenException;
+use RectorPrefix20210814\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20210814\Symplify\Astral\NodeFinder\SimpleNodeFinder;
+use RectorPrefix20210814\Symplify\PackageBuilder\Php\TypeChecker;
 /**
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
  */
@@ -48,7 +48,7 @@ final class NodeValueResolver
      * @var \Symplify\Astral\NodeFinder\SimpleNodeFinder
      */
     private $simpleNodeFinder;
-    public function __construct(\RectorPrefix20210813\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20210813\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \RectorPrefix20210813\Symplify\Astral\NodeFinder\SimpleNodeFinder $simpleNodeFinder)
+    public function __construct(\RectorPrefix20210814\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20210814\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \RectorPrefix20210814\Symplify\Astral\NodeFinder\SimpleNodeFinder $simpleNodeFinder)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->typeChecker = $typeChecker;
@@ -101,7 +101,7 @@ final class NodeValueResolver
     private function resolveMagicConst(\PhpParser\Node\Scalar\MagicConst $magicConst) : ?string
     {
         if ($this->currentFilePath === null) {
-            throw new \RectorPrefix20210813\Symplify\Astral\Exception\ShouldNotHappenException();
+            throw new \RectorPrefix20210814\Symplify\Astral\Exception\ShouldNotHappenException();
         }
         if ($magicConst instanceof \PhpParser\Node\Scalar\MagicConst\Dir) {
             return \dirname($this->currentFilePath);
@@ -128,7 +128,7 @@ final class NodeValueResolver
     private function resolveByNode(\PhpParser\Node\Expr $expr)
     {
         if ($this->currentFilePath === null) {
-            throw new \RectorPrefix20210813\Symplify\Astral\Exception\ShouldNotHappenException();
+            throw new \RectorPrefix20210814\Symplify\Astral\Exception\ShouldNotHappenException();
         }
         if ($expr instanceof \PhpParser\Node\Scalar\MagicConst) {
             return $this->resolveMagicConst($expr);

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210813;
+namespace RectorPrefix20210814;
 
 if (\class_exists('Tx_Aboutmodules_Controller_ModulesController')) {
     return;

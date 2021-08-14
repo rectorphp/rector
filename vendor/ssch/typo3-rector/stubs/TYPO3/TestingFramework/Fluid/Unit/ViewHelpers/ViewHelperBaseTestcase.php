@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210813\TYPO3\TestingFramework\Fluid\Unit\ViewHelpers;
+namespace RectorPrefix20210814\TYPO3\TestingFramework\Fluid\Unit\ViewHelpers;
 
 if (\class_exists('TYPO3\\TestingFramework\\Fluid\\Unit\\ViewHelpers\\ViewHelperBaseTestcase')) {
     return;

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210813\Symplify\Astral\NodeNameResolver;
+namespace RectorPrefix20210814\Symplify\Astral\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
-use RectorPrefix20210813\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class AttributeNodeNameResolver implements \RectorPrefix20210813\Symplify\Astral\Contract\NodeNameResolverInterface
+use RectorPrefix20210814\Symplify\Astral\Contract\NodeNameResolverInterface;
+final class AttributeNodeNameResolver implements \RectorPrefix20210814\Symplify\Astral\Contract\NodeNameResolverInterface
 {
     /**
      * @param \PhpParser\Node $node

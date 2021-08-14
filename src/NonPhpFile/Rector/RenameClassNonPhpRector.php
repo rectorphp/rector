@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NonPhpFile\Rector;
 
-use RectorPrefix20210813\Nette\Utils\Strings;
+use RectorPrefix20210814\Nette\Utils\Strings;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
@@ -74,7 +74,7 @@ CODE_SAMPLE
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
-            $newContent = \RectorPrefix20210813\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
+            $newContent = \RectorPrefix20210814\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }

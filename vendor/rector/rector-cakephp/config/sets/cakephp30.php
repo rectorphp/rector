@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210813;
+namespace RectorPrefix20210814;
 
 use Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;

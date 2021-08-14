@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210813\Symfony\Component\DependencyInjection;
+namespace RectorPrefix20210814\Symfony\Component\DependencyInjection;
 
-use RectorPrefix20210813\Symfony\Component\ExpressionLanguage\ExpressionFunction;
-use RectorPrefix20210813\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
+use RectorPrefix20210814\Symfony\Component\ExpressionLanguage\ExpressionFunction;
+use RectorPrefix20210814\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
 /**
  * Define some ExpressionLanguage functions.
  *
@@ -20,7 +20,7 @@ use RectorPrefix20210813\Symfony\Component\ExpressionLanguage\ExpressionFunction
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ExpressionLanguageProvider implements \RectorPrefix20210813\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface
+class ExpressionLanguageProvider implements \RectorPrefix20210814\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface
 {
     private $serviceCompiler;
     public function __construct(callable $serviceCompiler = null)
@@ -29,11 +29,11 @@ class ExpressionLanguageProvider implements \RectorPrefix20210813\Symfony\Compon
     }
     public function getFunctions()
     {
-        return [new \RectorPrefix20210813\Symfony\Component\ExpressionLanguage\ExpressionFunction('service', $this->serviceCompiler ?: function ($arg) {
+        return [new \RectorPrefix20210814\Symfony\Component\ExpressionLanguage\ExpressionFunction('service', $this->serviceCompiler ?: function ($arg) {
             return \sprintf('$this->get(%s)', $arg);
         }, function (array $variables, $value) {
             return $variables['container']->get($value);
-        }), new \RectorPrefix20210813\Symfony\Component\ExpressionLanguage\ExpressionFunction('parameter', function ($arg) {
+        }), new \RectorPrefix20210814\Symfony\Component\ExpressionLanguage\ExpressionFunction('parameter', function ($arg) {
             return \sprintf('$this->getParameter(%s)', $arg);
         }, function (array $variables, $value) {
             return $variables['container']->getParameter($value);
