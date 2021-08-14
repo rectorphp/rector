@@ -98,18 +98,18 @@ CODE_SAMPLE
         return $this->handleTernaryNode($node);
     }
 
-    private function handleIfNode(If_ $node): ?Node
+    private function handleIfNode(If_ $if): ?Node
     {
-        $processNullSafeOperator = $this->processNullSafeOperatorIdentical($node);
+        $processNullSafeOperator = $this->processNullSafeOperatorIdentical($if);
         if ($processNullSafeOperator !== null) {
             /** @var Expression $prevNode */
-            $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $prevNode = $if->getAttribute(AttributeKey::PREVIOUS_NODE);
             $this->removeNode($prevNode);
 
             return $processNullSafeOperator;
         }
 
-        return $this->processNullSafeOperatorNotIdentical($node);
+        return $this->processNullSafeOperatorNotIdentical($if);
     }
 
     private function processNullSafeOperatorIdentical(If_ $if, bool $isStartIf = true): ?Node
@@ -393,36 +393,36 @@ CODE_SAMPLE
         return $expr;
     }
 
-    private function handleTernaryNode(Ternary $node): ?Node
+    private function handleTernaryNode(Ternary $ternary): ?Node
     {
-        if ($this->shouldSkipTernary($node)) {
+        if ($this->shouldSkipTernary($ternary)) {
             return null;
         }
 
-        $nullSafeElse = $this->nullsafeManipulator->processNullSafeExpr($node->else);
+        $nullSafeElse = $this->nullsafeManipulator->processNullSafeExpr($ternary->else);
 
         if ($nullSafeElse !== null) {
             return $nullSafeElse;
         }
 
-        if ($node->if === null) {
+        if ($ternary->if === null) {
             return null;
         }
 
-        return $this->nullsafeManipulator->processNullSafeExpr($node->if);
+        return $this->nullsafeManipulator->processNullSafeExpr($ternary->if);
     }
 
-    private function shouldSkipTernary(Ternary $node): bool
+    private function shouldSkipTernary(Ternary $ternary): bool
     {
-        if (! $this->canTernaryReturnNull($node)) {
+        if (! $this->canTernaryReturnNull($ternary)) {
             return true;
         }
-        if ($node->cond instanceof Identical) {
-            return ! $this->hasNullComparison($node->cond);
+        if ($ternary->cond instanceof Identical) {
+            return ! $this->hasNullComparison($ternary->cond);
         }
 
-        if ($node->cond instanceof NotIdentical) {
-            return ! $this->hasNullComparison($node->cond);
+        if ($ternary->cond instanceof NotIdentical) {
+            return ! $this->hasNullComparison($ternary->cond);
         }
 
         return true;
@@ -437,18 +437,18 @@ CODE_SAMPLE
         return $this->valueResolver->isNull($check->right);
     }
 
-    private function canTernaryReturnNull(Ternary $node): bool
+    private function canTernaryReturnNull(Ternary $ternary): bool
     {
-        if ($this->valueResolver->isNull($node->else)) {
+        if ($this->valueResolver->isNull($ternary->else)) {
             return true;
         }
 
-        if ($node->if === null) {
+        if ($ternary->if === null) {
             // $foo === null ?: 'xx' returns true if $foo is null
             // therefore it does not return null in case of the elvis operator
             return false;
         }
 
-        return $this->valueResolver->isNull($node->if);
+        return $this->valueResolver->isNull($ternary->if);
     }
 }

@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Defluent\NodeAnalyzer;
 
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Defluent\Skipper\FluentMethodCallSkipper;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class MethodCallSkipAnalyzer
 {
@@ -29,5 +35,27 @@ final class MethodCallSkipAnalyzer
     public function shouldSkipLastCallNotReturnThis(MethodCall $methodCall): bool
     {
         return ! $this->fluentChainMethodCallNodeAnalyzer->isMethodCallReturnThis($methodCall);
+    }
+
+    public function shouldSkipDependsWithOtherExpr(MethodCall|Cast $node): bool
+    {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof Node) {
+            return false;
+        }
+
+        if ($parentNode instanceof Return_) {
+            return false;
+        }
+
+        if ($parentNode instanceof Assign) {
+            return ! $parentNode->getAttribute(AttributeKey::PARENT_NODE) instanceof Expression;
+        }
+
+        if ($parentNode instanceof Cast) {
+            return $this->shouldSkipDependsWithOtherExpr($parentNode);
+        }
+
+        return ! $parentNode instanceof Expression;
     }
 }
