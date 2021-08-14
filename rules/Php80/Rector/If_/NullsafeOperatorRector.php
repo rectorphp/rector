@@ -7,9 +7,12 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
@@ -76,12 +79,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param If_ $node
+     * @param If_|Ternary $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    {
+        if ($node instanceof \PhpParser\Node\Stmt\If_) {
+            return $this->handleIfNode($node);
+        }
+        return $this->handleTernaryNode($node);
+    }
+    private function handleIfNode(\PhpParser\Node\Stmt\If_ $node) : ?\PhpParser\Node
     {
         $processNullSafeOperator = $this->processNullSafeOperatorIdentical($node);
         if ($processNullSafeOperator !== null) {
@@ -303,5 +313,54 @@ CODE_SAMPLE
             }
         }
         return $expr;
+    }
+    private function handleTernaryNode(\PhpParser\Node\Expr\Ternary $node) : ?\PhpParser\Node
+    {
+        if ($this->shouldSkipTernary($node)) {
+            return null;
+        }
+        $nullSafeElse = $this->nullsafeManipulator->processNullSafeExpr($node->else);
+        if ($nullSafeElse !== null) {
+            return $nullSafeElse;
+        }
+        if ($node->if === null) {
+            return null;
+        }
+        return $this->nullsafeManipulator->processNullSafeExpr($node->if);
+    }
+    private function shouldSkipTernary(\PhpParser\Node\Expr\Ternary $node) : bool
+    {
+        if (!$this->canTernaryReturnNull($node)) {
+            return \true;
+        }
+        if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+            return !$this->hasNullComparison($node->cond);
+        }
+        if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+            return !$this->hasNullComparison($node->cond);
+        }
+        return \true;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Identical $check
+     */
+    private function hasNullComparison($check) : bool
+    {
+        if ($this->valueResolver->isNull($check->left)) {
+            return \true;
+        }
+        return $this->valueResolver->isNull($check->right);
+    }
+    private function canTernaryReturnNull(\PhpParser\Node\Expr\Ternary $node) : bool
+    {
+        if ($this->valueResolver->isNull($node->else)) {
+            return \true;
+        }
+        if ($node->if === null) {
+            // $foo === null ?: 'xx' returns true if $foo is null
+            // therefore it does not return null in case of the elvis operator
+            return \false;
+        }
+        return $this->valueResolver->isNull($node->if);
     }
 }
