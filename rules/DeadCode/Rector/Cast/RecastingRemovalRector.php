@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\FunctionLike;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -100,7 +101,7 @@ CODE_SAMPLE
     private function shouldSkip(\PhpParser\Node\Expr $expr) : bool
     {
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
-            return \false;
+            return $this->isNonTypedFromParam($expr);
         }
         /** @var PropertyFetch|StaticPropertyFetch $expr */
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
@@ -109,5 +110,20 @@ CODE_SAMPLE
         }
         $nativeType = $phpPropertyReflection->getNativeType();
         return $nativeType instanceof \PHPStan\Type\MixedType;
+    }
+    private function isNonTypedFromParam(\PhpParser\Node\Expr $expr) : bool
+    {
+        $functionLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\FunctionLike::class);
+        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
+            return \false;
+        }
+        $params = $functionLike->getParams();
+        foreach ($params as $param) {
+            if (!$this->nodeComparator->areNodesEqual($param->var, $expr)) {
+                continue;
+            }
+            return $param->type === null;
+        }
+        return \false;
     }
 }
