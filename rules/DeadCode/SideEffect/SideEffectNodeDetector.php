@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\SideEffect;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -17,6 +18,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\ObjectType;
@@ -85,6 +87,10 @@ final class SideEffectNodeDetector
             return false;
         }
 
+        if ($node instanceof New_ && $this->isPhpParser($node)) {
+            return false;
+        }
+
         $exprClass = $node::class;
         if (in_array($exprClass, self::CALL_EXPR_SIDE_EFFECT_NODE_TYPES, true)) {
             return true;
@@ -95,6 +101,18 @@ final class SideEffectNodeDetector
         }
 
         return false;
+    }
+
+    private function isPhpParser(New_ $new): bool
+    {
+        if (! $new->class instanceof FullyQualified) {
+            return false;
+        }
+
+        $className = $new->class->toString();
+        $namespace = Strings::before($className, '\\', 1);
+
+        return  $namespace === 'PhpParser';
     }
 
     private function isClassCallerThrowable(StaticCall $staticCall): bool

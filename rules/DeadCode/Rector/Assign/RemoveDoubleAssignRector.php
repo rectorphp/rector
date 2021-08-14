@@ -5,16 +5,13 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,7 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDoubleAssignRector extends AbstractRector
 {
     public function __construct(
-        private ScopeNestingComparator $scopeNestingComparator
+        private ScopeNestingComparator $scopeNestingComparator,
+        private SideEffectNodeDetector $sideEffectNodeDetector
     ) {
     }
 
@@ -74,15 +72,18 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isCall($previousStatement->expr->expr)) {
-            return null;
-        }
-
-        if ($this->shouldSkipForDifferentScope($node, $previousStatement)) {
-            return null;
-        }
-
+        // early check self referencing, ensure that variable not re-used
         if ($this->isSelfReferencing($node)) {
+            return null;
+        }
+
+        // detect call expression has side effect
+        if ($this->sideEffectNodeDetector->detectCallExpr($previousStatement->expr->expr)) {
+            return null;
+        }
+
+        // check scoping variable
+        if ($this->shouldSkipForDifferentScope($node, $previousStatement)) {
             return null;
         }
 
@@ -90,11 +91,6 @@ CODE_SAMPLE
         $this->removeNode($previousStatement);
 
         return $node;
-    }
-
-    private function isCall(Expr $expr): bool
-    {
-        return $expr instanceof FuncCall || $expr instanceof StaticCall || $expr instanceof MethodCall;
     }
 
     private function shouldSkipForDifferentScope(Assign $assign, Expression $expression): bool
