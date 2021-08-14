@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -143,7 +142,7 @@ CODE_SAMPLE
         }
         /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $expr */
         $expr = $assign->expr;
-        if (!$this->isCall($expr)) {
+        if (!$this->sideEffectNodeDetector->detectCallExpr($expr)) {
             return \false;
         }
         return $this->isUsedInAssignExpr($expr, $assign);
@@ -166,10 +165,6 @@ CODE_SAMPLE
             }
         }
         return \false;
-    }
-    private function isCall(\PhpParser\Node\Expr $expr) : bool
-    {
-        return $expr instanceof \PhpParser\Node\Expr\FuncCall || $expr instanceof \PhpParser\Node\Expr\MethodCall || $expr instanceof \PhpParser\Node\Expr\New_ || $expr instanceof \PhpParser\Node\Expr\NullsafeMethodCall || $expr instanceof \PhpParser\Node\Expr\StaticCall;
     }
     private function refactorUsedVariable(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Expr\Assign
     {
