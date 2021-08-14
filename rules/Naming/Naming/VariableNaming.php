@@ -176,11 +176,11 @@ final class VariableNaming
     }
     private function resolveFromNew(\PhpParser\Node\Expr\New_ $new) : string
     {
-        if ($new->class instanceof \PhpParser\Node\Name) {
-            $className = $this->nodeNameResolver->getName($new->class);
-            return $this->nodeNameResolver->getShortName($className);
+        $className = $this->nodeNameResolver->getName($new->class);
+        if ($className === null) {
+            throw new \Rector\Core\Exception\NotImplementedYetException();
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException();
+        return $this->nodeNameResolver->getShortName($className);
     }
     private function unwrapNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
