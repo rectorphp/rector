@@ -6,8 +6,10 @@ namespace Rector\Defluent\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\Matcher\AssignAndRootExprAndNodesToAddMatcher;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
@@ -17,6 +19,7 @@ use Rector\Defluent\NodeFactory\NonFluentChainMethodCallFactory;
 use Rector\Defluent\NodeFactory\VariableFromNewFactory;
 use Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd;
 use Rector\Defluent\ValueObject\FluentCallsKind;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,7 +35,8 @@ final class InArgFluentChainMethodCallToStandaloneMethodCallRector extends Abstr
         private FluentMethodCallAsArgFactory $fluentMethodCallAsArgFactory,
         private AssignAndRootExprAndNodesToAddMatcher $assignAndRootExprAndNodesToAddMatcher,
         private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer,
-        private NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory
+        private NonFluentChainMethodCallFactory $nonFluentChainMethodCallFactory,
+        private ParentFinder $parentFinder
     ) {
     }
 
@@ -102,6 +106,11 @@ CODE_SAMPLE
         }
 
         if (! $this->fluentChainMethodCallNodeAnalyzer->isLastChainMethodCall($node)) {
+            return null;
+        }
+
+        $isInReturnOrCast = (bool) $this->parentFinder->findByTypes($node, [Return_::class, Cast::class]);
+        if ($isInReturnOrCast) {
             return null;
         }
 

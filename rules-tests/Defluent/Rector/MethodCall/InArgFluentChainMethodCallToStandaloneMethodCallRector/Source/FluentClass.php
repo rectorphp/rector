@@ -15,4 +15,9 @@ final class FluentClass
     {
         return $this;
     }
+
+    public function otherFunction2()
+    {
+        return 1;
+    }
 }
