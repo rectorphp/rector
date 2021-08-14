@@ -214,6 +214,14 @@ final class PureFunctionDetector
         'json_encode',
         'json_decode',
         'json_last_error',
+        // array
+        'array_pop',
+        'array_push',
+        'array_shift',
+        'next',
+        'prev',
+        // stream
+        'stream_filter_append',
     ];
     /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
