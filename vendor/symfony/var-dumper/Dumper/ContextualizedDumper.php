@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210814\Symfony\Component\VarDumper\Dumper;
+namespace RectorPrefix20210815\Symfony\Component\VarDumper\Dumper;
 
-use RectorPrefix20210814\Symfony\Component\VarDumper\Cloner\Data;
-use RectorPrefix20210814\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
+use RectorPrefix20210815\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210815\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
 /**
  * @author Kévin Thérage <therage.kevin@gmail.com>
  */
-class ContextualizedDumper implements \RectorPrefix20210814\Symfony\Component\VarDumper\Dumper\DataDumperInterface
+class ContextualizedDumper implements \RectorPrefix20210815\Symfony\Component\VarDumper\Dumper\DataDumperInterface
 {
     private $wrappedDumper;
     private $contextProviders;
     /**
      * @param ContextProviderInterface[] $contextProviders
      */
-    public function __construct(\RectorPrefix20210814\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper, array $contextProviders)
+    public function __construct(\RectorPrefix20210815\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper, array $contextProviders)
     {
         $this->wrappedDumper = $wrappedDumper;
         $this->contextProviders = $contextProviders;

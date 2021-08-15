@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210814;
+namespace RectorPrefix20210815;
 
 if (\class_exists('tx_form_System_Postprocessor_Mail')) {
     return;

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210814\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper;
+namespace RectorPrefix20210815\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper;
 
-use RectorPrefix20210814\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20210815\Symfony\Component\DependencyInjection\Definition;
 /**
  * Null dumper, negates any proxy code generation for any given service definition.
  *
@@ -18,7 +18,7 @@ use RectorPrefix20210814\Symfony\Component\DependencyInjection\Definition;
  *
  * @final
  */
-class NullDumper implements \RectorPrefix20210814\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface
+class NullDumper implements \RectorPrefix20210815\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface
 {
     /**
      * {@inheritdoc}

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Enum;
 
-use RectorPrefix20210814\MyCLabs\Enum\Enum;
+use RectorPrefix20210815\MyCLabs\Enum\Enum;
 /**
  * @method static ApplicationPhase REFACTORING()
  * @method static ApplicationPhase PRINT_SKIP()
@@ -11,7 +11,7 @@ use RectorPrefix20210814\MyCLabs\Enum\Enum;
  * @method static ApplicationPhase POST_RECTORS()
  * @method static ApplicationPhase PARSING()
  */
-final class ApplicationPhase extends \RectorPrefix20210814\MyCLabs\Enum\Enum
+final class ApplicationPhase extends \RectorPrefix20210815\MyCLabs\Enum\Enum
 {
     /**
      * @var string

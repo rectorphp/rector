@@ -209,10 +209,7 @@ CODE_SAMPLE
         if (!\property_exists($nextNode->expr, self::NAME)) {
             return \false;
         }
-        if ($this->valueResolver->isNull($nextNode->expr)) {
-            return \false;
-        }
-        return \true;
+        return !$this->valueResolver->isNull($nextNode->expr);
     }
     private function processIfMayInNextNode(?\PhpParser\Node $nextNode = null) : ?\PhpParser\Node
     {

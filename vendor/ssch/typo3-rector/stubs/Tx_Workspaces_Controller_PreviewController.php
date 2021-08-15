@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210814;
+namespace RectorPrefix20210815;
 
 if (\class_exists('Tx_Workspaces_Controller_PreviewController')) {
     return;

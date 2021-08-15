@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210814\Symfony\Component\HttpFoundation\Exception;
+namespace RectorPrefix20210815\Symfony\Component\HttpFoundation\Exception;
 
 /**
  * Interface for Request exceptions.
