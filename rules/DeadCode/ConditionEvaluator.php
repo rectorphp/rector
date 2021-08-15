@@ -9,12 +9,17 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\DeadCode\Contract\ConditionInterface;
 use Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition;
 use Rector\DeadCode\ValueObject\VersionCompareCondition;
 
 final class ConditionEvaluator
 {
+    public function __construct(private PhpVersionProvider $phpVersionProvider)
+    {
+    }
+
     /**
      * @return bool|int|null
      */
@@ -31,10 +36,14 @@ final class ConditionEvaluator
         return null;
     }
 
-    private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition): bool | int
+    private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition): bool | int | null
     {
         $compareSign = $versionCompareCondition->getCompareSign();
         if ($compareSign !== null) {
+            if ($compareSign === '<' && $this->phpVersionProvider->provide() < $versionCompareCondition->getSecondVersion()) {
+                return null;
+            }
+
             return version_compare(
                 (string) $versionCompareCondition->getFirstVersion(),
                 (string) $versionCompareCondition->getSecondVersion(),
