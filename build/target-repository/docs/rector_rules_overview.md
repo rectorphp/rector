@@ -1,4 +1,4 @@
-# 475 Rules Overview
+# 476 Rules Overview
 
 <br>
 
@@ -74,7 +74,7 @@
 
 - [Php80](#php80) (17)
 
-- [Php81](#php81) (4)
+- [Php81](#php81) (5)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -8092,6 +8092,31 @@ Decorate read-only property with `readonly` attribute
      {
          return $this->name;
      }
+ }
+```
+
+<br>
+
+### SpatieEnumClassToEnumRector
+
+Refactor Spatie enum class to native Enum
+
+- class: [`Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector`](../rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php)
+
+```diff
+-use \Spatie\Enum\Enum;
+-
+-/**
+- * @method static self draft()
+- * @method static self published()
+- * @method static self archived()
+- */
+-class StatusEnum extends Enum
++enum StatusEnum
+ {
++    case draft = 'draft';
++    case published = 'published';
++    case archived = 'archived';
  }
 ```
 
