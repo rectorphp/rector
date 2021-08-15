@@ -42,6 +42,12 @@ final class PHPStanNodeScopeResolver
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\\w+)#';
     /**
+     * @var string
+     *
+     * @see https://regex101.com/r/3DVXef/2
+     */
+    private const MIXIN_REGEX = '#\\*\\s+\\@mixin\\s+\\\\?\\w+#';
+    /**
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
@@ -132,7 +138,11 @@ final class PHPStanNodeScopeResolver
             }
         };
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
-        $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        $contents = $smartFileInfo->getContents();
+        // avoid crash on class with @mixin @see https://github.com/rectorphp/rector-src/pull/688
+        if (!\RectorPrefix20210815\Nette\Utils\Strings::match($contents, self::MIXIN_REGEX)) {
+            $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+        }
         $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
         return $nodes;
     }
