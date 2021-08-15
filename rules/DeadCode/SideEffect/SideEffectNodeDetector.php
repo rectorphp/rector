@@ -112,7 +112,7 @@ final class SideEffectNodeDetector
         $className = $new->class->toString();
         $namespace = Strings::before($className, '\\', 1);
 
-        return  $namespace === 'PhpParser';
+        return $namespace === 'PhpParser';
     }
 
     private function isClassCallerThrowable(StaticCall $staticCall): bool
