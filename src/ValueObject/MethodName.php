@@ -45,4 +45,8 @@ final class MethodName
      * @var string
      */
     public const TO_STRING = '__toString';
+    /**
+     * @var string
+     */
+    public const INVOKE = '__invoke';
 }
