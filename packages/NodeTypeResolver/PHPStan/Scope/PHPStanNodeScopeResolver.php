@@ -126,8 +126,7 @@ final class PHPStanNodeScopeResolver
         array $nodes,
         MutatingScope $mutatingScope,
         callable $nodeCallback
-    ): array
-    {
+    ): array {
         $contents = $smartFileInfo->getContents();
 
         // avoid crash on class with @mixin @see https://github.com/rectorphp/rector-src/pull/688

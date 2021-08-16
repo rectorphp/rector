@@ -529,3 +529,18 @@ parameters:
         -
             message: '#Instead of array shape, use value object with specific types in constructor and getters#'
             path: src/NodeFactory/ClassWithPublicPropertiesFactory.php #26
+
+        -
+            message: '#Instead of abstract class, use specific service with composition#'
+            paths:
+                - packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php
+                - packages/PostRector/Rector/AbstractPostRector.php
+                - rules/Defluent/ValueObject/AbstractRootExpr.php
+                - rules/PhpSpecToPHPUnit/Rector/AbstractPhpSpecToPHPUnitRector.php
+                - src/Rector/AbstractRector.php
+
+        -
+            message: '#This call has duplicate argument#'
+            paths:
+                 - rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php
+

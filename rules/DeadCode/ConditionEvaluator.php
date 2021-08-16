@@ -16,8 +16,9 @@ use Rector\DeadCode\ValueObject\VersionCompareCondition;
 
 final class ConditionEvaluator
 {
-    public function __construct(private PhpVersionProvider $phpVersionProvider)
-    {
+    public function __construct(
+        private PhpVersionProvider $phpVersionProvider
+    ) {
     }
 
     /**
@@ -36,8 +37,9 @@ final class ConditionEvaluator
         return null;
     }
 
-    private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition): bool | int | null
-    {
+    private function evaluateVersionCompareCondition(
+        VersionCompareCondition $versionCompareCondition
+    ): bool | int | null {
         $compareSign = $versionCompareCondition->getCompareSign();
         if ($compareSign !== null) {
             if ($compareSign === '<' && $this->phpVersionProvider->provide() < $versionCompareCondition->getSecondVersion()) {
