@@ -18,6 +18,8 @@ final class StaticEasyPrefixer
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
         // for usage in Helmich\TypoScriptParser\Parser\Traverser\Visitor
         'Helmich\TypoScriptParser\Parser\AST\Statement',
+        // for usage in packages/Testing/PHPUnit/PlatformAgnosticAssertions.php
+        'PHPUnit\Framework\Constraint\IsEqual'
     ];
 
     /**
