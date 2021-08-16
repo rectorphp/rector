@@ -14,5 +14,11 @@ final class SkipOtherDocblocks
 
         /** @noRector */
         round(2 + 0);
+
+        // @noRector \Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector
+        round(3 + 0);
+
+        // @noRector
+        round(4 + 0);
     }
 }

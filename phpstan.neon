@@ -142,6 +142,7 @@ parameters:
             paths:
                 - src/PhpParser/NodeTransformer.php
                 - src/Rector/AbstractRector.php
+                - src/Exclusion/ExclusionManager.php
                 # playing around with doc block format
                 - packages/Comments/CommentRemover.php
                 - rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php

@@ -10,6 +10,9 @@ final class DifferentNorector
          * @noRector \Rector\Core\Tests\Exclusion\Source\SomeRector
          */
         round(1 + 0);
+
+        // @noRector \Rector\Core\Tests\Exclusion\Source\SomeRector
+        round(2 + 0);
     }
 }
 
@@ -27,6 +30,9 @@ final class DifferentNorector
          * @noRector \Rector\Core\Tests\Exclusion\Source\SomeRector
          */
         round(1);
+
+        // @noRector \Rector\Core\Tests\Exclusion\Source\SomeRector
+        round(2);
     }
 }
 
