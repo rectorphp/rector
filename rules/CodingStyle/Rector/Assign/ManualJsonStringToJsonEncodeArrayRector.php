@@ -9,12 +9,14 @@ use Nette\Utils\JsonException;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Concat as ConcatAssign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\Node\ConcatJoiner;
 use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\NodeFactory\JsonArrayFactory;
@@ -47,7 +49,8 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
         private ConcatJoiner $concatJoiner,
         private ConcatManipulator $concatManipulator,
         private JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,
-        private JsonArrayFactory $jsonArrayFactory
+        private JsonArrayFactory $jsonArrayFactory,
+        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -104,7 +107,7 @@ CODE_SAMPLE
             $isJsonString = $this->isJsonString($stringValue);
             if ($isJsonString) {
                 $jsonArray = $this->jsonArrayFactory->createFromJsonString($stringValue);
-                $jsonEncodeAssign = $this->jsonEncodeStaticCallFactory->createFromArray($node->var, $jsonArray);
+                $jsonEncodeAssign = $this->createJsonEncodeAssign($node->var, $jsonArray);
 
                 $jsonDataVariable = new Variable('jsonData');
                 $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
@@ -236,7 +239,7 @@ CODE_SAMPLE
 
         $this->addNodeBeforeNode($jsonDataAssign, $assign);
 
-        return $this->jsonEncodeStaticCallFactory->createFromArray($assign->var, $jsonArray);
+        return $this->createJsonEncodeAssign($assign->var, $jsonArray);
     }
 
     private function matchNextExprAssignConcatToSameVariable(
@@ -293,5 +296,18 @@ CODE_SAMPLE
         }
 
         return $currentExpression->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
+    private function createJsonEncodeAssign(Expr $assignExpr, Array_ $jsonArray): Assign
+    {
+        if ($this->reflectionProvider->hasClass('Nette\Utils\Json')) {
+            return $this->jsonEncodeStaticCallFactory->createFromArray($assignExpr, $jsonArray);
+        }
+
+        $jsonDataAssign = new Assign($assignExpr, $jsonArray);
+        $jsonDataVariable = new Variable('jsonData');
+        $jsonDataAssign->expr = $this->nodeFactory->createFuncCall('json_encode', [$jsonDataVariable]);
+
+        return $jsonDataAssign;
     }
 }
