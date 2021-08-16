@@ -8,12 +8,14 @@ use RectorPrefix20210816\Nette\Utils\JsonException;
 use RectorPrefix20210816\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Concat as ConcatAssign;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\Node\ConcatJoiner;
 use Rector\CodingStyle\Node\ConcatManipulator;
 use Rector\CodingStyle\NodeFactory\JsonArrayFactory;
@@ -55,12 +57,17 @@ final class ManualJsonStringToJsonEncodeArrayRector extends \Rector\Core\Rector\
      * @var \Rector\CodingStyle\NodeFactory\JsonArrayFactory
      */
     private $jsonArrayFactory;
-    public function __construct(\Rector\CodingStyle\Node\ConcatJoiner $concatJoiner, \Rector\CodingStyle\Node\ConcatManipulator $concatManipulator, \Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory, \Rector\CodingStyle\NodeFactory\JsonArrayFactory $jsonArrayFactory)
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\CodingStyle\Node\ConcatJoiner $concatJoiner, \Rector\CodingStyle\Node\ConcatManipulator $concatManipulator, \Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory, \Rector\CodingStyle\NodeFactory\JsonArrayFactory $jsonArrayFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->concatJoiner = $concatJoiner;
         $this->concatManipulator = $concatManipulator;
         $this->jsonEncodeStaticCallFactory = $jsonEncodeStaticCallFactory;
         $this->jsonArrayFactory = $jsonArrayFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -108,7 +115,7 @@ CODE_SAMPLE
             $isJsonString = $this->isJsonString($stringValue);
             if ($isJsonString) {
                 $jsonArray = $this->jsonArrayFactory->createFromJsonString($stringValue);
-                $jsonEncodeAssign = $this->jsonEncodeStaticCallFactory->createFromArray($node->var, $jsonArray);
+                $jsonEncodeAssign = $this->createJsonEncodeAssign($node->var, $jsonArray);
                 $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
                 $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
                 $this->addNodeBeforeNode($jsonDataAssign, $node);
@@ -191,7 +198,7 @@ CODE_SAMPLE
         $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
         $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
         $this->addNodeBeforeNode($jsonDataAssign, $assign);
-        return $this->jsonEncodeStaticCallFactory->createFromArray($assign->var, $jsonArray);
+        return $this->createJsonEncodeAssign($assign->var, $jsonArray);
     }
     /**
      * @param \PhpParser\Node\Expr\Assign|ConcatAssign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node $currentNode
@@ -237,5 +244,15 @@ CODE_SAMPLE
             return null;
         }
         return $currentExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+    }
+    private function createJsonEncodeAssign(\PhpParser\Node\Expr $assignExpr, \PhpParser\Node\Expr\Array_ $jsonArray) : \PhpParser\Node\Expr\Assign
+    {
+        if ($this->reflectionProvider->hasClass('Nette\\Utils\\Json')) {
+            return $this->jsonEncodeStaticCallFactory->createFromArray($assignExpr, $jsonArray);
+        }
+        $jsonDataAssign = new \PhpParser\Node\Expr\Assign($assignExpr, $jsonArray);
+        $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
+        $jsonDataAssign->expr = $this->nodeFactory->createFuncCall('json_encode', [$jsonDataVariable]);
+        return $jsonDataAssign;
     }
 }
