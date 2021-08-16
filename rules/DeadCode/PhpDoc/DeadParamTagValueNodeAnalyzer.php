@@ -7,6 +7,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -37,13 +38,26 @@ final class DeadParamTagValueNodeAnalyzer
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($param->type, $paramTagValueNode->type, $functionLike)) {
             return \false;
         }
-        if ($paramTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+        if (\in_array(\get_class($paramTagValueNode->type), [\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode::class, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode::class], \true)) {
             return \false;
         }
-        if ($paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode) {
-            return \false;
+        if (!$paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
+            return $paramTagValueNode->description === '';
         }
-        return $paramTagValueNode->description === '';
+        if (!$this->hasGenericType($paramTagValueNode->type)) {
+            return $paramTagValueNode->description === '';
+        }
+        return \false;
+    }
+    private function hasGenericType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
+    {
+        $types = $bracketsAwareUnionTypeNode->types;
+        foreach ($types as $type) {
+            if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function matchParamByName(string $desiredParamName, \PhpParser\Node\FunctionLike $functionLike) : ?\PhpParser\Node\Param
     {
