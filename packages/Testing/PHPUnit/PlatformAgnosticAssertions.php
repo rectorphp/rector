@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use RectorPrefix20210816\Nette\Utils\FileSystem;
-use RectorPrefix20210816\PHPUnit\Framework\Constraint\IsEqual;
+use PHPUnit\Framework\Constraint\IsEqual;
 /**
  * Relaxes phpunit assertions to be forgiving about platform issues, like directory-separators or newlines.
  * Mostly required to make assertion work on Windows.
@@ -42,7 +42,7 @@ trait PlatformAgnosticAssertions
     {
         parent::assertFileExists($expectedFile, $message);
         $expectedString = self::getNormalizedFileContents($expectedFile);
-        $isEqual = new \RectorPrefix20210816\PHPUnit\Framework\Constraint\IsEqual($expectedString);
+        $isEqual = new \PHPUnit\Framework\Constraint\IsEqual($expectedString);
         $actualString = self::normalize($actualString);
         parent::assertThat($actualString, $isEqual, $message);
     }
@@ -57,7 +57,7 @@ trait PlatformAgnosticAssertions
     {
         static::assertFileExists($expected, $message);
         static::assertFileExists($actual, $message);
-        $isEqual = new \RectorPrefix20210816\PHPUnit\Framework\Constraint\IsEqual(self::getNormalizedFileContents($expected));
+        $isEqual = new \PHPUnit\Framework\Constraint\IsEqual(self::getNormalizedFileContents($expected));
         static::assertThat(self::getNormalizedFileContents($actual), $isEqual, $message);
     }
     /**
