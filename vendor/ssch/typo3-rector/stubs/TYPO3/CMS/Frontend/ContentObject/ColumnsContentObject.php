@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210815\TYPO3\CMS\Frontend\ContentObject;
+namespace RectorPrefix20210816\TYPO3\CMS\Frontend\ContentObject;
 
 if (\class_exists('TYPO3\\CMS\\Frontend\\ContentObject\\ColumnsContentObject')) {
     return;

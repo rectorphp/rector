@@ -7,14 +7,14 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionWithFilename;
-use RectorPrefix20210815\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20210816\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
     /**
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(\RectorPrefix20210815\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
+    public function __construct(\RectorPrefix20210816\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->pathNormalizer = $pathNormalizer;
     }
@@ -28,7 +28,7 @@ final class VendorLocationDetector
         if ($fileName === \false) {
             return \false;
         }
-        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
+        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
         return \strpos($normalizedFileName, '/vendor/') !== \false;
     }
     /**

@@ -6,7 +6,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210815;
+namespace RectorPrefix20210816;
 
 require __DIR__ . '/Tracy/Bar/IBarPanel.php';
 require __DIR__ . '/Tracy/Bar/Bar.php';

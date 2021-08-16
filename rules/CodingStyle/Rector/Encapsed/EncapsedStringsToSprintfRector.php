@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use RectorPrefix20210815\Nette\Utils\Strings;
+use RectorPrefix20210816\Nette\Utils\Strings;
 use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -91,7 +91,7 @@ CODE_SAMPLE
             $this->sprintfFormat .= '%s';
             return;
         }
-        $this->sprintfFormat .= \RectorPrefix20210815\Nette\Utils\Strings::replace($stringValue, '#%#', '%%');
+        $this->sprintfFormat .= \RectorPrefix20210816\Nette\Utils\Strings::replace($stringValue, '#%#', '%%');
     }
     private function collectExpr(\PhpParser\Node\Expr $expr) : void
     {
@@ -123,7 +123,8 @@ CODE_SAMPLE
         if ($string === '%s%s' && \count($argumentVariables) === 2 && $this->hasEndOfLine($argumentVariables)) {
             return new \PhpParser\Node\Expr\BinaryOp\Concat($argumentVariables[0], $argumentVariables[1]);
         }
-        if (\strpos($string, \PHP_EOL) !== \false) {
+        // checks for windows or linux line ending. \n is contained in both.
+        if (\strpos($string, "\n") !== \false) {
             return null;
         }
         $arguments = [new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($string))];

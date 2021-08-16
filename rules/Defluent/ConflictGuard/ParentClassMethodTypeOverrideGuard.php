@@ -10,6 +10,7 @@ use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use RectorPrefix20210816\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -20,10 +21,15 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
      */
     private $vendorLocationDetector;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector)
+    /**
+     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     */
+    private $pathNormalizer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20210816\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->vendorLocationDetector = $vendorLocationDetector;
+        $this->pathNormalizer = $pathNormalizer;
     }
     public function hasParentMethodOutsideVendor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -63,7 +69,8 @@ final class ParentClassMethodTypeOverrideGuard
         if ($fileName === \false) {
             return \false;
         }
-        return \strpos($fileName, '/vendor/') === \false;
+        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+        return \strpos($normalizedFileName, '/vendor/') === \false;
     }
     public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

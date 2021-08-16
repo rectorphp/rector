@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210815;
+namespace RectorPrefix20210816;
 
 if (\class_exists('tx_lowlevel_missing_relations')) {
     return;

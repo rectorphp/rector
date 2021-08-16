@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210815\TYPO3\CMS\InfoPagetsconfig\Controller;
+namespace RectorPrefix20210816\TYPO3\CMS\InfoPagetsconfig\Controller;
 
 if (\class_exists('TYPO3\\CMS\\InfoPagetsconfig\\Controller\\InfoPageTyposcriptConfigController')) {
     return;
