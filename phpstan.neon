@@ -390,6 +390,7 @@ parameters:
             paths:
                  - src/functions/node_helper.php
                  - packages/ReadWrite/Guard/VariableToConstantGuard.php
+                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
 
         # upgrade to PHP 7.4 wip
         - '#This property type might be inlined to PHP\. Do you have confidence it is correct\? Put it here#'

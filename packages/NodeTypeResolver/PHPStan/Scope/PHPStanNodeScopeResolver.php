@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
@@ -24,6 +25,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -61,7 +63,8 @@ final class PHPStanNodeScopeResolver
         private TraitNodeScopeCollector $traitNodeScopeCollector,
         private PrivatesAccessor $privatesAccessor,
         private RenamedClassesSourceLocator $renamedClassesSourceLocator,
-        private ParentAttributeSourceLocator $parentAttributeSourceLocator
+        private ParentAttributeSourceLocator $parentAttributeSourceLocator,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -111,16 +114,80 @@ final class PHPStanNodeScopeResolver
 
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
 
+        return $this->processNodesWithMixinHandling($smartFileInfo, $nodes, $scope, $nodeCallback);
+    }
+
+    /**
+     * @param Stmt[] $nodes
+     * @return Stmt[]
+     */
+    private function processNodesWithMixinHandling(
+        SmartFileInfo $smartFileInfo,
+        array $nodes,
+        MutatingScope $mutatingScope,
+        callable $nodeCallback
+    ): array
+    {
         $contents = $smartFileInfo->getContents();
 
         // avoid crash on class with @mixin @see https://github.com/rectorphp/rector-src/pull/688
         if (! Strings::match($contents, self::MIXIN_REGEX)) {
-            $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+            // avoid crash on class with @mixin in source @see https://github.com/rectorphp/rector-src/pull/689
+            if ($this->isMixinInSource($nodes)) {
+                return $nodes;
+            }
+
+            $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
         }
 
-        $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
+        $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
 
         return $nodes;
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function isMixinInSource(array $nodes): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node): bool {
+            if (! $node instanceof FullyQualified) {
+                return false;
+            }
+
+            $className = $node->toString();
+
+            // fix error in parallel test
+            // use function_exists on purpose as using reflectionProvider broke the test in parallel
+            if (function_exists($className)) {
+                return false;
+            }
+
+            $hasClass = $this->reflectionProvider->hasClass($className);
+
+            if (! $hasClass) {
+                return false;
+            }
+
+            $classReflection = $this->reflectionProvider->getClass($className);
+            if (! $classReflection->isClass()) {
+                return false;
+            }
+
+            if ($classReflection->isBuiltIn()) {
+                return false;
+            }
+
+            $fileName = $classReflection->getFileName();
+            if ($fileName === false) {
+                return false;
+            }
+
+            $smartFileInfo = new SmartFileInfo($fileName);
+            $contents = $smartFileInfo->getContents();
+
+            return (bool) Strings::match($contents, self::MIXIN_REGEX);
+        });
     }
 
     /**
