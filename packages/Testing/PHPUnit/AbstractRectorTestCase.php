@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use Iterator;
-use Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Container\ContainerInterface;
@@ -72,6 +71,19 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
         /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
         $bootstrapFilesIncluder = $this->getService(BootstrapFilesIncluder::class);
         $bootstrapFilesIncluder->includeBootstrapFiles();
+    }
+
+    protected function tearDown(): void
+    {
+        // free memory and trigger gc to reduce memory peak consumption on windows
+        unset(
+            $this->applicationFileProcessor,
+            $this->parameterProvider,
+            $this->dynamicSourceLocatorProvider,
+            $this->removedAndAddedFilesCollector,
+            $this->originalTempFileInfo,
+        );
+        gc_collect_cycles();
     }
 
     /**
@@ -142,7 +154,7 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
 
     private function normalizeNewlines(string $string): string
     {
-        return Strings::replace($string, '#\r\n|\r|\n#', "\n");
+        return str_replace("\r\n", "\n", $string);
     }
 
     private function processFileInfo(SmartFileInfo $fileInfo): string

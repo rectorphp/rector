@@ -34,6 +34,8 @@ final class ClassWithPublicPropertiesFactoryTest extends AbstractTestCase
     public function test(SmartFileInfo $fixtureFileInfo): void
     {
         $contents = $fixtureFileInfo->getContents();
+        // normalize for windows compat
+        $contents = str_replace("\r\n", "\n", $contents);
         [$content, $expected] = explode("-----\n", $contents, 2);
 
         $classSettings = Json::decode($content, Json::FORCE_ARRAY);

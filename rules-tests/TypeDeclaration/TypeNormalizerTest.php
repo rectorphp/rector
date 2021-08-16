@@ -23,6 +23,11 @@ final class TypeNormalizerTest extends AbstractTestCase
         $this->typeNormalizer = $this->getService(TypeNormalizer::class);
     }
 
+    protected function tearDown(): void
+    {
+        unset($this->typeNormalizer);
+    }
+
     /**
      * @dataProvider provideDataNormalizeArrayOfUnionToUnionArray()
      */

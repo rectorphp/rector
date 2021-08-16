@@ -8,6 +8,9 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * Minor differences on windows, see https://github.com/rectorphp/rector/issues/6571
+ */
 final class SensitiveHereNowDocRectorTest extends AbstractRectorTestCase
 {
     /**

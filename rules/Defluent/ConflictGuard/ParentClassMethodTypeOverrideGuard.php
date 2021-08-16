@@ -11,12 +11,14 @@ use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 
 final class ParentClassMethodTypeOverrideGuard
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private VendorLocationDetector $vendorLocationDetector
+        private VendorLocationDetector $vendorLocationDetector,
+        private PathNormalizer $pathNormalizer
     ) {
     }
 
@@ -69,7 +71,8 @@ final class ParentClassMethodTypeOverrideGuard
             return false;
         }
 
-        return ! str_contains($fileName, '/vendor/');
+        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+        return ! str_contains($normalizedFileName, '/vendor/');
     }
 
     public function hasParentClassMethod(ClassMethod $classMethod): bool

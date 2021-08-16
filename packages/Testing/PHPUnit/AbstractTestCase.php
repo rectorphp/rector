@@ -12,6 +12,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 
 abstract class AbstractTestCase extends TestCase
 {
+    use PlatformAgnosticAssertions;
+
     /**
      * @var array<string, RectorKernel>
      */

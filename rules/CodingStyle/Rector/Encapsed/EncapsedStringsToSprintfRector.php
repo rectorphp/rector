@@ -152,7 +152,8 @@ CODE_SAMPLE
             return new Concat($argumentVariables[0], $argumentVariables[1]);
         }
 
-        if (\str_contains($string, PHP_EOL)) {
+        // checks for windows or linux line ending. \n is contained in both.
+        if (\str_contains($string, "\n")) {
             return null;
         }
 
