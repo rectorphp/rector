@@ -7,6 +7,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -54,6 +55,9 @@ final class DeadParamTagValueNodeAnalyzer
         $types = $bracketsAwareUnionTypeNode->types;
         foreach ($types as $type) {
             if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+                if ($type->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode && $type->type->name === 'array') {
+                    continue;
+                }
                 return \true;
             }
         }
