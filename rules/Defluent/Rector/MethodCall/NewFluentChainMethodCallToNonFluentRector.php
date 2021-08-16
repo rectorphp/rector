@@ -78,6 +78,10 @@ CODE_SAMPLE
     {
         // handled by another rule
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        // may happen if another rule make parent null
+        if (!$parent instanceof \PhpParser\Node) {
+            return null;
+        }
         if ($this->typeChecker->isInstanceOf($parent, [\PhpParser\Node\Stmt\Return_::class, \PhpParser\Node\Arg::class])) {
             return null;
         }
