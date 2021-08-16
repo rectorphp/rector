@@ -293,12 +293,6 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
-        # needed for native reflection parameter reference
-        -
-            message: '#Instead of "ReflectionFunction" class/interface use "PHPStan\\Reflection\\FunctionReflection"#'
-            paths:
-                - packages/ReadWrite/Guard/VariableToConstantGuard.php
-
         -
             message: '#Argument and options "debug" got confused#'
             paths:
@@ -341,12 +335,6 @@ parameters:
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
-
-        -
-            message: '#Do not inherit from abstract class, better use composition#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
-                - packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php
 
         -
             message: '#Do not use setter on a service#'
@@ -475,11 +463,6 @@ parameters:
 
         - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
         - '#Method Rector\\NodeNestingScope\\ParentFinder\:\:findByTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
-
-        -
-            message: '#Instead of "ReflectionFunction" class/interface use "PHPStan\\Reflection\\FunctionReflection"#'
-            paths:
-                 - rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php #45
 
         # array_index on generic types
         - '#Method Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:uniquateTypes\(\) should return array<TType of PHPStan\\Type\\Type\> but returns array<int, PHPStan\\Type\\Type\>#'
