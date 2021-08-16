@@ -74,6 +74,12 @@ CODE_SAMPLE
     {
         // handled by another rule
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+
+        // may happen if another rule make parent null
+        if (! $parent instanceof Node) {
+            return null;
+        }
+
         if ($this->typeChecker->isInstanceOf($parent, [Return_::class, Arg::class])) {
             return null;
         }
