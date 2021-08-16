@@ -8,11 +8,11 @@ use Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
 abstract class AbstractCodeSample implements \Symplify\RuleDocGenerator\Contract\CodeSampleInterface
 {
     /**
-     * @var string
+     * @var non-empty-string
      */
     private $goodCode;
     /**
-     * @var string
+     * @var non-empty-string
      */
     private $badCode;
     public function __construct(string $badCode, string $goodCode)
@@ -21,6 +21,9 @@ abstract class AbstractCodeSample implements \Symplify\RuleDocGenerator\Contract
         $goodCode = \trim($goodCode);
         if ($badCode === '') {
             throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException('Bad sample good code cannot be empty');
+        }
+        if ($goodCode === '') {
+            throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException('Good sample good code cannot be empty');
         }
         if ($goodCode === $badCode) {
             $errorMessage = \sprintf('Good and bad code cannot be identical: "%s"', $goodCode);

@@ -7,6 +7,7 @@ final class TypeChecker
 {
     /**
      * @param array<class-string> $types
+     * @param object|string $object
      */
     public function isInstanceOf($object, array $types) : bool
     {

@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace RectorPrefix20210816\Symplify\SymplifyKernel\ValueObject;
 
 use RectorPrefix20210816\Symfony\Component\Console\Application;
+use RectorPrefix20210816\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210816\Symfony\Component\HttpKernel\KernelInterface;
 use RectorPrefix20210816\Symplify\PackageBuilder\Console\Input\StaticInputDetector;
-use RectorPrefix20210816\Symplify\PackageBuilder\Console\ShellCode;
 use RectorPrefix20210816\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix20210816\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -39,7 +39,7 @@ final class KernelBootAndApplicationRun
             $symfonyStyleFactory = new \RectorPrefix20210816\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
             $symfonyStyle = $symfonyStyleFactory->create();
             $symfonyStyle->error($throwable->getMessage());
-            exit(\RectorPrefix20210816\Symplify\PackageBuilder\Console\ShellCode::ERROR);
+            exit(\RectorPrefix20210816\Symfony\Component\Console\Command\Command::FAILURE);
         }
     }
     private function createKernel() : \RectorPrefix20210816\Symfony\Component\HttpKernel\KernelInterface

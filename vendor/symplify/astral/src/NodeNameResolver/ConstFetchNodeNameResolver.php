@@ -20,7 +20,6 @@ final class ConstFetchNodeNameResolver implements \RectorPrefix20210816\Symplify
      */
     public function resolve($node) : ?string
     {
-        // convention to save uppercase and lowercase functions for each name
-        return $node->name->toLowerString();
+        return $node->name->toString();
     }
 }
