@@ -157,7 +157,7 @@ final class PHPStanNodeScopeResolver
         // avoid crash on class with @mixin @see https://github.com/rectorphp/rector-src/pull/688
         if (!\RectorPrefix20210816\Nette\Utils\Strings::match($contents, self::MIXIN_REGEX)) {
             // avoid crash on class with @mixin in source @see https://github.com/rectorphp/rector-src/pull/689
-            if ($this->isMixinInSource($nodes)) {
+            if ($this->isMixinInSource($nodes, $smartFileInfo)) {
                 return $nodes;
             }
             $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
@@ -168,9 +168,10 @@ final class PHPStanNodeScopeResolver
     /**
      * @param Node[] $nodes
      */
-    private function isMixinInSource(array $nodes) : bool
+    private function isMixinInSource(array $nodes, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) : bool {
+        $realPath = $smartFileInfo->getRealPath();
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) use($realPath) : bool {
             if (!$node instanceof \PhpParser\Node\Name\FullyQualified) {
                 return \false;
             }
@@ -193,6 +194,9 @@ final class PHPStanNodeScopeResolver
             }
             $fileName = $classReflection->getFileName();
             if ($fileName === \false) {
+                return \false;
+            }
+            if ($fileName === $realPath) {
                 return \false;
             }
             $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);

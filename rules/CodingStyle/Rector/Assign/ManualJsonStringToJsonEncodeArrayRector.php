@@ -42,6 +42,10 @@ final class ManualJsonStringToJsonEncodeArrayRector extends \Rector\Core\Rector\
      */
     private const JSON_STRING_REGEX = '#{(.*?\\:.*?)}#s';
     /**
+     * @var string
+     */
+    private const JSON_DATA = 'jsonData';
+    /**
      * @var \Rector\CodingStyle\Node\ConcatJoiner
      */
     private $concatJoiner;
@@ -116,7 +120,7 @@ CODE_SAMPLE
             if ($isJsonString) {
                 $jsonArray = $this->jsonArrayFactory->createFromJsonString($stringValue);
                 $jsonEncodeAssign = $this->createJsonEncodeAssign($node->var, $jsonArray);
-                $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
+                $jsonDataVariable = new \PhpParser\Node\Expr\Variable(self::JSON_DATA);
                 $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
                 $this->addNodeBeforeNode($jsonDataAssign, $node);
                 return $jsonEncodeAssign;
@@ -195,7 +199,7 @@ CODE_SAMPLE
         }
         $this->removeNodes($nodesToRemove);
         $jsonArray = $this->jsonArrayFactory->createFromJsonStringAndPlaceholders($stringValue, $placeholderNodes);
-        $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
+        $jsonDataVariable = new \PhpParser\Node\Expr\Variable(self::JSON_DATA);
         $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
         $this->addNodeBeforeNode($jsonDataAssign, $assign);
         return $this->createJsonEncodeAssign($assign->var, $jsonArray);
@@ -251,7 +255,7 @@ CODE_SAMPLE
             return $this->jsonEncodeStaticCallFactory->createFromArray($assignExpr, $jsonArray);
         }
         $jsonDataAssign = new \PhpParser\Node\Expr\Assign($assignExpr, $jsonArray);
-        $jsonDataVariable = new \PhpParser\Node\Expr\Variable('jsonData');
+        $jsonDataVariable = new \PhpParser\Node\Expr\Variable(self::JSON_DATA);
         $jsonDataAssign->expr = $this->nodeFactory->createFuncCall('json_encode', [$jsonDataVariable]);
         return $jsonDataAssign;
     }
