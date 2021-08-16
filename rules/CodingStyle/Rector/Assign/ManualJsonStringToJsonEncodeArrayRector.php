@@ -45,6 +45,11 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
      */
     private const JSON_STRING_REGEX = '#{(.*?\:.*?)}#s';
 
+    /**
+     * @var string
+     */
+    private const JSON_DATA = 'jsonData';
+
     public function __construct(
         private ConcatJoiner $concatJoiner,
         private ConcatManipulator $concatManipulator,
@@ -109,7 +114,7 @@ CODE_SAMPLE
                 $jsonArray = $this->jsonArrayFactory->createFromJsonString($stringValue);
                 $jsonEncodeAssign = $this->createJsonEncodeAssign($node->var, $jsonArray);
 
-                $jsonDataVariable = new Variable('jsonData');
+                $jsonDataVariable = new Variable(self::JSON_DATA);
                 $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
 
                 $this->addNodeBeforeNode($jsonDataAssign, $node);
@@ -234,7 +239,7 @@ CODE_SAMPLE
         $this->removeNodes($nodesToRemove);
 
         $jsonArray = $this->jsonArrayFactory->createFromJsonStringAndPlaceholders($stringValue, $placeholderNodes);
-        $jsonDataVariable = new Variable('jsonData');
+        $jsonDataVariable = new Variable(self::JSON_DATA);
         $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
 
         $this->addNodeBeforeNode($jsonDataAssign, $assign);
@@ -305,7 +310,7 @@ CODE_SAMPLE
         }
 
         $jsonDataAssign = new Assign($assignExpr, $jsonArray);
-        $jsonDataVariable = new Variable('jsonData');
+        $jsonDataVariable = new Variable(self::JSON_DATA);
         $jsonDataAssign->expr = $this->nodeFactory->createFuncCall('json_encode', [$jsonDataVariable]);
 
         return $jsonDataAssign;
