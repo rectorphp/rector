@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use RectorPrefix20210816\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
@@ -23,6 +24,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -87,7 +89,11 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator
      */
     private $parentAttributeSourceLocator;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector, \RectorPrefix20210816\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector, \RectorPrefix20210816\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -99,6 +105,7 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->parentAttributeSourceLocator = $parentAttributeSourceLocator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param Stmt[] $nodes
@@ -138,13 +145,60 @@ final class PHPStanNodeScopeResolver
             }
         };
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
+        return $this->processNodesWithMixinHandling($smartFileInfo, $nodes, $scope, $nodeCallback);
+    }
+    /**
+     * @param Stmt[] $nodes
+     * @return Stmt[]
+     */
+    private function processNodesWithMixinHandling(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $nodes, \PHPStan\Analyser\MutatingScope $mutatingScope, callable $nodeCallback) : array
+    {
         $contents = $smartFileInfo->getContents();
         // avoid crash on class with @mixin @see https://github.com/rectorphp/rector-src/pull/688
         if (!\RectorPrefix20210816\Nette\Utils\Strings::match($contents, self::MIXIN_REGEX)) {
-            $this->nodeScopeResolver->processNodes($nodes, $scope, $nodeCallback);
+            // avoid crash on class with @mixin in source @see https://github.com/rectorphp/rector-src/pull/689
+            if ($this->isMixinInSource($nodes)) {
+                return $nodes;
+            }
+            $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
         }
-        $this->resolveAndSaveDependentFiles($nodes, $scope, $smartFileInfo);
+        $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
         return $nodes;
+    }
+    /**
+     * @param Node[] $nodes
+     */
+    private function isMixinInSource(array $nodes) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Name\FullyQualified) {
+                return \false;
+            }
+            $className = $node->toString();
+            // fix error in parallel test
+            // use function_exists on purpose as using reflectionProvider broke the test in parallel
+            if (\function_exists($className)) {
+                return \false;
+            }
+            $hasClass = $this->reflectionProvider->hasClass($className);
+            if (!$hasClass) {
+                return \false;
+            }
+            $classReflection = $this->reflectionProvider->getClass($className);
+            if (!$classReflection->isClass()) {
+                return \false;
+            }
+            if ($classReflection->isBuiltIn()) {
+                return \false;
+            }
+            $fileName = $classReflection->getFileName();
+            if ($fileName === \false) {
+                return \false;
+            }
+            $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
+            $contents = $smartFileInfo->getContents();
+            return (bool) \RectorPrefix20210816\Nette\Utils\Strings::match($contents, self::MIXIN_REGEX);
+        });
     }
     /**
      * @param Node[] $nodes
