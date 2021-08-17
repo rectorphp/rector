@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210816;
+namespace RectorPrefix20210817;
 
 use Rector\Core\Bootstrap\ExtensionConfigResolver;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

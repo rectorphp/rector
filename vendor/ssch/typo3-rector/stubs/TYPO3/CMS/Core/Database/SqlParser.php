@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210816\TYPO3\CMS\Core\Database;
+namespace RectorPrefix20210817\TYPO3\CMS\Core\Database;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\SqlParser')) {
     return;

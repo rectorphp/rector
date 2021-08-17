@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210816;
+namespace RectorPrefix20210817;
 
 if (\class_exists('Tx_Workspaces_Domain_Model_CombinedRecord')) {
     return;

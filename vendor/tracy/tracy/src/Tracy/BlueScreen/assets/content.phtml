@@ -28,28 +28,27 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 	<a id="tracy-bs-toggle" href="#" class="tracy-toggle"></a>
 	<div class="tracy-bs-main">
 		<div id="tracy-bs-error" class="panel">
-			<?php if ($exception->getMessage()): ?><p><?= Helpers::encodeString($title . $code, self::MAX_MESSAGE_LENGTH) ?></p><?php endif ?>
+			<?php if ($exception->getMessage()): ?><p><?= Helpers::escapeHtml($title . $code) ?></p><?php endif ?>
 
 
-			<h1><span><?= $this->formatMessage($exception) ?></span>
+			<h1><span><?= $this->formatMessage($exception) ?: Helpers::escapeHtml($title . $code) ?></span>
 			<?php foreach ($actions as $item): ?>
 			<a href="<?= Helpers::escapeHtml($item['link']) ?>" class="action"<?= empty($item['external']) ? '' : ' target="_blank" rel="noreferrer noopener"'?>><?= Helpers::escapeHtml($item['label']) ?>&#x25ba;</a>
 			<?php endforeach ?></h1>
 		</div>
 
-		<?php if ($prev = $exception->getPrevious()): ?>
+		<?php if (count($exceptions) > 1): ?>
 		<div class="caused">
-			<a href="#tracyCaused">Caused by <?= Helpers::escapeHtml(Helpers::getClass($prev)) ?></a>
+			<a href="#tracyCaused">Caused by <?= Helpers::escapeHtml(Helpers::getClass($exceptions[1])) ?></a>
 		</div>
 		<?php endif ?>
 
 
-		<?php $ex = $exception; $level = 0; ?>
-		<?php do { ?>
+		<?php foreach ($exceptions as $level => $ex): ?>
 
-			<?php if ($level++): ?>
-			<div class="panel"<?php if ($level === 2) echo ' id="tracyCaused"' ?>>
-			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $level > 2) ? ' tracy-collapsed' : '' ?>">Caused by</a></h2>
+			<?php if ($level): ?>
+			<div class="panel"<?php if ($level === 1) echo ' id="tracyCaused"' ?>>
+			<h2><a data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $level > 1) ? ' tracy-collapsed' : '' ?>">Caused by</a></h2>
 
 			<div class="<?= $collapsed ? 'tracy-collapsed ' : '' ?>inner">
 				<div class="panel">
@@ -159,8 +158,8 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 			</div></div>
 			<?php endif ?>
 
-		<?php } while ($ex = $ex->getPrevious()); ?>
-		<?php while (--$level) echo '</div></div>' ?>
+		<?php endforeach ?>
+		<?php while ($level--) echo '</div></div>' ?>
 
 
 		<?php if (count((array) $exception) > count((array) new \Exception)):?>
@@ -280,7 +279,7 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 			<div class="outer">
 			<table>
 			<?php
-			foreach ($_SERVER['argv'] as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', Helpers::escapeHtml($v), "</td></tr>\n";
+			foreach ($_SERVER['argv'] as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', $dump($v, $k), "</td></tr>\n";
 			?>
 			</table>
 			</div>
@@ -299,7 +298,7 @@ $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 			<div class="outer">
 			<table class="tracy-sortable">
 			<?php
-			foreach ($httpHeaders as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', Helpers::escapeHtml($v), "</td></tr>\n";
+			foreach ($httpHeaders as $k => $v) echo '<tr><th>', Helpers::escapeHtml($k), '</th><td>', $dump($v, $k), "</td></tr>\n";
 			?>
 			</table>
 			</div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210816\TYPO3\CMS\Form\Controller;
+namespace RectorPrefix20210817\TYPO3\CMS\Form\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Form\\Controller\\FormFrontendController')) {
     return;

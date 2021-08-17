@@ -5,15 +5,17 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210816\Nette\Utils;
+namespace RectorPrefix20210817\Nette\Utils;
 
-use RectorPrefix20210816\Nette;
+use RectorPrefix20210817\Nette;
 /**
  * Paginating math.
  *
  * @property   int $page
  * @property-read int $firstPage
  * @property-read int|null $lastPage
+ * @property-read int $firstItemOnPage
+ * @property-read int $lastItemOnPage
  * @property   int $base
  * @property-read bool $first
  * @property-read bool $last
@@ -65,6 +67,20 @@ class Paginator
     public function getLastPage() : ?int
     {
         return $this->itemCount === null ? null : $this->base + \max(0, $this->getPageCount() - 1);
+    }
+    /**
+     * Returns the sequence number of the first element on the page
+     */
+    public function getFirstItemOnPage() : int
+    {
+        return $this->itemCount !== 0 ? $this->offset + 1 : 0;
+    }
+    /**
+     * Returns the sequence number of the last element on the page
+     */
+    public function getLastItemOnPage() : int
+    {
+        return $this->offset + $this->length;
     }
     /**
      * Sets first page (base) number.

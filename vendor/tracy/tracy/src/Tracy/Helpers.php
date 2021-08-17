@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210816\Tracy;
+namespace RectorPrefix20210817\Tracy;
 
 /**
  * Rendering helpers for Debugger.
@@ -19,7 +19,7 @@ class Helpers
      */
     public static function editorLink($file, $line = null) : string
     {
-        $file = \strtr($origFile = $file, \RectorPrefix20210816\Tracy\Debugger::$editorMapping);
+        $file = \strtr($origFile = $file, \RectorPrefix20210817\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
             $file = \strtr($file, '\\', '/');
             if (\preg_match('#(^[a-z]:)?/.{1,40}$#i', $file, $m) && \strlen($file) > \strlen($m[0])) {
@@ -41,10 +41,10 @@ class Helpers
      */
     public static function editorUri($file, $line = null, $action = 'open', $search = '', $replace = '') : ?string
     {
-        if (\RectorPrefix20210816\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
+        if (\RectorPrefix20210817\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
-            $file = \strtr($file, \RectorPrefix20210816\Tracy\Debugger::$editorMapping);
-            return \strtr(\RectorPrefix20210816\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
+            $file = \strtr($file, \RectorPrefix20210817\Tracy\Debugger::$editorMapping);
+            return \strtr(\RectorPrefix20210817\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
         }
         return null;
     }
@@ -125,7 +125,7 @@ class Helpers
     public static function improveException($e) : void
     {
         $message = $e->getMessage();
-        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20210816\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
+        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20210817\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
             // do nothing
         } elseif (\preg_match('#^Call to undefined function (\\S+\\\\)?(\\w+)\\(#', $message, $m)) {
             $funcs = \array_merge(\get_defined_functions()['internal'], \get_defined_functions()['user']);
@@ -268,8 +268,9 @@ class Helpers
     }
     /** @internal
      * @param string $s
-     * @param int|null $maxLength */
-    public static function encodeString($s, $maxLength = null, &$utf = null) : string
+     * @param int|null $maxLength
+     * @param bool $showWhitespaces */
+    public static function encodeString($s, $maxLength = null, $showWhitespaces = \true) : string
     {
         static $tableU, $tableB;
         if ($tableU === null) {
@@ -281,11 +282,28 @@ class Helpers
                 $tableB[$ch] = '<i>\\x' . \str_pad(\strtoupper(\dechex(\ord($ch))), 2, '0', \STR_PAD_LEFT) . '</i>';
             }
         }
-        [$utf, $table, $len] = \preg_match('##u', $s) ? [\true, $tableU, \strlen(\utf8_decode($s))] : [\false, $tableB, \strlen($s)];
+        $utf = self::isUtf8($s);
+        $table = $utf ? $tableU : $tableB;
+        if (!$showWhitespaces) {
+            unset($table["\r"], $table["\n"], $table["\t"]);
+        }
+        $len = $utf ? self::utf8Length($s) : \strlen($s);
         $s = $maxLength && $len > $maxLength + 20 ? \strtr(self::truncateString($s, $maxLength, $utf), $table) . ' <span>…</span> ' . \strtr(self::truncateString($s, -10, $utf), $table) : \strtr($s, $table);
         $s = \str_replace('</i><i>', '', $s);
         $s = \preg_replace('~\\n$~D', '', $s);
         return $s;
+    }
+    /** @internal
+     * @param string $s */
+    public static function utf8Length($s) : int
+    {
+        return \strlen(\utf8_decode($s));
+    }
+    /** @internal
+     * @param string $s */
+    public static function isUtf8($s) : bool
+    {
+        return (bool) \preg_match('##u', $s);
     }
     /** @internal
      * @param string $s
@@ -392,5 +410,16 @@ XX
             return \function_exists('posix_isatty') && @\posix_isatty($stream);
         };
         return (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
+    }
+    /**
+     * @param \Throwable $ex
+     */
+    public static function getExceptionChain($ex) : array
+    {
+        $res = [$ex];
+        while (($ex = $ex->getPrevious()) && !\in_array($ex, $res, \true)) {
+            $res[] = $ex;
+        }
+        return $res;
     }
 }

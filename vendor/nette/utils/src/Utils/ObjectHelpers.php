@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210816\Nette\Utils;
+namespace RectorPrefix20210817\Nette\Utils;
 
-use RectorPrefix20210816\Nette;
-use RectorPrefix20210816\Nette\MemberAccessException;
+use RectorPrefix20210817\Nette;
+use RectorPrefix20210817\Nette\MemberAccessException;
 /**
  * Nette\SmartObject helpers.
  */
@@ -24,7 +24,7 @@ final class ObjectHelpers
         $hint = self::getSuggestion(\array_merge(\array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($p) {
             return !$p->isStatic();
         }), self::parseFullDoc($rc, '~^[ \\t*]*@property(?:-read)?[ \\t]+(?:\\S+[ \\t]+)??\\$(\\w+)~m')), $name);
-        throw new \RectorPrefix20210816\Nette\MemberAccessException("Cannot read an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
+        throw new \RectorPrefix20210817\Nette\MemberAccessException("Cannot read an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
     }
     /** @throws MemberAccessException
      * @param string $class
@@ -35,7 +35,7 @@ final class ObjectHelpers
         $hint = self::getSuggestion(\array_merge(\array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($p) {
             return !$p->isStatic();
         }), self::parseFullDoc($rc, '~^[ \\t*]*@property(?:-write)?[ \\t]+(?:\\S+[ \\t]+)??\\$(\\w+)~m')), $name);
-        throw new \RectorPrefix20210816\Nette\MemberAccessException("Cannot write to an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
+        throw new \RectorPrefix20210817\Nette\MemberAccessException("Cannot write to an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
     }
     /** @throws MemberAccessException
      * @param string $class
@@ -43,22 +43,46 @@ final class ObjectHelpers
      * @param mixed[] $additionalMethods */
     public static function strictCall($class, $method, $additionalMethods = []) : void
     {
-        $hint = self::getSuggestion(\array_merge(\get_class_methods($class), self::parseFullDoc(new \ReflectionClass($class), '~^[ \\t*]*@method[ \\t]+(?:\\S+[ \\t]+)??(\\w+)\\(~m'), $additionalMethods), $method);
-        if (\method_exists($class, $method)) {
+        $trace = \debug_backtrace(0, 3);
+        // suppose this method is called from __call()
+        $context = ($trace[1]['function'] ?? null) === '__call' ? $trace[2]['class'] ?? null : null;
+        if ($context && \is_a($class, $context, \true) && \method_exists($context, $method)) {
             // called parent::$method()
-            $class = 'parent';
+            $class = \get_parent_class($context);
         }
-        throw new \RectorPrefix20210816\Nette\MemberAccessException("Call to undefined method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
+        if (\method_exists($class, $method)) {
+            // insufficient visibility
+            $rm = new \ReflectionMethod($class, $method);
+            $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
+            throw new \RectorPrefix20210817\Nette\MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
+        } else {
+            $hint = self::getSuggestion(\array_merge(\get_class_methods($class), self::parseFullDoc(new \ReflectionClass($class), '~^[ \\t*]*@method[ \\t]+(?:\\S+[ \\t]+)??(\\w+)\\(~m'), $additionalMethods), $method);
+            throw new \RectorPrefix20210817\Nette\MemberAccessException("Call to undefined method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
+        }
     }
     /** @throws MemberAccessException
      * @param string $class
      * @param string $method */
     public static function strictStaticCall($class, $method) : void
     {
-        $hint = self::getSuggestion(\array_filter((new \ReflectionClass($class))->getMethods(\ReflectionMethod::IS_PUBLIC), function ($m) {
-            return $m->isStatic();
-        }), $method);
-        throw new \RectorPrefix20210816\Nette\MemberAccessException("Call to undefined static method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
+        $trace = \debug_backtrace(0, 3);
+        // suppose this method is called from __callStatic()
+        $context = ($trace[1]['function'] ?? null) === '__callStatic' ? $trace[2]['class'] ?? null : null;
+        if ($context && \is_a($class, $context, \true) && \method_exists($context, $method)) {
+            // called parent::$method()
+            $class = \get_parent_class($context);
+        }
+        if (\method_exists($class, $method)) {
+            // insufficient visibility
+            $rm = new \ReflectionMethod($class, $method);
+            $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
+            throw new \RectorPrefix20210817\Nette\MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
+        } else {
+            $hint = self::getSuggestion(\array_filter((new \ReflectionClass($class))->getMethods(\ReflectionMethod::IS_PUBLIC), function ($m) {
+                return $m->isStatic();
+            }), $method);
+            throw new \RectorPrefix20210817\Nette\MemberAccessException("Call to undefined static method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
+        }
     }
     /**
      * Returns array of magic properties defined by annotation @property.

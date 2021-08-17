@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Use_;
 
-use RectorPrefix20210816\Nette\Utils\Strings;
+use RectorPrefix20210817\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
@@ -167,7 +167,7 @@ CODE_SAMPLE
                 $originalName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
                 if ($originalName instanceof \PhpParser\Node\Name) {
                     $loweredOriginalName = \strtolower($originalName->toString());
-                    $loweredOriginalNameNamespace = \RectorPrefix20210816\Nette\Utils\Strings::before($loweredOriginalName, '\\');
+                    $loweredOriginalNameNamespace = \RectorPrefix20210817\Nette\Utils\Strings::before($loweredOriginalName, '\\');
                     return $loweredAliasName === $loweredOriginalNameNamespace;
                 }
             }
