@@ -186,9 +186,6 @@ final class PHPStanNodeScopeResolver
                 return \false;
             }
             $classReflection = $this->reflectionProvider->getClass($className);
-            if (!$classReflection->isClass()) {
-                return \false;
-            }
             if ($classReflection->isBuiltIn()) {
                 return \false;
             }
@@ -199,9 +196,7 @@ final class PHPStanNodeScopeResolver
             if ($fileName === $realPath) {
                 return \false;
             }
-            $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
-            $contents = $smartFileInfo->getContents();
-            return (bool) \RectorPrefix20210817\Nette\Utils\Strings::match($contents, self::MIXIN_REGEX);
+            return $classReflection->getMixinTags() !== [];
         });
     }
     /**
