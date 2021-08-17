@@ -170,10 +170,6 @@ final class PHPStanNodeScopeResolver
             }
 
             $classReflection = $this->reflectionProvider->getClass($className);
-            if (! $classReflection->isClass()) {
-                return false;
-            }
-
             if ($classReflection->isBuiltIn()) {
                 return false;
             }
@@ -187,10 +183,7 @@ final class PHPStanNodeScopeResolver
                 return false;
             }
 
-            $smartFileInfo = new SmartFileInfo($fileName);
-            $contents = $smartFileInfo->getContents();
-
-            return (bool) Strings::match($contents, self::MIXIN_REGEX);
+            return $classReflection->getMixinTags() !== [];
         });
     }
 

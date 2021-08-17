@@ -88,16 +88,16 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $isModifiedNode = false;
-        $dateTimeObject = new ObjectType('DateTime');
+        $objectType = new ObjectType('DateTime');
 
         foreach ($node->getParams() as $param) {
-            if (! $this->isObjectType($param, $dateTimeObject)) {
+            if (! $this->isObjectType($param, $objectType)) {
                 continue;
             }
 
             // Do not refactor if node's type is a child class of \DateTime (can have wider API)
             $paramType = $this->nodeTypeResolver->resolve($param);
-            if (!$paramType->isSuperTypeOf($dateTimeObject)->yes()) {
+            if (! $paramType->isSuperTypeOf($objectType)->yes()) {
                 continue;
             }
 
