@@ -29,6 +29,8 @@ use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToAddCollector;
 final class LivingCodeManipulator
 {
@@ -36,9 +38,14 @@ final class LivingCodeManipulator
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
-    public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector)
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function addLivingCodeBeforeNode(\PhpParser\Node\Expr $expr, \PhpParser\Node $addBeforeThisNode) : void
     {
@@ -69,6 +76,13 @@ final class LivingCodeManipulator
             return \array_merge($this->keepLivingCodeFromExpr($expr->var), $this->keepLivingCodeFromExpr($expr->name));
         }
         if ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            $type = $this->nodeTypeResolver->resolve($expr->var);
+            if ($type instanceof \PHPStan\Type\ObjectType) {
+                $objectType = new \PHPStan\Type\ObjectType('ArrayAccess');
+                if ($objectType->isSuperTypeOf($type)->yes()) {
+                    return [$expr];
+                }
+            }
             return \array_merge($this->keepLivingCodeFromExpr($expr->var), $this->keepLivingCodeFromExpr($expr->dim));
         }
         if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
