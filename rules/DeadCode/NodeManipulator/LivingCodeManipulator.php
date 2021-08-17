@@ -30,12 +30,15 @@ use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PostRector\Collector\NodesToAddCollector;
 
 final class LivingCodeManipulator
 {
     public function __construct(
-        private NodesToAddCollector $nodesToAddCollector
+        private NodesToAddCollector $nodesToAddCollector,
+        private NodeTypeResolver $nodeTypeResolver
     ) {
     }
 
@@ -76,6 +79,15 @@ final class LivingCodeManipulator
         }
 
         if ($expr instanceof ArrayDimFetch) {
+            $type = $this->nodeTypeResolver->resolve($expr->var);
+
+            if ($type instanceof ObjectType) {
+                $objectType = new ObjectType('ArrayAccess');
+                if ($objectType->isSuperTypeOf($type)->yes()) {
+                    return [$expr];
+                }
+            }
+
             return array_merge(
                 $this->keepLivingCodeFromExpr($expr->var),
                 $this->keepLivingCodeFromExpr($expr->dim)
