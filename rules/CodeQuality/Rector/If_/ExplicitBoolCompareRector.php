@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
@@ -182,16 +184,61 @@ CODE_SAMPLE
         return new NotIdentical($expr, $array);
     }
 
-    private function resolveString(bool $isNegated, Expr $expr): Identical | NotIdentical
+    private function resolveString(bool $isNegated, Expr $expr): Identical | NotIdentical | BooleanAnd | BooleanOr
     {
         $string = new String_('');
 
-        // compare === ''
-        if ($isNegated) {
-            return new Identical($expr, $string);
+        $identical = $this->resolveIdentical($expr, $isNegated, $string);
+
+        $value = $this->valueResolver->getValue($expr);
+
+        // unknown value. may be from parameter
+        if ($value === null) {
+            return $this->resolveZeroIdenticalstring($identical, $isNegated, $expr);
         }
 
-        return new NotIdentical($expr, $string);
+        $length = strlen($value);
+
+        if ($length === 1) {
+            $string = new String_('0');
+            return $this->resolveIdentical($expr, $isNegated, $string);
+        }
+
+        return $identical;
+    }
+
+    private function resolveIdentical(Expr $expr, bool $isNegated, String_ $string): Identical | NotIdentical
+    {
+        /**
+         * // compare === ''
+         *
+         * @var Identical|NotIdentical $identical
+         */
+        $identical = $isNegated
+            ? new Identical($expr, $string)
+            : new NotIdentical($expr, $string);
+
+        return $identical;
+    }
+
+    private function resolveZeroIdenticalstring(
+        Identical | NotIdentical $identical,
+        bool $isNegated,
+        Expr $expr
+    ): BooleanAnd | BooleanOr {
+        $string = new String_('0');
+        $zeroIdentical = $isNegated
+            ? new Identical($expr, $string)
+            : new NotIdentical($expr, $string);
+
+        /**
+         * @var BooleanAnd|BooleanOr $result
+         */
+        $result = $isNegated
+            ? new BooleanOr($identical, $zeroIdentical)
+            : new BooleanAnd($identical, $zeroIdentical);
+
+        return $result;
     }
 
     private function resolveInteger(bool $isNegated, Expr $expr): Identical | NotIdentical
