@@ -5,11 +5,13 @@ namespace Rector\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
@@ -146,6 +148,30 @@ final class NodeTypeResolver
     }
     public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
+        if ($node instanceof \PhpParser\Node\Expr\Ternary) {
+            if ($node->if !== null) {
+                $first = $this->resolve($node->if);
+                $second = $this->resolve($node->else);
+                if ($this->isUnionTypeable($first, $second)) {
+                    return new \PHPStan\Type\UnionType([$first, $second]);
+                }
+            }
+            $condType = $this->resolve($node->cond);
+            if ($this->isNullableType($node->cond) && $condType instanceof \PHPStan\Type\UnionType) {
+                $first = $condType->getTypes()[0];
+                $second = $this->resolve($node->else);
+                if ($this->isUnionTypeable($first, $second)) {
+                    return new \PHPStan\Type\UnionType([$first, $second]);
+                }
+            }
+        }
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+            $first = $this->resolve($node->left);
+            $second = $this->resolve($node->right);
+            if ($this->isUnionTypeable($first, $second)) {
+                return new \PHPStan\Type\UnionType([$first, $second]);
+            }
+        }
         $type = $this->resolveByNodeTypeResolvers($node);
         if ($type !== null) {
             $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
@@ -320,6 +346,10 @@ final class NodeTypeResolver
             return null;
         }
         return new \PHPStan\Type\ObjectType($className, null, $classReflection);
+    }
+    private function isUnionTypeable(\PHPStan\Type\Type $first, \PHPStan\Type\Type $second) : bool
+    {
+        return !$first instanceof \PHPStan\Type\UnionType && !$second instanceof \PHPStan\Type\UnionType && !$second instanceof \PHPStan\Type\NullType;
     }
     private function addNodeTypeResolver(\Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface $nodeTypeResolver) : void
     {
