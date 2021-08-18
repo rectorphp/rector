@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
@@ -164,16 +166,50 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $array);
     }
     /**
-     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
     private function resolveString(bool $isNegated, \PhpParser\Node\Expr $expr)
     {
         $string = new \PhpParser\Node\Scalar\String_('');
-        // compare === ''
-        if ($isNegated) {
-            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $string);
+        $identical = $this->resolveIdentical($expr, $isNegated, $string);
+        $value = $this->valueResolver->getValue($expr);
+        // unknown value. may be from parameter
+        if ($value === null) {
+            return $this->resolveZeroIdenticalstring($identical, $isNegated, $expr);
         }
-        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $string);
+        $length = \strlen($value);
+        if ($length === 1) {
+            $string = new \PhpParser\Node\Scalar\String_('0');
+            return $this->resolveIdentical($expr, $isNegated, $string);
+        }
+        return $identical;
+    }
+    /**
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical
+     */
+    private function resolveIdentical(\PhpParser\Node\Expr $expr, bool $isNegated, \PhpParser\Node\Scalar\String_ $string)
+    {
+        /**
+         * // compare === ''
+         *
+         * @var Identical|NotIdentical $identical
+         */
+        $identical = $isNegated ? new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $string) : new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $string);
+        return $identical;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $identical
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
+     */
+    private function resolveZeroIdenticalstring($identical, bool $isNegated, \PhpParser\Node\Expr $expr)
+    {
+        $string = new \PhpParser\Node\Scalar\String_('0');
+        $zeroIdentical = $isNegated ? new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $string) : new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $string);
+        /**
+         * @var BooleanAnd|BooleanOr $result
+         */
+        $result = $isNegated ? new \PhpParser\Node\Expr\BinaryOp\BooleanOr($identical, $zeroIdentical) : new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($identical, $zeroIdentical);
+        return $result;
     }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical
