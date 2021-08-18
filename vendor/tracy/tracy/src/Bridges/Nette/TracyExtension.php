@@ -5,15 +5,15 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210817\Tracy\Bridges\Nette;
+namespace RectorPrefix20210818\Tracy\Bridges\Nette;
 
-use RectorPrefix20210817\Nette;
-use RectorPrefix20210817\Nette\Schema\Expect;
-use RectorPrefix20210817\Tracy;
+use RectorPrefix20210818\Nette;
+use RectorPrefix20210818\Nette\Schema\Expect;
+use RectorPrefix20210818\Tracy;
 /**
  * Tracy extension for Nette DI.
  */
-class TracyExtension extends \RectorPrefix20210817\Nette\DI\CompilerExtension
+class TracyExtension extends \RectorPrefix20210818\Nette\DI\CompilerExtension
 {
     /** @var bool */
     private $debugMode;
@@ -24,23 +24,23 @@ class TracyExtension extends \RectorPrefix20210817\Nette\DI\CompilerExtension
         $this->debugMode = $debugMode;
         $this->cliMode = $cliMode;
     }
-    public function getConfigSchema() : \RectorPrefix20210817\Nette\Schema\Schema
+    public function getConfigSchema() : \RectorPrefix20210818\Nette\Schema\Schema
     {
-        return \RectorPrefix20210817\Nette\Schema\Expect::structure(['email' => \RectorPrefix20210817\Nette\Schema\Expect::anyOf(\RectorPrefix20210817\Nette\Schema\Expect::email(), \RectorPrefix20210817\Nette\Schema\Expect::listOf('email'))->dynamic(), 'fromEmail' => \RectorPrefix20210817\Nette\Schema\Expect::email()->dynamic(), 'logSeverity' => \RectorPrefix20210817\Nette\Schema\Expect::anyOf(\RectorPrefix20210817\Nette\Schema\Expect::scalar(), \RectorPrefix20210817\Nette\Schema\Expect::listOf('scalar')), 'editor' => \RectorPrefix20210817\Nette\Schema\Expect::string()->dynamic(), 'browser' => \RectorPrefix20210817\Nette\Schema\Expect::string()->dynamic(), 'errorTemplate' => \RectorPrefix20210817\Nette\Schema\Expect::string()->dynamic(), 'strictMode' => \RectorPrefix20210817\Nette\Schema\Expect::bool()->dynamic(), 'showBar' => \RectorPrefix20210817\Nette\Schema\Expect::bool()->dynamic(), 'maxLength' => \RectorPrefix20210817\Nette\Schema\Expect::int()->dynamic(), 'maxDepth' => \RectorPrefix20210817\Nette\Schema\Expect::int()->dynamic(), 'keysToHide' => \RectorPrefix20210817\Nette\Schema\Expect::array(null)->dynamic(), 'dumpTheme' => \RectorPrefix20210817\Nette\Schema\Expect::string()->dynamic(), 'showLocation' => \RectorPrefix20210817\Nette\Schema\Expect::bool()->dynamic(), 'scream' => \RectorPrefix20210817\Nette\Schema\Expect::bool()->dynamic(), 'bar' => \RectorPrefix20210817\Nette\Schema\Expect::listOf('RectorPrefix20210817\\string|Nette\\DI\\Definitions\\Statement'), 'blueScreen' => \RectorPrefix20210817\Nette\Schema\Expect::listOf('callable'), 'editorMapping' => \RectorPrefix20210817\Nette\Schema\Expect::arrayOf('string')->dynamic()->default(null), 'netteMailer' => \RectorPrefix20210817\Nette\Schema\Expect::bool(\true)]);
+        return \RectorPrefix20210818\Nette\Schema\Expect::structure(['email' => \RectorPrefix20210818\Nette\Schema\Expect::anyOf(\RectorPrefix20210818\Nette\Schema\Expect::email(), \RectorPrefix20210818\Nette\Schema\Expect::listOf('email'))->dynamic(), 'fromEmail' => \RectorPrefix20210818\Nette\Schema\Expect::email()->dynamic(), 'logSeverity' => \RectorPrefix20210818\Nette\Schema\Expect::anyOf(\RectorPrefix20210818\Nette\Schema\Expect::scalar(), \RectorPrefix20210818\Nette\Schema\Expect::listOf('scalar')), 'editor' => \RectorPrefix20210818\Nette\Schema\Expect::string()->dynamic(), 'browser' => \RectorPrefix20210818\Nette\Schema\Expect::string()->dynamic(), 'errorTemplate' => \RectorPrefix20210818\Nette\Schema\Expect::string()->dynamic(), 'strictMode' => \RectorPrefix20210818\Nette\Schema\Expect::bool()->dynamic(), 'showBar' => \RectorPrefix20210818\Nette\Schema\Expect::bool()->dynamic(), 'maxLength' => \RectorPrefix20210818\Nette\Schema\Expect::int()->dynamic(), 'maxDepth' => \RectorPrefix20210818\Nette\Schema\Expect::int()->dynamic(), 'keysToHide' => \RectorPrefix20210818\Nette\Schema\Expect::array(null)->dynamic(), 'dumpTheme' => \RectorPrefix20210818\Nette\Schema\Expect::string()->dynamic(), 'showLocation' => \RectorPrefix20210818\Nette\Schema\Expect::bool()->dynamic(), 'scream' => \RectorPrefix20210818\Nette\Schema\Expect::bool()->dynamic(), 'bar' => \RectorPrefix20210818\Nette\Schema\Expect::listOf('RectorPrefix20210818\\string|Nette\\DI\\Definitions\\Statement'), 'blueScreen' => \RectorPrefix20210818\Nette\Schema\Expect::listOf('callable'), 'editorMapping' => \RectorPrefix20210818\Nette\Schema\Expect::arrayOf('string')->dynamic()->default(null), 'netteMailer' => \RectorPrefix20210818\Nette\Schema\Expect::bool(\true)]);
     }
     public function loadConfiguration()
     {
         $builder = $this->getContainerBuilder();
-        $builder->addDefinition($this->prefix('logger'))->setClass(\RectorPrefix20210817\Tracy\ILogger::class)->setFactory([\RectorPrefix20210817\Tracy\Debugger::class, 'getLogger']);
-        $builder->addDefinition($this->prefix('blueScreen'))->setFactory([\RectorPrefix20210817\Tracy\Debugger::class, 'getBlueScreen']);
-        $builder->addDefinition($this->prefix('bar'))->setFactory([\RectorPrefix20210817\Tracy\Debugger::class, 'getBar']);
+        $builder->addDefinition($this->prefix('logger'))->setClass(\RectorPrefix20210818\Tracy\ILogger::class)->setFactory([\RectorPrefix20210818\Tracy\Debugger::class, 'getLogger']);
+        $builder->addDefinition($this->prefix('blueScreen'))->setFactory([\RectorPrefix20210818\Tracy\Debugger::class, 'getBlueScreen']);
+        $builder->addDefinition($this->prefix('bar'))->setFactory([\RectorPrefix20210818\Tracy\Debugger::class, 'getBar']);
     }
     /**
      * @param \Nette\PhpGenerator\ClassType $class
      */
     public function afterCompile($class)
     {
-        $initialize = $this->initialization ?? new \RectorPrefix20210817\Nette\PhpGenerator\Closure();
+        $initialize = $this->initialization ?? new \RectorPrefix20210818\Nette\PhpGenerator\Closure();
         $initialize->addBody('if (!Tracy\\Debugger::isEnabled()) { return; }');
         $builder = $this->getContainerBuilder();
         $options = (array) $this->config;
@@ -55,38 +55,38 @@ class TracyExtension extends \RectorPrefix20210817\Nette\DI\CompilerExtension
         foreach ($options as $key => $value) {
             if ($value !== null) {
                 static $tbl = ['keysToHide' => 'array_push(Tracy\\Debugger::getBlueScreen()->keysToHide, ... ?)', 'fromEmail' => 'Tracy\\Debugger::getLogger()->fromEmail = ?'];
-                $initialize->addBody($builder->formatPhp(($tbl[$key] ?? 'Tracy\\Debugger::$' . $key . ' = ?') . ';', \RectorPrefix20210817\Nette\DI\Helpers::filterArguments([$value])));
+                $initialize->addBody($builder->formatPhp(($tbl[$key] ?? 'Tracy\\Debugger::$' . $key . ' = ?') . ';', \RectorPrefix20210818\Nette\DI\Helpers::filterArguments([$value])));
             }
         }
         $logger = $builder->getDefinition($this->prefix('logger'));
-        if (!$logger instanceof \RectorPrefix20210817\Nette\DI\ServiceDefinition || $logger->getFactory()->getEntity() !== [\RectorPrefix20210817\Tracy\Debugger::class, 'getLogger']) {
+        if (!$logger instanceof \RectorPrefix20210818\Nette\DI\ServiceDefinition || $logger->getFactory()->getEntity() !== [\RectorPrefix20210818\Tracy\Debugger::class, 'getLogger']) {
             $initialize->addBody($builder->formatPhp('Tracy\\Debugger::setLogger(?);', [$logger]));
         }
-        if ($this->config->netteMailer && $builder->getByType(\RectorPrefix20210817\Nette\Mail\IMailer::class)) {
-            $initialize->addBody($builder->formatPhp('Tracy\\Debugger::getLogger()->mailer = ?;', [[new \RectorPrefix20210817\Nette\DI\Statement(\RectorPrefix20210817\Tracy\Bridges\Nette\MailSender::class, ['fromEmail' => $this->config->fromEmail]), 'send']]));
+        if ($this->config->netteMailer && $builder->getByType(\RectorPrefix20210818\Nette\Mail\IMailer::class)) {
+            $initialize->addBody($builder->formatPhp('Tracy\\Debugger::getLogger()->mailer = ?;', [[new \RectorPrefix20210818\Nette\DI\Statement(\RectorPrefix20210818\Tracy\Bridges\Nette\MailSender::class, ['fromEmail' => $this->config->fromEmail]), 'send']]));
         }
         if ($this->debugMode) {
             foreach ($this->config->bar as $item) {
                 if (\is_string($item) && \substr($item, 0, 1) === '@') {
-                    $item = new \RectorPrefix20210817\Nette\DI\Statement(['@' . $builder::THIS_CONTAINER, 'getService'], [\substr($item, 1)]);
+                    $item = new \RectorPrefix20210818\Nette\DI\Statement(['@' . $builder::THIS_CONTAINER, 'getService'], [\substr($item, 1)]);
                 } elseif (\is_string($item)) {
-                    $item = new \RectorPrefix20210817\Nette\DI\Statement($item);
+                    $item = new \RectorPrefix20210818\Nette\DI\Statement($item);
                 }
-                $initialize->addBody($builder->formatPhp('$this->getService(?)->addPanel(?);', \RectorPrefix20210817\Nette\DI\Helpers::filterArguments([$this->prefix('bar'), $item])));
+                $initialize->addBody($builder->formatPhp('$this->getService(?)->addPanel(?);', \RectorPrefix20210818\Nette\DI\Helpers::filterArguments([$this->prefix('bar'), $item])));
             }
-            if (!$this->cliMode && ($name = $builder->getByType(\RectorPrefix20210817\Nette\Http\Session::class))) {
+            if (!$this->cliMode && ($name = $builder->getByType(\RectorPrefix20210818\Nette\Http\Session::class))) {
                 $initialize->addBody('$this->getService(?)->start();', [$name]);
                 $initialize->addBody('Tracy\\Debugger::dispatch();');
             }
         }
         foreach ($this->config->blueScreen as $item) {
-            $initialize->addBody($builder->formatPhp('$this->getService(?)->addPanel(?);', \RectorPrefix20210817\Nette\DI\Helpers::filterArguments([$this->prefix('blueScreen'), $item])));
+            $initialize->addBody($builder->formatPhp('$this->getService(?)->addPanel(?);', \RectorPrefix20210818\Nette\DI\Helpers::filterArguments([$this->prefix('blueScreen'), $item])));
         }
         if (empty($this->initialization)) {
             $class->getMethod('initialize')->addBody("({$initialize})();");
         }
-        if (($dir = \RectorPrefix20210817\Tracy\Debugger::$logDirectory) && !\is_writable($dir)) {
-            throw new \RectorPrefix20210817\Nette\InvalidStateException("Make directory '{$dir}' writable.");
+        if (($dir = \RectorPrefix20210818\Tracy\Debugger::$logDirectory) && !\is_writable($dir)) {
+            throw new \RectorPrefix20210818\Nette\InvalidStateException("Make directory '{$dir}' writable.");
         }
     }
 }

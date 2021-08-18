@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210817\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20210818\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20210817\Symfony\Component\Console\Application;
-use RectorPrefix20210817\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210817\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20210817\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20210817\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210818\Symfony\Component\Console\Application;
+use RectorPrefix20210818\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210818\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210818\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20210818\Symfony\Component\Console\Input\InputOption;
 /**
  * XML descriptor.
  *
@@ -22,7 +22,7 @@ use RectorPrefix20210817\Symfony\Component\Console\Input\InputOption;
  *
  * @internal
  */
-class XmlDescriptor extends \RectorPrefix20210817\Symfony\Component\Console\Descriptor\Descriptor
+class XmlDescriptor extends \RectorPrefix20210818\Symfony\Component\Console\Descriptor\Descriptor
 {
     /**
      * @param \Symfony\Component\Console\Input\InputDefinition $definition
@@ -87,7 +87,7 @@ class XmlDescriptor extends \RectorPrefix20210817\Symfony\Component\Console\Desc
             }
         }
         $rootXml->appendChild($commandsXML = $dom->createElement('commands'));
-        $description = new \RectorPrefix20210817\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $namespace, \true);
+        $description = new \RectorPrefix20210818\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $namespace, \true);
         if ($namespace) {
             $commandsXML->setAttribute('namespace', $namespace);
         }
@@ -169,7 +169,7 @@ class XmlDescriptor extends \RectorPrefix20210817\Symfony\Component\Console\Desc
         $dom->formatOutput = \true;
         $this->write($dom->saveXML());
     }
-    private function getInputArgumentDocument(\RectorPrefix20210817\Symfony\Component\Console\Input\InputArgument $argument) : \DOMDocument
+    private function getInputArgumentDocument(\RectorPrefix20210818\Symfony\Component\Console\Input\InputArgument $argument) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('argument'));
@@ -186,7 +186,7 @@ class XmlDescriptor extends \RectorPrefix20210817\Symfony\Component\Console\Desc
         }
         return $dom;
     }
-    private function getInputOptionDocument(\RectorPrefix20210817\Symfony\Component\Console\Input\InputOption $option) : \DOMDocument
+    private function getInputOptionDocument(\RectorPrefix20210818\Symfony\Component\Console\Input\InputOption $option) : \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
         $dom->appendChild($objectXML = $dom->createElement('option'));

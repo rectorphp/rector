@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210817\TYPO3\CMS\Extbase\Mvc\Web\Routing;
+namespace RectorPrefix20210818\TYPO3\CMS\Extbase\Mvc\Web\Routing;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Mvc\\Web\\Routing\\UriBuilder')) {
     return;

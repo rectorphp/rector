@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210817;
+namespace RectorPrefix20210818;
 
 if (\class_exists('Tx_Extbase_Persistence_Mapper_DataMapper')) {
     return;

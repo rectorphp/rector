@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210817\Symfony\Component\DependencyInjection\Config;
+namespace RectorPrefix20210818\Symfony\Component\DependencyInjection\Config;
 
-use RectorPrefix20210817\Symfony\Component\Config\Resource\ResourceInterface;
-use RectorPrefix20210817\Symfony\Component\Config\ResourceCheckerInterface;
-use RectorPrefix20210817\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210818\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix20210818\Symfony\Component\Config\ResourceCheckerInterface;
+use RectorPrefix20210818\Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class ContainerParametersResourceChecker implements \RectorPrefix20210817\Symfony\Component\Config\ResourceCheckerInterface
+class ContainerParametersResourceChecker implements \RectorPrefix20210818\Symfony\Component\Config\ResourceCheckerInterface
 {
     /** @var ContainerInterface */
     private $container;
-    public function __construct(\RectorPrefix20210817\Symfony\Component\DependencyInjection\ContainerInterface $container)
+    public function __construct(\RectorPrefix20210818\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -30,7 +30,7 @@ class ContainerParametersResourceChecker implements \RectorPrefix20210817\Symfon
      */
     public function supports($metadata)
     {
-        return $metadata instanceof \RectorPrefix20210817\Symfony\Component\DependencyInjection\Config\ContainerParametersResource;
+        return $metadata instanceof \RectorPrefix20210818\Symfony\Component\DependencyInjection\Config\ContainerParametersResource;
     }
     /**
      * {@inheritdoc}

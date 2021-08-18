@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210817;
+namespace RectorPrefix20210818;
 
 if (\class_exists('tx_scheduler_SleepTask_AdditionalFieldProvider')) {
     return;

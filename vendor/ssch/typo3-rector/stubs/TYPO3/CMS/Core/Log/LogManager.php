@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210817\TYPO3\CMS\Core\Log;
+namespace RectorPrefix20210818\TYPO3\CMS\Core\Log;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Log\\LogManager')) {
     return null;
@@ -14,6 +14,6 @@ class LogManager
     public function getLogger($class)
     {
         $class = (string) $class;
-        return new \RectorPrefix20210817\TYPO3\CMS\Core\Log\Logger();
+        return new \RectorPrefix20210818\TYPO3\CMS\Core\Log\Logger();
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210817;
+namespace RectorPrefix20210818;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20210817\Tracy\Debugger;
+use RectorPrefix20210818\Tracy\Debugger;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20210817\Tracy\Debugger::enable(\RectorPrefix20210817\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20210818\Tracy\Debugger::enable(\RectorPrefix20210818\Tracy\Debugger::DETECT, __DIR__ . '/log');
 ?>
 <!DOCTYPE html><link rel="stylesheet" href="assets/style.css">
 
@@ -29,7 +29,7 @@ class DemoClass
         throw new \Exception('The my exception', 123);
     }
 }
-\class_alias('RectorPrefix20210817\\DemoClass', 'DemoClass', \false);
+\class_alias('RectorPrefix20210818\\DemoClass', 'DemoClass', \false);
 $a = new class extends \RuntimeException
 {
     /**

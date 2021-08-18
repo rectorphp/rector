@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Exclusion;
 
-use RectorPrefix20210817\Nette\Utils\Strings;
+use RectorPrefix20210818\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Stmt;
@@ -37,6 +37,9 @@ final class ExclusionManager
     {
         if ($node instanceof \PhpParser\Node\Stmt\PropertyProperty || $node instanceof \PhpParser\Node\Const_) {
             $node = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$node instanceof \PhpParser\Node) {
+                return \false;
+            }
         }
         if ($this->hasNoRectorPhpDocTagMatch($node, $phpRector)) {
             return \true;
@@ -92,11 +95,11 @@ final class ExclusionManager
     private function matchesNoRectorComment(\PhpParser\Node $node, string $rectorClass) : bool
     {
         foreach ($node->getComments() as $comment) {
-            if (\RectorPrefix20210817\Nette\Utils\Strings::match($comment->getText(), self::NO_RECTOR_START_REGEX)) {
+            if (\RectorPrefix20210818\Nette\Utils\Strings::match($comment->getText(), self::NO_RECTOR_START_REGEX)) {
                 return \true;
             }
             $noRectorWithRule = '#@noRector \\\\?' . \preg_quote($rectorClass, '#') . '$#';
-            if (\RectorPrefix20210817\Nette\Utils\Strings::match($comment->getText(), $noRectorWithRule)) {
+            if (\RectorPrefix20210818\Nette\Utils\Strings::match($comment->getText(), $noRectorWithRule)) {
                 return \true;
             }
         }

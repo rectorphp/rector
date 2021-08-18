@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210817\Symfony\Component\ErrorHandler\Error;
+namespace RectorPrefix20210818\Symfony\Component\ErrorHandler\Error;
 
 class UndefinedMethodError extends \Error
 {

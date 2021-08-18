@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="<?php 
-namespace RectorPrefix20210817;
+namespace RectorPrefix20210818;
 
 echo $this->charset;
 ?>" />
