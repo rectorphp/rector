@@ -37,6 +37,9 @@ final class ExclusionManager
     {
         if ($node instanceof PropertyProperty || $node instanceof Const_) {
             $node = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (! $node instanceof Node) {
+                return false;
+            }
         }
 
         if ($this->hasNoRectorPhpDocTagMatch($node, $phpRector)) {
