@@ -22,6 +22,7 @@ use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -127,17 +128,11 @@ final class PHPStanNodeScopeResolver
         MutatingScope $mutatingScope,
         callable $nodeCallback
     ): array {
-        $contents = $smartFileInfo->getContents();
-
-        // avoid crash on class with @mixin @see https://github.com/rectorphp/rector-src/pull/688
-        if (! Strings::match($contents, self::MIXIN_REGEX)) {
-            // avoid crash on class with @mixin in source @see https://github.com/rectorphp/rector-src/pull/689
-            if ($this->isMixinInSource($nodes, $smartFileInfo)) {
-                return $nodes;
-            }
-
-            $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
+        if ($this->isMixinInSource($nodes)) {
+            return $nodes;
         }
+
+        $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
 
         $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
 
@@ -147,44 +142,58 @@ final class PHPStanNodeScopeResolver
     /**
      * @param Node[] $nodes
      */
-    private function isMixinInSource(array $nodes, SmartFileInfo $smartFileInfo): bool
+    private function isMixinInSource(array $nodes): bool
     {
-        $realPath = $smartFileInfo->getRealPath();
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($realPath): bool {
-            if (! $node instanceof FullyQualified) {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node): bool {
+            if (! $node instanceof FullyQualified && ! $node instanceof Class_) {
                 return false;
             }
 
-            $className = $node->toString();
-
-            // fix error in parallel test
-            // use function_exists on purpose as using reflectionProvider broke the test in parallel
-            if (function_exists($className)) {
+            if ($node instanceof Class_ && $node->isAnonymous()) {
                 return false;
             }
 
-            $hasClass = $this->reflectionProvider->hasClass($className);
+            $className = $node instanceof FullyQualified ? $node->toString() : $node->namespacedName->toString();
 
-            if (! $hasClass) {
-                return false;
-            }
-
-            $classReflection = $this->reflectionProvider->getClass($className);
-            if ($classReflection->isBuiltIn()) {
-                return false;
-            }
-
-            $fileName = $classReflection->getFileName();
-            if ($fileName === false) {
-                return false;
-            }
-
-            if ($fileName === $realPath) {
-                return false;
-            }
-
-            return $classReflection->getMixinTags() !== [];
+            return $this->isCircularMixin($className);
         });
+    }
+
+    private function isCircularMixin(string $className): bool
+    {
+        // fix error in parallel test
+        // use function_exists on purpose as using reflectionProvider broke the test in parallel
+        if (function_exists($className)) {
+            return false;
+        }
+
+        $hasClass = $this->reflectionProvider->hasClass($className);
+
+        if (! $hasClass) {
+            return false;
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($classReflection->isBuiltIn()) {
+            return false;
+        }
+
+        foreach ($classReflection->getMixinTags() as $mixinTag) {
+            $type = $mixinTag->getType();
+            if (!$type instanceof ObjectType){
+                return false;
+            }
+
+            if ($type->getClassName() === $className) {
+                return true;
+            }
+
+            if ($this->isCircularMixin($type->getClassName())){
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
