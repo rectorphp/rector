@@ -47,13 +47,6 @@ final class PHPStanNodeScopeResolver
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\w+)#';
 
-    /**
-     * @var string
-     *
-     * @see https://regex101.com/r/3DVXef/2
-     */
-    private const MIXIN_REGEX = '#\*\s+\@mixin\s+\\\\?\w+#';
-
     public function __construct(
         private ChangedFilesDetector $changedFilesDetector,
         private DependencyResolver $dependencyResolver,
@@ -180,7 +173,7 @@ final class PHPStanNodeScopeResolver
 
         foreach ($classReflection->getMixinTags() as $mixinTag) {
             $type = $mixinTag->getType();
-            if (!$type instanceof ObjectType){
+            if (! $type instanceof ObjectType) {
                 return false;
             }
 
@@ -188,7 +181,7 @@ final class PHPStanNodeScopeResolver
                 return true;
             }
 
-            if ($this->isCircularMixin($type->getClassName())){
+            if ($this->isCircularMixin($type->getClassName())) {
                 return true;
             }
         }
