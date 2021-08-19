@@ -45,12 +45,6 @@ final class PHPStanNodeScopeResolver
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\\w+)#';
     /**
-     * @var string
-     *
-     * @see https://regex101.com/r/3DVXef/2
-     */
-    private const MIXIN_REGEX = '#\\*\\s+\\@mixin\\s+\\\\?\\w+#';
-    /**
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
