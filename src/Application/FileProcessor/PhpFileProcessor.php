@@ -108,9 +108,6 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
                 $this->printFile($file, $configuration);
             }, \Rector\Core\Enum\ApplicationPhase::PRINT());
         } while ($file->hasChanged());
-        $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
-            $this->printFile($file, $configuration);
-        }, \Rector\Core\Enum\ApplicationPhase::PRINT());
     }
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
