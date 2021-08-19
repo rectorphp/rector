@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
-use RectorPrefix20210818\Nette\Utils\Strings;
+use RectorPrefix20210819\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -49,7 +49,7 @@ final class IdentifierManipulator
         if ($name === null) {
             return;
         }
-        $newName = \RectorPrefix20210818\Nette\Utils\Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
+        $newName = \RectorPrefix20210819\Nette\Utils\Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
         $node->name = new \PhpParser\Node\Identifier($newName);
     }
     /**

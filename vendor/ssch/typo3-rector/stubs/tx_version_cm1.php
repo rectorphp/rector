@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210818;
+namespace RectorPrefix20210819;
 
 if (\class_exists('tx_version_cm1')) {
     return;

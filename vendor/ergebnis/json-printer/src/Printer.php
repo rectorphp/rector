@@ -9,9 +9,9 @@ declare (strict_types=1);
  *
  * @see https://github.com/ergebnis/json-printer
  */
-namespace RectorPrefix20210818\Ergebnis\Json\Printer;
+namespace RectorPrefix20210819\Ergebnis\Json\Printer;
 
-final class Printer implements \RectorPrefix20210818\Ergebnis\Json\Printer\PrinterInterface
+final class Printer implements \RectorPrefix20210819\Ergebnis\Json\Printer\PrinterInterface
 {
     /**
      * This code is adopted from composer/composer (originally licensed under MIT by Nils Adermann <naderman@naderman.de>

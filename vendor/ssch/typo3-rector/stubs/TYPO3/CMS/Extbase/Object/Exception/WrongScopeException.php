@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210818\TYPO3\CMS\Extbase\Object\Exception;
+namespace RectorPrefix20210819\TYPO3\CMS\Extbase\Object\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\Exception\\WrongScopeException')) {
     return;

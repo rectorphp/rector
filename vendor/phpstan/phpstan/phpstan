@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php 
 declare (strict_types=1);
-namespace RectorPrefix20210818;
+namespace RectorPrefix20210819;
 
 \Phar::loadPhar(__DIR__ . '/phpstan.phar', 'phpstan.phar');
 require 'phar://phpstan.phar/bin/phpstan';
