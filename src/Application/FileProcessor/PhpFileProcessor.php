@@ -83,10 +83,6 @@ final class PhpFileProcessor implements FileProcessorInterface
                 $this->printFile($file, $configuration);
             }, ApplicationPhase::PRINT());
         } while ($file->hasChanged());
-
-        $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
-            $this->printFile($file, $configuration);
-        }, ApplicationPhase::PRINT());
     }
 
     public function supports(File $file, Configuration $configuration): bool
