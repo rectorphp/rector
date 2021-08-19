@@ -14,6 +14,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
+use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -45,11 +46,16 @@ final class NewToConstructorInjectionRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    /**
+     * @var \Rector\NodeRemoval\AssignRemover
+     */
+    private $assignRemover;
+    public function __construct(\Rector\Transform\NodeFactory\PropertyFetchFactory $propertyFetchFactory, \Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\NodeRemoval\AssignRemover $assignRemover)
     {
         $this->propertyFetchFactory = $propertyFetchFactory;
         $this->propertyNaming = $propertyNaming;
         $this->propertyToAddCollector = $propertyToAddCollector;
+        $this->assignRemover = $assignRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -143,7 +149,7 @@ CODE_SAMPLE
             if (!$this->isObjectType($assign->expr, $constructorInjectionObjectType)) {
                 continue;
             }
-            $this->removeNode($assign);
+            $this->assignRemover->removeAssignNode($assign);
         }
     }
     private function refactorNew(\PhpParser\Node\Expr\New_ $new) : void
