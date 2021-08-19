@@ -15,6 +15,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
+use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -40,7 +41,8 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
     public function __construct(
         private PropertyFetchFactory $propertyFetchFactory,
         private PropertyNaming $propertyNaming,
-        private PropertyToAddCollector $propertyToAddCollector
+        private PropertyToAddCollector $propertyToAddCollector,
+        private AssignRemover $assignRemover
     ) {
     }
 
@@ -158,7 +160,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->removeNode($assign);
+            $this->assignRemover->removeAssignNode($assign);
         }
     }
 
