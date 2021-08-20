@@ -7,14 +7,11 @@ namespace Rector\DowngradePhp80\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\StaticType;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
-use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,9 +23,7 @@ final class DowngradeStaticTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
         private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
-        private ReflectionProvider $reflectionProvider,
-        private AstResolver $astResolver,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -78,9 +73,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
-        if ($scope instanceof Scope && $this->shouldSkip($node, $scope)) {
+        if ($node->returnType instanceof Name && $this->nodeNameResolver->isName(
+            $node->returnType,
+            'self'
+        )) {
             return null;
         }
 
@@ -107,50 +103,5 @@ CODE_SAMPLE
         }
 
         return $node;
-    }
-
-    private function shouldSkip(ClassMethod $classMethod, Scope $scope): bool
-    {
-        if (! $classMethod->returnType instanceof Name) {
-            return false;
-        }
-
-        if (! $this->nodeNameResolver->isName($classMethod->returnType, 'self')) {
-            return false;
-        }
-
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        $className = $this->nodeNameResolver->getName($classLike);
-
-        if ($className === null) {
-            return false;
-        }
-
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return false;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-        $children = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
-
-        foreach ($children as $child) {
-            if (! $child->hasMethod($methodName)) {
-                continue;
-            }
-
-            $method = $child->getMethod($methodName, $scope);
-            $classMethod = $this->astResolver->resolveClassMethodFromMethodReflection($method);
-
-            if (! $classMethod instanceof ClassMethod) {
-                continue;
-            }
-
-            if ($classMethod->returnType === null) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
