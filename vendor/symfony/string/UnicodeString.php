@@ -177,10 +177,10 @@ class UnicodeString extends \RectorPrefix20210820\Symfony\Component\String\Abstr
         return \grapheme_strlen($this->string);
     }
     /**
-     * @return mixed
+     * @return static
      * @param int $form
      */
-    public function normalize($form = self::NFC)
+    public function normalize($form = self::NFC) : parent
     {
         $str = clone $this;
         if (\in_array($form, [self::NFC, self::NFKC], \true)) {

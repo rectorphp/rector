@@ -173,7 +173,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
     {
         return $this->getCommand()->getHelper($name);
     }
-    public function getCommand()
+    public function getCommand() : parent
     {
         if (!$this->command instanceof \Closure) {
             return $this->command;
