@@ -24,7 +24,7 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20210820\
      * @param \Doctrine\Inflector\Rules\Ruleset|null $singularRules
      * @param bool $reset
      */
-    public final function withSingularRules($singularRules, $reset = \false)
+    public final function withSingularRules($singularRules, $reset = \false) : \RectorPrefix20210820\Doctrine\Inflector\LanguageInflectorFactory
     {
         if ($reset) {
             $this->singularRulesets = [];
@@ -38,7 +38,7 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20210820\
      * @param \Doctrine\Inflector\Rules\Ruleset|null $pluralRules
      * @param bool $reset
      */
-    public final function withPluralRules($pluralRules, $reset = \false)
+    public final function withPluralRules($pluralRules, $reset = \false) : \RectorPrefix20210820\Doctrine\Inflector\LanguageInflectorFactory
     {
         if ($reset) {
             $this->pluralRulesets = [];

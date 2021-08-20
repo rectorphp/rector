@@ -13,6 +13,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
@@ -133,6 +134,9 @@ CODE_SAMPLE
             return null;
         }
         $node->setAttribute(self::ALREADY_DOWNGRADED, \true);
+        if ($parentReturnType instanceof \PHPStan\Type\ThisType) {
+            return null;
+        }
         // Add the docblock before changing the type
         $this->addDocBlockReturn($node);
         $node->returnType = $parentReturnTypeNode;
