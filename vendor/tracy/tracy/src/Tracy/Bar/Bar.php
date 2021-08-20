@@ -24,7 +24,7 @@ class Bar
      * @param \Tracy\IBarPanel $panel
      * @param string|null $id
      */
-    public function addPanel($panel, $id = null)
+    public function addPanel($panel, $id = null) : self
     {
         if ($id === null) {
             $c = 0;

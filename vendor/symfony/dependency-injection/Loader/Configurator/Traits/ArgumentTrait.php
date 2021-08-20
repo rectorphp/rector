@@ -18,7 +18,7 @@ trait ArgumentTrait
      * @return $this
      * @param mixed[] $arguments
      */
-    public final function args($arguments)
+    public final function args($arguments) : self
     {
         $this->definition->setArguments(static::processValue($arguments, \true));
         return $this;
@@ -31,7 +31,7 @@ trait ArgumentTrait
      *
      * @return $this
      */
-    public final function arg($key, $value)
+    public final function arg($key, $value) : self
     {
         $this->definition->setArgument($key, static::processValue($value, \true));
         return $this;

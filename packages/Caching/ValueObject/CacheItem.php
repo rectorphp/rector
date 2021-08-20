@@ -24,9 +24,8 @@ final class CacheItem
     }
     /**
      * @param mixed[] $properties
-     * @return $this
      */
-    public static function __set_state(array $properties)
+    public static function __set_state(array $properties) : self
     {
         return new self($properties['variableKey'], $properties['data']);
     }

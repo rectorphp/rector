@@ -46,7 +46,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210820\Symfony\Compo
      * @return static
      * @param int ...$codes
      */
-    public static function fromCodePoints(...$codes)
+    public static function fromCodePoints(...$codes) : self
     {
         $string = '';
         foreach ($codes as $code) {
@@ -68,9 +68,8 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210820\Symfony\Compo
      * Install the intl extension for best results.
      *
      * @param string[]|\Transliterator[]|\Closure[] $rules See "*-Latin" rules from Transliterator::listIDs()
-     * @return $this
      */
-    public function ascii($rules = [])
+    public function ascii($rules = []) : self
     {
         $str = clone $this;
         $s = $str->string;
@@ -231,7 +230,7 @@ abstract class AbstractUnicodeString extends \RectorPrefix20210820\Symfony\Compo
      * @return static
      * @param int $form
      */
-    public function normalize($form = self::NFC)
+    public function normalize($form = self::NFC) : self
     {
         if (!\in_array($form, [self::NFC, self::NFD, self::NFKC, self::NFKD])) {
             throw new \RectorPrefix20210820\Symfony\Component\String\Exception\InvalidArgumentException('Unsupported normalization form.');

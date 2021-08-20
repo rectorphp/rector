@@ -38,11 +38,10 @@ class ByteString extends \RectorPrefix20210820\Symfony\Component\String\Abstract
      * Copyright (c) 2004-2020, Facebook, Inc. (https://www.facebook.com/)
      */
     /**
-     * @return $this
      * @param int $length
      * @param string|null $alphabet
      */
-    public static function fromRandom($length = 16, $alphabet = null)
+    public static function fromRandom($length = 16, $alphabet = null) : self
     {
         if ($length <= 0) {
             throw new \RectorPrefix20210820\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('A strictly positive length is expected, "%d" given.', $length));
