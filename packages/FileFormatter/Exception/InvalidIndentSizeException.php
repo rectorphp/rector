@@ -7,11 +7,10 @@ use InvalidArgumentException;
 final class InvalidIndentSizeException extends \InvalidArgumentException
 {
     /**
-     * @return $this
      * @param int $size
      * @param int $minimumSize
      */
-    public static function fromSizeAndMinimumSize($size, $minimumSize)
+    public static function fromSizeAndMinimumSize($size, $minimumSize) : self
     {
         $message = \sprintf('Size %d must be greater than %d', $size, $minimumSize);
         return new self($message);

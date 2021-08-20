@@ -68,7 +68,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
      * @return $this
      * @param callable $code
      */
-    public function setCode($code)
+    public function setCode($code) : self
     {
         $this->getCommand()->setCode($code);
         return $this;
@@ -84,7 +84,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
     /**
      * @return $this
      */
-    public function setDefinition($definition)
+    public function setDefinition($definition) : self
     {
         $this->getCommand()->setDefinition($definition);
         return $this;
@@ -103,7 +103,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
      * @param int|null $mode
      * @param string $description
      */
-    public function addArgument($name, $mode = null, $description = '', $default = null)
+    public function addArgument($name, $mode = null, $description = '', $default = null) : self
     {
         $this->getCommand()->addArgument($name, $mode, $description, $default);
         return $this;
@@ -114,7 +114,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
      * @param int|null $mode
      * @param string $description
      */
-    public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null)
+    public function addOption($name, $shortcut = null, $mode = null, $description = '', $default = null) : self
     {
         $this->getCommand()->addOption($name, $shortcut, $mode, $description, $default);
         return $this;
@@ -123,7 +123,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
      * @return $this
      * @param string $title
      */
-    public function setProcessTitle($title)
+    public function setProcessTitle($title) : self
     {
         $this->getCommand()->setProcessTitle($title);
         return $this;
@@ -132,7 +132,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
      * @return $this
      * @param string $help
      */
-    public function setHelp($help)
+    public function setHelp($help) : self
     {
         $this->getCommand()->setHelp($help);
         return $this;
@@ -156,7 +156,7 @@ final class LazyCommand extends \RectorPrefix20210820\Symfony\Component\Console\
      * @return $this
      * @param string $usage
      */
-    public function addUsage($usage)
+    public function addUsage($usage) : self
     {
         $this->getCommand()->addUsage($usage);
         return $this;

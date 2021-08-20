@@ -193,7 +193,7 @@ class Table
      * @param int $columnIndex
      * @param int $width
      */
-    public function setColumnMaxWidth($columnIndex, $width)
+    public function setColumnMaxWidth($columnIndex, $width) : self
     {
         if (!$this->output->getFormatter() instanceof \RectorPrefix20210820\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface) {
             throw new \LogicException(\sprintf('Setting a maximum column width is only supported when using a "%s" formatter, got "%s".', \RectorPrefix20210820\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface::class, \get_debug_type($this->output->getFormatter())));
@@ -245,9 +245,8 @@ class Table
     }
     /**
      * Adds a row to the table, and re-renders the table.
-     * @return $this
      */
-    public function appendRow($row)
+    public function appendRow($row) : self
     {
         if (!$this->output instanceof \RectorPrefix20210820\Symfony\Component\Console\Output\ConsoleSectionOutput) {
             throw new \RectorPrefix20210820\Symfony\Component\Console\Exception\RuntimeException(\sprintf('Output should be an instance of "%s" when calling "%s".', \RectorPrefix20210820\Symfony\Component\Console\Output\ConsoleSectionOutput::class, __METHOD__));
@@ -268,28 +267,25 @@ class Table
         return $this;
     }
     /**
-     * @return $this
      * @param string|null $title
      */
-    public function setHeaderTitle($title)
+    public function setHeaderTitle($title) : self
     {
         $this->headerTitle = $title;
         return $this;
     }
     /**
-     * @return $this
      * @param string|null $title
      */
-    public function setFooterTitle($title)
+    public function setFooterTitle($title) : self
     {
         $this->footerTitle = $title;
         return $this;
     }
     /**
-     * @return $this
      * @param bool $horizontal
      */
-    public function setHorizontal($horizontal = \true)
+    public function setHorizontal($horizontal = \true) : self
     {
         $this->horizontal = $horizontal;
         return $this;

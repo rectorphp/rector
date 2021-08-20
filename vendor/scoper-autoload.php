@@ -9,8 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210820\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit35f421af3cb4251cc08ce0d18ab29b18', false) && !interface_exists('ComposerAutoloaderInit35f421af3cb4251cc08ce0d18ab29b18', false) && !trait_exists('ComposerAutoloaderInit35f421af3cb4251cc08ce0d18ab29b18', false)) {
-    spl_autoload_call('RectorPrefix20210820\ComposerAutoloaderInit35f421af3cb4251cc08ce0d18ab29b18');
+if (!class_exists('ComposerAutoloaderInit2131a3ddfcd6ba0077bc8936978e55fd', false) && !interface_exists('ComposerAutoloaderInit2131a3ddfcd6ba0077bc8936978e55fd', false) && !trait_exists('ComposerAutoloaderInit2131a3ddfcd6ba0077bc8936978e55fd', false)) {
+    spl_autoload_call('RectorPrefix20210820\ComposerAutoloaderInit2131a3ddfcd6ba0077bc8936978e55fd');
 }
 if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
     spl_autoload_call('RectorPrefix20210820\Helmich\TypoScriptParser\Parser\AST\Statement');
@@ -3308,9 +3308,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210820\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire35f421af3cb4251cc08ce0d18ab29b18')) {
-    function composerRequire35f421af3cb4251cc08ce0d18ab29b18() {
-        return \RectorPrefix20210820\composerRequire35f421af3cb4251cc08ce0d18ab29b18(...func_get_args());
+if (!function_exists('composerRequire2131a3ddfcd6ba0077bc8936978e55fd')) {
+    function composerRequire2131a3ddfcd6ba0077bc8936978e55fd() {
+        return \RectorPrefix20210820\composerRequire2131a3ddfcd6ba0077bc8936978e55fd(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {

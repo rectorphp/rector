@@ -14,7 +14,7 @@ interface LanguageInflectorFactory
      * @return $this
      * @param \Doctrine\Inflector\Rules\Ruleset|null $singularRules
      */
-    public function withSingularRules($singularRules, $reset = \false);
+    public function withSingularRules($singularRules, $reset = \false) : self;
     /**
      * Applies custom rules for pluralisation
      *
@@ -23,7 +23,7 @@ interface LanguageInflectorFactory
      * @return $this
      * @param \Doctrine\Inflector\Rules\Ruleset|null $pluralRules
      */
-    public function withPluralRules($pluralRules, $reset = \false);
+    public function withPluralRules($pluralRules, $reset = \false) : self;
     /**
      * Builds the inflector instance with all applicable rules
      */

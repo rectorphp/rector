@@ -24,7 +24,7 @@ trait DeprecateTrait
      *
      * @throws InvalidArgumentException when the message template is invalid
      */
-    public final function deprecate()
+    public final function deprecate() : self
     {
         $args = \func_get_args();
         $package = $version = $message = '';

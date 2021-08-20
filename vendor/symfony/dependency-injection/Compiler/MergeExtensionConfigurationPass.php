@@ -154,12 +154,11 @@ class MergeExtensionConfigurationContainerBuilder extends \RectorPrefix20210820\
     }
     /**
      * {@inheritdoc}
-     * @return $this
      * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
      * @param string $type
      * @param int $priority
      */
-    public function addCompilerPass($pass, $type = \RectorPrefix20210820\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0)
+    public function addCompilerPass($pass, $type = \RectorPrefix20210820\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0) : self
     {
         throw new \RectorPrefix20210820\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('You cannot add compiler pass "%s" from extension "%s". Compiler passes must be registered before the container is compiled.', \get_debug_type($pass), $this->extensionClass));
     }
