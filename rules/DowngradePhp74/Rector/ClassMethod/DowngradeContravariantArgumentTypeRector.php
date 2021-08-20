@@ -172,14 +172,11 @@ CODE_SAMPLE
         $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
 
         foreach ($parentClassReflections as $parentClassReflection) {
-            if (! $parentClassReflection->hasMethod($methodName)) {
+            $parentReflectionMethod = $this->resolveParentReflectionMethod($parentClassReflection, $methodName);
+
+            if (! $parentReflectionMethod instanceof ReflectionMethod) {
                 continue;
             }
-
-            $nativeClassReflection = $parentClassReflection->getNativeReflection();
-
-            // Find the param we're looking for
-            $parentReflectionMethod = $nativeClassReflection->getMethod($methodName);
 
             $differentAncestorParamTypeName = $this->getDifferentParamTypeFromReflectionMethod(
                 $parentReflectionMethod,
@@ -193,6 +190,25 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function resolveParentReflectionMethod(
+        ClassReflection $classReflection,
+        string $methodName
+    ): ?ReflectionMethod
+    {
+        if (! $classReflection->hasMethod($methodName)) {
+            return null;
+        }
+
+        $reflectionClass = $classReflection->getNativeReflection();
+
+        if (! $reflectionClass->hasMethod($methodName)) {
+            return null;
+        }
+
+        // Find the param we're looking for
+        return $reflectionClass->getMethod($methodName);
     }
 
     private function getDifferentParamTypeFromReflectionMethod(
