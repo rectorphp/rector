@@ -37,7 +37,7 @@ class DefaultsConfigurator extends \RectorPrefix20210820\Symfony\Component\Depen
      * @param string $name
      * @param mixed[] $attributes
      */
-    public final function tag($name, $attributes = []) : self
+    public final function tag($name, $attributes = [])
     {
         if ('' === $name) {
             throw new \RectorPrefix20210820\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('The tag name in "_defaults" must be a non-empty string.');

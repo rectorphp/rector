@@ -42,7 +42,7 @@ class BlueScreen
      * @return static
      * @param callable $panel
      */
-    public function addPanel($panel) : self
+    public function addPanel($panel)
     {
         if (!\in_array($panel, $this->panels, \true)) {
             $this->panels[] = $panel;
@@ -54,7 +54,7 @@ class BlueScreen
      * @return static
      * @param callable $action
      */
-    public function addAction($action) : self
+    public function addAction($action)
     {
         $this->actions[] = $action;
         return $this;

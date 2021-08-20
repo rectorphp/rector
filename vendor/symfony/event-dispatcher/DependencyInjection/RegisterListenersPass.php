@@ -57,7 +57,7 @@ class RegisterListenersPass implements \RectorPrefix20210820\Symfony\Component\D
      * @param mixed[] $noPreloadEvents
      * @param string $tagName
      */
-    public function setNoPreloadEvents($noPreloadEvents, $tagName = 'container.no_preload') : self
+    public function setNoPreloadEvents($noPreloadEvents, $tagName = 'container.no_preload')
     {
         $this->noPreloadEvents = \array_flip($noPreloadEvents);
         $this->noPreloadTagName = $tagName;

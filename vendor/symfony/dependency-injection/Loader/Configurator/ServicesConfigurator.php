@@ -85,9 +85,10 @@ class ServicesConfigurator extends \RectorPrefix20210820\Symfony\Component\Depen
     }
     /**
      * Removes an already defined service definition or alias.
+     * @return $this
      * @param string $id
      */
-    public final function remove($id) : self
+    public final function remove($id)
     {
         $this->container->removeDefinition($id);
         $this->container->removeAlias($id);

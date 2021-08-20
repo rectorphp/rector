@@ -65,7 +65,7 @@ class ServiceLocator implements \RectorPrefix20210820\Symfony\Contracts\Service\
      * @param string $externalId
      * @param \Symfony\Component\DependencyInjection\Container $container
      */
-    public function withContext($externalId, $container) : self
+    public function withContext($externalId, $container)
     {
         $locator = clone $this;
         $locator->externalId = $externalId;

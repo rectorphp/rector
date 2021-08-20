@@ -25,18 +25,20 @@ class ParserState
         $this->context = new \RectorPrefix20210820\Helmich\TypoScriptParser\Parser\AST\RootObjectPath();
     }
     /**
+     * @return $this
      * @param \Helmich\TypoScriptParser\Parser\AST\ObjectPath $context
      */
-    public function withContext($context) : self
+    public function withContext($context)
     {
         $clone = clone $this;
         $clone->context = $context;
         return $clone;
     }
     /**
+     * @return $this
      * @param \ArrayObject $statements
      */
-    public function withStatements($statements) : self
+    public function withStatements($statements)
     {
         $clone = clone $this;
         $clone->statements = $statements;

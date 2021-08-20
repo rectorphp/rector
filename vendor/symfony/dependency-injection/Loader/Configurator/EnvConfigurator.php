@@ -28,7 +28,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function __call(string $name, array $arguments) : self
+    public function __call(string $name, array $arguments)
     {
         $processor = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20210820\\1_\\2', $name));
         $this->custom($processor, ...$arguments);
@@ -38,7 +38,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
      * @return $this
      * @param string $processor
      */
-    public function custom($processor, ...$args) : self
+    public function custom($processor, ...$args)
     {
         \array_unshift($this->stack, $processor, ...$args);
         return $this;
@@ -46,7 +46,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function base64() : self
+    public function base64()
     {
         \array_unshift($this->stack, 'base64');
         return $this;
@@ -54,7 +54,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function bool() : self
+    public function bool()
     {
         \array_unshift($this->stack, 'bool');
         return $this;
@@ -62,7 +62,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function not() : self
+    public function not()
     {
         \array_unshift($this->stack, 'not');
         return $this;
@@ -70,7 +70,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function const() : self
+    public function const()
     {
         \array_unshift($this->stack, 'const');
         return $this;
@@ -78,7 +78,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function csv() : self
+    public function csv()
     {
         \array_unshift($this->stack, 'csv');
         return $this;
@@ -86,7 +86,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function file() : self
+    public function file()
     {
         \array_unshift($this->stack, 'file');
         return $this;
@@ -94,7 +94,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function float() : self
+    public function float()
     {
         \array_unshift($this->stack, 'float');
         return $this;
@@ -102,7 +102,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function int() : self
+    public function int()
     {
         \array_unshift($this->stack, 'int');
         return $this;
@@ -110,7 +110,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function json() : self
+    public function json()
     {
         \array_unshift($this->stack, 'json');
         return $this;
@@ -119,7 +119,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
      * @return $this
      * @param string $key
      */
-    public function key($key) : self
+    public function key($key)
     {
         \array_unshift($this->stack, 'key', $key);
         return $this;
@@ -127,7 +127,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function url() : self
+    public function url()
     {
         \array_unshift($this->stack, 'url');
         return $this;
@@ -135,7 +135,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function queryString() : self
+    public function queryString()
     {
         \array_unshift($this->stack, 'query_string');
         return $this;
@@ -143,7 +143,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function resolve() : self
+    public function resolve()
     {
         \array_unshift($this->stack, 'resolve');
         return $this;
@@ -152,7 +152,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
      * @return $this
      * @param string $fallbackParam
      */
-    public function default($fallbackParam) : self
+    public function default($fallbackParam)
     {
         \array_unshift($this->stack, 'default', $fallbackParam);
         return $this;
@@ -160,7 +160,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function string() : self
+    public function string()
     {
         \array_unshift($this->stack, 'string');
         return $this;
@@ -168,7 +168,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function trim() : self
+    public function trim()
     {
         \array_unshift($this->stack, 'trim');
         return $this;
@@ -176,7 +176,7 @@ class EnvConfigurator extends \RectorPrefix20210820\Symfony\Component\Config\Loa
     /**
      * @return $this
      */
-    public function require() : self
+    public function require()
     {
         \array_unshift($this->stack, 'require');
         return $this;

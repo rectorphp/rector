@@ -8,9 +8,10 @@ final class InvalidIndentStyleException extends \InvalidArgumentException
 {
     /**
      * @param array<int, string> $allowedStyles
+     * @return $this
      * @param string $style
      */
-    public static function fromStyleAndAllowedStyles($style, $allowedStyles) : self
+    public static function fromStyleAndAllowedStyles($style, $allowedStyles)
     {
         $message = \sprintf('Given style "%s" is not allowed. Allowed are "%s"', $style, \implode(' ', $allowedStyles));
         return new self($message);

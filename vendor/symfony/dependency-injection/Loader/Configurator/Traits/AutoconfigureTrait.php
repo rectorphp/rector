@@ -21,7 +21,7 @@ trait AutoconfigureTrait
      * @throws InvalidArgumentException when a parent is already set
      * @param bool $autoconfigured
      */
-    public final function autoconfigure($autoconfigured = \true) : self
+    public final function autoconfigure($autoconfigured = \true)
     {
         $this->definition->setAutoconfigured($autoconfigured);
         return $this;

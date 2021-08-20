@@ -34,9 +34,10 @@ class InstanceofConfigurator extends \RectorPrefix20210820\Symfony\Component\Dep
     }
     /**
      * Defines an instanceof-conditional to be applied to following service definitions.
+     * @return $this
      * @param string $fqcn
      */
-    public final function instanceof($fqcn) : self
+    public final function instanceof($fqcn)
     {
         return $this->parent->instanceof($fqcn);
     }

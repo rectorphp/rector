@@ -31,37 +31,58 @@ final class EditorConfigConfigurationBuilder
         $this->insertFinalNewline = $insertFinalNewline;
         $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig('lf');
     }
-    public static function create() : self
+    /**
+     * @return $this
+     */
+    public static function create()
     {
         return new self();
     }
-    public function withNewLine(\Rector\FileFormatter\ValueObject\NewLine $newLine) : self
+    /**
+     * @return $this
+     */
+    public function withNewLine(\Rector\FileFormatter\ValueObject\NewLine $newLine)
     {
         $this->newLine = $newLine;
         return $this;
     }
-    public function withIndent(\Rector\FileFormatter\ValueObject\Indent $indent) : self
+    /**
+     * @return $this
+     */
+    public function withIndent(\Rector\FileFormatter\ValueObject\Indent $indent)
     {
         $this->indentSize = $indent->getIndentSize();
         $this->indentStyle = $indent->getIndentStyle();
         return $this;
     }
-    public function withIndentStyle(string $indentStyle) : self
+    /**
+     * @return $this
+     */
+    public function withIndentStyle(string $indentStyle)
     {
         $this->indentStyle = $indentStyle;
         return $this;
     }
-    public function withIndentSize(int $indentSize) : self
+    /**
+     * @return $this
+     */
+    public function withIndentSize(int $indentSize)
     {
         $this->indentSize = $indentSize;
         return $this;
     }
-    public function withInsertFinalNewline(bool $insertFinalNewline) : self
+    /**
+     * @return $this
+     */
+    public function withInsertFinalNewline(bool $insertFinalNewline)
     {
         $this->insertFinalNewline = $insertFinalNewline;
         return $this;
     }
-    public function withEndOfLineFromEditorConfig(string $endOfLine) : self
+    /**
+     * @return $this
+     */
+    public function withEndOfLineFromEditorConfig(string $endOfLine)
     {
         $this->newLine = \Rector\FileFormatter\ValueObject\NewLine::fromEditorConfig($endOfLine);
         return $this;

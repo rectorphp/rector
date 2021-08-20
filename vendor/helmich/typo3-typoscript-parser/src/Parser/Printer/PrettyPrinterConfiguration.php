@@ -41,31 +41,46 @@ final class PrettyPrinterConfiguration
     private function __construct()
     {
     }
-    public static function create() : self
+    /**
+     * @return $this
+     */
+    public static function create()
     {
         return new self();
     }
-    public function withTabs() : self
+    /**
+     * @return $this
+     */
+    public function withTabs()
     {
         $clone = clone $this;
         $clone->indentationStyle = self::INDENTATION_STYLE_TABS;
         $clone->indentationSize = 1;
         return $clone;
     }
-    public function withSpaceIndentation(int $size) : self
+    /**
+     * @return $this
+     */
+    public function withSpaceIndentation(int $size)
     {
         $clone = clone $this;
         $clone->indentationStyle = self::INDENTATION_STYLE_SPACES;
         $clone->indentationSize = $size;
         return $clone;
     }
-    public function withClosingGlobalStatement() : self
+    /**
+     * @return $this
+     */
+    public function withClosingGlobalStatement()
     {
         $clone = clone $this;
         $clone->addClosingGlobal = \true;
         return $clone;
     }
-    public function withEmptyLineBreaks() : self
+    /**
+     * @return $this
+     */
+    public function withEmptyLineBreaks()
     {
         $clone = clone $this;
         $clone->includeEmptyLineBreaks = \true;

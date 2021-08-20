@@ -55,6 +55,7 @@ class Cookie
         return new static($name, $value, $data['expires'], $data['path'], $data['domain'], $data['secure'], $data['httponly'], $data['raw'], $data['samesite']);
     }
     /**
+     * @return $this
      * @param string $name
      * @param string|null $value
      * @param string|null $path
@@ -64,7 +65,7 @@ class Cookie
      * @param bool $raw
      * @param string|null $sameSite
      */
-    public static function create($name, $value = null, $expire = 0, $path = '/', $domain = null, $secure = null, $httpOnly = \true, $raw = \false, $sameSite = self::SAMESITE_LAX) : self
+    public static function create($name, $value = null, $expire = 0, $path = '/', $domain = null, $secure = null, $httpOnly = \true, $raw = \false, $sameSite = self::SAMESITE_LAX)
     {
         return new self($name, $value, $expire, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
     }
@@ -106,7 +107,7 @@ class Cookie
      * @return static
      * @param string|null $value
      */
-    public function withValue($value) : self
+    public function withValue($value)
     {
         $cookie = clone $this;
         $cookie->value = $value;
@@ -118,7 +119,7 @@ class Cookie
      * @return static
      * @param string|null $domain
      */
-    public function withDomain($domain) : self
+    public function withDomain($domain)
     {
         $cookie = clone $this;
         $cookie->domain = $domain;
@@ -131,7 +132,7 @@ class Cookie
      *
      * @return static
      */
-    public function withExpires($expire = 0) : self
+    public function withExpires($expire = 0)
     {
         $cookie = clone $this;
         $cookie->expire = self::expiresTimestamp($expire);
@@ -163,7 +164,7 @@ class Cookie
      * @return static
      * @param string $path
      */
-    public function withPath($path) : self
+    public function withPath($path)
     {
         $cookie = clone $this;
         $cookie->path = '' === $path ? '/' : $path;
@@ -175,7 +176,7 @@ class Cookie
      * @return static
      * @param bool $secure
      */
-    public function withSecure($secure = \true) : self
+    public function withSecure($secure = \true)
     {
         $cookie = clone $this;
         $cookie->secure = $secure;
@@ -187,7 +188,7 @@ class Cookie
      * @return static
      * @param bool $httpOnly
      */
-    public function withHttpOnly($httpOnly = \true) : self
+    public function withHttpOnly($httpOnly = \true)
     {
         $cookie = clone $this;
         $cookie->httpOnly = $httpOnly;
@@ -199,7 +200,7 @@ class Cookie
      * @return static
      * @param bool $raw
      */
-    public function withRaw($raw = \true) : self
+    public function withRaw($raw = \true)
     {
         if ($raw && \false !== \strpbrk($this->name, self::$reservedCharsList)) {
             throw new \InvalidArgumentException(\sprintf('The cookie name "%s" contains invalid characters.', $this->name));
@@ -214,7 +215,7 @@ class Cookie
      * @return static
      * @param string|null $sameSite
      */
-    public function withSameSite($sameSite) : self
+    public function withSameSite($sameSite)
     {
         if ('' === $sameSite) {
             $sameSite = null;

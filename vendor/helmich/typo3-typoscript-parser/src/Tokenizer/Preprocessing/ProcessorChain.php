@@ -16,7 +16,7 @@ class ProcessorChain implements \RectorPrefix20210820\Helmich\TypoScriptParser\T
      * @param Preprocessor $next
      * @return self
      */
-    public function with($next) : self
+    public function with($next)
     {
         $new = new self();
         $new->processors = \array_merge($this->processors, [$next]);

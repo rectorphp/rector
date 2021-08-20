@@ -245,7 +245,7 @@ class Process implements \IteratorAggregate
      * @param callable|null $callback
      * @param mixed[] $env
      */
-    public function mustRun($callback = null, $env = []) : self
+    public function mustRun($callback = null, $env = [])
     {
         if (0 !== $this->run($callback, $env)) {
             throw new \RectorPrefix20210820\Symfony\Component\Process\Exception\ProcessFailedException($this);
@@ -348,7 +348,7 @@ class Process implements \IteratorAggregate
      * @final
      * @param mixed[] $env
      */
-    public function restart($callback = null, $env = []) : self
+    public function restart($callback = null, $env = [])
     {
         if ($this->isRunning()) {
             throw new \RectorPrefix20210820\Symfony\Component\Process\Exception\RuntimeException('Process is already running.');
