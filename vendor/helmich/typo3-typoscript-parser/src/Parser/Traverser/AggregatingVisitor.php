@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210819\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20210820\Helmich\TypoScriptParser\Parser\Traverser;
 
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
@@ -10,7 +10,7 @@ use Helmich\TypoScriptParser\Parser\AST\Statement;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\Traverser
  */
-class AggregatingVisitor implements \RectorPrefix20210819\Helmich\TypoScriptParser\Parser\Traverser\Visitor
+class AggregatingVisitor implements \RectorPrefix20210820\Helmich\TypoScriptParser\Parser\Traverser\Visitor
 {
     /** @var Visitor[] */
     private $visitors = [];
@@ -18,7 +18,7 @@ class AggregatingVisitor implements \RectorPrefix20210819\Helmich\TypoScriptPars
      * @param Visitor $visitor
      * @return void
      */
-    public function addVisitor(\RectorPrefix20210819\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
+    public function addVisitor(\RectorPrefix20210820\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
     {
         $this->visitors[\spl_object_hash($visitor)] = $visitor;
     }
