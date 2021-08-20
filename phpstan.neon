@@ -528,3 +528,13 @@ parameters:
             paths:
                  - rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php
 
+        -
+            message: '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
+            paths:
+                - packages/NodeNestingScope/FlowOfControlLocator.php
+                - packages/NodeNestingScope/ParentFinder.php
+                - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
+                - rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php
+                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
+                - src/Application/FileProcessor.php
+                - src/PhpParser/Node/BetterNodeFinder.php
