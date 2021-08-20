@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
@@ -69,6 +70,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($node->returnType instanceof Name && $this->nodeNameResolver->isName($node->returnType, 'parent')) {
+            return null;
+        }
+
         $mixedType = new MixedType();
 
         foreach ($node->getParams() as $param) {
