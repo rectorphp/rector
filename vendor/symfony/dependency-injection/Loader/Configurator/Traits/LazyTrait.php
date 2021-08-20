@@ -19,7 +19,7 @@ trait LazyTrait
      *
      * @return $this
      */
-    public final function lazy($lazy = \true) : self
+    public final function lazy($lazy = \true)
     {
         $this->definition->setLazy((bool) $lazy);
         if (\is_string($lazy)) {

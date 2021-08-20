@@ -20,7 +20,7 @@ trait TagTrait
      * @param string $name
      * @param mixed[] $attributes
      */
-    public final function tag($name, $attributes = []) : self
+    public final function tag($name, $attributes = [])
     {
         if ('' === $name) {
             throw new \RectorPrefix20210820\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The tag name for service "%s" must be a non-empty string.', $this->id));
