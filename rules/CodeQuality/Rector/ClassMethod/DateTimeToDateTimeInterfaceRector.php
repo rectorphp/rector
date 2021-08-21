@@ -6,8 +6,6 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -21,6 +19,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator;
 use Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -50,7 +49,8 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector implements 
         private PhpDocTypeChanger $phpDocTypeChanger,
         private ParamAnalyzer $paramAnalyzer,
         private ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator,
-        private ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator
+        private ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator,
+        private CallAnalyzer $callAnalyzer
     ) {
     }
 
@@ -201,9 +201,11 @@ CODE_SAMPLE
             return false;
         }
 
-        return $return->expr instanceof New_ && $return->expr->class instanceof Name && $this->nodeNameResolver->isName(
-            $return->expr->class,
-            self::DATE_TIME
-        );
+        if (! $this->callAnalyzer->isNewInstance($this->betterNodeFinder, $return->expr)) {
+            return false;
+        }
+
+        $type = $this->nodeTypeResolver->resolve($return->expr);
+        return $type instanceof ObjectType && $type->getClassName() === self::DATE_TIME;
     }
 }

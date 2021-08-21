@@ -6,8 +6,6 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -23,7 +21,6 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,7 +47,6 @@ final class FluentChainMethodCallNodeAnalyzer
         private NodeFinder $nodeFinder,
         private AstResolver $astResolver,
         private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator,
         private ReturnTypeInferer $returnTypeInferer,
         private CallAnalyzer $callAnalyzer
     ) {
@@ -265,7 +261,7 @@ final class FluentChainMethodCallNodeAnalyzer
                 continue;
             }
 
-            if (! $this->isNewInstance($expr)) {
+            if (! $this->callAnalyzer->isNewInstance($this->betterNodeFinder, $expr)) {
                 continue;
             }
 
@@ -273,24 +269,5 @@ final class FluentChainMethodCallNodeAnalyzer
         }
 
         return false;
-    }
-
-    private function isNewInstance(Expr $expr): bool
-    {
-        if ($expr instanceof Clone_ || $expr instanceof New_) {
-            return true;
-        }
-
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $node) use ($expr): bool {
-            if (! $node instanceof Assign) {
-                return false;
-            }
-
-            if (! $this->nodeComparator->areNodesEqual($node->var, $expr)) {
-                return false;
-            }
-
-            return $node->expr instanceof Clone_ || $node->expr instanceof New_;
-        });
     }
 }
