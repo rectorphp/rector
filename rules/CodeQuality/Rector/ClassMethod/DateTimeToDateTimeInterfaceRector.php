@@ -5,8 +5,6 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -20,6 +18,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator;
 use Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -56,12 +55,17 @@ final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator
      */
     private $classMethodParameterTypeManipulator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator, \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
+     */
+    private $callAnalyzer;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator, \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->paramAnalyzer = $paramAnalyzer;
         $this->classMethodReturnTypeManipulator = $classMethodReturnTypeManipulator;
         $this->classMethodParameterTypeManipulator = $classMethodParameterTypeManipulator;
+        $this->callAnalyzer = $callAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -174,6 +178,10 @@ CODE_SAMPLE
         if (!$return->expr instanceof \PhpParser\Node\Expr) {
             return \false;
         }
-        return $return->expr instanceof \PhpParser\Node\Expr\New_ && $return->expr->class instanceof \PhpParser\Node\Name && $this->nodeNameResolver->isName($return->expr->class, self::DATE_TIME);
+        if (!$this->callAnalyzer->isNewInstance($this->betterNodeFinder, $return->expr)) {
+            return \false;
+        }
+        $type = $this->nodeTypeResolver->resolve($return->expr);
+        return $type instanceof \PHPStan\Type\ObjectType && $type->getClassName() === self::DATE_TIME;
     }
 }

@@ -5,8 +5,6 @@ namespace Rector\Defluent\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -22,7 +20,6 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -62,10 +59,6 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     private $betterNodeFinder;
     /**
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
-     */
-    private $nodeComparator;
-    /**
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
@@ -73,14 +66,13 @@ final class FluentChainMethodCallNodeAnalyzer
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeFinder = $nodeFinder;
         $this->astResolver = $astResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeComparator = $nodeComparator;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->callAnalyzer = $callAnalyzer;
     }
@@ -253,26 +245,11 @@ final class FluentChainMethodCallNodeAnalyzer
             if (!$expr instanceof \PhpParser\Node\Expr) {
                 continue;
             }
-            if (!$this->isNewInstance($expr)) {
+            if (!$this->callAnalyzer->isNewInstance($this->betterNodeFinder, $expr)) {
                 continue;
             }
             return \true;
         }
         return \false;
-    }
-    private function isNewInstance(\PhpParser\Node\Expr $expr) : bool
-    {
-        if ($expr instanceof \PhpParser\Node\Expr\Clone_ || $expr instanceof \PhpParser\Node\Expr\New_) {
-            return \true;
-        }
-        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
-                return \false;
-            }
-            if (!$this->nodeComparator->areNodesEqual($node->var, $expr)) {
-                return \false;
-            }
-            return $node->expr instanceof \PhpParser\Node\Expr\Clone_ || $node->expr instanceof \PhpParser\Node\Expr\New_;
-        });
     }
 }

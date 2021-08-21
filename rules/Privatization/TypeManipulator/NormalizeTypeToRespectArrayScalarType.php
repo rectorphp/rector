@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\Privatization\TypeManipulator;
 
 use PhpParser\Node;
+use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -33,7 +35,24 @@ final class NormalizeTypeToRespectArrayScalarType
         if ($type instanceof \PHPStan\Type\MixedType) {
             return new \PHPStan\Type\ArrayType($type, $type);
         }
+        if ($type instanceof \PHPStan\Type\ArrayType) {
+            return $this->resolveArrayType($type);
+        }
         return $type;
+    }
+    private function resolveArrayType(\PHPStan\Type\ArrayType $arrayType) : \PHPStan\Type\ArrayType
+    {
+        $itemType = $arrayType->getItemType();
+        if (!$itemType instanceof \PHPStan\Type\IntersectionType) {
+            return $arrayType;
+        }
+        $types = $itemType->getTypes();
+        foreach ($types as $key => $itemTypeType) {
+            if ($itemTypeType instanceof \PHPStan\Type\Accessory\NonEmptyArrayType) {
+                unset($types[$key]);
+            }
+        }
+        return new \PHPStan\Type\ArrayType($arrayType->getKeyType(), new \PHPStan\Type\IntersectionType($types));
     }
     private function normalizeUnionType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\UnionType
     {
