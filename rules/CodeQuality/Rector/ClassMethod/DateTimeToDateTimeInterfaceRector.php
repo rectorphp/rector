@@ -4,25 +4,22 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator;
+use Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -43,10 +40,20 @@ final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    /**
+     * @var \Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator
+     */
+    private $returnTypeManipulator;
+    /**
+     * @var \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator
+     */
+    private $parameterTypeManipulator;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator $returnTypeManipulator, \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator $parameterTypeManipulator)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->paramAnalyzer = $paramAnalyzer;
+        $this->returnTypeManipulator = $returnTypeManipulator;
+        $this->parameterTypeManipulator = $parameterTypeManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -76,105 +83,73 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassMethod|Property $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $isModifiedNode = \false;
-        $objectType = new \PHPStan\Type\ObjectType('DateTime');
-        foreach ($node->getParams() as $param) {
-            if (!$this->isObjectType($param, $objectType)) {
-                continue;
-            }
-            // Do not refactor if node's type is a child class of \DateTime (can have wider API)
-            $paramType = $this->nodeTypeResolver->resolve($param);
-            if (!$paramType->isSuperTypeOf($objectType)->yes()) {
-                continue;
-            }
-            $this->refactorParamTypeHint($param);
-            $this->refactorParamDocBlock($param, $node);
-            $this->refactorMethodCalls($param, $node);
-            $isModifiedNode = \true;
+        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            $this->refactorClassMethod($node);
+            return $node;
         }
-        if (!$isModifiedNode) {
-            return null;
-        }
-        return $node;
+        return $this->refactorProperty($node);
     }
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::DATE_TIME_INTERFACE;
     }
-    private function refactorParamTypeHint(\PhpParser\Node\Param $param) : void
+    private function refactorProperty(\PhpParser\Node\Stmt\Property $node) : ?\PhpParser\Node
     {
-        $fullyQualified = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
-        if ($this->paramAnalyzer->isNullable($param)) {
-            $param->type = new \PhpParser\Node\NullableType($fullyQualified);
-            return;
+        $type = $node->type;
+        if ($type === null) {
+            return null;
         }
-        $param->type = $fullyQualified;
+        $isNullable = \false;
+        if ($type instanceof \PhpParser\Node\NullableType) {
+            $isNullable = \true;
+            $type = $type->type;
+        }
+        if (!$this->isObjectType($type, new \PHPStan\Type\ObjectType('DateTime'))) {
+            return null;
+        }
+        $types = $this->determinePhpDocTypes($node->type);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, new \PHPStan\Type\UnionType($types));
+        $node->type = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
+        if ($isNullable) {
+            $node->type = new \PhpParser\Node\NullableType($node->type);
+        }
+        return $node;
     }
-    private function refactorParamDocBlock(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    /**
+     * @return Type[]
+     */
+    private function determinePhpDocTypes(?\PhpParser\Node $node) : array
     {
         $types = [new \PHPStan\Type\ObjectType('DateTime'), new \PHPStan\Type\ObjectType('DateTimeImmutable')];
-        if ($this->paramAnalyzer->isNullable($param)) {
+        if ($this->canHaveNullType($node)) {
             $types[] = new \PHPStan\Type\NullType();
         }
-        $paramName = $this->getName($param->var);
-        if ($paramName === null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $this->phpDocTypeChanger->changeParamType($phpDocInfo, new \PHPStan\Type\UnionType($types), $param, $paramName);
+        return $types;
     }
-    private function refactorMethodCalls(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function canHaveNullType(?\PhpParser\Node $node) : bool
     {
-        if ($classMethod->stmts === null) {
-            return;
+        if ($node instanceof \PhpParser\Node\Param) {
+            return $this->paramAnalyzer->isNullable($node);
         }
-        $this->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) use($param) : void {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-                return;
-            }
-            $this->refactorMethodCall($param, $node);
-        });
+        return $node instanceof \PhpParser\Node\NullableType;
     }
-    private function refactorMethodCall(\PhpParser\Node\Param $param, \PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $node) : void
     {
-        $paramName = $this->getName($param->var);
-        if ($paramName === null) {
+        $fromObjectType = new \PHPStan\Type\ObjectType('DateTime');
+        $replaceIntoType = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
+        $replacementPhpDocType = new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectType('DateTime'), new \PHPStan\Type\ObjectType('DateTimeImmutable')]);
+        $this->parameterTypeManipulator->refactorFunctionParameters($node, $fromObjectType, $replaceIntoType, $replacementPhpDocType, self::METHODS_RETURNING_CLASS_INSTANCE_MAP);
+        if (!$node->returnType instanceof \PhpParser\Node) {
             return;
         }
-        if ($this->shouldSkipMethodCallRefactor($paramName, $methodCall)) {
-            return;
-        }
-        $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($paramName), $methodCall);
-        /** @var Node $parent */
-        $parent = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Arg) {
-            $parent->value = $assign;
-            return;
-        }
-        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
-            return;
-        }
-        $parent->expr = $assign;
-    }
-    private function shouldSkipMethodCallRefactor(string $paramName, \PhpParser\Node\Expr\MethodCall $methodCall) : bool
-    {
-        if (!$this->isName($methodCall->var, $paramName)) {
-            return \true;
-        }
-        if (!$this->isNames($methodCall->name, self::METHODS_RETURNING_CLASS_INSTANCE_MAP)) {
-            return \true;
-        }
-        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node) {
-            return \true;
-        }
-        return $parentNode instanceof \PhpParser\Node\Expr\Assign;
+        $this->returnTypeManipulator->refactorFunctionReturnType($node, $fromObjectType, $replaceIntoType, $replacementPhpDocType);
     }
 }

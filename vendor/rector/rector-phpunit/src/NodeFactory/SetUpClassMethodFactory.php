@@ -10,7 +10,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PHPUnit\NodeManipulator\StmtManipulator;
 use Rector\RemovingStatic\NodeFactory\SetUpFactory;
-use RectorPrefix20210820\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210821\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
     /**
@@ -37,7 +37,7 @@ final class SetUpClassMethodFactory
     public function createSetUpMethod(array $stmts) : \PhpParser\Node\Stmt\ClassMethod
     {
         $stmts = $this->stmtManipulator->normalizeStmts($stmts);
-        $classMethodBuilder = new \RectorPrefix20210820\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
+        $classMethodBuilder = new \RectorPrefix20210821\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($this->setUpFactory->createParentStaticCall());
         $classMethodBuilder->addStmts($stmts);

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210820\TYPO3\CMS\Core\TimeTracker;
+namespace RectorPrefix20210821\TYPO3\CMS\Core\TimeTracker;
 
 if (\class_exists('TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker')) {
     return;

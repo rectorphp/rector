@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210820;
+namespace RectorPrefix20210821;
 
 if (\class_exists('Tx_Fluid_Core_ViewHelper_Exception_RenderingContextNotAccessibleException')) {
     return;

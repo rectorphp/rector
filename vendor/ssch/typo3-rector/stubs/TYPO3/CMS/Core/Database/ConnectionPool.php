@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210820\TYPO3\CMS\Core\Database;
+namespace RectorPrefix20210821\TYPO3\CMS\Core\Database;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\ConnectionPool')) {
     return;
@@ -14,7 +14,7 @@ class ConnectionPool
     public function getConnectionForTable($table)
     {
         $table = (string) $table;
-        return new \RectorPrefix20210820\TYPO3\CMS\Core\Database\Connection();
+        return new \RectorPrefix20210821\TYPO3\CMS\Core\Database\Connection();
     }
     /**
      * @return void

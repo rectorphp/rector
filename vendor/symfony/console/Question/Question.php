@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210820\Symfony\Component\Console\Question;
+namespace RectorPrefix20210821\Symfony\Component\Console\Question;
 
-use RectorPrefix20210820\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210820\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20210821\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210821\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a Question.
  *
@@ -94,7 +94,7 @@ class Question
     public function setHidden($hidden)
     {
         if ($this->autocompleterCallback) {
-            throw new \RectorPrefix20210820\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
+            throw new \RectorPrefix20210821\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
         }
         $this->hidden = (bool) $hidden;
         return $this;
@@ -172,7 +172,7 @@ class Question
     public function setAutocompleterCallback($callback = null) : self
     {
         if ($this->hidden && null !== $callback) {
-            throw new \RectorPrefix20210820\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
+            throw new \RectorPrefix20210821\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
         }
         $this->autocompleterCallback = $callback;
         return $this;
@@ -212,7 +212,7 @@ class Question
         if (null !== $attempts) {
             $attempts = (int) $attempts;
             if ($attempts < 1) {
-                throw new \RectorPrefix20210820\Symfony\Component\Console\Exception\InvalidArgumentException('Maximum number of attempts must be a positive value.');
+                throw new \RectorPrefix20210821\Symfony\Component\Console\Exception\InvalidArgumentException('Maximum number of attempts must be a positive value.');
             }
         }
         $this->attempts = $attempts;

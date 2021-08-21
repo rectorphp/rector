@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210820\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
+            "RectorPrefix20210821\\Symfony\\Polyfill\\Intl\\Normalizer\\": ""
         },
         "files": [
             "bootstrap.php"
