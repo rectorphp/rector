@@ -538,3 +538,15 @@ parameters:
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
                 - src/Application/FileProcessor.php
                 - src/PhpParser/Node/BetterNodeFinder.php
+
+        -
+            message: '#Parameter \#1 \$separator of function explode expects non\-empty\-string, string given#'
+            paths:
+                - rules/PSR4/FileRelocationResolver.php
+                - rules/Privatization/Rector/Class_/RepeatedLiteralToClassConstantRector.php
+                - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
+
+        -
+            message: '#Parameter \#2 \$length of function str_split expects int<1, max\>, int given#'
+            paths:
+                - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
