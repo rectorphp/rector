@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Rector\CodeQuality\NodeManipulator;
 
 use PhpParser\Node\Identifier;
@@ -28,7 +27,7 @@ final class ClassMethodReturnTypeManipulator
 
     public function refactorFunctionReturnType(
         ClassMethod $classMethod,
-        ObjectType $toReplaceType,
+        ObjectType $objectType,
         Identifier|Name|NullableType $replaceIntoType,
         Type $phpDocType
     ): void {
@@ -42,12 +41,12 @@ final class ClassMethodReturnTypeManipulator
             $isNullable = true;
             $returnType = $returnType->type;
         }
-        if (! $this->nodeTypeResolver->isObjectType($returnType, $toReplaceType)) {
+        if (! $this->nodeTypeResolver->isObjectType($returnType, $objectType)) {
             return;
         }
 
         $paramType = $this->nodeTypeResolver->resolve($returnType);
-        if (! $paramType->isSuperTypeOf($toReplaceType)->yes()) {
+        if (! $paramType->isSuperTypeOf($objectType)->yes()) {
             return;
         }
 
@@ -58,7 +57,7 @@ final class ClassMethodReturnTypeManipulator
             } else {
                 $phpDocType = new UnionType([$phpDocType, new NullType()]);
             }
-            if (!$replaceIntoType instanceof NullableType) {
+            if (! $replaceIntoType instanceof NullableType) {
                 $replaceIntoType = new NullableType($replaceIntoType);
             }
         }

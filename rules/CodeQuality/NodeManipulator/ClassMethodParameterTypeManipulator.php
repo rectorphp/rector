@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-
 namespace Rector\CodeQuality\NodeManipulator;
 
 use PhpParser\Node;
@@ -45,32 +44,31 @@ final class ClassMethodParameterTypeManipulator
      * @param string[] $methodsReturningClassInstance
      */
     public function refactorFunctionParameters(
-        ClassMethod $node,
-        ObjectType $toReplaceType,
+        ClassMethod $classMethod,
+        ObjectType $objectType,
         Identifier|Name|NullableType $replaceIntoType,
         Type $phpDocType,
         array $methodsReturningClassInstance
     ): void {
-        foreach ($node->getParams() as $param) {
-            if (! $this->nodeTypeResolver->isObjectType($param, $toReplaceType)) {
+        foreach ($classMethod->getParams() as $param) {
+            if (! $this->nodeTypeResolver->isObjectType($param, $objectType)) {
                 continue;
             }
 
             $paramType = $this->nodeTypeResolver->resolve($param);
-            if (! $paramType->isSuperTypeOf($toReplaceType)->yes()) {
+            if (! $paramType->isSuperTypeOf($objectType)->yes()) {
                 continue;
             }
 
             $this->refactorParamTypeHint($param, $replaceIntoType);
-            $this->refactorParamDocBlock($param, $node, $phpDocType);
-            $this->refactorMethodCalls($param, $node, $methodsReturningClassInstance);
+            $this->refactorParamDocBlock($param, $classMethod, $phpDocType);
+            $this->refactorMethodCalls($param, $classMethod, $methodsReturningClassInstance);
         }
     }
 
-
     private function refactorParamTypeHint(Param $param, Identifier|Name|NullableType $replaceIntoType): void
     {
-        if ($this->paramAnalyzer->isNullable($param) && !$replaceIntoType instanceof NullableType) {
+        if ($this->paramAnalyzer->isNullable($param) && ! $replaceIntoType instanceof NullableType) {
             $replaceIntoType = new NullableType($replaceIntoType);
         }
 
@@ -99,13 +97,20 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param string[] $methodsReturningClassInstance
      */
-    private function refactorMethodCalls(Param $param, ClassMethod $classMethod, array $methodsReturningClassInstance): void
+    private function refactorMethodCalls(
+        Param $param,
+        ClassMethod $classMethod,
+        array $methodsReturningClassInstance
+    ): void
     {
         if ($classMethod->stmts === null) {
             return;
         }
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use ($param, $methodsReturningClassInstance): void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use (
+            $param,
+            $methodsReturningClassInstance
+        ): void {
             if (! ($node instanceof MethodCall)) {
                 return;
             }
@@ -117,7 +122,11 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param string[] $methodsReturningClassInstance
      */
-    private function refactorMethodCall(Param $param, MethodCall $methodCall, array $methodsReturningClassInstance): void
+    private function refactorMethodCall(
+        Param $param,
+        MethodCall $methodCall,
+        array $methodsReturningClassInstance
+    ): void
     {
         $paramName = $this->nodeNameResolver->getName($param->var);
         if ($paramName === null) {
@@ -146,7 +155,11 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param string[] $methodsReturningClassInstance
      */
-    private function shouldSkipMethodCallRefactor(string $paramName, MethodCall $methodCall, array $methodsReturningClassInstance): bool
+    private function shouldSkipMethodCallRefactor(
+        string $paramName,
+        MethodCall $methodCall,
+        array $methodsReturningClassInstance
+    ): bool
     {
         if (! $this->nodeNameResolver->isName($methodCall->var, $paramName)) {
             return true;
