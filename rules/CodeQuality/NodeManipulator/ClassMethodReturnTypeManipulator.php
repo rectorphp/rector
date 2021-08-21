@@ -37,7 +37,7 @@ final class ClassMethodReturnTypeManipulator
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
      */
-    public function refactorFunctionReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $toReplaceType, $replaceIntoType, \PHPStan\Type\Type $phpDocType) : void
+    public function refactorFunctionReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, $replaceIntoType, \PHPStan\Type\Type $phpDocType) : void
     {
         $returnType = $classMethod->returnType;
         if ($returnType === null) {
@@ -48,11 +48,11 @@ final class ClassMethodReturnTypeManipulator
             $isNullable = \true;
             $returnType = $returnType->type;
         }
-        if (!$this->nodeTypeResolver->isObjectType($returnType, $toReplaceType)) {
+        if (!$this->nodeTypeResolver->isObjectType($returnType, $objectType)) {
             return;
         }
         $paramType = $this->nodeTypeResolver->resolve($returnType);
-        if (!$paramType->isSuperTypeOf($toReplaceType)->yes()) {
+        if (!$paramType->isSuperTypeOf($objectType)->yes()) {
             return;
         }
         if ($isNullable) {

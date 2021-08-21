@@ -65,19 +65,19 @@ final class ClassMethodParameterTypeManipulator
      * @param string[] $methodsReturningClassInstance
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
      */
-    public function refactorFunctionParameters(\PhpParser\Node\Stmt\ClassMethod $node, \PHPStan\Type\ObjectType $toReplaceType, $replaceIntoType, \PHPStan\Type\Type $phpDocType, array $methodsReturningClassInstance) : void
+    public function refactorFunctionParameters(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, $replaceIntoType, \PHPStan\Type\Type $phpDocType, array $methodsReturningClassInstance) : void
     {
-        foreach ($node->getParams() as $param) {
-            if (!$this->nodeTypeResolver->isObjectType($param, $toReplaceType)) {
+        foreach ($classMethod->getParams() as $param) {
+            if (!$this->nodeTypeResolver->isObjectType($param, $objectType)) {
                 continue;
             }
             $paramType = $this->nodeTypeResolver->resolve($param);
-            if (!$paramType->isSuperTypeOf($toReplaceType)->yes()) {
+            if (!$paramType->isSuperTypeOf($objectType)->yes()) {
                 continue;
             }
             $this->refactorParamTypeHint($param, $replaceIntoType);
-            $this->refactorParamDocBlock($param, $node, $phpDocType);
-            $this->refactorMethodCalls($param, $node, $methodsReturningClassInstance);
+            $this->refactorParamDocBlock($param, $classMethod, $phpDocType);
+            $this->refactorMethodCalls($param, $classMethod, $methodsReturningClassInstance);
         }
     }
     /**
