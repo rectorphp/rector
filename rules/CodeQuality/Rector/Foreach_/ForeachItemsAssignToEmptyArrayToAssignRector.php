@@ -8,6 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Foreach_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -45,7 +48,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-,
+                    ,
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -75,32 +78,61 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
+        /** @var Expr $assignVariable */
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
+
+        return new Assign($assignVariable, $node->expr);
+    }
+
+    private function shouldSkip(Foreach_ $foreach): bool
+    {
+        $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
         if (! $assignVariable instanceof Expr) {
-            return null;
+            return true;
         }
 
-        if ($this->shouldSkipAsPartOfNestedForeach($node)) {
-            return null;
+        if ($this->shouldSkipAsPartOfNestedForeach($foreach)) {
+            return true;
         }
 
-        $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($node, $assignVariable);
+        $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($foreach, $assignVariable);
         if (! $previousDeclaration instanceof Node) {
-            return null;
+            return true;
         }
 
         $previousDeclarationParentNode = $previousDeclaration->getAttribute(AttributeKey::PARENT_NODE);
         if (! $previousDeclarationParentNode instanceof Assign) {
-            return null;
+            return true;
         }
 
         // must be empty array, otherwise it will false override
         $defaultValue = $this->valueResolver->getValue($previousDeclarationParentNode->expr);
         if ($defaultValue !== []) {
-            return null;
+            return true;
         }
 
-        return new Assign($assignVariable, $node->expr);
+        /** @var Scope $scope */
+        $scope = $foreach->expr->getAttribute(AttributeKey::SCOPE);
+
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $type = $scope->getType($foreach->expr);
+
+        if ($type instanceof ObjectType) {
+            return $type->isIterable()->yes();
+        }
+
+        if ($type instanceof ThisType) {
+            return $type->isIterable()->yes();
+        }
+
+        return false;
     }
 
     private function shouldSkipAsPartOfNestedForeach(Foreach_ $foreach): bool
