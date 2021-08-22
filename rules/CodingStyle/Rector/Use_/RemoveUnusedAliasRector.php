@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Naming\NameRenamer;
 use Rector\CodingStyle\Node\DocAliasResolver;
 use Rector\CodingStyle\Node\UseManipulator;
@@ -46,7 +47,8 @@ final class RemoveUnusedAliasRector extends AbstractRector
         private DocAliasResolver $docAliasResolver,
         private UseManipulator $useManipulator,
         private UseNameAliasToNameResolver $useNameAliasToNameResolver,
-        private NameRenamer $nameRenamer
+        private NameRenamer $nameRenamer,
+        private ClassNameImportSkipper $classNameImportSkipper
     ) {
     }
 
@@ -129,7 +131,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->refactorAliasName($aliasName, $lastName, $use);
+            $this->refactorAliasName($node, $aliasName, $lastName, $use);
         }
 
         return $node;
@@ -206,20 +208,27 @@ CODE_SAMPLE
         });
     }
 
-    private function refactorAliasName(string $aliasName, string $lastName, UseUse $useUse): void
+    private function refactorAliasName(Use_ $use, string $aliasName, string $lastName, UseUse $useUse): void
     {
-        // only alias name is used → use last name directly
+        $parentUse = $use->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentUse instanceof Node) {
+            return;
+        }
+
+        /** @var Use_[] $uses */
+        $uses = $this->betterNodeFinder->find($parentUse, function (Node $node) use ($use): bool {
+            if ($node === $use) {
+                return false;
+            }
+
+            return $node instanceof Use_;
+        });
+
+        if ($this->classNameImportSkipper->isShortNameInUseStatement(new Name($lastName), $uses)) {
+            return;
+        }
+
         $lowerAliasName = strtolower($aliasName);
-        if (! isset($this->resolvedNodeNames[$lowerAliasName])) {
-            return;
-        }
-
-        // keep to differentiate 2 aliases classes
-        $lowerLastName = strtolower($lastName);
-        if (count($this->useNamesAliasToName[$lowerLastName] ?? []) > 1) {
-            return;
-        }
-
         $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
         $useUse->alias = null;
     }
