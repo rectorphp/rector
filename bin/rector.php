@@ -11,7 +11,8 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode;
+use RectorPrefix20210822\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210822\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
@@ -54,7 +55,7 @@ try {
         $symfonyStyle = $symfonyStyleFactory->create();
         $symfonyStyle->error($throwable->getMessage());
     }
-    exit(\RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::ERROR);
+    exit(\RectorPrefix20210822\Symfony\Component\Console\Command\Command::FAILURE);
 }
 /** @var ConsoleApplication $application */
 $application = $container->get(\Rector\Core\Console\ConsoleApplication::class);

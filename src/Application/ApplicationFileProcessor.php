@@ -34,7 +34,7 @@ final class ApplicationFileProcessor
      */
     private $symfonyStyle;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
      */
     private $fileProcessors = [];
     /**

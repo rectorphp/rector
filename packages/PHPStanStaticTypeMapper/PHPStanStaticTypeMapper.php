@@ -16,7 +16,7 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 final class PHPStanStaticTypeMapper
 {
     /**
-     * @var mixed[]
+     * @var \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface[]
      */
     private $typeMappers;
     /**

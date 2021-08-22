@@ -66,7 +66,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $rectorOutputStyle;
     /**
-     * @var mixed[]
+     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface[]
      */
     private $typoScriptRectors = [];
     /**

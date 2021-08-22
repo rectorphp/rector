@@ -8,11 +8,11 @@ use PhpParser\Node\Expr\ArrayItem;
 final class ArrayItemsAndFluentClass
 {
     /**
-     * @var mixed[]
+     * @var \PhpParser\Node\Expr\ArrayItem[]
      */
     private $arrayItems;
     /**
-     * @var mixed[]
+     * @var array<string, \PhpParser\Node\Expr>
      */
     private $fluentCalls;
     /**

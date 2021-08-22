@@ -6,11 +6,11 @@ namespace Rector\DowngradePhp80\ValueObject;
 final class DowngradeAttributeToAnnotation
 {
     /**
-     * @var string
+     * @var class-string
      */
     private $attributeClass;
     /**
-     * @var string|null
+     * @var class-string|string|null
      */
     private $tag;
     /**

@@ -7,7 +7,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class PropertyNamesAndPhpDocInfos
 {
     /**
-     * @var mixed[]
+     * @var \Rector\Doctrine\ValueObject\PropertyNameAndPhpDocInfo[]
      */
     private $propertyNameAndPhpDocInfos;
     /**

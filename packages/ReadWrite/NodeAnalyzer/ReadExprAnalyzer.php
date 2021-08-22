@@ -9,7 +9,7 @@ use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 final class ReadExprAnalyzer
 {
     /**
-     * @var mixed[]
+     * @var \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface[]
      */
     private $readNodeAnalyzers;
     /**

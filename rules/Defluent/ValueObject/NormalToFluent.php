@@ -11,7 +11,7 @@ final class NormalToFluent
      */
     private $class;
     /**
-     * @var mixed[]
+     * @var string[]
      */
     private $methodNames;
     /**

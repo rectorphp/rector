@@ -14,7 +14,6 @@ use RectorPrefix20210822\Symfony\Component\Console\Command\Command;
 use RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20210822\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode;
 final class ShowCommand extends \RectorPrefix20210822\Symfony\Component\Console\Command\Command
 {
     /**
@@ -26,7 +25,7 @@ final class ShowCommand extends \RectorPrefix20210822\Symfony\Component\Console\
      */
     private $showOutputFormatterCollector;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Rector\RectorInterface[]
      */
     private $rectors;
     /**
@@ -54,7 +53,7 @@ final class ShowCommand extends \RectorPrefix20210822\Symfony\Component\Console\
     {
         $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
         $this->reportLoadedRectors($outputFormat);
-        return \RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+        return \RectorPrefix20210822\Symfony\Component\Console\Command\Command::SUCCESS;
     }
     private function reportLoadedRectors(string $outputFormat) : void
     {

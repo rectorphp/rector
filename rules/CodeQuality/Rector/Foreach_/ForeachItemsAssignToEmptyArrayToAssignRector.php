@@ -103,10 +103,9 @@ CODE_SAMPLE
         if ($defaultValue !== []) {
             return \true;
         }
-        /** @var Scope $scope */
         $scope = $foreach->expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
+            return \true;
         }
         $type = $scope->getType($foreach->expr);
         if ($type instanceof \PHPStan\Type\ObjectType) {

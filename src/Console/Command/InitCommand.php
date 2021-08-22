@@ -13,7 +13,6 @@ use RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20210822\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode;
 use RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends \RectorPrefix20210822\Symfony\Component\Console\Command\Command
@@ -31,7 +30,7 @@ final class InitCommand extends \RectorPrefix20210822\Symfony\Component\Console\
      */
     private $symfonyStyle;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Template\TemplateResolverInterface[]
      */
     private $templateResolvers;
     /**
@@ -67,7 +66,7 @@ final class InitCommand extends \RectorPrefix20210822\Symfony\Component\Console\
             $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
             $this->symfonyStyle->success('"rector.php" config file was added');
         }
-        return \RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+        return \RectorPrefix20210822\Symfony\Component\Console\Command\Command::SUCCESS;
     }
     private function resolveTemplateFilePathByType(string $templateType) : string
     {

@@ -23,7 +23,7 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3
      */
     private $currentFileProvider;
     /**
-     * @var mixed[]
+     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher[]
      */
     private $conditionMatchers = [];
     /**

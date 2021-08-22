@@ -6,11 +6,11 @@ namespace Rector\Doctrine\ValueObject;
 final class OptionalAndRequiredParamNames
 {
     /**
-     * @var mixed[]
+     * @var string[]
      */
     private $optionalParamNames;
     /**
-     * @var mixed[]
+     * @var string[]
      */
     private $requiredParamNames;
     /**

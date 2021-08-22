@@ -28,7 +28,6 @@ use RectorPrefix20210822\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20210822\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode;
 final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Console\Command\Command
 {
     /**
@@ -80,7 +79,7 @@ final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Conso
      */
     private $missedRectorDueVersionChecker;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Rector\RectorInterface[]
      */
     private $rectors;
     /**
@@ -185,13 +184,13 @@ final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Conso
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return \RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::ERROR;
+            return \RectorPrefix20210822\Symfony\Component\Console\Command\Command::FAILURE;
         }
         // inverse error code for CI dry-run
         if (!$configuration->isDryRun()) {
-            return \RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::SUCCESS;
+            return \RectorPrefix20210822\Symfony\Component\Console\Command\Command::SUCCESS;
         }
-        return $processResult->getFileDiffs() === [] ? \RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::SUCCESS : \RectorPrefix20210822\Symplify\PackageBuilder\Console\ShellCode::ERROR;
+        return $processResult->getFileDiffs() === [] ? \RectorPrefix20210822\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20210822\Symfony\Component\Console\Command\Command::FAILURE;
     }
     /**
      * @param File[] $files

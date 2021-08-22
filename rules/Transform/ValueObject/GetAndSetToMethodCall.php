@@ -7,7 +7,7 @@ use PHPStan\Type\ObjectType;
 final class GetAndSetToMethodCall
 {
     /**
-     * @var string
+     * @var class-string
      */
     private $classType;
     /**

@@ -11,7 +11,7 @@ final class DataProviderClassMethodRecipe
      */
     private $methodName;
     /**
-     * @var mixed[]
+     * @var \PhpParser\Node\Arg[]
      */
     private $args;
     /**
