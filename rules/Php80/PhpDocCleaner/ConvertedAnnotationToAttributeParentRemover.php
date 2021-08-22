@@ -57,7 +57,12 @@ final class ConvertedAnnotationToAttributeParentRemover
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
         array $annotationsToAttributes
     ): bool {
-        foreach ($doctrineAnnotationTagValueNode->getValues() as $nodeValue) {
+        $nodeValues = $doctrineAnnotationTagValueNode->getValues();
+        if ($nodeValues === []) {
+            return false;
+        }
+
+        foreach ($nodeValues as $nodeValue) {
             if (! $nodeValue instanceof CurlyListNode) {
                 return false;
             }
