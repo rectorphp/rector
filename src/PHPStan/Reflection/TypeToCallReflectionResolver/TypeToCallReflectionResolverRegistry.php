@@ -11,7 +11,7 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 final class TypeToCallReflectionResolverRegistry
 {
     /**
-     * @var \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface[]
+     * @var mixed[]
      */
     private $resolvers;
     /**

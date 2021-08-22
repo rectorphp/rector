@@ -28,7 +28,7 @@ final class PhpDocNodeMapper
      */
     private $cloningPhpDocNodeVisitor;
     /**
-     * @var \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface[]
+     * @var mixed[]
      */
     private $phpDocNodeVisitors;
     /**

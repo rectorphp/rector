@@ -23,7 +23,7 @@ final class StaticCallToFuncCallRector extends \Rector\Core\Rector\AbstractRecto
      */
     public const STATIC_CALLS_TO_FUNCTIONS = 'static_calls_to_functions';
     /**
-     * @var \Rector\Transform\ValueObject\StaticCallToFuncCall[]
+     * @var mixed[]
      */
     private $staticCallsToFunctions = [];
     /**

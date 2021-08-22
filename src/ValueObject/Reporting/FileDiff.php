@@ -21,7 +21,7 @@ final class FileDiff
      */
     private $diffConsoleFormatted;
     /**
-     * @var \Rector\ChangesReporting\ValueObject\RectorWithLineChange[]
+     * @var mixed[]
      */
     private $rectorWithLineChanges = [];
     /**

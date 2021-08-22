@@ -15,7 +15,7 @@ final class Skipper
      */
     private const FILE_ELEMENT = 'file_elements';
     /**
-     * @var \Symplify\Skipper\Contract\SkipVoterInterface[]
+     * @var mixed[]
      */
     private $skipVoters;
     /**

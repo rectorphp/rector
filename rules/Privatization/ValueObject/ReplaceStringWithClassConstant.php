@@ -19,7 +19,7 @@ final class ReplaceStringWithClassConstant
      */
     private $argPosition;
     /**
-     * @var class-string
+     * @var string
      */
     private $classWithConstants;
     /**

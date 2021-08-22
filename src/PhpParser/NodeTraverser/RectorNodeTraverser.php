@@ -17,7 +17,7 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
      */
     private $areNodeVisitorsPrepared = \false;
     /**
-     * @var \Rector\Core\Contract\Rector\PhpRectorInterface[]
+     * @var mixed[]
      */
     private $phpRectors;
     /**

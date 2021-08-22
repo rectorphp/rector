@@ -11,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Naming\NameRenamer;
 use Rector\CodingStyle\Node\DocAliasResolver;
 use Rector\CodingStyle\Node\UseManipulator;
@@ -54,17 +53,12 @@ final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\CodingStyle\Naming\NameRenamer
      */
     private $nameRenamer;
-    /**
-     * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
-     */
-    private $classNameImportSkipper;
-    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper)
+    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer)
     {
         $this->docAliasResolver = $docAliasResolver;
         $this->useManipulator = $useManipulator;
         $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->nameRenamer = $nameRenamer;
-        $this->classNameImportSkipper = $classNameImportSkipper;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -126,7 +120,7 @@ CODE_SAMPLE
                 $use->alias = null;
                 continue;
             }
-            $this->refactorAliasName($node, $aliasName, $lastName, $use);
+            $this->refactorAliasName($aliasName, $lastName, $use);
         }
         return $node;
     }
@@ -186,23 +180,18 @@ CODE_SAMPLE
             return $node->class->toString() === $name->toString();
         });
     }
-    private function refactorAliasName(\PhpParser\Node\Stmt\Use_ $use, string $aliasName, string $lastName, \PhpParser\Node\Stmt\UseUse $useUse) : void
+    private function refactorAliasName(string $aliasName, string $lastName, \PhpParser\Node\Stmt\UseUse $useUse) : void
     {
-        $parentUse = $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentUse instanceof \PhpParser\Node) {
-            return;
-        }
-        /** @var Use_[] $uses */
-        $uses = $this->betterNodeFinder->find($parentUse, function (\PhpParser\Node $node) use($use) : bool {
-            if ($node === $use) {
-                return \false;
-            }
-            return $node instanceof \PhpParser\Node\Stmt\Use_;
-        });
-        if ($this->classNameImportSkipper->isShortNameInUseStatement(new \PhpParser\Node\Name($lastName), $uses)) {
-            return;
-        }
+        // only alias name is used → use last name directly
         $lowerAliasName = \strtolower($aliasName);
+        if (!isset($this->resolvedNodeNames[$lowerAliasName])) {
+            return;
+        }
+        // keep to differentiate 2 aliases classes
+        $lowerLastName = \strtolower($lastName);
+        if (\count($this->useNamesAliasToName[$lowerLastName] ?? []) > 1) {
+            return;
+        }
         $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
         $useUse->alias = null;
     }

@@ -38,7 +38,7 @@ final class NodeNameResolver
      */
     private $callAnalyzer;
     /**
-     * @var \Rector\NodeNameResolver\Contract\NodeNameResolverInterface[]
+     * @var mixed[]
      */
     private $nodeNameResolvers = [];
     /**

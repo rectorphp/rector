@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface[]
+     * @var mixed[]
      */
     private $strStartWithMatchAndRefactors;
     /**

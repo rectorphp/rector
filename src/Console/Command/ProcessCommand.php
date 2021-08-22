@@ -79,7 +79,7 @@ final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Conso
      */
     private $missedRectorDueVersionChecker;
     /**
-     * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @var mixed[]
      */
     private $rectors;
     /**

@@ -6,11 +6,11 @@ namespace Rector\Order\ValueObject;
 final class SortedClassMethodsAndOriginalClassMethods
 {
     /**
-     * @var string[]
+     * @var mixed[]
      */
     private $sortedClassMethods;
     /**
-     * @var string[]
+     * @var mixed[]
      */
     private $originalClassMethods;
     /**

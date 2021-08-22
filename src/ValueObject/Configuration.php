@@ -27,11 +27,11 @@ final class Configuration
      */
     private $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
     /**
-     * @var string[]
+     * @var mixed[]
      */
     private $fileExtensions = ['php'];
     /**
-     * @var string[]
+     * @var mixed[]
      */
     private $paths = [];
     /**

@@ -10,7 +10,7 @@ use Rector\Nette\Contract\Rector\NeonRectorInterface;
 final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \Rector\Nette\Contract\Rector\NeonRectorInterface[]
+     * @var mixed[]
      */
     private $neonRectors;
     /**

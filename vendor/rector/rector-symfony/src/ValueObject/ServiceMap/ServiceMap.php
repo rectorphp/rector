@@ -9,7 +9,7 @@ use Rector\Symfony\ValueObject\ServiceDefinition;
 final class ServiceMap
 {
     /**
-     * @var \Rector\Symfony\ValueObject\ServiceDefinition[]
+     * @var mixed[]
      */
     private $services;
     /**
