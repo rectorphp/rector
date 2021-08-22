@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ShowCommand extends Command
 {
@@ -52,7 +51,7 @@ final class ShowCommand extends Command
 
         $this->reportLoadedRectors($outputFormat);
 
-        return ShellCode::SUCCESS;
+        return Command::SUCCESS;
     }
 
     private function reportLoadedRectors(string $outputFormat): void

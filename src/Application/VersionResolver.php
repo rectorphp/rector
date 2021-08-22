@@ -6,8 +6,8 @@ namespace Rector\Core\Application;
 
 use DateTime;
 use Rector\Core\Exception\VersionException;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
-use Symplify\PackageBuilder\Console\ShellCode;
 
 /**
  * Inspired by https://github.com/composer/composer/blob/master/src/Composer/Composer.php
@@ -28,7 +28,7 @@ final class VersionResolver
     public static function resolvePackageVersion(): string
     {
         $process = new Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);
-        if ($process->run() !== ShellCode::SUCCESS) {
+        if ($process->run() !== Command::SUCCESS) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
             );
@@ -41,7 +41,7 @@ final class VersionResolver
     public static function resolverReleaseDateTime(): DateTime
     {
         $process = new Process(['git', 'log', '-n1', '--pretty=%ci', 'HEAD'], __DIR__);
-        if ($process->run() !== ShellCode::SUCCESS) {
+        if ($process->run() !== Command::SUCCESS) {
             throw new VersionException(
                 'You must ensure to run compile from composer git repository clone and that git binary is available.'
             );

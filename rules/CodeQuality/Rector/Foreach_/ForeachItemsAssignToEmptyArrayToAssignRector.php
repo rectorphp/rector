@@ -115,21 +115,22 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var Scope $scope */
         $scope = $foreach->expr->getAttribute(AttributeKey::SCOPE);
 
         if (! $scope instanceof Scope) {
-            return false;
+            return true;
         }
 
         $type = $scope->getType($foreach->expr);
 
         if ($type instanceof ObjectType) {
-            return $type->isIterable()->yes();
+            return $type->isIterable()
+                ->yes();
         }
 
         if ($type instanceof ThisType) {
-            return $type->isIterable()->yes();
+            return $type->isIterable()
+                ->yes();
         }
 
         return false;

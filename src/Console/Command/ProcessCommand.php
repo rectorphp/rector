@@ -29,7 +29,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symplify\PackageBuilder\Console\ShellCode;
 
 final class ProcessCommand extends Command
 {
@@ -185,15 +184,15 @@ final class ProcessCommand extends Command
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return ShellCode::ERROR;
+            return Command::FAILURE;
         }
 
         // inverse error code for CI dry-run
         if (! $configuration->isDryRun()) {
-            return ShellCode::SUCCESS;
+            return Command::SUCCESS;
         }
 
-        return $processResult->getFileDiffs() === [] ? ShellCode::SUCCESS : ShellCode::ERROR;
+        return $processResult->getFileDiffs() === [] ? Command::SUCCESS : Command::FAILURE;
     }
 
     /**

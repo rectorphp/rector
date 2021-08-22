@@ -73,10 +73,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->returnType instanceof Name && $this->nodeNameResolver->isName(
-            $node->returnType,
-            'self'
-        )) {
+        if ($node->returnType instanceof Name && $this->nodeNameResolver->isName($node->returnType, 'self')) {
             return null;
         }
 

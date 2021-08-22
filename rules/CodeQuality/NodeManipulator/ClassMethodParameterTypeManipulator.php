@@ -101,8 +101,7 @@ final class ClassMethodParameterTypeManipulator
         Param $param,
         ClassMethod $classMethod,
         array $methodsReturningClassInstance
-    ): void
-    {
+    ): void {
         if ($classMethod->stmts === null) {
             return;
         }
@@ -126,8 +125,7 @@ final class ClassMethodParameterTypeManipulator
         Param $param,
         MethodCall $methodCall,
         array $methodsReturningClassInstance
-    ): void
-    {
+    ): void {
         $paramName = $this->nodeNameResolver->getName($param->var);
         if ($paramName === null) {
             return;
@@ -159,8 +157,7 @@ final class ClassMethodParameterTypeManipulator
         string $paramName,
         MethodCall $methodCall,
         array $methodsReturningClassInstance
-    ): bool
-    {
+    ): bool {
         if (! $this->nodeNameResolver->isName($methodCall->var, $paramName)) {
             return true;
         }

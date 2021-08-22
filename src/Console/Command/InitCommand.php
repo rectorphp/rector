@@ -14,7 +14,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\PackageBuilder\Console\ShellCode;
 use Symplify\SmartFileSystem\FileSystemGuard;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -63,7 +62,7 @@ final class InitCommand extends Command
             $this->symfonyStyle->success('"rector.php" config file was added');
         }
 
-        return ShellCode::SUCCESS;
+        return Command::SUCCESS;
     }
 
     private function resolveTemplateFilePathByType(string $templateType): string

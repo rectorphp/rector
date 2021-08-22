@@ -195,8 +195,7 @@ CODE_SAMPLE
     private function resolveParentReflectionMethod(
         ClassReflection $classReflection,
         string $methodName
-    ): ?ReflectionMethod
-    {
+    ): ?ReflectionMethod {
         if (! $classReflection->hasMethod($methodName)) {
             return null;
         }

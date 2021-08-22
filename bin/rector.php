@@ -10,7 +10,8 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\HttpKernel\RectorKernel;
-use Symplify\PackageBuilder\Console\ShellCode;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArgvInput;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 // @ intentionally: continue anyway
@@ -57,7 +58,7 @@ try {
     $container = $rectorContainerFactory->createFromBootstrapConfigs($bootstrapConfigs);
 } catch (Throwable $throwable) {
     // for json output
-    $argvInput = new \Symfony\Component\Console\Input\ArgvInput();
+    $argvInput = new ArgvInput();
     $outputFormat = $argvInput->getParameterOption('--' . Option::OUTPUT_FORMAT);
 
     // report fatal error in json format
@@ -72,7 +73,7 @@ try {
         $symfonyStyle->error($throwable->getMessage());
     }
 
-    exit(ShellCode::ERROR);
+    exit(Command::FAILURE);
 }
 
 /** @var ConsoleApplication $application */
