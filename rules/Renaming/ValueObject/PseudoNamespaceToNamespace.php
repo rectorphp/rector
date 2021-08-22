@@ -10,7 +10,7 @@ final class PseudoNamespaceToNamespace
      */
     private $namespacePrefix;
     /**
-     * @var mixed[]
+     * @var string[]
      */
     private $excludedClasses = [];
     /**

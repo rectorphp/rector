@@ -25,7 +25,7 @@ final class FileFormatter
      */
     private $parameterProvider;
     /**
-     * @var mixed[]
+     * @var \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface[]
      */
     private $fileFormatters = [];
     /**

@@ -22,7 +22,7 @@ final class DatabaseConnectionToDbalRector extends \Rector\Core\Rector\AbstractR
      */
     private $typo3NodeResolver;
     /**
-     * @var mixed[]
+     * @var \Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToDbalRefactoring[]
      */
     private $databaseConnectionRefactorings;
     /**

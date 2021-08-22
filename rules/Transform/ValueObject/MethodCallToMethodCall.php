@@ -6,7 +6,7 @@ namespace Rector\Transform\ValueObject;
 final class MethodCallToMethodCall
 {
     /**
-     * @var string
+     * @var class-string
      */
     private $oldType;
     /**
@@ -14,7 +14,7 @@ final class MethodCallToMethodCall
      */
     private $oldMethod;
     /**
-     * @var string
+     * @var class-string
      */
     private $newType;
     /**

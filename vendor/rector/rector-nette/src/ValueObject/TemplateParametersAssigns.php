@@ -8,11 +8,11 @@ use Rector\Nette\Contract\ValueObject\ParameterArrayInterface;
 final class TemplateParametersAssigns implements \Rector\Nette\Contract\ValueObject\ParameterArrayInterface
 {
     /**
-     * @var mixed[]
+     * @var \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign[]
      */
     private $templateParameterAssigns;
     /**
-     * @var mixed[]
+     * @var \Rector\Nette\ValueObject\ConditionalTemplateParameterAssign[]
      */
     private $conditionalTemplateParameterAssign;
     /**

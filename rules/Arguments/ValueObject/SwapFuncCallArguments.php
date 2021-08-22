@@ -10,7 +10,7 @@ final class SwapFuncCallArguments
      */
     private $function;
     /**
-     * @var mixed[]
+     * @var int[]
      */
     private $order;
     /**

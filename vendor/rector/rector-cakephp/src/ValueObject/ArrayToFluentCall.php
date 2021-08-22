@@ -10,7 +10,7 @@ final class ArrayToFluentCall
      */
     private $class;
     /**
-     * @var mixed[]
+     * @var array<string, string>
      */
     private $arrayKeysToFluentCalls;
     /**
