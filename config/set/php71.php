@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210821;
+namespace RectorPrefix20210822;
 
 use Rector\Php71\Rector\Assign\AssignArrayToStringRector;
 use Rector\Php71\Rector\BinaryOp\BinaryOpBetweenNumberAndStringRector;

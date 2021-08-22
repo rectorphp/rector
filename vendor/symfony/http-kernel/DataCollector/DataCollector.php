@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210821\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20210821\Symfony\Component\VarDumper\Caster\CutStub;
-use RectorPrefix20210821\Symfony\Component\VarDumper\Caster\ReflectionCaster;
-use RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\ClonerInterface;
-use RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\Data;
-use RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\Stub;
-use RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\VarCloner;
+use RectorPrefix20210822\Symfony\Component\VarDumper\Caster\CutStub;
+use RectorPrefix20210822\Symfony\Component\VarDumper\Caster\ReflectionCaster;
+use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\ClonerInterface;
+use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Stub;
+use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\VarCloner;
 /**
  * DataCollector.
  *
@@ -24,7 +24,7 @@ use RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\VarCloner;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bernhard Schussek <bschussek@symfony.com>
  */
-abstract class DataCollector implements \RectorPrefix20210821\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface
+abstract class DataCollector implements \RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface
 {
     /**
      * @var array|Data
@@ -46,11 +46,11 @@ abstract class DataCollector implements \RectorPrefix20210821\Symfony\Component\
      */
     protected function cloneVar($var)
     {
-        if ($var instanceof \RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\Data) {
+        if ($var instanceof \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data) {
             return $var;
         }
         if (null === $this->cloner) {
-            $this->cloner = new \RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\VarCloner();
+            $this->cloner = new \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\VarCloner();
             $this->cloner->setMaxItems(-1);
             $this->cloner->addCasters($this->getCasters());
         }
@@ -61,16 +61,16 @@ abstract class DataCollector implements \RectorPrefix20210821\Symfony\Component\
      */
     protected function getCasters()
     {
-        $casters = ['*' => function ($v, array $a, \RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\Stub $s, $isNested) {
-            if (!$v instanceof \RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\Stub) {
+        $casters = ['*' => function ($v, array $a, \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Stub $s, $isNested) {
+            if (!$v instanceof \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Stub) {
                 foreach ($a as $k => $v) {
-                    if (\is_object($v) && !$v instanceof \DateTimeInterface && !$v instanceof \RectorPrefix20210821\Symfony\Component\VarDumper\Cloner\Stub) {
-                        $a[$k] = new \RectorPrefix20210821\Symfony\Component\VarDumper\Caster\CutStub($v);
+                    if (\is_object($v) && !$v instanceof \DateTimeInterface && !$v instanceof \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Stub) {
+                        $a[$k] = new \RectorPrefix20210822\Symfony\Component\VarDumper\Caster\CutStub($v);
                     }
                 }
             }
             return $a;
-        }] + \RectorPrefix20210821\Symfony\Component\VarDumper\Caster\ReflectionCaster::UNSET_CLOSURE_FILE_INFO;
+        }] + \RectorPrefix20210822\Symfony\Component\VarDumper\Caster\ReflectionCaster::UNSET_CLOSURE_FILE_INFO;
         return $casters;
     }
     /**

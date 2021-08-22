@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20210821\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210821\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20210822\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210822\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class CheckRequirementsClassMethodFactory
 {
     /**
@@ -31,9 +31,9 @@ final class CheckRequirementsClassMethodFactory
      */
     public function create(array $getUserStmts) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210821\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::CHECK_REQUIREMENTS_METHOD_NAME);
+        $methodBuilder = new \RectorPrefix20210822\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::CHECK_REQUIREMENTS_METHOD_NAME);
         $methodBuilder->makePublic();
-        $paramBuilder = new \RectorPrefix20210821\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('element');
+        $paramBuilder = new \RectorPrefix20210822\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('element');
         $methodBuilder->addParam($paramBuilder);
         $methodBuilder->setReturnType('void');
         $parentStaticCall = $this->creatParentStaticCall();

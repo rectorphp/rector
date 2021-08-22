@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210821;
+namespace RectorPrefix20210822;
 
 use Rector\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector;
 use Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector;

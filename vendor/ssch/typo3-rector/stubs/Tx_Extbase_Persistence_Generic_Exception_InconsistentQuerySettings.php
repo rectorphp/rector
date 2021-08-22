@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210821;
+namespace RectorPrefix20210822;
 
 if (\class_exists('Tx_Extbase_Persistence_Generic_Exception_InconsistentQuerySettings')) {
     return;

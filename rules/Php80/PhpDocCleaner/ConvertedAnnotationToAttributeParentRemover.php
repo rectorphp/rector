@@ -8,7 +8,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
-use RectorPrefix20210821\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210822\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class ConvertedAnnotationToAttributeParentRemover
 {
     /**
@@ -17,7 +17,7 @@ final class ConvertedAnnotationToAttributeParentRemover
      */
     public function processPhpDocNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, array $annotationsToAttributes, array $skippedUnwrapAnnotations) : void
     {
-        $phpDocNodeTraverser = new \RectorPrefix20210821\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210822\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($annotationsToAttributes, $skippedUnwrapAnnotations) : ?int {
             if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
@@ -27,11 +27,11 @@ final class ConvertedAnnotationToAttributeParentRemover
             }
             $doctrineAnnotationTagValueNode = $node->value;
             if ($doctrineAnnotationTagValueNode->hasClassNames($skippedUnwrapAnnotations)) {
-                return \RectorPrefix20210821\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return \RectorPrefix20210822\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             // has only children of annotation to attribute? it will be removed
             if ($this->detect($node->value, $annotationsToAttributes)) {
-                return \RectorPrefix20210821\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                return \RectorPrefix20210822\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
             return null;
         });
@@ -41,7 +41,11 @@ final class ConvertedAnnotationToAttributeParentRemover
      */
     private function detect(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $annotationsToAttributes) : bool
     {
-        foreach ($doctrineAnnotationTagValueNode->getValues() as $nodeValue) {
+        $nodeValues = $doctrineAnnotationTagValueNode->getValues();
+        if ($nodeValues === []) {
+            return \false;
+        }
+        foreach ($nodeValues as $nodeValue) {
             if (!$nodeValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
                 return \false;
             }

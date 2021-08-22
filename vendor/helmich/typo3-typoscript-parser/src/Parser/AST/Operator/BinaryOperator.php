@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210821\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20210822\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20210821\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20210822\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Abstract base class for statements with binary operators.
