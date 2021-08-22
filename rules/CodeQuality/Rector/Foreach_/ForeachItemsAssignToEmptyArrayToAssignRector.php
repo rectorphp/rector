@@ -116,7 +116,6 @@ CODE_SAMPLE
         }
 
         $scope = $foreach->expr->getAttribute(AttributeKey::SCOPE);
-
         if (! $scope instanceof Scope) {
             return true;
         }
