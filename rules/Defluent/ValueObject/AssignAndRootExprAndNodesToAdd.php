@@ -12,7 +12,7 @@ final class AssignAndRootExprAndNodesToAdd
      */
     private $assignAndRootExpr;
     /**
-     * @var mixed[]
+     * @var \PhpParser\Node\Expr[]|\PhpParser\Node\Stmt\Return_[]
      */
     private $nodesToAdd;
     /**

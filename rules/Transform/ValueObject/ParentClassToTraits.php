@@ -11,7 +11,7 @@ final class ParentClassToTraits
      */
     private $parentType;
     /**
-     * @var mixed[]
+     * @var string[]
      */
     private $traitNames;
     /**

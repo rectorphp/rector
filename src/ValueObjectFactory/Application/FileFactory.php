@@ -22,7 +22,7 @@ final class FileFactory
      */
     private $changedFilesDetector;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
      */
     private $fileProcessors;
     /**

@@ -15,7 +15,7 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 final class PhpParserNodeMapper
 {
     /**
-     * @var mixed[]
+     * @var \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface[]
      */
     private $phpParserNodeMappers;
     /**

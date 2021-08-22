@@ -22,7 +22,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
      */
     private $composerJsonPrinter;
     /**
-     * @var mixed[]
+     * @var \Rector\Composer\Contract\Rector\ComposerRectorInterface[]
      */
     private $composerRectors;
     /**

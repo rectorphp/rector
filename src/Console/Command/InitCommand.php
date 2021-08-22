@@ -30,7 +30,7 @@ final class InitCommand extends \RectorPrefix20210822\Symfony\Component\Console\
      */
     private $symfonyStyle;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Template\TemplateResolverInterface[]
      */
     private $templateResolvers;
     /**

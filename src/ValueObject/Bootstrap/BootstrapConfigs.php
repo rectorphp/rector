@@ -11,7 +11,7 @@ final class BootstrapConfigs
      */
     private $mainConfigFileInfo;
     /**
-     * @var mixed[]
+     * @var \Symplify\SmartFileSystem\SmartFileInfo[]
      */
     private $setConfigFileInfos;
     /**

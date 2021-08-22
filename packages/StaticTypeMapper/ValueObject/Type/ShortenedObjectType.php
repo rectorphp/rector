@@ -9,7 +9,7 @@ use PHPStan\Type\Type;
 final class ShortenedObjectType extends \PHPStan\Type\ObjectType
 {
     /**
-     * @var string
+     * @var class-string
      */
     private $fullyQualifiedName;
     /**

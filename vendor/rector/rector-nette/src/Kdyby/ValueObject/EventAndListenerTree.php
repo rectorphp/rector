@@ -34,11 +34,11 @@ final class EventAndListenerTree
      */
     private $eventDispatcherDispatchMethodCall;
     /**
-     * @var mixed[]
+     * @var array<class-string, \PhpParser\Node\Stmt\ClassMethod[]>
      */
     private $listenerMethodsByEventSubscriberClass;
     /**
-     * @var mixed[]
+     * @var \Rector\Nette\Kdyby\ValueObject\GetterMethodBlueprint[]
      */
     private $getterMethodBlueprints;
     /**

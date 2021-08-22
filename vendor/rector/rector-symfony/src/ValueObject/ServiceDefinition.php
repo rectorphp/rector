@@ -27,7 +27,7 @@ final class ServiceDefinition
      */
     private $alias;
     /**
-     * @var mixed[]
+     * @var \Rector\Symfony\Contract\Tag\TagInterface[]
      */
     private $tags;
     /**

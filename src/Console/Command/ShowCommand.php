@@ -25,7 +25,7 @@ final class ShowCommand extends \RectorPrefix20210822\Symfony\Component\Console\
      */
     private $showOutputFormatterCollector;
     /**
-     * @var mixed[]
+     * @var \Rector\Core\Contract\Rector\RectorInterface[]
      */
     private $rectors;
     /**

@@ -19,6 +19,9 @@ final class VariableWithType
      * @var \PHPStan\Type\Type
      */
     private $type;
+    /**
+     * @var \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
+     */
     private $phpParserTypeNode;
     /**
      * @param Identifier|Name|NullableType|UnionType|null $phpParserTypeNode

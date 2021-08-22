@@ -10,7 +10,7 @@ use Rector\Nette\Contract\Rector\LatteRectorInterface;
 final class LatteFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var mixed[]
+     * @var \Rector\Nette\Contract\Rector\LatteRectorInterface[]
      */
     private $latteRectors;
     /**
