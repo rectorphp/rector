@@ -22,8 +22,8 @@ use RectorPrefix20210822\Symfony\Component\HttpKernel\HttpKernelInterface;
 class SubRequestHandler
 {
     /**
-     * @param \Symfony\Component\HttpKernel\HttpKernelInterface $kernel
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpKernelInterface $kernel
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param int $type
      * @param bool $catch
      */

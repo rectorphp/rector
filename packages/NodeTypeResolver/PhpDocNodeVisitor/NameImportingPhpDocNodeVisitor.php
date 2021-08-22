@@ -32,7 +32,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210822\Symplif
      */
     private $staticTypeMapper;
     /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**

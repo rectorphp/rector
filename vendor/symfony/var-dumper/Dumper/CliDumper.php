@@ -92,7 +92,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      * @param string $type
      */
     public function dumpScalar($cursor, $type, $value)
@@ -143,7 +143,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      * @param string $str
      * @param bool $bin
      * @param int $cut
@@ -226,7 +226,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      * @param int $type
      * @param bool $hasChild
      */
@@ -263,7 +263,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      * @param int $type
      * @param bool $hasChild
      * @param int $cut
@@ -281,7 +281,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
      *
      * @param bool $hasChild When the dump of the hash has child item
      * @param int  $cut      The number of items the hash has been cut by
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      */
     protected function dumpEllipsis($cursor, $hasChild, $cut)
     {
@@ -297,7 +297,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
     }
     /**
      * Dumps a key in a hash structure.
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      */
     protected function dumpKey($cursor)
     {
@@ -495,7 +495,7 @@ class CliDumper extends \RectorPrefix20210822\Symfony\Component\VarDumper\Dumper
         parent::dumpLine($depth);
     }
     /**
-     * @param \Symfony\Component\VarDumper\Cloner\Cursor $cursor
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Cursor $cursor
      */
     protected function endValue($cursor)
     {

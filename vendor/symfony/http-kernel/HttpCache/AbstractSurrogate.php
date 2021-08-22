@@ -42,7 +42,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function hasSurrogateCapability($request)
     {
@@ -53,7 +53,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function addSurrogateCapability($request)
     {
@@ -63,7 +63,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function needsParsing($response)
     {
@@ -75,7 +75,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
      * @param string $uri
      * @param string $alt
      * @param bool $ignoreErrors
@@ -101,7 +101,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * Remove the Surrogate from the Surrogate-Control header.
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     protected function removeFromControl($response)
     {

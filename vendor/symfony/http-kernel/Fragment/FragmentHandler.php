@@ -44,7 +44,7 @@ class FragmentHandler
     }
     /**
      * Adds a renderer.
-     * @param \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface $renderer
      */
     public function addRenderer($renderer)
     {
@@ -88,7 +88,7 @@ class FragmentHandler
      * @return string|null The Response content or null when the Response is streamed
      *
      * @throws \RuntimeException when the Response is not successful
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     protected function deliver($response)
     {

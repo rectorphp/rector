@@ -64,7 +64,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @param \PhpParser\Node\Param $param
+     * @param \RectorPrefix20210822\PhpParser\Node\Param $param
      */
     public function inferParam($param) : \PHPStan\Type\Type
     {

@@ -70,7 +70,7 @@ final class PropertyFetchAnalyzer
         });
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
     public function isPropertyToSelf($expr) : bool
     {

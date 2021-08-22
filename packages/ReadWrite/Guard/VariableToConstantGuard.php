@@ -25,11 +25,11 @@ final class VariableToConstantGuard
      */
     private $nodeNameResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)

@@ -8,11 +8,11 @@ use PHPStan\Type\Type;
 final class ParamAndArg
 {
     /**
-     * @var \PhpParser\Node\Expr\Variable
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
-     * @var \PHPStan\Type\Type|null
+     * @var \RectorPrefix20210822\PHPStan\Type\Type|null
      */
     private $type;
     public function __construct(\PhpParser\Node\Expr\Variable $variable, ?\PHPStan\Type\Type $type)

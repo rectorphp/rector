@@ -33,7 +33,7 @@ final class LocalPropertyAnalyzer
      */
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\\Support\\Collection';
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**

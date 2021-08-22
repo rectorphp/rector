@@ -10,7 +10,7 @@ use RectorPrefix20210822\Symplify\Astral\Contract\NodeNameResolverInterface;
 final class IdentifierNodeNameResolver implements \RectorPrefix20210822\Symplify\Astral\Contract\NodeNameResolverInterface
 {
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function match($node) : bool
     {

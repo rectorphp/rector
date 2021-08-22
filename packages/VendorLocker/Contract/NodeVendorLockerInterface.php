@@ -7,7 +7,7 @@ use PhpParser\Node;
 interface NodeVendorLockerInterface
 {
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function resolve($node) : bool;
 }

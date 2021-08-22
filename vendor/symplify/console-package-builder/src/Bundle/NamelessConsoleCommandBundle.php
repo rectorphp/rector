@@ -9,7 +9,7 @@ use RectorPrefix20210822\Symplify\ConsolePackageBuilder\DependencyInjection\Comp
 final class NamelessConsoleCommandBundle extends \RectorPrefix20210822\Symfony\Component\HttpKernel\Bundle\Bundle
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     public function build($containerBuilder) : void
     {

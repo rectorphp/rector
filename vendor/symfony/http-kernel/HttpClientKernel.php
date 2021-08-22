@@ -37,7 +37,7 @@ final class HttpClientKernel implements \RectorPrefix20210822\Symfony\Component\
         $this->client = $client ?? \RectorPrefix20210822\Symfony\Component\HttpClient\HttpClient::create();
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param int $type
      * @param bool $catch
      */

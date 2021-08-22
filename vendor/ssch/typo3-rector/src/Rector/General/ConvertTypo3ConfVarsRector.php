@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConvertTypo3ConfVarsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Ssch\TYPO3Rector\Helper\FilesFinder
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
     public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder)

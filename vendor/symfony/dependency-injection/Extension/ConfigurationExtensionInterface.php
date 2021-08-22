@@ -24,7 +24,7 @@ interface ConfigurationExtensionInterface
      *
      * @return ConfigurationInterface|null The configuration or null
      * @param mixed[] $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function getConfiguration($config, $container);
 }

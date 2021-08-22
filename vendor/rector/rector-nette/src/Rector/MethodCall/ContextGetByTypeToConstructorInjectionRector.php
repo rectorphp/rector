@@ -35,7 +35,7 @@ final class ContextGetByTypeToConstructorInjectionRector extends \Rector\Core\Re
 class SomeClass
 {
     /**
-     * @var \Nette\DI\Container
+     * @var \RectorPrefix20210822\Nette\DI\Container
      */
     private $context;
 
@@ -49,7 +49,7 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @var \Nette\DI\Container
+     * @var \RectorPrefix20210822\Nette\DI\Container
      */
     private $context;
 

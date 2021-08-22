@@ -286,7 +286,7 @@ class Response
      * the Request that is "associated" with this Response.
      *
      * @return $this
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function prepare($request)
     {
@@ -638,7 +638,7 @@ class Response
      * @return object
      *
      * @final
-     * @param \DateTimeInterface $date
+     * @param \RectorPrefix20210822\DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -696,7 +696,7 @@ class Response
      * @return object
      *
      * @final
-     * @param \DateTimeInterface|null $date
+     * @param \RectorPrefix20210822\DateTimeInterface|null $date
      */
     public function setExpires($date = null)
     {
@@ -828,7 +828,7 @@ class Response
      * @return object
      *
      * @final
-     * @param \DateTimeInterface|null $date
+     * @param \RectorPrefix20210822\DateTimeInterface|null $date
      */
     public function setLastModified($date = null)
     {
@@ -1000,7 +1000,7 @@ class Response
      * @return bool true if the Response validators match the Request, false otherwise
      *
      * @final
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function isNotModified($request) : bool
     {
@@ -1166,7 +1166,7 @@ class Response
      * @see http://support.microsoft.com/kb/323308
      *
      * @final
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function ensureIEOverSSLCompatibility($request) : void
     {

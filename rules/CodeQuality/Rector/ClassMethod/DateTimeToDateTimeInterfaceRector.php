@@ -80,7 +80,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass {
     /**
-     * @param \DateTime|\DateTimeImmutable $dateTime
+     * @param \RectorPrefix20210822\DateTime|\DateTimeImmutable $dateTime
      */
     public function methodWithDateTime(\DateTimeInterface $dateTime)
     {

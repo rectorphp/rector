@@ -11,11 +11,11 @@ use PHPStan\Type\Type;
 final class PropertyType
 {
     /**
-     * @var \PHPStan\Type\Type
+     * @var \RectorPrefix20210822\PHPStan\Type\Type
      */
     private $varType;
     /**
-     * @var \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null
      */
     private $propertyTypeNode;
     /**

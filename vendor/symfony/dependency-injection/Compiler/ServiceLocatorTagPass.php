@@ -78,7 +78,7 @@ final class ServiceLocatorTagPass extends \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * @param Reference[] $refMap
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string|null $callerId
      */
     public static function register($container, $refMap, $callerId = null) : \RectorPrefix20210822\Symfony\Component\DependencyInjection\Reference

@@ -63,7 +63,7 @@ use Doctrine\ORM\EntityManagerInterface;
 final class PostRepository
 {
     /**
-     * @var \Doctrine\ORM\EntityRepository<Post>
+     * @var \RectorPrefix20210822\Doctrine\ORM\EntityRepository<Post>
      */
     private EntityRepository $repository;
 

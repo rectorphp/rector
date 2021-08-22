@@ -29,7 +29,7 @@ class MarkdownDescriptor extends \RectorPrefix20210822\Symfony\Component\Console
     /**
      * {@inheritdoc}
      * @param object $object
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      * @param mixed[] $options
      */
     public function describe($output, $object, $options = [])
@@ -50,7 +50,7 @@ class MarkdownDescriptor extends \RectorPrefix20210822\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputArgument $argument
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputArgument $argument
      * @param mixed[] $options
      */
     protected function describeInputArgument($argument, $options = [])
@@ -59,7 +59,7 @@ class MarkdownDescriptor extends \RectorPrefix20210822\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputOption $option
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputOption $option
      * @param mixed[] $options
      */
     protected function describeInputOption($option, $options = [])
@@ -75,7 +75,7 @@ class MarkdownDescriptor extends \RectorPrefix20210822\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
      * @param mixed[] $options
      */
     protected function describeInputDefinition($definition, $options = [])
@@ -104,7 +104,7 @@ class MarkdownDescriptor extends \RectorPrefix20210822\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Command\Command $command
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
      * @param mixed[] $options
      */
     protected function describeCommand($command, $options = [])
@@ -131,7 +131,7 @@ class MarkdownDescriptor extends \RectorPrefix20210822\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Application $application
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Application $application
      * @param mixed[] $options
      */
     protected function describeApplication($application, $options = [])

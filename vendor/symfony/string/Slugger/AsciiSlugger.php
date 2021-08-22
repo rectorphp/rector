@@ -27,7 +27,7 @@ class AsciiSlugger implements \RectorPrefix20210822\Symfony\Component\String\Slu
     /**
      * Cache of transliterators per locale.
      *
-     * @var \Transliterator[]
+     * @var \RectorPrefix20210822\Transliterator[]
      */
     private $transliterators = [];
     /**

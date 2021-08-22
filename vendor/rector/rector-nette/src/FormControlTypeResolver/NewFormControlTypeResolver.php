@@ -38,7 +38,7 @@ final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormCon
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function resolve($node) : array
     {

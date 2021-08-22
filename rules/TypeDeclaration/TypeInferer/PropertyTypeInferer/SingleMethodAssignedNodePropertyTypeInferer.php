@@ -29,7 +29,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements \Rector\TypeD
      */
     private $nodeTypeResolver;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
@@ -44,7 +44,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements \Rector\TypeD
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property $property
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property $property
      */
     public function inferProperty($property) : ?\PHPStan\Type\Type
     {

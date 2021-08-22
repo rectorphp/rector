@@ -31,7 +31,7 @@ final class CakePHPFullyQualifiedClassNameResolver
      */
     private $implicitNameResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\CakePHP\ImplicitNameResolver $implicitNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

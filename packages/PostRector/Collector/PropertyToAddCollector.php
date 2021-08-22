@@ -48,7 +48,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
         return $this->constantsByClass !== [];
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $class
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_ $class
      * @param \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata
      */
     public function addPropertyToClass($class, $propertyMetadata) : void
@@ -58,8 +58,8 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_ $class
-     * @param \PhpParser\Node\Stmt\ClassConst $classConst
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_ $class
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassConst $classConst
      */
     public function addConstantToClass($class, $classConst) : void
     {
@@ -69,8 +69,8 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @param string $propertyName
-     * @param \PHPStan\Type\Type|null $propertyType
-     * @param \PhpParser\Node\Stmt\Class_ $class
+     * @param \RectorPrefix20210822\PHPStan\Type\Type|null $propertyType
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_ $class
      */
     public function addPropertyWithoutConstructorToClass($propertyName, $propertyType, $class) : void
     {
@@ -79,7 +79,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @return ClassConst[]
-     * @param \PhpParser\Node\Stmt\Class_ $class
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_ $class
      */
     public function getConstantsByClass($class) : array
     {
@@ -88,7 +88,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @return PropertyMetadata[]
-     * @param \PhpParser\Node\Stmt\Class_ $class
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_ $class
      */
     public function getPropertiesByClass($class) : array
     {
@@ -97,7 +97,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @return array<string, Type>
-     * @param \PhpParser\Node\Stmt\Class_ $class
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_ $class
      */
     public function getPropertiesWithoutConstructorByClass($class) : array
     {

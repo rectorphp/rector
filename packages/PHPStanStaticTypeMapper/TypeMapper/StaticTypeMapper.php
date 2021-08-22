@@ -37,7 +37,7 @@ final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
         return \PHPStan\Type\StaticType::class;
     }
     /**
-     * @param \PHPStan\Type\Type $type
+     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
@@ -45,7 +45,7 @@ final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
         return new \PHPStan\PhpDocParser\Ast\Type\ThisTypeNode();
     }
     /**
-     * @param \PHPStan\Type\Type $type
+     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node

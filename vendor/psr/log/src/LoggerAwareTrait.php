@@ -16,7 +16,7 @@ trait LoggerAwareTrait
     /**
      * Sets a logger.
      *
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \RectorPrefix20210822\Psr\Log\LoggerInterface $logger
      */
     public function setLogger($logger)
     {

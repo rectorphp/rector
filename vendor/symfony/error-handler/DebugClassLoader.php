@@ -247,7 +247,7 @@ class DebugClassLoader
         }
     }
     /**
-     * @param \ReflectionClass $refl
+     * @param \RectorPrefix20210822\ReflectionClass $refl
      * @param string $class
      */
     public function checkAnnotations($refl, $class) : array
@@ -479,7 +479,7 @@ class DebugClassLoader
         return $deprecations;
     }
     /**
-     * @param \ReflectionClass $refl
+     * @param \RectorPrefix20210822\ReflectionClass $refl
      * @param string $file
      * @param string $class
      */

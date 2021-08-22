@@ -164,7 +164,7 @@ CODE_SAMPLE
         return $this->processNullSafeOperatorNotIdentical($nextNode, $nullSafe);
     }
     /**
-     * @param \PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\NullsafePropertyFetch $nullSafe
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\NullsafePropertyFetch $nullSafe
      * @return \PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\NullsafePropertyFetch|\PhpParser\Node\Expr\BinaryOp\Coalesce|null
      */
     private function verifyDefaultValueInElse(\PhpParser\Node\Stmt\If_ $if, $nullSafe, \PhpParser\Node\Expr\Assign $assign)
@@ -352,7 +352,7 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Identical $check
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Identical $check
      */
     private function hasNullComparison($check) : bool
     {

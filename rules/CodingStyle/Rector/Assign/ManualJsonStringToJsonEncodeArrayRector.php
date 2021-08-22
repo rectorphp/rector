@@ -62,7 +62,7 @@ final class ManualJsonStringToJsonEncodeArrayRector extends \Rector\Core\Rector\
      */
     private $jsonArrayFactory;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\CodingStyle\Node\ConcatJoiner $concatJoiner, \Rector\CodingStyle\Node\ConcatManipulator $concatManipulator, \Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory, \Rector\CodingStyle\NodeFactory\JsonArrayFactory $jsonArrayFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -205,7 +205,7 @@ CODE_SAMPLE
         return $this->createJsonEncodeAssign($assign->var, $jsonArray);
     }
     /**
-     * @param \PhpParser\Node\Expr\Assign|ConcatAssign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node $currentNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Assign|ConcatAssign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node $currentNode
      */
     private function matchNextExprAssignConcatToSameVariable(\PhpParser\Node\Expr $expr, $currentNode) : ?\Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem
     {

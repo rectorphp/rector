@@ -14,11 +14,11 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard;
 final class AdditionalAutoloader
 {
     /**
-     * @var \Symplify\SmartFileSystem\FileSystemGuard
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
     /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**

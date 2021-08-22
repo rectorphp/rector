@@ -23,7 +23,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class PHPStanServicesFactory
 {
     /**
-     * @var \PHPStan\DependencyInjection\Container
+     * @var \RectorPrefix20210822\PHPStan\DependencyInjection\Container
      */
     private $container;
     public function __construct(\RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)

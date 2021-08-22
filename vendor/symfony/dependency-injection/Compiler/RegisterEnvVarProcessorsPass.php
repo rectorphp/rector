@@ -25,7 +25,7 @@ class RegisterEnvVarProcessorsPass implements \RectorPrefix20210822\Symfony\Comp
 {
     private const ALLOWED_TYPES = ['array', 'bool', 'float', 'int', 'string'];
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

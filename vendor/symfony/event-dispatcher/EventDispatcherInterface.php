@@ -34,7 +34,7 @@ interface EventDispatcherInterface extends \RectorPrefix20210822\Symfony\Contrac
      *
      * The subscriber is asked for all the events it is
      * interested in and added as a listener for these events.
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function addSubscriber($subscriber);
     /**
@@ -44,7 +44,7 @@ interface EventDispatcherInterface extends \RectorPrefix20210822\Symfony\Contrac
      */
     public function removeListener($eventName, $listener);
     /**
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function removeSubscriber($subscriber);
     /**

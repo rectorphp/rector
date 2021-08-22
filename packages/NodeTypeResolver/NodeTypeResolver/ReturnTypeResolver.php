@@ -31,7 +31,7 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

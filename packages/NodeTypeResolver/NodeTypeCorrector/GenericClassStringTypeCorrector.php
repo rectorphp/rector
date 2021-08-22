@@ -12,7 +12,7 @@ use PHPStan\Type\TypeTraverser;
 final class GenericClassStringTypeCorrector
 {
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

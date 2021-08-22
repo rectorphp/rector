@@ -14,19 +14,19 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractSymplifyCommand extends \RectorPrefix20210822\Symfony\Component\Console\Command\Command
 {
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
      */
     protected $symfonyStyle;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     protected $smartFileSystem;
     /**
-     * @var \Symplify\SmartFileSystem\Finder\SmartFinder
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Finder\SmartFinder
      */
     protected $smartFinder;
     /**
-     * @var \Symplify\SmartFileSystem\FileSystemGuard
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard
      */
     protected $fileSystemGuard;
     public function __construct()

@@ -95,7 +95,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
     }
     /**
      * @return Expr[]
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function getNonVariableArguments($call) : array
     {

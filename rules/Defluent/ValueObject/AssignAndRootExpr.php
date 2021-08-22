@@ -13,7 +13,7 @@ use Rector\Defluent\Contract\ValueObject\RootExprAwareInterface;
 final class AssignAndRootExpr extends \Rector\Defluent\ValueObject\AbstractRootExpr implements \Rector\Defluent\Contract\ValueObject\RootExprAwareInterface, \Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface
 {
     /**
-     * @var \PhpParser\Node\Expr\Variable|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Variable|null
      */
     private $silentVariable;
     public function __construct(\PhpParser\Node\Expr $assignExpr, \PhpParser\Node\Expr $rootExpr, ?\PhpParser\Node\Expr\Variable $silentVariable = null, bool $isFirstCallFactory = \false)

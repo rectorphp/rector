@@ -9,7 +9,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 trait MultipleFilesChangedTrait
 {
     /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
      * @param bool $allowMatches
      */
     protected function doTestFileInfoWithAdditionalChanges($fixtureFileInfo, $allowMatches = \true) : void

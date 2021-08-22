@@ -9,11 +9,11 @@ use PhpParser\ParserFactory;
 final class NikicPhpParserFactory
 {
     /**
-     * @var \PhpParser\Lexer
+     * @var \RectorPrefix20210822\PhpParser\Lexer
      */
     private $lexer;
     /**
-     * @var \PhpParser\ParserFactory
+     * @var \RectorPrefix20210822\PhpParser\ParserFactory
      */
     private $parserFactory;
     public function __construct(\PhpParser\Lexer $lexer, \PhpParser\ParserFactory $parserFactory)

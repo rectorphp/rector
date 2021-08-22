@@ -44,7 +44,7 @@ class ArrayNodeDefinition extends \RectorPrefix20210822\Symfony\Component\Config
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $builder
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder
      */
     public function setBuilder($builder)
     {
@@ -303,7 +303,7 @@ class ArrayNodeDefinition extends \RectorPrefix20210822\Symfony\Component\Config
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Config\Definition\Builder\NodeDefinition $node
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\Builder\NodeDefinition $node
      */
     public function append($node)
     {
@@ -387,7 +387,7 @@ class ArrayNodeDefinition extends \RectorPrefix20210822\Symfony\Component\Config
      * Validate the configuration of a concrete node.
      *
      * @throws InvalidDefinitionException
-     * @param \Symfony\Component\Config\Definition\ArrayNode $node
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\ArrayNode $node
      */
     protected function validateConcreteNode($node)
     {
@@ -412,7 +412,7 @@ class ArrayNodeDefinition extends \RectorPrefix20210822\Symfony\Component\Config
      * Validate the configuration of a prototype node.
      *
      * @throws InvalidDefinitionException
-     * @param \Symfony\Component\Config\Definition\PrototypedArrayNode $node
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\PrototypedArrayNode $node
      */
     protected function validatePrototypeNode($node)
     {

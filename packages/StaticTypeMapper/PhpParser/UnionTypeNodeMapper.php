@@ -39,7 +39,7 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
         return \PhpParser\Node\UnionType::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {

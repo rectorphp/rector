@@ -18,7 +18,7 @@ class Context
     /**
      * @return void
      * @param string $name
-     * @param \TYPO3\CMS\Core\Context\AspectInterface $aspect
+     * @param \RectorPrefix20210822\TYPO3\CMS\Core\Context\AspectInterface $aspect
      */
     public function setAspect($name, $aspect)
     {

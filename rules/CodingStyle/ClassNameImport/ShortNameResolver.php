@@ -42,7 +42,7 @@ final class ShortNameResolver
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
@@ -50,11 +50,11 @@ final class ShortNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \PhpParser\NodeFinder
+     * @var \RectorPrefix20210822\PhpParser\NodeFinder
      */
     private $nodeFinder;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

@@ -143,7 +143,7 @@ class XmlUtils
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DOMElement $element     A \DOMElement instance
+     * @param \RectorPrefix20210822\DOMElement $element     A \DOMElement instance
      * @param bool        $checkPrefix Check prefix in an element or an attribute name
      *
      * @return mixed

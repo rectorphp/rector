@@ -54,7 +54,7 @@ final class PropertyNaming
      */
     private $nodeTypeResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\Naming\RectorNamingInflector $rectorNamingInflector, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -109,7 +109,7 @@ final class PropertyNaming
         return new \Rector\Naming\ValueObject\ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
     /**
-     * @param \PHPStan\Type\ObjectType|string $objectType
+     * @param \RectorPrefix20210822\PHPStan\Type\ObjectType|string $objectType
      */
     public function fqnToVariableName($objectType) : string
     {
@@ -173,7 +173,7 @@ final class PropertyNaming
         return \lcfirst($shortClassName);
     }
     /**
-     * @param \PHPStan\Type\ObjectType|string $objectType
+     * @param \RectorPrefix20210822\PHPStan\Type\ObjectType|string $objectType
      */
     private function resolveClassName($objectType) : string
     {

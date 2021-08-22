@@ -25,7 +25,7 @@ use RectorPrefix20210822\Symfony\Component\Console\Input\InputOption;
 class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Descriptor\Descriptor
 {
     /**
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
      */
     public function getInputDefinitionDocument($definition) : \DOMDocument
     {
@@ -42,7 +42,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
         return $dom;
     }
     /**
-     * @param \Symfony\Component\Console\Command\Command $command
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
      * @param bool $short
      */
     public function getCommandDocument($command, $short = \false) : \DOMDocument
@@ -72,7 +72,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
         return $dom;
     }
     /**
-     * @param \Symfony\Component\Console\Application $application
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Application $application
      * @param string|null $namespace
      * @param bool $short
      */
@@ -109,7 +109,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputArgument $argument
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputArgument $argument
      * @param mixed[] $options
      */
     protected function describeInputArgument($argument, $options = [])
@@ -118,7 +118,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputOption $option
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputOption $option
      * @param mixed[] $options
      */
     protected function describeInputOption($option, $options = [])
@@ -127,7 +127,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
      * @param mixed[] $options
      */
     protected function describeInputDefinition($definition, $options = [])
@@ -136,7 +136,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Command\Command $command
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
      * @param mixed[] $options
      */
     protected function describeCommand($command, $options = [])
@@ -145,7 +145,7 @@ class XmlDescriptor extends \RectorPrefix20210822\Symfony\Component\Console\Desc
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Application $application
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Application $application
      * @param mixed[] $options
      */
     protected function describeApplication($application, $options = [])

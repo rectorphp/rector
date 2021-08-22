@@ -131,7 +131,7 @@ class ClassExistenceResource implements \RectorPrefix20210822\Symfony\Component\
      *
      * @internal
      * @param string $class
-     * @param \Exception|null $previous
+     * @param \RectorPrefix20210822\Exception|null $previous
      */
     public static function throwOnRequiredClass($class, $previous = null)
     {

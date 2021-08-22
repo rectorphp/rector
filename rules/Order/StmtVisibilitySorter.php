@@ -27,7 +27,7 @@ final class StmtVisibilitySorter
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
     public function sortProperties($classLike) : array
     {
@@ -60,7 +60,7 @@ final class StmtVisibilitySorter
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
     public function sortConstants($classLike) : array
     {
@@ -76,7 +76,7 @@ final class StmtVisibilitySorter
         return $this->sortByRanksAndGetNames($classConstsRankeables);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $stmt
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $stmt
      */
     private function getVisibilityLevelOrder($stmt) : int
     {

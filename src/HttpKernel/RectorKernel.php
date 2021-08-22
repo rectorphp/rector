@@ -36,7 +36,7 @@ final class RectorKernel extends \RectorPrefix20210822\Symfony\Component\HttpKer
      */
     private $configureCallValuesCollector;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo[]
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo[]
      */
     private $configFileInfos;
     /**
@@ -63,7 +63,7 @@ final class RectorKernel extends \RectorPrefix20210822\Symfony\Component\HttpKer
         return \sys_get_temp_dir() . '/rector/log';
     }
     /**
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Loader\LoaderInterface $loader
      */
     public function registerContainerConfiguration($loader) : void
     {
@@ -80,7 +80,7 @@ final class RectorKernel extends \RectorPrefix20210822\Symfony\Component\HttpKer
         return [new \RectorPrefix20210822\Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle(), new \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle(), new \RectorPrefix20210822\Symplify\Skipper\Bundle\SkipperBundle(), new \RectorPrefix20210822\Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle()];
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     protected function build($containerBuilder) : void
     {

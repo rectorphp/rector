@@ -29,7 +29,7 @@ final class ArrayThisCallToThisMethodCallRector extends \Rector\Core\Rector\Abst
      */
     private $arrayCallableMethodMatcher;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher $arrayCallableMethodMatcher, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

@@ -8,7 +8,7 @@ use RectorPrefix20210822\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKern
 final class AstralKernel extends \RectorPrefix20210822\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
     /**
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Loader\LoaderInterface $loader
      */
     public function registerContainerConfiguration($loader) : void
     {

@@ -123,7 +123,7 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
         $this->setAlias(\RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface::class, new \RectorPrefix20210822\Symfony\Component\DependencyInjection\Alias('service_container', \false))->setDeprecated('symfony/dependency-injection', '5.1', $deprecationMessage);
     }
     /**
-     * @var \ReflectionClass[] a list of class reflectors
+     * @var \RectorPrefix20210822\ReflectionClass[] a list of class reflectors
      */
     private $classReflectors;
     /**
@@ -148,14 +148,14 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
     }
     /**
      * Sets the instantiator to be used when fetching proxies.
-     * @param \Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface $proxyInstantiator
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\LazyProxy\Instantiator\InstantiatorInterface $proxyInstantiator
      */
     public function setProxyInstantiator($proxyInstantiator)
     {
         $this->proxyInstantiator = $proxyInstantiator;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\Extension\ExtensionInterface $extension
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Extension\ExtensionInterface $extension
      */
     public function registerExtension($extension)
     {
@@ -212,7 +212,7 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
     }
     /**
      * @return $this
-     * @param \Symfony\Component\Config\Resource\ResourceInterface $resource
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Resource\ResourceInterface $resource
      */
     public function addResource($resource)
     {
@@ -383,7 +383,7 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
      * @param int    $priority Used to sort the passes
      *
      * @return $this
-     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
      */
     public function addCompilerPass($pass, $type = \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, $priority = 0)
     {
@@ -830,7 +830,7 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
      *
      * @throws BadMethodCallException When this ContainerBuilder is compiled
      * @param string $id
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition $definition
      */
     public function setDefinition($id, $definition)
     {
@@ -1123,7 +1123,7 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
         return \array_values(\array_diff($this->findTags(), $this->usedTags));
     }
     /**
-     * @param \Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface $provider
+     * @param \RectorPrefix20210822\Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface $provider
      */
     public function addExpressionLanguageProvider($provider)
     {
@@ -1275,7 +1275,7 @@ class ContainerBuilder extends \RectorPrefix20210822\Symfony\Component\Dependenc
     }
     /**
      * @final
-     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
      * @param string $message
      */
     public function log($pass, $message)

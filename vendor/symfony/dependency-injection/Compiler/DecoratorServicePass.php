@@ -34,7 +34,7 @@ class DecoratorServicePass extends \RectorPrefix20210822\Symfony\Component\Depen
         $this->innerId = $innerId;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

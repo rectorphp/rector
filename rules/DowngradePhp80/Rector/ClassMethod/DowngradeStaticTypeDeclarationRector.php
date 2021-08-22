@@ -24,7 +24,7 @@ final class DowngradeStaticTypeDeclarationRector extends \Rector\Core\Rector\Abs
      */
     private $phpDocFromTypeDeclarationDecorator;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

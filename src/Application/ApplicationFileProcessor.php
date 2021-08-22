@@ -14,7 +14,7 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
@@ -30,7 +30,7 @@ final class ApplicationFileProcessor
      */
     private $removedAndAddedFilesProcessor;
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**

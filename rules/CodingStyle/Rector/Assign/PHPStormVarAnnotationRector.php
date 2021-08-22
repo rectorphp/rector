@@ -39,10 +39,10 @@ final class PHPStormVarAnnotationRector extends \Rector\Core\Rector\AbstractRect
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change various @var annotation formats to one PHPStorm understands', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $config = 5;
-/** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
+/** @var \RectorPrefix20210822\Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-/** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
+/** @var \RectorPrefix20210822\Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 $config = 5;
 CODE_SAMPLE
 )]);

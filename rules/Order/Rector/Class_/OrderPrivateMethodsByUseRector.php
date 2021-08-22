@@ -103,7 +103,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
     private function getSortedAndOriginalClassMethods($classLike) : \Rector\Order\ValueObject\SortedClassMethodsAndOriginalClassMethods
     {

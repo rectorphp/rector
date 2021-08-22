@@ -62,7 +62,7 @@ Let´s see another one:
 final class SomeService
 {
     /**
-     * @var \Ssch\TYPO3Rector\Tests\Rector\Annotation\Source\InjectionClass
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Tests\Rector\Annotation\Source\InjectionClass
      * @inject
      */
     protected $injectMe;
@@ -75,7 +75,7 @@ use Ssch\TYPO3Rector\Tests\Rector\Annotation\Source\InjectionClass;
 final class SomeInjectClass
 {
     /**
-     * @var \Ssch\TYPO3Rector\Tests\Rector\Annotation\Source\InjectionClass
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Tests\Rector\Annotation\Source\InjectionClass
      */
     protected $injectMe;
 

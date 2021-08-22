@@ -12,7 +12,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class DependencyResolver
 {
     /**
-     * @var \PHPStan\Analyser\NodeScopeResolver
+     * @var \RectorPrefix20210822\PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
@@ -20,11 +20,11 @@ final class DependencyResolver
      */
     private $phpStanDependencyResolver;
     /**
-     * @var \PHPStan\File\FileHelper
+     * @var \RectorPrefix20210822\PHPStan\File\FileHelper
      */
     private $fileHelper;
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(\PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Dependency\DependencyResolver $phpStanDependencyResolver, \PHPStan\File\FileHelper $fileHelper, \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)

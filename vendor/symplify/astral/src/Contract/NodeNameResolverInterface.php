@@ -7,11 +7,11 @@ use PhpParser\Node;
 interface NodeNameResolverInterface
 {
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function match($node) : bool;
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function resolve($node) : ?string;
 }

@@ -40,7 +40,7 @@ final class MethodCallSkipAnalyzer
         return !$this->fluentChainMethodCallNodeAnalyzer->isMethodCallReturnThis($methodCall);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\Cast $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\Cast $node
      */
     public function shouldSkipDependsWithOtherExpr($node) : bool
     {

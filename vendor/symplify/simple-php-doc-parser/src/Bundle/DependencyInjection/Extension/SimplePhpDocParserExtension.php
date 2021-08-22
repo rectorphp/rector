@@ -11,7 +11,7 @@ final class SimplePhpDocParserExtension extends \RectorPrefix20210822\Symfony\Co
 {
     /**
      * @param string[] $configs
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     public function load($configs, $containerBuilder) : void
     {

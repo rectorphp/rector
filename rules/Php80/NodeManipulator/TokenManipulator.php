@@ -29,11 +29,11 @@ use RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class TokenManipulator
 {
     /**
-     * @var \PhpParser\Node\Expr|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
      */
     private $assignedNameExpr;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**

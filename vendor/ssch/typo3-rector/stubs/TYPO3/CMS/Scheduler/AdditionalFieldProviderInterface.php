@@ -11,7 +11,7 @@ interface AdditionalFieldProviderInterface
 {
     /**
      * @param mixed[] $taskInfo
-     * @param \TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule
+     * @param \RectorPrefix20210822\TYPO3\CMS\Scheduler\Controller\SchedulerModuleController $schedulerModule
      */
     public function getAdditionalFields(&$taskInfo, $task, $schedulerModule);
 }

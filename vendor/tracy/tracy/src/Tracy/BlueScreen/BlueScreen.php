@@ -61,7 +61,7 @@ class BlueScreen
     }
     /**
      * Renders blue screen.
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function render($exception) : void
     {
@@ -78,7 +78,7 @@ class BlueScreen
     }
     /**
      * Renders blue screen to file (if file exists, it will not be overwritten).
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      * @param string $file
      */
     public function renderToFile($exception, $file) : bool
@@ -314,7 +314,7 @@ class BlueScreen
         };
     }
     /**
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function formatMessage($exception) : string
     {

@@ -8,11 +8,11 @@ use Rector\Php80\Enum\MatchKind;
 final class CondAndExpr
 {
     /**
-     * @var \PhpParser\Node\Expr[]
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr[]
      */
     private $condExprs;
     /**
-     * @var \PhpParser\Node\Expr
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr
      */
     private $expr;
     /**

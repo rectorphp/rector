@@ -44,7 +44,7 @@ abstract class NodeDefinition implements \RectorPrefix20210822\Symfony\Component
      * Sets the parent node.
      *
      * @return $this
-     * @param \Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent
      */
     public function setParent($parent)
     {

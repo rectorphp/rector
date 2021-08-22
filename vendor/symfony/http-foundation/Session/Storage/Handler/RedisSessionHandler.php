@@ -35,7 +35,7 @@ class RedisSessionHandler extends \RectorPrefix20210822\Symfony\Component\HttpFo
      *  * prefix: The prefix to use for the keys in order to avoid collision on the Redis server
      *  * ttl: The time to live in seconds.
      *
-     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface|RedisProxy|RedisClusterProxy $redis
+     * @param \RectorPrefix20210822\Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface|RedisProxy|RedisClusterProxy $redis
      *
      * @throws \InvalidArgumentException When unsupported client or options are passed
      */

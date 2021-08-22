@@ -34,7 +34,7 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
      */
     private const METHOD_KEY = 'method';
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -42,16 +42,16 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \PHPStan\Type\Type $type
+     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
      */
     public function supports($type) : bool
     {
         return $type instanceof \PHPStan\Type\Constant\ConstantStringType;
     }
     /**
-     * @param \PHPStan\Type\Type $type
+     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
      * @return FunctionReflection|MethodReflection|null
-     * @param \PHPStan\Analyser\Scope $scope
+     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
      */
     public function resolve($type, $scope)
     {

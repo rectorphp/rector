@@ -31,7 +31,7 @@ class ProcessHelper extends \RectorPrefix20210822\Symfony\Component\Console\Help
      *                                output available on STDOUT or STDERR
      *
      * @return Process The process that ran
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      * @param string|null $error
      * @param int $verbosity
      */
@@ -90,7 +90,7 @@ class ProcessHelper extends \RectorPrefix20210822\Symfony\Component\Console\Help
      * @throws ProcessFailedException
      *
      * @see run()
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      * @param string|null $error
      */
     public function mustRun($output, $cmd, $error = null, $callback = null) : \RectorPrefix20210822\Symfony\Component\Process\Process
@@ -103,8 +103,8 @@ class ProcessHelper extends \RectorPrefix20210822\Symfony\Component\Console\Help
     }
     /**
      * Wraps a Process callback to add debugging output.
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Process\Process $process
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Process\Process $process
      * @param callable|null $callback
      */
     public function wrapCallback($output, $process, $callback = null) : callable

@@ -44,7 +44,7 @@ final class DispatchStringToObjectRector extends \Rector\Core\Rector\AbstractRec
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change string events to anonymous class which implement \\League\\Event\\HasEventName', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
-    /** @var \League\Event\EventDispatcher */
+    /** @var \RectorPrefix20210822\League\Event\EventDispatcher */
     private $dispatcher;
 
     public function run()
@@ -56,7 +56,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    /** @var \League\Event\EventDispatcher */
+    /** @var \RectorPrefix20210822\League\Event\EventDispatcher */
     private $dispatcher;
 
     public function run()

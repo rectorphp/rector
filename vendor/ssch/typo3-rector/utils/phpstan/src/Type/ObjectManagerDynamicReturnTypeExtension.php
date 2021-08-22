@@ -18,16 +18,16 @@ final class ObjectManagerDynamicReturnTypeExtension implements \PHPStan\Type\Dyn
         return 'TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface';
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection $methodReflection
+     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection $methodReflection
      */
     public function isMethodSupported($methodReflection) : bool
     {
         return 'get' === $methodReflection->getName();
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection $methodReflection
-     * @param \PhpParser\Node\Expr\MethodCall $methodCall
-     * @param \PHPStan\Analyser\Scope $scope
+     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection $methodReflection
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall $methodCall
+     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
      */
     public function getTypeFromMethodCall($methodReflection, $methodCall, $scope) : \PHPStan\Type\Type
     {

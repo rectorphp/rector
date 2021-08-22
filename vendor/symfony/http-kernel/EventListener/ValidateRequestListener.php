@@ -24,7 +24,7 @@ class ValidateRequestListener implements \RectorPrefix20210822\Symfony\Component
 {
     /**
      * Performs the validation.
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event)
     {

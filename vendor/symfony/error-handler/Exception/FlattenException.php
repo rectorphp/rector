@@ -48,7 +48,7 @@ class FlattenException
     private $asString;
     /**
      * @return static
-     * @param \Exception $exception
+     * @param \RectorPrefix20210822\Exception $exception
      * @param int|null $statusCode
      * @param mixed[] $headers
      */
@@ -58,7 +58,7 @@ class FlattenException
     }
     /**
      * @return static
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      * @param int|null $statusCode
      * @param mixed[] $headers
      */
@@ -248,7 +248,7 @@ class FlattenException
     }
     /**
      * @return $this
-     * @param \Throwable $throwable
+     * @param \RectorPrefix20210822\Throwable $throwable
      */
     public function setTraceFromThrowable($throwable) : self
     {

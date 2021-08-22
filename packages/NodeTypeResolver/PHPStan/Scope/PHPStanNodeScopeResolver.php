@@ -53,11 +53,11 @@ final class PHPStanNodeScopeResolver
      */
     private $dependencyResolver;
     /**
-     * @var \PHPStan\Analyser\NodeScopeResolver
+     * @var \RectorPrefix20210822\PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -73,7 +73,7 @@ final class PHPStanNodeScopeResolver
      */
     private $traitNodeScopeCollector;
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**
@@ -210,7 +210,7 @@ final class PHPStanNodeScopeResolver
         $nodeTraverser->traverse($nodes);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
     private function resolveClassOrInterfaceScope($classLike, \PHPStan\Analyser\Scope $scope) : \PHPStan\Analyser\Scope
     {
@@ -227,7 +227,7 @@ final class PHPStanNodeScopeResolver
         return $scope->enterClass($classReflection);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
     private function resolveClassName($classLike) : string
     {

@@ -41,7 +41,7 @@ class NormalizationBuilder
      * Registers a closure to run before the normalization or an expression builder to build it if null is provided.
      *
      * @return ExprBuilder|$this
-     * @param \Closure|null $closure
+     * @param \RectorPrefix20210822\Closure|null $closure
      */
     public function before($closure = null)
     {

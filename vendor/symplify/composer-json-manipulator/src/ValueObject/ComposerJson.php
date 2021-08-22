@@ -91,11 +91,11 @@ final class ComposerJson
      */
     private $config = [];
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo|null
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo|null
      */
     private $fileInfo;
     /**
-     * @var \Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter
+     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter
      */
     private $composerPackageSorter;
     /**

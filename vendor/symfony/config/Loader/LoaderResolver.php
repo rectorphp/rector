@@ -47,7 +47,7 @@ class LoaderResolver implements \RectorPrefix20210822\Symfony\Component\Config\L
         return \false;
     }
     /**
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Loader\LoaderInterface $loader
      */
     public function addLoader($loader)
     {

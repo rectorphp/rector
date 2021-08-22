@@ -20,7 +20,7 @@ final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Sto
      */
     private $directory;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     public function __construct(string $directory, \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

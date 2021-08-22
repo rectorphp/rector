@@ -20,7 +20,7 @@ abstract class MultiplePcreFilterIterator extends \FilterIterator
     protected $matchRegexps = [];
     protected $noMatchRegexps = [];
     /**
-     * @param \Iterator $iterator        The Iterator to filter
+     * @param \RectorPrefix20210822\Iterator $iterator        The Iterator to filter
      * @param string[]  $matchPatterns   An array of patterns that need to match
      * @param string[]  $noMatchPatterns An array of patterns that need to not match
      */

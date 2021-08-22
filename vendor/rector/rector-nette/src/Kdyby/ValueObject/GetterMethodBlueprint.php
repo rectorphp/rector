@@ -11,7 +11,7 @@ final class GetterMethodBlueprint
      */
     private $methodName;
     /**
-     * @var \PhpParser\Node|null
+     * @var \RectorPrefix20210822\PhpParser\Node|null
      */
     private $returnTypeNode;
     /**

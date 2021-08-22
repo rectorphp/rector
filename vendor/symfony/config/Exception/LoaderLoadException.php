@@ -21,7 +21,7 @@ class LoaderLoadException extends \Exception
      * @param string          $resource       The resource that could not be imported
      * @param string|null     $sourceResource The original resource importing the new resource
      * @param int|null        $code           The error code
-     * @param \Throwable|null $previous       A previous exception
+     * @param \RectorPrefix20210822\Throwable|null $previous       A previous exception
      * @param string|null     $type           The type of resource
      */
     public function __construct(string $resource, string $sourceResource = null, ?int $code = 0, \Throwable $previous = null, string $type = null)

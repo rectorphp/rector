@@ -12,7 +12,7 @@ interface LanguageInflectorFactory
      * @param bool $reset If true, will unset default inflections for all new rules
      *
      * @return $this
-     * @param \Doctrine\Inflector\Rules\Ruleset|null $singularRules
+     * @param \RectorPrefix20210822\Doctrine\Inflector\Rules\Ruleset|null $singularRules
      */
     public function withSingularRules($singularRules, $reset = \false) : self;
     /**
@@ -21,7 +21,7 @@ interface LanguageInflectorFactory
      * @param bool $reset If true, will unset default inflections for all new rules
      *
      * @return $this
-     * @param \Doctrine\Inflector\Rules\Ruleset|null $pluralRules
+     * @param \RectorPrefix20210822\Doctrine\Inflector\Rules\Ruleset|null $pluralRules
      */
     public function withPluralRules($pluralRules, $reset = \false) : self;
     /**

@@ -37,14 +37,14 @@ class LocaleListener implements \RectorPrefix20210822\Symfony\Component\EventDis
         $this->router = $router;
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\KernelEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\KernelEvent $event
      */
     public function setDefaultLocale($event)
     {
         $event->getRequest()->setDefaultLocale($this->defaultLocale);
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event)
     {
@@ -53,7 +53,7 @@ class LocaleListener implements \RectorPrefix20210822\Symfony\Component\EventDis
         $this->setRouterContext($request);
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
      */
     public function onKernelFinishRequest($event)
     {

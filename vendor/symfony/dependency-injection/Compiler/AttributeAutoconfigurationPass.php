@@ -19,7 +19,7 @@ use RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition;
 final class AttributeAutoconfigurationPass extends \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container) : void
     {

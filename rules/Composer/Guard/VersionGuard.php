@@ -8,7 +8,7 @@ use Rector\Composer\Contract\VersionAwareInterface;
 final class VersionGuard
 {
     /**
-     * @var \Composer\Semver\VersionParser
+     * @var \RectorPrefix20210822\Composer\Semver\VersionParser
      */
     private $versionParser;
     public function __construct(\RectorPrefix20210822\Composer\Semver\VersionParser $versionParser)

@@ -27,7 +27,7 @@ final class MockVariableCollector
     }
     /**
      * @return array<string, class-string>
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $node
      */
     public function collectMockVariableName($node) : array
     {

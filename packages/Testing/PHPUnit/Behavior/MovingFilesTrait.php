@@ -14,7 +14,7 @@ use RectorPrefix20210822\Webmozart\Assert\Assert;
 trait MovingFilesTrait
 {
     /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     protected function assertFileWasNotChanged($smartFileInfo) : void
     {
@@ -29,7 +29,7 @@ trait MovingFilesTrait
         $this->assertFilesWereAdded([$addedFileWithContent]);
     }
     /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     protected function assertFileWasRemoved($smartFileInfo) : void
     {

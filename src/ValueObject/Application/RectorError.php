@@ -11,7 +11,7 @@ final class RectorError
      */
     private $message;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
      */
     private $fileInfo;
     /**

@@ -34,7 +34,7 @@ final class UsesClassNameImportSkipVoter implements \Rector\CodingStyle\Contract
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
     {

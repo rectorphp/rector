@@ -167,7 +167,7 @@ class ArrayNode extends \RectorPrefix20210822\Symfony\Component\Config\Definitio
      *
      * @throws \InvalidArgumentException when the child node has no name
      * @throws \InvalidArgumentException when the child node's name is not unique
-     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\NodeInterface $node
      */
     public function addChild($node)
     {

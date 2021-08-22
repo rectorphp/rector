@@ -19,7 +19,7 @@ interface BuilderAwareInterface
 {
     /**
      * Sets a custom children builder.
-     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $builder
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\Builder\NodeBuilder $builder
      */
     public function setBuilder($builder);
 }

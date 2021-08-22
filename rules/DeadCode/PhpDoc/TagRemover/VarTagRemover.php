@@ -36,7 +36,7 @@ final class VarTagRemover
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
     /**
@@ -64,7 +64,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {
@@ -92,7 +92,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
      */
     private function isNonBasicArrayType($node, \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode) : bool
     {

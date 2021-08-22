@@ -11,7 +11,7 @@ final class DataProviderClassMethodRecipe
      */
     private $methodName;
     /**
-     * @var \PhpParser\Node\Arg[]
+     * @var \RectorPrefix20210822\PhpParser\Node\Arg[]
      */
     private $args;
     /**

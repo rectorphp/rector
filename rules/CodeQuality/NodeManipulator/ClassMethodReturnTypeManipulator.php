@@ -35,7 +35,7 @@ final class ClassMethodReturnTypeManipulator
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
+     * @param \RectorPrefix20210822\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
      */
     public function refactorFunctionReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, $replaceIntoType, \PHPStan\Type\Type $phpDocType) : void
     {

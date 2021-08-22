@@ -20,19 +20,19 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
      */
     private $expectedName;
     /**
-     * @var \PhpParser\Node\Param
+     * @var \RectorPrefix20210822\PhpParser\Node\Param
      */
     private $param;
     /**
-     * @var \PhpParser\Node\Expr\Variable
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
-     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
+     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
      */
     private $functionLike;
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function __construct(string $currentName, string $expectedName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Variable $variable, $functionLike)
     {

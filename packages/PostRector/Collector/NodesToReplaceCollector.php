@@ -12,8 +12,8 @@ final class NodesToReplaceCollector implements \Rector\PostRector\Contract\Colle
      */
     private $nodesToReplace = [];
     /**
-     * @param \PhpParser\Node $node
-     * @param \PhpParser\Node $replaceWith
+     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $replaceWith
      */
     public function addReplaceNodeWithAnotherNode($node, $replaceWith) : void
     {

@@ -44,7 +44,7 @@ abstract class Bundle implements \RectorPrefix20210822\Symfony\Component\HttpKer
      *
      * This method can be overridden to register compilation passes,
      * other extensions, ...
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function build($container)
     {
@@ -109,7 +109,7 @@ abstract class Bundle implements \RectorPrefix20210822\Symfony\Component\HttpKer
         return $this->name;
     }
     /**
-     * @param \Symfony\Component\Console\Application $application
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Application $application
      */
     public function registerCommands($application)
     {

@@ -23,7 +23,7 @@ final class SimpleNameResolver
      */
     private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\\w+]#';
     /**
-     * @var \Symplify\Astral\Contract\NodeNameResolverInterface[]
+     * @var \RectorPrefix20210822\Symplify\Astral\Contract\NodeNameResolverInterface[]
      */
     private $nodeNameResolvers;
     /**
@@ -34,7 +34,7 @@ final class SimpleNameResolver
         $this->nodeNameResolvers = $nodeNameResolvers;
     }
     /**
-     * @param \PhpParser\Node|string $node
+     * @param \RectorPrefix20210822\PhpParser\Node|string $node
      */
     public function getName($node) : ?string
     {

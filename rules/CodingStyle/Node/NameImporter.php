@@ -40,7 +40,7 @@ final class NameImporter
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
@@ -52,7 +52,7 @@ final class NameImporter
      */
     private $useNodesToAddCollector;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

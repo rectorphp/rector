@@ -19,7 +19,7 @@ final class PhpDocTypeMapper
      */
     private $phpDocTypeMappers;
     /**
-     * @var \PHPStan\PhpDoc\TypeNodeResolver
+     * @var \RectorPrefix20210822\PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;
     /**

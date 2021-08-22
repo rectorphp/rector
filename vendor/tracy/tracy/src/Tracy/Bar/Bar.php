@@ -21,7 +21,7 @@ class Bar
     /**
      * Add custom panel.
      * @return static
-     * @param \Tracy\IBarPanel $panel
+     * @param \RectorPrefix20210822\Tracy\IBarPanel $panel
      * @param string|null $id
      */
     public function addPanel($panel, $id = null) : self

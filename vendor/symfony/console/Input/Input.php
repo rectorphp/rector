@@ -41,7 +41,7 @@ abstract class Input implements \RectorPrefix20210822\Symfony\Component\Console\
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
      */
     public function bind($definition)
     {

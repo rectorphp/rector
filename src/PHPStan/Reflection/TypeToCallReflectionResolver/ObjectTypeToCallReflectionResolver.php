@@ -15,7 +15,7 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 final class ObjectTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
 {
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -23,15 +23,15 @@ final class ObjectTypeToCallReflectionResolver implements \Rector\Core\Contract\
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \PHPStan\Type\Type $type
+     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
      */
     public function supports($type) : bool
     {
         return $type instanceof \PHPStan\Type\ObjectType;
     }
     /**
-     * @param \PHPStan\Type\Type $type
-     * @param \PHPStan\Analyser\Scope $scope
+     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
      */
     public function resolve($type, $scope) : ?\PHPStan\Reflection\MethodReflection
     {

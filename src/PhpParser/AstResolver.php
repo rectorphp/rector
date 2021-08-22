@@ -63,15 +63,15 @@ final class AstResolver
      */
     private $classLikesByName = [];
     /**
-     * @var \PhpParser\Parser
+     * @var \RectorPrefix20210822\PhpParser\Parser
      */
     private $parser;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
-     * @var \PhpParser\NodeFinder
+     * @var \RectorPrefix20210822\PhpParser\NodeFinder
      */
     private $nodeFinder;
     /**
@@ -87,7 +87,7 @@ final class AstResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -160,7 +160,7 @@ final class AstResolver
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
     public function resolveClassMethodOrFunctionFromCall($call, \PHPStan\Analyser\Scope $scope)
@@ -223,7 +223,7 @@ final class AstResolver
         return $this->resolveClassMethodFromCall($methodCall);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     public function resolveClassMethodFromCall($call) : ?\PhpParser\Node\Stmt\ClassMethod
     {

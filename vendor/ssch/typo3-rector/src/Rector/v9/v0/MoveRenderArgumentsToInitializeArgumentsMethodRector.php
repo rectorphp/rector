@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveRenderArgumentsToInitializeArgumentsMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Ssch\TYPO3Rector\NodeFactory\HelperArgumentAssignFactory
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\NodeFactory\HelperArgumentAssignFactory
      */
     private $helperArgumentAssignFactory;
     /**
-     * @var \Ssch\TYPO3Rector\NodeFactory\InitializeArgumentsClassMethodFactory
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\NodeFactory\InitializeArgumentsClassMethodFactory
      */
     private $initializeArgumentsClassMethodFactory;
     /**

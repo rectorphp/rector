@@ -20,7 +20,7 @@ class AssertSameWithCountRule implements \PHPStan\Rules\Rule
         if (!\PHPStan\Rules\PHPUnit\AssertRuleHelper::isMethodOrStaticCallOnAssert($node, $scope)) {
             return [];
         }
-        /** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
+        /** @var \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
         $node = $node;
         if (\count($node->args) < 2) {
             return [];

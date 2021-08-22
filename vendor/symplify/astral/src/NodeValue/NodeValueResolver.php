@@ -29,7 +29,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker;
 final class NodeValueResolver
 {
     /**
-     * @var \PhpParser\ConstExprEvaluator
+     * @var \RectorPrefix20210822\PhpParser\ConstExprEvaluator
      */
     private $constExprEvaluator;
     /**
@@ -37,15 +37,15 @@ final class NodeValueResolver
      */
     private $currentFilePath;
     /**
-     * @var \Symplify\Astral\Naming\SimpleNameResolver
+     * @var \RectorPrefix20210822\Symplify\Astral\Naming\SimpleNameResolver
      */
     private $simpleNameResolver;
     /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
-     * @var \Symplify\Astral\NodeFinder\SimpleNodeFinder
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeFinder\SimpleNodeFinder
      */
     private $simpleNodeFinder;
     public function __construct(\RectorPrefix20210822\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \RectorPrefix20210822\Symplify\Astral\NodeFinder\SimpleNodeFinder $simpleNodeFinder)

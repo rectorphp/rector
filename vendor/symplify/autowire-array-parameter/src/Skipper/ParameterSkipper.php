@@ -20,7 +20,7 @@ final class ParameterSkipper
      */
     private $excludedFatalClasses = [];
     /**
-     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
+     * @var \RectorPrefix20210822\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
     /**

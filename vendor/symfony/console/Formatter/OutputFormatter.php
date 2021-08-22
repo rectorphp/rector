@@ -91,7 +91,7 @@ class OutputFormatter implements \RectorPrefix20210822\Symfony\Component\Console
     /**
      * {@inheritdoc}
      * @param string $name
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
      */
     public function setStyle($name, $style)
     {

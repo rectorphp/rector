@@ -28,7 +28,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         $this->logger = $logger;
     }
     /**
-     * @param \Symfony\Component\Console\Event\ConsoleErrorEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Event\ConsoleErrorEvent $event
      */
     public function onConsoleError($event)
     {
@@ -43,7 +43,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         $this->logger->critical('Error thrown while running command "{command}". Message: "{message}"', ['exception' => $error, 'command' => $inputString, 'message' => $error->getMessage()]);
     }
     /**
-     * @param \Symfony\Component\Console\Event\ConsoleTerminateEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Event\ConsoleTerminateEvent $event
      */
     public function onConsoleTerminate($event)
     {

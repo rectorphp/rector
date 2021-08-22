@@ -9,11 +9,11 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 final class ComposerNamespaceMatcher
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
-     * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
+     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
     public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory)

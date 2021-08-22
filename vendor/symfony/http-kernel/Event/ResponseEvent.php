@@ -35,7 +35,7 @@ final class ResponseEvent extends \RectorPrefix20210822\Symfony\Component\HttpKe
         return $this->response;
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function setResponse($response) : void
     {

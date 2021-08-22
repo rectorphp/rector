@@ -13,7 +13,7 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemFilter;
 final class DynamicSourceLocatorDecorator
 {
     /**
-     * @var \Symplify\SmartFileSystem\FileSystemFilter
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemFilter
      */
     private $fileSystemFilter;
     /**

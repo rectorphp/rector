@@ -17,7 +17,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
      */
     private const INDEX = 'index';
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**

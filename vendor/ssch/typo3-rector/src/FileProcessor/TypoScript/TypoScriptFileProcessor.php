@@ -38,15 +38,15 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $allowedFileExtensions = ['typoscript', 'ts', 'txt'];
     /**
-     * @var \Helmich\TypoScriptParser\Parser\ParserInterface
+     * @var \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\ParserInterface
      */
     private $typoscriptParser;
     /**
-     * @var \Symfony\Component\Console\Output\BufferedOutput
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Output\BufferedOutput
      */
     private $output;
     /**
-     * @var \Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface
+     * @var \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface
      */
     private $typoscriptPrinter;
     /**
@@ -66,7 +66,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $rectorOutputStyle;
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface[]
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface[]
      */
     private $typoScriptRectors = [];
     /**

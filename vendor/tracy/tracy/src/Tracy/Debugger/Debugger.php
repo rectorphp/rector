@@ -205,7 +205,7 @@ class Debugger
     /**
      * Handler to catch uncaught exception.
      * @internal
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public static function exceptionHandler($exception) : void
     {
@@ -372,7 +372,7 @@ class Debugger
         return self::$bar;
     }
     /**
-     * @param \Tracy\ILogger $logger
+     * @param \RectorPrefix20210822\Tracy\ILogger $logger
      */
     public static function setLogger($logger) : void
     {

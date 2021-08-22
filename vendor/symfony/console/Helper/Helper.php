@@ -22,7 +22,7 @@ abstract class Helper implements \RectorPrefix20210822\Symfony\Component\Console
     protected $helperSet = null;
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Helper\HelperSet|null $helperSet
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Helper\HelperSet|null $helperSet
      */
     public function setHelperSet($helperSet = null)
     {
@@ -128,7 +128,7 @@ abstract class Helper implements \RectorPrefix20210822\Symfony\Component\Console
     }
     /**
      * @deprecated since Symfony 5.3
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      * @param string|null $string
      */
     public static function strlenWithoutDecoration($formatter, $string)
@@ -137,7 +137,7 @@ abstract class Helper implements \RectorPrefix20210822\Symfony\Component\Console
         return self::width(self::removeDecoration($formatter, $string));
     }
     /**
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      * @param string|null $string
      */
     public static function removeDecoration($formatter, $string)

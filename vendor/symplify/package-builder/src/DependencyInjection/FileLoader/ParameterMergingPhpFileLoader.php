@@ -15,7 +15,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ParameterMergingPhpFileLoader extends \RectorPrefix20210822\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
-     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Yaml\ParametersMerger
      */
     private $parametersMerger;
     public function __construct(\RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20210822\Symfony\Component\Config\FileLocatorInterface $fileLocator)

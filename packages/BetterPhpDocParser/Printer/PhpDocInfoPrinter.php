@@ -73,7 +73,7 @@ final class PhpDocInfoPrinter
      */
     private $phpDocInfo;
     /**
-     * @var \Symplify\SimplePhpDocParser\PhpDocNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\SimplePhpDocParser\PhpDocNodeTraverser
      */
     private $changedPhpDocNodeTraverser;
     /**

@@ -98,7 +98,7 @@ CODE_SAMPLE
 class MyResponse extends Response
 {
     /**
-     * @var \TYPO3\CMS\Extbase\Service\EnvironmentService
+     * @var \RectorPrefix20210822\TYPO3\CMS\Extbase\Service\EnvironmentService
      */
     protected $environmentService;
 
@@ -130,7 +130,7 @@ CODE_SAMPLE
         $propertyBuilder = new \RectorPrefix20210822\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder(self::ENVIRONMENT_SERVICE);
         $propertyBuilder->makeProtected();
         $type = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType('TYPO3\\CMS\\Extbase\\Service\\EnvironmentService');
-        $propertyBuilder->setDocComment(new \PhpParser\Comment\Doc(\sprintf('/**%s * @var \\%s%s */', \PHP_EOL, $type->describe(\PHPStan\Type\VerbosityLevel::typeOnly()), \PHP_EOL)));
+        $propertyBuilder->setDocComment(new \PhpParser\Comment\Doc(\sprintf('/**%s * @var \RectorPrefix20210822\\%s%s */', \PHP_EOL, $type->describe(\PHPStan\Type\VerbosityLevel::typeOnly()), \PHP_EOL)));
         return $propertyBuilder->getNode();
     }
     private function isPropertyEnvironmentServiceInUse(\PhpParser\Node\Stmt\Class_ $node) : bool

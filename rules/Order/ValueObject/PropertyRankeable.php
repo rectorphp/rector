@@ -16,7 +16,7 @@ final class PropertyRankeable implements \Rector\Order\Contract\RankeableInterfa
      */
     private $visibility;
     /**
-     * @var \PhpParser\Node\Stmt\Property
+     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\Property
      */
     private $property;
     /**

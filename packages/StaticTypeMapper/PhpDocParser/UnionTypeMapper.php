@@ -41,9 +41,9 @@ final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocP
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-     * @param \PhpParser\Node $node
-     * @param \PHPStan\Analyser\NameScope $nameScope
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \RectorPrefix20210822\PHPStan\Analyser\NameScope $nameScope
      */
     public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
     {

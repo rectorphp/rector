@@ -13,11 +13,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassAndCodeSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
-     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver
+     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver
      */
     private $skippedClassAndCodesResolver;
     /**
-     * @var \Symplify\Skipper\Matcher\FileInfoMatcher
+     * @var \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
     public function __construct(\RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver $skippedClassAndCodesResolver, \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
@@ -37,7 +37,7 @@ final class ClassAndCodeSkipVoter implements \RectorPrefix20210822\Symplify\Skip
     }
     /**
      * @param string|object $element
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool
     {

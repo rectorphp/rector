@@ -20,7 +20,7 @@ interface ErrorRendererInterface
 {
     /**
      * Renders a Throwable as a FlattenException.
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function render($exception) : \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException;
 }

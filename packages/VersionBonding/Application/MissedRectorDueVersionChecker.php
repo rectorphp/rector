@@ -16,7 +16,7 @@ final class MissedRectorDueVersionChecker
      */
     private $phpVersionProvider;
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)

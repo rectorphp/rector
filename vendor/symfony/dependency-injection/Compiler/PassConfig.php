@@ -52,7 +52,7 @@ class PassConfig
      * Adds a pass.
      *
      * @throws InvalidArgumentException when a pass type doesn't exist
-     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
      * @param string $type
      * @param int $priority
      */
@@ -123,7 +123,7 @@ class PassConfig
         return $this->mergePass;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
      */
     public function setMergePass($pass)
     {

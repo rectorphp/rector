@@ -20,7 +20,7 @@ final class KnownArrayParamTypeInferer implements \Rector\TypeDeclaration\Contra
      */
     private $nodeNameResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -29,7 +29,7 @@ final class KnownArrayParamTypeInferer implements \Rector\TypeDeclaration\Contra
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \PhpParser\Node\Param $param
+     * @param \RectorPrefix20210822\PhpParser\Node\Param $param
      */
     public function inferParam($param) : \PHPStan\Type\Type
     {

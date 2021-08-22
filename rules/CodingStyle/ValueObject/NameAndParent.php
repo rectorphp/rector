@@ -9,11 +9,11 @@ use PhpParser\Node\Name;
 final class NameAndParent
 {
     /**
-     * @var \PhpParser\Node\Name|\PhpParser\Node\Identifier
+     * @var \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier
      */
     private $nameNode;
     /**
-     * @var \PhpParser\Node
+     * @var \RectorPrefix20210822\PhpParser\Node
      */
     private $parentNode;
     /**

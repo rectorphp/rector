@@ -380,7 +380,7 @@ class Finder implements \IteratorAggregate, \Countable
      * @return $this
      *
      * @see SortableIterator
-     * @param \Closure $closure
+     * @param \RectorPrefix20210822\Closure $closure
      */
     public function sort($closure)
     {
@@ -485,7 +485,7 @@ class Finder implements \IteratorAggregate, \Countable
      * @return $this
      *
      * @see CustomFilterIterator
-     * @param \Closure $closure
+     * @param \RectorPrefix20210822\Closure $closure
      */
     public function filter($closure)
     {

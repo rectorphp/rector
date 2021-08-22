@@ -25,8 +25,8 @@ class SymfonyQuestionHelper extends \RectorPrefix20210822\Symfony\Component\Cons
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Question\Question $question
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Question\Question $question
      */
     protected function writePrompt($output, $question)
     {
@@ -67,8 +67,8 @@ class SymfonyQuestionHelper extends \RectorPrefix20210822\Symfony\Component\Cons
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Exception $error
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Exception $error
      */
     protected function writeError($output, $error)
     {

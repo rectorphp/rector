@@ -26,7 +26,7 @@ interface FragmentRendererInterface
      * @param string|ControllerReference $uri A URI as a string or a ControllerReference instance
      *
      * @return Response A Response instance
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param mixed[] $options
      */
     public function render($uri, $request, $options = []);

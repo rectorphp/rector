@@ -51,7 +51,7 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @var \Namespaced\SomeRenderer
+     * @var \RectorPrefix20210822\Namespaced\SomeRenderer
      */
     private $someRenderer;
 

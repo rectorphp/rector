@@ -38,9 +38,9 @@ class RequestDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpK
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \Throwable|null $exception
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Throwable|null $exception
      */
     public function collect($request, $response, $exception = null)
     {
@@ -287,14 +287,14 @@ class RequestDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpK
         return $this->data['forward_token'] ?? null;
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ControllerEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ControllerEvent $event
      */
     public function onKernelController($event)
     {
         $this->controllers[$event->getRequest()] = $event->getController();
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function onKernelResponse($event)
     {

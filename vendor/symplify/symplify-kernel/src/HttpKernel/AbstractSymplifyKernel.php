@@ -44,7 +44,7 @@ abstract class AbstractSymplifyKernel extends \RectorPrefix20210822\Symfony\Comp
         }
     }
     /**
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Loader\LoaderInterface $loader
      */
     public function registerContainerConfiguration($loader) : void
     {

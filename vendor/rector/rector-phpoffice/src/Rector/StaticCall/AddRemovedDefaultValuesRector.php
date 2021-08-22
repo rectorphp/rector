@@ -71,7 +71,7 @@ CODE_SAMPLE
     }
     /**
      * @param array<int, mixed> $defaultValuesByPosition
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
     private function refactorArgs($node, array $defaultValuesByPosition) : void
     {
@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
     private function isCallerObjectType($node, \PHPStan\Type\ObjectType $objectType) : bool
     {

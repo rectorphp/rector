@@ -36,7 +36,7 @@ class OutputFormatterStyleStack implements \RectorPrefix20210822\Symfony\Contrac
     }
     /**
      * Pushes a style in the stack.
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
      */
     public function push($style)
     {
@@ -48,7 +48,7 @@ class OutputFormatterStyleStack implements \RectorPrefix20210822\Symfony\Contrac
      * @return OutputFormatterStyleInterface
      *
      * @throws InvalidArgumentException When style tags incorrectly nested
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface|null $style
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface|null $style
      */
     public function pop($style = null)
     {
@@ -80,7 +80,7 @@ class OutputFormatterStyleStack implements \RectorPrefix20210822\Symfony\Contrac
     }
     /**
      * @return $this
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle
      */
     public function setEmptyStyle($emptyStyle)
     {

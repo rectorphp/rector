@@ -257,7 +257,7 @@ class Data implements \ArrayAccess, \Countable, \IteratorAggregate
     }
     /**
      * Dumps data with a DumperInterface dumper.
-     * @param \Symfony\Component\VarDumper\Cloner\DumperInterface $dumper
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\DumperInterface $dumper
      */
     public function dump($dumper)
     {

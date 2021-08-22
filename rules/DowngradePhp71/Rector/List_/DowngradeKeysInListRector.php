@@ -115,7 +115,7 @@ CODE_SAMPLE
     }
     /**
      * @return Expression[]
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
     private function processExtractToItsOwnVariable($node, \PhpParser\Node $parent, \PhpParser\Node $parentExpression) : array
     {

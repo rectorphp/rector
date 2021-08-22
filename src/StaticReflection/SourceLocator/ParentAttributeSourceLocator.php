@@ -30,7 +30,7 @@ final class ParentAttributeSourceLocator implements \PHPStan\BetterReflection\So
      */
     private $astResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

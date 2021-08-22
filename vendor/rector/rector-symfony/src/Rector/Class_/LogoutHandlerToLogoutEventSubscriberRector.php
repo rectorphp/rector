@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LogoutHandlerToLogoutEventSubscriberRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \PHPStan\Type\ObjectType
+     * @var \RectorPrefix20210822\PHPStan\Type\ObjectType
      */
     private $logoutHandlerObjectType;
     /**

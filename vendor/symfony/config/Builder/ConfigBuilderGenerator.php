@@ -37,7 +37,7 @@ class ConfigBuilderGenerator implements \RectorPrefix20210822\Symfony\Component\
     }
     /**
      * @return \Closure that will return the root config class
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      */
     public function build($configuration) : \Closure
     {

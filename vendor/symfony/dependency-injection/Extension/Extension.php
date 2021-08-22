@@ -71,7 +71,7 @@ abstract class Extension implements \RectorPrefix20210822\Symfony\Component\Depe
     /**
      * {@inheritdoc}
      * @param mixed[] $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function getConfiguration($config, $container)
     {
@@ -94,7 +94,7 @@ abstract class Extension implements \RectorPrefix20210822\Symfony\Component\Depe
         return null;
     }
     /**
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      * @param mixed[] $configs
      */
     protected final function processConfiguration($configuration, $configs) : array
@@ -117,7 +117,7 @@ abstract class Extension implements \RectorPrefix20210822\Symfony\Component\Depe
      * @return bool Whether the configuration is enabled
      *
      * @throws InvalidArgumentException When the config is not enableable
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param mixed[] $config
      */
     protected function isConfigEnabled($container, $config)

@@ -29,7 +29,7 @@ class MergeExtensionConfigurationPass implements \RectorPrefix20210822\Symfony\C
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {
@@ -106,8 +106,8 @@ class MergeExtensionConfigurationParameterBag extends \RectorPrefix20210822\Symf
         $this->mergeEnvPlaceholders($parameterBag);
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\Extension\Extension $extension
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Extension\Extension $extension
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function freezeAfterProcessing($extension, $container)
     {
@@ -154,7 +154,7 @@ class MergeExtensionConfigurationContainerBuilder extends \RectorPrefix20210822\
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass
      * @param string $type
      * @param int $priority
      */
@@ -164,7 +164,7 @@ class MergeExtensionConfigurationContainerBuilder extends \RectorPrefix20210822\
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\Extension\ExtensionInterface $extension
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Extension\ExtensionInterface $extension
      */
     public function registerExtension($extension)
     {

@@ -22,7 +22,7 @@ class CliErrorRenderer implements \RectorPrefix20210822\Symfony\Component\ErrorH
 {
     /**
      * {@inheritdoc}
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function render($exception) : \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException
     {

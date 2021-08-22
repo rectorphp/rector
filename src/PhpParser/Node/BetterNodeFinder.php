@@ -30,7 +30,7 @@ use RectorPrefix20210822\Webmozart\Assert\Assert;
 final class BetterNodeFinder
 {
     /**
-     * @var \PhpParser\NodeFinder
+     * @var \RectorPrefix20210822\PhpParser\NodeFinder
      */
     private $nodeFinder;
     /**
@@ -38,7 +38,7 @@ final class BetterNodeFinder
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
@@ -309,7 +309,7 @@ final class BetterNodeFinder
     }
     /**
      * @return Expr[]
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
     public function findSameNamedExprs($expr) : array
     {

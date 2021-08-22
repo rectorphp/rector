@@ -26,7 +26,7 @@ class TraceableControllerResolver implements \RectorPrefix20210822\Symfony\Compo
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function getController($request)
     {

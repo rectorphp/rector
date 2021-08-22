@@ -28,14 +28,14 @@ class YamlReferenceDumper
 {
     private $reference;
     /**
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      */
     public function dump($configuration)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree());
     }
     /**
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      * @param string $path
      */
     public function dumpAtPath($configuration, $path)
@@ -58,7 +58,7 @@ class YamlReferenceDumper
         return $this->dumpNode($node);
     }
     /**
-     * @param \Symfony\Component\Config\Definition\NodeInterface $node
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Definition\NodeInterface $node
      */
     public function dumpNode($node)
     {

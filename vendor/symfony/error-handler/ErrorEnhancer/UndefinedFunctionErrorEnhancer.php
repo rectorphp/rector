@@ -19,7 +19,7 @@ class UndefinedFunctionErrorEnhancer implements \RectorPrefix20210822\Symfony\Co
 {
     /**
      * {@inheritdoc}
-     * @param \Throwable $error
+     * @param \RectorPrefix20210822\Throwable $error
      */
     public function enhance($error) : ?\Throwable
     {

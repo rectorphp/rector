@@ -10,7 +10,7 @@ use Stringable;
 final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode
 {
     /**
-     * @var \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
+     * @var \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
      */
     public $identifierTypeNode;
     /**

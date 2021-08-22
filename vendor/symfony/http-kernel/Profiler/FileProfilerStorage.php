@@ -111,7 +111,7 @@ class FileProfilerStorage implements \RectorPrefix20210822\Symfony\Component\Htt
      * {@inheritdoc}
      *
      * @throws \RuntimeException
-     * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler\Profile $profile
      */
     public function write($profile) : bool
     {
@@ -214,7 +214,7 @@ class FileProfilerStorage implements \RectorPrefix20210822\Symfony\Component\Htt
     /**
      * @param string $token
      * @param mixed[] $data
-     * @param \Symfony\Component\HttpKernel\Profiler\Profile|null $parent
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler\Profile|null $parent
      */
     protected function createProfileFromData($token, $data, $parent = null)
     {

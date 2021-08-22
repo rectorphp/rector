@@ -161,7 +161,7 @@ final class VariableNaming
         return $varName . \ucfirst($propertyName);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function resolveFromMethodCall($node) : ?string
     {

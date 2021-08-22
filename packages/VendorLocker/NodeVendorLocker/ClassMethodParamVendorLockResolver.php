@@ -17,7 +17,7 @@ final class ClassMethodParamVendorLockResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
     /**

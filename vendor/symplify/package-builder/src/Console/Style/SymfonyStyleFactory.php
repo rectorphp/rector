@@ -13,7 +13,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class SymfonyStyleFactory
 {
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     public function __construct()

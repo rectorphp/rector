@@ -20,7 +20,7 @@ use RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ControllerEvent;
 class RouterDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector\DataCollector
 {
     /**
-     * @var \SplObjectStorage
+     * @var \RectorPrefix20210822\SplObjectStorage
      */
     protected $controllers;
     public function __construct()
@@ -31,9 +31,9 @@ class RouterDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpKe
      * {@inheritdoc}
      *
      * @final
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \Throwable|null $exception
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Throwable|null $exception
      */
     public function collect($request, $response, $exception = null)
     {
@@ -52,7 +52,7 @@ class RouterDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpKe
         $this->data = ['redirect' => \false, 'url' => null, 'route' => null];
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function guessRoute($request, $controller)
     {
@@ -60,7 +60,7 @@ class RouterDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpKe
     }
     /**
      * Remembers the controller associated to each request.
-     * @param \Symfony\Component\HttpKernel\Event\ControllerEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ControllerEvent $event
      */
     public function onKernelController($event)
     {

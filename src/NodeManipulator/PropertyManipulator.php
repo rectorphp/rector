@@ -56,7 +56,7 @@ final class PropertyManipulator
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
@@ -84,7 +84,7 @@ final class PropertyManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     public function isPropertyUsedInReadContext($propertyOrPromotedParam) : bool
     {
@@ -114,7 +114,7 @@ final class PropertyManipulator
         });
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
      */
     public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
     {
@@ -148,7 +148,7 @@ final class PropertyManipulator
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
     private function isChangeableContext($propertyFetch) : bool
     {
@@ -175,7 +175,7 @@ final class PropertyManipulator
         return \false;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isFoundByRefParam($node) : bool
     {

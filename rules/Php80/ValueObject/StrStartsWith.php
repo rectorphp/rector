@@ -8,15 +8,15 @@ use PhpParser\Node\Expr\FuncCall;
 final class StrStartsWith
 {
     /**
-     * @var \PhpParser\Node\Expr\FuncCall
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall
      */
     private $funcCall;
     /**
-     * @var \PhpParser\Node\Expr
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr
      */
     private $haystackExpr;
     /**
-     * @var \PhpParser\Node\Expr
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr
      */
     private $needleExpr;
     /**

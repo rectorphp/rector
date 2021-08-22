@@ -31,7 +31,7 @@ final class ArgumentAddingScope
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
      */
     public function isInCorrectScope($expr, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
     {

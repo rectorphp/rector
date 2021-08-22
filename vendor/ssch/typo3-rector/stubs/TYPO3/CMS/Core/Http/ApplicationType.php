@@ -17,7 +17,7 @@ class ApplicationType
     }
     /**
      * @return $this
-     * @param \Psr\Http\Message\ServerRequestInterface $request
+     * @param \RectorPrefix20210822\Psr\Http\Message\ServerRequestInterface $request
      */
     public static function fromRequest($request)
     {

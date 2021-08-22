@@ -56,7 +56,7 @@ class Profiler implements \RectorPrefix20210822\Symfony\Contracts\Service\ResetI
      * Loads the Profile for the given Response.
      *
      * @return Profile|null A Profile instance
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function loadProfileFromResponse($response)
     {
@@ -79,7 +79,7 @@ class Profiler implements \RectorPrefix20210822\Symfony\Contracts\Service\ResetI
      * Saves a Profile.
      *
      * @return bool
-     * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler\Profile $profile
      */
     public function saveProfile($profile)
     {
@@ -124,9 +124,9 @@ class Profiler implements \RectorPrefix20210822\Symfony\Contracts\Service\ResetI
      * Collects data for the given Response.
      *
      * @return Profile|null A Profile instance or null if the profiler is disabled
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \Throwable|null $exception
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Throwable|null $exception
      */
     public function collect($request, $response, $exception = null)
     {
@@ -184,7 +184,7 @@ class Profiler implements \RectorPrefix20210822\Symfony\Contracts\Service\ResetI
     }
     /**
      * Adds a Collector.
-     * @param \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
      */
     public function add($collector)
     {

@@ -46,7 +46,7 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property $property
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property $property
      */
     public function inferProperty($property) : ?\PHPStan\Type\Type
     {

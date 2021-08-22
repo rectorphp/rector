@@ -37,7 +37,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         $this->debug = $debug;
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      */
     public function logKernelException($event)
     {
@@ -45,7 +45,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         $this->logException($event->getThrowable(), \sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', $e->getClass(), $e->getMessage(), $e->getFile(), $e->getLine()));
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      */
     public function onKernelException($event)
     {
@@ -76,7 +76,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         }
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function removeCspHeader($event) : void
     {
@@ -85,7 +85,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         }
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent $event
      */
     public function onControllerArguments($event)
     {
@@ -107,7 +107,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
     }
     /**
      * Logs an exception.
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      * @param string $message
      */
     protected function logException($exception, $message) : void
@@ -122,8 +122,8 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
     }
     /**
      * Clones the request for the exception.
-     * @param \Throwable $exception
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Throwable $exception
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function duplicateRequest($exception, $request) : \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request
     {

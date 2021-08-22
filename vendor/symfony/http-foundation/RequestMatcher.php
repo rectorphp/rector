@@ -137,7 +137,7 @@ class RequestMatcher implements \RectorPrefix20210822\Symfony\Component\HttpFoun
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function matches($request)
     {

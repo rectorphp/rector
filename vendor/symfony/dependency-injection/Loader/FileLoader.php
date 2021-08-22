@@ -136,7 +136,7 @@ abstract class FileLoader extends \RectorPrefix20210822\Symfony\Component\Config
     /**
      * Registers a definition in the container with its instanceof-conditionals.
      * @param string $id
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition $definition
      */
     protected function setDefinition($id, $definition)
     {

@@ -23,7 +23,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
      */
     private $currentFileProvider;
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface[]
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface[]
      */
     private $transformer;
     /**

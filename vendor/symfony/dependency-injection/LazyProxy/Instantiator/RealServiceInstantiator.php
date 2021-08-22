@@ -23,8 +23,8 @@ class RealServiceInstantiator implements \RectorPrefix20210822\Symfony\Component
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition $definition
      * @param string $id
      * @param callable $realInstantiator
      */

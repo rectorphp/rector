@@ -34,7 +34,7 @@ interface ControllerResolverInterface
      *                        or false if this resolver is not able to determine the controller
      *
      * @throws \LogicException If a controller was found based on the request but it is not callable
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function getController($request);
 }

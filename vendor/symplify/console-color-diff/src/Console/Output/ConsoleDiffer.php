@@ -8,11 +8,11 @@ use RectorPrefix20210822\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsol
 final class ConsoleDiffer
 {
     /**
-     * @var \SebastianBergmann\Diff\Differ
+     * @var \RectorPrefix20210822\SebastianBergmann\Diff\Differ
      */
     private $differ;
     /**
-     * @var \Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter
+     * @var \RectorPrefix20210822\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter
      */
     private $colorConsoleDiffFormatter;
     public function __construct(\RectorPrefix20210822\SebastianBergmann\Diff\Differ $differ, \RectorPrefix20210822\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)

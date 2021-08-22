@@ -38,7 +38,7 @@ class ErrorController
         return new \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response($exception->getAsString(), $exception->getStatusCode(), $exception->getHeaders());
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param int $code
      */
     public function preview($request, $code) : \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response

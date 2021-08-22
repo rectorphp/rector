@@ -25,7 +25,7 @@ final class AddSeeTestAnnotationRector extends \Rector\Core\Rector\AbstractRecto
      */
     private const SEE = 'see';
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

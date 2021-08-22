@@ -22,7 +22,7 @@ final class ParentClassMethodTypeOverrideGuard
      */
     private $vendorLocationDetector;
     /**
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)

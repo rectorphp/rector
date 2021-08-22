@@ -26,7 +26,7 @@ final class NodeScopeAndMetadataDecorator
      */
     private const OPTION_REPLACE_NODES = 'replaceNodes';
     /**
-     * @var \PhpParser\NodeVisitor\CloningVisitor
+     * @var \RectorPrefix20210822\PhpParser\NodeVisitor\CloningVisitor
      */
     private $cloningVisitor;
     /**
@@ -46,7 +46,7 @@ final class NodeScopeAndMetadataDecorator
      */
     private $statementNodeVisitor;
     /**
-     * @var \PhpParser\NodeVisitor\NodeConnectingVisitor
+     * @var \RectorPrefix20210822\PhpParser\NodeVisitor\NodeConnectingVisitor
      */
     private $nodeConnectingVisitor;
     /**

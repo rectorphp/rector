@@ -38,7 +38,7 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
      */
     private static $persistenceArray = [];
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
      */
     private $fileTemplate;
     public function __construct(\Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)

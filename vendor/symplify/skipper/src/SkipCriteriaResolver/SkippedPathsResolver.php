@@ -16,11 +16,11 @@ final class SkippedPathsResolver
      */
     private $skippedPaths = [];
     /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
     public function __construct(\RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)

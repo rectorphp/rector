@@ -61,7 +61,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
     private function renameTraitUse(string $lastName, \PhpParser\Node\Stmt\TraitUse $traitUse, $usedNameNode) : void
     {
@@ -73,7 +73,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
     private function renameClass(string $lastName, \PhpParser\Node\Stmt\Class_ $class, $usedNameNode) : void
     {
@@ -90,7 +90,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
     private function renameParam(string $lastName, \PhpParser\Node\Param $param, $usedNameNode) : void
     {
@@ -115,7 +115,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
     private function renameNew(string $lastName, \PhpParser\Node\Expr\New_ $new, $usedNameNode) : void
     {
@@ -124,7 +124,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
     private function renameClassMethod(string $lastName, \PhpParser\Node\Stmt\ClassMethod $classMethod, $usedNameNode) : void
     {
@@ -137,7 +137,7 @@ final class NameRenamer
         $classMethod->returnType = new \PhpParser\Node\Name($lastName);
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
      */
     private function renameInterface(string $lastName, \PhpParser\Node\Stmt\Interface_ $interface, $usedNameNode) : void
     {

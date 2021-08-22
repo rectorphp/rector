@@ -53,7 +53,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * Tries to lock the cache for a given Request, without blocking.
      *
      * @return bool|string true if the lock is acquired, the path to the current lock otherwise
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function lock($request)
     {
@@ -76,7 +76,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * Releases the lock for the given Request.
      *
      * @return bool False if the lock file does not exist or cannot be unlocked, true otherwise
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function unlock($request)
     {
@@ -90,7 +90,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
         return \false;
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function isLocked($request)
     {
@@ -113,7 +113,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * Locates a cached Response for the Request provided.
      *
      * @return Response|null A Response instance, or null if no cache entry was found
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function lookup($request)
     {
@@ -150,8 +150,8 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * @return string The key under which the response is stored
      *
      * @throws \RuntimeException
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function write($request, $response)
     {
@@ -200,7 +200,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * Returns content digest for $response.
      *
      * @return string
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     protected function generateContentDigest($response)
     {
@@ -210,7 +210,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * Invalidates all cache entries that match the request.
      *
      * @throws \RuntimeException
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function invalidate($request)
     {
@@ -366,7 +366,7 @@ class Store implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCa
      * be stored independently under the same cache key.
      *
      * @return string A key for the given Request
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function generateCacheKey($request)
     {

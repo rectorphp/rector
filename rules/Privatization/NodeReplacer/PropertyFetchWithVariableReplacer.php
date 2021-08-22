@@ -13,7 +13,7 @@ use RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class PropertyFetchWithVariableReplacer
 {
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**

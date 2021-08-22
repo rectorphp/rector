@@ -13,7 +13,7 @@ final class AddedFileWithNodes implements \Rector\FileSystemRector\Contract\Adde
      */
     private $filePath;
     /**
-     * @var \PhpParser\Node[]
+     * @var \RectorPrefix20210822\PhpParser\Node[]
      */
     private $nodes;
     /**

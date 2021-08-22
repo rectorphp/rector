@@ -20,15 +20,15 @@ final class JsonFileManager
      */
     private $cachedJSONFiles = [];
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
-     * @var \Symplify\ComposerJsonManipulator\Json\JsonCleaner
+     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Json\JsonCleaner
      */
     private $jsonCleaner;
     /**
-     * @var \Symplify\ComposerJsonManipulator\Json\JsonInliner
+     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Json\JsonInliner
      */
     private $jsonInliner;
     public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Json\JsonCleaner $jsonCleaner, \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Json\JsonInliner $jsonInliner)

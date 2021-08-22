@@ -12,7 +12,7 @@ use Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToD
 final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToDbalRefactoring
 {
     /**
-     * @var \Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory
      */
     private $connectionCallFactory;
     /**
@@ -26,7 +26,7 @@ final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3R
     }
     /**
      * @return Expr[]
-     * @param \PhpParser\Node\Expr\MethodCall $oldNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall $oldNode
      */
     public function refactor($oldNode) : array
     {

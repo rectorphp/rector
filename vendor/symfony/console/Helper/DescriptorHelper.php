@@ -41,7 +41,7 @@ class DescriptorHelper extends \RectorPrefix20210822\Symfony\Component\Console\H
      *
      * @throws InvalidArgumentException when the given format is not supported
      * @param object|null $object
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      * @param mixed[] $options
      */
     public function describe($output, $object, $options = [])
@@ -58,7 +58,7 @@ class DescriptorHelper extends \RectorPrefix20210822\Symfony\Component\Console\H
      *
      * @return $this
      * @param string $format
-     * @param \Symfony\Component\Console\Descriptor\DescriptorInterface $descriptor
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Descriptor\DescriptorInterface $descriptor
      */
     public function register($format, $descriptor)
     {

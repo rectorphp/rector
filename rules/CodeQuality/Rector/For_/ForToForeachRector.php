@@ -36,15 +36,15 @@ final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
      */
     private $countValueName;
     /**
-     * @var \PhpParser\Node\Expr|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
      */
     private $countValueVariableExpr;
     /**
-     * @var \PhpParser\Node\Expr|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
      */
     private $iteratedExpr;
     /**
-     * @var \Doctrine\Inflector\Inflector
+     * @var \RectorPrefix20210822\Doctrine\Inflector\Inflector
      */
     private $inflector;
     /**

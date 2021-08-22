@@ -72,7 +72,7 @@ class UriSigner
         return \hash_equals($this->computeHash($this->buildUrl($url, $params)), $hash);
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function checkRequest($request) : bool
     {

@@ -39,7 +39,7 @@ class Connection
         return $this->contextProviders;
     }
     /**
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
      */
     public function write($data) : bool
     {

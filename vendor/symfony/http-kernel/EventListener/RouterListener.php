@@ -81,14 +81,14 @@ class RouterListener implements \RectorPrefix20210822\Symfony\Component\EventDis
     /**
      * After a sub-request is done, we need to reset the routing context to the parent request so that the URL generator
      * operates on the correct context again.
-     * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
      */
     public function onKernelFinishRequest($event)
     {
         $this->setCurrentRequest($this->requestStack->getParentRequest());
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event)
     {
@@ -124,7 +124,7 @@ class RouterListener implements \RectorPrefix20210822\Symfony\Component\EventDis
         }
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      */
     public function onKernelException($event)
     {

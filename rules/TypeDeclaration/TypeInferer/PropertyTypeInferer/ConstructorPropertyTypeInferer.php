@@ -38,7 +38,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
      */
     private $classMethodPropertyFetchManipulator;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -46,7 +46,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
@@ -82,7 +82,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
         $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property $property
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property $property
      */
     public function inferProperty($property) : ?\PHPStan\Type\Type
     {

@@ -198,7 +198,7 @@ CODE_SAMPLE
         return $identical;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $identical
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $identical
      * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
     private function resolveZeroIdenticalstring($identical, bool $isNegated, \PhpParser\Node\Expr $expr)

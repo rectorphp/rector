@@ -33,7 +33,7 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210822\Symfony\Co
     private $inExpression = \false;
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {
@@ -100,7 +100,7 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210822\Symfony\Co
      * @return \ReflectionFunctionAbstract|null
      *
      * @throws RuntimeException
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition $definition
      * @param bool $required
      */
     protected function getConstructor($definition, $required)
@@ -153,7 +153,7 @@ abstract class AbstractRecursivePass implements \RectorPrefix20210822\Symfony\Co
      * @throws RuntimeException
      *
      * @return \ReflectionFunctionAbstract
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition $definition
      * @param string $method
      */
     protected function getReflectionMethod($definition, $method)

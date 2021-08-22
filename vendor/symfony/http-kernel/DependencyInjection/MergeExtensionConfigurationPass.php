@@ -25,7 +25,7 @@ class MergeExtensionConfigurationPass extends \RectorPrefix20210822\Symfony\Comp
         $this->extensions = $extensions;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

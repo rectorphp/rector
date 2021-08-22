@@ -44,7 +44,7 @@ final class SomeClass
 {
     public function run()
     {
-        /** @var \Nette\Caching\Cache $cache */
+        /** @var \RectorPrefix20210822\Nette\Caching\Cache $cache */
         $cache->save($key, function () use ($container) {
             return 100;
         });
@@ -56,7 +56,7 @@ final class SomeClass
 {
     public function run()
     {
-        /** @var \Nette\Caching\Cache $cache */
+        /** @var \RectorPrefix20210822\Nette\Caching\Cache $cache */
         $result = 100;
         $cache->save($key, $result);
     }

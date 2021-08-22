@@ -60,7 +60,7 @@ CODE_SAMPLE
 class SomeClass
 {
 	/**
-	 * @var \MyClassFactory
+	 * @var \RectorPrefix20210822\MyClassFactory
 	 */
 	private $myClassFactory;
 

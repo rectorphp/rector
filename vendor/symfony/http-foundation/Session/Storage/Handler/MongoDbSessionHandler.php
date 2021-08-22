@@ -22,7 +22,7 @@ class MongoDbSessionHandler extends \RectorPrefix20210822\Symfony\Component\Http
 {
     private $mongo;
     /**
-     * @var \MongoDB\Collection
+     * @var \RectorPrefix20210822\MongoDB\Collection
      */
     private $collection;
     /**

@@ -13,7 +13,7 @@ final class ParameterTypeResolver
      */
     private $resolvedParameterTypesCached = [];
     /**
-     * @var \Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver
+     * @var \RectorPrefix20210822\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver
      */
     private $paramTypeDocBlockResolver;
     public function __construct(\RectorPrefix20210822\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver $paramTypeDocBlockResolver)

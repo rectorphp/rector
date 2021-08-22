@@ -23,7 +23,7 @@ interface EnvVarProcessorInterface
      *
      * @param string   $prefix The namespace of the variable
      * @param string   $name   The name of the variable within the namespace
-     * @param \Closure $getEnv A closure that allows fetching more env vars
+     * @param \RectorPrefix20210822\Closure $getEnv A closure that allows fetching more env vars
      *
      * @return mixed
      *

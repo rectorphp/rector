@@ -31,7 +31,7 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
      */
     private $typeFactory;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
@@ -91,7 +91,7 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
         return $yieldNodes;
     }
     /**
-     * @param \PhpParser\Node\Expr\Yield_|\PhpParser\Node\Expr\YieldFrom $yieldExpr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Yield_|\PhpParser\Node\Expr\YieldFrom $yieldExpr
      */
     private function resolveYieldValue($yieldExpr) : ?\PhpParser\Node\Expr
     {

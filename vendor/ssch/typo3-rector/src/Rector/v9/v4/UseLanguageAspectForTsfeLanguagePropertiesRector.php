@@ -23,7 +23,7 @@ final class UseLanguageAspectForTsfeLanguagePropertiesRector extends \Rector\Cor
      */
     private const NODE_NAME_MAPPING = ['sys_language_uid' => 'id', 'sys_language_content' => 'contentId', 'sys_language_contentOL' => 'legacyOverlayType', 'sys_language_mode' => 'legacyLanguageMode'];
     /**
-     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

@@ -36,7 +36,7 @@ class TracyExtension extends \RectorPrefix20210822\Nette\DI\CompilerExtension
         $builder->addDefinition($this->prefix('bar'))->setFactory([\RectorPrefix20210822\Tracy\Debugger::class, 'getBar']);
     }
     /**
-     * @param \Nette\PhpGenerator\ClassType $class
+     * @param \RectorPrefix20210822\Nette\PhpGenerator\ClassType $class
      */
     public function afterCompile($class)
     {

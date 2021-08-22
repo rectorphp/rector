@@ -8,11 +8,11 @@ use RectorPrefix20210822\Symplify\SymplifyKernel\Exception\ShouldNotHappenExcept
 final class ExpectedAndOutputFileInfoPair
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
      */
     private $expectedFileInfo;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo|null
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo|null
      */
     private $outputFileInfo;
     public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $expectedFileInfo, ?\Symplify\SmartFileSystem\SmartFileInfo $outputFileInfo)

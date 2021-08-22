@@ -101,7 +101,7 @@ CODE_SAMPLE
      * since they are not needed anymore.
      * If all of them can be removed, then directly remove `list()`.
      * @return List_|Array_|null
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
     public function removeStaleParams($node, int $rightSideRemovableParamsCount) : ?\PhpParser\Node
     {
@@ -119,7 +119,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
     private function shouldRefactor($node) : bool
     {

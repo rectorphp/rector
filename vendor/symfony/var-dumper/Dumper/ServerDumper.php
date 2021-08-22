@@ -38,7 +38,7 @@ class ServerDumper implements \RectorPrefix20210822\Symfony\Component\VarDumper\
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
      */
     public function dump($data)
     {

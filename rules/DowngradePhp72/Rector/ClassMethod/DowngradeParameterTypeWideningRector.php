@@ -45,7 +45,7 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      */
     private $nativeParamToPhpDocDecorator;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

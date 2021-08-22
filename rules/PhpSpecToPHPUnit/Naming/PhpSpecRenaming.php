@@ -27,7 +27,7 @@ final class PhpSpecRenaming
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\PackageBuilder\Strings\StringFormatConverter
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Strings\StringFormatConverter
      */
     private $stringFormatConverter;
     /**

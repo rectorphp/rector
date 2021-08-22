@@ -22,7 +22,7 @@ final class BetterTypeParser extends \PHPStan\PhpDocParser\Parser\TypeParser
         parent::__construct($constExprParser);
     }
     /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      */
     public function parse($tokenIterator) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {

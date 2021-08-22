@@ -19,8 +19,8 @@ class ProxyHelper
 {
     /**
      * @return string|null The FQCN or builtin name of the type hint, or null when the type hint references an invalid self|parent context
-     * @param \ReflectionFunctionAbstract $r
-     * @param \ReflectionParameter|null $p
+     * @param \RectorPrefix20210822\ReflectionFunctionAbstract $r
+     * @param \RectorPrefix20210822\ReflectionParameter|null $p
      * @param bool $noBuiltin
      */
     public static function getTypeHint($r, $p = null, $noBuiltin = \false) : ?string

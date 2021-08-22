@@ -7,7 +7,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class InputFileInfoAndExpected
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
      */
     private $inputFileInfo;
     private $expected;

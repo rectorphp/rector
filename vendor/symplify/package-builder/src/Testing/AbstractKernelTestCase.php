@@ -22,11 +22,11 @@ use RectorPrefix20210822\Symplify\SymplifyKernel\Exception\ShouldNotHappenExcept
 abstract class AbstractKernelTestCase extends \RectorPrefix20210822\PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Symfony\Component\HttpKernel\KernelInterface|null
+     * @var \RectorPrefix20210822\Symfony\Component\HttpKernel\KernelInterface|null
      */
     protected static $kernel;
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
+     * @var \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface|null
      */
     protected static $container;
     /**

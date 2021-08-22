@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringsAssertNakedRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \PhpParser\Parser
+     * @var \RectorPrefix20210822\PhpParser\Parser
      */
     private $parser;
     public function __construct(\PhpParser\Parser $parser)

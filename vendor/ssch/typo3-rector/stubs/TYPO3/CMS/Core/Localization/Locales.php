@@ -10,7 +10,7 @@ class Locales
 {
     /**
      * @return void
-     * @param \TYPO3\CMS\Core\Site\Entity\SiteLanguage $siteLanguage
+     * @param \RectorPrefix20210822\TYPO3\CMS\Core\Site\Entity\SiteLanguage $siteLanguage
      */
     public static function setSystemLocaleFromSiteLanguage($siteLanguage)
     {

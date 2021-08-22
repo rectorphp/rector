@@ -110,7 +110,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function shouldAddEmptyLine(?string $currentStmtVariableName, $node, int $key) : bool
     {
@@ -121,7 +121,7 @@ CODE_SAMPLE
         return !$this->isPrecededByEmptyLine($node, $key);
     }
     /**
-     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\MethodCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\MethodCall $node
      */
     private function shouldSkipLeftVariable($node) : bool
     {
@@ -148,7 +148,7 @@ CODE_SAMPLE
         return $this->previousStmtVariableName !== $currentStmtVariableName;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function isPrecededByEmptyLine($node, int $key) : bool
     {

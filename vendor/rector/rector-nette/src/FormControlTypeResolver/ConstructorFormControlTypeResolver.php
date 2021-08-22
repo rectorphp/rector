@@ -39,7 +39,7 @@ final class ConstructorFormControlTypeResolver implements \Rector\Nette\Contract
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function resolve($node) : array
     {

@@ -41,8 +41,8 @@ abstract class RoutableFragmentRenderer implements \RectorPrefix20210822\Symfony
      * @param bool $strict   Whether to allow non-scalar attributes or not
      *
      * @return string A fragment URI
-     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $reference
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Controller\ControllerReference $reference
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function generateFragmentUri($reference, $request, $absolute = \false, $strict = \true)
     {

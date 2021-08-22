@@ -31,7 +31,7 @@ final class StaticCallOnNonStaticToInstanceCallRector extends \Rector\Core\Recto
      */
     private $staticAnalyzer;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

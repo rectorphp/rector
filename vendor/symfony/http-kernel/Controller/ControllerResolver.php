@@ -28,7 +28,7 @@ class ControllerResolver implements \RectorPrefix20210822\Symfony\Component\Http
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function getController($request)
     {

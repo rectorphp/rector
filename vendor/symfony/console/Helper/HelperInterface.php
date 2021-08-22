@@ -19,7 +19,7 @@ interface HelperInterface
 {
     /**
      * Sets the helper set associated with this helper.
-     * @param \Symfony\Component\Console\Helper\HelperSet|null $helperSet
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Helper\HelperSet|null $helperSet
      */
     public function setHelperSet($helperSet = null);
     /**

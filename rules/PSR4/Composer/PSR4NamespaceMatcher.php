@@ -23,7 +23,7 @@ final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNa
     }
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function getExpectedNamespace($file, $node) : ?string
     {

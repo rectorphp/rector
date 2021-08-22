@@ -161,7 +161,7 @@ class EventDispatcher implements \RectorPrefix20210822\Symfony\Component\EventDi
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function addSubscriber($subscriber)
     {
@@ -179,7 +179,7 @@ class EventDispatcher implements \RectorPrefix20210822\Symfony\Component\EventDi
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function removeSubscriber($subscriber)
     {

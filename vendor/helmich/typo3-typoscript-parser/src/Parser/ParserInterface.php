@@ -25,7 +25,7 @@ interface ParserInterface
     /**
      * Parses a token stream.
      *
-     * @param \Helmich\TypoScriptParser\Tokenizer\TokenInterface[] $tokens The token stream to parse.
+     * @param \RectorPrefix20210822\Helmich\TypoScriptParser\Tokenizer\TokenInterface[] $tokens The token stream to parse.
      * @return Statement[] The syntax tree.
      */
     public function parseTokens($tokens) : array;

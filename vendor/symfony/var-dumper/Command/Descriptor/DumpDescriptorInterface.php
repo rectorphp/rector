@@ -18,8 +18,8 @@ use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data;
 interface DumpDescriptorInterface
 {
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
      * @param mixed[] $context
      * @param int $clientId
      */

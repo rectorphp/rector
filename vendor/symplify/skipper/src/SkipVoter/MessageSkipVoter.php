@@ -10,11 +10,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class MessageSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
-     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver
+     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver
      */
     private $skippedMessagesResolver;
     /**
-     * @var \Symplify\Skipper\Matcher\FileInfoMatcher
+     * @var \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
     public function __construct(\RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver $skippedMessagesResolver, \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
@@ -34,7 +34,7 @@ final class MessageSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\C
     }
     /**
      * @param string|object $element
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool
     {

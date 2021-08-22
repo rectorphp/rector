@@ -30,7 +30,7 @@ class ExprBuilder
      * Marks the expression as being always used.
      *
      * @return $this
-     * @param \Closure|null $then
+     * @param \RectorPrefix20210822\Closure|null $then
      */
     public function always($then = null)
     {
@@ -48,7 +48,7 @@ class ExprBuilder
      * The default one tests if the value is true.
      *
      * @return $this
-     * @param \Closure|null $closure
+     * @param \RectorPrefix20210822\Closure|null $closure
      */
     public function ifTrue($closure = null)
     {
@@ -153,7 +153,7 @@ class ExprBuilder
      * Sets the closure to run if the test pass.
      *
      * @return $this
-     * @param \Closure $closure
+     * @param \RectorPrefix20210822\Closure $closure
      */
     public function then($closure)
     {

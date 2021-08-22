@@ -32,7 +32,7 @@ class CheckDefinitionValidityPass implements \RectorPrefix20210822\Symfony\Compo
      * Processes the ContainerBuilder to validate the Definition.
      *
      * @throws RuntimeException When the Definition is invalid
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

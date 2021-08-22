@@ -10,7 +10,7 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\Intermedia
 final class RectorBetterReflectionSourceLocatorFactory
 {
     /**
-     * @var \PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory
+     * @var \RectorPrefix20210822\PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory
      */
     private $betterReflectionSourceLocatorFactory;
     /**

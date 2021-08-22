@@ -35,7 +35,7 @@ final class AddEntityIdByConditionRector extends \Rector\Core\Rector\AbstractRec
      */
     private $classInsertManipulator;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

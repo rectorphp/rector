@@ -40,7 +40,7 @@ class EnvVarProcessor implements \RectorPrefix20210822\Symfony\Component\Depende
      * {@inheritdoc}
      * @param string $prefix
      * @param string $name
-     * @param \Closure $getEnv
+     * @param \RectorPrefix20210822\Closure $getEnv
      */
     public function getEnv($prefix, $name, $getEnv)
     {

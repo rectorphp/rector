@@ -46,7 +46,7 @@ class RegisterControllerArgumentLocatorsPass implements \RectorPrefix20210822\Sy
         $this->notTaggedControllerResolverServiceId = $notTaggedControllerResolverServiceId;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {
@@ -119,11 +119,11 @@ class RegisterControllerArgumentLocatorsPass implements \RectorPrefix20210822\Sy
                 }
             }
             foreach ($methods as [$r, $parameters]) {
-                /** @var \ReflectionMethod $r */
+                /** @var \RectorPrefix20210822\ReflectionMethod $r */
                 // create a per-method map of argument-names to service/type-references
                 $args = [];
                 foreach ($parameters as $p) {
-                    /** @var \ReflectionParameter $p */
+                    /** @var \RectorPrefix20210822\ReflectionParameter $p */
                     $type = \ltrim($target = (string) \RectorPrefix20210822\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper::getTypeHint($r, $p), '\\');
                     $invalidBehavior = \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE;
                     if (isset($arguments[$r->name][$p->name])) {

@@ -13,7 +13,7 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 final class RemovedAndAddedFilesProcessor
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
@@ -25,7 +25,7 @@ final class RemovedAndAddedFilesProcessor
      */
     private $removedAndAddedFilesCollector;
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)

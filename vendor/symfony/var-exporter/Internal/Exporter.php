@@ -24,7 +24,7 @@ class Exporter
      * For performance this method is public and has no type-hints.
      *
      * @param array             &$values
-     * @param \SplObjectStorage $objectsPool
+     * @param \RectorPrefix20210822\SplObjectStorage $objectsPool
      * @param array             &$refsPool
      * @param int               &$objectsCount
      * @param bool              &$valuesAreStatic
@@ -321,8 +321,8 @@ class Exporter
         return '\\' . \get_class($value) . "::hydrate(\n" . $subIndent . \implode(",\n" . $subIndent, $code) . "\n" . $indent . ')';
     }
     /**
-     * @param \ArrayIterator|\ArrayObject $value
-     * @param \ArrayIterator|\ArrayObject $proto
+     * @param \RectorPrefix20210822\ArrayIterator|\ArrayObject $value
+     * @param \RectorPrefix20210822\ArrayIterator|\ArrayObject $proto
      */
     private static function getArrayObjectProperties($value, array &$arrayValue, $proto) : array
     {

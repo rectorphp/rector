@@ -129,7 +129,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function processType($node, \PHPStan\Type\Type $inferedType) : ?\PhpParser\Node
     {
@@ -158,7 +158,7 @@ CODE_SAMPLE
         return $this->vendorLockResolver->isReturnChangeVendorLockedIn($classMethod);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function shouldSkipInferredReturnNode($functionLike) : bool
     {
@@ -169,7 +169,7 @@ CODE_SAMPLE
         return (bool) $functionLike->returnType->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function shouldSkipExistingReturnType($functionLike, \PHPStan\Type\Type $inferedType) : bool
     {
@@ -186,8 +186,8 @@ CODE_SAMPLE
         return $this->isNullableTypeSubType($currentType, $inferedType);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $inferredReturnNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $inferredReturnNode
      */
     private function addReturnType($functionLike, $inferredReturnNode) : void
     {

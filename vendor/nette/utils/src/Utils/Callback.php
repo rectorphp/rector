@@ -139,7 +139,7 @@ final class Callback
     }
     /**
      * Unwraps closure created by Closure::fromCallable().
-     * @param \Closure $closure
+     * @param \RectorPrefix20210822\Closure $closure
      */
     public static function unwrap($closure) : callable
     {

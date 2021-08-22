@@ -64,7 +64,7 @@ class HttpKernel implements \RectorPrefix20210822\Symfony\Component\HttpKernel\H
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param int $type
      * @param bool $catch
      */
@@ -86,8 +86,8 @@ class HttpKernel implements \RectorPrefix20210822\Symfony\Component\HttpKernel\H
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function terminate($request, $response)
     {
@@ -95,8 +95,8 @@ class HttpKernel implements \RectorPrefix20210822\Symfony\Component\HttpKernel\H
     }
     /**
      * @internal
-     * @param \Throwable $exception
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     * @param \RectorPrefix20210822\Throwable $exception
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request|null $request
      */
     public function terminateWithException($exception, $request = null)
     {

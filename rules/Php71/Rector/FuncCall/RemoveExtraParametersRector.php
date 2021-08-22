@@ -82,7 +82,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     private function shouldSkip($call) : bool
     {
@@ -100,7 +100,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         return $this->variadicAnalyzer->hasVariadicParameters($call);
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
     private function resolveMaximumAllowedParameterCount($functionLikeReflection) : int
     {

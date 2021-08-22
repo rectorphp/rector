@@ -14,23 +14,23 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
-     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
     /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @var \Symplify\Skipper\Skipper\SkipSkipper
+     * @var \RectorPrefix20210822\Symplify\Skipper\Skipper\SkipSkipper
      */
     private $skipSkipper;
     /**
-     * @var \Symplify\Skipper\Skipper\OnlySkipper
+     * @var \RectorPrefix20210822\Symplify\Skipper\Skipper\OnlySkipper
      */
     private $onlySkipper;
     /**
-     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver
+     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
     public function __construct(\RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker, \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210822\Symplify\Skipper\Skipper\SkipSkipper $skipSkipper, \RectorPrefix20210822\Symplify\Skipper\Skipper\OnlySkipper $onlySkipper, \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver $skippedClassResolver)
@@ -53,7 +53,7 @@ final class ClassSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Con
     }
     /**
      * @param string|object $element
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool
     {

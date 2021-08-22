@@ -18,7 +18,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20210822\Symp
      */
     private $pseudoNamespaceToNamespace;
     /**
-     * @var \PhpParser\Node|null
+     * @var \RectorPrefix20210822\PhpParser\Node|null
      */
     private $currentPhpParserNode;
     /**

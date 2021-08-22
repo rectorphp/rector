@@ -29,7 +29,7 @@ class ResponseListener implements \RectorPrefix20210822\Symfony\Component\EventD
     }
     /**
      * Filters the Response.
-     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function onKernelResponse($event)
     {

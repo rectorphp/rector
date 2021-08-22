@@ -44,7 +44,7 @@ final class PhpDocInfo
      */
     private $isSingleLine = \false;
     /**
-     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
+     * @var \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
     private $originalPhpDocNode;
     /**
@@ -52,7 +52,7 @@ final class PhpDocInfo
      */
     private $hasChanged = \false;
     /**
-     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
+     * @var \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
     private $phpDocNode;
     /**
@@ -64,7 +64,7 @@ final class PhpDocInfo
      */
     private $staticTypeMapper;
     /**
-     * @var \PhpParser\Node
+     * @var \RectorPrefix20210822\PhpParser\Node
      */
     private $node;
     /**

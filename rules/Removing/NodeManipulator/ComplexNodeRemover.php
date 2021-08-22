@@ -95,7 +95,7 @@ final class ComplexNodeRemover
     }
     /**
      * @param string[] $classMethodNamesToSkip
-     * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $expr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $expr
      */
     private function shouldSkipPropertyForClassMethod($expr, array $classMethodNamesToSkip) : bool
     {
@@ -107,7 +107,7 @@ final class ComplexNodeRemover
         return \in_array($classMethodName, $classMethodNamesToSkip, \true);
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
     private function resolveAssign($expr) : ?\PhpParser\Node\Expr\Assign
     {

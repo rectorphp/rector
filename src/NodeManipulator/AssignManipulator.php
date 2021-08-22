@@ -47,7 +47,7 @@ final class AssignManipulator
      */
     private $propertyFetchAnalyzer;
     /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)

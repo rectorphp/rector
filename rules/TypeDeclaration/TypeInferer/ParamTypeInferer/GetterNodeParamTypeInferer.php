@@ -37,7 +37,7 @@ final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contra
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
@@ -49,7 +49,7 @@ final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contra
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
-     * @param \PhpParser\Node\Param $param
+     * @param \RectorPrefix20210822\PhpParser\Node\Param $param
      */
     public function inferParam($param) : \PHPStan\Type\Type
     {

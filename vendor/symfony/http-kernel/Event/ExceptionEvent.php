@@ -45,7 +45,7 @@ final class ExceptionEvent extends \RectorPrefix20210822\Symfony\Component\HttpK
      * Replaces the thrown exception.
      *
      * This exception will be thrown if no response is set in the event.
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function setThrowable($exception) : void
     {

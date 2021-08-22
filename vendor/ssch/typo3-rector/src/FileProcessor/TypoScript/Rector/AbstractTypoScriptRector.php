@@ -13,11 +13,11 @@ abstract class AbstractTypoScriptRector implements \RectorPrefix20210822\Helmich
      */
     protected $hasChanged = \false;
     /**
-     * @var \Helmich\TypoScriptParser\Parser\AST\Statement|null
+     * @var \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\AST\Statement|null
      */
     protected $originalStatement;
     /**
-     * @var \Helmich\TypoScriptParser\Parser\AST\Statement|null
+     * @var \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\AST\Statement|null
      */
     protected $newStatement;
     public function enterTree(array $statements) : void

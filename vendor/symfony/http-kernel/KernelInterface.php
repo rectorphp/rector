@@ -34,7 +34,7 @@ interface KernelInterface extends \RectorPrefix20210822\Symfony\Component\HttpKe
     public function registerBundles();
     /**
      * Loads the container configuration.
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Loader\LoaderInterface $loader
      */
     public function registerContainerConfiguration($loader);
     /**

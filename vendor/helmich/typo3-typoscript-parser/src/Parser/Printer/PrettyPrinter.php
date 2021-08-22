@@ -36,7 +36,7 @@ class PrettyPrinter implements \RectorPrefix20210822\Helmich\TypoScriptParser\Pa
         $this->prettyPrinterConfiguration = $prettyPrinterConfiguration ?? \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
     }
     /**
-     * @param \Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration
+     * @param \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration
      */
     public function setPrettyPrinterConfiguration($prettyPrinterConfiguration) : void
     {

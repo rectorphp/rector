@@ -32,7 +32,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
     protected $maxlen = -1;
     protected $deleteFileAfterSend = \false;
     /**
-     * @param \SplFileInfo|string $file               The file to stream
+     * @param \RectorPrefix20210822\SplFileInfo|string $file               The file to stream
      * @param int                 $status             The response status code
      * @param array               $headers            An array of response headers
      * @param bool                $public             Files are public by default
@@ -49,7 +49,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
         }
     }
     /**
-     * @param \SplFileInfo|string $file               The file to stream
+     * @param \RectorPrefix20210822\SplFileInfo|string $file               The file to stream
      * @param int                 $status             The response status code
      * @param array               $headers            An array of response headers
      * @param bool                $public             Files are public by default
@@ -69,7 +69,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
     /**
      * Sets the file to stream.
      *
-     * @param \SplFileInfo|string $file The file to stream
+     * @param \RectorPrefix20210822\SplFileInfo|string $file The file to stream
      *
      * @return $this
      *
@@ -158,7 +158,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function prepare($request)
     {

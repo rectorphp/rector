@@ -12,7 +12,7 @@ final class FluentCallStaticTypeResolver
      */
     private $exprStringTypeResolver;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Defluent\NodeAnalyzer\ExprStringTypeResolver $exprStringTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

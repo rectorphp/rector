@@ -14,7 +14,7 @@ final class FileDiffFactory
      */
     private $defaultDiffer;
     /**
-     * @var \Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer
+     * @var \RectorPrefix20210822\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer
      */
     private $consoleDiffer;
     public function __construct(\Rector\Core\Differ\DefaultDiffer $defaultDiffer, \RectorPrefix20210822\Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer $consoleDiffer)

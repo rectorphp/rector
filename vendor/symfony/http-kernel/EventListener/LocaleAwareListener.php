@@ -34,14 +34,14 @@ class LocaleAwareListener implements \RectorPrefix20210822\Symfony\Component\Eve
         $this->requestStack = $requestStack;
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event) : void
     {
         $this->setLocale($event->getRequest()->getLocale(), $event->getRequest()->getDefaultLocale());
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
      */
     public function onKernelFinishRequest($event) : void
     {

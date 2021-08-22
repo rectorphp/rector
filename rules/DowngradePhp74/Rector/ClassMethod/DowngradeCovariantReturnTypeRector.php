@@ -39,7 +39,7 @@ final class DowngradeCovariantReturnTypeRector extends \Rector\Core\Rector\Abstr
      */
     private $phpDocTypeChanger;
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
@@ -143,7 +143,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier $returnTypeNode
+     * @param \RectorPrefix20210822\PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier $returnTypeNode
      */
     private function resolveDifferentAncestorReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, $returnTypeNode) : \PHPStan\Type\Type
     {

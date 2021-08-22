@@ -31,7 +31,7 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
@@ -39,15 +39,15 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private $parser;
     /**
-     * @var \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector
      */
     private $addArgumentToSymfonyCommandRector;
     /**
-     * @var \Ssch\TYPO3Rector\Helper\FilesFinder
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
     /**
-     * @var \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector
      */
     private $addCommandsToReturnRector;
     /**
@@ -55,7 +55,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private $nikicParser;
     /**
-     * @var \Ssch\TYPO3Rector\Template\TemplateFinder
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Template\TemplateFinder
      */
     private $templateFinder;
     public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\Parser $parser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \PhpParser\Parser $nikicParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)

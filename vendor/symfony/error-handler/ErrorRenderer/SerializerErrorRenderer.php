@@ -46,7 +46,7 @@ class SerializerErrorRenderer implements \RectorPrefix20210822\Symfony\Component
     }
     /**
      * {@inheritdoc}
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function render($exception) : \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException
     {
@@ -66,7 +66,7 @@ class SerializerErrorRenderer implements \RectorPrefix20210822\Symfony\Component
         }
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\RequestStack $requestStack
      */
     public static function getPreferredFormat($requestStack) : \Closure
     {

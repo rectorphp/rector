@@ -12,11 +12,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SmartFinder
 {
     /**
-     * @var \Symplify\SmartFileSystem\Finder\FinderSanitizer
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Finder\FinderSanitizer
      */
     private $finderSanitizer;
     /**
-     * @var \Symplify\SmartFileSystem\FileSystemFilter
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemFilter
      */
     private $fileSystemFilter;
     public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter)

@@ -13,7 +13,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class NamelessConsoleCommandCompilerPass implements \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     public function process($containerBuilder) : void
     {

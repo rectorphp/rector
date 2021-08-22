@@ -67,7 +67,7 @@ CODE_SAMPLE
     }
     /**
      * @return FuncCall
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot $expr
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot $expr
      */
     private function matchStrContainsOrNotStrContains($expr) : ?\PhpParser\Node\Expr\FuncCall
     {

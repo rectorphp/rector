@@ -10,11 +10,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class PathSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
-     * @var \Symplify\Skipper\Matcher\FileInfoMatcher
+     * @var \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
     /**
-     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
+     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
     public function __construct(\RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher, \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver)
@@ -31,7 +31,7 @@ final class PathSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Cont
     }
     /**
      * @param string|object $element
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool
     {

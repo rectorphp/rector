@@ -53,7 +53,7 @@ class HIncludeFragmentRenderer extends \RectorPrefix20210822\Symfony\Component\H
      *  * default:    The default content (it can be a template name or the content)
      *  * id:         An optional hx:include tag id attribute
      *  * attributes: An optional array of hx:include tag attributes
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param mixed[] $options
      */
     public function render($uri, $request, $options = [])

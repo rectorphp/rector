@@ -46,7 +46,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210822\Symfony\
         $this->debug = $debug;
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event)
     {
@@ -64,7 +64,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210822\Symfony\
         $this->sessionUsageStack[] = $session instanceof \RectorPrefix20210822\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() : 0;
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function onKernelResponse($event)
     {
@@ -123,7 +123,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210822\Symfony\
         }
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\FinishRequestEvent $event
      */
     public function onFinishRequest($event)
     {

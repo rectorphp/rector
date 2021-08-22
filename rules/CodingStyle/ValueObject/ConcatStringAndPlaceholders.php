@@ -11,7 +11,7 @@ final class ConcatStringAndPlaceholders
      */
     private $content;
     /**
-     * @var \PhpParser\Node\Expr[]
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr[]
      */
     private $placeholderNodes;
     /**

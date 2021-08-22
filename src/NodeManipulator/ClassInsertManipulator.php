@@ -34,7 +34,7 @@ final class ClassInsertManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $stmt
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $stmt
      */
     public function addAsFirstMethod(\PhpParser\Node\Stmt\Class_ $class, $stmt) : void
     {

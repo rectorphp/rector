@@ -48,9 +48,9 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode::class;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-     * @param \PhpParser\Node $node
-     * @param \PHPStan\Analyser\NameScope $nameScope
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \RectorPrefix20210822\PHPStan\Analyser\NameScope $nameScope
      */
     public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
     {

@@ -151,7 +151,7 @@ class ResponseHeaderBag extends \RectorPrefix20210822\Symfony\Component\HttpFoun
         return $this->computedCacheControl[$key] ?? null;
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Cookie $cookie
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Cookie $cookie
      */
     public function setCookie($cookie)
     {

@@ -32,7 +32,7 @@ class SessionListener extends \RectorPrefix20210822\Symfony\Component\HttpKernel
         parent::__construct($container, $debug);
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event)
     {

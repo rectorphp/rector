@@ -28,7 +28,7 @@ final class GetParameterToConstructorInjectionRector extends \Rector\Core\Rector
      */
     private $propertyNaming;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

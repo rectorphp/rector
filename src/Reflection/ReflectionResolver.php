@@ -27,7 +27,7 @@ use ReflectionMethod;
 final class ReflectionResolver
 {
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -112,7 +112,7 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($callerType->getClassName(), $methodName, $scope);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      * @return \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null
      */
     public function resolveFunctionLikeReflectionFromCall($call)
@@ -145,7 +145,7 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($newClassType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
     public function resolvePropertyReflectionFromPropertyFetch($propertyFetch) : ?\PHPStan\Reflection\Php\PhpPropertyReflection
     {

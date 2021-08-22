@@ -39,8 +39,8 @@ class SingleCommandApplication extends \RectorPrefix20210822\Symfony\Component\C
         return $this;
     }
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface|null $input
-     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface|null $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface|null $output
      */
     public function run($input = null, $output = null) : int
     {

@@ -79,7 +79,7 @@ CODE_SAMPLE
 class SomeController
 {
     /**
-     * @var \Illuminate\Contracts\View\Factory
+     * @var \RectorPrefix20210822\Illuminate\Contracts\View\Factory
      */
     private $viewFactory;
 

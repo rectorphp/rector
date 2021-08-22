@@ -8,7 +8,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 class ConstExprParser
 {
     /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens
      * @param bool $trimStrings
      */
     public function parse($tokens, $trimStrings = \false) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode

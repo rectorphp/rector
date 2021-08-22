@@ -55,7 +55,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function addSubscriber($subscriber)
     {
@@ -80,7 +80,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function removeSubscriber($subscriber)
     {
@@ -158,7 +158,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * @return array
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request|null $request
      */
     public function getCalledListeners($request = null)
     {
@@ -177,7 +177,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * @return array
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request|null $request
      */
     public function getNotCalledListeners($request = null)
     {
@@ -215,7 +215,7 @@ class TraceableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
         return $notCalled;
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request|null $request
      */
     public function getOrphanedEvents($request = null) : array
     {

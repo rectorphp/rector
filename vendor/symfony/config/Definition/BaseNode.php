@@ -225,7 +225,7 @@ abstract class BaseNode implements \RectorPrefix20210822\Symfony\Component\Confi
     /**
      * Sets the closures used for normalization.
      *
-     * @param \Closure[] $closures An array of Closures used for normalization
+     * @param \RectorPrefix20210822\Closure[] $closures An array of Closures used for normalization
      */
     public function setNormalizationClosures($closures)
     {
@@ -234,7 +234,7 @@ abstract class BaseNode implements \RectorPrefix20210822\Symfony\Component\Confi
     /**
      * Sets the closures used for final validation.
      *
-     * @param \Closure[] $closures An array of Closures used for final validation
+     * @param \RectorPrefix20210822\Closure[] $closures An array of Closures used for final validation
      */
     public function setFinalValidationClosures($closures)
     {

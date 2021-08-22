@@ -20,7 +20,7 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         return \PhpParser\Node\Name\FullyQualified::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {

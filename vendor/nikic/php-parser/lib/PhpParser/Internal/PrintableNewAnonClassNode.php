@@ -37,7 +37,7 @@ class PrintableNewAnonClassNode extends \PhpParser\Node\Expr
         $this->stmts = $stmts;
     }
     /**
-     * @param \PhpParser\Node\Expr\New_ $newNode
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\New_ $newNode
      */
     public static function fromNewNode($newNode)
     {

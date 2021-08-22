@@ -78,12 +78,12 @@ use Doctrine\Persistence\ManagerRegistry;
 final class ProjectRepository extends ServiceEntityRepository
 {
     /**
-     * @var \Doctrine\ORM\EntityManagerInterface
+     * @var \RectorPrefix20210822\Doctrine\ORM\EntityManagerInterface
      */
     private $entityManager;
 
     /**
-     * @var \Doctrine\ORM\EntityRepository<Project>
+     * @var \RectorPrefix20210822\Doctrine\ORM\EntityRepository<Project>
      */
     private $repository;
 

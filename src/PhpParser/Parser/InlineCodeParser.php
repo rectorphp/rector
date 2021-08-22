@@ -48,11 +48,11 @@ final class InlineCodeParser
      */
     private $nodeScopeAndMetadataDecorator;
     /**
-     * @var \PhpParser\Parser
+     * @var \RectorPrefix20210822\PhpParser\Parser
      */
     private $parser;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \PhpParser\Parser $parser, \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)

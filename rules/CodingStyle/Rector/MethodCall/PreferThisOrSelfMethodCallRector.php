@@ -87,7 +87,7 @@ CODE_SAMPLE
         $this->typeToPreference = $typeToPreference;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function processToSelf($node) : ?\PhpParser\Node\Expr\StaticCall
     {
@@ -104,7 +104,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createStaticCall(self::SELF, $name, $node->args);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function processToThis($node) : ?\PhpParser\Node\Expr\MethodCall
     {

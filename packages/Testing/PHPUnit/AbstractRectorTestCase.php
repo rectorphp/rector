@@ -28,7 +28,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     use MovingFilesTrait;
     use MultipleFilesChangedTrait;
     /**
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     protected $parameterProvider;
     /**
@@ -36,11 +36,11 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
      */
     protected $removedAndAddedFilesCollector;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo|null
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo|null
      */
     protected $originalTempFileInfo;
     /**
-     * @var \Psr\Container\ContainerInterface|null
+     * @var \RectorPrefix20210822\Psr\Container\ContainerInterface|null
      */
     protected static $allRectorContainer;
     /**
@@ -93,7 +93,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         return \strncasecmp(\PHP_OS, 'WIN', 3) === 0;
     }
     /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
+     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
      * @param bool $allowMatches
      */
     protected function doTestFileInfo($fixtureFileInfo, $allowMatches = \true) : void

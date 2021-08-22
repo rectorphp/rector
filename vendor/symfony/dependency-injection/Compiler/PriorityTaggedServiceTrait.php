@@ -105,7 +105,7 @@ class PriorityTaggedServiceUtil
 {
     /**
      * @return string|int|null
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      * @param string $serviceId
      * @param string $class
      * @param string $defaultMethod

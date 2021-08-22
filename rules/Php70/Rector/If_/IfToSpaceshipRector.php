@@ -41,11 +41,11 @@ final class IfToSpaceshipRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $onGreater;
     /**
-     * @var \PhpParser\Node\Expr|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
      */
     private $firstValue;
     /**
-     * @var \PhpParser\Node\Expr|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
      */
     private $secondValue;
     /**

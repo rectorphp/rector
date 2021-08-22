@@ -39,7 +39,7 @@ final class PageNotFoundAndErrorHandlingRector extends \Rector\Core\Rector\Abstr
      */
     private const METHODS = ['pageNotFoundAndExit', 'pageUnavailableAndExit', 'checkPageUnavailableHandler', 'pageUnavailableHandler', 'pageNotFoundHandler', 'pageErrorHandler'];
     /**
-     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

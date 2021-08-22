@@ -34,15 +34,15 @@ final class AutowireArrayParameterCompilerPass implements \RectorPrefix20210822\
      */
     private $excludedFatalClasses = ['RectorPrefix20210822\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix20210822\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix20210822\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix20210822\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix20210822\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix20210822\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix20210822\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix20210822\\Sonata\\Twig\\Extension\\TemplateExtension', 'RectorPrefix20210822\\Symfony\\Component\\HttpKernel\\KernelInterface'];
     /**
-     * @var \Symplify\PackageBuilder\DependencyInjection\DefinitionFinder
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\DependencyInjection\DefinitionFinder
      */
     private $definitionFinder;
     /**
-     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
+     * @var \RectorPrefix20210822\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
     /**
-     * @var \Symplify\AutowireArrayParameter\Skipper\ParameterSkipper
+     * @var \RectorPrefix20210822\Symplify\AutowireArrayParameter\Skipper\ParameterSkipper
      */
     private $parameterSkipper;
     /**
@@ -56,7 +56,7 @@ final class AutowireArrayParameterCompilerPass implements \RectorPrefix20210822\
         $this->parameterSkipper = new \RectorPrefix20210822\Symplify\AutowireArrayParameter\Skipper\ParameterSkipper($this->parameterTypeResolver, $excludedFatalClasses);
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     public function process($containerBuilder) : void
     {

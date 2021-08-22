@@ -7,11 +7,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class BootstrapConfigs
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo|null
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo|null
      */
     private $mainConfigFileInfo;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo[]
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo[]
      */
     private $setConfigFileInfos;
     /**

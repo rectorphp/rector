@@ -33,8 +33,8 @@ final class FragmentUriGenerator implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritDoc}
-     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $controller
-     * @param \Symfony\Component\HttpFoundation\Request|null $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Controller\ControllerReference $controller
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request|null $request
      * @param bool $absolute
      * @param bool $strict
      * @param bool $sign

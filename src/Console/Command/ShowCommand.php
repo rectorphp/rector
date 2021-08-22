@@ -46,8 +46,8 @@ final class ShowCommand extends \RectorPrefix20210822\Symfony\Component\Console\
         $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, 'o', \RectorPrefix20210822\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
     }
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute($input, $output) : int
     {

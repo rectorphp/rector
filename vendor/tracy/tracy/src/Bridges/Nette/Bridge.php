@@ -26,7 +26,7 @@ class Bridge
         $blueScreen->addPanel([self::class, 'renderNeonError']);
     }
     /**
-     * @param \Throwable|null $e
+     * @param \RectorPrefix20210822\Throwable|null $e
      */
     public static function renderLatteError($e) : ?array
     {
@@ -44,7 +44,7 @@ class Bridge
         return null;
     }
     /**
-     * @param \Throwable|null $e
+     * @param \RectorPrefix20210822\Throwable|null $e
      */
     public static function renderLatteUnknownMacro($e) : ?array
     {
@@ -54,7 +54,7 @@ class Bridge
         return null;
     }
     /**
-     * @param \Throwable|null $e
+     * @param \RectorPrefix20210822\Throwable|null $e
      */
     public static function renderMemberAccessException($e) : ?array
     {
@@ -71,7 +71,7 @@ class Bridge
         return null;
     }
     /**
-     * @param \Throwable|null $e
+     * @param \RectorPrefix20210822\Throwable|null $e
      */
     public static function renderNeonError($e) : ?array
     {

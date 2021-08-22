@@ -23,7 +23,7 @@ class LoggerPass implements \RectorPrefix20210822\Symfony\Component\DependencyIn
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

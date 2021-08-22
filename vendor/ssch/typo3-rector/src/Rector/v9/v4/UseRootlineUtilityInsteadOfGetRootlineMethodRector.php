@@ -19,7 +19,7 @@ use RectorPrefix20210822\TYPO3\CMS\Frontend\Page\PageRepository;
 final class UseRootlineUtilityInsteadOfGetRootlineMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

@@ -15,7 +15,7 @@ final class MissingRectorRulesReporter
      */
     private $rectors;
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**

@@ -15,11 +15,11 @@ use PHPStan\Analyser\TypeSpecifierContext;
 use PHPStan\Type\Constant\ConstantStringType;
 class AssertTypeSpecifyingExtensionHelper
 {
-    /** @var \Closure[] */
+    /** @var \RectorPrefix20210822\Closure[] */
     private static $resolvers;
     /**
      * @param string $name
-     * @param \PhpParser\Node\Arg[] $args
+     * @param \RectorPrefix20210822\PhpParser\Node\Arg[] $args
      * @return bool
      */
     public static function isSupported(string $name, array $args) : bool
@@ -51,7 +51,7 @@ class AssertTypeSpecifyingExtensionHelper
      * @param TypeSpecifier $typeSpecifier
      * @param Scope $scope
      * @param string $name
-     * @param \PhpParser\Node\Arg[] $args $args
+     * @param \RectorPrefix20210822\PhpParser\Node\Arg[] $args $args
      * @return SpecifiedTypes
      */
     public static function specifyTypes(\PHPStan\Analyser\TypeSpecifier $typeSpecifier, \PHPStan\Analyser\Scope $scope, string $name, array $args) : \PHPStan\Analyser\SpecifiedTypes
@@ -65,7 +65,7 @@ class AssertTypeSpecifyingExtensionHelper
     /**
      * @param Scope $scope
      * @param string $name
-     * @param \PhpParser\Node\Arg[] $args
+     * @param \RectorPrefix20210822\PhpParser\Node\Arg[] $args
      * @return \PhpParser\Node\Expr|null
      */
     private static function createExpression(\PHPStan\Analyser\Scope $scope, string $name, array $args) : ?\PhpParser\Node\Expr

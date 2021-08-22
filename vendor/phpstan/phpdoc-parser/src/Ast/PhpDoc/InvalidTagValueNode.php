@@ -9,7 +9,7 @@ class InvalidTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagV
     use NodeAttributes;
     /** @var string (may be empty) */
     public $value;
-    /** @var \PHPStan\PhpDocParser\Parser\ParserException */
+    /** @var \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\ParserException */
     public $exception;
     public function __construct(string $value, \PHPStan\PhpDocParser\Parser\ParserException $exception)
     {

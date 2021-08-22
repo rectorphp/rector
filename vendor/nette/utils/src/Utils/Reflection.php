@@ -27,7 +27,7 @@ final class Reflection
      * Returns the type of return value of given function or method and normalizes `self`, `static`, and `parent` to actual class names.
      * If the function does not have a return type, it returns null.
      * If the function has union type, it throws Nette\InvalidStateException.
-     * @param \ReflectionFunctionAbstract $func
+     * @param \RectorPrefix20210822\ReflectionFunctionAbstract $func
      */
     public static function getReturnType($func) : ?string
     {
@@ -35,7 +35,7 @@ final class Reflection
     }
     /**
      * Returns the types of return value of given function or method and normalizes `self`, `static`, and `parent` to actual class names.
-     * @param \ReflectionFunctionAbstract $func
+     * @param \RectorPrefix20210822\ReflectionFunctionAbstract $func
      */
     public static function getReturnTypes($func) : array
     {
@@ -45,7 +45,7 @@ final class Reflection
      * Returns the type of given parameter and normalizes `self` and `parent` to the actual class names.
      * If the parameter does not have a type, it returns null.
      * If the parameter has union type, it throws Nette\InvalidStateException.
-     * @param \ReflectionParameter $param
+     * @param \RectorPrefix20210822\ReflectionParameter $param
      */
     public static function getParameterType($param) : ?string
     {
@@ -53,7 +53,7 @@ final class Reflection
     }
     /**
      * Returns the types of given parameter and normalizes `self` and `parent` to the actual class names.
-     * @param \ReflectionParameter $param
+     * @param \RectorPrefix20210822\ReflectionParameter $param
      */
     public static function getParameterTypes($param) : array
     {
@@ -63,7 +63,7 @@ final class Reflection
      * Returns the type of given property and normalizes `self` and `parent` to the actual class names.
      * If the property does not have a type, it returns null.
      * If the property has union type, it throws Nette\InvalidStateException.
-     * @param \ReflectionProperty $prop
+     * @param \RectorPrefix20210822\ReflectionProperty $prop
      */
     public static function getPropertyType($prop) : ?string
     {
@@ -71,7 +71,7 @@ final class Reflection
     }
     /**
      * Returns the types of given property and normalizes `self` and `parent` to the actual class names.
-     * @param \ReflectionProperty $prop
+     * @param \RectorPrefix20210822\ReflectionProperty $prop
      */
     public static function getPropertyTypes($prop) : array
     {
@@ -124,7 +124,7 @@ final class Reflection
      * Returns the default value of parameter. If it is a constant, it returns its value.
      * @return mixed
      * @throws \ReflectionException  If the parameter does not have a default value or the constant cannot be resolved
-     * @param \ReflectionParameter $param
+     * @param \RectorPrefix20210822\ReflectionParameter $param
      */
     public static function getParameterDefaultValue($param)
     {
@@ -153,7 +153,7 @@ final class Reflection
     }
     /**
      * Returns a reflection of a class or trait that contains a declaration of given property. Property can also be declared in the trait.
-     * @param \ReflectionProperty $prop
+     * @param \RectorPrefix20210822\ReflectionProperty $prop
      */
     public static function getPropertyDeclaringClass($prop) : \ReflectionClass
     {
@@ -167,7 +167,7 @@ final class Reflection
     /**
      * Returns a reflection of a method that contains a declaration of $method.
      * Usually, each method is its own declaration, but the body of the method can also be in the trait and under a different name.
-     * @param \ReflectionMethod $method
+     * @param \RectorPrefix20210822\ReflectionMethod $method
      */
     public static function getMethodDeclaringMethod($method) : \ReflectionMethod
     {
@@ -196,7 +196,7 @@ final class Reflection
         return $res ?? ($res = (bool) (new \ReflectionMethod(__METHOD__))->getDocComment());
     }
     /**
-     * @param \Reflector $ref
+     * @param \RectorPrefix20210822\Reflector $ref
      */
     public static function toString($ref) : string
     {
@@ -219,7 +219,7 @@ final class Reflection
      * Thus, it returns how the PHP parser would understand $name if it were written in the body of the class $context.
      * @throws Nette\InvalidArgumentException
      * @param string $name
-     * @param \ReflectionClass $context
+     * @param \RectorPrefix20210822\ReflectionClass $context
      */
     public static function expandClassName($name, $context) : string
     {
@@ -246,7 +246,7 @@ final class Reflection
         }
     }
     /** @return array of [alias => class]
-     * @param \ReflectionClass $class */
+     * @param \RectorPrefix20210822\ReflectionClass $class */
     public static function getUseStatements($class) : array
     {
         if ($class->isAnonymous()) {

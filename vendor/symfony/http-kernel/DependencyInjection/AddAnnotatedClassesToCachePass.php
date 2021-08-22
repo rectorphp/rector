@@ -30,7 +30,7 @@ class AddAnnotatedClassesToCachePass implements \RectorPrefix20210822\Symfony\Co
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

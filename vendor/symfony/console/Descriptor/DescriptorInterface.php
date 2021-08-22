@@ -20,7 +20,7 @@ interface DescriptorInterface
 {
     /**
      * @param object $object
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      * @param mixed[] $options
      */
     public function describe($output, $object, $options = []);

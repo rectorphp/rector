@@ -37,7 +37,7 @@ final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20210822\Symf
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

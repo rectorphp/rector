@@ -43,7 +43,7 @@ EOF
 );
     }
     /**
-     * @param \Symfony\Component\Console\Command\Command $command
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
      */
     public function setCommand($command)
     {
@@ -51,8 +51,8 @@ EOF
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute($input, $output)
     {

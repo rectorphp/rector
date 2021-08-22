@@ -30,7 +30,7 @@ class AddEventAliasesPass implements \RectorPrefix20210822\Symfony\Component\Dep
         $this->eventAliasesParameter = $eventAliasesParameter;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container) : void
     {

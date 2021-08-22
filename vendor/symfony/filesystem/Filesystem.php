@@ -464,7 +464,7 @@ class Filesystem
      *  - existing files in the target directory will be overwritten, except if they are newer (see the `override` option)
      *  - files in the target directory that do not exist in the source directory will not be deleted (see the `delete` option)
      *
-     * @param \Traversable|null $iterator Iterator that filters which files and directories to copy, if null a recursive iterator is created
+     * @param \RectorPrefix20210822\Traversable|null $iterator Iterator that filters which files and directories to copy, if null a recursive iterator is created
      * @param array             $options  An array of boolean options
      *                                    Valid options are:
      *                                    - $options['override'] If true, target files newer than origin files are overwritten (see copy(), defaults to false)

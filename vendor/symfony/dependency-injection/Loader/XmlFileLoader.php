@@ -497,7 +497,7 @@ class XmlFileLoader extends \RectorPrefix20210822\Symfony\Component\DependencyIn
      * @return bool
      *
      * @throws RuntimeException When extension references a non-existent XSD file
-     * @param \DOMDocument $dom
+     * @param \RectorPrefix20210822\DOMDocument $dom
      */
     public function validateSchema($dom)
     {
@@ -656,7 +656,7 @@ EOF;
      *
      *  * The nested-tags are converted to keys (<foo><foo>bar</foo></foo>)
      *
-     * @param \DOMElement $element A \DOMElement instance
+     * @param \RectorPrefix20210822\DOMElement $element A \DOMElement instance
      *
      * @return mixed
      */

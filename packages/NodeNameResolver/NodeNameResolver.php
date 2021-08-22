@@ -101,7 +101,7 @@ final class NodeNameResolver
         return $name === $resolvedName;
     }
     /**
-     * @param \PhpParser\Node|string $node
+     * @param \RectorPrefix20210822\PhpParser\Node|string $node
      */
     public function getName($node) : ?string
     {

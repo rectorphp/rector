@@ -12,7 +12,7 @@ final class ConfigureCallValuesCollector
      */
     private $configureCallValuesByRectorClass = [];
     /**
-     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Yaml\ParametersMerger
      */
     private $parametersMerger;
     public function __construct()

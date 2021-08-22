@@ -37,8 +37,8 @@ final class ConsoleApplication extends \RectorPrefix20210822\Symfony\Component\C
         $this->setDefaultCommand(\RectorPrefix20210822\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\ProcessCommand::class));
     }
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     public function doRun($input, $output) : int
     {

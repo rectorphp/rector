@@ -50,8 +50,8 @@ class Intervals
      * Checks whether $candidate is a subset of $constraint
      *
      * @return bool
-     * @param \Composer\Semver\Constraint\ConstraintInterface $candidate
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
+     * @param \RectorPrefix20210822\Composer\Semver\Constraint\ConstraintInterface $candidate
+     * @param \RectorPrefix20210822\Composer\Semver\Constraint\ConstraintInterface $constraint
      */
     public static function isSubsetOf($candidate, $constraint)
     {
@@ -94,8 +94,8 @@ class Intervals
      * Checks whether $a and $b have any intersection, equivalent to $a->matches($b)
      *
      * @return bool
-     * @param \Composer\Semver\Constraint\ConstraintInterface $a
-     * @param \Composer\Semver\Constraint\ConstraintInterface $b
+     * @param \RectorPrefix20210822\Composer\Semver\Constraint\ConstraintInterface $a
+     * @param \RectorPrefix20210822\Composer\Semver\Constraint\ConstraintInterface $b
      */
     public static function haveIntersections($a, $b)
     {
@@ -117,7 +117,7 @@ class Intervals
      * to match the same intervals.
      *
      * @return ConstraintInterface
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
+     * @param \RectorPrefix20210822\Composer\Semver\Constraint\ConstraintInterface $constraint
      */
     public static function compactConstraint($constraint)
     {
@@ -230,7 +230,7 @@ class Intervals
      *
      * @return array
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
+     * @param \RectorPrefix20210822\Composer\Semver\Constraint\ConstraintInterface $constraint
      */
     public static function get($constraint)
     {

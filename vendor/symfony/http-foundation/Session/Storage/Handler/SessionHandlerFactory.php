@@ -20,7 +20,7 @@ use RectorPrefix20210822\Symfony\Component\Cache\Traits\RedisProxy;
 class SessionHandlerFactory
 {
     /**
-     * @param \Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface|RedisProxy|RedisClusterProxy|\Memcached|\PDO|string $connection Connection or DSN
+     * @param \RectorPrefix20210822\Redis|\RedisArray|\RedisCluster|\Predis\ClientInterface|RedisProxy|RedisClusterProxy|\Memcached|\PDO|string $connection Connection or DSN
      */
     public static function createHandler($connection) : \RectorPrefix20210822\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
     {

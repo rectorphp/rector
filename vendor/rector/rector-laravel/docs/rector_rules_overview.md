@@ -80,14 +80,14 @@ Replace magical call on `$this->app["something"]` to standalone type assign vari
  class SomeClass
  {
      /**
-      * @var \Illuminate\Contracts\Foundation\Application
+      * @var \RectorPrefix20210822\Illuminate\Contracts\Foundation\Application
       */
      private $app;
 
      public function run()
      {
 -        $validator = $this->app['validator']->make('...');
-+        /** @var \Illuminate\Validation\Factory $validationFactory */
++        /** @var \RectorPrefix20210822\Illuminate\Validation\Factory $validationFactory */
 +        $validationFactory = $this->app['validator'];
 +        $validator = $validationFactory->make('...');
      }
@@ -148,7 +148,7 @@ Change param type to iterable, if passed one
  class AnotherClass
  {
      /**
-      * @var \Illuminate\Contracts\Foundation\Application
+      * @var \RectorPrefix20210822\Illuminate\Contracts\Foundation\Application
       */
      private $app;
 

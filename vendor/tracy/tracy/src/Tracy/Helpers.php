@@ -82,7 +82,7 @@ class Helpers
         return \explode("\0", \get_class($obj))[0];
     }
     /** @internal
-     * @param \Throwable $exception */
+     * @param \RectorPrefix20210822\Throwable $exception */
     public static function fixStack($exception) : \Throwable
     {
         if (\function_exists('xdebug_get_function_stack')) {
@@ -121,7 +121,7 @@ class Helpers
         }
     }
     /** @internal
-     * @param \Throwable $e */
+     * @param \RectorPrefix20210822\Throwable $e */
     public static function improveException($e) : void
     {
         $message = $e->getMessage();
@@ -412,7 +412,7 @@ XX
         return (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
     }
     /**
-     * @param \Throwable $ex
+     * @param \RectorPrefix20210822\Throwable $ex
      */
     public static function getExceptionChain($ex) : array
     {

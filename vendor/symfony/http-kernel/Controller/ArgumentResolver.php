@@ -37,7 +37,7 @@ final class ArgumentResolver implements \RectorPrefix20210822\Symfony\Component\
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param callable $controller
      */
     public function getArguments($request, $controller) : array

@@ -128,8 +128,8 @@ abstract class Kernel implements \RectorPrefix20210822\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function terminate($request, $response)
     {
@@ -159,7 +159,7 @@ abstract class Kernel implements \RectorPrefix20210822\Symfony\Component\HttpKer
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param int $type
      * @param bool $catch
      */
@@ -349,7 +349,7 @@ abstract class Kernel implements \RectorPrefix20210822\Symfony\Component\HttpKer
      * The extension point similar to the Bundle::build() method.
      *
      * Use this method to register compiler passes and manipulate the container during the building process.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     protected function build($container)
     {
@@ -551,7 +551,7 @@ abstract class Kernel implements \RectorPrefix20210822\Symfony\Component\HttpKer
     }
     /**
      * Prepares the ContainerBuilder before it is compiled.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     protected function prepareContainer($container)
     {
@@ -599,8 +599,8 @@ abstract class Kernel implements \RectorPrefix20210822\Symfony\Component\HttpKer
      *
      * @param string $class     The name of the class to generate
      * @param string $baseClass The name of the container's base class
-     * @param \Symfony\Component\Config\ConfigCache $cache
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\Config\ConfigCache $cache
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     protected function dumpContainer($cache, $container, $class, $baseClass)
     {
@@ -627,7 +627,7 @@ abstract class Kernel implements \RectorPrefix20210822\Symfony\Component\HttpKer
      * Returns a loader for the container.
      *
      * @return DelegatingLoader The loader
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     protected function getContainerLoader($container)
     {

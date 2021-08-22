@@ -9,7 +9,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerJsonPrinter
 {
     /**
-     * @var \Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager
+     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager
      */
     private $jsonFileManager;
     public function __construct(\RectorPrefix20210822\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager $jsonFileManager)

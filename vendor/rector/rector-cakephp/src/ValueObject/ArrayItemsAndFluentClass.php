@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\ArrayItem;
 final class ArrayItemsAndFluentClass
 {
     /**
-     * @var \PhpParser\Node\Expr\ArrayItem[]
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr\ArrayItem[]
      */
     private $arrayItems;
     /**

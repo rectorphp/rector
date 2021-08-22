@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NewFluentChainMethodCallToNonFluentRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**

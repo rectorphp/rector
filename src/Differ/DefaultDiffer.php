@@ -8,7 +8,7 @@ use RectorPrefix20210822\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBu
 final class DefaultDiffer
 {
     /**
-     * @var \SebastianBergmann\Diff\Differ
+     * @var \RectorPrefix20210822\SebastianBergmann\Diff\Differ
      */
     private $differ;
     public function __construct()

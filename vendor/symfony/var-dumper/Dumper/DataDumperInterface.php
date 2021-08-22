@@ -19,7 +19,7 @@ use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data;
 interface DataDumperInterface
 {
     /**
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
      */
     public function dump($data);
 }

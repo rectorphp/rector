@@ -50,7 +50,7 @@ class RedisCaster
         return $a;
     }
     /**
-     * @param \Redis|\RedisArray|\RedisCluster $redis
+     * @param \RectorPrefix20210822\Redis|\RedisArray|\RedisCluster $redis
      */
     private static function getRedisOptions($redis, array $options = []) : \RectorPrefix20210822\Symfony\Component\VarDumper\Caster\EnumStub
     {

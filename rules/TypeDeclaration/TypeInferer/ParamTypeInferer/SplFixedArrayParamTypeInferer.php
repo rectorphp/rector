@@ -25,7 +25,7 @@ final class SplFixedArrayParamTypeInferer implements \Rector\TypeDeclaration\Con
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @param \PhpParser\Node\Param $param
+     * @param \RectorPrefix20210822\PhpParser\Node\Param $param
      */
     public function inferParam($param) : \PHPStan\Type\Type
     {

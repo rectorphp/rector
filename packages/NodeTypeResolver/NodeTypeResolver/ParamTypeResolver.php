@@ -36,7 +36,7 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
      */
     private $staticTypeMapper;
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
@@ -69,7 +69,7 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         return [\PhpParser\Node\Param::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

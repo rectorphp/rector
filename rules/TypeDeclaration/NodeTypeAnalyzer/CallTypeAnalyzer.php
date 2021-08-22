@@ -21,7 +21,7 @@ final class CallTypeAnalyzer
     }
     /**
      * @return Type[]
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
     public function resolveMethodParameterTypes($call) : array
     {

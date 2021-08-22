@@ -32,7 +32,7 @@ class ResolveInvalidReferencesPass implements \RectorPrefix20210822\Symfony\Comp
     private $currentId;
     /**
      * Process the ContainerBuilder to resolve invalid references.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

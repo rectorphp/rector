@@ -8,7 +8,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoMatcher
 {
     /**
-     * @var \Symplify\Skipper\FileSystem\PathNormalizer
+     * @var \RectorPrefix20210822\Symplify\Skipper\FileSystem\PathNormalizer
      */
     private $pathNormalizer;
     public function __construct(\RectorPrefix20210822\Symplify\Skipper\FileSystem\PathNormalizer $pathNormalizer)

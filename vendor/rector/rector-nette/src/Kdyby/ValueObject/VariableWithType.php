@@ -16,11 +16,11 @@ final class VariableWithType
      */
     private $name;
     /**
-     * @var \PHPStan\Type\Type
+     * @var \RectorPrefix20210822\PHPStan\Type\Type
      */
     private $type;
     /**
-     * @var \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
      */
     private $phpParserTypeNode;
     /**

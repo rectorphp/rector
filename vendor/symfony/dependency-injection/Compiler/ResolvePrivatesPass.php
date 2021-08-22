@@ -21,7 +21,7 @@ class ResolvePrivatesPass implements \RectorPrefix20210822\Symfony\Component\Dep
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

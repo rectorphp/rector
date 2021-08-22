@@ -28,7 +28,7 @@ abstract class ConfigurableExtension extends \RectorPrefix20210822\Symfony\Compo
     /**
      * {@inheritdoc}
      * @param mixed[] $configs
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public final function load($configs, $container)
     {
@@ -37,7 +37,7 @@ abstract class ConfigurableExtension extends \RectorPrefix20210822\Symfony\Compo
     /**
      * Configures the passed container according to the merged configuration.
      * @param mixed[] $mergedConfig
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     protected abstract function loadInternal($mergedConfig, $container);
 }

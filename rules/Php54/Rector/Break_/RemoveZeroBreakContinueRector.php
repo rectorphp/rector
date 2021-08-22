@@ -86,7 +86,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_ $stmt
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Break_|\PhpParser\Node\Stmt\Continue_ $stmt
      */
     private function processVariableNum($stmt, \PhpParser\Node\Expr\Variable $numVariable) : ?\PhpParser\Node
     {

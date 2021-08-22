@@ -15,7 +15,7 @@ use RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class ClassMethodPropertyFetchManipulator
 {
     /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**

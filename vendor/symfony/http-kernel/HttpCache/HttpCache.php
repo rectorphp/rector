@@ -162,7 +162,7 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      * @param int $type
      * @param bool $catch
      */
@@ -212,8 +212,8 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function terminate($request, $response)
     {
@@ -227,7 +227,7 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * @param bool $catch Whether to process exceptions
      *
      * @return Response A Response instance
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function pass($request, $catch = \false)
     {
@@ -244,7 +244,7 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * @throws \Exception
      *
      * @see RFC2616 13.10
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function invalidate($request, $catch = \false)
     {
@@ -284,7 +284,7 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * @return Response A Response instance
      *
      * @throws \Exception
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function lookup($request, $catch = \false)
     {
@@ -321,8 +321,8 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * @param bool $catch Whether to process exceptions
      *
      * @return Response A Response instance
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $entry
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $entry
      */
     protected function validate($request, $entry, $catch = \false)
     {
@@ -374,7 +374,7 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * @param bool $catch Whether to process exceptions
      *
      * @return Response A Response instance
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function fetch($request, $catch = \false)
     {
@@ -402,7 +402,7 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * @param Response|null $entry A Response instance (the stale entry if present, null otherwise)
      *
      * @return Response A Response instance
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     protected function forward($request, $catch = \false, $entry = null)
     {
@@ -463,8 +463,8 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * Checks whether the cache entry is "fresh enough" to satisfy the Request.
      *
      * @return bool true if the cache entry if fresh enough, false otherwise
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $entry
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $entry
      */
     protected function isFreshEnough($request, $entry)
     {
@@ -480,8 +480,8 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * Locks a Request during the call to the backend.
      *
      * @return bool true if the cache entry can be returned even if it is staled, false otherwise
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $entry
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $entry
      */
     protected function lock($request, $entry)
     {
@@ -520,8 +520,8 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
      * Writes the Response to the cache.
      *
      * @throws \Exception
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     protected function store($request, $response)
     {
@@ -567,8 +567,8 @@ class HttpCache implements \RectorPrefix20210822\Symfony\Component\HttpKernel\Ht
         $response->headers->remove('X-Body-File');
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     protected function processResponseBody($request, $response)
     {

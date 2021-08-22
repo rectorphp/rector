@@ -86,7 +86,7 @@ class Table
     /**
      * Sets a style definition.
      * @param string $name
-     * @param \Symfony\Component\Console\Helper\TableStyle $style
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Helper\TableStyle $style
      */
     public static function setStyleDefinition($name, $style)
     {

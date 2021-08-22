@@ -39,7 +39,7 @@ final class NonInformativeReturnTagRemover
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)
@@ -48,7 +48,7 @@ final class NonInformativeReturnTagRemover
         $this->typeChecker = $typeChecker;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function removeReturnTagIfNotUseful($functionLike) : void
     {

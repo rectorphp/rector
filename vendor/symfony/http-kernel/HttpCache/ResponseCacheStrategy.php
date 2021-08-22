@@ -37,7 +37,7 @@ class ResponseCacheStrategy implements \RectorPrefix20210822\Symfony\Component\H
     private $ageDirectives = ['max-age' => null, 's-maxage' => null, 'expires' => null];
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function add($response)
     {
@@ -69,7 +69,7 @@ class ResponseCacheStrategy implements \RectorPrefix20210822\Symfony\Component\H
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function update($response)
     {

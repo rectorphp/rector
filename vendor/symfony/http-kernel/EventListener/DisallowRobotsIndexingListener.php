@@ -22,7 +22,7 @@ class DisallowRobotsIndexingListener implements \RectorPrefix20210822\Symfony\Co
 {
     private const HEADER_NAME = 'X-Robots-Tag';
     /**
-     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function onResponse($event) : void
     {

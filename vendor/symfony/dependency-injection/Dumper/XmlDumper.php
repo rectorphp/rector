@@ -31,7 +31,7 @@ use RectorPrefix20210822\Symfony\Component\ExpressionLanguage\Expression;
 class XmlDumper extends \RectorPrefix20210822\Symfony\Component\DependencyInjection\Dumper\Dumper
 {
     /**
-     * @var \DOMDocument
+     * @var \RectorPrefix20210822\DOMDocument
      */
     private $document;
     /**

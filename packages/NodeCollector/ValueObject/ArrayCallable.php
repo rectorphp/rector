@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 final class ArrayCallable
 {
     /**
-     * @var \PhpParser\Node\Expr
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr
      */
     private $callerExpr;
     /**

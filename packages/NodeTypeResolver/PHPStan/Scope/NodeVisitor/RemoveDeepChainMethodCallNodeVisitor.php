@@ -22,7 +22,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorA
      */
     private $nestedChainMethodCallLimit;
     /**
-     * @var \PhpParser\Node\Stmt\Expression|null
+     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|null
      */
     private $removingExpression;
     /**

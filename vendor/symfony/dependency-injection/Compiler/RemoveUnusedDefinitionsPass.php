@@ -23,7 +23,7 @@ class RemoveUnusedDefinitionsPass extends \RectorPrefix20210822\Symfony\Componen
     private $connectedIds = [];
     /**
      * Processes the ContainerBuilder to remove unused definitions.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

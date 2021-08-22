@@ -16,7 +16,7 @@ namespace RectorPrefix20210822\Symfony\Component\VarDumper\Exception;
 class ThrowingCasterException extends \Exception
 {
     /**
-     * @param \Throwable $prev The exception thrown from the caster
+     * @param \RectorPrefix20210822\Throwable $prev The exception thrown from the caster
      */
     public function __construct(\Throwable $prev)
     {

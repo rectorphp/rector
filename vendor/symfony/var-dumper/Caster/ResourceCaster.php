@@ -21,7 +21,7 @@ use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Stub;
 class ResourceCaster
 {
     /**
-     * @param \CurlHandle|resource $h
+     * @param \RectorPrefix20210822\CurlHandle|resource $h
      *
      * @return array
      */

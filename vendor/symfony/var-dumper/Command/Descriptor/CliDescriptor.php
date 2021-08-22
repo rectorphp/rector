@@ -34,8 +34,8 @@ class CliDescriptor implements \RectorPrefix20210822\Symfony\Component\VarDumper
         $this->supportsHref = \method_exists(\RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterStyle::class, 'setHref');
     }
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
      * @param mixed[] $context
      * @param int $clientId
      */

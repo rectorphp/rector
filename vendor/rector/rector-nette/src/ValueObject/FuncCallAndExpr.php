@@ -8,11 +8,11 @@ use PhpParser\Node\Expr\FuncCall;
 final class FuncCallAndExpr
 {
     /**
-     * @var \PhpParser\Node\Expr\FuncCall
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall
      */
     private $funcCall;
     /**
-     * @var \PhpParser\Node\Expr
+     * @var \RectorPrefix20210822\PhpParser\Node\Expr
      */
     private $expr;
     public function __construct(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr)

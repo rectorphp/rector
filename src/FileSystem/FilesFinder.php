@@ -31,15 +31,15 @@ final class FilesFinder
      */
     private $filesystemTweaker;
     /**
-     * @var \Symplify\SmartFileSystem\Finder\FinderSanitizer
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Finder\FinderSanitizer
      */
     private $finderSanitizer;
     /**
-     * @var \Symplify\SmartFileSystem\FileSystemFilter
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemFilter
      */
     private $fileSystemFilter;
     /**
-     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
+     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
     /**

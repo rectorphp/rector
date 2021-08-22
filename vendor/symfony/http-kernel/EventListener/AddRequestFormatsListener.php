@@ -29,7 +29,7 @@ class AddRequestFormatsListener implements \RectorPrefix20210822\Symfony\Compone
     }
     /**
      * Adds request formats.
-     * @param \Symfony\Component\HttpKernel\Event\RequestEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\RequestEvent $event
      */
     public function onKernelRequest($event)
     {

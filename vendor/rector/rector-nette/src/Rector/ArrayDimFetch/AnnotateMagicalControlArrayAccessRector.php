@@ -94,7 +94,7 @@ final class SomePresenter extends Presenter
 {
     public function run()
     {
-        /** @var \Nette\Application\UI\Form $someForm */
+        /** @var \RectorPrefix20210822\Nette\Application\UI\Form $someForm */
         $someForm = $this['some_form'];
         if ($someForm->isSubmitted()) {
         }

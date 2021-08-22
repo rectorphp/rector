@@ -7,11 +7,11 @@ use PhpParser\Node;
 interface ReadNodeAnalyzerInterface
 {
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function supports($node) : bool;
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function isRead($node) : bool;
 }

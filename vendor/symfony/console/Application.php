@@ -94,14 +94,14 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
     }
     /**
      * @final
-     * @param \Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher
+     * @param \RectorPrefix20210822\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher
      */
     public function setDispatcher($dispatcher)
     {
         $this->dispatcher = $dispatcher;
     }
     /**
-     * @param \Symfony\Component\Console\CommandLoader\CommandLoaderInterface $commandLoader
+     * @param \RectorPrefix20210822\Symfony\Component\Console\CommandLoader\CommandLoaderInterface $commandLoader
      */
     public function setCommandLoader($commandLoader)
     {
@@ -127,8 +127,8 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
      * @return int 0 if everything went fine, or an error code
      *
      * @throws \Exception When running fails. Bypass this when {@link setCatchExceptions()}.
-     * @param \Symfony\Component\Console\Input\InputInterface|null $input
-     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface|null $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface|null $output
      */
     public function run($input = null, $output = null)
     {
@@ -201,8 +201,8 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
      * Runs the current application.
      *
      * @return int 0 if everything went fine, or an error code
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     public function doRun($input, $output)
     {
@@ -274,7 +274,7 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
     {
     }
     /**
-     * @param \Symfony\Component\Console\Helper\HelperSet $helperSet
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Helper\HelperSet $helperSet
      */
     public function setHelperSet($helperSet)
     {
@@ -293,7 +293,7 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
         return $this->helperSet;
     }
     /**
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
      */
     public function setDefinition($definition)
     {
@@ -438,7 +438,7 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
      * If the command is not enabled it will not be added.
      *
      * @return Command|null The registered command if enabled or null
-     * @param \Symfony\Component\Console\Command\Command $command
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
      */
     public function add($command)
     {
@@ -697,8 +697,8 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
         return $abbrevs;
     }
     /**
-     * @param \Throwable $e
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Throwable $e
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     public function renderThrowable($e, $output) : void
     {
@@ -710,8 +710,8 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
         }
     }
     /**
-     * @param \Throwable $e
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Throwable $e
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function doRenderThrowable($e, $output) : void
     {
@@ -772,8 +772,8 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
     }
     /**
      * Configures the input and output instances based on the user arguments and options.
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function configureIO($input, $output)
     {
@@ -833,9 +833,9 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
      * events are also dispatched during the life-cycle of the command.
      *
      * @return int 0 if everything went fine, or an error code
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function doRunCommand($command, $input, $output)
     {
@@ -904,7 +904,7 @@ class Application implements \RectorPrefix20210822\Symfony\Contracts\Service\Res
      * Gets the name of the command based on input.
      *
      * @return string|null
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
      */
     protected function getCommandName($input)
     {

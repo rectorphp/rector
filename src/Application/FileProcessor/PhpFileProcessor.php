@@ -39,7 +39,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      */
     private $removedAndAddedFilesCollector;
     /**
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**

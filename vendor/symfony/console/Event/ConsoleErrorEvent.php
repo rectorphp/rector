@@ -32,7 +32,7 @@ final class ConsoleErrorEvent extends \RectorPrefix20210822\Symfony\Component\Co
         return $this->error;
     }
     /**
-     * @param \Throwable $error
+     * @param \RectorPrefix20210822\Throwable $error
      */
     public function setError($error) : void
     {

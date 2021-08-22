@@ -51,7 +51,7 @@ class ProfilerListener implements \RectorPrefix20210822\Symfony\Component\EventD
     }
     /**
      * Handles the onKernelException event.
-     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      */
     public function onKernelException($event)
     {
@@ -62,7 +62,7 @@ class ProfilerListener implements \RectorPrefix20210822\Symfony\Component\EventD
     }
     /**
      * Handles the onKernelResponse event.
-     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function onKernelResponse($event)
     {
@@ -85,7 +85,7 @@ class ProfilerListener implements \RectorPrefix20210822\Symfony\Component\EventD
         $this->parents[$request] = $this->requestStack->getParentRequest();
     }
     /**
-     * @param \Symfony\Component\HttpKernel\Event\TerminateEvent $event
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\TerminateEvent $event
      */
     public function onKernelTerminate($event)
     {

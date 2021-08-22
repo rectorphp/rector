@@ -63,7 +63,7 @@ class ServiceLocator implements \RectorPrefix20210822\Symfony\Contracts\Service\
      *
      * @return static
      * @param string $externalId
-     * @param \Symfony\Component\DependencyInjection\Container $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\Container $container
      */
     public function withContext($externalId, $container) : self
     {

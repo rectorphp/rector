@@ -11,7 +11,7 @@ use PhpParser\NodeAbstract;
 final class FileWithoutNamespace extends \PhpParser\NodeAbstract
 {
     /**
-     * @var \PhpParser\Node\Stmt[]
+     * @var \RectorPrefix20210822\PhpParser\Node\Stmt[]
      */
     public $stmts;
     /**

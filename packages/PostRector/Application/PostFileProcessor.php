@@ -18,7 +18,7 @@ final class PostFileProcessor
      */
     private $postRectors = [];
     /**
-     * @var \Symplify\Skipper\Skipper\Skipper
+     * @var \RectorPrefix20210822\Symplify\Skipper\Skipper\Skipper
      */
     private $skipper;
     /**

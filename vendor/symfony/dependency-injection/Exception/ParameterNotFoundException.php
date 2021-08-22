@@ -27,7 +27,7 @@ class ParameterNotFoundException extends \RectorPrefix20210822\Symfony\Component
      * @param string          $key                  The requested parameter key
      * @param string|null     $sourceId             The service id that references the non-existent parameter
      * @param string|null     $sourceKey            The parameter key that references the non-existent parameter
-     * @param \Throwable|null $previous             The previous exception
+     * @param \RectorPrefix20210822\Throwable|null $previous             The previous exception
      * @param string[]        $alternatives         Some parameter name alternatives
      * @param string|null     $nonNestedAlternative The alternative parameter name when the user expected dot notation for nested parameters
      */

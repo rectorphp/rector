@@ -28,7 +28,7 @@ class ConfigDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpKe
     private $kernel;
     /**
      * Sets the Kernel associated with this Request.
-     * @param \Symfony\Component\HttpKernel\KernelInterface|null $kernel
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\KernelInterface|null $kernel
      */
     public function setKernel($kernel = null)
     {
@@ -36,9 +36,9 @@ class ConfigDataCollector extends \RectorPrefix20210822\Symfony\Component\HttpKe
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
-     * @param \Throwable|null $exception
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Throwable|null $exception
      */
     public function collect($request, $response, $exception = null)
     {

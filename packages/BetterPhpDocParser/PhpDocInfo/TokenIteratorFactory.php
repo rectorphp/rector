@@ -14,11 +14,11 @@ final class TokenIteratorFactory
      */
     private const INDEX = 'index';
     /**
-     * @var \PHPStan\PhpDocParser\Lexer\Lexer
+     * @var \RectorPrefix20210822\PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(\PHPStan\PhpDocParser\Lexer\Lexer $lexer, \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)

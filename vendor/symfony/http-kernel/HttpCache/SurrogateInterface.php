@@ -30,26 +30,26 @@ interface SurrogateInterface
      * Checks that at least one surrogate has Surrogate capability.
      *
      * @return bool true if one surrogate has Surrogate capability, false otherwise
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function hasSurrogateCapability($request);
     /**
      * Adds Surrogate-capability to the given Request.
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
      */
     public function addSurrogateCapability($request);
     /**
      * Adds HTTP headers to specify that the Response needs to be parsed for Surrogate.
      *
      * This method only adds an Surrogate HTTP header if the Response has some Surrogate tags.
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function addSurrogateControl($response);
     /**
      * Checks that the Response needs to be parsed for Surrogate tags.
      *
      * @return bool true if the Response needs to be parsed, false otherwise
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function needsParsing($response);
     /**
@@ -67,8 +67,8 @@ interface SurrogateInterface
      * Replaces a Response Surrogate tags with the included resource content.
      *
      * @return Response
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\HttpFoundation\Response $response
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
      */
     public function process($request, $response);
     /**
@@ -80,7 +80,7 @@ interface SurrogateInterface
      *
      * @throws \RuntimeException
      * @throws \Exception
-     * @param \Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
      * @param string $uri
      * @param bool $ignoreErrors
      */

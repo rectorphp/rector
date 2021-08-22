@@ -33,7 +33,7 @@ abstract class Loader implements \RectorPrefix20210822\Symfony\Component\Config\
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Config\Loader\LoaderResolverInterface $resolver
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver
      */
     public function setResolver($resolver)
     {

@@ -16,7 +16,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     private static $kernelsByHash = [];
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
+     * @var \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface|null
      */
     private static $currentContainer;
     protected function boot() : void

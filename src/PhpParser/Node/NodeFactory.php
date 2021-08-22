@@ -88,7 +88,7 @@ final class NodeFactory
      */
     private const REFERENCES = [self::REFERENCE_STATIC, self::REFERENCE_PARENT, self::REFERENCE_SELF];
     /**
-     * @var \PhpParser\BuilderFactory
+     * @var \RectorPrefix20210822\PhpParser\BuilderFactory
      */
     private $builderFactory;
     /**

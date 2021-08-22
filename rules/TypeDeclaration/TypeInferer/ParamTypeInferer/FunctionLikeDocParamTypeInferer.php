@@ -35,7 +35,7 @@ final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\C
         $this->parentFinder = $parentFinder;
     }
     /**
-     * @param \PhpParser\Node\Param $param
+     * @param \RectorPrefix20210822\PhpParser\Node\Param $param
      */
     public function inferParam($param) : \PHPStan\Type\Type
     {

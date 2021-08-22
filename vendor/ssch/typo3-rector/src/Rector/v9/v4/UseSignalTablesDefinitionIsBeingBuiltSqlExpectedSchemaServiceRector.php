@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseSignalTablesDefinitionIsBeingBuiltSqlExpectedSchemaServiceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Ssch\TYPO3Rector\NodeAnalyzer\ClassConstAnalyzer
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\NodeAnalyzer\ClassConstAnalyzer
      */
     private $classConstAnalyzer;
     public function __construct(\Ssch\TYPO3Rector\NodeAnalyzer\ClassConstAnalyzer $classConstAnalyzer)

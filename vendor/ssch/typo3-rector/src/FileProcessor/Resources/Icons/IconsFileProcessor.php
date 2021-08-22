@@ -18,15 +18,15 @@ use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
 final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \Ssch\TYPO3Rector\Helper\FilesFinder
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface[]
+     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface[]
      */
     private $iconsRector;
     /**

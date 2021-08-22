@@ -63,7 +63,7 @@ final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Conso
      */
     private $processResultFactory;
     /**
-     * @var \PHPStan\Analyser\NodeScopeResolver
+     * @var \RectorPrefix20210822\PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
@@ -116,8 +116,8 @@ final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Conso
         $this->addOption(\Rector\Core\Configuration\Option::CLEAR_CACHE, null, \RectorPrefix20210822\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Clear unchaged files cache');
     }
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function execute($input, $output) : int
     {
@@ -155,8 +155,8 @@ final class ProcessCommand extends \RectorPrefix20210822\Symfony\Component\Conso
         return $this->resolveReturnCode($processResult, $configuration);
     }
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
      */
     protected function initialize($input, $output) : void
     {

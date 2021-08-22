@@ -24,7 +24,7 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
 {
     /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
+     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
@@ -43,7 +43,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         $this->privatesCaller = new \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller();
     }
     /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      */
     public function parse($tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
     {
@@ -64,7 +64,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         return $phpDocNode;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      */
     public function parseTag($tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
@@ -73,7 +73,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($tag, $phpDocTagValueNode);
     }
     /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      * @param string $tag
      */
     public function parseTagValue($tokenIterator, $tag) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode

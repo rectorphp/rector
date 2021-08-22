@@ -33,7 +33,7 @@ class DemoClass
 $a = new class extends \RuntimeException
 {
     /**
-     * @param \Throwable $e
+     * @param \RectorPrefix20210822\Throwable $e
      */
     public function setPrevious($e) : void
     {

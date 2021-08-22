@@ -26,7 +26,7 @@ class ContainerParametersResourceChecker implements \RectorPrefix20210822\Symfon
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Config\Resource\ResourceInterface $metadata
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Resource\ResourceInterface $metadata
      */
     public function supports($metadata)
     {
@@ -34,7 +34,7 @@ class ContainerParametersResourceChecker implements \RectorPrefix20210822\Symfon
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Config\Resource\ResourceInterface $resource
+     * @param \RectorPrefix20210822\Symfony\Component\Config\Resource\ResourceInterface $resource
      * @param int $timestamp
      */
     public function isFresh($resource, $timestamp)

@@ -20,7 +20,7 @@ class DateRangeFilterIterator extends \FilterIterator
 {
     private $comparators = [];
     /**
-     * @param \Iterator        $iterator    The Iterator to filter
+     * @param \RectorPrefix20210822\Iterator        $iterator    The Iterator to filter
      * @param DateComparator[] $comparators An array of DateComparator instances
      */
     public function __construct(\Iterator $iterator, array $comparators)

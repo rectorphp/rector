@@ -20,7 +20,7 @@ final class ExprNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         return \PhpParser\Node\Expr::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {

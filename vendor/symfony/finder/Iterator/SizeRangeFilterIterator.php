@@ -20,7 +20,7 @@ class SizeRangeFilterIterator extends \FilterIterator
 {
     private $comparators = [];
     /**
-     * @param \Iterator          $iterator    The Iterator to filter
+     * @param \RectorPrefix20210822\Iterator          $iterator    The Iterator to filter
      * @param NumberComparator[] $comparators An array of NumberComparator instances
      */
     public function __construct(\Iterator $iterator, array $comparators)

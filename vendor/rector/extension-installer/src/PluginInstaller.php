@@ -50,15 +50,15 @@ CODE_SAMPLE;
      */
     private $filesystem;
     /**
-     * @var \Composer\Repository\InstalledRepositoryInterface
+     * @var \RectorPrefix20210822\Composer\Repository\InstalledRepositoryInterface
      */
     private $localRepository;
     /**
-     * @var \Composer\IO\IOInterface
+     * @var \RectorPrefix20210822\Composer\IO\IOInterface
      */
     private $io;
     /**
-     * @var \Composer\Installer\InstallationManager
+     * @var \RectorPrefix20210822\Composer\Installer\InstallationManager
      */
     private $installationManager;
     /**

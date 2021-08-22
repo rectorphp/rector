@@ -41,9 +41,9 @@ class QuestionHelper extends \RectorPrefix20210822\Symfony\Component\Console\Hel
      * @return mixed The user answer
      *
      * @throws RuntimeException If there is no data to read in the input stream
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Question\Question $question
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Question\Question $question
      */
     public function ask($input, $output, $question)
     {
@@ -158,8 +158,8 @@ class QuestionHelper extends \RectorPrefix20210822\Symfony\Component\Console\Hel
     }
     /**
      * Outputs the question prompt.
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\Console\Question\Question $question
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Question\Question $question
      */
     protected function writePrompt($output, $question)
     {
@@ -172,7 +172,7 @@ class QuestionHelper extends \RectorPrefix20210822\Symfony\Component\Console\Hel
     }
     /**
      * @return string[]
-     * @param \Symfony\Component\Console\Question\ChoiceQuestion $question
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Question\ChoiceQuestion $question
      * @param string $tag
      */
     protected function formatChoiceQuestionChoices($question, $tag)
@@ -187,8 +187,8 @@ class QuestionHelper extends \RectorPrefix20210822\Symfony\Component\Console\Hel
     }
     /**
      * Outputs an error message.
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Exception $error
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Exception $error
      */
     protected function writeError($output, $error)
     {

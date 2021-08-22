@@ -137,7 +137,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function refactorParam(\PhpParser\Node\Param $param, $functionLike) : void
     {
@@ -164,7 +164,7 @@ CODE_SAMPLE
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function shouldSkipParam(\PhpParser\Node\Param $param, $functionLike) : bool
     {

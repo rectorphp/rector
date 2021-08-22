@@ -19,7 +19,7 @@ class DepthRangeFilterIterator extends \FilterIterator
 {
     private $minDepth = 0;
     /**
-     * @param \RecursiveIteratorIterator $iterator The Iterator to filter
+     * @param \RectorPrefix20210822\RecursiveIteratorIterator $iterator The Iterator to filter
      * @param int                        $minDepth The min depth
      * @param int                        $maxDepth The max depth
      */

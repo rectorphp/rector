@@ -86,7 +86,7 @@ class Logger implements \RectorPrefix20210822\Tracy\ILogger
         return \implode(' ', [\date('[Y-m-d H-i-s]'), \preg_replace('#\\s*\\r?\\n\\s*#', ' ', static::formatMessage($message)), ' @  ' . \RectorPrefix20210822\Tracy\Helpers::getSource(), $exceptionFile ? ' @@  ' . \basename($exceptionFile) : null]);
     }
     /**
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      * @param string $level
      */
     public function getExceptionFile($exception, $level = self::EXCEPTION) : string
@@ -109,7 +109,7 @@ class Logger implements \RectorPrefix20210822\Tracy\ILogger
     /**
      * Logs exception to the file if file doesn't exist.
      * @return string logged error filename
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      * @param string|null $file
      */
     protected function logException($exception, $file = null) : string

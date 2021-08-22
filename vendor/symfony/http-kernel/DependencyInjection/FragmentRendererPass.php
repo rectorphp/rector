@@ -34,7 +34,7 @@ class FragmentRendererPass implements \RectorPrefix20210822\Symfony\Component\De
         $this->rendererTag = $rendererTag;
     }
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {

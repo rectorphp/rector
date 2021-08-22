@@ -21,7 +21,7 @@ class ClassNotFoundErrorEnhancer implements \RectorPrefix20210822\Symfony\Compon
 {
     /**
      * {@inheritdoc}
-     * @param \Throwable $error
+     * @param \RectorPrefix20210822\Throwable $error
      */
     public function enhance($error) : ?\Throwable
     {

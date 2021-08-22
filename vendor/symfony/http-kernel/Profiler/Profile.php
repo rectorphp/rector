@@ -239,7 +239,7 @@ class Profile
     }
     /**
      * Adds a Collector.
-     * @param \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
+     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
      */
     public function addCollector($collector)
     {

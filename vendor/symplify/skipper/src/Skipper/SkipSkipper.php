@@ -11,7 +11,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class SkipSkipper
 {
     /**
-     * @var \Symplify\Skipper\Matcher\FileInfoMatcher
+     * @var \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
     public function __construct(\RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)

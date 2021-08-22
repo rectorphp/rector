@@ -12,7 +12,7 @@ interface PhpParserNodeMapperInterface
      */
     public function getNodeType() : string;
     /**
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function mapToPHPStan($node) : \PHPStan\Type\Type;
 }

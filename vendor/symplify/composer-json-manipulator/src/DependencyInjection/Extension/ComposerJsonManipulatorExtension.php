@@ -11,7 +11,7 @@ final class ComposerJsonManipulatorExtension extends \RectorPrefix20210822\Symfo
 {
     /**
      * @param string[] $configs
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
+     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     public function load($configs, $containerBuilder) : void
     {

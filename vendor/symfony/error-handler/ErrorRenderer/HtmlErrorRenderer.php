@@ -54,7 +54,7 @@ class HtmlErrorRenderer implements \RectorPrefix20210822\Symfony\Component\Error
     }
     /**
      * {@inheritdoc}
-     * @param \Throwable $exception
+     * @param \RectorPrefix20210822\Throwable $exception
      */
     public function render($exception) : \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException
     {
@@ -68,7 +68,7 @@ class HtmlErrorRenderer implements \RectorPrefix20210822\Symfony\Component\Error
     }
     /**
      * Gets the HTML content associated with the given exception.
-     * @param \Symfony\Component\ErrorHandler\Exception\FlattenException $exception
+     * @param \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException $exception
      */
     public function getBody($exception) : string
     {
@@ -85,7 +85,7 @@ class HtmlErrorRenderer implements \RectorPrefix20210822\Symfony\Component\Error
         return $this->include('assets/css/exception.css');
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\RequestStack $requestStack
      * @param bool $debug
      */
     public static function isDebug($requestStack, $debug) : \Closure
@@ -98,7 +98,7 @@ class HtmlErrorRenderer implements \RectorPrefix20210822\Symfony\Component\Error
         };
     }
     /**
-     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\RequestStack $requestStack
      */
     public static function getAndCleanOutputBuffer($requestStack) : \Closure
     {

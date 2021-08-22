@@ -29,8 +29,8 @@ class HtmlDescriptor implements \RectorPrefix20210822\Symfony\Component\VarDumpe
         $this->dumper = $dumper;
     }
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
      * @param mixed[] $context
      * @param int $clientId
      */

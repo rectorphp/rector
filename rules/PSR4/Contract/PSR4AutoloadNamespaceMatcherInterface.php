@@ -9,7 +9,7 @@ interface PSR4AutoloadNamespaceMatcherInterface
 {
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \PhpParser\Node $node
+     * @param \RectorPrefix20210822\PhpParser\Node $node
      */
     public function getExpectedNamespace($file, $node) : ?string;
 }

@@ -130,7 +130,7 @@ CODE_SAMPLE
     }
     /**
      * @return Name|Identifier
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $node
+     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\Identifier $node
      */
     private function processNameOrIdentifier($node) : ?\PhpParser\Node
     {

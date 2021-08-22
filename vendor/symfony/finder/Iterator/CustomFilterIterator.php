@@ -22,7 +22,7 @@ class CustomFilterIterator extends \FilterIterator
 {
     private $filters = [];
     /**
-     * @param \Iterator  $iterator The Iterator to filter
+     * @param \RectorPrefix20210822\Iterator  $iterator The Iterator to filter
      * @param callable[] $filters  An array of PHP callbacks
      *
      * @throws \InvalidArgumentException

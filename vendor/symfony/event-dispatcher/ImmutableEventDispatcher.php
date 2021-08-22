@@ -43,7 +43,7 @@ class ImmutableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function addSubscriber($subscriber)
     {
@@ -59,7 +59,7 @@ class ImmutableEventDispatcher implements \RectorPrefix20210822\Symfony\Componen
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function removeSubscriber($subscriber)
     {

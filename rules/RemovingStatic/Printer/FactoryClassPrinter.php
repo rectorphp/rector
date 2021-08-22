@@ -19,7 +19,7 @@ final class FactoryClassPrinter
      */
     private $betterStandardPrinter;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
