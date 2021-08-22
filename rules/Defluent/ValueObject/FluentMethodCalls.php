@@ -11,7 +11,7 @@ final class FluentMethodCalls
      */
     private $rootMethodCall;
     /**
-     * @var \PhpParser\Node\Expr\MethodCall[]
+     * @var mixed[]
      */
     private $fluentMethodCalls;
     /**

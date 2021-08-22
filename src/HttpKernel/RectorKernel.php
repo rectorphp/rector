@@ -36,7 +36,7 @@ final class RectorKernel extends \RectorPrefix20210822\Symfony\Component\HttpKer
      */
     private $configureCallValuesCollector;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo[]
+     * @var mixed[]
      */
     private $configFileInfos;
     /**

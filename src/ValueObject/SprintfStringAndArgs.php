@@ -12,7 +12,7 @@ final class SprintfStringAndArgs
      */
     private $string;
     /**
-     * @var \PhpParser\Node\Expr[]
+     * @var mixed[]
      */
     private $arrayItems;
     /**

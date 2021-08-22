@@ -15,7 +15,7 @@ final class PropertyType
      */
     private $varType;
     /**
-     * @var \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null
+     * @var \PhpParser\Node|null
      */
     private $propertyTypeNode;
     /**

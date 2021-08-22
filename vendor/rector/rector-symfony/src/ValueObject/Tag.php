@@ -11,7 +11,7 @@ final class Tag implements \Rector\Symfony\Contract\Tag\TagInterface
      */
     private $name;
     /**
-     * @var array<string, mixed>
+     * @var mixed[]
      */
     private $data = [];
     /**

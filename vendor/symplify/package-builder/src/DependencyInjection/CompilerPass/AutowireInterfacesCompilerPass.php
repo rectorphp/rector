@@ -8,7 +8,7 @@ use RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class AutowireInterfacesCompilerPass implements \RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
-     * @var string[]
+     * @var mixed[]
      */
     private $typesToAutowire;
     /**

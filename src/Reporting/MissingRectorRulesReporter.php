@@ -11,7 +11,7 @@ use RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissingRectorRulesReporter
 {
     /**
-     * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @var mixed[]
      */
     private $rectors;
     /**

@@ -10,8 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\MixedType;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -29,14 +27,9 @@ final class DowngradePropertyPromotionRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
-    /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
     {
         $this->classInsertManipulator = $classInsertManipulator;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -173,31 +166,11 @@ CODE_SAMPLE
             $property = $this->nodeFactory->createProperty($name);
             $property->flags = $param->flags;
             $property->type = $param->type;
-            $this->decoratePropertyWithParamDocInfo($param, $property);
             if ($param->default !== null) {
                 $property->props[0]->default = $param->default;
             }
             $properties[] = $property;
         }
         return $properties;
-    }
-    private function decoratePropertyWithParamDocInfo(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\Property $property) : void
-    {
-        $constructor = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructor);
-        if ($phpDocInfo === null) {
-            return;
-        }
-        $name = $this->getName($param->var);
-        if ($name === null) {
-            return;
-        }
-        $type = $phpDocInfo->getParamType($name);
-        // MixedType likely means there was no param type defined
-        if ($type instanceof \PHPStan\Type\MixedType) {
-            return;
-        }
-        $propertyDocInfo = $this->phpDocInfoFactory->createEmpty($property);
-        $this->phpDocTypeChanger->changeVarType($propertyDocInfo, $type);
     }
 }

@@ -14,7 +14,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassNameImportSkipper
 {
     /**
-     * @var \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface[]
+     * @var mixed[]
      */
     private $classNameImportSkipVoters;
     /**

@@ -8,7 +8,7 @@ use Rector\Php80\Enum\MatchKind;
 final class CondAndExpr
 {
     /**
-     * @var \PhpParser\Node\Expr[]
+     * @var mixed[]
      */
     private $condExprs;
     /**
