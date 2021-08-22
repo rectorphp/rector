@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Cast\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Ternary;
@@ -111,6 +112,9 @@ CODE_SAMPLE
     private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isName($funcCall, 'count')) {
+            return \true;
+        }
+        if ($funcCall->args[0]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \true;
         }
         $alreadyChangedOnCount = $funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT);
