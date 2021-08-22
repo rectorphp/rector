@@ -11,6 +11,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -26,7 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePropertyPromotionRector extends AbstractRector
 {
     public function __construct(
-        private ClassInsertManipulator $classInsertManipulator
+        private ClassInsertManipulator $classInsertManipulator,
+        private PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 
@@ -201,6 +204,7 @@ CODE_SAMPLE
             $property = $this->nodeFactory->createProperty($name);
             $property->flags = $param->flags;
             $property->type = $param->type;
+            $this->decoratePropertyWithParamDocInfo($param, $property);
 
             if ($param->default !== null) {
                 $property->props[0]->default = $param->default;
@@ -210,5 +214,29 @@ CODE_SAMPLE
         }
 
         return $properties;
+    }
+
+    private function decoratePropertyWithParamDocInfo(Param $param, Property $property): void
+    {
+        $constructor = $param->getAttribute(AttributeKey::METHOD_NODE);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructor);
+        if ($phpDocInfo === null) {
+            return;
+        }
+
+        $name = $this->getName($param->var);
+        if ($name === null) {
+            return;
+        }
+
+        $type = $phpDocInfo->getParamType($name);
+
+        // MixedType likely means there was no param type defined
+        if ($type instanceof MixedType) {
+            return;
+        }
+
+        $propertyDocInfo = $this->phpDocInfoFactory->createEmpty($property);
+        $this->phpDocTypeChanger->changeVarType($propertyDocInfo, $type);
     }
 }
