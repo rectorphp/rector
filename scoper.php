@@ -122,6 +122,13 @@ return [
             'PHPUnit\Framework\Constraint\IsEqual'
         ),
 
+        // prefix vendor classes in phpdoc
+        fn (string $filePath, string $prefix, string $content): string => Strings::replace(
+            $content,
+            '#@(var|param) (\\\\(?!Rector)(?:[^ ]+))#',
+            '@$1 \\\\' . $prefix . '$2'
+        ),
+
         // unprefixed ContainerConfigurator
         function (string $filePath, string $prefix, string $content): string {
             // keep vendor prefixed the prefixed file loading; not part of public API
