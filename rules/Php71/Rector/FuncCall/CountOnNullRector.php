@@ -114,6 +114,9 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'count')) {
             return \true;
         }
+        if (!isset($funcCall->args[0])) {
+            return \true;
+        }
         if ($funcCall->args[0]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \true;
         }
@@ -124,9 +127,6 @@ CODE_SAMPLE
         }
         $parentNode = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentNode instanceof \PhpParser\Node\Expr\Ternary) {
-            return \true;
-        }
-        if (!isset($funcCall->args[0])) {
             return \true;
         }
         // skip node in trait, as impossible to analyse
