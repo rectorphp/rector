@@ -58,7 +58,7 @@ final class NamedToUnnamedArgs
      * @param Arg[] $unnamedArgs
      * @param ParameterReflection[]|PhpParameterReflection[] $parameters
      * @return Arg[]
-     * @param \RectorPrefix20210822\PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\ReflectionFunction $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\ReflectionFunction $functionLikeReflection
      */
     public function fillFromJumpedNamedArgs($functionLikeReflection, array $unnamedArgs, bool $isNativeFunctionReflection, array $parameters) : array
     {

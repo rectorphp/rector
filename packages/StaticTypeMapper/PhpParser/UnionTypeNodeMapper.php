@@ -9,7 +9,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
@@ -39,7 +39,7 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
         return \PhpParser\Node\UnionType::class;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {

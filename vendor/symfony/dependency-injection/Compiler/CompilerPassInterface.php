@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20210823\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Interface that must be implemented by compilation passes.
  *
@@ -20,7 +20,7 @@ interface CompilerPassInterface
 {
     /**
      * You can modify the container here before it is dumped to PHP code.
-     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container);
 }

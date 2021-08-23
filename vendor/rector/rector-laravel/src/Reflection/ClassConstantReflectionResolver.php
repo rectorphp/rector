@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassConstantReflectionResolver
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

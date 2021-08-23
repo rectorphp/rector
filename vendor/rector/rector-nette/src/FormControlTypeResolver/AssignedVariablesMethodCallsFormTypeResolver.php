@@ -32,7 +32,7 @@ final class AssignedVariablesMethodCallsFormTypeResolver implements \Rector\Nett
     }
     /**
      * @return array<string, string>
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : array
     {

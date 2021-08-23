@@ -90,7 +90,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function shouldSkip($node) : bool
     {
@@ -113,7 +113,7 @@ CODE_SAMPLE
         return $node->returnType && $this->isName($node->returnType, 'never');
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function hasNeverFuncCall($functionLike) : bool
     {

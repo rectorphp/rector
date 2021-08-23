@@ -47,8 +47,8 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         return $this->nodesToAddAfter !== [] || $this->nodesToAddBefore !== [];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $addedNode
-     * @param \RectorPrefix20210822\PhpParser\Node $positionNode
+     * @param \PhpParser\Node $addedNode
+     * @param \PhpParser\Node $positionNode
      */
     public function addNodeBeforeNode($addedNode, $positionNode) : void
     {
@@ -62,7 +62,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     }
     /**
      * @param Node[] $addedNodes
-     * @param \RectorPrefix20210822\PhpParser\Node $positionNode
+     * @param \PhpParser\Node $positionNode
      */
     public function addNodesAfterNode($addedNodes, $positionNode) : void
     {
@@ -75,8 +75,8 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $addedNode
-     * @param \RectorPrefix20210822\PhpParser\Node $positionNode
+     * @param \PhpParser\Node $addedNode
+     * @param \PhpParser\Node $positionNode
      */
     public function addNodeAfterNode($addedNode, $positionNode) : void
     {
@@ -86,7 +86,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     }
     /**
      * @return Stmt[]
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function getNodesToAddAfterNode($node) : array
     {
@@ -95,7 +95,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     }
     /**
      * @return Stmt[]
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function getNodesToAddBeforeNode($node) : array
     {
@@ -103,7 +103,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         return $this->nodesToAddBefore[$position] ?? [];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function clearNodesToAddAfter($node) : void
     {
@@ -111,7 +111,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         unset($this->nodesToAddAfter[$objectHash]);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function clearNodesToAddBefore($node) : void
     {
@@ -120,7 +120,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     }
     /**
      * @param Node[] $newNodes
-     * @param \RectorPrefix20210822\PhpParser\Node $positionNode
+     * @param \PhpParser\Node $positionNode
      */
     public function addNodesBeforeNode($newNodes, $positionNode) : void
     {
@@ -151,7 +151,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         return \spl_object_hash($foundNode);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
      */
     private function wrapToExpression($node) : \PhpParser\Node\Stmt
     {

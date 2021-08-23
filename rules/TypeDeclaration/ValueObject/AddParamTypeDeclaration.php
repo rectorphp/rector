@@ -20,7 +20,7 @@ final class AddParamTypeDeclaration
      */
     private $position;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\Type
+     * @var \PHPStan\Type\Type
      */
     private $paramType;
     public function __construct(string $className, string $methodName, int $position, \PHPStan\Type\Type $paramType)

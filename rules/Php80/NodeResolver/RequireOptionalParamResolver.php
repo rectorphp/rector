@@ -11,7 +11,7 @@ final class RequireOptionalParamResolver
 {
     /**
      * @return ParameterReflection[]
-     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
     public function resolveFromReflection($functionLikeReflection) : array
     {

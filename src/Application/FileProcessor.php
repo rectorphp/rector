@@ -16,7 +16,7 @@ final class FileProcessor
      */
     private $affectedFilesCollector;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Lexer
+     * @var \PhpParser\Lexer
      */
     private $lexer;
     /**

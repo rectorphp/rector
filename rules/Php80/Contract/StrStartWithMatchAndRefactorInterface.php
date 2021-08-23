@@ -11,7 +11,7 @@ use Rector\Php80\ValueObject\StrStartsWith;
 interface StrStartWithMatchAndRefactorInterface
 {
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\BinaryOp $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp $binaryOp
      */
     public function match($binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith;
     /**

@@ -11,7 +11,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
@@ -41,9 +41,9 @@ final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocP
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-     * @param \RectorPrefix20210822\PhpParser\Node $node
-     * @param \RectorPrefix20210822\PHPStan\Analyser\NameScope $nameScope
+     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
+     * @param \PhpParser\Node $node
+     * @param \PHPStan\Analyser\NameScope $nameScope
      */
     public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
     {

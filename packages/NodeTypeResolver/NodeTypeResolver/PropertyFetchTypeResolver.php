@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\PropertyFetchTypeResolverTest
  */
@@ -36,7 +36,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
      */
     private $traitNodeScopeCollector;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -60,7 +60,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
         return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

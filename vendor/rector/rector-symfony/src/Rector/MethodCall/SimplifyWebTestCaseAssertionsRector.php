@@ -31,7 +31,7 @@ final class SimplifyWebTestCaseAssertionsRector extends \Rector\Core\Rector\Abst
      */
     private const ASSERT_SAME = 'assertSame';
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|null
+     * @var \PhpParser\Node\Expr\MethodCall|null
      */
     private $getStatusCodeMethodCall;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition

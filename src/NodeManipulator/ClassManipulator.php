@@ -22,7 +22,7 @@ final class ClassManipulator
      */
     private $nodesToRemoveCollector;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -83,7 +83,7 @@ final class ClassManipulator
     }
     /**
      * @return string[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
     public function getClassLikeNodeParentInterfaceNames($classLike) : array
     {

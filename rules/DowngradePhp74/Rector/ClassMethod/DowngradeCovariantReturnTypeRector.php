@@ -20,7 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -39,14 +39,14 @@ final class DowngradeCovariantReturnTypeRector extends \Rector\Core\Rector\Abstr
      */
     private $phpDocTypeChanger;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller, \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover $returnTagRemover)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->privatesCaller = $privatesCaller;
@@ -143,7 +143,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier $returnTypeNode
+     * @param \PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier $returnTypeNode
      */
     private function resolveDifferentAncestorReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, $returnTypeNode) : \PHPStan\Type\Type
     {

@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Frontend\Controller;
+namespace RectorPrefix20210823\TYPO3\CMS\Frontend\Controller;
 
-use RectorPrefix20210822\Psr\Http\Message\ResponseInterface;
-use RectorPrefix20210822\TYPO3\CMS\Core\Charset\CharsetConverter;
-use RectorPrefix20210822\TYPO3\CMS\Core\Context\Context;
-use RectorPrefix20210822\TYPO3\CMS\Core\Page\PageRenderer;
-use RectorPrefix20210822\TYPO3\CMS\Core\Site\Entity\SiteLanguage;
-use RectorPrefix20210822\TYPO3\CMS\Core\TypoScript\TemplateService;
-use RectorPrefix20210822\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
-use RectorPrefix20210822\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
-use RectorPrefix20210822\TYPO3\CMS\Frontend\Page\PageRepository;
+use RectorPrefix20210823\Psr\Http\Message\ResponseInterface;
+use RectorPrefix20210823\TYPO3\CMS\Core\Charset\CharsetConverter;
+use RectorPrefix20210823\TYPO3\CMS\Core\Context\Context;
+use RectorPrefix20210823\TYPO3\CMS\Core\Page\PageRenderer;
+use RectorPrefix20210823\TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use RectorPrefix20210823\TYPO3\CMS\Core\TypoScript\TemplateService;
+use RectorPrefix20210823\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication;
+use RectorPrefix20210823\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use RectorPrefix20210823\TYPO3\CMS\Frontend\Page\PageRepository;
 if (\class_exists('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController')) {
     return;
 }
@@ -132,17 +132,17 @@ class TypoScriptFrontendController
     public function __construct()
     {
         //fake template object, otherwise tests cannot access this property
-        $this->tmpl = new \RectorPrefix20210822\TYPO3\CMS\Core\TypoScript\TemplateService();
-        $this->sys_page = new \RectorPrefix20210822\TYPO3\CMS\Frontend\Page\PageRepository();
-        $this->language = new \RectorPrefix20210822\TYPO3\CMS\Core\Site\Entity\SiteLanguage();
+        $this->tmpl = new \RectorPrefix20210823\TYPO3\CMS\Core\TypoScript\TemplateService();
+        $this->sys_page = new \RectorPrefix20210823\TYPO3\CMS\Frontend\Page\PageRepository();
+        $this->language = new \RectorPrefix20210823\TYPO3\CMS\Core\Site\Entity\SiteLanguage();
         $this->sys_language_isocode = 'ch';
-        $this->csConvObj = new \RectorPrefix20210822\TYPO3\CMS\Core\Charset\CharsetConverter();
-        $this->cObj = new \RectorPrefix20210822\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer();
-        $this->fe_user = new \RectorPrefix20210822\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
+        $this->csConvObj = new \RectorPrefix20210823\TYPO3\CMS\Core\Charset\CharsetConverter();
+        $this->cObj = new \RectorPrefix20210823\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer();
+        $this->fe_user = new \RectorPrefix20210823\TYPO3\CMS\Frontend\Authentication\FrontendUserAuthentication();
     }
     /**
      * @return void
-     * @param \RectorPrefix20210822\Psr\Http\Message\ResponseInterface $response
+     * @param \Psr\Http\Message\ResponseInterface $response
      */
     public function applyHttpHeadersToResponse($response)
     {
@@ -183,7 +183,7 @@ class TypoScriptFrontendController
      */
     public function getPageRenderer()
     {
-        return new \RectorPrefix20210822\TYPO3\CMS\Core\Page\PageRenderer();
+        return new \RectorPrefix20210823\TYPO3\CMS\Core\Page\PageRenderer();
     }
     /**
      * @return mixed[]

@@ -46,7 +46,7 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->typeUnwrapper = $typeUnwrapper;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function decorate($functionLike) : void
     {
@@ -60,7 +60,7 @@ final class PhpDocFromTypeDeclarationDecorator
     }
     /**
      * @param array<class-string<Type>> $requiredTypes
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function decorateParam(\PhpParser\Node\Param $param, $functionLike, array $requiredTypes) : void
     {
@@ -74,7 +74,7 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->moveParamTypeToParamDoc($functionLike, $param, $type);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function decorateParamWithSpecificType(\PhpParser\Node\Param $param, $functionLike, \PHPStan\Type\Type $requireType) : void
     {
@@ -89,7 +89,7 @@ final class PhpDocFromTypeDeclarationDecorator
     }
     /**
      * @return bool True if node was changed
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function decorateReturnWithSpecificType($functionLike, \PHPStan\Type\Type $requireType) : bool
     {
@@ -112,7 +112,7 @@ final class PhpDocFromTypeDeclarationDecorator
         return \is_a($returnType, \get_class($requireType), \true);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function moveParamTypeToParamDoc($functionLike, \PhpParser\Node\Param $param, \PHPStan\Type\Type $type) : void
     {

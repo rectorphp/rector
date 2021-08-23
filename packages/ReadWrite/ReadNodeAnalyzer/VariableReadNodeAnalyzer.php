@@ -29,14 +29,14 @@ final class VariableReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadN
         $this->justReadExprAnalyzer = $justReadExprAnalyzer;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function supports($node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\Variable;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function isRead($node) : bool
     {

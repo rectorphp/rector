@@ -40,7 +40,7 @@ final class CompleteDynamicPropertiesRector extends \Rector\Core\Rector\Abstract
      */
     private $classLikeAnalyzer;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

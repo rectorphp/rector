@@ -96,7 +96,7 @@ CODE_SAMPLE
     /**
      * @param MatchArm[] $matchArms
      * @return Case_[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
     private function createSwitchCasesFromMatchArms($node, array $matchArms) : array
     {
@@ -121,7 +121,7 @@ CODE_SAMPLE
     }
     /**
      * @return Stmt[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
     private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm) : array
     {

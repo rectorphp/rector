@@ -19,7 +19,7 @@ class PhpDocParser
         $this->constantExprParser = $constantExprParser;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
      */
     public function parse($tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
     {
@@ -74,7 +74,7 @@ class PhpDocParser
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode(\trim($text, " \t"));
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
      */
     public function parseTag($tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
@@ -84,7 +84,7 @@ class PhpDocParser
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($tag, $value);
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
      * @param string $tag
      */
     public function parseTagValue($tokens, $tag) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode

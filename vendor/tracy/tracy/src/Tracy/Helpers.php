@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210822\Tracy;
+namespace RectorPrefix20210823\Tracy;
 
 /**
  * Rendering helpers for Debugger.
@@ -19,7 +19,7 @@ class Helpers
      */
     public static function editorLink($file, $line = null) : string
     {
-        $file = \strtr($origFile = $file, \RectorPrefix20210822\Tracy\Debugger::$editorMapping);
+        $file = \strtr($origFile = $file, \RectorPrefix20210823\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
             $file = \strtr($file, '\\', '/');
             if (\preg_match('#(^[a-z]:)?/.{1,40}$#i', $file, $m) && \strlen($file) > \strlen($m[0])) {
@@ -41,10 +41,10 @@ class Helpers
      */
     public static function editorUri($file, $line = null, $action = 'open', $search = '', $replace = '') : ?string
     {
-        if (\RectorPrefix20210822\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
+        if (\RectorPrefix20210823\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
-            $file = \strtr($file, \RectorPrefix20210822\Tracy\Debugger::$editorMapping);
-            return \strtr(\RectorPrefix20210822\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
+            $file = \strtr($file, \RectorPrefix20210823\Tracy\Debugger::$editorMapping);
+            return \strtr(\RectorPrefix20210823\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
         }
         return null;
     }
@@ -82,7 +82,7 @@ class Helpers
         return \explode("\0", \get_class($obj))[0];
     }
     /** @internal
-     * @param \RectorPrefix20210822\Throwable $exception */
+     * @param \Throwable $exception */
     public static function fixStack($exception) : \Throwable
     {
         if (\function_exists('xdebug_get_function_stack')) {
@@ -121,11 +121,11 @@ class Helpers
         }
     }
     /** @internal
-     * @param \RectorPrefix20210822\Throwable $e */
+     * @param \Throwable $e */
     public static function improveException($e) : void
     {
         $message = $e->getMessage();
-        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20210822\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
+        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20210823\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
             // do nothing
         } elseif (\preg_match('#^Call to undefined function (\\S+\\\\)?(\\w+)\\(#', $message, $m)) {
             $funcs = \array_merge(\get_defined_functions()['internal'], \get_defined_functions()['user']);
@@ -412,7 +412,7 @@ XX
         return (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
     }
     /**
-     * @param \RectorPrefix20210822\Throwable $ex
+     * @param \Throwable $ex
      */
     public static function getExceptionChain($ex) : array
     {

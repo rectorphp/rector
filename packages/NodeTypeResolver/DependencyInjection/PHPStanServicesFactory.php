@@ -15,7 +15,7 @@ use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Factory so Symfony app can use services from PHPStan container
  * @see packages/NodeTypeResolver/config/config.yaml:17
@@ -23,10 +23,10 @@ use RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class PHPStanServicesFactory
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\DependencyInjection\Container
+     * @var \PHPStan\DependencyInjection\Container
      */
     private $container;
-    public function __construct(\RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $containerFactory = new \PHPStan\DependencyInjection\ContainerFactory(\getcwd());
         $additionalConfigFiles = [];

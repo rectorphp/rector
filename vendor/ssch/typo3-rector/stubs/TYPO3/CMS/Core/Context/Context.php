@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20210823\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\Context')) {
     return;
@@ -18,7 +18,7 @@ class Context
     /**
      * @return void
      * @param string $name
-     * @param \RectorPrefix20210822\TYPO3\CMS\Core\Context\AspectInterface $aspect
+     * @param \TYPO3\CMS\Core\Context\AspectInterface $aspect
      */
     public function setAspect($name, $aspect)
     {

@@ -58,7 +58,7 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends \Rector\Core
      */
     private $typeUnwrapper;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -143,7 +143,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $callNode
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $callNode
      */
     private function isMultipleCall($callNode) : bool
     {
@@ -190,7 +190,7 @@ CODE_SAMPLE
         $this->variableRenamer->renameVariableInFunctionLike($variableAndCallAssign->getFunctionLike(), $variableAndCallAssign->getVariableName(), $expectedName, $variableAndCallAssign->getAssign());
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $expr
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $expr
      */
     private function isClassTypeWithChildren($expr) : bool
     {

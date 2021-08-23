@@ -141,7 +141,7 @@ CODE_SAMPLE
         return $nodeToReturn;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
     private function printNewNodes(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode) : void
     {

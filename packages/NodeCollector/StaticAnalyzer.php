@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\NodeCollector;
 
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 final class StaticAnalyzer
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -40,6 +40,6 @@ final class StaticAnalyzer
             return \false;
         }
         // @see https://regex101.com/r/7Zkej2/1
-        return (bool) \RectorPrefix20210822\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*((([\\w\\|\\\\]+)|\\$this)*+(\\[\\])*)*\\s+\\b' . $methodName . '\\b#');
+        return (bool) \RectorPrefix20210823\Nette\Utils\Strings::match($resolvedPhpDocBlock->getPhpDocString(), '#@method\\s*static\\s*((([\\w\\|\\\\]+)|\\$this)*+(\\[\\])*)*\\s+\\b' . $methodName . '\\b#');
     }
 }

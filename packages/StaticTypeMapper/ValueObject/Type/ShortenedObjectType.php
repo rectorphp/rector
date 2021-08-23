@@ -21,7 +21,7 @@ final class ShortenedObjectType extends \PHPStan\Type\ObjectType
         parent::__construct($shortName);
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      */
     public function isSuperTypeOf($type) : \PHPStan\TrinaryLogic
     {

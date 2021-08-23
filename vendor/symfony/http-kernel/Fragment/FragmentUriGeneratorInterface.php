@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Controller\ControllerReference;
 /**
  * Interface implemented by rendering strategies able to generate an URL for a fragment.
  *
@@ -27,8 +27,8 @@ interface FragmentUriGeneratorInterface
      * @param bool $sign     Whether to sign the URL or not
      *
      * @return string A fragment URI
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Controller\ControllerReference $controller
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request|null $request
+     * @param \Symfony\Component\HttpKernel\Controller\ControllerReference $controller
+     * @param \Symfony\Component\HttpFoundation\Request|null $request
      */
     public function generate($controller, $request = null, $absolute = \false, $strict = \true, $sign = \true) : string;
 }

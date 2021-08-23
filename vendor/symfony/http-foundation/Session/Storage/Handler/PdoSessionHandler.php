@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace RectorPrefix20210823\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 /**
  * Session handler using a PDO connection to read and write data.
@@ -37,7 +37,7 @@ namespace RectorPrefix20210822\Symfony\Component\HttpFoundation\Session\Storage\
  * @author Michael Williams <michael.williams@funsational.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class PdoSessionHandler extends \RectorPrefix20210822\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class PdoSessionHandler extends \RectorPrefix20210823\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     /**
      * No locking is done. This means sessions are prone to loss of data due to
@@ -63,7 +63,7 @@ class PdoSessionHandler extends \RectorPrefix20210822\Symfony\Component\HttpFoun
     public const LOCK_TRANSACTIONAL = 2;
     private const MAX_LIFETIME = 315576000;
     /**
-     * @var \RectorPrefix20210822\PDO|null PDO instance or null when not connected yet
+     * @var \PDO|null PDO instance or null when not connected yet
      */
     private $pdo;
     /**
@@ -113,7 +113,7 @@ class PdoSessionHandler extends \RectorPrefix20210822\Symfony\Component\HttpFoun
     /**
      * It's an array to support multiple reads before closing which is manual, non-standard usage.
      *
-     * @var \RectorPrefix20210822\PDOStatement[] An array of statements to release advisory locks
+     * @var \PDOStatement[] An array of statements to release advisory locks
      */
     private $unlockStatements = [];
     /**
@@ -145,7 +145,7 @@ class PdoSessionHandler extends \RectorPrefix20210822\Symfony\Component\HttpFoun
      *  * db_connection_options: An array of driver-specific connection options [default: []]
      *  * lock_mode: The strategy for locking, see constants [default: LOCK_TRANSACTIONAL]
      *
-     * @param \RectorPrefix20210822\PDO|string|null $pdoOrDsn A \PDO instance or DSN string or URL string or null
+     * @param \PDO|string|null $pdoOrDsn A \PDO instance or DSN string or URL string or null
      *
      * @throws \InvalidArgumentException When PDO error mode is not PDO::ERRMODE_EXCEPTION
      */

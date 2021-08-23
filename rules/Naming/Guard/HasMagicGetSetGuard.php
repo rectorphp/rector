@@ -10,7 +10,7 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class HasMagicGetSetGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

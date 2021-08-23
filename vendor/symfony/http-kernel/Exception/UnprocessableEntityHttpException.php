@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\Exception;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\Exception;
 
 /**
  * @author Steve Hutchins <hutchinsteve@gmail.com>
  */
-class UnprocessableEntityHttpException extends \RectorPrefix20210822\Symfony\Component\HttpKernel\Exception\HttpException
+class UnprocessableEntityHttpException extends \RectorPrefix20210823\Symfony\Component\HttpKernel\Exception\HttpException
 {
     /**
      * @param string|null     $message  The internal exception message
-     * @param \RectorPrefix20210822\Throwable|null $previous The previous exception
+     * @param \Throwable|null $previous The previous exception
      * @param int             $code     The internal exception code
      */
     public function __construct(?string $message = '', \Throwable $previous = null, int $code = 0, array $headers = [])

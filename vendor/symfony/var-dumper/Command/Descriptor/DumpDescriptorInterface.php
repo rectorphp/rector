@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\VarDumper\Command\Descriptor;
+namespace RectorPrefix20210823\Symfony\Component\VarDumper\Command\Descriptor;
 
-use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210823\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
 interface DumpDescriptorInterface
 {
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
-     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
      * @param mixed[] $context
      * @param int $clientId
      */

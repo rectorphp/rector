@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Helmich\TypoScriptParser\Parser;
+namespace RectorPrefix20210823\Helmich\TypoScriptParser\Parser;
 
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 interface ParserInterface
@@ -25,7 +25,7 @@ interface ParserInterface
     /**
      * Parses a token stream.
      *
-     * @param \RectorPrefix20210822\Helmich\TypoScriptParser\Tokenizer\TokenInterface[] $tokens The token stream to parse.
+     * @param \Helmich\TypoScriptParser\Tokenizer\TokenInterface[] $tokens The token stream to parse.
      * @return Statement[] The syntax tree.
      */
     public function parseTokens($tokens) : array;

@@ -107,7 +107,7 @@ class Lexer
         return ($token[0] === \T_COMMENT || $token[0] === \T_DOC_COMMENT) && \substr($token[1], 0, 2) === '/*' && \substr($token[1], -2) !== '*/';
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\ErrorHandler $errorHandler
+     * @param \PhpParser\ErrorHandler $errorHandler
      */
     protected function postprocessTokens($errorHandler)
     {

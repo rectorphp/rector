@@ -13,7 +13,7 @@ use PhpParser\ErrorHandler;
 class Throwing implements \PhpParser\ErrorHandler
 {
     /**
-     * @param \RectorPrefix20210822\PhpParser\Error $error
+     * @param \PhpParser\Error $error
      */
     public function handleError($error)
     {

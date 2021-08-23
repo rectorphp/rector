@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Response;
 /**
  * Terminable extends the Kernel request/response cycle with dispatching a post
  * response event after sending the response and before shutting down the kernel.
@@ -25,8 +25,8 @@ interface TerminableInterface
      * Terminates a request/response cycle.
      *
      * Should be called after sending the response and before shutting down the kernel.
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     public function terminate($request, $response);
 }

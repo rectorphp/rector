@@ -17,7 +17,7 @@ use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210823\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
@@ -37,10 +37,10 @@ final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contra
      */
     private $nodeNameResolver;
     /**
-     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20210823\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
@@ -49,7 +49,7 @@ final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contra
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Param $param
+     * @param \PhpParser\Node\Param $param
      */
     public function inferParam($param) : \PHPStan\Type\Type
     {

@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Core\Http;
+namespace RectorPrefix20210823\TYPO3\CMS\Core\Http;
 
-use RectorPrefix20210822\Psr\Http\Message\ServerRequestInterface;
-use RectorPrefix20210822\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
+use RectorPrefix20210823\Psr\Http\Message\ServerRequestInterface;
+use RectorPrefix20210823\TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 if (\class_exists('TYPO3\\CMS\\Core\\Http\\ApplicationType')) {
     return;
 }
@@ -17,7 +17,7 @@ class ApplicationType
     }
     /**
      * @return $this
-     * @param \RectorPrefix20210822\Psr\Http\Message\ServerRequestInterface $request
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      */
     public static function fromRequest($request)
     {

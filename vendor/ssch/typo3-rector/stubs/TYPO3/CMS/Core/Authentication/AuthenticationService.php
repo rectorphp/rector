@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Core\Authentication;
+namespace RectorPrefix20210823\TYPO3\CMS\Core\Authentication;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Authentication\\AuthenticationService')) {
     return;

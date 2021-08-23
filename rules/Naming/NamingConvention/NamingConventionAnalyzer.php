@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\NamingConvention;
 
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -24,7 +24,7 @@ final class NamingConventionAnalyzer
      * $someNameSuffix = $this->getSomeName();
      * $prefixSomeName = $this->getSomeName();
      * $someName = $this->getSomeName();
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
      */
     public function isCallMatchingVariableName($expr, string $currentName, string $expectedName) : bool
     {
@@ -34,6 +34,6 @@ final class NamingConventionAnalyzer
             return \true;
         }
         // starts with or ends with
-        return (bool) \RectorPrefix20210822\Nette\Utils\Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
+        return (bool) \RectorPrefix20210823\Nette\Utils\Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
     }
 }

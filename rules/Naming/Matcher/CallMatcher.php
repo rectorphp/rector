@@ -13,7 +13,7 @@ final class CallMatcher
 {
     /**
      * @return FuncCall|StaticCall|MethodCall|null
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Foreach_ $node
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Foreach_ $node
      */
     public function matchCall($node) : ?\PhpParser\Node
     {

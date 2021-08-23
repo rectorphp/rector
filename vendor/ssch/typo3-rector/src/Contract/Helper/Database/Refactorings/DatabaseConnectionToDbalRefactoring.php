@@ -9,7 +9,7 @@ interface DatabaseConnectionToDbalRefactoring
 {
     /**
      * @return Expr[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall $oldNode
+     * @param \PhpParser\Node\Expr\MethodCall $oldNode
      */
     public function refactor($oldNode) : array;
     /**

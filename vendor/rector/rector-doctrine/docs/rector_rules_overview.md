@@ -447,7 +447,7 @@ Turns parent EntityRepository class to constructor dependency
 +final class PostRepository
  {
 +    /**
-+     * @var \RectorPrefix20210822\Doctrine\ORM\EntityRepository<Post>
++     * @var \Doctrine\ORM\EntityRepository<Post>
 +     */
 +    private EntityRepository $repository;
 +
@@ -560,12 +560,12 @@ Change ServiceEntityRepository to dependency injection, with repository property
  {
 -    public function __construct(ManagerRegistry $registry)
 +    /**
-+     * @var \RectorPrefix20210822\Doctrine\ORM\EntityManagerInterface
++     * @var \Doctrine\ORM\EntityManagerInterface
 +     */
 +    private $entityManager;
 +
 +    /**
-+     * @var \RectorPrefix20210822\Doctrine\ORM\EntityRepository<Project>
++     * @var \Doctrine\ORM\EntityRepository<Project>
 +     */
 +    private $repository;
 +

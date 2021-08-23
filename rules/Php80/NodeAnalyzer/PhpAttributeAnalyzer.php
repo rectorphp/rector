@@ -19,7 +19,7 @@ final class PhpAttributeAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      */
     public function hasPhpAttribute($node, string $attributeClass) : bool
     {

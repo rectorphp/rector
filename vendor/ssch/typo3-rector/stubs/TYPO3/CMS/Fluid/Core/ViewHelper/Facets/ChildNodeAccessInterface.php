@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Fluid\Core\ViewHelper\Facets;
+namespace RectorPrefix20210823\TYPO3\CMS\Fluid\Core\ViewHelper\Facets;
 
 if (\interface_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\Facets\\ChildNodeAccessInterface')) {
     return;

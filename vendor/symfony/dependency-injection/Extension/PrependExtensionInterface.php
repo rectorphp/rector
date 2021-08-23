@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix20210823\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\ContainerBuilder;
 interface PrependExtensionInterface
 {
     /**
      * Allow an extension to prepend the extension configurations.
-     * @param \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function prepend($container);
 }

@@ -44,7 +44,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         $this->useImportTypesInFilePath[$smartFileInfo->getRealPath()][] = $objectType;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
      */
     public function addFunctionUseImport($node, $fullyQualifiedObjectType) : void
@@ -56,7 +56,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     /**
      * @return AliasedObjectType[]|FullyQualifiedObjectType[]
      * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function getUseImportTypesByNode($file, $node) : array
     {
@@ -78,7 +78,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
      */
     public function hasImport($file, $node, $fullyQualifiedObjectType) : bool
@@ -135,7 +135,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @return AliasedObjectType[]|FullyQualifiedObjectType[]
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function getObjectImportsByFileInfo($smartFileInfo) : array
     {
@@ -143,7 +143,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     }
     /**
      * @return FullyQualifiedObjectType[]
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function getFunctionImportsByFileInfo($smartFileInfo) : array
     {

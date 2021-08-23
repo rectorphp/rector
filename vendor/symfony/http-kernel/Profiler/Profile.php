@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\Profiler;
 
-use RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 /**
  * Profile.
  *
@@ -239,7 +239,7 @@ class Profile
     }
     /**
      * Adds a Collector.
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
+     * @param \Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface $collector
      */
     public function addCollector($collector)
     {

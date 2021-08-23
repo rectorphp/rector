@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\HttpCache;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\HttpKernelInterface;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Abstract class implementing Surrogate capabilities to Request and Response instances.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface
+abstract class AbstractSurrogate implements \RectorPrefix20210823\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface
 {
     protected $contentTypes;
     protected $phpEscapeMap = [['<?', '<%', '<s', '<S'], ['<?php echo "<?"; ?>', '<?php echo "<%"; ?>', '<?php echo "<s"; ?>', '<?php echo "<S"; ?>']];
@@ -38,11 +38,11 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
      */
     public function createCacheStrategy()
     {
-        return new \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategy();
+        return new \RectorPrefix20210823\Symfony\Component\HttpKernel\HttpCache\ResponseCacheStrategy();
     }
     /**
      * {@inheritdoc}
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function hasSurrogateCapability($request)
     {
@@ -53,7 +53,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function addSurrogateCapability($request)
     {
@@ -63,7 +63,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     public function needsParsing($response)
     {
@@ -75,16 +75,16 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * {@inheritdoc}
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
+     * @param \Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
      * @param string $uri
      * @param string $alt
      * @param bool $ignoreErrors
      */
     public function handle($cache, $uri, $alt, $ignoreErrors)
     {
-        $subRequest = \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request::create($uri, \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request::METHOD_GET, [], $cache->getRequest()->cookies->all(), [], $cache->getRequest()->server->all());
+        $subRequest = \RectorPrefix20210823\Symfony\Component\HttpFoundation\Request::create($uri, \RectorPrefix20210823\Symfony\Component\HttpFoundation\Request::METHOD_GET, [], $cache->getRequest()->cookies->all(), [], $cache->getRequest()->server->all());
         try {
-            $response = $cache->handle($subRequest, \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, \true);
+            $response = $cache->handle($subRequest, \RectorPrefix20210823\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, \true);
             if (!$response->isSuccessful()) {
                 throw new \RuntimeException(\sprintf('Error when rendering "%s" (Status code is %d).', $subRequest->getUri(), $response->getStatusCode()));
             }
@@ -101,7 +101,7 @@ abstract class AbstractSurrogate implements \RectorPrefix20210822\Symfony\Compon
     }
     /**
      * Remove the Surrogate from the Surrogate-Control header.
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     protected function removeFromControl($response)
     {

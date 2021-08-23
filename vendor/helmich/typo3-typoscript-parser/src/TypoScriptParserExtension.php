@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Helmich\TypoScriptParser;
+namespace RectorPrefix20210823\Helmich\TypoScriptParser;
 
-use RectorPrefix20210822\Symfony\Component\Config\FileLocator;
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix20210823\Symfony\Component\Config\FileLocator;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * Class TypoScriptParserExtension
  *
  * @package Helmich\TypoScriptParser
  * @codeCoverageIgnore
  */
-class TypoScriptParserExtension implements \RectorPrefix20210822\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+class TypoScriptParserExtension implements \RectorPrefix20210823\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
 {
     /**
      * Loads a specific configuration.
@@ -28,7 +28,7 @@ class TypoScriptParserExtension implements \RectorPrefix20210822\Symfony\Compone
      */
     public function load($configs, $container)
     {
-        $loader = new \RectorPrefix20210822\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \RectorPrefix20210822\Symfony\Component\Config\FileLocator(__DIR__ . '/../config'));
+        $loader = new \RectorPrefix20210823\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \RectorPrefix20210823\Symfony\Component\Config\FileLocator(__DIR__ . '/../config'));
         $loader->load('services.yml');
     }
     /**

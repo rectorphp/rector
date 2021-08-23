@@ -32,7 +32,7 @@ final class IgnoreValidationAnnotationRector extends \Rector\Core\Rector\Abstrac
      */
     private $phpDocTagRemover;
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
+     * @var \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory
      */
     private $importExtbaseAnnotationIfMissingFactory;
     public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Ssch\TYPO3Rector\NodeFactory\ImportExtbaseAnnotationIfMissingFactory $importExtbaseAnnotationIfMissingFactory)

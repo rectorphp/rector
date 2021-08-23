@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -40,7 +40,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210823\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionFactory
 {
     /**
@@ -65,14 +65,14 @@ final class AnonymousFunctionFactory
      */
     private $staticTypeMapper;
     /**
-     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Parser
+     * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210823\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -84,7 +84,7 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
-     * @param \RectorPrefix20210822\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $returnTypeNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $returnTypeNode
      */
     public function create(array $params, array $stmts, $returnTypeNode) : \PhpParser\Node\Expr\Closure
     {
@@ -144,7 +144,7 @@ final class AnonymousFunctionFactory
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-            $match = \RectorPrefix20210822\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            $match = \RectorPrefix20210823\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
             if (!$match) {
                 return $node;
             }

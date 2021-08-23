@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20210823\Symplify\EasyTesting\ValueObject;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class InputFileInfoAndExpected
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $inputFileInfo;
     private $expected;

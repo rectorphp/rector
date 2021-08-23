@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Console\Helper;
+namespace RectorPrefix20210823\Symfony\Component\Console\Helper;
 
 /**
  * HelperInterface is the interface all helpers must implement.
@@ -19,7 +19,7 @@ interface HelperInterface
 {
     /**
      * Sets the helper set associated with this helper.
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Helper\HelperSet|null $helperSet
+     * @param \Symfony\Component\Console\Helper\HelperSet|null $helperSet
      */
     public function setHelperSet($helperSet = null);
     /**

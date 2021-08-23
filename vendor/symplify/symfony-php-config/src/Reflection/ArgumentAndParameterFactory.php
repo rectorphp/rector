@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Symplify\SymfonyPhpConfig\Reflection;
 
-use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class ArgumentAndParameterFactory
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct()
     {
-        $this->privatesAccessor = new \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+        $this->privatesAccessor = new \RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
     }
     /**
      * @param array<string, mixed> $arguments

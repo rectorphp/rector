@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210823\Symfony\Component\HttpFoundation;
 
 /**
  * RequestMatcherInterface is an interface for strategies to match a Request.
@@ -21,7 +21,7 @@ interface RequestMatcherInterface
      * Decides whether the rule(s) implemented by the strategy matches the supplied request.
      *
      * @return bool true if the request matches, false otherwise
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function matches($request);
 }

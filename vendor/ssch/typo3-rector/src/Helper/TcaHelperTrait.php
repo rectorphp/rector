@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Return_;
 trait TcaHelperTrait
 {
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Return_ $node
+     * @param \PhpParser\Node\Stmt\Return_ $node
      */
     protected function isFullTca($node) : bool
     {
@@ -21,7 +21,7 @@ trait TcaHelperTrait
         return null !== $ctrl && null !== $columns;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node|null $node
+     * @param \PhpParser\Node|null $node
      * @param string $key
      */
     protected function extractArrayItemByKey($node, $key) : ?\PhpParser\Node\Expr\ArrayItem
@@ -47,7 +47,7 @@ trait TcaHelperTrait
         return null;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node|null $node
+     * @param \PhpParser\Node|null $node
      * @param string $key
      */
     protected function extractSubArrayByKey($node, $key) : ?\PhpParser\Node\Expr\Array_
@@ -66,7 +66,7 @@ trait TcaHelperTrait
         return $columnItems;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node|null $node
+     * @param \PhpParser\Node|null $node
      * @param string $key
      */
     protected function extractArrayValueByKey($node, $key) : ?\PhpParser\Node\Expr
@@ -74,7 +74,7 @@ trait TcaHelperTrait
         return ($extractArrayItemByKey = $this->extractArrayItemByKey($node, $key)) ? $extractArrayItemByKey->value : null;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Array_ $configValue
+     * @param \PhpParser\Node\Expr\Array_ $configValue
      * @param string $configKey
      * @param string $expectedValue
      */

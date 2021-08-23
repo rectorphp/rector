@@ -17,14 +17,14 @@ use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
 final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
@@ -40,10 +40,10 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
         parent::__construct($typeParser, $constExprParser);
-        $this->privatesCaller = new \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        $this->privatesCaller = new \RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesCaller();
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      */
     public function parse($tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
     {
@@ -64,7 +64,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         return $phpDocNode;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      */
     public function parseTag($tokenIterator) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
@@ -73,7 +73,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($tag, $phpDocTagValueNode);
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator
      * @param string $tag
      */
     public function parseTagValue($tokenIterator, $tag) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode

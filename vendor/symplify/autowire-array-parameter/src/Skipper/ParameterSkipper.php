@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\AutowireArrayParameter\Skipper;
+namespace RectorPrefix20210823\Symplify\AutowireArrayParameter\Skipper;
 
 use ReflectionMethod;
 use ReflectionParameter;
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20210822\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20210823\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
 final class ParameterSkipper
 {
     /**
@@ -14,24 +14,24 @@ final class ParameterSkipper
      *
      * @var string[]
      */
-    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix20210822\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix20210822\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix20210822\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix20210822\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix20210822\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix20210822\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix20210822\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix20210822\\Sonata\\Twig\\Extension\\TemplateExtension'];
+    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix20210823\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix20210823\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix20210823\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix20210823\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix20210823\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix20210823\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix20210823\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix20210823\\Sonata\\Twig\\Extension\\TemplateExtension'];
     /**
      * @var string[]
      */
     private $excludedFatalClasses = [];
     /**
-     * @var \RectorPrefix20210822\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
+     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
     /**
      * @param string[] $excludedFatalClasses
      */
-    public function __construct(\RectorPrefix20210822\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses)
+    public function __construct(\RectorPrefix20210823\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses)
     {
         $this->parameterTypeResolver = $parameterTypeResolver;
         $this->excludedFatalClasses = \array_merge(self::DEFAULT_EXCLUDED_FATAL_CLASSES, $excludedFatalClasses);
     }
-    public function shouldSkipParameter(\ReflectionMethod $reflectionMethod, \RectorPrefix20210822\Symfony\Component\DependencyInjection\Definition $definition, \ReflectionParameter $reflectionParameter) : bool
+    public function shouldSkipParameter(\ReflectionMethod $reflectionMethod, \RectorPrefix20210823\Symfony\Component\DependencyInjection\Definition $definition, \ReflectionParameter $reflectionParameter) : bool
     {
         if (!$this->isArrayType($reflectionParameter)) {
             return \true;

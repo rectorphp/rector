@@ -21,7 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
-use RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210823\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -34,14 +34,14 @@ final class ParamTypeByMethodCallTypeRector extends \Rector\Core\Rector\Abstract
      */
     private $callerParamMatcher;
     /**
-     * @var \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
      * @var \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher, \RectorPrefix20210822\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher, \RectorPrefix20210823\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->callerParamMatcher = $callerParamMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -149,7 +149,7 @@ CODE_SAMPLE
         return !$classReflection->isClass();
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $paramType
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $paramType
      */
     private function mirrorParamType(\PhpParser\Node\Param $decoratedParam, $paramType) : void
     {

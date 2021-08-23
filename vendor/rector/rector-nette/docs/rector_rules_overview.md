@@ -37,7 +37,7 @@ Change magic `$this["some_component"]` to variable assign with `@var` annotation
      public function run()
      {
 -        if ($this['some_form']->isSubmitted()) {
-+        /** @var \RectorPrefix20210822\Nette\Application\UI\Form $someForm */
++        /** @var \Nette\Application\UI\Form $someForm */
 +        $someForm = $this['some_form'];
 +        if ($someForm->isSubmitted()) {
          }
@@ -162,7 +162,7 @@ Move dependency get via `$context->getByType()` to constructor injection
  class SomeClass
  {
      /**
-      * @var \RectorPrefix20210822\Nette\DI\Container
+      * @var \Nette\DI\Container
       */
      private $context;
 

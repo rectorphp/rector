@@ -10,11 +10,11 @@ use PhpParser\Node\Stmt\Property;
 final class EventAndListenerTree
 {
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall
+     * @var \PhpParser\Node\Expr\MethodCall
      */
     private $magicDispatchMethodCall;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\Property|null
+     * @var \PhpParser\Node\Stmt\Property|null
      */
     private $onMagicProperty;
     /**
@@ -26,11 +26,11 @@ final class EventAndListenerTree
      */
     private $eventFileLocation;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\Namespace_
+     * @var \PhpParser\Node\Stmt\Namespace_
      */
     private $eventClassInNamespace;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall
+     * @var \PhpParser\Node\Expr\MethodCall
      */
     private $eventDispatcherDispatchMethodCall;
     /**

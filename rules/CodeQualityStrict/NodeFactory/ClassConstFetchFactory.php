@@ -14,7 +14,7 @@ final class ClassConstFetchFactory
 {
     /**
      * @return ClassConstFetch[]
-     * @param \RectorPrefix20210822\PHPStan\Type\ObjectType|\PHPStan\Type\UnionType $type
+     * @param \PHPStan\Type\ObjectType|\PHPStan\Type\UnionType $type
      */
     public function createFromType($type) : array
     {

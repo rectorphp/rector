@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20210823\Helmich\TypoScriptParser\Tokenizer;
 
 /**
  * An exception that represents an error during tokenization.
@@ -20,7 +20,7 @@ class TokenizerException extends \Exception
      *
      * @param string          $message    The message text.
      * @param int             $code       The exception code.
-     * @param \RectorPrefix20210822\Exception|null $previous   A nested previous exception.
+     * @param \Exception|null $previous   A nested previous exception.
      * @param int|null        $sourceLine The original source line.
      */
     public function __construct(string $message = "", int $code = 0, \Exception $previous = null, int $sourceLine = null)

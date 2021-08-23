@@ -9,7 +9,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
@@ -31,7 +31,7 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

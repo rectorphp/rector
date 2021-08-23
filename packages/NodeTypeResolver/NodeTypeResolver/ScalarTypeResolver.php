@@ -27,7 +27,7 @@ final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
         return [\PhpParser\Node\Scalar::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

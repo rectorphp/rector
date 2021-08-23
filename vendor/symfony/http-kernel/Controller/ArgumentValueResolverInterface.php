@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\Controller;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\Controller;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Responsible for resolving the value of an argument based on its metadata.
  *
@@ -23,16 +23,16 @@ interface ArgumentValueResolverInterface
      * Whether this resolver can resolve the value for the given ArgumentMetadata.
      *
      * @return bool
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
      */
     public function supports($request, $argument);
     /**
      * Returns the possible value(s).
      *
      * @return iterable
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata $argument
      */
     public function resolve($request, $argument);
 }

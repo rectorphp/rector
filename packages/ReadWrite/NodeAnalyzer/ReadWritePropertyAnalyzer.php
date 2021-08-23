@@ -45,7 +45,7 @@ final class ReadWritePropertyAnalyzer
         $this->parentFinder = $parentFinder;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $node
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $node
      */
     public function isRead($node) : bool
     {

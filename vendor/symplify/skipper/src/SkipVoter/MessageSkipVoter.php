@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\Skipper\SkipVoter;
+namespace RectorPrefix20210823\Symplify\Skipper\SkipVoter;
 
-use RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher;
-use RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver;
+use RectorPrefix20210823\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20210823\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix20210823\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class MessageSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface
+final class MessageSkipVoter implements \RectorPrefix20210823\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver
+     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver
      */
     private $skippedMessagesResolver;
     /**
-     * @var \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher
+     * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
-    public function __construct(\RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver $skippedMessagesResolver, \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
+    public function __construct(\RectorPrefix20210823\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver $skippedMessagesResolver, \RectorPrefix20210823\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
     {
         $this->skippedMessagesResolver = $skippedMessagesResolver;
         $this->fileInfoMatcher = $fileInfoMatcher;
@@ -34,7 +34,7 @@ final class MessageSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\C
     }
     /**
      * @param string|object $element
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool
     {

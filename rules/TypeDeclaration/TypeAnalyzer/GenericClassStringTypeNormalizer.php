@@ -19,7 +19,7 @@ use PHPStan\Type\UnionType;
 final class GenericClassStringTypeNormalizer
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)

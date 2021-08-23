@@ -27,7 +27,7 @@ final class BundleClassResolver
      */
     private $parser;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Parser\Parser $parser, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

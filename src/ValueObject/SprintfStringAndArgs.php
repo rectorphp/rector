@@ -8,11 +8,11 @@ use PhpParser\Node\Scalar\String_;
 final class SprintfStringAndArgs
 {
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Scalar\String_
+     * @var \PhpParser\Node\Scalar\String_
      */
     private $string;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr[]
+     * @var \PhpParser\Node\Expr[]
      */
     private $arrayItems;
     /**

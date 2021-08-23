@@ -87,7 +87,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
      */
     private $matchersKeys = [];
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|null
+     * @var \PhpParser\Node\Expr\PropertyFetch|null
      */
     private $testedObjectPropertyFetch;
     /**

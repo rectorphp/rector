@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\ValueObject\Application\File;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210823\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
  */
@@ -19,10 +19,10 @@ final class FormatPerservingPrinter
      */
     private $betterStandardPrinter;
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20210823\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->smartFileSystem = $smartFileSystem;

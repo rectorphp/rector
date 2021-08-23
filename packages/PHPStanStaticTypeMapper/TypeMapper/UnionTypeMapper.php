@@ -32,7 +32,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<UnionType>
  */
@@ -85,7 +85,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return \PHPStan\Type\UnionType::class;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
@@ -102,7 +102,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode($unionTypesNodes);
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node

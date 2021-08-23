@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Controller\ControllerReference;
 /**
  * Interface implemented by all rendering strategies.
  *
@@ -26,7 +26,7 @@ interface FragmentRendererInterface
      * @param string|ControllerReference $uri A URI as a string or a ControllerReference instance
      *
      * @return Response A Response instance
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      * @param mixed[] $options
      */
     public function render($uri, $request, $options = []);

@@ -7,14 +7,14 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20210822\Webmozart\Assert\Assert;
+use RectorPrefix20210823\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
  */
 trait MovingFilesTrait
 {
     /**
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     protected function assertFileWasNotChanged($smartFileInfo) : void
     {
@@ -29,7 +29,7 @@ trait MovingFilesTrait
         $this->assertFilesWereAdded([$addedFileWithContent]);
     }
     /**
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     protected function assertFileWasRemoved($smartFileInfo) : void
     {
@@ -41,12 +41,12 @@ trait MovingFilesTrait
      */
     protected function assertFilesWereAdded($expectedAddedFileWithContents) : void
     {
-        \RectorPrefix20210822\Webmozart\Assert\Assert::allIsAOf($expectedAddedFileWithContents, \Rector\FileSystemRector\ValueObject\AddedFileWithContent::class);
+        \RectorPrefix20210823\Webmozart\Assert\Assert::allIsAOf($expectedAddedFileWithContents, \Rector\FileSystemRector\ValueObject\AddedFileWithContent::class);
         \sort($expectedAddedFileWithContents);
         $addedFilePathsWithContents = $this->resolveAddedFilePathsWithContents();
         \sort($addedFilePathsWithContents);
         // there should be at least some added files
-        \RectorPrefix20210822\Webmozart\Assert\Assert::notEmpty($addedFilePathsWithContents);
+        \RectorPrefix20210823\Webmozart\Assert\Assert::notEmpty($addedFilePathsWithContents);
         foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
             $expectedFilePathWithContent = $expectedAddedFileWithContents[$key];
             /**

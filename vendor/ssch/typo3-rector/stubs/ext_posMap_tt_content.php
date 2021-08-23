@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210822;
+namespace RectorPrefix20210823;
 
 if (\class_exists('ext_posMap_tt_content')) {
     return;

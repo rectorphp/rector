@@ -183,7 +183,7 @@ CODE_SAMPLE
         });
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
     private function resolveClassMethodFromCall($call) : ?\PhpParser\Node\Stmt\ClassMethod
     {

@@ -21,7 +21,7 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
      */
     private $phpRectors;
     /**
-     * @var \RectorPrefix20210822\PhpParser\NodeFinder
+     * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
     /**

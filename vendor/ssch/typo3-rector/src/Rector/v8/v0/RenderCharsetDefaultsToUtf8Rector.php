@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenderCharsetDefaultsToUtf8Rector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

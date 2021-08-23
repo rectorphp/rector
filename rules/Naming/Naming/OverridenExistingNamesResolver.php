@@ -36,7 +36,7 @@ final class OverridenExistingNamesResolver
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function hasNameInClassMethodForNew(string $variableName, $functionLike) : bool
     {
@@ -62,7 +62,7 @@ final class OverridenExistingNamesResolver
     }
     /**
      * @return string[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveOveriddenNamesForNew($functionLike) : array
     {

@@ -106,7 +106,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
      */
     private function processBinaryPlusAndMinus($binaryOp) : ?\PhpParser\Node\Expr
     {
@@ -125,7 +125,7 @@ CODE_SAMPLE
         return $binaryOp->left;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Mul|\PhpParser\Node\Expr\BinaryOp\Div $binaryOp
      */
     private function processBinaryMulAndDiv($binaryOp) : ?\PhpParser\Node\Expr
     {

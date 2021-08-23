@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Helmich\TypoScriptParser\Parser\Printer;
+namespace RectorPrefix20210823\Helmich\TypoScriptParser\Parser\Printer;
 
-use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface;
 interface ASTPrinterInterface
 {
     /**
-     * @param \RectorPrefix20210822\Helmich\TypoScriptParser\Parser\AST\Statement[]  $statements
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Helmich\TypoScriptParser\Parser\AST\Statement[]  $statements
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @return void
      */
     public function printStatements($statements, $output) : void;

@@ -8,44 +8,44 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20210822\Psr\Log\LoggerInterface;
-use RectorPrefix20210822\Symfony\Component\Debug\Exception\FlattenException as LegacyFlattenException;
-use RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException;
-use RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\HttpKernelInterface;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\KernelEvents;
-use RectorPrefix20210822\Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
+use RectorPrefix20210823\Psr\Log\LoggerInterface;
+use RectorPrefix20210823\Symfony\Component\Debug\Exception\FlattenException as LegacyFlattenException;
+use RectorPrefix20210823\Symfony\Component\ErrorHandler\Exception\FlattenException;
+use RectorPrefix20210823\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\HttpKernelInterface;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20210823\Symfony\Component\HttpKernel\Log\DebugLoggerInterface;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class ErrorListener implements \RectorPrefix20210823\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     protected $controller;
     protected $logger;
     protected $debug;
-    public function __construct($controller, \RectorPrefix20210822\Psr\Log\LoggerInterface $logger = null, bool $debug = \false)
+    public function __construct($controller, \RectorPrefix20210823\Psr\Log\LoggerInterface $logger = null, bool $debug = \false)
     {
         $this->controller = $controller;
         $this->logger = $logger;
         $this->debug = $debug;
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      */
     public function logKernelException($event)
     {
-        $e = \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($event->getThrowable());
+        $e = \RectorPrefix20210823\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($event->getThrowable());
         $this->logException($event->getThrowable(), \sprintf('Uncaught PHP Exception %s: "%s" at %s line %s', $e->getClass(), $e->getMessage(), $e->getFile(), $e->getLine()));
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ExceptionEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\ExceptionEvent $event
      */
     public function onKernelException($event)
     {
@@ -55,9 +55,9 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         $exception = $event->getThrowable();
         $request = $this->duplicateRequest($exception, $event->getRequest());
         try {
-            $response = $event->getKernel()->handle($request, \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, \false);
+            $response = $event->getKernel()->handle($request, \RectorPrefix20210823\Symfony\Component\HttpKernel\HttpKernelInterface::SUB_REQUEST, \false);
         } catch (\Exception $e) {
-            $f = \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($e);
+            $f = \RectorPrefix20210823\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($e);
             $this->logException($e, \sprintf('Exception thrown when handling an exception (%s: %s at %s line %s)', $f->getClass(), $f->getMessage(), $e->getFile(), $e->getLine()));
             $prev = $e;
             do {
@@ -76,7 +76,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         }
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ResponseEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
      */
     public function removeCspHeader($event) : void
     {
@@ -85,7 +85,7 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         }
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent $event
+     * @param \Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent $event
      */
     public function onControllerArguments($event)
     {
@@ -95,25 +95,25 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
         }
         $r = new \ReflectionFunction(\Closure::fromCallable($event->getController()));
         $r = $r->getParameters()[$k] ?? null;
-        if ($r && (!($r = $r->getType()) instanceof \ReflectionNamedType || \in_array($r->getName(), [\RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException::class, \RectorPrefix20210822\Symfony\Component\Debug\Exception\FlattenException::class], \true))) {
+        if ($r && (!($r = $r->getType()) instanceof \ReflectionNamedType || \in_array($r->getName(), [\RectorPrefix20210823\Symfony\Component\ErrorHandler\Exception\FlattenException::class, \RectorPrefix20210823\Symfony\Component\Debug\Exception\FlattenException::class], \true))) {
             $arguments = $event->getArguments();
-            $arguments[$k] = \RectorPrefix20210822\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($e);
+            $arguments[$k] = \RectorPrefix20210823\Symfony\Component\ErrorHandler\Exception\FlattenException::createFromThrowable($e);
             $event->setArguments($arguments);
         }
     }
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20210822\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS => 'onControllerArguments', \RectorPrefix20210822\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION => [['logKernelException', 0], ['onKernelException', -128]], \RectorPrefix20210822\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => ['removeCspHeader', -128]];
+        return [\RectorPrefix20210823\Symfony\Component\HttpKernel\KernelEvents::CONTROLLER_ARGUMENTS => 'onControllerArguments', \RectorPrefix20210823\Symfony\Component\HttpKernel\KernelEvents::EXCEPTION => [['logKernelException', 0], ['onKernelException', -128]], \RectorPrefix20210823\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => ['removeCspHeader', -128]];
     }
     /**
      * Logs an exception.
-     * @param \RectorPrefix20210822\Throwable $exception
+     * @param \Throwable $exception
      * @param string $message
      */
     protected function logException($exception, $message) : void
     {
         if (null !== $this->logger) {
-            if (!$exception instanceof \RectorPrefix20210822\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface || $exception->getStatusCode() >= 500) {
+            if (!$exception instanceof \RectorPrefix20210823\Symfony\Component\HttpKernel\Exception\HttpExceptionInterface || $exception->getStatusCode() >= 500) {
                 $this->logger->critical($message, ['exception' => $exception]);
             } else {
                 $this->logger->error($message, ['exception' => $exception]);
@@ -122,12 +122,12 @@ class ErrorListener implements \RectorPrefix20210822\Symfony\Component\EventDisp
     }
     /**
      * Clones the request for the exception.
-     * @param \RectorPrefix20210822\Throwable $exception
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Throwable $exception
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    protected function duplicateRequest($exception, $request) : \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request
+    protected function duplicateRequest($exception, $request) : \RectorPrefix20210823\Symfony\Component\HttpFoundation\Request
     {
-        $attributes = ['_controller' => $this->controller, 'exception' => $exception, 'logger' => $this->logger instanceof \RectorPrefix20210822\Symfony\Component\HttpKernel\Log\DebugLoggerInterface ? $this->logger : null];
+        $attributes = ['_controller' => $this->controller, 'exception' => $exception, 'logger' => $this->logger instanceof \RectorPrefix20210823\Symfony\Component\HttpKernel\Log\DebugLoggerInterface ? $this->logger : null];
         $request = $request->duplicate(null, null, $attributes);
         $request->setMethod('GET');
         return $request;

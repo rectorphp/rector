@@ -124,7 +124,7 @@ CODE_SAMPLE
         return $scope;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classLike
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
     private function shouldSkipClassMethod($classLike, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Type\TypeWithClassName $typeWithClassName) : bool
     {

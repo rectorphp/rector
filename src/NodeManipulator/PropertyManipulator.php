@@ -28,7 +28,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
-use RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210823\Symplify\PackageBuilder\Php\TypeChecker;
 /**
  * For inspiration to improve this service,
  * @see examples of variable modifications in https://wiki.php.net/rfc/readonly_properties_v2#proposal
@@ -56,7 +56,7 @@ final class PropertyManipulator
      */
     private $phpDocInfoFactory;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
+     * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
@@ -71,7 +71,7 @@ final class PropertyManipulator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer $readWritePropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer $readWritePropertyAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210823\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->assignManipulator = $assignManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -84,7 +84,7 @@ final class PropertyManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     public function isPropertyUsedInReadContext($propertyOrPromotedParam) : bool
     {
@@ -114,7 +114,7 @@ final class PropertyManipulator
         });
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
      */
     public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
     {
@@ -148,7 +148,7 @@ final class PropertyManipulator
         return \false;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
     private function isChangeableContext($propertyFetch) : bool
     {
@@ -175,7 +175,7 @@ final class PropertyManipulator
         return \false;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isFoundByRefParam($node) : bool
     {

@@ -13,7 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210822\Webmozart\Assert\Assert;
+use RectorPrefix20210823\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
@@ -69,11 +69,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? [];
-        \RectorPrefix20210822\Webmozart\Assert\Assert::allIsInstanceOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
+        \RectorPrefix20210823\Webmozart\Assert\Assert::allIsInstanceOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
         $this->removedArguments = $removedArguments;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
     private function processPosition($node, \Rector\Removing\ValueObject\ArgumentRemover $argumentRemover) : void
     {
@@ -102,7 +102,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
     private function removeByName($node, int $position, string $name) : void
     {

@@ -33,11 +33,11 @@ final class AddChangelogDocBlockForRectorClass implements \PHPStan\Rules\Rule
      */
     private const ALLOWED_CLASSES_WITH_NON_CHANGELOG_DOC_BLOCK = [\Ssch\TYPO3Rector\Rector\Migrations\RenameClassMapAliasRector::class, \Ssch\TYPO3Rector\Rules\Rector\Misc\AddCodeCoverageIgnoreToMethodRectorDefinitionRector::class, \Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector::class, \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector::class, \Ssch\TYPO3Rector\ComposerPackages\Rector\AddPackageVersionRector::class];
     /**
-     * @var \RectorPrefix20210822\PHPStan\Broker\Broker
+     * @var \PHPStan\Broker\Broker
      */
     private $broker;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\FileTypeMapper
+     * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
     public function __construct(\PHPStan\Broker\Broker $broker, \PHPStan\Type\FileTypeMapper $fileTypeMapper)
@@ -50,9 +50,9 @@ final class AddChangelogDocBlockForRectorClass implements \PHPStan\Rules\Rule
         return \PhpParser\Node\Stmt\Class_::class;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      * @return string[]
-     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
+     * @param \PHPStan\Analyser\Scope $scope
      */
     public function processNode($node, $scope) : array
     {

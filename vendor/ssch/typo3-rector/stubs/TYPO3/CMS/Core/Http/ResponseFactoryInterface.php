@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Core\Http;
+namespace RectorPrefix20210823\TYPO3\CMS\Core\Http;
 
-use RectorPrefix20210822\Psr\Http\Message\ResponseInterface;
+use RectorPrefix20210823\Psr\Http\Message\ResponseInterface;
 if (\class_exists('TYPO3\\CMS\\Core\\Http\\ResponseFactoryInterface')) {
     return;
 }

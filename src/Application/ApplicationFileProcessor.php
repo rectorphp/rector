@@ -9,12 +9,12 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
-use RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210823\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210823\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
@@ -30,7 +30,7 @@ final class ApplicationFileProcessor
      */
     private $removedAndAddedFilesProcessor;
     /**
-     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
@@ -40,7 +40,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20210823\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210823\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;

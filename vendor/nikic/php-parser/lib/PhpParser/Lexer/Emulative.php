@@ -55,7 +55,7 @@ class Emulative extends \PhpParser\Lexer
     }
     /**
      * @param string $code
-     * @param \RectorPrefix20210822\PhpParser\ErrorHandler|null $errorHandler
+     * @param \PhpParser\ErrorHandler|null $errorHandler
      */
     public function startLexing($code, $errorHandler = null)
     {

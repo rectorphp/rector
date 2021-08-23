@@ -11,7 +11,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<IntersectionType>
  */
@@ -36,7 +36,7 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
         return \PHPStan\Type\IntersectionType::class;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
@@ -49,7 +49,7 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
         return new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode($intersectionTypesNodes);
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node

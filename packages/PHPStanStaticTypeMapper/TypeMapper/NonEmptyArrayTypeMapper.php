@@ -25,7 +25,7 @@ final class NonEmptyArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\C
         return \PHPStan\Type\Accessory\NonEmptyArrayType::class;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
@@ -33,7 +33,7 @@ final class NonEmptyArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\C
         return new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('mixed'));
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node

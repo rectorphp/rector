@@ -31,7 +31,7 @@ final class ContentObjectRendererFileResourceRector extends \Rector\Core\Rector\
      */
     private const PATH = 'path';
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

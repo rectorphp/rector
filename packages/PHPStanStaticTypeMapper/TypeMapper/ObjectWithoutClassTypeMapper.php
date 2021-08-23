@@ -16,7 +16,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use RectorPrefix20210822\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210823\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectWithoutClassType>
  */
@@ -42,7 +42,7 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
         return \PHPStan\Type\ObjectWithoutClassType::class;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
@@ -54,7 +54,7 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node

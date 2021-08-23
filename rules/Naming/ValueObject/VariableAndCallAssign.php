@@ -14,15 +14,15 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallAssign
 {
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Variable
+     * @var \PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
+     * @var \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
     private $expr;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Assign
+     * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**
@@ -30,12 +30,12 @@ final class VariableAndCallAssign
      */
     private $variableName;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
+     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
      */
     private $functionLike;
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function __construct(\PhpParser\Node\Expr\Variable $variable, $expr, \PhpParser\Node\Expr\Assign $assign, string $variableName, $functionLike)
     {

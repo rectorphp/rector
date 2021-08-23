@@ -54,7 +54,7 @@ CODE_SAMPLE
         return $this->processForStringOrVariableOrProperty($node);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
     private function processForStringOrVariableOrProperty($expr) : ?\PhpParser\Node\Expr
     {

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20210823\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20210822\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix20210823\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * This class builds an if expression.
  *
@@ -22,7 +22,7 @@ class ExprBuilder
     protected $node;
     public $ifPart;
     public $thenPart;
-    public function __construct(\RectorPrefix20210822\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
+    public function __construct(\RectorPrefix20210823\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
     {
         $this->node = $node;
     }
@@ -30,7 +30,7 @@ class ExprBuilder
      * Marks the expression as being always used.
      *
      * @return $this
-     * @param \RectorPrefix20210822\Closure|null $then
+     * @param \Closure|null $then
      */
     public function always($then = null)
     {
@@ -48,7 +48,7 @@ class ExprBuilder
      * The default one tests if the value is true.
      *
      * @return $this
-     * @param \RectorPrefix20210822\Closure|null $closure
+     * @param \Closure|null $closure
      */
     public function ifTrue($closure = null)
     {
@@ -153,7 +153,7 @@ class ExprBuilder
      * Sets the closure to run if the test pass.
      *
      * @return $this
-     * @param \RectorPrefix20210822\Closure $closure
+     * @param \Closure $closure
      */
     public function then($closure)
     {
@@ -199,7 +199,7 @@ class ExprBuilder
     public function thenUnset()
     {
         $this->thenPart = function () {
-            throw new \RectorPrefix20210822\Symfony\Component\Config\Definition\Exception\UnsetKeyException('Unsetting key.');
+            throw new \RectorPrefix20210823\Symfony\Component\Config\Definition\Exception\UnsetKeyException('Unsetting key.');
         };
         return $this;
     }

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
@@ -77,7 +77,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
     private function shouldSkip($node) : bool
     {
@@ -87,7 +87,7 @@ CODE_SAMPLE
         return !$this->isMethodCallOnTsfe($node);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
     private function isEidUtilityMethodCall($node) : bool
     {

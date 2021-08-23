@@ -27,7 +27,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20210823\Symplify\PackageBuilder\Php\TypeChecker;
 final class NonInformativeReturnTagRemover
 {
     /**
@@ -39,16 +39,16 @@ final class NonInformativeReturnTagRemover
      */
     private $phpDocInfoFactory;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker
+     * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210822\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210823\Symplify\PackageBuilder\Php\TypeChecker $typeChecker)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeChecker = $typeChecker;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function removeReturnTagIfNotUseful($functionLike) : void
     {

@@ -31,7 +31,7 @@ final class InvalidNameNodeReporter
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     public function reportInvalidNodeForName($node) : void
     {

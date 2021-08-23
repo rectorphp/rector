@@ -8,11 +8,11 @@ use PhpParser\Node\Expr\PropertyFetch;
 final class AssignToPropertyFetch
 {
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Assign
+     * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch
+     * @var \PhpParser\Node\Expr\PropertyFetch
      */
     private $propertyFetch;
     /**

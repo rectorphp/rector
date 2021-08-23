@@ -37,7 +37,7 @@ namespace spec\SomeNamespaceForThisTest;
 class OrderSpec extends ObjectBehavior
 {
     /**
-     * @var \RectorPrefix20210822\SomeNamespaceForThisTest\Order
+     * @var \SomeNamespaceForThisTest\Order
      */
     private $order;
     protected function setUp()

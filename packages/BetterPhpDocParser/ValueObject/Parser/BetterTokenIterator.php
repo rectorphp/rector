@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterator
 {
     /**
@@ -17,7 +17,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
      */
     private const INDEX = 'index';
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**
@@ -25,7 +25,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
      */
     public function __construct(array $tokens, int $index = 0)
     {
-        $this->privatesAccessor = new \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+        $this->privatesAccessor = new \RectorPrefix20210823\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
         if ($tokens === []) {
             $this->privatesAccessor->setPrivateProperty($this, self::TOKENS, []);
             $this->privatesAccessor->setPrivateProperty($this, self::INDEX, 0);

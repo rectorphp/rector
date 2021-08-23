@@ -24,7 +24,7 @@ final class EnumFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var \RectorPrefix20210822\PhpParser\BuilderFactory
+     * @var \PhpParser\BuilderFactory
      */
     private $builderFactory;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PhpParser\BuilderFactory $builderFactory)

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver;
+namespace RectorPrefix20210823\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix20210822\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210823\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20210823\Symplify\Skipper\ValueObject\Option;
 final class SkippedClassResolver
 {
     /**
@@ -13,14 +13,14 @@ final class SkippedClassResolver
      */
     private $skippedClasses = [];
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
-    public function __construct(\RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
+    public function __construct(\RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20210823\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
     {
         $this->parameterProvider = $parameterProvider;
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
@@ -33,7 +33,7 @@ final class SkippedClassResolver
         if ($this->skippedClasses !== []) {
             return $this->skippedClasses;
         }
-        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20210822\Symplify\Skipper\ValueObject\Option::SKIP);
+        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20210823\Symplify\Skipper\ValueObject\Option::SKIP);
         foreach ($skip as $key => $value) {
             // e.g. [SomeClass::class] → shift values to [SomeClass::class => null]
             if (\is_int($key)) {

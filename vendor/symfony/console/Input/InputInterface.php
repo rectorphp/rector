@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Console\Input;
+namespace RectorPrefix20210823\Symfony\Component\Console\Input;
 
-use RectorPrefix20210822\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210822\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20210823\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210823\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * InputInterface is the interface implemented by all input classes.
  *
@@ -58,7 +58,7 @@ interface InputInterface
      * Binds the current Input instance with the given arguments and options.
      *
      * @throws RuntimeException
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
      */
     public function bind($definition);
     /**

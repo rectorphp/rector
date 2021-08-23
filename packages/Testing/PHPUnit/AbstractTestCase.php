@@ -6,7 +6,7 @@ namespace Rector\Testing\PHPUnit;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
@@ -16,7 +16,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     private static $kernelsByHash = [];
     /**
-     * @var \RectorPrefix20210822\Symfony\Component\DependencyInjection\ContainerInterface|null
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
     private static $currentContainer;
     protected function boot() : void

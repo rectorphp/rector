@@ -56,7 +56,7 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
         $this->currentFileProvider = $currentFileProvider;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function addNodeToRemove($node) : void
     {
@@ -82,7 +82,7 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
         $this->nodesToRemove[] = $node;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function isNodeRemoved($node) : bool
     {

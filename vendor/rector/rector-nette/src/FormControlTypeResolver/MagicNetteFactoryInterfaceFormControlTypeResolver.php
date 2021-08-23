@@ -29,7 +29,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
      */
     private $nodeTypeResolver;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -52,7 +52,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
     }
     /**
      * @return array<string, string>
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : array
     {

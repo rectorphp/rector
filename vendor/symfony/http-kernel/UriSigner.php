@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
 /**
  * Signs URIs.
  *
@@ -72,7 +72,7 @@ class UriSigner
         return \hash_equals($this->computeHash($this->buildUrl($url, $params)), $hash);
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function checkRequest($request) : bool
     {

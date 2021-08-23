@@ -41,7 +41,7 @@ final class VariadicAnalyzer
         $this->reflectionResolver = $reflectionResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
     public function hasVariadicParameters($call) : bool
     {
@@ -67,7 +67,7 @@ final class VariadicAnalyzer
         return \false;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
     private function hasVariadicVariant($functionLikeReflection) : bool
     {

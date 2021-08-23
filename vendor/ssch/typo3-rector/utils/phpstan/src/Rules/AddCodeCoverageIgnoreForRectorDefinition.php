@@ -23,7 +23,7 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
      */
     public const ERROR_MESSAGE = 'Provide @codeCoverageIgnore doc block for "%s" RectorDefinition method';
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\FileTypeMapper
+     * @var \PHPStan\Type\FileTypeMapper
      */
     private $fileTypeMapper;
     public function __construct(\PHPStan\Type\FileTypeMapper $fileTypeMapper)
@@ -38,7 +38,7 @@ final class AddCodeCoverageIgnoreForRectorDefinition implements \PHPStan\Rules\R
      * @param Node|ClassMethod $node
      *
      * @return string[]
-     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
+     * @param \PHPStan\Analyser\Scope $scope
      */
     public function processNode($node, $scope) : array
     {

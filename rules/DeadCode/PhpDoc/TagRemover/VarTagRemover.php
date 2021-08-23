@@ -20,7 +20,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20210823\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 final class VarTagRemover
 {
     /**
@@ -36,14 +36,14 @@ final class VarTagRemover
      */
     private $phpDocInfoFactory;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
     /**
      * @var \Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer
      */
     private $deadVarTagValueNodeAnalyzer;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210822\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker, \Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer)
+    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20210823\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker, \Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -64,7 +64,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {
@@ -92,7 +92,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
      */
     private function isNonBasicArrayType($node, \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode) : bool
     {

@@ -33,7 +33,7 @@ final class CallerParamMatcher
         $this->astResolver = $astResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType
      */
     public function matchCallParamType($call, \PhpParser\Node\Param $param, \PHPStan\Analyser\Scope $scope)
@@ -45,7 +45,7 @@ final class CallerParamMatcher
         return $callParam->type;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      */
     public function matchCallParam($call, \PhpParser\Node\Param $param, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node\Param
     {
@@ -73,7 +73,7 @@ final class CallerParamMatcher
         return $this->resolveParentMethodParam($scope, $methodName, $parentStaticCallArgPosition);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
      * @return int|null
      */
     private function matchCallArgPosition($call, \PhpParser\Node\Param $param)

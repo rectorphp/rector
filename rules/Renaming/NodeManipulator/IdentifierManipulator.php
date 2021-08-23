@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -30,7 +30,7 @@ final class IdentifierManipulator
     }
     /**
      * @param string[] $renameMethodMap
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
     public function renameNodeWithMap($node, array $renameMethodMap) : void
     {
@@ -41,7 +41,7 @@ final class IdentifierManipulator
         $node->name = new \PhpParser\Node\Identifier($renameMethodMap[$oldNodeMethodName]);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
     public function removeSuffix($node, string $suffixToRemove) : void
     {
@@ -49,11 +49,11 @@ final class IdentifierManipulator
         if ($name === null) {
             return;
         }
-        $newName = \RectorPrefix20210822\Nette\Utils\Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
+        $newName = \RectorPrefix20210823\Nette\Utils\Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
         $node->name = new \PhpParser\Node\Identifier($newName);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
     private function resolveOldMethodName($node) : ?string
     {

@@ -27,7 +27,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ValueResolver
 {
     /**
-     * @var \RectorPrefix20210822\PhpParser\ConstExprEvaluator|null
+     * @var \PhpParser\ConstExprEvaluator|null
      */
     private $constExprEvaluator;
     /**
@@ -43,7 +43,7 @@ final class ValueResolver
      */
     private $constFetchAnalyzer;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

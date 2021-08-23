@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20210823\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20210822\Symfony\Component\Console\Application;
-use RectorPrefix20210822\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210822\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210822\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20210822\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210823\Symfony\Component\Console\Application;
+use RectorPrefix20210823\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210823\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210823\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20210823\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20210823\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  *
  * @internal
  */
-abstract class Descriptor implements \RectorPrefix20210822\Symfony\Component\Console\Descriptor\DescriptorInterface
+abstract class Descriptor implements \RectorPrefix20210823\Symfony\Component\Console\Descriptor\DescriptorInterface
 {
     /**
      * @var OutputInterface
@@ -31,30 +31,30 @@ abstract class Descriptor implements \RectorPrefix20210822\Symfony\Component\Con
     /**
      * {@inheritdoc}
      * @param object $object
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param mixed[] $options
      */
     public function describe($output, $object, $options = [])
     {
         $this->output = $output;
         switch (\true) {
-            case $object instanceof \RectorPrefix20210822\Symfony\Component\Console\Input\InputArgument:
+            case $object instanceof \RectorPrefix20210823\Symfony\Component\Console\Input\InputArgument:
                 $this->describeInputArgument($object, $options);
                 break;
-            case $object instanceof \RectorPrefix20210822\Symfony\Component\Console\Input\InputOption:
+            case $object instanceof \RectorPrefix20210823\Symfony\Component\Console\Input\InputOption:
                 $this->describeInputOption($object, $options);
                 break;
-            case $object instanceof \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition:
+            case $object instanceof \RectorPrefix20210823\Symfony\Component\Console\Input\InputDefinition:
                 $this->describeInputDefinition($object, $options);
                 break;
-            case $object instanceof \RectorPrefix20210822\Symfony\Component\Console\Command\Command:
+            case $object instanceof \RectorPrefix20210823\Symfony\Component\Console\Command\Command:
                 $this->describeCommand($object, $options);
                 break;
-            case $object instanceof \RectorPrefix20210822\Symfony\Component\Console\Application:
+            case $object instanceof \RectorPrefix20210823\Symfony\Component\Console\Application:
                 $this->describeApplication($object, $options);
                 break;
             default:
-                throw new \RectorPrefix20210822\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Object of type "%s" is not describable.', \get_debug_type($object)));
+                throw new \RectorPrefix20210823\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Object of type "%s" is not describable.', \get_debug_type($object)));
         }
     }
     /**
@@ -64,35 +64,35 @@ abstract class Descriptor implements \RectorPrefix20210822\Symfony\Component\Con
      */
     protected function write($content, $decorated = \false)
     {
-        $this->output->write($content, \false, $decorated ? \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL : \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW);
+        $this->output->write($content, \false, $decorated ? \RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL : \RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW);
     }
     /**
      * Describes an InputArgument instance.
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputArgument $argument
+     * @param \Symfony\Component\Console\Input\InputArgument $argument
      * @param mixed[] $options
      */
     protected abstract function describeInputArgument($argument, $options = []);
     /**
      * Describes an InputOption instance.
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputOption $option
+     * @param \Symfony\Component\Console\Input\InputOption $option
      * @param mixed[] $options
      */
     protected abstract function describeInputOption($option, $options = []);
     /**
      * Describes an InputDefinition instance.
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition $definition
+     * @param \Symfony\Component\Console\Input\InputDefinition $definition
      * @param mixed[] $options
      */
     protected abstract function describeInputDefinition($definition, $options = []);
     /**
      * Describes a Command instance.
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Command\Command $command
+     * @param \Symfony\Component\Console\Command\Command $command
      * @param mixed[] $options
      */
     protected abstract function describeCommand($command, $options = []);
     /**
      * Describes an Application instance.
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Application $application
+     * @param \Symfony\Component\Console\Application $application
      * @param mixed[] $options
      */
     protected abstract function describeApplication($application, $options = []);

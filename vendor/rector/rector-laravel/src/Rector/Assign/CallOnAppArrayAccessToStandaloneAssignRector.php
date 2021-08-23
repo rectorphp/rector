@@ -77,7 +77,7 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
 class SomeClass
 {
     /**
-     * @var \RectorPrefix20210822\Illuminate\Contracts\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     private $app;
 
@@ -91,13 +91,13 @@ CODE_SAMPLE
 class SomeClass
 {
     /**
-     * @var \RectorPrefix20210822\Illuminate\Contracts\Foundation\Application
+     * @var \Illuminate\Contracts\Foundation\Application
      */
     private $app;
 
     public function run()
     {
-        /** @var \RectorPrefix20210822\Illuminate\Validation\Factory $validationFactory */
+        /** @var \Illuminate\Validation\Factory $validationFactory */
         $validationFactory = $this->app['validator'];
         $validator = $validationFactory->make('...');
     }

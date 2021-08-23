@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210822\TYPO3\CMS\Extbase\Configuration\Exception;
+namespace RectorPrefix20210823\TYPO3\CMS\Extbase\Configuration\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Configuration\\Exception\\ContainerIsLockedException')) {
     return;

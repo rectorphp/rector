@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\HttpCache;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\Response;
 interface SurrogateInterface
 {
     /**
@@ -30,26 +30,26 @@ interface SurrogateInterface
      * Checks that at least one surrogate has Surrogate capability.
      *
      * @return bool true if one surrogate has Surrogate capability, false otherwise
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function hasSurrogateCapability($request);
     /**
      * Adds Surrogate-capability to the given Request.
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function addSurrogateCapability($request);
     /**
      * Adds HTTP headers to specify that the Response needs to be parsed for Surrogate.
      *
      * This method only adds an Surrogate HTTP header if the Response has some Surrogate tags.
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     public function addSurrogateControl($response);
     /**
      * Checks that the Response needs to be parsed for Surrogate tags.
      *
      * @return bool true if the Response needs to be parsed, false otherwise
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     public function needsParsing($response);
     /**
@@ -67,8 +67,8 @@ interface SurrogateInterface
      * Replaces a Response Surrogate tags with the included resource content.
      *
      * @return Response
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response $response
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Response $response
      */
     public function process($request, $response);
     /**
@@ -80,7 +80,7 @@ interface SurrogateInterface
      *
      * @throws \RuntimeException
      * @throws \Exception
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
+     * @param \Symfony\Component\HttpKernel\HttpCache\HttpCache $cache
      * @param string $uri
      * @param bool $ignoreErrors
      */

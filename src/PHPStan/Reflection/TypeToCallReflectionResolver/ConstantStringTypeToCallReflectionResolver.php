@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
@@ -34,7 +34,7 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
      */
     private const METHOD_KEY = 'method';
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -42,16 +42,16 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      */
     public function supports($type) : bool
     {
         return $type instanceof \PHPStan\Type\Constant\ConstantStringType;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @return FunctionReflection|MethodReflection|null
-     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
+     * @param \PHPStan\Analyser\Scope $scope
      */
     public function resolve($type, $scope)
     {
@@ -62,7 +62,7 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
             return $this->reflectionProvider->getFunction($name, null);
         }
         // 'MyClass::myStaticFunction'
-        $matches = \RectorPrefix20210822\Nette\Utils\Strings::match($value, self::STATIC_METHOD_REGEX);
+        $matches = \RectorPrefix20210823\Nette\Utils\Strings::match($value, self::STATIC_METHOD_REGEX);
         if ($matches === null) {
             return null;
         }

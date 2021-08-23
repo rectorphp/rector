@@ -7,19 +7,19 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionWithFilename;
-use RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20210823\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
+    public function __construct(\RectorPrefix20210823\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->pathNormalizer = $pathNormalizer;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
      */
     public function detectFunctionLikeReflection($reflection) : bool
     {
@@ -32,7 +32,7 @@ final class VendorLocationDetector
         return \strpos($normalizedFileName, '/vendor/') !== \false;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\FunctionReflection $reflection
      * @return string|bool
      */
     private function resolveReflectionFileName($reflection)

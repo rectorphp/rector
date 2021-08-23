@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\DependencyInjection;
+namespace RectorPrefix20210823\Symfony\Component\DependencyInjection;
 
-use RectorPrefix20210822\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20210823\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 /**
  * The EnvVarProcessorInterface is implemented by objects that manage environment-like variables.
  *
@@ -23,7 +23,7 @@ interface EnvVarProcessorInterface
      *
      * @param string   $prefix The namespace of the variable
      * @param string   $name   The name of the variable within the namespace
-     * @param \RectorPrefix20210822\Closure $getEnv A closure that allows fetching more env vars
+     * @param \Closure $getEnv A closure that allows fetching more env vars
      *
      * @return mixed
      *

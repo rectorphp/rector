@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20210823\Symfony\Component\DependencyInjection\Exception;
 
-use RectorPrefix20210822\Psr\Container\NotFoundExceptionInterface;
+use RectorPrefix20210823\Psr\Container\NotFoundExceptionInterface;
 /**
  * This exception is thrown when a non-existent parameter is used.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParameterNotFoundException extends \RectorPrefix20210822\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException implements \RectorPrefix20210822\Psr\Container\NotFoundExceptionInterface
+class ParameterNotFoundException extends \RectorPrefix20210823\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException implements \RectorPrefix20210823\Psr\Container\NotFoundExceptionInterface
 {
     private $key;
     private $sourceId;
@@ -27,7 +27,7 @@ class ParameterNotFoundException extends \RectorPrefix20210822\Symfony\Component
      * @param string          $key                  The requested parameter key
      * @param string|null     $sourceId             The service id that references the non-existent parameter
      * @param string|null     $sourceKey            The parameter key that references the non-existent parameter
-     * @param \RectorPrefix20210822\Throwable|null $previous             The previous exception
+     * @param \Throwable|null $previous             The previous exception
      * @param string[]        $alternatives         Some parameter name alternatives
      * @param string|null     $nonNestedAlternative The alternative parameter name when the user expected dot notation for nested parameters
      */

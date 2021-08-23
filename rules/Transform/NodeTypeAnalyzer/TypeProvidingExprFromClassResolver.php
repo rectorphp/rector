@@ -32,7 +32,7 @@ final class TypeProvidingExprFromClassResolver
      */
     private $typeUnwrapper;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -52,7 +52,7 @@ final class TypeProvidingExprFromClassResolver
     }
     /**
      * @return MethodCall|PropertyFetch|Variable|null
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function resolveTypeProvidingExprFromClass(\PhpParser\Node\Stmt\Class_ $class, $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr
     {

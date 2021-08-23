@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20210823\Symfony\Component\Finder\Iterator;
 
 /**
  * CustomFilterIterator filters files by applying anonymous functions.
@@ -22,7 +22,7 @@ class CustomFilterIterator extends \FilterIterator
 {
     private $filters = [];
     /**
-     * @param \RectorPrefix20210822\Iterator  $iterator The Iterator to filter
+     * @param \Iterator  $iterator The Iterator to filter
      * @param callable[] $filters  An array of PHP callbacks
      *
      * @throws \InvalidArgumentException

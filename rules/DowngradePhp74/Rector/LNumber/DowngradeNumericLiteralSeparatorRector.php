@@ -75,7 +75,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
      */
     public function shouldRefactor($node) : bool
     {

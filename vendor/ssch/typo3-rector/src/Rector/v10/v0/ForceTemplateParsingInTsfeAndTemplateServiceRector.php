@@ -31,7 +31,7 @@ final class ForceTemplateParsingInTsfeAndTemplateServiceRector extends \Rector\C
      */
     private const TYPOSCRIPT = 'typoscript';
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

@@ -40,7 +40,7 @@ final class RemoveParentAndNameFromComponentConstructorRector extends \Rector\Co
      */
     private const NAME = 'name';
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\ObjectType
+     * @var \PHPStan\Type\ObjectType
      */
     private $controlObjectType;
     /**

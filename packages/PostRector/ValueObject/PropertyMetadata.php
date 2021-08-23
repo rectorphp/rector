@@ -11,7 +11,7 @@ final class PropertyMetadata
      */
     private $name;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\Type|null
+     * @var \PHPStan\Type\Type|null
      */
     private $type;
     /**

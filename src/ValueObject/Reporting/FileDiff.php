@@ -9,7 +9,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileDiff
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $smartFileInfo;
     /**

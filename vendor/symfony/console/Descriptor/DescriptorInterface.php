@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20210823\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Descriptor interface.
  *
@@ -20,7 +20,7 @@ interface DescriptorInterface
 {
     /**
      * @param object $object
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param mixed[] $options
      */
     public function describe($output, $object, $options = []);

@@ -63,14 +63,14 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isExtensionManagementUtilityIsLoaded($node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) && $this->isName($node->name, 'isLoaded');
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isPackageManagerIsActivePackage($node) : bool
     {

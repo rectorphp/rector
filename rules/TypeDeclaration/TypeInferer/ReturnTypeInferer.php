@@ -20,7 +20,7 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
-use RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ReturnTypeInferer
 {
     /**
@@ -40,13 +40,13 @@ final class ReturnTypeInferer
      */
     private $phpVersionProvider;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;

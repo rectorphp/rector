@@ -82,7 +82,7 @@ CODE_SAMPLE
     }
     /**
      * @return Assign[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
     private function createStandaloneAssigns($expr, \PhpParser\Node\Expr\Array_ $rightArray) : array
     {
@@ -100,7 +100,7 @@ CODE_SAMPLE
         return $standaloneAssigns;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $expr
      */
     private function isValueSwap($expr, \PhpParser\Node\Expr\Array_ $secondArray) : bool
     {
@@ -109,7 +109,7 @@ CODE_SAMPLE
         return $firstArrayItemsHash === $secondArrayItemsHash;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
      */
     private function getArrayItemsHash($node) : string
     {

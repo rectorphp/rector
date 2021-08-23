@@ -6,8 +6,8 @@ namespace Rector\Core\Reporting;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20210822\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210823\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210823\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissingRectorRulesReporter
 {
     /**
@@ -15,13 +15,13 @@ final class MissingRectorRulesReporter
      */
     private $rectors;
     /**
-     * @var \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, \RectorPrefix20210822\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(array $rectors, \RectorPrefix20210823\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->rectors = $rectors;
         $this->symfonyStyle = $symfonyStyle;
@@ -38,7 +38,7 @@ final class MissingRectorRulesReporter
             return null;
         }
         $this->report();
-        return \RectorPrefix20210822\Symfony\Component\Console\Command\Command::FAILURE;
+        return \RectorPrefix20210823\Symfony\Component\Console\Command\Command::FAILURE;
     }
     public function report() : void
     {

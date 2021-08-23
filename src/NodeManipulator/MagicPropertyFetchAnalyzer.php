@@ -31,7 +31,7 @@ final class MagicPropertyFetchAnalyzer
      */
     private $nodeTypeResolver;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -41,7 +41,7 @@ final class MagicPropertyFetchAnalyzer
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
     public function isMagicOnType($expr, \PHPStan\Type\Type $type) : bool
     {
@@ -62,7 +62,7 @@ final class MagicPropertyFetchAnalyzer
         return !$this->hasPublicProperty($expr, $nodeName);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */
     private function hasPublicProperty($expr, string $propertyName) : bool
     {

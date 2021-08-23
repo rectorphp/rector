@@ -5,33 +5,33 @@ namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
-use RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20210823\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210823\Symplify\SmartFileSystem\FileSystemGuard;
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
  */
 final class AdditionalAutoloader
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard
+     * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
     /**
-     * @var \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-    public function __construct(\RectorPrefix20210822\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20210822\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    public function __construct(\RectorPrefix20210823\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20210823\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->parameterProvider = $parameterProvider;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
-    public function autoloadInput(\RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input) : void
+    public function autoloadInput(\RectorPrefix20210823\Symfony\Component\Console\Input\InputInterface $input) : void
     {
         if (!$input->hasOption(\Rector\Core\Configuration\Option::AUTOLOAD_FILE)) {
             return;

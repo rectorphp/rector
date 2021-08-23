@@ -49,7 +49,7 @@ final class FormTypeInstanceToClassConstRector extends \Rector\Core\Rector\Abstr
      */
     private $configureOptionsNodeFactory;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**

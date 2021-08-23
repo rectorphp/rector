@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\VarDumper\Exception;
+namespace RectorPrefix20210823\Symfony\Component\VarDumper\Exception;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
@@ -16,7 +16,7 @@ namespace RectorPrefix20210822\Symfony\Component\VarDumper\Exception;
 class ThrowingCasterException extends \Exception
 {
     /**
-     * @param \RectorPrefix20210822\Throwable $prev The exception thrown from the caster
+     * @param \Throwable $prev The exception thrown from the caster
      */
     public function __construct(\Throwable $prev)
     {

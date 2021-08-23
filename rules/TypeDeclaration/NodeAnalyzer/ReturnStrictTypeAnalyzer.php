@@ -60,7 +60,7 @@ final class ReturnStrictTypeAnalyzer
         return $this->typeNodeUnwrapper->uniquateNodes($returnedStrictTypeNodes);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
     private function resolveMethodCallReturnNode($call) : ?\PhpParser\Node
     {

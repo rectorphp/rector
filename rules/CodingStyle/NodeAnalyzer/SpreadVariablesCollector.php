@@ -14,7 +14,7 @@ final class SpreadVariablesCollector
 {
     /**
      * @return array<int, ParameterReflection>
-     * @param \RectorPrefix20210822\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
     public function resolveFromMethodReflection($functionLikeReflection) : array
     {

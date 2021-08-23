@@ -68,7 +68,7 @@ CODE_SAMPLE
         return $funcCall;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $expr
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $expr
      */
     private function matchIdenticalOrNotIdenticalToFalse($expr) : ?\PhpParser\Node\Expr\FuncCall
     {

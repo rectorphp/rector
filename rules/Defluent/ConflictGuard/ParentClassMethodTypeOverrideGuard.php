@@ -10,7 +10,7 @@ use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20210823\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -22,10 +22,10 @@ final class ParentClassMethodTypeOverrideGuard
      */
     private $vendorLocationDetector;
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20210822\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20210823\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->vendorLocationDetector = $vendorLocationDetector;

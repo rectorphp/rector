@@ -8,7 +8,7 @@ use PHPStan\Type\Type;
 final class NestedArrayType
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\Type
+     * @var \PHPStan\Type\Type
      */
     private $type;
     /**
@@ -16,7 +16,7 @@ final class NestedArrayType
      */
     private $arrayNestingLevel;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\Type|null
+     * @var \PHPStan\Type\Type|null
      */
     private $keyType;
     public function __construct(\PHPStan\Type\Type $type, int $arrayNestingLevel, ?\PHPStan\Type\Type $keyType = null)

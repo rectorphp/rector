@@ -25,7 +25,7 @@ final class AllAssignNodePropertyTypeInferer implements \Rector\TypeDeclaration\
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property $property
+     * @param \PhpParser\Node\Stmt\Property $property
      */
     public function inferProperty($property) : ?\PHPStan\Type\Type
     {

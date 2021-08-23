@@ -205,7 +205,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function refactorParam(\PhpParser\Node\Param $param, $functionLike) : void
     {
@@ -216,7 +216,7 @@ CODE_SAMPLE
         $param->type = null;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function decorateWithDocBlock($functionLike, \PhpParser\Node\Param $param) : void
     {

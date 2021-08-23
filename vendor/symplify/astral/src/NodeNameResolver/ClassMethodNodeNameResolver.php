@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\Astral\NodeNameResolver;
+namespace RectorPrefix20210823\Symplify\Astral\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20210822\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class ClassMethodNodeNameResolver implements \RectorPrefix20210822\Symplify\Astral\Contract\NodeNameResolverInterface
+use RectorPrefix20210823\Symplify\Astral\Contract\NodeNameResolverInterface;
+final class ClassMethodNodeNameResolver implements \RectorPrefix20210823\Symplify\Astral\Contract\NodeNameResolverInterface
 {
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function match($node) : bool
     {
         return $node instanceof \PhpParser\Node\Stmt\ClassMethod;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : ?string
     {

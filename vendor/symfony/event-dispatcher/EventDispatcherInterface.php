@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\EventDispatcher;
+namespace RectorPrefix20210823\Symfony\Component\EventDispatcher;
 
-use RectorPrefix20210822\Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
+use RectorPrefix20210823\Symfony\Contracts\EventDispatcher\EventDispatcherInterface as ContractsEventDispatcherInterface;
 /**
  * The EventDispatcherInterface is the central point of Symfony's event listener system.
  * Listeners are registered on the manager and events are dispatched through the
@@ -18,7 +18,7 @@ use RectorPrefix20210822\Symfony\Contracts\EventDispatcher\EventDispatcherInterf
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-interface EventDispatcherInterface extends \RectorPrefix20210822\Symfony\Contracts\EventDispatcher\EventDispatcherInterface
+interface EventDispatcherInterface extends \RectorPrefix20210823\Symfony\Contracts\EventDispatcher\EventDispatcherInterface
 {
     /**
      * Adds an event listener that listens on the specified events.
@@ -34,7 +34,7 @@ interface EventDispatcherInterface extends \RectorPrefix20210822\Symfony\Contrac
      *
      * The subscriber is asked for all the events it is
      * interested in and added as a listener for these events.
-     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function addSubscriber($subscriber);
     /**
@@ -44,7 +44,7 @@ interface EventDispatcherInterface extends \RectorPrefix20210822\Symfony\Contrac
      */
     public function removeListener($eventName, $listener);
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
+     * @param \Symfony\Component\EventDispatcher\EventSubscriberInterface $subscriber
      */
     public function removeSubscriber($subscriber);
     /**

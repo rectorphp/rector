@@ -70,14 +70,14 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
      */
     public function isMethodVerifyFilenameAgainstDenyPattern($node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) && $this->isName($node->name, 'verifyFilenameAgainstDenyPattern');
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
      */
     private function shouldSkip($node) : bool
     {
@@ -87,7 +87,7 @@ CODE_SAMPLE
         return !$this->isConstFileDenyPatternDefault($node);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isConstFileDenyPatternDefault($node) : bool
     {

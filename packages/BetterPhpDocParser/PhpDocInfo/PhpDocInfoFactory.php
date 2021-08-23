@@ -33,7 +33,7 @@ final class PhpDocInfoFactory
      */
     private $currentNodeProvider;
     /**
-     * @var \RectorPrefix20210822\PHPStan\PhpDocParser\Lexer\Lexer
+     * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
     /**

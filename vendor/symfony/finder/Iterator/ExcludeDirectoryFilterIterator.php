@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20210823\Symfony\Component\Finder\Iterator;
 
 /**
  * ExcludeDirectoryFilterIterator filters out directories.
@@ -22,7 +22,7 @@ class ExcludeDirectoryFilterIterator extends \FilterIterator implements \Recursi
     private $excludedDirs = [];
     private $excludedPattern;
     /**
-     * @param \RectorPrefix20210822\Iterator $iterator    The Iterator to filter
+     * @param \Iterator $iterator    The Iterator to filter
      * @param string[]  $directories An array of directories to exclude
      */
     public function __construct(\Iterator $iterator, array $directories)

@@ -86,7 +86,7 @@ CODE_SAMPLE
     }
     /**
      * @param Arg[] $args
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\FuncCall $node
      */
     private function removeNamedArguments($node, array $args) : ?\PhpParser\Node
     {

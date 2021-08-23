@@ -46,7 +46,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
         return [\PhpParser\Node\Expr\New_::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

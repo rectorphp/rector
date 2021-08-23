@@ -46,7 +46,7 @@ final class File
      */
     private $rectorErrors = [];
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $smartFileInfo;
     /**

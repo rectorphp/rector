@@ -15,7 +15,7 @@ interface NodeTypeResolverInterface
      */
     public function getNodeClasses() : array;
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type;
 }

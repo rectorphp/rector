@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20210823\Symfony\Component\Finder\Iterator;
 
 /**
  * MultiplePcreFilterIterator filters files using patterns (regexps, globs or strings).
@@ -20,7 +20,7 @@ abstract class MultiplePcreFilterIterator extends \FilterIterator
     protected $matchRegexps = [];
     protected $noMatchRegexps = [];
     /**
-     * @param \RectorPrefix20210822\Iterator $iterator        The Iterator to filter
+     * @param \Iterator $iterator        The Iterator to filter
      * @param string[]  $matchPatterns   An array of patterns that need to match
      * @param string[]  $noMatchPatterns An array of patterns that need to not match
      */

@@ -24,7 +24,7 @@ final class UseContextApiRector extends \Rector\Core\Rector\AbstractRector
      */
     private const REFACTOR_PROPERTIES = ['loginUser', 'gr_list', 'beUserLogin', 'showHiddenPage', 'showHiddenRecords'];
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

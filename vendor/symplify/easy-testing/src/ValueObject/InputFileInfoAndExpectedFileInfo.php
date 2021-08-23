@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20210823\Symplify\EasyTesting\ValueObject;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class InputFileInfoAndExpectedFileInfo
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $inputFileInfo;
     /**
-     * @var \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo
+     * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $expectedFileInfo;
     public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $inputFileInfo, \Symplify\SmartFileSystem\SmartFileInfo $expectedFileInfo)

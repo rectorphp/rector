@@ -34,7 +34,7 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
         $this->fileNodesFetcher = $fileNodesFetcher;
     }
     /**
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $fileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $fileInfo
      */
     public function setFileInfo($fileInfo) : void
     {

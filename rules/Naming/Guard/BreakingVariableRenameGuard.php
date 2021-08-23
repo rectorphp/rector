@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -67,7 +67,7 @@ final class BreakingVariableRenameGuard
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     public function shouldSkipVariable(string $currentName, string $expectedName, $functionLike, \PhpParser\Node\Expr\Variable $variable) : bool
     {
@@ -142,14 +142,14 @@ final class BreakingVariableRenameGuard
         return $trinaryLogic->maybe();
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function hasConflictVariable($functionLike, string $newName) : bool
     {
         return $this->betterNodeFinder->hasInstanceOfName((array) $functionLike->stmts, \PhpParser\Node\Expr\Variable::class, $newName);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function isUsedInClosureUsesName(string $expectedName, $functionLike) : bool
     {
@@ -219,6 +219,6 @@ final class BreakingVariableRenameGuard
         }
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
-        return (bool) \RectorPrefix20210822\Nette\Utils\Strings::match($currentName, self::AT_NAMING_REGEX . '');
+        return (bool) \RectorPrefix20210823\Nette\Utils\Strings::match($currentName, self::AT_NAMING_REGEX . '');
     }
 }

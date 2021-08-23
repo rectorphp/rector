@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Console\Command;
+namespace RectorPrefix20210823\Symfony\Component\Console\Command;
 
-use RectorPrefix20210822\Symfony\Component\Console\Application;
-use RectorPrefix20210822\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210823\Symfony\Component\Console\Application;
+use RectorPrefix20210823\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix20210823\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20210823\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20210823\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class LazyCommand extends \RectorPrefix20210822\Symfony\Component\Console\Command\Command
+final class LazyCommand extends \RectorPrefix20210823\Symfony\Component\Console\Command\Command
 {
     private $command;
     private $isEnabled;
@@ -33,7 +33,7 @@ final class LazyCommand extends \RectorPrefix20210822\Symfony\Component\Console\
         $this->getCommand()->ignoreValidationErrors();
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Application|null $application
+     * @param \Symfony\Component\Console\Application|null $application
      */
     public function setApplication($application = null) : void
     {
@@ -43,7 +43,7 @@ final class LazyCommand extends \RectorPrefix20210822\Symfony\Component\Console\
         parent::setApplication($application);
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Helper\HelperSet $helperSet
+     * @param \Symfony\Component\Console\Helper\HelperSet $helperSet
      */
     public function setHelperSet($helperSet) : void
     {
@@ -57,8 +57,8 @@ final class LazyCommand extends \RectorPrefix20210822\Symfony\Component\Console\
         return $this->isEnabled ?? $this->getCommand()->isEnabled();
     }
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Input\InputInterface $input
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Output\OutputInterface $output
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
     public function run($input, $output) : int
     {
@@ -89,11 +89,11 @@ final class LazyCommand extends \RectorPrefix20210822\Symfony\Component\Console\
         $this->getCommand()->setDefinition($definition);
         return $this;
     }
-    public function getDefinition() : \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition
+    public function getDefinition() : \RectorPrefix20210823\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getDefinition();
     }
-    public function getNativeDefinition() : \RectorPrefix20210822\Symfony\Component\Console\Input\InputDefinition
+    public function getNativeDefinition() : \RectorPrefix20210823\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getNativeDefinition();
     }

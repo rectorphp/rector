@@ -12,15 +12,15 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 final class ClosureTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
 {
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      */
     public function supports($type) : bool
     {
         return $type instanceof \PHPStan\Type\ClosureType;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
-     * @param \RectorPrefix20210822\PHPStan\Analyser\Scope $scope
+     * @param \PHPStan\Type\Type $type
+     * @param \PHPStan\Analyser\Scope $scope
      */
     public function resolve($type, $scope) : \PHPStan\Reflection\Native\NativeFunctionReflection
     {

@@ -65,7 +65,7 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $varTagRemover;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -157,7 +157,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
      */
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property) : bool
     {
@@ -178,7 +178,7 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
      */
     private function shouldSkipNonClassLikeType($node) : bool
     {

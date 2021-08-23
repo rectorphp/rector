@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 final class TraitTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -32,7 +32,7 @@ final class TraitTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         return [\PhpParser\Node\Stmt\Trait_::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

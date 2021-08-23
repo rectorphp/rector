@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\VarDumper\Dumper;
+namespace RectorPrefix20210823\Symfony\Component\VarDumper\Dumper;
 
-use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210823\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * DataDumperInterface for dumping Data objects.
  *
@@ -19,7 +19,7 @@ use RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data;
 interface DataDumperInterface
 {
     /**
-     * @param \RectorPrefix20210822\Symfony\Component\VarDumper\Cloner\Data $data
+     * @param \Symfony\Component\VarDumper\Cloner\Data $data
      */
     public function dump($data);
 }

@@ -16,7 +16,7 @@ final class AddReturnTypeDeclaration
      */
     private $method;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Type\Type
+     * @var \PHPStan\Type\Type
      */
     private $returnType;
     public function __construct(string $class, string $method, \PHPStan\Type\Type $returnType)

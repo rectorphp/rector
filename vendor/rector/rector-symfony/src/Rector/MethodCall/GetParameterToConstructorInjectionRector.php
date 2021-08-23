@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20210822\Nette\Utils\Strings;
+use RectorPrefix20210823\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -28,7 +28,7 @@ final class GetParameterToConstructorInjectionRector extends \Rector\Core\Rector
      */
     private $propertyNaming;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -96,7 +96,7 @@ CODE_SAMPLE
         /** @var String_ $stringArgument */
         $stringArgument = $node->args[0]->value;
         $parameterName = $stringArgument->value;
-        $parameterName = \RectorPrefix20210822\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
+        $parameterName = \RectorPrefix20210823\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
         $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {

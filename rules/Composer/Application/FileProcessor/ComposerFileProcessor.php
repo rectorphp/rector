@@ -8,17 +8,17 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
-use RectorPrefix20210822\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
+use RectorPrefix20210823\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
+use RectorPrefix20210823\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory
+     * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
     /**
-     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter
+     * @var \Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter
      */
     private $composerJsonPrinter;
     /**
@@ -28,7 +28,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     /**
      * @param ComposerRectorInterface[] $composerRectors
      */
-    public function __construct(\RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210822\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter $composerJsonPrinter, array $composerRectors)
+    public function __construct(\RectorPrefix20210823\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210823\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter $composerJsonPrinter, array $composerRectors)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;

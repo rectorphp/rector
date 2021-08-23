@@ -27,7 +27,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
      */
     private $renamedClassesDataCollector;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -43,7 +43,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         return \PhpParser\Node\Name::class;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {

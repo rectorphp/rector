@@ -88,7 +88,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Property $node
      */
     private function resolveDefaultValueExpr($node) : ?\PhpParser\Node\Expr
     {
@@ -105,7 +105,7 @@ CODE_SAMPLE
         return $expr->value === '';
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Property $node
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt\Property
      */
     private function resolveAssignedVar($node)

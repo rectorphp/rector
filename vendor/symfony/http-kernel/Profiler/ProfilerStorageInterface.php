@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler;
+namespace RectorPrefix20210823\Symfony\Component\HttpKernel\Profiler;
 
 /**
  * ProfilerStorageInterface.
@@ -46,12 +46,12 @@ interface ProfilerStorageInterface
      * @return Profile|null The profile associated with token
      * @param string $token
      */
-    public function read($token) : ?\RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler\Profile;
+    public function read($token) : ?\RectorPrefix20210823\Symfony\Component\HttpKernel\Profiler\Profile;
     /**
      * Saves a Profile.
      *
      * @return bool Write operation successful
-     * @param \RectorPrefix20210822\Symfony\Component\HttpKernel\Profiler\Profile $profile
+     * @param \Symfony\Component\HttpKernel\Profiler\Profile $profile
      */
     public function write($profile) : bool;
     /**

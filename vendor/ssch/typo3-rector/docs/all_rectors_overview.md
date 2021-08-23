@@ -1160,7 +1160,7 @@ Inject EnvironmentService if needed in subclass of Response
  class MyResponse extends Response
  {
 +    /**
-+     * @var \RectorPrefix20210822\TYPO3\CMS\Extbase\Service\EnvironmentService
++     * @var \TYPO3\CMS\Extbase\Service\EnvironmentService
 +     */
 +    protected $environmentService;
 +

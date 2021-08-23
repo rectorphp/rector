@@ -27,7 +27,7 @@ final class PropertyFetchFinder
      */
     private $nodeNameResolver;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
@@ -48,7 +48,7 @@ final class PropertyFetchFinder
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
     {
@@ -126,7 +126,7 @@ final class PropertyFetchFinder
         return $propertyFetches;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     private function resolvePropertyName($propertyOrPromotedParam) : ?string
     {

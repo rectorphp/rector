@@ -8,7 +8,7 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
-use RectorPrefix20210822\Symfony\Component\Yaml\Yaml;
+use RectorPrefix20210823\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Yaml\Form\FormYamlProcessorTest
  */
@@ -23,7 +23,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
      */
     private $currentFileProvider;
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface[]
+     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface[]
      */
     private $transformer;
     /**
@@ -46,7 +46,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         }
         $this->currentFileProvider->setFile($file);
         $smartFileInfo = $file->getSmartFileInfo();
-        $yaml = \RectorPrefix20210822\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
+        $yaml = \RectorPrefix20210823\Symfony\Component\Yaml\Yaml::parseFile($smartFileInfo->getRealPath());
         if (!\is_array($yaml)) {
             return;
         }
@@ -58,7 +58,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         if ($newYaml === $yaml) {
             return;
         }
-        $newFileContent = \RectorPrefix20210822\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
+        $newFileContent = \RectorPrefix20210823\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
         $file->changeFileContent($newFileContent);
     }
     /**

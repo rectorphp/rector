@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210823\Symfony\Component\HttpFoundation;
 
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210822\Symfony\Component\HttpFoundation\ResponseHeaderBag::class);
+\class_exists(\RectorPrefix20210823\Symfony\Component\HttpFoundation\ResponseHeaderBag::class);
 /**
  * Response represents an HTTP response.
  *
@@ -231,7 +231,7 @@ class Response
      */
     public function __construct(?string $content = '', int $status = 200, array $headers = [])
     {
-        $this->headers = new \RectorPrefix20210822\Symfony\Component\HttpFoundation\ResponseHeaderBag($headers);
+        $this->headers = new \RectorPrefix20210823\Symfony\Component\HttpFoundation\ResponseHeaderBag($headers);
         $this->setContent($content);
         $this->setStatusCode($status);
         $this->setProtocolVersion('1.0');
@@ -286,7 +286,7 @@ class Response
      * the Request that is "associated" with this Response.
      *
      * @return $this
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function prepare($request)
     {
@@ -638,7 +638,7 @@ class Response
      * @return object
      *
      * @final
-     * @param \RectorPrefix20210822\DateTimeInterface $date
+     * @param \DateTimeInterface $date
      */
     public function setDate($date)
     {
@@ -696,7 +696,7 @@ class Response
      * @return object
      *
      * @final
-     * @param \RectorPrefix20210822\DateTimeInterface|null $date
+     * @param \DateTimeInterface|null $date
      */
     public function setExpires($date = null)
     {
@@ -828,7 +828,7 @@ class Response
      * @return object
      *
      * @final
-     * @param \RectorPrefix20210822\DateTimeInterface|null $date
+     * @param \DateTimeInterface|null $date
      */
     public function setLastModified($date = null)
     {
@@ -1000,7 +1000,7 @@ class Response
      * @return bool true if the Response validators match the Request, false otherwise
      *
      * @final
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function isNotModified($request) : bool
     {
@@ -1166,7 +1166,7 @@ class Response
      * @see http://support.microsoft.com/kb/323308
      *
      * @final
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     protected function ensureIEOverSSLCompatibility($request) : void
     {

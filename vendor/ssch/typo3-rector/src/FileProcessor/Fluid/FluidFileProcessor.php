@@ -13,7 +13,7 @@ use Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface;
 final class FluidFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface[]
+     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface[]
      */
     private $fluidRectors;
     /**

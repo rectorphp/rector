@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20210823\Symfony\Component\HttpFoundation;
 
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\File\Exception\FileException;
-use RectorPrefix20210822\Symfony\Component\HttpFoundation\File\File;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\File\Exception\FileException;
+use RectorPrefix20210823\Symfony\Component\HttpFoundation\File\File;
 /**
  * BinaryFileResponse represents an HTTP response delivering a file.
  *
@@ -21,7 +21,7 @@ use RectorPrefix20210822\Symfony\Component\HttpFoundation\File\File;
  * @author Jordan Alliot <jordan.alliot@gmail.com>
  * @author Sergey Linnik <linniksa@gmail.com>
  */
-class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFoundation\Response
+class BinaryFileResponse extends \RectorPrefix20210823\Symfony\Component\HttpFoundation\Response
 {
     protected static $trustXSendfileTypeHeader = \false;
     /**
@@ -32,7 +32,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
     protected $maxlen = -1;
     protected $deleteFileAfterSend = \false;
     /**
-     * @param \RectorPrefix20210822\SplFileInfo|string $file               The file to stream
+     * @param \SplFileInfo|string $file               The file to stream
      * @param int                 $status             The response status code
      * @param array               $headers            An array of response headers
      * @param bool                $public             Files are public by default
@@ -49,7 +49,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
         }
     }
     /**
-     * @param \RectorPrefix20210822\SplFileInfo|string $file               The file to stream
+     * @param \SplFileInfo|string $file               The file to stream
      * @param int                 $status             The response status code
      * @param array               $headers            An array of response headers
      * @param bool                $public             Files are public by default
@@ -69,7 +69,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
     /**
      * Sets the file to stream.
      *
-     * @param \RectorPrefix20210822\SplFileInfo|string $file The file to stream
+     * @param \SplFileInfo|string $file The file to stream
      *
      * @return $this
      *
@@ -80,15 +80,15 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
      */
     public function setFile($file, $contentDisposition = null, $autoEtag = \false, $autoLastModified = \true)
     {
-        if (!$file instanceof \RectorPrefix20210822\Symfony\Component\HttpFoundation\File\File) {
+        if (!$file instanceof \RectorPrefix20210823\Symfony\Component\HttpFoundation\File\File) {
             if ($file instanceof \SplFileInfo) {
-                $file = new \RectorPrefix20210822\Symfony\Component\HttpFoundation\File\File($file->getPathname());
+                $file = new \RectorPrefix20210823\Symfony\Component\HttpFoundation\File\File($file->getPathname());
             } else {
-                $file = new \RectorPrefix20210822\Symfony\Component\HttpFoundation\File\File((string) $file);
+                $file = new \RectorPrefix20210823\Symfony\Component\HttpFoundation\File\File((string) $file);
             }
         }
         if (!$file->isReadable()) {
-            throw new \RectorPrefix20210822\Symfony\Component\HttpFoundation\File\Exception\FileException('File must be readable.');
+            throw new \RectorPrefix20210823\Symfony\Component\HttpFoundation\File\Exception\FileException('File must be readable.');
         }
         $this->file = $file;
         if ($autoEtag) {
@@ -158,7 +158,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
     }
     /**
      * {@inheritdoc}
-     * @param \RectorPrefix20210822\Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $request
      */
     public function prepare($request)
     {
@@ -190,7 +190,7 @@ class BinaryFileResponse extends \RectorPrefix20210822\Symfony\Component\HttpFou
             if ('x-accel-redirect' === \strtolower($type)) {
                 // Do X-Accel-Mapping substitutions.
                 // @link https://www.nginx.com/resources/wiki/start/topics/examples/x-accel/#x-accel-redirect
-                $parts = \RectorPrefix20210822\Symfony\Component\HttpFoundation\HeaderUtils::split($request->headers->get('X-Accel-Mapping', ''), ',=');
+                $parts = \RectorPrefix20210823\Symfony\Component\HttpFoundation\HeaderUtils::split($request->headers->get('X-Accel-Mapping', ''), ',=');
                 foreach ($parts as $part) {
                     [$pathPrefix, $location] = $part;
                     if (\substr($path, 0, \strlen($pathPrefix)) === $pathPrefix) {

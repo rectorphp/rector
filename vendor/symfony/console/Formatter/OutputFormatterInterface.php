@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210822\Symfony\Component\Console\Formatter;
+namespace RectorPrefix20210823\Symfony\Component\Console\Formatter;
 
 /**
  * Formatter interface for console output.
@@ -31,7 +31,7 @@ interface OutputFormatterInterface
     /**
      * Sets a new style.
      * @param string $name
-     * @param \RectorPrefix20210822\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
+     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
      */
     public function setStyle($name, $style);
     /**

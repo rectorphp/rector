@@ -23,7 +23,7 @@ final class ClassAnnotationMatcher
      */
     private $useImportNameMatcher;
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)

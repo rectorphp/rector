@@ -54,7 +54,7 @@ class SomeClass
 {
     public function run()
     {
-        /** @var \RectorPrefix20210822\stdClass|null $value */
+        /** @var \stdClass|null $value */
         $value = $this->foo->bar();
         if (! $value instanceof \stdClass) {
             return null;

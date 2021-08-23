@@ -11,7 +11,7 @@ use Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToD
 final class DatabaseConnectionExecTruncateTableRefactoring implements \Ssch\TYPO3Rector\Contract\Helper\Database\Refactorings\DatabaseConnectionToDbalRefactoring
 {
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory
+     * @var \Ssch\TYPO3Rector\Helper\Database\Refactorings\ConnectionCallFactory
      */
     private $connectionCallFactory;
     /**
@@ -24,7 +24,7 @@ final class DatabaseConnectionExecTruncateTableRefactoring implements \Ssch\TYPO
         $this->nodeFactory = $nodeFactory;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall $oldNode
+     * @param \PhpParser\Node\Expr\MethodCall $oldNode
      */
     public function refactor($oldNode) : array
     {

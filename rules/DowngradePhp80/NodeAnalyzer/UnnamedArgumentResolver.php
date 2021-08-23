@@ -28,7 +28,7 @@ final class UnnamedArgumentResolver
     /**
      * @param Arg[] $currentArgs
      * @return Arg[]
-     * @param \RectorPrefix20210822\PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $functionLikeReflection
      */
     public function resolveFromReflection($functionLikeReflection, array $currentArgs) : array
     {

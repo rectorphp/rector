@@ -20,7 +20,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var \RectorPrefix20210822\PHPStan\Reflection\ReflectionProvider
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
@@ -35,7 +35,7 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         return [\PhpParser\Node\Name::class, \PhpParser\Node\Name\FullyQualified::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

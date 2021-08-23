@@ -35,7 +35,7 @@ final class CastTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         return [\PhpParser\Node\Expr\Cast::class];
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

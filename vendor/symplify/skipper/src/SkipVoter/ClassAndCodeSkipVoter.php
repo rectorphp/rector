@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\Skipper\SkipVoter;
+namespace RectorPrefix20210823\Symplify\Skipper\SkipVoter;
 
-use RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher;
-use RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver;
+use RectorPrefix20210823\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20210823\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix20210823\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * Matching class and code, e.g. App\Category\ArraySniff.SomeCode
  */
-final class ClassAndCodeSkipVoter implements \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface
+final class ClassAndCodeSkipVoter implements \RectorPrefix20210823\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver
+     * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver
      */
     private $skippedClassAndCodesResolver;
     /**
-     * @var \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher
+     * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
-    public function __construct(\RectorPrefix20210822\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver $skippedClassAndCodesResolver, \RectorPrefix20210822\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
+    public function __construct(\RectorPrefix20210823\Symplify\Skipper\SkipCriteriaResolver\SkippedClassAndCodesResolver $skippedClassAndCodesResolver, \RectorPrefix20210823\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
     {
         $this->skippedClassAndCodesResolver = $skippedClassAndCodesResolver;
         $this->fileInfoMatcher = $fileInfoMatcher;
@@ -37,7 +37,7 @@ final class ClassAndCodeSkipVoter implements \RectorPrefix20210822\Symplify\Skip
     }
     /**
      * @param string|object $element
-     * @param \RectorPrefix20210822\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
+     * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool
     {

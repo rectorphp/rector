@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\For_;
 
-use RectorPrefix20210822\Doctrine\Inflector\Inflector;
+use RectorPrefix20210823\Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -36,15 +36,15 @@ final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
      */
     private $countValueName;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
+     * @var \PhpParser\Node\Expr|null
      */
     private $countValueVariableExpr;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr|null
+     * @var \PhpParser\Node\Expr|null
      */
     private $iteratedExpr;
     /**
-     * @var \RectorPrefix20210822\Doctrine\Inflector\Inflector
+     * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
     /**
@@ -59,7 +59,7 @@ final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(\RectorPrefix20210822\Doctrine\Inflector\Inflector $inflector, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, \Rector\CodeQuality\NodeFactory\ForeachFactory $foreachFactory, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(\RectorPrefix20210823\Doctrine\Inflector\Inflector $inflector, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, \Rector\CodeQuality\NodeFactory\ForeachFactory $foreachFactory, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
     {
         $this->inflector = $inflector;
         $this->forAnalyzer = $forAnalyzer;

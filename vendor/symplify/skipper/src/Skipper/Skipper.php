@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210822\Symplify\Skipper\Skipper;
+namespace RectorPrefix20210823\Symplify\Skipper\Skipper;
 
-use RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20210823\Symplify\Skipper\Contract\SkipVoterInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\Skipper\Tests\Skipper\Skipper\SkipperTest
@@ -15,7 +15,7 @@ final class Skipper
      */
     private const FILE_ELEMENT = 'file_elements';
     /**
-     * @var \RectorPrefix20210822\Symplify\Skipper\Contract\SkipVoterInterface[]
+     * @var \Symplify\Skipper\Contract\SkipVoterInterface[]
      */
     private $skipVoters;
     /**

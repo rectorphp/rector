@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseCachingFrameworkInsteadGetAndStoreHashRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
@@ -79,7 +79,7 @@ CODE_SAMPLE
         return $this->nodeFactory->createMethodCall($this->createCacheManager(), 'set', [$hash, $data, $this->nodeFactory->createArray([$this->nodeFactory->createConcat([new \PhpParser\Node\Scalar\String_('ident_'), $ident])]), $lifetime]);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function shouldSkip($node) : bool
     {

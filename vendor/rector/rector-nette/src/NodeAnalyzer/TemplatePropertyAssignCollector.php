@@ -24,7 +24,7 @@ final class TemplatePropertyAssignCollector
      */
     private const NODE_TYPES = \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES + [\PhpParser\Node\FunctionLike::class];
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Stmt\Return_|null
+     * @var \PhpParser\Node\Stmt\Return_|null
      */
     private $lastReturn;
     /**

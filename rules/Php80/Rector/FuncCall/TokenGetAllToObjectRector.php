@@ -106,7 +106,7 @@ CODE_SAMPLE
         $this->replaceGetNameOrGetValue($classMethodOrFunction, $assign->var);
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function replaceGetNameOrGetValue($functionLike, \PhpParser\Node\Expr $assignedExpr) : void
     {
@@ -117,7 +117,7 @@ CODE_SAMPLE
     }
     /**
      * @return Foreach_[]
-     * @param \RectorPrefix20210822\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function findForeachesOverTokenVariable($functionLike, \PhpParser\Node\Expr $assignedExpr) : array
     {

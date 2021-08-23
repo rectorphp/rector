@@ -21,7 +21,7 @@ final class RefactorRemovedMethodsFromContentObjectRendererRector extends \Recto
      */
     private const METHODS_TO_REFACTOR = ['FLOWPLAYER', 'TEXT', 'CLEARGIF', 'COBJ_ARRAY', 'USER', 'FILE', 'FILES', 'IMAGE', 'IMG_RESOURCE', 'IMGTEXT', 'CONTENT', 'RECORDS', 'HMENU', 'CTABLE', 'OTABLE', 'COLUMNS', 'HRULER', 'CASEFUNC', 'LOAD_REGISTER', 'FORM', 'SEARCHRESULT', 'TEMPLATE', 'FLUIDTEMPLATE', 'MULTIMEDIA', 'MEDIA', 'SWFOBJECT', 'QTOBJECT'];
     /**
-     * @var \RectorPrefix20210822\Ssch\TYPO3Rector\Helper\Typo3NodeResolver
+     * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
     public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)

@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210822\Nette\Utils;
+namespace RectorPrefix20210823\Nette\Utils;
 
-use RectorPrefix20210822\Nette;
+use RectorPrefix20210823\Nette;
 /**
  * PHP reflection helpers.
  */
@@ -27,7 +27,7 @@ final class Reflection
      * Returns the type of return value of given function or method and normalizes `self`, `static`, and `parent` to actual class names.
      * If the function does not have a return type, it returns null.
      * If the function has union type, it throws Nette\InvalidStateException.
-     * @param \RectorPrefix20210822\ReflectionFunctionAbstract $func
+     * @param \ReflectionFunctionAbstract $func
      */
     public static function getReturnType($func) : ?string
     {
@@ -35,7 +35,7 @@ final class Reflection
     }
     /**
      * Returns the types of return value of given function or method and normalizes `self`, `static`, and `parent` to actual class names.
-     * @param \RectorPrefix20210822\ReflectionFunctionAbstract $func
+     * @param \ReflectionFunctionAbstract $func
      */
     public static function getReturnTypes($func) : array
     {
@@ -45,7 +45,7 @@ final class Reflection
      * Returns the type of given parameter and normalizes `self` and `parent` to the actual class names.
      * If the parameter does not have a type, it returns null.
      * If the parameter has union type, it throws Nette\InvalidStateException.
-     * @param \RectorPrefix20210822\ReflectionParameter $param
+     * @param \ReflectionParameter $param
      */
     public static function getParameterType($param) : ?string
     {
@@ -53,7 +53,7 @@ final class Reflection
     }
     /**
      * Returns the types of given parameter and normalizes `self` and `parent` to the actual class names.
-     * @param \RectorPrefix20210822\ReflectionParameter $param
+     * @param \ReflectionParameter $param
      */
     public static function getParameterTypes($param) : array
     {
@@ -63,7 +63,7 @@ final class Reflection
      * Returns the type of given property and normalizes `self` and `parent` to the actual class names.
      * If the property does not have a type, it returns null.
      * If the property has union type, it throws Nette\InvalidStateException.
-     * @param \RectorPrefix20210822\ReflectionProperty $prop
+     * @param \ReflectionProperty $prop
      */
     public static function getPropertyType($prop) : ?string
     {
@@ -71,7 +71,7 @@ final class Reflection
     }
     /**
      * Returns the types of given property and normalizes `self` and `parent` to the actual class names.
-     * @param \RectorPrefix20210822\ReflectionProperty $prop
+     * @param \ReflectionProperty $prop
      */
     public static function getPropertyTypes($prop) : array
     {
@@ -99,9 +99,9 @@ final class Reflection
                 }
                 return $types;
             }
-            throw new \RectorPrefix20210822\Nette\InvalidStateException('The ' . self::toString($reflection) . ' is not expected to have a union type.');
+            throw new \RectorPrefix20210823\Nette\InvalidStateException('The ' . self::toString($reflection) . ' is not expected to have a union type.');
         } else {
-            throw new \RectorPrefix20210822\Nette\InvalidStateException('Unexpected type of ' . self::toString($reflection));
+            throw new \RectorPrefix20210823\Nette\InvalidStateException('Unexpected type of ' . self::toString($reflection));
         }
     }
     /**
@@ -124,7 +124,7 @@ final class Reflection
      * Returns the default value of parameter. If it is a constant, it returns its value.
      * @return mixed
      * @throws \ReflectionException  If the parameter does not have a default value or the constant cannot be resolved
-     * @param \RectorPrefix20210822\ReflectionParameter $param
+     * @param \ReflectionParameter $param
      */
     public static function getParameterDefaultValue($param)
     {
@@ -153,7 +153,7 @@ final class Reflection
     }
     /**
      * Returns a reflection of a class or trait that contains a declaration of given property. Property can also be declared in the trait.
-     * @param \RectorPrefix20210822\ReflectionProperty $prop
+     * @param \ReflectionProperty $prop
      */
     public static function getPropertyDeclaringClass($prop) : \ReflectionClass
     {
@@ -167,7 +167,7 @@ final class Reflection
     /**
      * Returns a reflection of a method that contains a declaration of $method.
      * Usually, each method is its own declaration, but the body of the method can also be in the trait and under a different name.
-     * @param \RectorPrefix20210822\ReflectionMethod $method
+     * @param \ReflectionMethod $method
      */
     public static function getMethodDeclaringMethod($method) : \ReflectionMethod
     {
@@ -196,7 +196,7 @@ final class Reflection
         return $res ?? ($res = (bool) (new \ReflectionMethod(__METHOD__))->getDocComment());
     }
     /**
-     * @param \RectorPrefix20210822\Reflector $ref
+     * @param \Reflector $ref
      */
     public static function toString($ref) : string
     {
@@ -211,7 +211,7 @@ final class Reflection
         } elseif ($ref instanceof \ReflectionParameter) {
             return '$' . $ref->name . ' in ' . self::toString($ref->getDeclaringFunction());
         } else {
-            throw new \RectorPrefix20210822\Nette\InvalidArgumentException();
+            throw new \RectorPrefix20210823\Nette\InvalidArgumentException();
         }
     }
     /**
@@ -219,13 +219,13 @@ final class Reflection
      * Thus, it returns how the PHP parser would understand $name if it were written in the body of the class $context.
      * @throws Nette\InvalidArgumentException
      * @param string $name
-     * @param \RectorPrefix20210822\ReflectionClass $context
+     * @param \ReflectionClass $context
      */
     public static function expandClassName($name, $context) : string
     {
         $lower = \strtolower($name);
         if (empty($name)) {
-            throw new \RectorPrefix20210822\Nette\InvalidArgumentException('Class name must not be empty.');
+            throw new \RectorPrefix20210823\Nette\InvalidArgumentException('Class name must not be empty.');
         } elseif (isset(self::BUILTIN_TYPES[$lower])) {
             return $lower;
         } elseif ($lower === 'self' || $lower === 'static') {
@@ -246,11 +246,11 @@ final class Reflection
         }
     }
     /** @return array of [alias => class]
-     * @param \RectorPrefix20210822\ReflectionClass $class */
+     * @param \ReflectionClass $class */
     public static function getUseStatements($class) : array
     {
         if ($class->isAnonymous()) {
-            throw new \RectorPrefix20210822\Nette\NotImplementedException('Anonymous classes are not supported.');
+            throw new \RectorPrefix20210823\Nette\NotImplementedException('Anonymous classes are not supported.');
         }
         static $cache = [];
         if (!isset($cache[$name = $class->name])) {

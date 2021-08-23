@@ -3,27 +3,27 @@
 declare (strict_types=1);
 namespace Rector\Core\Php\PhpVersionResolver;
 
-use RectorPrefix20210822\Composer\Semver\VersionParser;
+use RectorPrefix20210823\Composer\Semver\VersionParser;
 use Rector\Core\Util\PhpVersionFactory;
-use RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
+use RectorPrefix20210823\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest
  */
 final class ProjectComposerJsonPhpVersionResolver
 {
     /**
-     * @var \RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory
+     * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
     /**
-     * @var \RectorPrefix20210822\Composer\Semver\VersionParser
+     * @var \Composer\Semver\VersionParser
      */
     private $versionParser;
     /**
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
-    public function __construct(\RectorPrefix20210822\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210822\Composer\Semver\VersionParser $versionParser, \Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
+    public function __construct(\RectorPrefix20210823\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20210823\Composer\Semver\VersionParser $versionParser, \Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->versionParser = $versionParser;

@@ -30,7 +30,7 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\Coding
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
     {

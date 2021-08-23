@@ -47,7 +47,7 @@ final class FluentChainMethodCallNodeAnalyzer
      */
     private $nodeTypeResolver;
     /**
-     * @var \RectorPrefix20210822\PhpParser\NodeFinder
+     * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
     /**

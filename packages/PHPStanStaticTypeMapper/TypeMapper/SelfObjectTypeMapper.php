@@ -24,7 +24,7 @@ final class SelfObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Cont
         return \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType::class;
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
@@ -32,7 +32,7 @@ final class SelfObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Cont
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('self');
     }
     /**
-     * @param \RectorPrefix20210822\PHPStan\Type\Type $type
+     * @param \PHPStan\Type\Type $type
      * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node

@@ -14,7 +14,7 @@ class TypeParser
         $this->constExprParser = $constExprParser;
     }
     /** @phpstan-impure
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens */
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens */
     public function parse($tokens) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_NULLABLE)) {
@@ -134,7 +134,7 @@ class TypeParser
         return new \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode($type);
     }
     /** @phpstan-impure
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens */
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens */
     public function isHtml($tokens) : bool
     {
         $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_ANGLE_BRACKET);
@@ -155,8 +155,8 @@ class TypeParser
         return \false;
     }
     /** @phpstan-impure
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     * @param \RectorPrefix20210822\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $baseType */
+     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
+     * @param \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $baseType */
     public function parseGeneric($tokens, $baseType) : \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
     {
         $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_ANGLE_BRACKET);

@@ -31,14 +31,14 @@ final class LocalPropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Cont
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function supports($node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\PropertyFetch;
     }
     /**
-     * @param \RectorPrefix20210822\PhpParser\Node $node
+     * @param \PhpParser\Node $node
      */
     public function isRead($node) : bool
     {

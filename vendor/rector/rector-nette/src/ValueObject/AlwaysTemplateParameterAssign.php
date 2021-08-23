@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\Assign;
 final class AlwaysTemplateParameterAssign
 {
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr\Assign
+     * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**
@@ -16,7 +16,7 @@ final class AlwaysTemplateParameterAssign
      */
     private $parameterName;
     /**
-     * @var \RectorPrefix20210822\PhpParser\Node\Expr
+     * @var \PhpParser\Node\Expr
      */
     private $assignedExpr;
     public function __construct(\PhpParser\Node\Expr\Assign $assign, string $parameterName, \PhpParser\Node\Expr $assignedExpr)
