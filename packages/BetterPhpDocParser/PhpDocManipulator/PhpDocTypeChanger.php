@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -12,6 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -122,5 +124,25 @@ final class PhpDocTypeChanger
             $paramTagValueNode = $this->paramPhpDocNodeFactory->create($phpDocType, $param);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
+    }
+
+    public function copyPropertyDocToParam(Property $property, Param $param): void
+    {
+        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        if (! $phpDocInfo) {
+            return;
+        }
+
+        $varTag = $phpDocInfo->getVarTagValueNode();
+        if (! $varTag instanceof VarTagValueNode) {
+            return;
+        }
+
+        if ($varTag->description !== '') {
+            return;
+        }
+
+        $phpDocInfo->removeByType(VarTagValueNode::class);
+        $param->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
     }
 }

@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -37,7 +38,8 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         private PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver,
         private VariableRenamer $variableRenamer,
         private VarTagRemover $varTagRemover,
-        private ParamAnalyzer $paramAnalyzer
+        private ParamAnalyzer $paramAnalyzer,
+        private PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 
@@ -132,6 +134,8 @@ CODE_SAMPLE
             // Copy over attributes of the "old" property
             $param->attrGroups = $property->attrGroups;
             $this->processNullableType($property, $param);
+
+            $this->phpDocTypeChanger->copyPropertyDocToParam($property, $param);
         }
 
         return $node;
