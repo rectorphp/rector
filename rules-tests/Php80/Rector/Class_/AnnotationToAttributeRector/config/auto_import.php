@@ -18,6 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AnnotationToAttributeRector::class)
         ->call('configure', [[
             AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Id'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
 
