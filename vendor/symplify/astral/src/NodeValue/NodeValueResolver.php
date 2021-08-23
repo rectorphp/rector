@@ -18,6 +18,11 @@ use PhpParser\Node\Scalar\MagicConst;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\Constant\ConstantFloatType;
+use PHPStan\Type\Constant\ConstantIntegerType;
+use PHPStan\Type\Constant\ConstantStringType;
 use ReflectionClassConstant;
 use RectorPrefix20210823\Symplify\Astral\Exception\ShouldNotHappenException;
 use RectorPrefix20210823\Symplify\Astral\Naming\SimpleNameResolver;
@@ -56,6 +61,31 @@ final class NodeValueResolver
         $this->constExprEvaluator = new \PhpParser\ConstExprEvaluator(function (\PhpParser\Node\Expr $expr) {
             return $this->resolveByNode($expr);
         });
+    }
+    /**
+     * @return array|bool|float|int|mixed|string|null
+     */
+    public function resolveWithScope(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope)
+    {
+        $this->currentFilePath = $scope->getFile();
+        try {
+            return $this->constExprEvaluator->evaluateDirectly($expr);
+        } catch (\PhpParser\ConstExprEvaluationException $exception) {
+        }
+        $exprType = $scope->getType($expr);
+        if ($exprType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+            return $exprType->getValue();
+        }
+        if ($exprType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
+            return $exprType->getValue();
+        }
+        if ($exprType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+            return $exprType->getValue();
+        }
+        if ($exprType instanceof \PHPStan\Type\Constant\ConstantFloatType) {
+            return $exprType->getValue();
+        }
+        return null;
     }
     /**
      * @return array|bool|float|int|mixed|string|null
