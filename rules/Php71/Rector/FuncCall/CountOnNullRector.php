@@ -133,6 +133,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if (! isset($funcCall->args[0])) {
+            return true;
+        }
+
         if ($funcCall->args[0]->value instanceof ClassConstFetch) {
             return true;
         }
@@ -146,10 +150,6 @@ CODE_SAMPLE
 
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Ternary) {
-            return true;
-        }
-
-        if (! isset($funcCall->args[0])) {
             return true;
         }
 
