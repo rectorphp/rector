@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
@@ -30,11 +32,16 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends \Rector\Core\Re
      * @var \Rector\DeadCode\UselessIfCondBeforeForeachDetector
      */
     private $uselessIfCondBeforeForeachDetector;
-    public function __construct(\Rector\DeadCode\NodeManipulator\CountManipulator $countManipulator, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DeadCode\UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector)
+    /**
+     * @var \Rector\Core\Php\ReservedKeywordAnalyzer
+     */
+    private $reservedKeywordAnalyzer;
+    public function __construct(\Rector\DeadCode\NodeManipulator\CountManipulator $countManipulator, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DeadCode\UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
     {
         $this->countManipulator = $countManipulator;
         $this->ifManipulator = $ifManipulator;
         $this->uselessIfCondBeforeForeachDetector = $uselessIfCondBeforeForeachDetector;
+        $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -96,6 +103,12 @@ CODE_SAMPLE
         /** @var Foreach_ $foreach */
         $foreach = $if->stmts[0];
         $foreachExpr = $foreach->expr;
+        if ($foreachExpr instanceof \PhpParser\Node\Expr\Variable) {
+            $variableName = $this->nodeNameResolver->getName($foreachExpr);
+            if (\is_string($variableName) && $this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
+                return \false;
+            }
+        }
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return \true;
         }

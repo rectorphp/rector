@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210823;
+namespace RectorPrefix20210824;
 
 if (\class_exists('tx_rtehtmlarea_pi3')) {
     return;

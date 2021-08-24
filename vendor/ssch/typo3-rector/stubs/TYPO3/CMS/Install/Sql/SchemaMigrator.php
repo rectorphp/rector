@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210823\TYPO3\CMS\Install\Sql;
+namespace RectorPrefix20210824\TYPO3\CMS\Install\Sql;
 
 if (\class_exists('TYPO3\\CMS\\Install\\Sql\\SchemaMigrator')) {
     return;
