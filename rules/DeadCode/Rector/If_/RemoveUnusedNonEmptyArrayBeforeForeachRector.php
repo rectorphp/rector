@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
@@ -23,7 +25,8 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
     public function __construct(
         private CountManipulator $countManipulator,
         private IfManipulator $ifManipulator,
-        private UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector
+        private UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector,
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
     }
 
@@ -102,6 +105,13 @@ CODE_SAMPLE
         /** @var Foreach_ $foreach */
         $foreach = $if->stmts[0];
         $foreachExpr = $foreach->expr;
+
+        if ($foreachExpr instanceof Variable) {
+            $variableName = $this->nodeNameResolver->getName($foreachExpr);
+            if (is_string($variableName) && $this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
+                return false;
+            }
+        }
 
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return true;
