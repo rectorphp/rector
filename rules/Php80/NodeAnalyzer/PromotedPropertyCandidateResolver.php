@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -186,12 +187,11 @@ final class PromotedPropertyCandidateResolver
 
         $isAllFullyQualifiedObjectType = true;
         if ($propertyType instanceof UnionType) {
-            foreach ($propertyType->getTypes() as $type) {
-                if (! $type instanceof FullyQualifiedObjectType) {
-                    $isAllFullyQualifiedObjectType = false;
-                    break;
-                }
+            if ($this->hasGenericTemplateType($propertyType)) {
+                return false;
             }
+
+            $isAllFullyQualifiedObjectType = ! $this->hasNonFullyQualifiedObjectType($propertyType);
         }
 
         // different types, not a good to fit
@@ -199,6 +199,28 @@ final class PromotedPropertyCandidateResolver
             $propertyType,
             $matchedParamType
         );
+    }
+
+    private function hasNonFullyQualifiedObjectType(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if (! $type instanceof FullyQualifiedObjectType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasGenericTemplateType(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if ($type instanceof TemplateType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -215,12 +237,12 @@ final class PromotedPropertyCandidateResolver
             return true;
         }
 
-        // @todo unknown type, not suitable?
-        $propertyType = $this->propertyTypeInferer->inferProperty($property);
-        if ($this->hasConflictingParamType($matchedParam, $propertyType)) {
+        if ($this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable)) {
             return true;
         }
 
-        return $this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable);
+        // @todo unknown type, not suitable?
+        $propertyType = $this->propertyTypeInferer->inferProperty($property);
+        return $this->hasConflictingParamType($matchedParam, $propertyType);
     }
 }
