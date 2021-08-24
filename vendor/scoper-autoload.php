@@ -9,8 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20210824\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInitca3d4aa89155cd33936b1df29f951085', false) && !interface_exists('ComposerAutoloaderInitca3d4aa89155cd33936b1df29f951085', false) && !trait_exists('ComposerAutoloaderInitca3d4aa89155cd33936b1df29f951085', false)) {
-    spl_autoload_call('RectorPrefix20210824\ComposerAutoloaderInitca3d4aa89155cd33936b1df29f951085');
+if (!class_exists('ComposerAutoloaderInit058bf0f7ae75bb522c54bcad5f09a886', false) && !interface_exists('ComposerAutoloaderInit058bf0f7ae75bb522c54bcad5f09a886', false) && !trait_exists('ComposerAutoloaderInit058bf0f7ae75bb522c54bcad5f09a886', false)) {
+    spl_autoload_call('RectorPrefix20210824\ComposerAutoloaderInit058bf0f7ae75bb522c54bcad5f09a886');
 }
 if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
     spl_autoload_call('RectorPrefix20210824\Helmich\TypoScriptParser\Parser\AST\Statement');
@@ -3308,9 +3308,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20210824\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequireca3d4aa89155cd33936b1df29f951085')) {
-    function composerRequireca3d4aa89155cd33936b1df29f951085() {
-        return \RectorPrefix20210824\composerRequireca3d4aa89155cd33936b1df29f951085(...func_get_args());
+if (!function_exists('composerRequire058bf0f7ae75bb522c54bcad5f09a886')) {
+    function composerRequire058bf0f7ae75bb522c54bcad5f09a886() {
+        return \RectorPrefix20210824\composerRequire058bf0f7ae75bb522c54bcad5f09a886(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {
@@ -3421,6 +3421,11 @@ if (!function_exists('bdump')) {
 if (!function_exists('this_is_fatal_error')) {
     function this_is_fatal_error() {
         return \RectorPrefix20210824\this_is_fatal_error(...func_get_args());
+    }
+}
+if (!function_exists('demo')) {
+    function demo() {
+        return \RectorPrefix20210824\demo(...func_get_args());
     }
 }
 if (!function_exists('first')) {

@@ -1,4 +1,4 @@
-# 50 Rules Overview
+# 52 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -149,10 +149,6 @@ Change XML loader to YAML in Bundle Extension
 - class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector`](../src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php)
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -160,7 +156,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ChangeFileLoaderInExtensionAndKernelRector::class)
-        ->call('configure', [[ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml', ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml']]);
+        ->call('configure', [[
+            ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
+            ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
+        ]]);
 };
 ```
 
@@ -297,10 +296,6 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
 - class: [`Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector`](../src/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php)
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -308,7 +303,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ContainerGetToConstructorInjectionRector::class)
-        ->call('configure', [[ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => ['ContainerAwareParentClassName', 'ContainerAwareParentCommandClassName', 'ThisClassCallsMethodInConstructorClassName']]]);
+        ->call('configure', [[
+            ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
+                'ContainerAwareParentClassName',
+                'ContainerAwareParentCommandClassName',
+                'ThisClassCallsMethodInConstructorClassName',
+            ],
+        ]]);
 };
 ```
 
@@ -398,39 +399,6 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 
 <br>
 
-## ExtractAttributeRouteNameConstantsRector
-
-`Extract` #[Route] attribute name argument from string to constant
-
-- class: [`Rector\Symfony\Rector\Attribute\ExtractAttributeRouteNameConstantsRector`](../src/Rector/Attribute/ExtractAttributeRouteNameConstantsRector.php)
-
-```diff
- use Symfony\Component\Routing\Annotation\Route;
-
- class SomeClass
- {
--    #[Route(path: "path", name: "/name")]
-+    #[Route(path: "path", name: RouteName::NAME)]
-     public function run()
-     {
-     }
- }
-```
-
-Extra file:
-
-```php
-final class RouteName
-{
-    /**
-     * @var string
-     */
-    public NAME = 'name';
-}
-```
-
-<br>
-
 ## FormBuilderSetDataMapperRector
 
 Migrates from deprecated Form Builder->setDataMapper(new `PropertyPathMapper())` to Builder->setDataMapper(new DataMapper(new `PropertyPathAccessor()))`
@@ -471,7 +439,7 @@ Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form i
 
 ## FormTypeGetParentRector
 
-Turns string Form Type references to their `CONSTANT` alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
+Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
 - class: [`Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector`](../src/Rector/ClassMethod/FormTypeGetParentRector.php)
 
@@ -582,10 +550,6 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 - class: [`Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector`](../src/Rector/MethodCall/GetToConstructorInjectionRector.php)
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -593,7 +557,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(GetToConstructorInjectionRector::class)
-        ->call('configure', [[GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => ['SymfonyControllerClassName', 'GetTraitClassName']]]);
+        ->call('configure', [[
+            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
+                'SymfonyControllerClassName',
+                'GetTraitClassName',
+            ],
+        ]]);
 };
 ```
 
@@ -615,6 +584,28 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +        $this->someService;
      }
  }
+```
+
+<br>
+
+## JMSInjectPropertyToConstructorInjectionRector
+
+Turns properties with `@inject` to private properties and constructor injection
+
+- class: [`Rector\Symfony\Rector\Property\JMSInjectPropertyToConstructorInjectionRector`](../src/Rector/Property/JMSInjectPropertyToConstructorInjectionRector.php)
+
+```diff
+ /**
+  * @var SomeService
+- * @inject
+  */
+-public $someService;
++private $someService;
++
++public function __construct(SomeService $someService)
++{
++    $this->someService = $someService;
++}
 ```
 
 <br>
@@ -1128,7 +1119,7 @@ Simplify use of assertions in WebTestCase
 
 ## StringFormTypeToClassRector
 
-Turns string Form Type references to their `CONSTANT` alternatives in FormTypes in Form in Symfony. To enable custom types, add `link` to your container XML `dump` in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"
+Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$parameters->set(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, ...);"
 
 - class: [`Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector`](../src/Rector/MethodCall/StringFormTypeToClassRector.php)
 
@@ -1150,6 +1141,39 @@ Changes Process string argument to an array
  use Symfony\Component\Process\Process;
 -$process = new Process('ls -l');
 +$process = new Process(['ls', '-l']);
+```
+
+<br>
+
+## SwiftCreateMessageToNewEmailRector
+
+Changes `createMessage()` into a new Symfony\Component\Mime\Email
+
+- class: [`Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../src/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
+
+```diff
+-$email = $this->swift->createMessage('message');
++$email = new \Symfony\Component\Mime\Email();
+```
+
+<br>
+
+## SwiftSetBodyToHtmlPlainMethodCallRector
+
+Changes `setBody()` method call on Swift_Message into a `html()` or `plain()` based on second argument
+
+- class: [`Rector\Symfony\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector`](../src/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php)
+
+```diff
+ $message = new Swift_Message();
+
+-$message->setBody('...', 'text/html');
++$message->html('...');
+
+-$message->setBody('...', 'text/plain');
+-$message->setBody('...');
++$message->text('...');
++$message->text('...');
 ```
 
 <br>

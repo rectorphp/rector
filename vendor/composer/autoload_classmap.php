@@ -2995,6 +2995,8 @@ return array(
     'Rector\\Symfony\\Rector\\MethodCall\\ReflectionExtractorEnableMagicCallExtractorRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\SimplifyWebTestCaseAssertionsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/SimplifyWebTestCaseAssertionsRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\StringFormTypeToClassRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/StringFormTypeToClassRector.php',
+    'Rector\\Symfony\\Rector\\MethodCall\\SwiftCreateMessageToNewEmailRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php',
+    'Rector\\Symfony\\Rector\\MethodCall\\SwiftSetBodyToHtmlPlainMethodCallRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ValidatorBuilderEnableAnnotationMappingRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ValidatorBuilderEnableAnnotationMappingRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\VarDumperTestTraitMethodArgsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php',
     'Rector\\Symfony\\Rector\\New_\\PropertyAccessorCreationBooleanToFlagsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/New_/PropertyAccessorCreationBooleanToFlagsRector.php',

@@ -13,7 +13,7 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.8.6';
+    public const VERSION = '2.8.7';
     /** server modes for Debugger::enable() */
     public const DEVELOPMENT = \false, PRODUCTION = \true, DETECT = null;
     public const COOKIE_SECRET = 'tracy-debug';
@@ -45,6 +45,8 @@ class Debugger
     public static $maxLength = 150;
     /** @var bool display location by dump()? */
     public static $showLocation;
+    /** @var string[] sensitive keys not displayed by dump() */
+    public static $keysToHide = [];
     /** @var string theme for dump() */
     public static $dumpTheme = 'light';
     /** @deprecated */
@@ -411,7 +413,7 @@ class Debugger
                 \RectorPrefix20210824\Tracy\Dumper::dump($var, $options);
             });
         } elseif (!self::$productionMode) {
-            \RectorPrefix20210824\Tracy\Dumper::dump($var, [\RectorPrefix20210824\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210824\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20210824\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20210824\Tracy\Dumper::THEME => self::$dumpTheme]);
+            \RectorPrefix20210824\Tracy\Dumper::dump($var, [\RectorPrefix20210824\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210824\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20210824\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20210824\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20210824\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
         }
         return $var;
     }

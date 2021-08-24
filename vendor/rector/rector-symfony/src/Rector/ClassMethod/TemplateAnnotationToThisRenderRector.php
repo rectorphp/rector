@@ -40,7 +40,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TemplateAnnotationToThisRenderRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var string
+     * @var class-string
      */
     private const RESPONSE_CLASS = 'Symfony\\Component\\HttpFoundation\\Response';
     /**

@@ -30,20 +30,12 @@ class DemoClass
     }
 }
 \class_alias('RectorPrefix20210824\\DemoClass', 'DemoClass', \false);
-$a = new class extends \RuntimeException
+function demo($a, $b)
 {
-    /**
-     * @param \Throwable $e
-     */
-    public function setPrevious($e) : void
-    {
-        $ref = new \ReflectionClass($this);
-        $parent = $ref->getParentClass()->getParentClass();
-        $previous = $parent->getProperty('previous');
-        $previous->setAccessible(\true);
-        $previous->setValue($this, $e);
-    }
-};
-$a->setPrevious($a);
-// this line will kill your BlueScreen:
-throw $a;
+    $demo = new \RectorPrefix20210824\DemoClass();
+    $demo->first($a, $b);
+}
+if (\RectorPrefix20210824\Tracy\Debugger::$productionMode) {
+    echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
+}
+\RectorPrefix20210824\demo(10, 'any string');

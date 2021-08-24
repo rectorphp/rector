@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace Tracy;
 
 $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
+$exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 
 ?>
 <div id="tracy-bs" itemscope>

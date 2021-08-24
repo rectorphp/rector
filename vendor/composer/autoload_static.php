@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitca3d4aa89155cd33936b1df29f951085
+class ComposerStaticInit058bf0f7ae75bb522c54bcad5f09a886
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3355,6 +3355,8 @@ class ComposerStaticInitca3d4aa89155cd33936b1df29f951085
         'Rector\\Symfony\\Rector\\MethodCall\\ReflectionExtractorEnableMagicCallExtractorRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\SimplifyWebTestCaseAssertionsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/SimplifyWebTestCaseAssertionsRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\StringFormTypeToClassRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/StringFormTypeToClassRector.php',
+        'Rector\\Symfony\\Rector\\MethodCall\\SwiftCreateMessageToNewEmailRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php',
+        'Rector\\Symfony\\Rector\\MethodCall\\SwiftSetBodyToHtmlPlainMethodCallRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\ValidatorBuilderEnableAnnotationMappingRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ValidatorBuilderEnableAnnotationMappingRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\VarDumperTestTraitMethodArgsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php',
         'Rector\\Symfony\\Rector\\New_\\PropertyAccessorCreationBooleanToFlagsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/New_/PropertyAccessorCreationBooleanToFlagsRector.php',
@@ -3853,9 +3855,9 @@ class ComposerStaticInitca3d4aa89155cd33936b1df29f951085
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitca3d4aa89155cd33936b1df29f951085::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitca3d4aa89155cd33936b1df29f951085::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitca3d4aa89155cd33936b1df29f951085::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit058bf0f7ae75bb522c54bcad5f09a886::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit058bf0f7ae75bb522c54bcad5f09a886::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit058bf0f7ae75bb522c54bcad5f09a886::$classMap;
 
         }, null, ClassLoader::class);
     }
