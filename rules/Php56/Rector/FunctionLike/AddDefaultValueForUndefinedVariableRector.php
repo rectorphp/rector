@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php56\NodeAnalyzer\UndefinedVariableResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,9 +34,14 @@ final class AddDefaultValueForUndefinedVariableRector extends \Rector\Core\Recto
      * @var \Rector\Php56\NodeAnalyzer\UndefinedVariableResolver
      */
     private $undefinedVariableResolver;
-    public function __construct(\Rector\Php56\NodeAnalyzer\UndefinedVariableResolver $undefinedVariableResolver)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
+     */
+    private $inlineHTMLAnalyzer;
+    public function __construct(\Rector\Php56\NodeAnalyzer\UndefinedVariableResolver $undefinedVariableResolver, \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer $inlineHTMLAnalyzer)
     {
         $this->undefinedVariableResolver = $undefinedVariableResolver;
+        $this->inlineHTMLAnalyzer = $inlineHTMLAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -78,6 +84,9 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($this->inlineHTMLAnalyzer->hasInlineHTML($node)) {
+            return null;
+        }
         $undefinedVariableNames = $this->undefinedVariableResolver->resolve($node);
         // avoids adding same variable multiple tiemes
         $alreadyAddedVariableNames = (array) $node->getAttribute(self::ALREADY_ADDED_VARIABLE_NAMES);

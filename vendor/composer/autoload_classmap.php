@@ -1836,6 +1836,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\CompactFuncCallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CompactFuncCallAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ConstFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/ConstFetchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\EnumAnalyzer' => $baseDir . '/src/NodeAnalyzer/EnumAnalyzer.php',
+    'Rector\\Core\\NodeAnalyzer\\InlineHTMLAnalyzer' => $baseDir . '/src/NodeAnalyzer/InlineHTMLAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ParamAnalyzer' => $baseDir . '/src/NodeAnalyzer/ParamAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => $baseDir . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',

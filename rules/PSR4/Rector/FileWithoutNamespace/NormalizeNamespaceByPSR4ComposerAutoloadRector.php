@@ -6,8 +6,8 @@ namespace Rector\PSR4\Rector\FileWithoutNamespace;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
@@ -28,10 +28,15 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends \Rector\Core\
      * @var \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer
      */
     private $fullyQualifyStmtsAnalyzer;
-    public function __construct(\Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
+     */
+    private $inlineHTMLAnalyzer;
+    public function __construct(\Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer, \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer $inlineHTMLAnalyzer)
     {
         $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
         $this->fullyQualifyStmtsAnalyzer = $fullyQualifyStmtsAnalyzer;
+        $this->inlineHTMLAnalyzer = $inlineHTMLAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -75,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->inlineHTMLAnalyzer->hasInlineHTML($node)) {
             return null;
         }
         $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $node);
@@ -93,10 +98,6 @@ CODE_SAMPLE
         $node->name = new \PhpParser\Node\Name($expectedNamespace);
         $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
         return $node;
-    }
-    private function shouldSkip(\PhpParser\Node $node) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstInstanceOf($node, \PhpParser\Node\Stmt\InlineHTML::class);
     }
     private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : \PhpParser\Node\Stmt\Namespace_
     {
