@@ -61,3 +61,10 @@ class Traverser
         return $statements;
     }
 }
+/**
+ * Class Traverser
+ *
+ * @package    Helmich\TypoScriptParser
+ * @subpackage Parser\Traverser
+ */
+\class_alias('RectorPrefix20210825\\Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', 'Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', \false);

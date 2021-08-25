@@ -7,7 +7,7 @@ use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\ParseError;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\ParserInterface;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration;
-use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
+use Helmich\TypoScriptParser\Parser\Traverser\Traverser;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
@@ -124,7 +124,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $this->currentFileProvider->setFile($file);
             $smartFileInfo = $file->getSmartFileInfo();
             $originalStatements = $this->typoscriptParser->parseString($smartFileInfo->getContents());
-            $traverser = new \RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Traverser\Traverser($originalStatements);
+            $traverser = new \Helmich\TypoScriptParser\Parser\Traverser\Traverser($originalStatements);
             foreach ($this->typoScriptRectors as $visitor) {
                 $traverser->addVisitor($visitor);
             }

@@ -8,7 +8,7 @@ use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Parser;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\ParserInterface;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter;
-use RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Traverser\Traverser;
+use Helmich\TypoScriptParser\Parser\Traverser\Traverser;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Tokenizer\Tokenizer;
 use RectorPrefix20210825\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface;
 use Rector\RectorGenerator\FileSystem\ConfigFilesystem;
@@ -21,7 +21,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();
     $services->load('Ssch\\TYPO3Rector\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Set', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/FileProcessor/TypoScript/Conditions', __DIR__ . '/../src/FileProcessor/TypoScript/Rector', __DIR__ . '/../src/FileProcessor/Yaml/Form/Rector', __DIR__ . '/../src/FileProcessor/Composer/Rector', __DIR__ . '/../src/FileProcessor/FlexForms/Rector', __DIR__ . '/../src/FileProcessor/Resources/Icons/Rector', __DIR__ . '/../src/FileProcessor/Fluid/Rector']);
-    $services->set(\RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Traverser\Traverser::class);
+    $services->set(\Helmich\TypoScriptParser\Parser\Traverser\Traverser::class);
     $services->set(\RectorPrefix20210825\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
     $services->alias(\RectorPrefix20210825\Helmich\TypoScriptParser\Tokenizer\TokenizerInterface::class, \RectorPrefix20210825\Helmich\TypoScriptParser\Tokenizer\Tokenizer::class);
     $services->set(\RectorPrefix20210825\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinter::class);
