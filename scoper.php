@@ -115,6 +115,13 @@ return [
             'Helmich\TypoScriptParser\Parser\AST\Statement'
         ),
 
+        // unprefixed Traverser
+        fn (string $filePath, string $prefix, string $content): string => Strings::replace(
+            $content,
+            '#' . $prefix . '\\\\Helmich\\\\TypoScriptParser\\\\Parser\\\\Traverser\\\\Traverser#',
+            'Helmich\TypoScriptParser\Parser\Traverser\Traverser'
+        ),
+
         // unprefixed PHPUnit IsEqual
         fn (string $filePath, string $prefix, string $content): string => Strings::replace(
             $content,
