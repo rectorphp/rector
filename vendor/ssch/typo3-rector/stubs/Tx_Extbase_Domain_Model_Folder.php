@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210824;
+namespace RectorPrefix20210825;
 
 if (\class_exists('Tx_Extbase_Domain_Model_Folder')) {
     return;

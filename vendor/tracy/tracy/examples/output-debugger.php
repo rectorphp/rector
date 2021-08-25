@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210824;
+namespace RectorPrefix20210825;
 
 require __DIR__ . '/../src/tracy.php';
-\RectorPrefix20210824\Tracy\OutputDebugger::enable();
+\RectorPrefix20210825\Tracy\OutputDebugger::enable();
 function head()
 {
     echo '<!DOCTYPE html><link rel="stylesheet" href="assets/style.css">';
 }
-\RectorPrefix20210824\head();
+\RectorPrefix20210825\head();
 echo '<h1>Output Debugger demo</h1>';

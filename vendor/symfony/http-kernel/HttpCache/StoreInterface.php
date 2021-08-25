@@ -11,10 +11,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210824\Symfony\Component\HttpKernel\HttpCache;
+namespace RectorPrefix20210825\Symfony\Component\HttpKernel\HttpCache;
 
-use RectorPrefix20210824\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210824\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210825\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210825\Symfony\Component\HttpFoundation\Response;
 /**
  * Interface implemented by HTTP cache stores.
  *
