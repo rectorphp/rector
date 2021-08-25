@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
@@ -147,9 +146,6 @@ CODE_SAMPLE
         }
         $inferedType = $this->paramTypeInferer->inferParam($param);
         if ($inferedType instanceof \PHPStan\Type\MixedType) {
-            return;
-        }
-        if ($inferedType instanceof \PHPStan\Type\NullType) {
             return;
         }
         if ($this->traitTypeAnalyzer->isTraitType($inferedType)) {
