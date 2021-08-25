@@ -8765,7 +8765,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentRemover('ExampleClass', 'someMethod', 0, 'true'),
+                new ArgumentRemover('ExampleClass', 'someMethod', 0, ['true']),
             ]),
         ]]);
 };
