@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Generic\TemplateType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -22,7 +23,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 final class PromotedPropertyCandidateResolver
 {
@@ -173,29 +173,31 @@ final class PromotedPropertyCandidateResolver
             $defaultValueType = $this->nodeTypeResolver->getStaticType($param->default);
             $matchedParamType = $this->typeFactory->createMixedPassedOrUnionType([$matchedParamType, $defaultValueType]);
         }
-        $isAllFullyQualifiedObjectType = \true;
-        if ($propertyType instanceof \PHPStan\Type\UnionType) {
-            if ($this->hasGenericTemplateType($propertyType)) {
-                return \false;
-            }
-            $isAllFullyQualifiedObjectType = !$this->hasNonFullyQualifiedObjectType($propertyType);
+        if (!$propertyType instanceof \PHPStan\Type\UnionType) {
+            return \false;
         }
-        // different types, not a good to fit
-        return !$isAllFullyQualifiedObjectType && !$this->typeComparator->areTypesEqual($propertyType, $matchedParamType);
+        if ($this->typeComparator->areTypesEqual($propertyType, $matchedParamType)) {
+            return \false;
+        }
+        // different types, check not has mixed and not has templated generic types
+        if (!$this->hasMixedType($propertyType)) {
+            return \false;
+        }
+        return !$this->hasTemplatedGenericType($propertyType);
     }
-    private function hasNonFullyQualifiedObjectType(\PHPStan\Type\UnionType $unionType) : bool
+    private function hasTemplatedGenericType(\PHPStan\Type\UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            if ($type instanceof \PHPStan\Type\Generic\TemplateType) {
                 return \true;
             }
         }
         return \false;
     }
-    private function hasGenericTemplateType(\PHPStan\Type\UnionType $unionType) : bool
+    private function hasMixedType(\PHPStan\Type\UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof \PHPStan\Type\Generic\TemplateType) {
+            if ($type instanceof \PHPStan\Type\MixedType) {
                 return \true;
             }
         }
