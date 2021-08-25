@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Generic\TemplateType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -23,7 +24,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 final class PromotedPropertyCandidateResolver
@@ -185,26 +185,26 @@ final class PromotedPropertyCandidateResolver
             );
         }
 
-        $isAllFullyQualifiedObjectType = true;
-        if ($propertyType instanceof UnionType) {
-            if ($this->hasGenericTemplateType($propertyType)) {
-                return false;
-            }
-
-            $isAllFullyQualifiedObjectType = ! $this->hasNonFullyQualifiedObjectType($propertyType);
+        if (! $propertyType instanceof UnionType) {
+            return false;
         }
 
-        // different types, not a good to fit
-        return ! $isAllFullyQualifiedObjectType && ! $this->typeComparator->areTypesEqual(
-            $propertyType,
-            $matchedParamType
-        );
+        if ($this->typeComparator->areTypesEqual($propertyType, $matchedParamType)) {
+            return false;
+        }
+
+        // different types, check not has mixed and not has templated generic types
+        if (! $this->hasMixedType($propertyType)) {
+            return false;
+        }
+
+        return ! $this->hasTemplatedGenericType($propertyType);
     }
 
-    private function hasNonFullyQualifiedObjectType(UnionType $unionType): bool
+    private function hasTemplatedGenericType(UnionType $unionType): bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if (! $type instanceof FullyQualifiedObjectType) {
+            if ($type instanceof TemplateType) {
                 return true;
             }
         }
@@ -212,10 +212,10 @@ final class PromotedPropertyCandidateResolver
         return false;
     }
 
-    private function hasGenericTemplateType(UnionType $unionType): bool
+    private function hasMixedType(UnionType $unionType): bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof TemplateType) {
+            if ($type instanceof MixedType) {
                 return true;
             }
         }
