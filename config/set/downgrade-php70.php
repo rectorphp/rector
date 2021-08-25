@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
@@ -31,4 +32,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeSessionStartArrayOptionsRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
     $services->set(DowngradeGeneratedScalarTypesRector::class);
+    $services->set(DowngradeParentTypeDeclarationRector::class);
 };
