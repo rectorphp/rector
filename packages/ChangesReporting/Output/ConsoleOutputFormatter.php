@@ -71,6 +71,11 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         $i = 0;
         foreach ($fileDiffs as $fileDiff) {
             $relativeFilePath = $fileDiff->getRelativeFilePath();
+            // append line number for faster file jump in diff
+            $firstLineNumber = $fileDiff->getFirstLineNumber();
+            if ($firstLineNumber !== null) {
+                $relativeFilePath .= ':' . $firstLineNumber;
+            }
             $message = \sprintf('<options=bold>%d) %s</>', ++$i, $relativeFilePath);
             $this->outputStyle->writeln($message);
             $this->outputStyle->newLine();

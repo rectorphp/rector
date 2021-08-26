@@ -3,11 +3,21 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject\Reporting;
 
+use RectorPrefix20210826\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileDiff
 {
+    /**
+     * @var string
+     * @se https://regex101.com/r/AUPIX4/1
+     */
+    private const FIRST_LINE_REGEX = '#@@(.*?)(?<' . self::FIRST_LINE_KEY . '>\\d+)(.*?)@@#';
+    /**
+     * @var string
+     */
+    private const FIRST_LINE_KEY = 'first_line';
     /**
      * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
@@ -67,6 +77,15 @@ final class FileDiff
             $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
         return $this->sortClasses($rectorClasses);
+    }
+    public function getFirstLineNumber() : ?int
+    {
+        $match = \RectorPrefix20210826\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
+        // probably some error in diff
+        if (!isset($match[self::FIRST_LINE_KEY])) {
+            return null;
+        }
+        return (int) $match[self::FIRST_LINE_KEY] - 1;
     }
     /**
      * @template TType as object
