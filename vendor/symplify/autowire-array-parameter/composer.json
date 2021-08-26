@@ -6,7 +6,7 @@
         "php": ">=8.0",
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.3|^6.0",
-        "symplify\/package-builder": "^9.5"
+        "symplify\/package-builder": "^9.4.40"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
