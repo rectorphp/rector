@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
@@ -96,9 +95,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/StaticDoctrineAnnotationParserTest.php',
             '*TypeResolverTest.php',
         ],
-
-        AssignmentInConditionSniff::class . '.FoundInWhileCondition' => null,
     ]);
 
+    $containerConfigurator->import(SetList::CONTROL_STRUCTURES);
     $parameters->set(Option::LINE_ENDING, "\n");
 };
