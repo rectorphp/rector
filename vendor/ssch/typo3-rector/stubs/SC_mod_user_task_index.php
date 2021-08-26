@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210825;
+namespace RectorPrefix20210826;
 
 if (\class_exists('SC_mod_user_task_index')) {
     return;

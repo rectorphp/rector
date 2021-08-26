@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
-use RectorPrefix20210825\Nette\Utils\Strings;
+use RectorPrefix20210826\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
@@ -51,8 +51,8 @@ final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNa
      */
     private function resolveExtraNamespace(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $path) : string
     {
-        $extraNamespace = \RectorPrefix20210825\Nette\Utils\Strings::substring($smartFileInfo->getRelativeDirectoryPath(), \RectorPrefix20210825\Nette\Utils\Strings::length($path) + 1);
-        $extraNamespace = \RectorPrefix20210825\Nette\Utils\Strings::replace($extraNamespace, '#/#', '\\');
+        $extraNamespace = \RectorPrefix20210826\Nette\Utils\Strings::substring($smartFileInfo->getRelativeDirectoryPath(), \RectorPrefix20210826\Nette\Utils\Strings::length($path) + 1);
+        $extraNamespace = \RectorPrefix20210826\Nette\Utils\Strings::replace($extraNamespace, '#/#', '\\');
         return \trim($extraNamespace);
     }
 }

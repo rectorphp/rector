@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210825\Symplify\Astral\HttpKernel;
+namespace RectorPrefix20210826\Symplify\Astral\HttpKernel;
 
-use RectorPrefix20210825\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20210825\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class AstralKernel extends \RectorPrefix20210825\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+use RectorPrefix20210826\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20210826\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
+final class AstralKernel extends \RectorPrefix20210826\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
     /**
      * @param \Symfony\Component\Config\Loader\LoaderInterface $loader

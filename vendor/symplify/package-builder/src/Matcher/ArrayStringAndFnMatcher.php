@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210825\Symplify\PackageBuilder\Matcher;
+namespace RectorPrefix20210826\Symplify\PackageBuilder\Matcher;
 
 final class ArrayStringAndFnMatcher
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210825;
+namespace RectorPrefix20210826;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Security_IfHasRoleViewHelper')) {
     return;
