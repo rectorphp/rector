@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp70\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeParentTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
         private ReflectionProvider $reflectionProvider
     ) {
     }
@@ -82,37 +80,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->returnType instanceof Name) {
-            return null;
-        }
-
-        if (! $this->nodeNameResolver->isName($node->returnType, 'parent')) {
-            return null;
-        }
-
-        $node->returnType = null;
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo->hasByType(ReturnTagValueNode::class)) {
-            return $node;
-        }
-
-        $parentStaticType = $this->getType($node);
-
-        if (! $parentStaticType instanceof ParentStaticType) {
-            return $node;
-        }
-
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $parentStaticType);
-        return $node;
-    }
-
-    private function getType(ClassMethod $classMethod): ?ParentStaticType
-    {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
             // in a trait
-            $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
+            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             $classReflection = $this->reflectionProvider->getClass($className);
         } else {
             $classReflection = $scope->getClassReflection();
@@ -122,6 +93,12 @@ CODE_SAMPLE
             return null;
         }
 
-        return new ParentStaticType($classReflection);
+        $parentStaticType = new ParentStaticType($classReflection);
+
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $parentStaticType)) {
+            return null;
+        }
+
+        return $node;
     }
 }
