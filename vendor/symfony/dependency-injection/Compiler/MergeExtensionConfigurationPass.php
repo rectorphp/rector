@@ -97,10 +97,7 @@ class MergeExtensionConfigurationPass implements \RectorPrefix20210826\Symfony\C
 class MergeExtensionConfigurationParameterBag extends \RectorPrefix20210826\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag
 {
     private $processedEnvPlaceholders;
-    /**
-     * @param parent $parameterBag
-     */
-    public function __construct($parameterBag)
+    public function __construct(parent $parameterBag)
     {
         parent::__construct($parameterBag->all());
         $this->mergeEnvPlaceholders($parameterBag);

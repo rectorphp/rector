@@ -81,7 +81,7 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($param->type === null) {
             return;
         }
-        if (!$this->isTypeMatchOrSubType($param->type, $requireType)) {
+        if (!$this->isTypeMatch($param->type, $requireType)) {
             return;
         }
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
@@ -96,20 +96,20 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($functionLike->returnType === null) {
             return \false;
         }
-        if (!$this->isTypeMatchOrSubType($functionLike->returnType, $requireType)) {
+        if (!$this->isTypeMatch($functionLike->returnType, $requireType)) {
             return \false;
         }
         $this->decorate($functionLike);
         return \true;
     }
-    private function isTypeMatchOrSubType(\PhpParser\Node $typeNode, \PHPStan\Type\Type $requireType) : bool
+    private function isTypeMatch(\PhpParser\Node $typeNode, \PHPStan\Type\Type $requireType) : bool
     {
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
         // cover nullable union types
         if ($returnType instanceof \PHPStan\Type\UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
-        return \is_a($returnType, \get_class($requireType), \true);
+        return \get_class($returnType) === \get_class($requireType);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike

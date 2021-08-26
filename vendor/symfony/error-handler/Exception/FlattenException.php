@@ -214,10 +214,7 @@ class FlattenException
         $this->code = $code;
         return $this;
     }
-    /**
-     * @return $this|null
-     */
-    public function getPrevious()
+    public function getPrevious() : ?self
     {
         return $this->previous;
     }
