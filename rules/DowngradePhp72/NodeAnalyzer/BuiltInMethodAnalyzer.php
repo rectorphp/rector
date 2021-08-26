@@ -11,8 +11,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class BuiltInMethodAnalyzer
 {
-    public function __construct(private NodeNameResolver $nodeNameResolver, private ClassChildAnalyzer $classChildAnalyzer)
-    {
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver,
+        private ClassChildAnalyzer $classChildAnalyzer
+    ) {
     }
 
     public function isImplementsBuiltInInterface(ClassReflection $classReflection, ClassMethod $classMethod): bool
