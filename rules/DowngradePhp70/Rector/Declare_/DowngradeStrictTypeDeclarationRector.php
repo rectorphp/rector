@@ -24,8 +24,10 @@ final class DowngradeStrictTypeDeclarationRector extends \Rector\Core\Rector\Abs
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove the declare(strict_types=1)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 declare(strict_types=1);
+echo 'something';
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+echo 'something';
 CODE_SAMPLE
 )]);
     }

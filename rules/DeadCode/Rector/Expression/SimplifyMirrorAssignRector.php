@@ -16,7 +16,10 @@ final class SimplifyMirrorAssignRector extends \Rector\Core\Rector\AbstractRecto
 {
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes unneeded $a = $a assigns', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$a = $a;', '')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes unneeded $a = $a assigns', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('function run() {
+                $a = $a;
+            }', 'function run() {
+            }')]);
     }
     /**
      * @return array<class-string<Node>>

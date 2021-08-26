@@ -1,4 +1,4 @@
-# 476 Rules Overview
+# 477 Rules Overview
 
 <br>
 
@@ -24,7 +24,7 @@
 
 - [DowngradePhp53](#downgradephp53) (1)
 
-- [DowngradePhp70](#downgradephp70) (10)
+- [DowngradePhp70](#downgradephp70) (11)
 
 - [DowngradePhp71](#downgradephp71) (9)
 
@@ -3840,7 +3840,9 @@ Removes unneeded $a = $a assigns
 - class: [`Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector`](../rules/DeadCode/Rector/Expression/SimplifyMirrorAssignRector.php)
 
 ```diff
--$a = $a;
+ function run() {
+-                $a = $a;
+             }
 ```
 
 <br>
@@ -4311,6 +4313,32 @@ Change null coalesce to isset ternary check
 
 <br>
 
+### DowngradeParentTypeDeclarationRector
+
+Remove "parent" return type, add a `"@return` parent" tag instead
+
+- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeParentTypeDeclarationRector.php)
+
+```diff
+ class ParentClass
+ {
+ }
+
+ class SomeClass extends ParentClass
+ {
+-    public function foo(): parent
++    /**
++     * @return parent
++     */
++    public function foo()
+     {
+         return $this;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeScalarTypeDeclarationRector
 
 Remove the type params and return type, add `@param` and `@return` tags instead
@@ -4395,6 +4423,7 @@ Remove the declare(strict_types=1)
 
 ```diff
 -declare(strict_types=1);
+ echo 'something';
 ```
 
 <br>
@@ -8765,8 +8794,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentRemoverRector::class)
         ->call('configure', [[
             ArgumentRemoverRector::REMOVED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentRemover('ExampleClass', 'someMethod', 0, 'true'),
-            ]),
+                new ArgumentRemover('ExampleClass', 'someMethod', 0, [true]), ]
+            ),
         ]]);
 };
 ```
