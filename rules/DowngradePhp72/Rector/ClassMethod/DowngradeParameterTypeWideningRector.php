@@ -11,6 +11,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
@@ -49,7 +50,8 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     public function __construct(
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
         private ReflectionProvider $reflectionProvider,
-        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer
+        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
+        private BuiltInMethodAnalyzer $builtInMethodAnalyzer
     ) {
     }
 
@@ -137,6 +139,10 @@ CODE_SAMPLE
         }
 
         if ($this->shouldSkipClassMethod($node)) {
+            return null;
+        }
+
+        if ($this->builtInMethodAnalyzer->isImplementsBuiltInInterface($classReflection, $node)) {
             return null;
         }
 
