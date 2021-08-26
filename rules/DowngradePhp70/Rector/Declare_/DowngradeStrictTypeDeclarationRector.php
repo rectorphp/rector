@@ -31,9 +31,11 @@ final class DowngradeStrictTypeDeclarationRector extends AbstractRector
                 new CodeSample(
                     <<<'CODE_SAMPLE'
 declare(strict_types=1);
+echo 'something';
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+echo 'something';
 CODE_SAMPLE
                 ),
             ]
