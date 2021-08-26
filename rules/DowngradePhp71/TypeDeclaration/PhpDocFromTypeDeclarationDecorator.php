@@ -71,7 +71,7 @@ final class PhpDocFromTypeDeclarationDecorator
             return;
         }
 
-        if (! $this->isTypeMatchOrSubType($param->type, $requireType)) {
+        if (! $this->isTypeMatch($param->type, $requireType)) {
             return;
         }
 
@@ -90,7 +90,7 @@ final class PhpDocFromTypeDeclarationDecorator
             return false;
         }
 
-        if (! $this->isTypeMatchOrSubType($functionLike->returnType, $requireType)) {
+        if (! $this->isTypeMatch($functionLike->returnType, $requireType)) {
             return false;
         }
 
@@ -98,7 +98,7 @@ final class PhpDocFromTypeDeclarationDecorator
         return true;
     }
 
-    private function isTypeMatchOrSubType(Node $typeNode, Type $requireType): bool
+    private function isTypeMatch(Node $typeNode, Type $requireType): bool
     {
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
 
@@ -106,7 +106,8 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($returnType instanceof UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
-        return is_a($returnType, $requireType::class, true);
+
+        return $returnType::class === $requireType::class;
     }
 
     private function moveParamTypeToParamDoc(

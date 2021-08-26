@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -73,10 +72,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($node->returnType instanceof Name && $this->nodeNameResolver->isNames($node->returnType, ['self', 'parent'])) {
-            return null;
-        }
-
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if ($scope === null) {
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
