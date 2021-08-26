@@ -98,7 +98,7 @@ class MergeExtensionConfigurationParameterBag extends \RectorPrefix20210826\Symf
 {
     private $processedEnvPlaceholders;
     /**
-     * @param mixed $parameterBag
+     * @param parent $parameterBag
      */
     public function __construct($parameterBag)
     {

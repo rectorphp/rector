@@ -4,13 +4,11 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp70\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,16 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeParentTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     * @var \Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator
      */
-    private $phpDocTypeChanger;
+    private $phpDocFromTypeDeclarationDecorator;
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\DowngradePhp71\TypeDeclaration\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
@@ -78,30 +76,10 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->returnType instanceof \PhpParser\Node\Name) {
-            return null;
-        }
-        if (!$this->nodeNameResolver->isName($node->returnType, 'parent')) {
-            return null;
-        }
-        $node->returnType = null;
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo->hasByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class)) {
-            return $node;
-        }
-        $parentStaticType = $this->getType($node);
-        if (!$parentStaticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType) {
-            return $node;
-        }
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $parentStaticType);
-        return $node;
-    }
-    private function getType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType
-    {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if ($scope === null) {
             // in a trait
-            $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+            $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
             $classReflection = $this->reflectionProvider->getClass($className);
         } else {
             $classReflection = $scope->getClassReflection();
@@ -109,6 +87,10 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-        return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
+        $parentStaticType = new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
+        if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $parentStaticType)) {
+            return null;
+        }
+        return $node;
     }
 }

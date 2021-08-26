@@ -20,6 +20,7 @@ use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
@@ -51,7 +52,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         if ($this->isExistingClass($name)) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($name);
         }
-        if (\in_array($name, ['static', 'self'], \true)) {
+        if (\in_array($name, ['static', 'self', 'parent'], \true)) {
             return $this->createClassReferenceType($node, $name);
         }
         return $this->createScalarType($name);
@@ -76,6 +77,9 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         }
         if ($reference === 'static') {
             return new \PHPStan\Type\StaticType($className);
+        }
+        if ($reference === 'parent') {
+            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($className);
         }
         if ($this->reflectionProvider->hasClass($className)) {
             $classReflection = $this->reflectionProvider->getClass($className);
