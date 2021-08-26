@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\DowngradePhp71\TypeDeclaration;
+namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;

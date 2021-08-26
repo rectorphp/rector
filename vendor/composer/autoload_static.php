@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit05182aee3c6c6307d83088f893edbf0c
+class ComposerStaticInita3cf0e224fbad634247a5f8702df3282
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1892,6 +1892,7 @@ class ComposerStaticInit05182aee3c6c6307d83088f893edbf0c
         'Rector\\BetterPhpDocParser\\PhpDocParser\\BetterTypeParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php',
+        'Rector\\BetterPhpDocParser\\PhpDocParser\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/PhpDocFromTypeDeclarationDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\ArrayParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\PlainValueParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
@@ -2499,7 +2500,6 @@ class ComposerStaticInit05182aee3c6c6307d83088f893edbf0c
         'Rector\\DowngradePhp71\\Rector\\List_\\DowngradeKeysInListRector' => __DIR__ . '/../..' . '/rules/DowngradePhp71/Rector/List_/DowngradeKeysInListRector.php',
         'Rector\\DowngradePhp71\\Rector\\String_\\DowngradeNegativeStringOffsetToStrlenRector' => __DIR__ . '/../..' . '/rules/DowngradePhp71/Rector/String_/DowngradeNegativeStringOffsetToStrlenRector.php',
         'Rector\\DowngradePhp71\\Rector\\TryCatch\\DowngradePipeToMultiCatchExceptionRector' => __DIR__ . '/../..' . '/rules/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php',
-        'Rector\\DowngradePhp71\\TypeDeclaration\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/../..' . '/rules/DowngradePhp71/TypeDeclaration/PhpDocFromTypeDeclarationDecorator.php',
         'Rector\\DowngradePhp72\\Contract\\Rector\\DowngradeTypeRectorInterface' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Contract/Rector/DowngradeTypeRectorInterface.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\BuiltInMethodAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/BuiltInMethodAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\FunctionExistsFunCallAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/FunctionExistsFunCallAnalyzer.php',
@@ -3858,9 +3858,9 @@ class ComposerStaticInit05182aee3c6c6307d83088f893edbf0c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit05182aee3c6c6307d83088f893edbf0c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit05182aee3c6c6307d83088f893edbf0c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit05182aee3c6c6307d83088f893edbf0c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita3cf0e224fbad634247a5f8702df3282::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita3cf0e224fbad634247a5f8702df3282::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita3cf0e224fbad634247a5f8702df3282::$classMap;
 
         }, null, ClassLoader::class);
     }
