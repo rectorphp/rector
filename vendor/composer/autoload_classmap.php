@@ -2141,6 +2141,7 @@ return array(
     'Rector\\DowngradePhp71\\Rector\\TryCatch\\DowngradePipeToMultiCatchExceptionRector' => $baseDir . '/rules/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php',
     'Rector\\DowngradePhp71\\TypeDeclaration\\PhpDocFromTypeDeclarationDecorator' => $baseDir . '/rules/DowngradePhp71/TypeDeclaration/PhpDocFromTypeDeclarationDecorator.php',
     'Rector\\DowngradePhp72\\Contract\\Rector\\DowngradeTypeRectorInterface' => $baseDir . '/rules/DowngradePhp72/Contract/Rector/DowngradeTypeRectorInterface.php',
+    'Rector\\DowngradePhp72\\NodeAnalyzer\\BuiltInMethodAnalyzer' => $baseDir . '/rules/DowngradePhp72/NodeAnalyzer/BuiltInMethodAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\FunctionExistsFunCallAnalyzer' => $baseDir . '/rules/DowngradePhp72/NodeAnalyzer/FunctionExistsFunCallAnalyzer.php',
     'Rector\\DowngradePhp72\\PhpDoc\\NativeParamToPhpDocDecorator' => $baseDir . '/rules/DowngradePhp72/PhpDoc/NativeParamToPhpDocDecorator.php',
     'Rector\\DowngradePhp72\\Rector\\ClassMethod\\DowngradeParameterTypeWideningRector' => $baseDir . '/rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php',
