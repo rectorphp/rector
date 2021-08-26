@@ -127,12 +127,6 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     private function isMatchingType(Type $type, array $requiredTypes): bool
     {
-        foreach ($requiredTypes as $requiredType) {
-            if (is_a($type, $requiredType, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return in_array($type::class, $requiredTypes, true);
     }
 }
