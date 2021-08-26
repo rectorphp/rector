@@ -69,7 +69,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->returnType instanceof \PhpParser\Node\Name && $this->nodeNameResolver->isName($node->returnType, 'self')) {
+        if ($node->returnType instanceof \PhpParser\Node\Name && $this->nodeNameResolver->isNames($node->returnType, ['self', 'parent'])) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);

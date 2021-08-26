@@ -180,7 +180,7 @@ class UnicodeString extends \RectorPrefix20210826\Symfony\Component\String\Abstr
      * @return static
      * @param int $form
      */
-    public function normalize($form = self::NFC)
+    public function normalize($form = self::NFC) : parent
     {
         $str = clone $this;
         if (\in_array($form, [self::NFC, self::NFKC], \true)) {
