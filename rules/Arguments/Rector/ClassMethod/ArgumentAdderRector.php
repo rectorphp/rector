@@ -42,6 +42,8 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      */
     private array $addedArguments = [];
 
+    private bool $haveArgumentsChanged = false;
+
     public function __construct(
         private ArgumentAddingScope $argumentAddingScope
     ) {
@@ -62,17 +64,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
                     <<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
-CODE_SAMPLE
-                    ,
-                    <<<'CODE_SAMPLE'
-$someObject = new SomeExampleClass;
-$someObject->someMethod(true);
-CODE_SAMPLE
-                    ,
-                    $exampleConfiguration
-                ),
-                new ConfiguredCodeSample(
-                    <<<'CODE_SAMPLE'
+
 class MyCustomClass extends SomeExampleClass
 {
     public function someMethod()
@@ -82,6 +74,9 @@ class MyCustomClass extends SomeExampleClass
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
+$someObject = new SomeExampleClass;
+$someObject->someMethod(true);
+
 class MyCustomClass extends SomeExampleClass
 {
     public function someMethod($value = true)
@@ -107,8 +102,10 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): MethodCall | StaticCall | ClassMethod
+    public function refactor(Node $node): MethodCall | StaticCall | ClassMethod | null
     {
+        $this->haveArgumentsChanged = false;
+
         foreach ($this->addedArguments as $addedArgument) {
             if (! $this->isObjectTypeMatch($node, $addedArgument->getObjectType())) {
                 continue;
@@ -121,7 +118,11 @@ CODE_SAMPLE
             $this->processPositionWithDefaultValues($node, $addedArgument);
         }
 
-        return $node;
+        if ($this->haveArgumentsChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     /**
@@ -180,6 +181,7 @@ CODE_SAMPLE
             }
 
             $node->args[$position] = $arg;
+            $this->haveArgumentsChanged = true;
         }
     }
 
@@ -203,25 +205,18 @@ CODE_SAMPLE
             return $this->isName($node->params[$position], $argumentName);
         }
 
-        // already added?
-        if (! isset($node->args[$position])) {
-            // is correct scope?
-            return ! $this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
+        if (isset($node->args[$position])) {
+            return true;
         }
-        if (! $this->isName($node->args[$position], $argumentName)) {
-            // is correct scope?
-            return ! $this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
-        }
-        return true;
+
+        // is correct scope?
+        return ! $this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
     }
 
-    /**
-     * @param mixed $defaultValue
-     */
     private function addClassMethodParam(
         ClassMethod $classMethod,
         ArgumentAdder $argumentAdder,
-        $defaultValue,
+        mixed $defaultValue,
         ?string $type,
         int $position
     ): void {
@@ -236,6 +231,7 @@ CODE_SAMPLE
         }
 
         $classMethod->params[$position] = $param;
+        $this->haveArgumentsChanged = true;
     }
 
     private function processStaticCall(StaticCall $staticCall, int $position, ArgumentAdder $argumentAdder): void
@@ -254,5 +250,6 @@ CODE_SAMPLE
         }
 
         $staticCall->args[$position] = new Arg(new Variable($argumentName));
+        $this->haveArgumentsChanged = true;
     }
 }
