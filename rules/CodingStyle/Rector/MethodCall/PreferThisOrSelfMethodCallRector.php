@@ -7,9 +7,11 @@ namespace Rector\CodingStyle\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,6 +37,10 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @var array<PreferenceSelfThis>
      */
     private array $typeToPreference = [];
+
+    public function __construct(private AstResolver $astResolver)
+    {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -116,6 +122,11 @@ CODE_SAMPLE
         }
 
         if ($node instanceof MethodCall && ! $this->isName($node->var, 'this')) {
+            return null;
+        }
+
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+        if ($classMethod instanceof ClassMethod && ! $classMethod->isStatic()) {
             return null;
         }
 
