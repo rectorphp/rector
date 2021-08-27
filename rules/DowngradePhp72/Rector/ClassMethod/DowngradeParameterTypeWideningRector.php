@@ -9,14 +9,17 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
+use Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer;
+use Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210826\Webmozart\Assert\Assert;
+use RectorPrefix20210827\Webmozart\Assert\Assert;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
@@ -57,12 +60,27 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      * @var \Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer
      */
     private $builtInMethodAnalyzer;
-    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer $builtInMethodAnalyzer)
+    /**
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer
+     */
+    private $overrideFromAnonymousClassMethodAnalyzer;
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer
+     */
+    private $sealedClassAnalyzer;
+    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer $builtInMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer $sealedClassAnalyzer)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->reflectionProvider = $reflectionProvider;
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->builtInMethodAnalyzer = $builtInMethodAnalyzer;
+        $this->overrideFromAnonymousClassMethodAnalyzer = $overrideFromAnonymousClassMethodAnalyzer;
+        $this->astResolver = $astResolver;
+        $this->sealedClassAnalyzer = $sealedClassAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -113,6 +131,16 @@ CODE_SAMPLE
         if ($classLike === null) {
             return null;
         }
+        if ($this->overrideFromAnonymousClassMethodAnalyzer->isOverrideParentMethod($classLike, $node)) {
+            $classReflection = $this->reflectionProvider->getClass($classLike->extends->toString());
+            $methodName = $this->nodeNameResolver->getName($node);
+            /** @var ClassMethod $classMethod */
+            $classMethod = $this->astResolver->resolveClassMethod($classReflection->getName(), $methodName);
+            if ($this->shouldSkip($classReflection, $classMethod)) {
+                return null;
+            }
+            return $this->processRemoveParamTypeFromMethod($node);
+        }
         $className = $this->nodeNameResolver->getName($classLike);
         if ($className === null) {
             return null;
@@ -121,26 +149,13 @@ CODE_SAMPLE
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($this->isSealedClass($classReflection)) {
-            return null;
-        }
-        if ($this->isSafeType($classReflection, $node)) {
-            return null;
-        }
-        if ($node->isPrivate()) {
-            return null;
-        }
-        if ($this->shouldSkipClassMethod($node)) {
+        if ($this->shouldSkip($classReflection, $node)) {
             return null;
         }
         if ($this->builtInMethodAnalyzer->isImplementsBuiltInInterface($classReflection, $node)) {
             return null;
         }
-        // Downgrade every scalar parameter, just to be sure
-        foreach (\array_keys($node->params) as $paramPosition) {
-            $this->removeParamTypeFromMethod($node, $paramPosition);
-        }
-        return $node;
+        return $this->processRemoveParamTypeFromMethod($node);
     }
     /**
      * @param array<string, mixed> $configuration
@@ -148,15 +163,36 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
-        \RectorPrefix20210826\Webmozart\Assert\Assert::allString($safeTypes);
+        \RectorPrefix20210827\Webmozart\Assert\Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
         $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
-        \RectorPrefix20210826\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
+        \RectorPrefix20210827\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
         foreach ($safeTypesToMethods as $key => $value) {
-            \RectorPrefix20210826\Webmozart\Assert\Assert::string($key);
-            \RectorPrefix20210826\Webmozart\Assert\Assert::allString($value);
+            \RectorPrefix20210827\Webmozart\Assert\Assert::string($key);
+            \RectorPrefix20210827\Webmozart\Assert\Assert::allString($value);
         }
         $this->safeTypesToMethods = $safeTypesToMethods;
+    }
+    private function shouldSkip(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    {
+        if ($this->sealedClassAnalyzer->isSealedClass($classReflection)) {
+            return \true;
+        }
+        if ($this->isSafeType($classReflection, $classMethod)) {
+            return \true;
+        }
+        if ($classMethod->isPrivate()) {
+            return \true;
+        }
+        return $this->shouldSkipClassMethod($classMethod);
+    }
+    private function processRemoveParamTypeFromMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Stmt\ClassMethod
+    {
+        // Downgrade every scalar parameter, just to be sure
+        foreach (\array_keys($classMethod->params) as $paramPosition) {
+            $this->removeParamTypeFromMethod($classMethod, $paramPosition);
+        }
+        return $classMethod;
     }
     private function removeParamTypeFromMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $paramPosition) : void
     {
@@ -189,19 +225,6 @@ CODE_SAMPLE
             }
         }
         return \true;
-    }
-    /**
-     * This method is perfectly sealed, nothing to downgrade here
-     */
-    private function isSealedClass(\PHPStan\Reflection\ClassReflection $classReflection) : bool
-    {
-        if (!$classReflection->isClass()) {
-            return \false;
-        }
-        if (!$classReflection->isFinal()) {
-            return \false;
-        }
-        return \count($classReflection->getAncestors()) === 1;
     }
     private function isSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

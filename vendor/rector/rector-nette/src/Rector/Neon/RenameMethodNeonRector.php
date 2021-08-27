@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Neon;
 
-use RectorPrefix20210826\Nette\Utils\Strings;
+use RectorPrefix20210827\Nette\Utils\Strings;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -48,7 +48,7 @@ CODE_SAMPLE
             $oldMethodName = $methodCallRename->getOldMethod();
             $newMethodName = $methodCallRename->getNewMethod();
             $pattern = '#\\n(.*?)(class|factory): ' . $className . '(\\n|\\((.*?)\\)\\n)\\1setup:(.*?)- ' . $oldMethodName . '\\(#s';
-            if (\RectorPrefix20210826\Nette\Utils\Strings::match($content, $pattern)) {
+            if (\RectorPrefix20210827\Nette\Utils\Strings::match($content, $pattern)) {
                 $content = \str_replace($oldMethodName . '(', $newMethodName . '(', $content);
             }
         }

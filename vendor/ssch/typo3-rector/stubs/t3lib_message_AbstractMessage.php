@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210826;
+namespace RectorPrefix20210827;
 
 if (\class_exists('t3lib_message_AbstractMessage')) {
     return;
