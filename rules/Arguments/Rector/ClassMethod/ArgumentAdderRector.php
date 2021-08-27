@@ -39,6 +39,10 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $addedArguments = [];
     /**
+     * @var bool
+     */
+    private $haveArgumentsChanged = \false;
+    /**
      * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
     private $argumentAddingScope;
@@ -52,12 +56,7 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('This Rector adds new default arguments in calls of defined methods and class types.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-$someObject = new SomeExampleClass;
-$someObject->someMethod(true);
-CODE_SAMPLE
-, $exampleConfiguration), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+
 class MyCustomClass extends SomeExampleClass
 {
     public function someMethod()
@@ -66,6 +65,9 @@ class MyCustomClass extends SomeExampleClass
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+$someObject = new SomeExampleClass;
+$someObject->someMethod(true);
+
 class MyCustomClass extends SomeExampleClass
 {
     public function someMethod($value = true)
@@ -84,10 +86,11 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
     public function refactor(\PhpParser\Node $node)
     {
+        $this->haveArgumentsChanged = \false;
         foreach ($this->addedArguments as $addedArgument) {
             if (!$this->isObjectTypeMatch($node, $addedArgument->getObjectType())) {
                 continue;
@@ -97,7 +100,10 @@ CODE_SAMPLE
             }
             $this->processPositionWithDefaultValues($node, $addedArgument);
         }
-        return $node;
+        if ($this->haveArgumentsChanged) {
+            return $node;
+        }
+        return null;
     }
     /**
      * @param array<string, ArgumentAdder[]> $configuration
@@ -149,6 +155,7 @@ CODE_SAMPLE
                 return;
             }
             $node->args[$position] = $arg;
+            $this->haveArgumentsChanged = \true;
         }
     }
     /**
@@ -168,16 +175,11 @@ CODE_SAMPLE
             }
             return $this->isName($node->params[$position], $argumentName);
         }
-        // already added?
-        if (!isset($node->args[$position])) {
-            // is correct scope?
-            return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
+        if (isset($node->args[$position])) {
+            return \true;
         }
-        if (!$this->isName($node->args[$position], $argumentName)) {
-            // is correct scope?
-            return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
-        }
-        return \true;
+        // is correct scope?
+        return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
     }
     /**
      * @param mixed $defaultValue
@@ -193,6 +195,7 @@ CODE_SAMPLE
             $param->type = \ctype_upper($type[0]) ? new \PhpParser\Node\Name\FullyQualified($type) : new \PhpParser\Node\Identifier($type);
         }
         $classMethod->params[$position] = $param;
+        $this->haveArgumentsChanged = \true;
     }
     private function processStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall, int $position, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
     {
@@ -207,5 +210,6 @@ CODE_SAMPLE
             return;
         }
         $staticCall->args[$position] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable($argumentName));
+        $this->haveArgumentsChanged = \true;
     }
 }
