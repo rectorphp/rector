@@ -21,6 +21,25 @@ final class ClassMethodParamVendorLockResolver
     ) {
     }
 
+    /**
+     * Includes non-vendor classes
+     */
+    public function isSoftLocked(ClassMethod $classMethod): bool
+    {
+        if ($this->isVendorLocked($classMethod)) {
+            return true;
+        }
+
+        $classReflection = $this->resolveClassReflection($classMethod);
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        /** @var string $methodName */
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '');
+    }
+
     public function isVendorLocked(ClassMethod $classMethod): bool
     {
         if ($classMethod->isMagic()) {
@@ -34,7 +53,6 @@ final class ClassMethodParamVendorLockResolver
 
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
-
         if ($this->hasTraitMethodVendorLock($classReflection, $methodName)) {
             return true;
         }
@@ -44,30 +62,10 @@ final class ClassMethodParamVendorLockResolver
             return true;
         }
 
+        /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            // skip self
-            if ($ancestorClassReflection === $classReflection) {
-                continue;
-            }
 
-            // parent type
-            if (! $ancestorClassReflection->hasNativeMethod($methodName)) {
-                continue;
-            }
-
-            // is file in vendor?
-            $fileName = $ancestorClassReflection->getFileName();
-            // probably internal class
-            if ($fileName === false) {
-                continue;
-            }
-
-            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
-            return str_contains($normalizedFileName, '/vendor/');
-        }
-
-        return false;
+        return $this->hasClassMethodLockMatchingFileName($classReflection, $methodName, '/vendor/');
     }
 
     private function hasTraitMethodVendorLock(ClassReflection $classReflection, string $methodName): bool
@@ -105,6 +103,43 @@ final class ClassMethodParamVendorLockResolver
     {
         foreach ($classReflection->getInterfaces() as $interfaceClassReflection) {
             if ($interfaceClassReflection->hasMethod($methodName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function hasClassMethodLockMatchingFileName(
+        ClassReflection $classReflection,
+        string $methodName,
+        string $filePathPartName
+    ): bool {
+        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+            // skip self
+            if ($ancestorClassReflection === $classReflection) {
+                continue;
+            }
+
+            // parent type
+            if (! $ancestorClassReflection->hasNativeMethod($methodName)) {
+                continue;
+            }
+
+            // is file in vendor?
+            $fileName = $ancestorClassReflection->getFileName();
+            // probably internal class
+            if ($fileName === false) {
+                continue;
+            }
+
+            // not conditions? its a match
+            if ($filePathPartName === '') {
+                return true;
+            }
+
+            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+            if (str_contains($normalizedFileName, $filePathPartName)) {
                 return true;
             }
         }

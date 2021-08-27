@@ -34,6 +34,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpVersionInterface
 {
+    private bool $hasChanged = false;
+
     public function __construct(
         private VendorLockResolver $vendorLockResolver,
         private ParamTypeInferer $paramTypeInferer,
@@ -121,12 +123,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->hasChanged = false;
+
         if ($node->params === []) {
             return null;
         }
 
         foreach ($node->params as $param) {
             $this->refactorParam($param, $node);
+        }
+
+        if ($this->hasChanged) {
+            return $node;
         }
 
         return null;
@@ -170,6 +178,8 @@ CODE_SAMPLE
 
         $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
+
+        $this->hasChanged = true;
     }
 
     private function shouldSkipParam(Param $param, ClassMethod | Function_ $functionLike): bool

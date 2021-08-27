@@ -33,6 +33,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnionTypesRector extends AbstractRector implements MinPhpVersionInterface
 {
+    private bool $hasChanged = false;
+
     public function __construct(
         private ReturnTagRemover $returnTagRemover,
         private ParamTagRemover $paramTagRemover,
@@ -87,6 +89,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->hasChanged = false;
+
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
         $this->refactorParamTypes($node, $phpDocInfo);
@@ -95,7 +99,15 @@ CODE_SAMPLE
         $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
 
-        return $node;
+        if ($phpDocInfo->hasChanged()) {
+            $this->hasChanged = true;
+        }
+
+        if ($this->hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     public function provideMinPhpVersion(): int
@@ -107,7 +119,8 @@ CODE_SAMPLE
         ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
         PhpDocInfo $phpDocInfo
     ): void {
-        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked(
+        // skip parent class lock too, just to be safe in case of different parent docs
+        if ($functionLike instanceof ClassMethod && $this->classMethodParamVendorLockResolver->isSoftLocked(
             $functionLike
         )) {
             return;
@@ -145,6 +158,7 @@ CODE_SAMPLE
             }
 
             $param->type = $phpParserUnionType;
+            $this->hasChanged = true;
         }
     }
 
@@ -155,6 +169,7 @@ CODE_SAMPLE
         }
 
         $param->type = new Name('object');
+        $this->hasChanged = true;
     }
 
     private function refactorReturnType(
@@ -186,6 +201,7 @@ CODE_SAMPLE
         }
 
         $functionLike->returnType = $phpParserUnionType;
+        $this->hasChanged = true;
     }
 
     private function filterOutDuplicatedArrayTypes(UnionType $unionType): UnionType | Type
