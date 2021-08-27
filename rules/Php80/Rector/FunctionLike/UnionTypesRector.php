@@ -32,6 +32,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @var bool
+     */
+    private $hasChanged = \false;
+    /**
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
@@ -95,12 +99,19 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $this->hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->refactorParamTypes($node, $phpDocInfo);
         $this->refactorReturnType($node, $phpDocInfo);
         $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-        return $node;
+        if ($phpDocInfo->hasChanged()) {
+            $this->hasChanged = \true;
+        }
+        if ($this->hasChanged) {
+            return $node;
+        }
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
@@ -111,7 +122,8 @@ CODE_SAMPLE
      */
     private function refactorParamTypes($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
-        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodParamVendorLockResolver->isVendorLocked($functionLike)) {
+        // skip parent class lock too, just to be safe in case of different parent docs
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodParamVendorLockResolver->isSoftLocked($functionLike)) {
             return;
         }
         foreach ($functionLike->getParams() as $param) {
@@ -137,6 +149,7 @@ CODE_SAMPLE
                 continue;
             }
             $param->type = $phpParserUnionType;
+            $this->hasChanged = \true;
         }
     }
     private function changeObjectWithoutClassType(\PhpParser\Node\Param $param, \PHPStan\Type\UnionType $unionType) : void
@@ -145,6 +158,7 @@ CODE_SAMPLE
             return;
         }
         $param->type = new \PhpParser\Node\Name('object');
+        $this->hasChanged = \true;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
@@ -168,6 +182,7 @@ CODE_SAMPLE
             return;
         }
         $functionLike->returnType = $phpParserUnionType;
+        $this->hasChanged = \true;
     }
     /**
      * @return \PHPStan\Type\UnionType|\PHPStan\Type\Type

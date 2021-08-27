@@ -33,6 +33,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @var bool
+     */
+    private $hasChanged = \false;
+    /**
      * @var \Rector\VendorLocker\VendorLockResolver
      */
     private $vendorLockResolver;
@@ -125,11 +129,15 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $this->hasChanged = \false;
         if ($node->params === []) {
             return null;
         }
         foreach ($node->params as $param) {
             $this->refactorParam($param, $node);
+        }
+        if ($this->hasChanged) {
+            return $node;
         }
         return null;
     }
@@ -166,6 +174,7 @@ CODE_SAMPLE
         $param->type = $paramTypeNode;
         $functionLikePhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->paramTagRemover->removeParamTagsIfUseless($functionLikePhpDocInfo, $functionLike);
+        $this->hasChanged = \true;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
