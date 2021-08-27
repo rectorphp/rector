@@ -10,8 +10,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
+use Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer;
+use Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer;
 use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
@@ -51,7 +54,10 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
         private ReflectionProvider $reflectionProvider,
         private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
-        private BuiltInMethodAnalyzer $builtInMethodAnalyzer
+        private BuiltInMethodAnalyzer $builtInMethodAnalyzer,
+        private OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer,
+        private AstResolver $astResolver,
+        private SealedClassAnalyzer $sealedClassAnalyzer
     ) {
     }
 
@@ -116,6 +122,19 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->overrideFromAnonymousClassMethodAnalyzer->isOverrideParentMethod($classLike, $node)) {
+            $classReflection = $this->reflectionProvider->getClass($classLike->extends->toString());
+            $methodName = $this->nodeNameResolver->getName($node);
+            /** @var ClassMethod $classMethod */
+            $classMethod = $this->astResolver->resolveClassMethod($classReflection->getName(), $methodName);
+
+            if ($this->shouldSkip($classReflection, $classMethod)) {
+                return null;
+            }
+
+            return $this->processRemoveParamTypeFromMethod($node);
+        }
+
         $className = $this->nodeNameResolver->getName($classLike);
         if ($className === null) {
             return null;
@@ -126,19 +145,7 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($this->isSealedClass($classReflection)) {
-            return null;
-        }
-
-        if ($this->isSafeType($classReflection, $node)) {
-            return null;
-        }
-
-        if ($node->isPrivate()) {
-            return null;
-        }
-
-        if ($this->shouldSkipClassMethod($node)) {
+        if ($this->shouldSkip($classReflection, $node)) {
             return null;
         }
 
@@ -146,12 +153,7 @@ CODE_SAMPLE
             return null;
         }
 
-        // Downgrade every scalar parameter, just to be sure
-        foreach (array_keys($node->params) as $paramPosition) {
-            $this->removeParamTypeFromMethod($node, $paramPosition);
-        }
-
-        return $node;
+        return $this->processRemoveParamTypeFromMethod($node);
     }
 
     /**
@@ -171,6 +173,33 @@ CODE_SAMPLE
         }
 
         $this->safeTypesToMethods = $safeTypesToMethods;
+    }
+
+    private function shouldSkip(ClassReflection $classReflection, ClassMethod $classMethod): bool
+    {
+        if ($this->sealedClassAnalyzer->isSealedClass($classReflection)) {
+            return true;
+        }
+
+        if ($this->isSafeType($classReflection, $classMethod)) {
+            return true;
+        }
+
+        if ($classMethod->isPrivate()) {
+            return true;
+        }
+
+        return $this->shouldSkipClassMethod($classMethod);
+    }
+
+    private function processRemoveParamTypeFromMethod(ClassMethod $classMethod): ClassMethod
+    {
+        // Downgrade every scalar parameter, just to be sure
+        foreach (array_keys($classMethod->params) as $paramPosition) {
+            $this->removeParamTypeFromMethod($classMethod, $paramPosition);
+        }
+
+        return $classMethod;
     }
 
     private function removeParamTypeFromMethod(ClassMethod $classMethod, int $paramPosition): void
@@ -211,22 +240,6 @@ CODE_SAMPLE
         }
 
         return true;
-    }
-
-    /**
-     * This method is perfectly sealed, nothing to downgrade here
-     */
-    private function isSealedClass(ClassReflection $classReflection): bool
-    {
-        if (! $classReflection->isClass()) {
-            return false;
-        }
-
-        if (! $classReflection->isFinal()) {
-            return false;
-        }
-
-        return count($classReflection->getAncestors()) === 1;
     }
 
     private function isSafeType(ClassReflection $classReflection, ClassMethod $classMethod): bool
