@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitced676bac478ca7f538d0185ee84e6bc
+class ComposerStaticInita6ab9ef7a275625464f155554aa7acaa
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3211,18 +3211,11 @@ class ComposerStaticInitced676bac478ca7f538d0185ee84e6bc
         'Rector\\RectorInstaller\\PluginInstaller' => __DIR__ . '/..' . '/rector/extension-installer/src/PluginInstaller.php',
         'Rector\\RemovingStatic\\NodeAnalyzer\\StaticCallPresenceAnalyzer' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeAnalyzer/StaticCallPresenceAnalyzer.php',
         'Rector\\RemovingStatic\\NodeFactory\\SetUpFactory' => __DIR__ . '/../..' . '/rules/RemovingStatic/NodeFactory/SetUpFactory.php',
-        'Rector\\RemovingStatic\\Printer\\FactoryClassPrinter' => __DIR__ . '/../..' . '/rules/RemovingStatic/Printer/FactoryClassPrinter.php',
         'Rector\\RemovingStatic\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',
         'Rector\\RemovingStatic\\Rector\\Class_\\DesiredClassTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/DesiredClassTypeToDynamicRector.php',
-        'Rector\\RemovingStatic\\Rector\\Class_\\NewUniqueObjectToEntityFactoryRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/NewUniqueObjectToEntityFactoryRector.php',
-        'Rector\\RemovingStatic\\Rector\\Class_\\PassFactoryToUniqueObjectRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/PassFactoryToUniqueObjectRector.php',
-        'Rector\\RemovingStatic\\Rector\\Class_\\StaticTypeToSetterInjectionRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Class_/StaticTypeToSetterInjectionRector.php',
         'Rector\\RemovingStatic\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector.php',
         'Rector\\RemovingStatic\\Rector\\StaticCall\\DesiredStaticCallTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/StaticCall/DesiredStaticCallTypeToDynamicRector.php',
         'Rector\\RemovingStatic\\Rector\\StaticPropertyFetch\\DesiredStaticPropertyFetchTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/StaticPropertyFetch/DesiredStaticPropertyFetchTypeToDynamicRector.php',
-        'Rector\\RemovingStatic\\StaticTypesInClassResolver' => __DIR__ . '/../..' . '/rules/RemovingStatic/StaticTypesInClassResolver.php',
-        'Rector\\RemovingStatic\\UniqueObjectFactoryFactory' => __DIR__ . '/../..' . '/rules/RemovingStatic/UniqueObjectFactoryFactory.php',
-        'Rector\\RemovingStatic\\UniqueObjectOrServiceDetector' => __DIR__ . '/../..' . '/rules/RemovingStatic/UniqueObjectOrServiceDetector.php',
         'Rector\\Removing\\NodeManipulator\\ComplexNodeRemover' => __DIR__ . '/../..' . '/rules/Removing/NodeManipulator/ComplexNodeRemover.php',
         'Rector\\Removing\\Rector\\ClassMethod\\ArgumentRemoverRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php',
         'Rector\\Removing\\Rector\\Class_\\RemoveInterfacesRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/Class_/RemoveInterfacesRector.php',
@@ -3860,9 +3853,9 @@ class ComposerStaticInitced676bac478ca7f538d0185ee84e6bc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitced676bac478ca7f538d0185ee84e6bc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitced676bac478ca7f538d0185ee84e6bc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitced676bac478ca7f538d0185ee84e6bc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita6ab9ef7a275625464f155554aa7acaa::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita6ab9ef7a275625464f155554aa7acaa::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita6ab9ef7a275625464f155554aa7acaa::$classMap;
 
         }, null, ClassLoader::class);
     }
