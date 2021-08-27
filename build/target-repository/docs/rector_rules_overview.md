@@ -1,4 +1,4 @@
-# 477 Rules Overview
+# 474 Rules Overview
 
 <br>
 
@@ -84,7 +84,7 @@
 
 - [Removing](#removing) (6)
 
-- [RemovingStatic](#removingstatic) (8)
+- [RemovingStatic](#removingstatic) (5)
 
 - [Renaming](#renaming) (11)
 
@@ -132,31 +132,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  $someObject = new SomeExampleClass;
 -$someObject->someMethod();
 +$someObject->someMethod(true);
-```
 
-<br>
-
-```php
-use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
-use Rector\Arguments\ValueObject\ArgumentAdder;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ArgumentAdderRector::class)
-        ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, 'SomeType', null),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
  class MyCustomClass extends SomeExampleClass
  {
 -    public function someMethod()
@@ -9101,177 +9077,6 @@ Change static method and local-only calls to non-static
 -    private static function someStatic()
 +    private function someStatic()
      {
-     }
- }
-```
-
-<br>
-
-### NewUniqueObjectToEntityFactoryRector
-
-Convert new X to new factories
-
-:wrench: **configure it!**
-
-- class: [`Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector`](../rules/RemovingStatic/Rector/Class_/NewUniqueObjectToEntityFactoryRector.php)
-
-```php
-use Rector\RemovingStatic\Rector\Class_\NewUniqueObjectToEntityFactoryRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(NewUniqueObjectToEntityFactoryRector::class)
-        ->call('configure', [[
-            NewUniqueObjectToEntityFactoryRector::TYPES_TO_SERVICES => ['ClassName'],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-+    public function __construct(AnotherClassFactory $anotherClassFactory)
-+    {
-+        $this->anotherClassFactory = $anotherClassFactory;
-+    }
-+
-     public function run()
-     {
--        return new AnotherClass;
-+        return $this->anotherClassFactory->create();
-     }
- }
-
- class AnotherClass
- {
-     public function someFun()
-     {
-         return StaticClass::staticMethod();
-     }
- }
-```
-
-<br>
-
-### PassFactoryToUniqueObjectRector
-
-Convert new `X/Static::call()` to factories in entities, pass them via constructor to each other
-
-:wrench: **configure it!**
-
-- class: [`Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector`](../rules/RemovingStatic/Rector/Class_/PassFactoryToUniqueObjectRector.php)
-
-```php
-use Rector\RemovingStatic\Rector\Class_\PassFactoryToUniqueObjectRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(PassFactoryToUniqueObjectRector::class)
-        ->call('configure', [[
-            PassFactoryToUniqueObjectRector::TYPES_TO_SERVICES => ['StaticClass'],
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-+    public function __construct(AnotherClassFactory $anotherClassFactory)
-+    {
-+        $this->anotherClassFactory = $anotherClassFactory;
-+    }
-+
-     public function run()
-     {
--        return new AnotherClass;
-+        return $this->anotherClassFactory->create();
-     }
- }
-
- class AnotherClass
- {
-+    public function __construct(StaticClass $staticClass)
-+    {
-+        $this->staticClass = $staticClass;
-+    }
-+
-     public function someFun()
-     {
--        return StaticClass::staticMethod();
-+        return $this->staticClass->staticMethod();
-+    }
-+}
-+
-+final class AnotherClassFactory
-+{
-+    /**
-+     * @var StaticClass
-+     */
-+    private $staticClass;
-+
-+    public function __construct(StaticClass $staticClass)
-+    {
-+        $this->staticClass = $staticClass;
-+    }
-+
-+    public function create(): AnotherClass
-+    {
-+        return new AnotherClass($this->staticClass);
-     }
- }
-```
-
-<br>
-
-### StaticTypeToSetterInjectionRector
-
-Changes types to setter injection
-
-:wrench: **configure it!**
-
-- class: [`Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector`](../rules/RemovingStatic/Rector/Class_/StaticTypeToSetterInjectionRector.php)
-
-```php
-use Rector\RemovingStatic\Rector\Class_\StaticTypeToSetterInjectionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(StaticTypeToSetterInjectionRector::class)
-        ->call('configure', [[
-            StaticTypeToSetterInjectionRector::STATIC_TYPES => ['SomeStaticClass'],
-        ]]);
-};
-```
-
-↓
-
-```diff
- final class CheckoutEntityFactory
- {
-+    /**
-+     * @var SomeStaticClass
-+     */
-+    private $someStaticClass;
-+
-+    public function setSomeStaticClass(SomeStaticClass $someStaticClass)
-+    {
-+        $this->someStaticClass = $someStaticClass;
-+    }
-+
-     public function run()
-     {
--        return SomeStaticClass::go();
-+        return $this->someStaticClass->go();
      }
  }
 ```
