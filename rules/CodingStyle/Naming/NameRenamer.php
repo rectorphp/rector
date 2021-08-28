@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Naming;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -58,7 +60,33 @@ final class NameRenamer
             if ($parentNode instanceof \PhpParser\Node\UnionType) {
                 $this->renameUnionType($lastName, $parentNode, $usedName);
             }
+            if ($parentNode instanceof \PhpParser\Node\NullableType) {
+                $this->renameNullableType($lastName, $parentNode, $usedName);
+            }
+            if ($parentNode instanceof \PhpParser\Node\Expr\Instanceof_) {
+                $this->renameInInstanceOf($lastName, $parentNode, $usedName);
+            }
         }
+    }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     */
+    private function renameInInstanceOf(string $lastName, \PhpParser\Node\Expr\Instanceof_ $instanceof, $usedNameNode) : void
+    {
+        if (!$this->nodeNameResolver->areNamesEqual($instanceof->class, $usedNameNode)) {
+            return;
+        }
+        $instanceof->class = new \PhpParser\Node\Name($lastName);
+    }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     */
+    private function renameNullableType(string $lastName, \PhpParser\Node\NullableType $nullableType, $usedNameNode) : void
+    {
+        if (!$this->nodeNameResolver->areNamesEqual($nullableType->type, $usedNameNode)) {
+            return;
+        }
+        $nullableType->type = new \PhpParser\Node\Name($lastName);
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode

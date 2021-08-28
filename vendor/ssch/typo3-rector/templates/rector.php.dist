@@ -64,7 +64,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/**/Configuration/RequestMiddlewares.php',
             __DIR__ . '/**/Configuration/TCA/*',
         ],
-
+        // @see https://github.com/sabbelasichon/typo3-rector/issues/2536
+        __DIR__ . '/**/Configuration/ExtensionBuilder/*',
         // We skip those directories on purpose as there might be node_modules or similar
         // that include typescript which would result in false positive processing
         __DIR__ . '/**/Resources/**/node_modules/*',

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210827;
+namespace RectorPrefix20210828;
 
 if (\class_exists('t3lib_extMgm')) {
     return;

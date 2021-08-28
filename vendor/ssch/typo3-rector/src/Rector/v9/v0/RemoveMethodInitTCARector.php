@@ -46,6 +46,7 @@ use TYPO3\CMS\Frontend\Utility\EidUtility;
 EidUtility::initTCA();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+-
 CODE_SAMPLE
 )]);
     }

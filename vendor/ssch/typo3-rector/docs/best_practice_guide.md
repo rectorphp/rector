@@ -15,10 +15,10 @@ You can use typo3-rector in various ways:
 
 - apply older or current version rulesets first (if you're going from v8 to v10, apply v7/v8 sets first )
 - composer package versions update via SetList (see [composer section below](#composer-packages-update))
-- add ClassAliasMap in case you're upgrading 2 versions to provide old classes to migrate
+- add ClassAliasMap in case you're upgrading 2 versions to provide old classes to migrate (see [ClassAliasMap](#classaliasmap))
 - apply rulesets stepwise by version; first TCA only, then full set or combined
 - apply rulesets stepwise to your packages or multiple packages at once
-- don't use class aliases for Nimut Testing Framework
+- don't use class aliases for Nimut Testing Framework (see [Migrating Testing Framework](#migrating-testing-framework))
 
 ### Starting
 Starting with an upgrade should start with installing typo3-rector and checking for the rector rules/sets of your current version, not the one you're targeting.
@@ -73,6 +73,41 @@ Both of that is reason to gather multiple packages for a combined TCA run with t
         __DIR__ . '/packages/package_thirdone',
     ]);
 ```
+
+### ClassAliasMap
+
+The ClassAliasMap is a TYPO3 specific feature.
+It is used to allow migration of no longer existing class names to new class names.
+Rector is not able to load necessary ClassAliasMap on demand.
+Those need to be provided via `extra` section inside `composer.json` of the project:
+
+```json
+{
+    "extra": {
+        "typo3/class-alias-loader": {
+            "class-alias-maps": [
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/8.7/typo3/sysext/extbase/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/8.7/typo3/sysext/fluid/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/8.7/typo3/sysext/version/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/adminpanel/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/backend/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/core/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/extbase/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/fluid/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/info/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/lowlevel/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/recordlist/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/reports/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/t3editor/Migrations/Code/ClassAliasMap.php",
+                "vendor/rector/rector/vendor/ssch/typo3-rector/Migrations/TYPO3/9.5/typo3/sysext/workspaces/Migrations/Code/ClassAliasMap.php"
+            ]
+        }
+    }
+}
+```
+
+Provide ClassAliasMap files of all necessary extensions for all necessary versions.
+
 ### Migrating Testing Framework
 
 Do not use any class alias like

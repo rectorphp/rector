@@ -1,4 +1,4 @@
-# 36 Rules Overview
+# 37 Rules Overview
 
 ## AddNextrasDatePickerToDateControlRector
 
@@ -821,6 +821,66 @@ Change `$this->templates->{magic}` to `$this->template->render(..., $values)` in
 +        $this->template->render(__DIR__ . '/poll.latte', ['param' => 'some value']);
      }
  }
+```
+
+<br>
+
+## TemplateTypeBasedOnPresenterTemplateParametersRector
+
+Creates Template class and adds latte {templateType} based on presenter `$this->template` parameters
+
+:wrench: **configure it!**
+
+- class: [`Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector`](../src/Rector/Class_/TemplateTypeBasedOnPresenterTemplateParametersRector.php)
+
+```php
+use Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(TemplateTypeBasedOnPresenterTemplateParametersRector::class)
+        ->call('configure', [[
+            TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_PARENT => '',
+            TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_TRAITS => [],
+        ]]);
+};
+```
+
+↓
+
+```diff
+ // presenters/SomePresenter.php
+ <?php
+
+ use Nette\Application\UI\Presenter;
+
+ class SomePresenter extends Presenter
+ {
+     public function renderDefault(): void
+     {
+         $this->template->title = 'My title';
+         $this->template->count = 123;
+     }
+ }
+
++// presenters/SomeDefaultTemplate.php
++<?php
++
++use Nette\Bridges\ApplicationLatte\Template;
++
++class SomeDefaultTemplate extends Template
++{
++    public string $title;
++    public int $count;
++}
++
+ // templates/Some/default.latte
++{templateType SomeDefaultTemplate}
++
+ <h1>{$title}</h1>
+ <span class="count">{$count}</span>
 ```
 
 <br>

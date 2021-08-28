@@ -2618,7 +2618,8 @@ Remove `EidUtility::connectDB()` call
 - class: [`Ssch\TYPO3Rector\Rector\v7\v0\RemoveMethodCallConnectDbRector`](../src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php)
 
 ```diff
--EidUtility::connectDB()
+-'GeneralUtility::loadTCA()'
++-
 ```
 
 <br>
@@ -2630,7 +2631,8 @@ Remove `GeneralUtility::loadTCA()` call
 - class: [`Ssch\TYPO3Rector\Rector\v7\v0\RemoveMethodCallLoadTcaRector`](../src/Rector/v7/v0/RemoveMethodCallLoadTcaRector.php)
 
 ```diff
--GeneralUtility::loadTCA()
+-'GeneralUtility::loadTCA()'
++-
 ```
 
 <br>
@@ -2644,6 +2646,7 @@ Remove superfluous EidUtility::initTCA call
 ```diff
 -use TYPO3\CMS\Frontend\Utility\EidUtility;
 -EidUtility::initTCA();
++-
 ```
 
 <br>

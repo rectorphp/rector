@@ -41,6 +41,12 @@ final class RemoveMethodCallConnectDbRector extends \Rector\Core\Rector\Abstract
      */
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove EidUtility::connectDB() call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('EidUtility::connectDB()', '')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove EidUtility::connectDB() call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+'GeneralUtility::loadTCA()'
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+-
+CODE_SAMPLE
+)]);
     }
 }
