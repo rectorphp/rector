@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Naming;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -65,7 +67,39 @@ final class NameRenamer
             if ($parentNode instanceof UnionType) {
                 $this->renameUnionType($lastName, $parentNode, $usedName);
             }
+
+            if ($parentNode instanceof NullableType) {
+                $this->renameNullableType($lastName, $parentNode, $usedName);
+            }
+
+            if ($parentNode instanceof Instanceof_) {
+                $this->renameInInstanceOf($lastName, $parentNode, $usedName);
+            }
         }
+    }
+
+    private function renameInInstanceOf(
+        string $lastName,
+        Instanceof_ $instanceof,
+        Name | Identifier $usedNameNode
+    ): void {
+        if (! $this->nodeNameResolver->areNamesEqual($instanceof->class, $usedNameNode)) {
+            return;
+        }
+
+        $instanceof->class = new Name($lastName);
+    }
+
+    private function renameNullableType(
+        string $lastName,
+        NullableType $nullableType,
+        Name | Identifier $usedNameNode
+    ): void {
+        if (! $this->nodeNameResolver->areNamesEqual($nullableType->type, $usedNameNode)) {
+            return;
+        }
+
+        $nullableType->type = new Name($lastName);
     }
 
     private function renameTraitUse(string $lastName, TraitUse $traitUse, Name | Identifier $usedNameNode): void
