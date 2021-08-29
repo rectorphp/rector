@@ -551,4 +551,4 @@ parameters:
             paths:
                 - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
 
-        - '#^Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 12, keep it under 9$#'
+        - '#^Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 13, keep it under 9$#'

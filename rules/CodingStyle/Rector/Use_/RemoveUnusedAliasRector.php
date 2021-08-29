@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\Use_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -18,6 +15,7 @@ use Rector\CodingStyle\Node\DocAliasResolver;
 use Rector\CodingStyle\Node\UseManipulator;
 use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
 use Rector\CodingStyle\ValueObject\NameAndParent;
+use Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -48,7 +46,8 @@ final class RemoveUnusedAliasRector extends AbstractRector
         private UseManipulator $useManipulator,
         private UseNameAliasToNameResolver $useNameAliasToNameResolver,
         private NameRenamer $nameRenamer,
-        private ClassNameImportSkipper $classNameImportSkipper
+        private ClassNameImportSkipper $classNameImportSkipper,
+        private FullyQualifiedFromUseFinder $fullyQualifiedFromUseFinder
     ) {
     }
 
@@ -183,29 +182,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return (bool) $this->betterNodeFinder->findFirstNext($use, function (Node $node) use (
-            $name,
-            $loweredAliasName
-        ): bool {
-            if ($node instanceof FullyQualified) {
-                $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
-                if ($originalName instanceof Name) {
-                    $loweredOriginalName = strtolower($originalName->toString());
-                    $loweredOriginalNameNamespace = Strings::before($loweredOriginalName, '\\');
-                    return $loweredAliasName === $loweredOriginalNameNamespace;
-                }
-            }
-
-            if (! $node instanceof ClassConstFetch) {
-                return false;
-            }
-
-            if (! $node->class instanceof Name) {
-                return false;
-            }
-
-            return $node->class->toString() === $name->toString();
-        });
+        return (bool) $this->fullyQualifiedFromUseFinder->matchAliasNamespace($use, $loweredAliasName);
     }
 
     private function refactorAliasName(Use_ $use, string $aliasName, string $lastName, UseUse $useUse): void

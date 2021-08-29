@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Naming;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -75,7 +76,24 @@ final class NameRenamer
             if ($parentNode instanceof Instanceof_) {
                 $this->renameInInstanceOf($lastName, $parentNode, $usedName);
             }
+
+            if ($parentNode instanceof ClassConstFetch) {
+                $this->renameClassConstFetch($lastName, $parentNode, $usedName);
+            }
         }
+    }
+
+    private function renameClassConstFetch(
+        string $lastName,
+        ClassConstFetch $classConstFetch,
+        Name | Identifier $usedNameNode
+    ): void
+    {
+        if (! $this->nodeNameResolver->areNamesEqual($classConstFetch->class, $usedNameNode)) {
+            return;
+        }
+
+        $classConstFetch->class = new Name($lastName);
     }
 
     private function renameInInstanceOf(
