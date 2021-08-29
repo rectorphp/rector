@@ -19,7 +19,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\MethodCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210828\Webmozart\Assert\Assert;
+use RectorPrefix20210829\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToMethodCallRector\MethodCallToMethodCallRectorTest
  */
@@ -125,7 +125,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? [];
-        \RectorPrefix20210828\Webmozart\Assert\Assert::allIsAOf($methodCallsToMethodsCalls, \Rector\Transform\ValueObject\MethodCallToMethodCall::class);
+        \RectorPrefix20210829\Webmozart\Assert\Assert::allIsAOf($methodCallsToMethodsCalls, \Rector\Transform\ValueObject\MethodCallToMethodCall::class);
         $this->methodCallsToMethodsCalls = $methodCallsToMethodsCalls;
     }
     private function isMatch(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\Transform\ValueObject\MethodCallToMethodCall $methodCallToMethodCall) : bool

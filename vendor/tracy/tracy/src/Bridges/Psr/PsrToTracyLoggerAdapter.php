@@ -5,35 +5,35 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210828\Tracy\Bridges\Psr;
+namespace RectorPrefix20210829\Tracy\Bridges\Psr;
 
-use RectorPrefix20210828\Psr;
-use RectorPrefix20210828\Tracy;
+use RectorPrefix20210829\Psr;
+use RectorPrefix20210829\Tracy;
 /**
  * Psr\Log\LoggerInterface to Tracy\ILogger adapter.
  */
-class PsrToTracyLoggerAdapter implements \RectorPrefix20210828\Tracy\ILogger
+class PsrToTracyLoggerAdapter implements \RectorPrefix20210829\Tracy\ILogger
 {
     /** Tracy logger level to PSR-3 log level mapping */
-    private const LEVEL_MAP = [\RectorPrefix20210828\Tracy\ILogger::DEBUG => \RectorPrefix20210828\Psr\Log\LogLevel::DEBUG, \RectorPrefix20210828\Tracy\ILogger::INFO => \RectorPrefix20210828\Psr\Log\LogLevel::INFO, \RectorPrefix20210828\Tracy\ILogger::WARNING => \RectorPrefix20210828\Psr\Log\LogLevel::WARNING, \RectorPrefix20210828\Tracy\ILogger::ERROR => \RectorPrefix20210828\Psr\Log\LogLevel::ERROR, \RectorPrefix20210828\Tracy\ILogger::EXCEPTION => \RectorPrefix20210828\Psr\Log\LogLevel::ERROR, \RectorPrefix20210828\Tracy\ILogger::CRITICAL => \RectorPrefix20210828\Psr\Log\LogLevel::CRITICAL];
+    private const LEVEL_MAP = [\RectorPrefix20210829\Tracy\ILogger::DEBUG => \RectorPrefix20210829\Psr\Log\LogLevel::DEBUG, \RectorPrefix20210829\Tracy\ILogger::INFO => \RectorPrefix20210829\Psr\Log\LogLevel::INFO, \RectorPrefix20210829\Tracy\ILogger::WARNING => \RectorPrefix20210829\Psr\Log\LogLevel::WARNING, \RectorPrefix20210829\Tracy\ILogger::ERROR => \RectorPrefix20210829\Psr\Log\LogLevel::ERROR, \RectorPrefix20210829\Tracy\ILogger::EXCEPTION => \RectorPrefix20210829\Psr\Log\LogLevel::ERROR, \RectorPrefix20210829\Tracy\ILogger::CRITICAL => \RectorPrefix20210829\Psr\Log\LogLevel::CRITICAL];
     /** @var Psr\Log\LoggerInterface */
     private $psrLogger;
-    public function __construct(\RectorPrefix20210828\Psr\Log\LoggerInterface $psrLogger)
+    public function __construct(\RectorPrefix20210829\Psr\Log\LoggerInterface $psrLogger)
     {
         $this->psrLogger = $psrLogger;
     }
     public function log($value, $level = self::INFO)
     {
         if ($value instanceof \Throwable) {
-            $message = \RectorPrefix20210828\Tracy\Helpers::getClass($value) . ': ' . $value->getMessage() . ($value->getCode() ? ' #' . $value->getCode() : '') . ' in ' . $value->getFile() . ':' . $value->getLine();
+            $message = \RectorPrefix20210829\Tracy\Helpers::getClass($value) . ': ' . $value->getMessage() . ($value->getCode() ? ' #' . $value->getCode() : '') . ' in ' . $value->getFile() . ':' . $value->getLine();
             $context = ['exception' => $value];
         } elseif (!\is_string($value)) {
-            $message = \trim(\RectorPrefix20210828\Tracy\Dumper::toText($value));
+            $message = \trim(\RectorPrefix20210829\Tracy\Dumper::toText($value));
             $context = [];
         } else {
             $message = $value;
             $context = [];
         }
-        $this->psrLogger->log(self::LEVEL_MAP[$level] ?? \RectorPrefix20210828\Psr\Log\LogLevel::ERROR, $message, $context);
+        $this->psrLogger->log(self::LEVEL_MAP[$level] ?? \RectorPrefix20210829\Psr\Log\LogLevel::ERROR, $message, $context);
     }
 }

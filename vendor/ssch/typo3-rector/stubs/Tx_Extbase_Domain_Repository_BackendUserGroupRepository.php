@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210828;
+namespace RectorPrefix20210829;
 
 if (\class_exists('Tx_Extbase_Domain_Repository_BackendUserGroupRepository')) {
     return;

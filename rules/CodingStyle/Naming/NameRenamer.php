@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Naming;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -66,7 +67,20 @@ final class NameRenamer
             if ($parentNode instanceof \PhpParser\Node\Expr\Instanceof_) {
                 $this->renameInInstanceOf($lastName, $parentNode, $usedName);
             }
+            if ($parentNode instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+                $this->renameClassConstFetch($lastName, $parentNode, $usedName);
+            }
         }
+    }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     */
+    private function renameClassConstFetch(string $lastName, \PhpParser\Node\Expr\ClassConstFetch $classConstFetch, $usedNameNode) : void
+    {
+        if (!$this->nodeNameResolver->areNamesEqual($classConstFetch->class, $usedNameNode)) {
+            return;
+        }
+        $classConstFetch->class = new \PhpParser\Node\Name($lastName);
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode

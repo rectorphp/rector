@@ -3,11 +3,8 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Use_;
 
-use RectorPrefix20210828\Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -17,6 +14,7 @@ use Rector\CodingStyle\Node\DocAliasResolver;
 use Rector\CodingStyle\Node\UseManipulator;
 use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
 use Rector\CodingStyle\ValueObject\NameAndParent;
+use Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -58,13 +56,18 @@ final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
     private $classNameImportSkipper;
-    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper)
+    /**
+     * @var \Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder
+     */
+    private $fullyQualifiedFromUseFinder;
+    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder $fullyQualifiedFromUseFinder)
     {
         $this->docAliasResolver = $docAliasResolver;
         $this->useManipulator = $useManipulator;
         $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->nameRenamer = $nameRenamer;
         $this->classNameImportSkipper = $classNameImportSkipper;
+        $this->fullyQualifiedFromUseFinder = $fullyQualifiedFromUseFinder;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -168,23 +171,7 @@ CODE_SAMPLE
         if (\in_array($loweredAliasName, $this->resolvedDocPossibleAliases, \true)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($use, function (\PhpParser\Node $node) use($name, $loweredAliasName) : bool {
-            if ($node instanceof \PhpParser\Node\Name\FullyQualified) {
-                $originalName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
-                if ($originalName instanceof \PhpParser\Node\Name) {
-                    $loweredOriginalName = \strtolower($originalName->toString());
-                    $loweredOriginalNameNamespace = \RectorPrefix20210828\Nette\Utils\Strings::before($loweredOriginalName, '\\');
-                    return $loweredAliasName === $loweredOriginalNameNamespace;
-                }
-            }
-            if (!$node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-                return \false;
-            }
-            if (!$node->class instanceof \PhpParser\Node\Name) {
-                return \false;
-            }
-            return $node->class->toString() === $name->toString();
-        });
+        return (bool) $this->fullyQualifiedFromUseFinder->matchAliasNamespace($use, $loweredAliasName);
     }
     private function refactorAliasName(\PhpParser\Node\Stmt\Use_ $use, string $aliasName, string $lastName, \PhpParser\Node\Stmt\UseUse $useUse) : void
     {

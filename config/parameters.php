@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210828;
+namespace RectorPrefix20210829;
 
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210828\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20210829\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20210828\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210828\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210829\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210829\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Removes empty service-locators registered for ServiceValueResolver.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class RemoveEmptyControllerArgumentLocatorsPass implements \RectorPrefix20210828\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class RemoveEmptyControllerArgumentLocatorsPass implements \RectorPrefix20210829\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     private $controllerLocator;
     public function __construct(string $controllerLocator = 'argument_resolver.controller_locator')

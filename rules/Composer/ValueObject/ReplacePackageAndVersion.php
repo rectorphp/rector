@@ -5,7 +5,7 @@ namespace Rector\Composer\ValueObject;
 
 use Rector\Composer\Contract\VersionAwareInterface;
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
-use RectorPrefix20210828\Webmozart\Assert\Assert;
+use RectorPrefix20210829\Webmozart\Assert\Assert;
 final class ReplacePackageAndVersion implements \Rector\Composer\Contract\VersionAwareInterface
 {
     /**
@@ -23,7 +23,7 @@ final class ReplacePackageAndVersion implements \Rector\Composer\Contract\Versio
     public function __construct(string $oldPackageName, string $newPackageName, string $version)
     {
         $this->version = $version;
-        \RectorPrefix20210828\Webmozart\Assert\Assert::notSame($oldPackageName, $newPackageName, 'Old and new package have to be different. If you want to only change package version, use ' . \Rector\Composer\Rector\ChangePackageVersionComposerRector::class);
+        \RectorPrefix20210829\Webmozart\Assert\Assert::notSame($oldPackageName, $newPackageName, 'Old and new package have to be different. If you want to only change package version, use ' . \Rector\Composer\Rector\ChangePackageVersionComposerRector::class);
         $this->oldPackageName = $oldPackageName;
         $this->newPackageName = $newPackageName;
     }

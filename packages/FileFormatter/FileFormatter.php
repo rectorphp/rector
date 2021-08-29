@@ -13,7 +13,7 @@ use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObject\Indent;
 use Rector\FileFormatter\ValueObject\NewLine;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
-use RectorPrefix20210828\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210829\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FileFormatter
 {
     /**
@@ -31,7 +31,7 @@ final class FileFormatter
     /**
      * @param FileFormatterInterface[] $fileFormatters
      */
-    public function __construct(\Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \RectorPrefix20210828\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, array $fileFormatters = [])
+    public function __construct(\Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \RectorPrefix20210829\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, array $fileFormatters = [])
     {
         $this->editorConfigParser = $editorConfigParser;
         $this->parameterProvider = $parameterProvider;
