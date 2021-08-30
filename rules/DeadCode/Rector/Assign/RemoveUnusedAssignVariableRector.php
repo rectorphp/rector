@@ -103,6 +103,12 @@ CODE_SAMPLE
         if (!$this->isPreviousVariablePartOfOverridingAssign($node) && ($this->isVariableTypeInScope($node) || $this->exprUsedInNextNodeAnalyzer->isUsed($node->var))) {
             return null;
         }
+        // @see https://github.com/rectorphp/rector/issues/6655
+        // verify current statement is a Node before removing or use its Assign Expr
+        $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!$currentStatement instanceof \PhpParser\Node) {
+            return null;
+        }
         // is scalar assign? remove whole
         if (!$this->sideEffectNodeDetector->detect($node->expr)) {
             $this->removeNode($node);
