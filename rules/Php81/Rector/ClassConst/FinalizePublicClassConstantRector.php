@@ -55,9 +55,11 @@ CODE_SAMPLE
         if ($node->isPrivate()) {
             return null;
         }
+
         if ($node->isProtected()) {
             return null;
         }
+
         if ($node->isFinal()) {
             return null;
         }

@@ -60,6 +60,7 @@ CODE_SAMPLE
         if (! $nodeIf instanceof Assign) {
             return null;
         }
+
         if (! $nodeElse instanceof Assign) {
             return null;
         }
@@ -69,6 +70,7 @@ CODE_SAMPLE
         if (! $nodeIfVar instanceof Variable) {
             return null;
         }
+
         if (! $nodeElseVar instanceof Variable) {
             return null;
         }

@@ -133,6 +133,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         if (! $classLike instanceof Class_) {
             return false;
         }
+
         return $classLike->isAbstract();
     }
 

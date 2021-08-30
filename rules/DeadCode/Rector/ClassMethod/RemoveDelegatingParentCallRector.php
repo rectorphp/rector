@@ -106,6 +106,7 @@ CODE_SAMPLE
         if (! $classLike instanceof Class_) {
             return true;
         }
+
         return $classLike->extends === null;
     }
 

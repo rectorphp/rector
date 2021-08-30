@@ -47,12 +47,15 @@ final class DeadParamTagValueNodeAnalyzer
         ], true)) {
             return false;
         }
+
         if (! $paramTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             return $paramTagValueNode->description === '';
         }
+
         if (! $this->hasGenericType($paramTagValueNode->type)) {
             return $paramTagValueNode->description === '';
         }
+
         return false;
     }
 

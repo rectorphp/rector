@@ -37,6 +37,7 @@ final class ImplodeAnalyzer
         if (! $firstArgumentValue instanceof String_) {
             return true;
         }
+
         return $firstArgumentValue->value === '","';
     }
 }

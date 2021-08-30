@@ -150,9 +150,11 @@ CODE_SAMPLE
             if (! is_string($token)) {
                 continue;
             }
+
             if (! str_contains($token, '_')) {
                 continue;
             }
+
             return true;
         }
 

@@ -124,6 +124,7 @@ CODE_SAMPLE
         if (! $mainMethodCall->var instanceof MethodCall) {
             return false;
         }
+
         if ($toBeRemovedMethodCall !== $mainMethodCall->var) {
             return false;
         }

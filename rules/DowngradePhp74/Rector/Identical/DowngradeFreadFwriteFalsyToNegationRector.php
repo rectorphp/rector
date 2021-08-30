@@ -73,12 +73,15 @@ CODE_SAMPLE
         if ($identical->left instanceof FuncCall && $this->isNames($identical->left, self::FUNC_FREAD_FWRITE)) {
             return $identical->right;
         }
+
         if (! $identical->right instanceof FuncCall) {
             return null;
         }
+
         if (! $this->isNames($identical->right, self::FUNC_FREAD_FWRITE)) {
             return null;
         }
+
         return $identical->left;
     }
 

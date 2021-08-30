@@ -134,6 +134,7 @@ CODE_SAMPLE
                 $switchCases[] = new Case_($matchArm->conds[0] ?? null, $stmts);
             }
         }
+
         return $switchCases;
     }
 

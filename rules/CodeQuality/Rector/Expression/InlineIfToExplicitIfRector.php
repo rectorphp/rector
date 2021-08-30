@@ -79,9 +79,11 @@ CODE_SAMPLE
         if ($node->expr instanceof BooleanAnd) {
             return $this->processExplicitIf($node);
         }
+
         if ($node->expr instanceof BooleanOr) {
             return $this->processExplicitIf($node);
         }
+
         return null;
     }
 

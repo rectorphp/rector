@@ -18,6 +18,7 @@ final class ConstFetchAnalyzer
         if ($this->isTrue($node)) {
             return true;
         }
+
         return $this->isFalse($node);
     }
 

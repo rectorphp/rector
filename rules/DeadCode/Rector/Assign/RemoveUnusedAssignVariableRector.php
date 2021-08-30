@@ -126,6 +126,7 @@ CODE_SAMPLE
         if (! $parentIf instanceof If_) {
             return (bool) $this->nextVariableUsageNodeFinder->find($assign);
         }
+
         if (! $parentIf->else instanceof Else_) {
             return (bool) $this->nextVariableUsageNodeFinder->find($assign);
         }

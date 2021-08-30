@@ -62,9 +62,11 @@ final class UselessIfCondBeforeForeachDetector
         if (! $previousParam instanceof Param) {
             return true;
         }
+
         if ($this->paramAnalyzer->isNullable($previousParam)) {
             return false;
         }
+
         return ! $this->paramAnalyzer->hasDefaultNull($previousParam);
     }
 

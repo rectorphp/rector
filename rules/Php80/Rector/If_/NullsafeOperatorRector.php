@@ -228,6 +228,7 @@ CODE_SAMPLE
         if ($this->shouldProcessAssignInCurrentNode($assign, $nextNode)) {
             return $this->processAssignInCurrentNode($assign, $prevExpression, $nextNode, $isStartIf);
         }
+
         return $this->processAssignMayInNextNode($nextNode);
     }
 
@@ -236,12 +237,15 @@ CODE_SAMPLE
         if (! property_exists($assign->expr, self::NAME)) {
             return false;
         }
+
         if (! property_exists($nextNode, 'expr')) {
             return false;
         }
+
         if (! property_exists($nextNode->expr, self::NAME)) {
             return false;
         }
+
         return ! $this->valueResolver->isNull($nextNode->expr);
     }
 
@@ -302,9 +306,11 @@ CODE_SAMPLE
         if (! $nextNode instanceof Expression) {
             return null;
         }
+
         if (! $nextNode->expr instanceof Assign) {
             return null;
         }
+
         $mayNextIf = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
         if (! $mayNextIf instanceof If_) {
             return null;
@@ -423,6 +429,7 @@ CODE_SAMPLE
         if (! $this->canTernaryReturnNull($ternary)) {
             return true;
         }
+
         if ($ternary->cond instanceof Identical) {
             return ! $this->hasNullComparison($ternary->cond);
         }

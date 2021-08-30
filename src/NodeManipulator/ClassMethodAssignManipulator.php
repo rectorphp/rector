@@ -239,6 +239,7 @@ final class ClassMethodAssignManipulator
         if ($this->isFuncCallWithReferencedArgument($node, $variable)) {
             return true;
         }
+
         return $this->isConstructorWithReference($node, $argumentPosition);
     }
 
@@ -310,6 +311,7 @@ final class ClassMethodAssignManipulator
                 if ($parameterPosition !== $argumentPosition) {
                     continue;
                 }
+
                 return $parameterReflection->passedByReference()
                     ->yes();
             }

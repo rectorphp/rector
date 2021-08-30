@@ -149,9 +149,11 @@ final class ReturnTypeAlreadyAddedChecker
         if ($type instanceof IterableType) {
             return true;
         }
+
         if (! $type instanceof ObjectType) {
             return false;
         }
+
         return $type->getClassName() === Iterator::class;
     }
 }

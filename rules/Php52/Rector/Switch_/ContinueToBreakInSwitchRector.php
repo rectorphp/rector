@@ -107,12 +107,15 @@ CODE_SAMPLE
         if (! $staticType instanceof ConstantType) {
             return $continue;
         }
+
         if (! $staticType instanceof ConstantIntegerType) {
             return $continue;
         }
+
         if ($staticType->getValue() > 1) {
             return $continue;
         }
+
         return new Break_();
     }
 }

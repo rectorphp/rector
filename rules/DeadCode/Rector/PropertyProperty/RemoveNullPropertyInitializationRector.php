@@ -77,6 +77,7 @@ CODE_SAMPLE
         if (strtolower((string) $defaultValueNode->name) !== 'null') {
             return null;
         }
+
         $nodeNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
 
         if ($nodeNode instanceof NullableType) {

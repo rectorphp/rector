@@ -100,9 +100,11 @@ CODE_SAMPLE
         if ($node->expr instanceof MethodCall) {
             return $this->refactorIfHasReturnTypeWasCalled($node->expr);
         }
+
         if (! $node->expr instanceof Variable) {
             return null;
         }
+
         if (! $this->isObjectType($node->expr, new ObjectType('ReflectionType'))) {
             return null;
         }
@@ -125,9 +127,11 @@ CODE_SAMPLE
             if (! $type instanceof ObjectType) {
                 continue;
             }
+
             if ($type->getClassName() !== 'ReflectionType') {
                 continue;
             }
+
             return true;
         }
 
@@ -180,9 +184,11 @@ CODE_SAMPLE
             if (! $variableName) {
                 return;
             }
+
             if (! $methodName) {
                 return;
             }
+
             $this->callsByVariable[$variableName][] = $methodName;
         }
     }

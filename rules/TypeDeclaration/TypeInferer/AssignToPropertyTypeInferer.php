@@ -96,6 +96,7 @@ final class AssignToPropertyTypeInferer
             if ($isAssignedInConstructor) {
                 return false;
             }
+
             return ! $hasPropertyDefaultValue;
         }
 

@@ -101,6 +101,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
+
         if ($node->stmts === []) {
             return null;
         }

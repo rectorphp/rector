@@ -163,9 +163,11 @@ CODE_SAMPLE
             if (! $parent instanceof Node) {
                 return;
             }
+
             if ($parent instanceof FunctionLike) {
                 return;
             }
+
             $nextNode = $parent->getAttribute(AttributeKey::NEXT_NODE);
             $this->replaceNextUsageVariable($parent, $nextNode, $oldVariableName, $newVariableName);
 

@@ -57,9 +57,11 @@ final class NodeNameResolver
         if ($node instanceof MethodCall) {
             return false;
         }
+
         if ($node instanceof StaticCall) {
             return false;
         }
+
         $nodes = is_array($node) ? $node : [$node];
 
         foreach ($nodes as $node) {
@@ -80,6 +82,7 @@ final class NodeNameResolver
         if ($node instanceof MethodCall) {
             return false;
         }
+
         if ($node instanceof StaticCall) {
             return false;
         }

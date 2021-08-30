@@ -74,6 +74,7 @@ CODE_SAMPLE
         if ($node->stmts === []) {
             return null;
         }
+
         if ($node->stmts === null) {
             return null;
         }

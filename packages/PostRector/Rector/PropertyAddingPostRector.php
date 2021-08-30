@@ -38,9 +38,11 @@ final class PropertyAddingPostRector extends AbstractPostRector
         if (! $node instanceof Class_) {
             return null;
         }
+
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
+
         $this->addConstants($node);
         $this->addProperties($node);
         $this->addPropertiesWithoutConstructor($node);

@@ -68,6 +68,7 @@ CODE_SAMPLE
         if (! $this->isName($classMethod, MethodName::SET_STATE)) {
             return true;
         }
+
         return $classMethod->isStatic();
     }
 }

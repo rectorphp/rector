@@ -88,9 +88,11 @@ final class GenericClassStringTypeNormalizer
         if ($classReflection->isBuiltIn()) {
             return new GenericClassStringType(new ObjectType($value));
         }
+
         if (str_contains($value, '\\')) {
             return new GenericClassStringType(new ObjectType($value));
         }
+
         return new StringType();
     }
 }

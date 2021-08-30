@@ -143,9 +143,11 @@ CODE_SAMPLE
             if (! $singleClassConst->value instanceof ConstFetch) {
                 continue;
             }
+
             if (! $this->isName($singleClassConst->value, self::FLAG)) {
                 continue;
             }
+
             $classConst->consts[$key]->value = new LNumber(512);
             return $classConst;
         }

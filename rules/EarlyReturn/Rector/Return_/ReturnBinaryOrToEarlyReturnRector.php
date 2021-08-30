@@ -120,9 +120,11 @@ CODE_SAMPLE
             if ($expr instanceof BooleanAnd) {
                 return [];
             }
+
             if (! $expr instanceof BooleanOr) {
                 continue;
             }
+
             return [];
         }
 

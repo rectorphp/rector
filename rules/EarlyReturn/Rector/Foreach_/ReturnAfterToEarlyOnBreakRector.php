@@ -106,6 +106,7 @@ CODE_SAMPLE
             if (! $parent instanceof Assign) {
                 return false;
             }
+
             return $this->nodeComparator->areNodesEqual($node, $assignVariable);
         });
 

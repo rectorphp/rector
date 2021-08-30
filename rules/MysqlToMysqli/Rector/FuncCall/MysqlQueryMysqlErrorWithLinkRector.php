@@ -170,6 +170,7 @@ CODE_SAMPLE
         if ($this->isUnionTypeWithResourceSubType($staticType, $resourceType)) {
             return true;
         }
+
         if (! $expr instanceof Variable) {
             return false;
         }

@@ -61,6 +61,7 @@ CODE_SAMPLE
 
             return null;
         }
+
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         if ($parentNode instanceof Expression) {

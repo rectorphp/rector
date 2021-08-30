@@ -135,6 +135,7 @@ CODE_SAMPLE
         if ($listNode->items[0] !== null) {
             return false;
         }
+
         return $listNode->items[1] === null;
     }
 }

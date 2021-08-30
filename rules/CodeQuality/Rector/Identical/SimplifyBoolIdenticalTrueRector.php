@@ -70,12 +70,15 @@ CODE_SAMPLE
         ) && ! $this->valueResolver->isTrueOrFalse($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
+
         if (! $this->nodeTypeResolver->isStaticType($node->right, BooleanType::class)) {
             return null;
         }
+
         if ($this->valueResolver->isTrueOrFalse($node->right)) {
             return null;
         }
+
         return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
     }
 

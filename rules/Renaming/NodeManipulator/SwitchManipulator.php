@@ -20,10 +20,12 @@ final class SwitchManipulator
             if (! $node instanceof Break_) {
                 continue;
             }
+
             if (! $node->num instanceof LNumber || $node->num->value === 1) {
                 unset($stmts[$key]);
                 continue;
             }
+
             $node->num = $node->num->value === 2 ? null : new LNumber($node->num->value - 1);
         }
 

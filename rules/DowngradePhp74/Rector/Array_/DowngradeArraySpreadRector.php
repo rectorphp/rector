@@ -97,6 +97,7 @@ CODE_SAMPLE
         if (! $this->shouldRefactor($node)) {
             return null;
         }
+
         return $this->refactorNode($node);
     }
 
@@ -141,6 +142,7 @@ CODE_SAMPLE
                     // If it is a not variable, transform it to a variable
                     $item->value = $this->createVariableFromNonVariable($array, $item, $position);
                 }
+
                 if ($accumulatedItems !== []) {
                     // If previous items were in the new array, add them first
                     $newItems[] = $this->createArrayItem($accumulatedItems);
@@ -159,6 +161,7 @@ CODE_SAMPLE
         if ($accumulatedItems !== []) {
             $newItems[] = $this->createArrayItem($accumulatedItems);
         }
+
         return $newItems;
     }
 
@@ -175,6 +178,7 @@ CODE_SAMPLE
                 $item->unpack = false;
                 return $this->createArgFromSpreadArrayItem($nodeScope, $item);
             }
+
             return new Arg($item);
         }, $items));
     }

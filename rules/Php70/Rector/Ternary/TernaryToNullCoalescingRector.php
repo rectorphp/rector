@@ -60,9 +60,11 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
             // not a match
             return null;
         }
+
         if ($checkedNode === null) {
             return null;
         }
+
         if (! $fallbackNode instanceof Expr) {
             return null;
         }
@@ -72,6 +74,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
             return new Coalesce($checkedNode, $fallbackNode);
         }
+
         if ($this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)) {
             return new Coalesce($checkedNode, $fallbackNode);
         }
@@ -96,6 +99,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if (! isset($issetNode->vars[0])) {
             return null;
         }
+
         if (count($issetNode->vars) > 1) {
             return null;
         }

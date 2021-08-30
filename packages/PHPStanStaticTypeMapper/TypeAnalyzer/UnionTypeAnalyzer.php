@@ -106,15 +106,19 @@ final class UnionTypeAnalyzer
             if ($type instanceof StringType && ! $type instanceof ConstantStringType) {
                 continue;
             }
+
             if ($type instanceof FloatType) {
                 continue;
             }
+
             if ($type instanceof IntegerType) {
                 continue;
             }
+
             if ($type instanceof BooleanType) {
                 continue;
             }
+
             return false;
         }
 

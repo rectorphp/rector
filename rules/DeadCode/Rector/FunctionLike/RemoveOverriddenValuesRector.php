@@ -178,6 +178,7 @@ CODE_SAMPLE
                 if ($comments !== null) {
                     continue;
                 }
+
                 $nodesIsName = $nodes->isName($assignedVariableName);
 
                 if (! $nodesIsName) {

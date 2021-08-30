@@ -132,9 +132,11 @@ CODE_SAMPLE
             if (! $this->isName($useUse->name, $completeImportForPartialAnnotation->getUse())) {
                 continue;
             }
+
             if ((string) $useUse->alias !== $completeImportForPartialAnnotation->getAlias()) {
                 continue;
             }
+
             return $namespace;
         }
 

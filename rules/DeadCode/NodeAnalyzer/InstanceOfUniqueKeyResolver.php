@@ -20,6 +20,7 @@ final class InstanceOfUniqueKeyResolver
         if (! $instanceof->expr instanceof Variable) {
             return null;
         }
+
         $variableName = $this->nodeNameResolver->getName($instanceof->expr);
         if ($variableName === null) {
             return null;

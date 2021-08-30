@@ -86,6 +86,7 @@ final class NamedToUnnamedArgs
             if (in_array($i, $keys, true)) {
                 continue;
             }
+
             if ($i > $highestParameterPosition) {
                 continue;
             }

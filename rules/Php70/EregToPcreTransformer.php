@@ -92,6 +92,7 @@ final class EregToPcreTransformer
         } elseif (isset($this->cache[$content])) {
             return $this->cache[$content];
         }
+
         [$r, $i] = $this->_ere2pcre($content, 0);
         if ($i !== strlen($content)) {
             throw new InvalidEregException('unescaped metacharacter ")"');
@@ -127,9 +128,11 @@ final class EregToPcreTransformer
                     $cls .= '^';
                     ++$i;
                 }
+
                 if ($i >= $l) {
                     throw new InvalidEregException('"[" does not have a matching "]"');
                 }
+
                 $start = true;
 
                 $i = (int) $i;
@@ -138,6 +141,7 @@ final class EregToPcreTransformer
                 if ($i >= $l) {
                     throw new InvalidEregException('"[" does not have a matching "]"');
                 }
+
                 $r[$rr] .= '[' . $cls . ']';
             } elseif ($char === ')') {
                 break;
@@ -159,6 +163,7 @@ final class EregToPcreTransformer
                 if ($r[$rr] === '') {
                     throw new InvalidEregException('empty branch');
                 }
+
                 $r[] = '';
                 ++$rr;
                 ++$i;
@@ -167,11 +172,13 @@ final class EregToPcreTransformer
                 if (++$i >= $l) {
                     throw new InvalidEregException('an invalid escape sequence at the end');
                 }
+
                 $r[$rr] .= $this->_ere2pcre_escape($content[$i]);
             } else {
                 // including ] and } which are allowed as a literal character
                 $r[$rr] .= $this->_ere2pcre_escape($char);
             }
+
             ++$i;
             if ($i >= $l) {
                 break;
@@ -210,6 +217,7 @@ final class EregToPcreTransformer
             if ($ii >= $l || $content[$ii] !== ')') {
                 throw new InvalidEregException('"(" does not have a matching ")"');
             }
+
             $r[$rr] .= '(' . $t . ')';
             $i = $ii;
         }
@@ -232,6 +240,7 @@ final class EregToPcreTransformer
                 if ($a === '-' && ! $start && ! ($i < $l && $s[$i] === ']')) {
                     throw new InvalidEregException('"-" is invalid for the start character in the brackets');
                 }
+
                 if ($i < $l && $s[$i] === '-') {
                     $b = $s[++$i];
                     ++$i;
@@ -242,11 +251,13 @@ final class EregToPcreTransformer
                         $errorMessage = sprintf('an invalid character range %d-%d"', (int) $a, (int) $b);
                         throw new InvalidEregException($errorMessage);
                     }
+
                     $cls .= $this->_ere2pcre_escape($a) . '-' . $this->_ere2pcre_escape($b);
                 } else {
                     $cls .= $this->_ere2pcre_escape($a);
                 }
             }
+
             $start = false;
         } while ($i < $l && $s[$i] !== ']');
 
@@ -318,6 +329,7 @@ final class EregToPcreTransformer
         if (! isset(self::CHARACTER_CLASS_MAP[$ccls])) {
             throw new InvalidEregException('an invalid or unsupported character class [' . $ccls . ']');
         }
+
         $cls .= self::CHARACTER_CLASS_MAP[$ccls];
         $i = $ii + 1;
 

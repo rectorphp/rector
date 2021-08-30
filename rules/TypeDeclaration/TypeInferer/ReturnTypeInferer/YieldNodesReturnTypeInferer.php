@@ -53,6 +53,7 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
             if ($resolvedType instanceof MixedType) {
                 continue;
             }
+
             $types[] = $resolvedType;
         }
 

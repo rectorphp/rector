@@ -196,12 +196,15 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return true;
         }
+
         if (! $node instanceof ClassMethod) {
             return $this->isUnionPossibleReturnsVoid($node);
         }
+
         if (! $node->isMagic()) {
             return $this->isUnionPossibleReturnsVoid($node);
         }
+
         return true;
     }
 

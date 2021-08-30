@@ -38,6 +38,7 @@ final class ClassConstFetchNameResolver implements NodeNameResolverInterface
         if ($class === null) {
             return null;
         }
+
         if ($name === null) {
             return null;
         }

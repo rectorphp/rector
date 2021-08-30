@@ -101,6 +101,7 @@ CODE_SAMPLE
         if (! $this->nodeComparator->areNodesEqual($arrayDimFetch->var, $valuesExpr)) {
             return false;
         }
+
         return $this->nodeComparator->areNodesEqual($arrayDimFetch->dim, $keyExpr);
     }
 }

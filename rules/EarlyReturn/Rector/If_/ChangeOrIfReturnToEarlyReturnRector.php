@@ -117,6 +117,7 @@ CODE_SAMPLE
 
             $expr = $expr->right;
         }
+
         return $ifs + [$this->createIf($expr, $return)];
     }
 

@@ -25,9 +25,11 @@ final class ConditionInverter
             if (! $inversedCondition instanceof BinaryOp) {
                 return new BooleanNot($expr);
             }
+
             if ($inversedCondition instanceof BooleanAnd) {
                 return new BooleanNot($expr);
             }
+
             return $inversedCondition;
         }
 

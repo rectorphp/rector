@@ -100,6 +100,7 @@ CODE_SAMPLE
         if ($singularValueVarName === $exprName) {
             return null;
         }
+
         if ($singularValueVarName === $valueVarName) {
             return null;
         }
@@ -135,6 +136,7 @@ CODE_SAMPLE
             if (! $this->isName($node, $valueVarName)) {
                 return null;
             }
+
             return new Variable($singularValueVarName);
         });
 

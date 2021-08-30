@@ -25,6 +25,7 @@ use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonySt
 use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
+use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
@@ -76,4 +77,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDoubleUnderscoreInMethodNameRector::class);
     $services->set(PostIncDecToPreIncDecRector::class);
     $services->set(UnSpreadOperatorRector::class);
+    $services->set(NewlineAfterStatementRector::class);
 };

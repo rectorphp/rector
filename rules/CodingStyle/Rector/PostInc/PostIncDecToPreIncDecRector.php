@@ -76,15 +76,19 @@ CODE_SAMPLE
         if ($parentNode instanceof ArrayDimFetch && $this->nodeComparator->areNodesEqual($parentNode->dim, $node)) {
             return $this->processPreArray($node, $parentNode);
         }
+
         if (! $parentNode instanceof For_) {
             return null;
         }
+
         if (count($parentNode->loop) !== 1) {
             return null;
         }
+
         if (! $this->nodeComparator->areNodesEqual($parentNode->loop[0], $node)) {
             return null;
         }
+
         return $this->processPreFor($node, $parentNode);
     }
 
@@ -93,6 +97,7 @@ CODE_SAMPLE
         if (! $node instanceof Node) {
             return false;
         }
+
         return $node instanceof Expression;
     }
 

@@ -115,9 +115,11 @@ final class PropertyFetchFinder
             if ($node instanceof PropertyFetch) {
                 return $this->nodeNameResolver->isName($node, $propertyName);
             }
+
             if ($node instanceof StaticPropertyFetch) {
                 return $this->nodeNameResolver->isName($node, $propertyName);
             }
+
             return false;
         });
 

@@ -171,12 +171,15 @@ CODE_SAMPLE
                 if (! $node instanceof Assign) {
                     return false;
                 }
+
                 if ($node->var instanceof Variable) {
                     return $this->nodeNameResolver->isName($node->var, $globalVariableName);
                 }
+
                 if ($node->var instanceof PropertyFetch) {
                     return $this->nodeNameResolver->isName($node->var, $globalVariableName);
                 }
+
                 return false;
             });
 

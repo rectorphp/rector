@@ -131,9 +131,11 @@ CODE_SAMPLE
             $this->removeNode($parentNode);
             return null;
         }
+
         if ($rightSideRemovableParamsCount > 0) {
             array_splice($node->items, $nodeItemsCount - $rightSideRemovableParamsCount);
         }
+
         return $node;
     }
 
@@ -144,12 +146,15 @@ CODE_SAMPLE
         if (! $parentNode instanceof Assign) {
             return false;
         }
+
         if ($parentNode->var !== $node) {
             return false;
         }
+
         if (! $parentNode->expr instanceof Variable) {
             return false;
         }
+
         return $this->hasAnyItemByRef($node->items);
     }
 
@@ -184,6 +189,7 @@ CODE_SAMPLE
             // Item not by reference. Reach the end
             return $count;
         }
+
         return $count;
     }
 
@@ -203,6 +209,7 @@ CODE_SAMPLE
             if (! $listItem instanceof ArrayItem) {
                 continue;
             }
+
             if ($listItem->value instanceof Variable && ! $listItem->byRef) {
                 continue;
             }
@@ -237,6 +244,7 @@ CODE_SAMPLE
                 )
             );
         }
+
         return $newNodes;
     }
 
@@ -272,9 +280,11 @@ CODE_SAMPLE
         if ($arrayItem->key instanceof String_) {
             return $arrayItem->key->value;
         }
+
         if ($arrayItem->key instanceof LNumber) {
             return $arrayItem->key->value;
         }
+
         return $position;
     }
 
@@ -293,6 +303,7 @@ CODE_SAMPLE
             $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
             $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
         }
+
         $dim = BuilderHelpers::normalizeValue($arrayIndex);
         $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
         return new AssignRef($assignVariable, $arrayDimFetch);
@@ -339,9 +350,11 @@ CODE_SAMPLE
             // $condition === self::ANY
             return $this->hasAnyItemByRef($nestedList->items);
         }
+
         if (! $arrayItem->value instanceof Variable) {
             return false;
         }
+
         return $arrayItem->byRef;
     }
 }

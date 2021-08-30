@@ -105,6 +105,7 @@ CODE_SAMPLE
         if ($countInCond === null) {
             return null;
         }
+
         if ($variableName === null) {
             return null;
         }

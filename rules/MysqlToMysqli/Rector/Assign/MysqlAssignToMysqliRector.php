@@ -142,11 +142,9 @@ CODE_SAMPLE
 
     private function processMysqlFetchField(Assign $assign, FuncCall $funcCall): Assign
     {
-        if (isset($funcCall->args[1])) {
-            $funcCall->name = new Name('mysqli_fetch_field_direct');
-        } else {
-            $funcCall->name = new Name('mysqli_fetch_field');
-        }
+        $funcCall->name = isset($funcCall->args[1]) ? new Name('mysqli_fetch_field_direct') : new Name(
+            'mysqli_fetch_field'
+        );
 
         return $assign;
     }
@@ -180,6 +178,7 @@ CODE_SAMPLE
                 if ($parentNode instanceof PropertyFetch) {
                     continue;
                 }
+
                 if ($parentNode instanceof StaticPropertyFetch) {
                     continue;
                 }

@@ -72,12 +72,15 @@ final class ArrayTypeAnalyzer
             if ($intersectionNodeType instanceof ArrayType) {
                 continue;
             }
+
             if ($intersectionNodeType instanceof HasOffsetType) {
                 continue;
             }
+
             if ($intersectionNodeType instanceof NonEmptyArrayType) {
                 continue;
             }
+
             return false;
         }
 
@@ -98,6 +101,7 @@ final class ArrayTypeAnalyzer
         if ($classLike instanceof Interface_) {
             return false;
         }
+
         if ($classLike === null) {
             return false;
         }
@@ -119,9 +123,11 @@ final class ArrayTypeAnalyzer
         } else {
             $propertyOwnerStaticType = $this->nodeTypeResolver->resolve($node->class);
         }
+
         if ($propertyOwnerStaticType instanceof ThisType) {
             return false;
         }
+
         return $propertyOwnerStaticType instanceof TypeWithClassName;
     }
 }

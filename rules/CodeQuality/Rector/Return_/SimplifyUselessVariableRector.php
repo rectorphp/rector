@@ -134,6 +134,7 @@ CODE_SAMPLE
         if (! $previousExpression instanceof Node) {
             return true;
         }
+
         if (! $previousExpression instanceof Expression) {
             return true;
         }
@@ -179,9 +180,11 @@ CODE_SAMPLE
         if (! $prePreviousExpression instanceof Expression) {
             return false;
         }
+
         if (! $prePreviousExpression->expr instanceof AssignOp) {
             return false;
         }
+
         return $this->nodeComparator->areNodesEqual($prePreviousExpression->expr->var, $previousNode->var);
     }
 }

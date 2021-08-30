@@ -96,6 +96,7 @@ final class PropertyFetchByMethodAnalyzer
         if (! $this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return false;
         }
+
         return $this->isPropertyChanging($classMethod, $propertyName);
     }
 

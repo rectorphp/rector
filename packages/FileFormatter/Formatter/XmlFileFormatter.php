@@ -126,9 +126,11 @@ final class XmlFileFormatter implements FileFormatterInterface
         if ($this->isOpeningTag($part)) {
             ++$this->depth;
         }
+
         if ($this->isClosingCdataTag($part)) {
             $this->preserveWhitespace = false;
         }
+
         if ($this->isOpeningCdataTag($part)) {
             $this->preserveWhitespace = true;
         }

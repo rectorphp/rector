@@ -115,6 +115,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
             return $parentNodeScope;
         }
+
         return null;
     }
 }

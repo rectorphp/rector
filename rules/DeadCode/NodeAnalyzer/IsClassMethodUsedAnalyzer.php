@@ -164,6 +164,7 @@ final class IsClassMethodUsedAnalyzer
             if (! $method instanceof ClassMethod) {
                 continue;
             }
+
             return true;
         }
 

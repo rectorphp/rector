@@ -87,6 +87,7 @@ final class PregMatchTypeCorrector
             if (! $node instanceof Variable) {
                 return false;
             }
+
             return $node->name === $variable->name;
         });
     }

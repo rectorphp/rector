@@ -55,12 +55,15 @@ final class SpacingAwareCallableTypeNode extends CallableTypeNode implements Str
         if ($parameterTypeString !== '') {
             return '(' . $parameterTypeString . ')';
         }
+
         if ($returnTypeAsString === 'mixed') {
             return $parameterTypeString;
         }
+
         if ($returnTypeAsString === '') {
             return $parameterTypeString;
         }
+
         return '()';
     }
 
@@ -69,9 +72,11 @@ final class SpacingAwareCallableTypeNode extends CallableTypeNode implements Str
         if ($returnTypeAsString !== 'mixed') {
             return ':' . $returnTypeAsString;
         }
+
         if ($parameterTypeString !== '') {
             return ':' . $returnTypeAsString;
         }
+
         return '';
     }
 }

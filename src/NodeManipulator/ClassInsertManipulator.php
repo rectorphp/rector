@@ -34,6 +34,7 @@ final class ClassInsertManipulator
         if ($this->isSuccessToInsertBeforeFirstMethod($class, $stmt)) {
             return;
         }
+
         if ($this->isSuccessToInsertAfterLastProperty($class, $stmt)) {
             return;
         }

@@ -87,6 +87,7 @@ final class MatchSwitchAnalyzer
             if ($matchArm->conds === null) {
                 return true;
             }
+
             if ($matchArm->conds === []) {
                 return true;
             }

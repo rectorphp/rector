@@ -78,6 +78,7 @@ CODE_SAMPLE
         if (! $parentOfNextNode instanceof ArrayDimFetch) {
             return null;
         }
+
         if (! $this->nodeComparator->areNodesEqual($parentOfNextNode->dim, $nextNode)) {
             return null;
         }

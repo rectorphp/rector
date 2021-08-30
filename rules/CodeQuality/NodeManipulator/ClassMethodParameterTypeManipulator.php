@@ -90,6 +90,7 @@ final class ClassMethodParameterTypeManipulator
                 $phpDocType = new UnionType([$phpDocType, new NullType()]);
             }
         }
+
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $phpDocType, $param, $paramName);
     }
@@ -130,6 +131,7 @@ final class ClassMethodParameterTypeManipulator
         if ($paramName === null) {
             return;
         }
+
         if ($this->shouldSkipMethodCallRefactor($paramName, $methodCall, $methodsReturningClassInstance)) {
             return;
         }

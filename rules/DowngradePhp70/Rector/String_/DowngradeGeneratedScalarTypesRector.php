@@ -166,6 +166,7 @@ CODE_SAMPLE
         foreach ($this->phpRectors as $phpRector) {
             $nodeTraverser->addVisitor($phpRector);
         }
+
         return $nodeTraverser;
     }
 }

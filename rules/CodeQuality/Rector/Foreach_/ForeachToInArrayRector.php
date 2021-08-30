@@ -144,6 +144,7 @@ CODE_SAMPLE
         if (! $nextNode instanceof Node) {
             return true;
         }
+
         if (! $nextNode instanceof Return_) {
             return true;
         }
@@ -172,6 +173,7 @@ CODE_SAMPLE
         if ($ifCondition instanceof Identical) {
             return false;
         }
+
         return ! $ifCondition instanceof Equal;
     }
 
