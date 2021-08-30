@@ -513,7 +513,7 @@ final class NodeFactory
         } elseif (\is_array($item)) {
             $arrayItem = new \PhpParser\Node\Expr\ArrayItem($this->createArray($item));
         }
-        if ($item instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        if ($item === null || $item instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             $itemValue = \PhpParser\BuilderHelpers::normalizeValue($item);
             $arrayItem = new \PhpParser\Node\Expr\ArrayItem($itemValue);
         }

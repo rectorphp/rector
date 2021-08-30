@@ -141,6 +141,6 @@ class MetadataBag implements \RectorPrefix20210830\Symfony\Component\HttpFoundat
     {
         $timeStamp = \time();
         $this->meta[self::CREATED] = $this->meta[self::UPDATED] = $this->lastUsed = $timeStamp;
-        $this->meta[self::LIFETIME] = $lifetime ?? \ini_get('session.cookie_lifetime');
+        $this->meta[self::LIFETIME] = $lifetime ?? (int) \ini_get('session.cookie_lifetime');
     }
 }

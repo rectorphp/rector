@@ -23,6 +23,7 @@ class FilecontentFilterIterator extends \RectorPrefix20210830\Symfony\Component\
      *
      * @return bool true if the value should be kept, false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function accept()
     {
         if (!$this->matchRegexps && !$this->noMatchRegexps) {

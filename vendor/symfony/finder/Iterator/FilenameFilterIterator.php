@@ -23,6 +23,7 @@ class FilenameFilterIterator extends \RectorPrefix20210830\Symfony\Component\Fin
      *
      * @return bool true if the value should be kept, false otherwise
      */
+    #[\ReturnTypeWillChange]
     public function accept()
     {
         return $this->isAccepted($this->current()->getFilename());

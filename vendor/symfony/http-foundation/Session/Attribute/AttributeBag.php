@@ -114,6 +114,7 @@ class AttributeBag implements \RectorPrefix20210830\Symfony\Component\HttpFounda
      *
      * @return \ArrayIterator An \ArrayIterator instance
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->attributes);
@@ -123,6 +124,7 @@ class AttributeBag implements \RectorPrefix20210830\Symfony\Component\HttpFounda
      *
      * @return int The number of attributes
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return \count($this->attributes);

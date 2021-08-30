@@ -31,7 +31,6 @@ use RectorPrefix20210830\Symfony\Component\HttpKernel\Exception\HttpExceptionInt
 use RectorPrefix20210830\Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use RectorPrefix20210830\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20210830\Symfony\Component\HttpKernel\LegacyEventDispatcherProxy::class);
 \class_exists(\RectorPrefix20210830\Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent::class);
 \class_exists(\RectorPrefix20210830\Symfony\Component\HttpKernel\Event\ControllerEvent::class);
 \class_exists(\RectorPrefix20210830\Symfony\Component\HttpKernel\Event\ExceptionEvent::class);

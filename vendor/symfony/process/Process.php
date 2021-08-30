@@ -554,6 +554,7 @@ class Process implements \IteratorAggregate
      *
      * @return \Generator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator(int $flags = 0)
     {
         $this->readPipesForOutput(__FUNCTION__, \false);

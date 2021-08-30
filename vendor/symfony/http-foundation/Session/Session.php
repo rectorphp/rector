@@ -111,6 +111,7 @@ class Session implements \RectorPrefix20210830\Symfony\Component\HttpFoundation\
      *
      * @return \ArrayIterator An \ArrayIterator instance
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new \ArrayIterator($this->getAttributeBag()->all());
@@ -120,6 +121,7 @@ class Session implements \RectorPrefix20210830\Symfony\Component\HttpFoundation\
      *
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return \count($this->getAttributeBag()->all());

@@ -22,6 +22,7 @@ class Stream extends \RectorPrefix20210830\Symfony\Component\HttpFoundation\File
      *
      * @return int|false
      */
+    #[\ReturnTypeWillChange]
     public function getSize()
     {
         return \false;

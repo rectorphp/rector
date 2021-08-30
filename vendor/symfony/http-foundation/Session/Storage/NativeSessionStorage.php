@@ -77,7 +77,7 @@ class NativeSessionStorage implements \RectorPrefix20210830\Symfony\Component\Ht
      * name, "PHPSESSID"
      * referer_check, ""
      * serialize_handler, "php"
-     * use_strict_mode, "0"
+     * use_strict_mode, "1"
      * use_cookies, "1"
      * use_only_cookies, "1"
      * use_trans_sid, "0"
