@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210829\Nette\Utils;
+namespace RectorPrefix20210830\Nette\Utils;
 
-use RectorPrefix20210829\Nette;
+use RectorPrefix20210830\Nette;
 /**
  * Validation utilities.
  */
@@ -31,7 +31,7 @@ class Validators
         // pseudo-types
         'callable' => [self::class, 'isCallable'],
         'iterable' => 'is_iterable',
-        'list' => [\RectorPrefix20210829\Nette\Utils\Arrays::class, 'isList'],
+        'list' => [\RectorPrefix20210830\Nette\Utils\Arrays::class, 'isList'],
         'mixed' => [self::class, 'isMixed'],
         'none' => [self::class, 'isNone'],
         'number' => [self::class, 'isNumber'],
@@ -60,7 +60,7 @@ class Validators
         'type' => [self::class, 'isType'],
     ];
     /** @var array<string,callable> */
-    protected static $counters = ['string' => 'strlen', 'unicode' => [\RectorPrefix20210829\Nette\Utils\Strings::class, 'length'], 'array' => 'count', 'list' => 'count', 'alnum' => 'strlen', 'alpha' => 'strlen', 'digit' => 'strlen', 'lower' => 'strlen', 'space' => 'strlen', 'upper' => 'strlen', 'xdigit' => 'strlen'];
+    protected static $counters = ['string' => 'strlen', 'unicode' => [\RectorPrefix20210830\Nette\Utils\Strings::class, 'length'], 'array' => 'count', 'list' => 'count', 'alnum' => 'strlen', 'alpha' => 'strlen', 'digit' => 'strlen', 'lower' => 'strlen', 'space' => 'strlen', 'upper' => 'strlen', 'xdigit' => 'strlen'];
     /**
      * Verifies that the value is of expected types separated by pipe.
      * @param  mixed  $value
@@ -79,7 +79,7 @@ class Validators
             } elseif (\is_object($value)) {
                 $type .= ' ' . \get_class($value);
             }
-            throw new \RectorPrefix20210829\Nette\Utils\AssertionException("The {$label} expects to be {$expected}, {$type} given.");
+            throw new \RectorPrefix20210830\Nette\Utils\AssertionException("The {$label} expects to be {$expected}, {$type} given.");
         }
     }
     /**
@@ -93,7 +93,7 @@ class Validators
     public static function assertField($array, $key, $expected = null, $label = "item '%' in array") : void
     {
         if (!\array_key_exists($key, $array)) {
-            throw new \RectorPrefix20210829\Nette\Utils\AssertionException('Missing ' . \str_replace('%', $key, $label) . '.');
+            throw new \RectorPrefix20210830\Nette\Utils\AssertionException('Missing ' . \str_replace('%', $key, $label) . '.');
         } elseif ($expected) {
             static::assert($array[$key], $expected, \str_replace('%', $key, $label));
         }
@@ -127,7 +127,7 @@ class Validators
                     continue;
                 }
             } elseif ($type === 'pattern') {
-                if (\RectorPrefix20210829\Nette\Utils\Strings::match($value, '|^' . ($item[1] ?? '') . '$|D')) {
+                if (\RectorPrefix20210830\Nette\Utils\Strings::match($value, '|^' . ($item[1] ?? '') . '$|D')) {
                     return \true;
                 }
                 continue;
@@ -226,7 +226,7 @@ class Validators
      */
     public static function isList($value) : bool
     {
-        return \RectorPrefix20210829\Nette\Utils\Arrays::isList($value);
+        return \RectorPrefix20210830\Nette\Utils\Arrays::isList($value);
     }
     /**
      * Checks if the value is in the given range [min, max], where the upper or lower limit can be omitted (null).

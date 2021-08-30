@@ -105,11 +105,7 @@ CODE_SAMPLE
     }
     private function processMysqlFetchField(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\Assign
     {
-        if (isset($funcCall->args[1])) {
-            $funcCall->name = new \PhpParser\Node\Name('mysqli_fetch_field_direct');
-        } else {
-            $funcCall->name = new \PhpParser\Node\Name('mysqli_fetch_field');
-        }
+        $funcCall->name = isset($funcCall->args[1]) ? new \PhpParser\Node\Name('mysqli_fetch_field_direct') : new \PhpParser\Node\Name('mysqli_fetch_field');
         return $assign;
     }
     private function processMysqlResult(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall

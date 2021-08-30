@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
-use RectorPrefix20210829\Nette\Utils\Strings;
+use RectorPrefix20210830\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -219,6 +219,6 @@ final class BreakingVariableRenameGuard
         }
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
-        return (bool) \RectorPrefix20210829\Nette\Utils\Strings::match($currentName, self::AT_NAMING_REGEX . '');
+        return (bool) \RectorPrefix20210830\Nette\Utils\Strings::match($currentName, self::AT_NAMING_REGEX . '');
     }
 }

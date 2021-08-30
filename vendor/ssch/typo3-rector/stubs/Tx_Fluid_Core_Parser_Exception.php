@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210829;
+namespace RectorPrefix20210830;
 
 if (\class_exists('Tx_Fluid_Core_Parser_Exception')) {
     return;

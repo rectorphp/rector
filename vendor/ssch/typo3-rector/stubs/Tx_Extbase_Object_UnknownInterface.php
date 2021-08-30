@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210829;
+namespace RectorPrefix20210830;
 
 if (\interface_exists('Tx_Extbase_Object_UnknownInterface')) {
     return;
