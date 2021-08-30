@@ -595,7 +595,7 @@ final class NodeFactory
             $arrayItem = new ArrayItem($this->createArray($item));
         }
 
-        if ($item instanceof ClassConstFetch) {
+        if ($item === null || $item instanceof ClassConstFetch) {
             $itemValue = BuilderHelpers::normalizeValue($item);
             $arrayItem = new ArrayItem($itemValue);
         }
