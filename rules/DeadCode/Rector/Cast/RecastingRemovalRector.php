@@ -25,6 +25,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -121,7 +122,14 @@ CODE_SAMPLE
         /** @var PropertyFetch|StaticPropertyFetch $expr */
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
         if (! $phpPropertyReflection instanceof PhpPropertyReflection) {
-            return false;
+            $propertyType = $expr instanceof StaticPropertyFetch
+                ? $this->nodeTypeResolver->resolve($expr->class)
+                : $this->nodeTypeResolver->resolve($expr->var);
+
+            // need to UnionType check due rectify with RecastingRemovalRector + CountOnNullRector
+            // cause add (array) cast on $node->args
+            // on union $node types FuncCall|MethodCall|StaticCall
+            return ! $propertyType instanceof UnionType;
         }
 
         $nativeType = $phpPropertyReflection->getNativeType();
