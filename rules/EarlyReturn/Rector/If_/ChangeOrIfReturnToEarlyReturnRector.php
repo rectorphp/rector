@@ -82,14 +82,15 @@ CODE_SAMPLE
             return null;
         }
         $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
-            return null;
-        }
-        if ($nextNode instanceof \PhpParser\Node\Stmt\Return_ && $nextNode->expr === null) {
+        if ($this->shouldSkip($nextNode)) {
             return null;
         }
         /** @var Return_ $return */
         $return = $node->stmts[0];
+        // avoid repetitive ifs combined with other rules
+        if ($nextNode instanceof \PhpParser\Node\Stmt\Return_ && $this->nodeComparator->areNodesEqual($nextNode->expr, $return->expr)) {
+            return null;
+        }
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
         foreach ($ifs as $key => $if) {
             if ($key === 0) {
@@ -99,6 +100,13 @@ CODE_SAMPLE
         }
         $this->removeNode($node);
         return $node;
+    }
+    private function shouldSkip(?\PhpParser\Node $nextNode) : bool
+    {
+        if ($nextNode === null) {
+            return \true;
+        }
+        return $nextNode instanceof \PhpParser\Node\Stmt\Return_ && $nextNode->expr === null;
     }
     /**
      * @param If_[] $ifs
