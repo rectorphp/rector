@@ -28,7 +28,10 @@ class ComplexIfCondOrWithoutElseIf
 {
     public function run($a, $b, $c)
     {
-        if (($a && false === $b) || ! $c) {
+        if ($a && false === $b) {
+            return 'a';
+        }
+        if (! $c) {
             return 'a';
         }
         return 'b';

@@ -120,7 +120,7 @@ CODE_SAMPLE
     private function shouldSkip(?Node $nextNode): bool
     {
         if ($nextNode === null) {
-            return true;
+            return false;
         }
 
         return $nextNode instanceof Return_ && $nextNode->expr === null;
