@@ -11,15 +11,15 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer;
+use Rector\Nette\NodeAnalyzer\MethodCallArgMerger;
 use Rector\Nette\NodeAnalyzer\NetteClassAnalyzer;
 use Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer;
-use Rector\Nette\NodeAnalyzer\RightAssignTemplateRemover;
 use Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector;
 use Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer;
 use Rector\Nette\NodeFactory\RenderParameterArrayFactory;
+use Rector\Nette\ValueObject\TemplateParametersAssigns;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -48,22 +48,22 @@ final class TemplateMagicAssignToExplicitVariableArrayRector extends \Rector\Cor
      */
     private $conditionalTemplateAssignReplacer;
     /**
-     * @var \Rector\Nette\NodeAnalyzer\RightAssignTemplateRemover
-     */
-    private $rightAssignTemplateRemover;
-    /**
      * @var \Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer
      */
     private $templatePropertyParametersReplacer;
-    public function __construct(\Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector $templatePropertyAssignCollector, \Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer $renderMethodAnalyzer, \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer $netteClassAnalyzer, \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory, \Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer $conditionalTemplateAssignReplacer, \Rector\Nette\NodeAnalyzer\RightAssignTemplateRemover $rightAssignTemplateRemover, \Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer $templatePropertyParametersReplacer)
+    /**
+     * @var \Rector\Nette\NodeAnalyzer\MethodCallArgMerger
+     */
+    private $methodCallArgMerger;
+    public function __construct(\Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector $templatePropertyAssignCollector, \Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer $renderMethodAnalyzer, \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer $netteClassAnalyzer, \Rector\Nette\NodeFactory\RenderParameterArrayFactory $renderParameterArrayFactory, \Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer $conditionalTemplateAssignReplacer, \Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer $templatePropertyParametersReplacer, \Rector\Nette\NodeAnalyzer\MethodCallArgMerger $methodCallArgMerger)
     {
         $this->templatePropertyAssignCollector = $templatePropertyAssignCollector;
         $this->renderMethodAnalyzer = $renderMethodAnalyzer;
         $this->netteClassAnalyzer = $netteClassAnalyzer;
         $this->renderParameterArrayFactory = $renderParameterArrayFactory;
         $this->conditionalTemplateAssignReplacer = $conditionalTemplateAssignReplacer;
-        $this->rightAssignTemplateRemover = $rightAssignTemplateRemover;
         $this->templatePropertyParametersReplacer = $templatePropertyParametersReplacer;
+        $this->methodCallArgMerger = $methodCallArgMerger;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -122,9 +122,6 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (!$this->isNames($classMethod, ['render', 'render*'])) {
-            return \true;
-        }
         return !$this->netteClassAnalyzer->isInComponent($classMethod);
     }
     /**
@@ -146,13 +143,21 @@ CODE_SAMPLE
         if (!$array instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
+        $this->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use($templateParametersAssigns) {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return null;
+            }
+            foreach ($templateParametersAssigns->getTemplateParameterAssigns() as $alwaysTemplateParameterAssign) {
+                if ($this->nodeComparator->areNodesEqual($node->var, $alwaysTemplateParameterAssign->getAssignVar())) {
+                    $this->removeNode($node);
+                    return null;
+                }
+            }
+            return $this->replaceThisTemplateAssignWithVariable($templateParametersAssigns, $node);
+        });
         $this->conditionalTemplateAssignReplacer->processClassMethod($templateParametersAssigns);
         // has already an array?
-        $this->mergeOrApendArray($renderMethodCall, $array);
-        foreach ($templateParametersAssigns->getTemplateParameterAssigns() as $alwaysTemplateParameterAssign) {
-            $this->removeNode($alwaysTemplateParameterAssign->getAssign());
-        }
-        $this->rightAssignTemplateRemover->removeInClassMethod($classMethod);
+        $this->methodCallArgMerger->mergeOrApendArray($renderMethodCall, 1, $array);
         return $classMethod;
     }
     /**
@@ -174,17 +179,18 @@ CODE_SAMPLE
         }
         return $classMethod;
     }
-    private function mergeOrApendArray(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Array_ $array) : void
+    /**
+     * @return null|\PhpParser\Node\Expr\Assign
+     */
+    private function replaceThisTemplateAssignWithVariable(\Rector\Nette\ValueObject\TemplateParametersAssigns $templateParametersAssigns, \PhpParser\Node\Expr\Assign $assign)
     {
-        if (!isset($methodCall->args[1])) {
-            $methodCall->args[1] = new \PhpParser\Node\Arg($array);
-            return;
+        foreach ($templateParametersAssigns->getDefaultChangeableTemplateParameterAssigns() as $alwaysTemplateParameterAssign) {
+            if (!$this->nodeComparator->areNodesEqual($assign->var, $alwaysTemplateParameterAssign->getAssignVar())) {
+                continue;
+            }
+            $assign->var = new \PhpParser\Node\Expr\Variable($alwaysTemplateParameterAssign->getParameterName());
+            return $assign;
         }
-        $existingParameterArgValue = $methodCall->args[1]->value;
-        if (!$existingParameterArgValue instanceof \PhpParser\Node\Expr\Array_) {
-            // another parameters than array are not suported yet
-            throw new \Rector\Core\Exception\NotImplementedYetException();
-        }
-        $existingParameterArgValue->items = \array_merge($existingParameterArgValue->items, $array->items);
+        return null;
     }
 }

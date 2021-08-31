@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfb512c822f4bb4de905a6d8c48261597
+class ComposerStaticInitdb3564edb309c4003cf71e6404dbf998
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2668,7 +2668,6 @@ class ComposerStaticInitfb512c822f4bb4de905a6d8c48261597
         'Rector\\Nette\\Contract\\PregToNetteUtilsStringInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/PregToNetteUtilsStringInterface.php',
         'Rector\\Nette\\Contract\\Rector\\LatteRectorInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/Rector/LatteRectorInterface.php',
         'Rector\\Nette\\Contract\\Rector\\NeonRectorInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/Rector/NeonRectorInterface.php',
-        'Rector\\Nette\\Contract\\ValueObject\\ParameterArrayInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/ValueObject/ParameterArrayInterface.php',
         'Rector\\Nette\\FileProcessor\\LatteFileProcessor' => __DIR__ . '/..' . '/rector/rector-nette/src/FileProcessor/LatteFileProcessor.php',
         'Rector\\Nette\\FileProcessor\\NeonFileProcessor' => __DIR__ . '/..' . '/rector/rector-nette/src/FileProcessor/NeonFileProcessor.php',
         'Rector\\Nette\\FormControlTypeResolver\\ArrayDimFetchControlTypeResolver' => __DIR__ . '/..' . '/rector/rector-nette/src/FormControlTypeResolver/ArrayDimFetchControlTypeResolver.php',
@@ -2710,12 +2709,12 @@ class ComposerStaticInitfb512c822f4bb4de905a6d8c48261597
         'Rector\\Nette\\NodeAnalyzer\\Component\\NetteControlFactoryInterfaceAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/Component/NetteControlFactoryInterfaceAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\ConditionalTemplateAssignReplacer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ConditionalTemplateAssignReplacer.php',
         'Rector\\Nette\\NodeAnalyzer\\ControlDimFetchAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ControlDimFetchAnalyzer.php',
+        'Rector\\Nette\\NodeAnalyzer\\MethodCallArgMerger' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/MethodCallArgMerger.php',
         'Rector\\Nette\\NodeAnalyzer\\NetteClassAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/NetteClassAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\NetteInjectPropertyAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/NetteInjectPropertyAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\PregMatchAllAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/PregMatchAllAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\RenderMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/RenderMethodAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ReturnAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\RightAssignTemplateRemover' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/RightAssignTemplateRemover.php',
         'Rector\\Nette\\NodeAnalyzer\\StaticCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/StaticCallAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\StrlenEndsWithResolver' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/StrlenEndsWithResolver.php',
         'Rector\\Nette\\NodeAnalyzer\\StrlenStartsWithResolver' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/StrlenStartsWithResolver.php',
@@ -2770,12 +2769,12 @@ class ComposerStaticInitfb512c822f4bb4de905a6d8c48261597
         'Rector\\Nette\\Set\\KdybySetList' => __DIR__ . '/..' . '/rector/rector-nette/src/Set/KdybySetList.php',
         'Rector\\Nette\\Set\\NetteSetList' => __DIR__ . '/..' . '/rector/rector-nette/src/Set/NetteSetList.php',
         'Rector\\Nette\\ValueObject\\AlwaysTemplateParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/AlwaysTemplateParameterAssign.php',
-        'Rector\\Nette\\ValueObject\\ConditionalTemplateParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ConditionalTemplateParameterAssign.php',
         'Rector\\Nette\\ValueObject\\ContentExprAndNeedleExpr' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ContentExprAndNeedleExpr.php',
         'Rector\\Nette\\ValueObject\\FormField' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/FormField.php',
         'Rector\\Nette\\ValueObject\\FuncCallAndExpr' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/FuncCallAndExpr.php',
         'Rector\\Nette\\ValueObject\\LatteVariableType' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/LatteVariableType.php',
         'Rector\\Nette\\ValueObject\\NetteFormMethodNameToControlType' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/NetteFormMethodNameToControlType.php',
+        'Rector\\Nette\\ValueObject\\ParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ParameterAssign.php',
         'Rector\\Nette\\ValueObject\\TemplateParametersAssigns' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/TemplateParametersAssigns.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\BooleanAndAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php',
@@ -3856,9 +3855,9 @@ class ComposerStaticInitfb512c822f4bb4de905a6d8c48261597
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfb512c822f4bb4de905a6d8c48261597::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfb512c822f4bb4de905a6d8c48261597::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfb512c822f4bb4de905a6d8c48261597::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdb3564edb309c4003cf71e6404dbf998::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdb3564edb309c4003cf71e6404dbf998::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdb3564edb309c4003cf71e6404dbf998::$classMap;
 
         }, null, ClassLoader::class);
     }

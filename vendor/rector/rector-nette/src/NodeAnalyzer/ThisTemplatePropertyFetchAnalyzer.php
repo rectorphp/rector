@@ -30,27 +30,11 @@ final class ThisTemplatePropertyFetchAnalyzer
         return $this->nodeNameResolver->getName($propertyFetch);
     }
     /**
-     * $this->template->someKey => "someKey"
-     */
-    public function matchThisTemplateKey(\PhpParser\Node\Expr $expr) : ?string
-    {
-        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return null;
-        }
-        if (!$expr->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return null;
-        }
-        if (!$this->nodeNameResolver->isName($expr->var, 'template')) {
-            return null;
-        }
-        return $this->nodeNameResolver->getName($expr->name);
-    }
-    /**
      * Looks for: $this->template
      *
      * $template
      */
-    public function isTemplatePropertyFetch(\PhpParser\Node\Expr $expr) : bool
+    private function isTemplatePropertyFetch(\PhpParser\Node\Expr $expr) : bool
     {
         if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;

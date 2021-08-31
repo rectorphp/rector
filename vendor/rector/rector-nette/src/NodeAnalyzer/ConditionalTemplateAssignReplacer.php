@@ -22,5 +22,9 @@ final class ConditionalTemplateAssignReplacer
             $assign = $conditionalTemplateParameterAssign->getAssign();
             $assign->var = new \PhpParser\Node\Expr\Variable($conditionalTemplateParameterAssign->getParameterName());
         }
+        foreach ($templateParametersAssigns->getDefaultChangeableTemplateParameterAssigns() as $conditionalTemplateParameterAssign) {
+            $assign = $conditionalTemplateParameterAssign->getAssign();
+            $assign->var = new \PhpParser\Node\Expr\Variable($conditionalTemplateParameterAssign->getParameterName());
+        }
     }
 }

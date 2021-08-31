@@ -29,6 +29,10 @@ final class AlwaysTemplateParameterAssign
     {
         return $this->assign;
     }
+    public function getAssignVar() : \PhpParser\Node\Expr
+    {
+        return $this->assign->var;
+    }
     public function getParameterName() : string
     {
         return $this->parameterName;

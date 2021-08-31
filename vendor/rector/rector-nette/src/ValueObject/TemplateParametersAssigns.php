@@ -4,28 +4,33 @@ declare (strict_types=1);
 namespace Rector\Nette\ValueObject;
 
 use PhpParser\Node\Expr;
-use Rector\Nette\Contract\ValueObject\ParameterArrayInterface;
-final class TemplateParametersAssigns implements \Rector\Nette\Contract\ValueObject\ParameterArrayInterface
+final class TemplateParametersAssigns
 {
     /**
      * @var \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign[]
      */
     private $templateParameterAssigns;
     /**
-     * @var \Rector\Nette\ValueObject\ConditionalTemplateParameterAssign[]
+     * @var \Rector\Nette\ValueObject\ParameterAssign[]
      */
     private $conditionalTemplateParameterAssign;
     /**
-     * @param AlwaysTemplateParameterAssign[] $templateParameterAssigns
-     * @param ConditionalTemplateParameterAssign[] $conditionalTemplateParameterAssign
+     * @var \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign[]
      */
-    public function __construct(array $templateParameterAssigns, array $conditionalTemplateParameterAssign)
+    private $defaultChangeableTemplateParameterAssigns;
+    /**
+     * @param AlwaysTemplateParameterAssign[] $templateParameterAssigns
+     * @param ParameterAssign[] $conditionalTemplateParameterAssign
+     * @param AlwaysTemplateParameterAssign[] $defaultChangeableTemplateParameterAssigns
+     */
+    public function __construct(array $templateParameterAssigns, array $conditionalTemplateParameterAssign, array $defaultChangeableTemplateParameterAssigns)
     {
         $this->templateParameterAssigns = $templateParameterAssigns;
         $this->conditionalTemplateParameterAssign = $conditionalTemplateParameterAssign;
+        $this->defaultChangeableTemplateParameterAssigns = $defaultChangeableTemplateParameterAssigns;
     }
     /**
-     * @return ConditionalTemplateParameterAssign[]
+     * @return ParameterAssign[]
      */
     public function getConditionalTemplateParameterAssign() : array
     {
@@ -58,6 +63,16 @@ final class TemplateParametersAssigns implements \Rector\Nette\Contract\ValueObj
         foreach ($this->templateParameterAssigns as $templateParameterAssign) {
             $templateVariables[$templateParameterAssign->getParameterName()] = $templateParameterAssign->getAssignedExpr();
         }
+        foreach ($this->defaultChangeableTemplateParameterAssigns as $alwaysTemplateParameterAssign) {
+            $templateVariables[$alwaysTemplateParameterAssign->getParameterName()] = $alwaysTemplateParameterAssign->getAssignedExpr();
+        }
         return $templateVariables;
+    }
+    /**
+     * @return AlwaysTemplateParameterAssign[]
+     */
+    public function getDefaultChangeableTemplateParameterAssigns() : array
+    {
+        return $this->defaultChangeableTemplateParameterAssigns;
     }
 }

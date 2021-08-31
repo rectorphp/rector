@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Nette\ValueObject;
 
 use PhpParser\Node\Expr\Assign;
-final class ConditionalTemplateParameterAssign
+final class ParameterAssign
 {
     /**
      * @var \PhpParser\Node\Expr\Assign
