@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210830;
+namespace RectorPrefix20210831;
 
 if (\class_exists('t3lib_cache_backend_TransientMemoryBackend')) {
     return;

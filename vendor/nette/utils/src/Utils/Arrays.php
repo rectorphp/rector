@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210830\Nette\Utils;
+namespace RectorPrefix20210831\Nette\Utils;
 
-use RectorPrefix20210830\Nette;
+use RectorPrefix20210831\Nette;
 use function is_array, is_int, is_object, count;
 /**
  * Array tools library.
@@ -30,7 +30,7 @@ class Arrays
                 $array = $array[$k];
             } else {
                 if (\func_num_args() < 3) {
-                    throw new \RectorPrefix20210830\Nette\InvalidArgumentException("Missing item '{$k}'.");
+                    throw new \RectorPrefix20210831\Nette\InvalidArgumentException("Missing item '{$k}'.");
                 }
                 return $default;
             }
@@ -50,7 +50,7 @@ class Arrays
             if (\is_array($array) || $array === null) {
                 $array =& $array[$k];
             } else {
-                throw new \RectorPrefix20210830\Nette\InvalidArgumentException('Traversed item is not an array.');
+                throw new \RectorPrefix20210831\Nette\InvalidArgumentException('Traversed item is not an array.');
             }
         }
         return $array;
@@ -80,7 +80,7 @@ class Arrays
      */
     public static function getKeyOffset($array, $key) : ?int
     {
-        return \RectorPrefix20210830\Nette\Utils\Helpers::falseToNull(\array_search(self::toKey($key), \array_keys($array), \true));
+        return \RectorPrefix20210831\Nette\Utils\Helpers::falseToNull(\array_search(self::toKey($key), \array_keys($array), \true));
     }
     /**
      * @deprecated  use  getKeyOffset()
@@ -171,7 +171,7 @@ class Arrays
      */
     public static function grep($array, $pattern, $flags = 0) : array
     {
-        return \RectorPrefix20210830\Nette\Utils\Strings::pcre('preg_grep', [$pattern, $array, $flags]);
+        return \RectorPrefix20210831\Nette\Utils\Strings::pcre('preg_grep', [$pattern, $array, $flags]);
     }
     /**
      * Transforms multidimensional array to flat array.
@@ -207,7 +207,7 @@ class Arrays
     {
         $parts = \is_array($path) ? $path : \preg_split('#(\\[\\]|->|=|\\|)#', $path, -1, \PREG_SPLIT_DELIM_CAPTURE | \PREG_SPLIT_NO_EMPTY);
         if (!$parts || $parts === ['->'] || $parts[0] === '=' || $parts[0] === '|') {
-            throw new \RectorPrefix20210830\Nette\InvalidArgumentException("Invalid path '{$path}'.");
+            throw new \RectorPrefix20210831\Nette\InvalidArgumentException("Invalid path '{$path}'.");
         }
         $res = $parts[0] === '->' ? new \stdClass() : [];
         foreach ($array as $rowOrig) {
@@ -270,7 +270,7 @@ class Arrays
             unset($array[$key]);
             return $value;
         } elseif (\func_num_args() < 3) {
-            throw new \RectorPrefix20210830\Nette\InvalidArgumentException("Missing item '{$key}'.");
+            throw new \RectorPrefix20210831\Nette\InvalidArgumentException("Missing item '{$key}'.");
         } else {
             return $default;
         }

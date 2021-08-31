@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210830\Symfony\Component\Config\Loader;
+namespace RectorPrefix20210831\Symfony\Component\Config\Loader;
 
-use RectorPrefix20210830\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix20210831\Symfony\Component\Config\Exception\LoaderLoadException;
 /**
  * DelegatingLoader delegates loading to other loaders using a loader resolver.
  *
@@ -19,9 +19,9 @@ use RectorPrefix20210830\Symfony\Component\Config\Exception\LoaderLoadException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DelegatingLoader extends \RectorPrefix20210830\Symfony\Component\Config\Loader\Loader
+class DelegatingLoader extends \RectorPrefix20210831\Symfony\Component\Config\Loader\Loader
 {
-    public function __construct(\RectorPrefix20210830\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
+    public function __construct(\RectorPrefix20210831\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver)
     {
         $this->resolver = $resolver;
     }
@@ -32,7 +32,7 @@ class DelegatingLoader extends \RectorPrefix20210830\Symfony\Component\Config\Lo
     public function load($resource, $type = null)
     {
         if (\false === ($loader = $this->resolver->resolve($resource, $type))) {
-            throw new \RectorPrefix20210830\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
+            throw new \RectorPrefix20210831\Symfony\Component\Config\Exception\LoaderLoadException($resource, null, 0, null, $type);
         }
         return $loader->load($resource, $type);
     }

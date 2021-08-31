@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210830;
+namespace RectorPrefix20210831;
 
 if (\class_exists('tx_saltedpasswords_eval_fe')) {
     return;

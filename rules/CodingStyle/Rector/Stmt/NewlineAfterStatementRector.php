@@ -5,10 +5,14 @@ namespace Rector\CodingStyle\Rector\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
@@ -88,6 +92,9 @@ CODE_SAMPLE
         if (!$nextNode instanceof \PhpParser\Node) {
             return null;
         }
+        if ($this->shouldSkip($nextNode)) {
+            return null;
+        }
         $endLine = $node->getEndLine();
         $line = $nextNode->getLine();
         $rangeLine = $line - $endLine;
@@ -97,5 +104,9 @@ CODE_SAMPLE
         $this->stmtsHashed[$hash] = \true;
         $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
         return $node;
+    }
+    private function shouldSkip(\PhpParser\Node $nextNode) : bool
+    {
+        return $nextNode instanceof \PhpParser\Node\Stmt\Else_ || $nextNode instanceof \PhpParser\Node\Stmt\ElseIf_ || $nextNode instanceof \PhpParser\Node\Stmt\Catch_ || $nextNode instanceof \PhpParser\Node\Stmt\Finally_;
     }
 }
