@@ -100,11 +100,6 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        // to avoid repetitive If_ creation when used along with ChangeOrIfReturnToEarlyReturnRector
-        // @see https://github.com/rectorphp/rector-src/pull/651
-        if ($if->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr && $if->elseifs !== []) {
-            return \true;
-        }
         // to avoid repetitive flipped elseif above return when used along with ChangeAndIfReturnToEarlyReturnRector
         // @see https://github.com/rectorphp/rector-src/pull/654
         return $if->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd && \count($if->elseifs) > 1;

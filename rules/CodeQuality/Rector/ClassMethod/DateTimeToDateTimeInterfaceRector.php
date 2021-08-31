@@ -104,9 +104,7 @@ CODE_SAMPLE
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $this->refactorClassMethod($node);
-            // @see https://github.com/rectorphp/rector-src/pull/794
-            // avoid duplicated ifs and returns when combined with ChangeOrIfReturnToEarlyReturnRector and ChangeAndIfToEarlyReturnRector
-            return null;
+            return $node;
         }
         return $this->refactorProperty($node);
     }
