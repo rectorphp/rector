@@ -91,16 +91,18 @@ CODE_SAMPLE
         }
 
         $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextNode === null) {
-            return null;
-        }
-
-        if ($nextNode instanceof Return_ && $nextNode->expr === null) {
+        if ($this->shouldSkip($nextNode)) {
             return null;
         }
 
         /** @var Return_ $return */
         $return = $node->stmts[0];
+
+        // avoid repetitive ifs combined with other rules
+        if ($nextNode instanceof Return_ && $this->nodeComparator->areNodesEqual($nextNode->expr, $return->expr)) {
+            return null;
+        }
+
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
 
         foreach ($ifs as $key => $if) {
@@ -113,6 +115,15 @@ CODE_SAMPLE
 
         $this->removeNode($node);
         return $node;
+    }
+
+    private function shouldSkip(?Node $nextNode): bool
+    {
+        if ($nextNode === null) {
+            return true;
+        }
+
+        return $nextNode instanceof Return_ && $nextNode->expr === null;
     }
 
     /**

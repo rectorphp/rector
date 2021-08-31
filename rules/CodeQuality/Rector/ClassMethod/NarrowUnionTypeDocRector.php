@@ -90,14 +90,11 @@ CODE_SAMPLE
             }
         }
 
-        if (! $phpDocInfo->hasChanged()) {
-            return null;
+        if ($phpDocInfo->hasChanged()) {
+            $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
+            return $node;
         }
 
-        $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
-
-        // @see https://github.com/rectorphp/rector-src/pull/795
-        // avoid duplicated ifs and returns when combined with ChangeOrIfReturnToEarlyReturnRector, ChangeAndIfToEarlyReturnRector, and AddArrayReturnDocTypeRector
         return null;
     }
 
