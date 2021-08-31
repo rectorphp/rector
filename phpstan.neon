@@ -309,8 +309,6 @@ parameters:
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
-        - '#Unable to resolve the template type T in call to method Rector\\NodeNestingScope\\ParentFinder\:\:findByTypes\(\)#'
-
         # mimics original doctrine/annotations parser, improve later when finished
         -
             message: '#Array destruct is not allowed\. Use value object to pass data instead#'
@@ -408,15 +406,8 @@ parameters:
             message: '#Function "dump_node\(\)" cannot be used/left in the code#'
             path: src/functions/node_helper.php
 
-        -
-            message: '#Use separate function calls with readable variable names#'
-            path: 'src/FileSystem/PhpFilesFinder.php'
-
         # union false positive
         - '#Method Rector\\Comments\\CommentRemover\:\:removeFromNode\(\) has parameter \$node with no value type specified in iterable type array#'
-
-        # should be refactored to collector
-        - '#Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 10, keep it under 9#'
 
         -
             message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper", "Rector\\StaticTypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
@@ -436,17 +427,6 @@ parameters:
             message: '#Cannot return include_once/require_once#'
             path: rules/Renaming/Rector/Name/RenameClassRector.php
 
-        # required assigns - parent looping
-        -
-            message: '#foreach\(\.\.\.\), while\(\), for\(\) or if\(\.\.\.\) cannot contains a complex expression\. Extract it to a new variable assign on line before#'
-            paths:
-                - packages/NodeNestingScope/FlowOfControlLocator.php
-                - src/PhpParser/Node/BetterNodeFinder.php
-                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
-                - src/Application/FileProcessor.php
-                - rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php
-                - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
-
         # class-string miss match
         - '#Parameter \#1 \$classes of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:getByAnnotationClasses\(\) expects array<class\-string\>, array<int, string\> given#'
         - '#Parameter \#1 \$classes of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<TNode of PHPStan\\PhpDocParser\\Ast\\Node\>\:\:getByAnnotationClasses\(\) expects array<class\-string\>, array<string\> given#'
@@ -454,12 +434,6 @@ parameters:
         - '#expects class\-string<TNode of PHPStan\\PhpDocParser\\Ast\\Node\>, string given#'
         # weird generics
         - '#Method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo\:\:getByType\(\) should return array<TNode of PHPStan\\PhpDocParser\\Ast\\Node\> but returns array<PHPStan\\PhpDocParser\\Ast\\Node\>#'
-
-        # should be allowed, as continue check - fix in symplify
-        -
-            message: '#foreach\(\.\.\.\), while\(\), for\(\) or if\(\.\.\.\) cannot contains a complex expression\. Extract it to a new variable assign on line before#'
-            paths:
-                 - packages/NodeNestingScope/ParentFinder.php
 
         - '#Callable callable\(PHPStan\\Type\\Type\)\: PHPStan\\Type\\Type invoked with 2 parameters, 1 required#'
         - '#Method Rector\\NodeNestingScope\\ParentFinder\:\:findByTypes\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
@@ -544,7 +518,6 @@ parameters:
             paths:
                 - rules/PSR4/FileRelocationResolver.php
                 - rules/Privatization/Rector/Class_/RepeatedLiteralToClassConstantRector.php
-                - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
 
         -
             message: '#Parameter \#2 \$length of function str_split expects int<1, max\>, int given#'
@@ -552,8 +525,3 @@ parameters:
                 - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
 
         - '#^Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 13, keep it under 9$#'
-
-        -
-            message: '#The string value "" is repeated 6 times\. Refactor to enum to avoid typos and make clear allowed value#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php #45
