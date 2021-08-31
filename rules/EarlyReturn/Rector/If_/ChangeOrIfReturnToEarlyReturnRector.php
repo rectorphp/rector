@@ -104,7 +104,7 @@ CODE_SAMPLE
     private function shouldSkip(?\PhpParser\Node $nextNode) : bool
     {
         if ($nextNode === null) {
-            return \true;
+            return \false;
         }
         return $nextNode instanceof \PhpParser\Node\Stmt\Return_ && $nextNode->expr === null;
     }
