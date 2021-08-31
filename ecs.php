@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
@@ -10,7 +11,6 @@ use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
 use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
-use Symplify\CodingStandard\Fixer\Commenting\RemoveCommentedCodeFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
@@ -75,8 +75,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         UnaryOperatorSpacesFixer::class,
 
         // buggy - @todo fix on Symplify master
-        RemoveCommentedCodeFixer::class,
         DocBlockLineLengthFixer::class,
+
+        // buggy on closure in interface union
+        NoUnusedImportsFixer::class => [__DIR__ . '/rules/Naming/Contract/RenameParamValueObjectInterface.php'],
 
         // breaks on-purpose annotated variables
         ReturnAssignmentFixer::class,

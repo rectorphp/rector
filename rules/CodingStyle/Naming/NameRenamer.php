@@ -87,8 +87,7 @@ final class NameRenamer
         string $lastName,
         ClassConstFetch $classConstFetch,
         Name | Identifier $usedNameNode
-    ): void
-    {
+    ): void {
         if (! $this->nodeNameResolver->areNamesEqual($classConstFetch->class, $usedNameNode)) {
             return;
         }
