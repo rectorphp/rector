@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -78,6 +79,13 @@ CODE_SAMPLE
             return null;
         }
         if ($this->isInstanceofCondOnly($node->cond)) {
+            return null;
+        }
+        $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if ($nextNode === null) {
+            return null;
+        }
+        if ($nextNode instanceof \PhpParser\Node\Stmt\Return_ && $nextNode->expr === null) {
             return null;
         }
         /** @var Return_ $return */
