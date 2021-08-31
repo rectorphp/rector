@@ -80,10 +80,12 @@ CODE_SAMPLE
                 $this->changeDocObjectWithoutClassType($paramType, $key, $phpDocInfo);
             }
         }
-        if ($phpDocInfo->hasChanged()) {
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
-            return $node;
+        if (!$phpDocInfo->hasChanged()) {
+            return null;
         }
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
+        // @see https://github.com/rectorphp/rector-src/pull/795
+        // avoid duplicated ifs and returns when combined with ChangeOrIfReturnToEarlyReturnRector, ChangeAndIfToEarlyReturnRector, and AddArrayReturnDocTypeRector
         return null;
     }
     private function changeDocObjectWithoutClassType(\PHPStan\Type\UnionType $unionType, int $key, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
