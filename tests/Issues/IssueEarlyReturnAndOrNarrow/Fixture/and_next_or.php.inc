@@ -31,12 +31,10 @@ class AndNextOrReturnVoid
      */
     public function run($a, $b, $c, $d)
     {
-        if ($a && $b) {
+        if ($a && $b  || $c) {
             return null;
         }
-        if ($c) {
-            return null;
-        }
+
         return;
     }
 }
