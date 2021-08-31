@@ -26,7 +26,7 @@
         "rector/rector-cakephp": "^0.11.3",
         "rector/rector-doctrine": "^0.11.17",
         "rector/rector-laravel": "^0.11.5",
-        "rector/rector-nette": "^0.11.23",
+        "rector/rector-nette": "^0.11.24",
         "rector/rector-phpunit": "^0.11.7",
         "rector/rector-symfony": "^0.11.18",
         "rector/rector-phpoffice": "^0.11.2",
