@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Issues\IssueReturnBeforeElseIf\Fixture;
 
-class ComplexIfCondOrWithoutElseIf
+class ComplexIfCondOr
 {
-    public function run($a, $b, $c)
+    public function run($a, $b, $c, $d, $e)
     {
         if (($a && false === $b) || ! $c) {
-            return 'a';
-        } else {
-            return 'b';
+            return '';
+        } elseif ($d) {
+            return '';
         }
+        return $e;
     }
 }
 
@@ -24,14 +25,17 @@ declare(strict_types=1);
 
 namespace Rector\Core\Tests\Issues\IssueReturnBeforeElseIf\Fixture;
 
-class ComplexIfCondOrWithoutElseIf
+class ComplexIfCondOr
 {
-    public function run($a, $b, $c)
+    public function run($a, $b, $c, $d, $e)
     {
         if (($a && false === $b) || ! $c) {
-            return 'a';
+            return '';
         }
-        return 'b';
+        if ($d) {
+            return '';
+        }
+        return $e;
     }
 }
 
