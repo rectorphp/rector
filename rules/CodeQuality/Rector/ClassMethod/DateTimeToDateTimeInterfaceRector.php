@@ -97,7 +97,10 @@ CODE_SAMPLE
     {
         if ($node instanceof ClassMethod) {
             $this->refactorClassMethod($node);
-            return $node;
+
+            // @see https://github.com/rectorphp/rector-src/pull/794
+            // avoid duplicated ifs and returns when combined with ChangeOrIfReturnToEarlyReturnRector and ChangeAndIfToEarlyReturnRector
+            return null;
         }
 
         return $this->refactorProperty($node);
