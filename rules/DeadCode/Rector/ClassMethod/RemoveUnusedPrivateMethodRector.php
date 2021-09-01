@@ -71,6 +71,9 @@ CODE_SAMPLE
         if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node)) {
             return null;
         }
+        if ($this->nodesToAddCollector->isActive()) {
+            return null;
+        }
         $this->removeNode($node);
         return $node;
     }

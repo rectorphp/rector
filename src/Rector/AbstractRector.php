@@ -157,7 +157,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
-    private $nodesToAddCollector;
+    protected $nodesToAddCollector;
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
