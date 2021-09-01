@@ -55,6 +55,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        return $this->refactorLogicalToBoolean($node);
+    }
+
+    private function refactorLogicalToBoolean(LogicalOr|LogicalAnd $node): BooleanAnd|BooleanOr
+    {
+        if ($node->left instanceof LogicalOr || $node->left instanceof LogicalAnd) {
+            $node->left = $this->refactorLogicalToBoolean(
+                $node->left,
+            );
+        }
+
+        if ($node->right instanceof LogicalOr || $node->right instanceof LogicalAnd) {
+            $node->right = $this->refactorLogicalToBoolean(
+                $node->right,
+            );
+        }
+
         if ($node instanceof LogicalOr) {
             return new BooleanOr($node->left, $node->right);
         }
