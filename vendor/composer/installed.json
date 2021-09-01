@@ -832,17 +832,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "0.12.96",
-            "version_normalized": "0.12.96.0",
+            "version": "0.12.97",
+            "version_normalized": "0.12.97.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "a98bdc51318f20fcae8c953d266f81a70254917f"
+                "reference": "a8867e63a00e606589faf8d3613164f20722c4ee"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/a98bdc51318f20fcae8c953d266f81a70254917f",
-                "reference": "a98bdc51318f20fcae8c953d266f81a70254917f",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/a8867e63a00e606589faf8d3613164f20722c4ee",
+                "reference": "a8867e63a00e606589faf8d3613164f20722c4ee",
                 "shasum": ""
             },
             "require": {
@@ -851,7 +851,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-08-21T11:55:13+00:00",
+            "time": "2021-09-01T10:51:52+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -875,7 +875,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/0.12.96"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/0.12.97"
             },
             "funding": [
                 {
@@ -1938,12 +1938,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "a665946279f566d94ed5eb98999cfa65c6fa5a78"
+                "reference": "999cfcf6400502bbc145b2bf36935770770ba6ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/a665946279f566d94ed5eb98999cfa65c6fa5a78",
-                "reference": "a665946279f566d94ed5eb98999cfa65c6fa5a78",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/999cfcf6400502bbc145b2bf36935770770ba6ca",
+                "reference": "999cfcf6400502bbc145b2bf36935770770ba6ca",
                 "shasum": ""
             },
             "require": {
@@ -1976,7 +1976,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-08-02T16:16:27+00:00",
+            "time": "2021-08-31T18:22:06+00:00",
             "default-branch": true,
             "type": "library",
             "installation-source": "dist",
@@ -2005,7 +2005,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v5.3.7"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/5.3"
             },
             "funding": [
                 {
