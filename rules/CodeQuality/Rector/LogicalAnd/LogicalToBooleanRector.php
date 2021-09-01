@@ -44,6 +44,20 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        return $this->refactorLogicalToBoolean($node);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\LogicalOr|\PhpParser\Node\Expr\BinaryOp\LogicalAnd $node
+     * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
+     */
+    private function refactorLogicalToBoolean($node)
+    {
+        if ($node->left instanceof \PhpParser\Node\Expr\BinaryOp\LogicalOr || $node->left instanceof \PhpParser\Node\Expr\BinaryOp\LogicalAnd) {
+            $node->left = $this->refactorLogicalToBoolean($node->left);
+        }
+        if ($node->right instanceof \PhpParser\Node\Expr\BinaryOp\LogicalOr || $node->right instanceof \PhpParser\Node\Expr\BinaryOp\LogicalAnd) {
+            $node->right = $this->refactorLogicalToBoolean($node->right);
+        }
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\LogicalOr) {
             return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($node->left, $node->right);
         }
