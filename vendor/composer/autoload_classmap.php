@@ -2140,6 +2140,7 @@ return array(
     'Rector\\DowngradePhp71\\Rector\\FunctionLike\\DowngradeNullableTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp71/Rector/FunctionLike/DowngradeNullableTypeDeclarationRector.php',
     'Rector\\DowngradePhp71\\Rector\\FunctionLike\\DowngradeVoidTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp71/Rector/FunctionLike/DowngradeVoidTypeDeclarationRector.php',
     'Rector\\DowngradePhp71\\Rector\\List_\\DowngradeKeysInListRector' => $baseDir . '/rules/DowngradePhp71/Rector/List_/DowngradeKeysInListRector.php',
+    'Rector\\DowngradePhp71\\Rector\\StaticCall\\DowngradeClosureFromCallableRector' => $baseDir . '/rules/DowngradePhp71/Rector/StaticCall/DowngradeClosureFromCallableRector.php',
     'Rector\\DowngradePhp71\\Rector\\String_\\DowngradeNegativeStringOffsetToStrlenRector' => $baseDir . '/rules/DowngradePhp71/Rector/String_/DowngradeNegativeStringOffsetToStrlenRector.php',
     'Rector\\DowngradePhp71\\Rector\\TryCatch\\DowngradePipeToMultiCatchExceptionRector' => $baseDir . '/rules/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php',
     'Rector\\DowngradePhp72\\Contract\\Rector\\DowngradeTypeRectorInterface' => $baseDir . '/rules/DowngradePhp72/Contract/Rector/DowngradeTypeRectorInterface.php',

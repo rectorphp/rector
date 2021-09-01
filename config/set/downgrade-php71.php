@@ -12,6 +12,7 @@ use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclara
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector;
 use Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector;
 use Rector\DowngradePhp71\Rector\List_\DowngradeKeysInListRector;
+use Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector;
 use Rector\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector;
 use Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -28,4 +29,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp71\Rector\List_\DowngradeKeysInListRector::class);
     $services->set(\Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp71\Rector\FuncCall\DowngradeIsIterableRector::class);
+    $services->set(\Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector::class);
 };
