@@ -122,7 +122,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      */
     private $previousAppliedClass;
 
-    private NodesToAddCollector $nodesToAddCollector;
+    protected NodesToAddCollector $nodesToAddCollector;
 
     private CurrentFileProvider $currentFileProvider;
 

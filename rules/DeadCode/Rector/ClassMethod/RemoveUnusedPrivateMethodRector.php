@@ -78,6 +78,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->nodesToAddCollector->isActive()) {
+            return null;
+        }
+
         $this->removeNode($node);
 
         return $node;
