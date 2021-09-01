@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20210831\Composer\Semver;
+namespace RectorPrefix20210901\Composer\Semver;
 
-use RectorPrefix20210831\Composer\Semver\Constraint\Constraint;
-use RectorPrefix20210831\Composer\Semver\Constraint\ConstraintInterface;
+use RectorPrefix20210901\Composer\Semver\Constraint\Constraint;
+use RectorPrefix20210901\Composer\Semver\Constraint\ConstraintInterface;
 /**
  * Helper class to evaluate constraint by compiling and reusing the code to evaluate
  */
@@ -27,7 +27,7 @@ class CompilingMatcher
     /**
      * @phpstan-var array<Constraint::OP_*, Constraint::STR_OP_*>
      */
-    private static $transOpInt = array(\RectorPrefix20210831\Composer\Semver\Constraint\Constraint::OP_EQ => \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::STR_OP_EQ, \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::OP_LT => \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::STR_OP_LT, \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::OP_LE => \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::STR_OP_LE, \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::OP_GT => \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::STR_OP_GT, \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::OP_GE => \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::STR_OP_GE, \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::OP_NE => \RectorPrefix20210831\Composer\Semver\Constraint\Constraint::STR_OP_NE);
+    private static $transOpInt = array(\RectorPrefix20210901\Composer\Semver\Constraint\Constraint::OP_EQ => \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::STR_OP_EQ, \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::OP_LT => \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::STR_OP_LT, \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::OP_LE => \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::STR_OP_LE, \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::OP_GT => \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::STR_OP_GT, \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::OP_GE => \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::STR_OP_GE, \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::OP_NE => \RectorPrefix20210901\Composer\Semver\Constraint\Constraint::STR_OP_NE);
     /**
      * Evaluates the expression: $constraint match $operator $version
      *
@@ -44,7 +44,7 @@ class CompilingMatcher
             self::$enabled = !\in_array('eval', \explode(',', (string) \ini_get('disable_functions')), \true);
         }
         if (!self::$enabled) {
-            return $constraint->matches(new \RectorPrefix20210831\Composer\Semver\Constraint\Constraint(self::$transOpInt[$operator], $version));
+            return $constraint->matches(new \RectorPrefix20210901\Composer\Semver\Constraint\Constraint(self::$transOpInt[$operator], $version));
         }
         $cacheKey = $operator . $constraint;
         if (!isset(self::$compiledCheckerCache[$cacheKey])) {

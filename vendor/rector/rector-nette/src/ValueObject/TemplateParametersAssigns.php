@@ -30,6 +30,16 @@ final class TemplateParametersAssigns
         $this->defaultChangeableTemplateParameterAssigns = $defaultChangeableTemplateParameterAssigns;
     }
     /**
+     * These parameters are not defined just once. They can change later or they defined based on if/else/while
+     * conditions.
+     *
+     * @return array<ParameterAssign|AlwaysTemplateParameterAssign>
+     */
+    public function getNonSingleParameterAssigns() : array
+    {
+        return \array_merge($this->conditionalTemplateParameterAssign, $this->defaultChangeableTemplateParameterAssigns);
+    }
+    /**
      * @return ParameterAssign[]
      */
     public function getConditionalTemplateParameterAssign() : array

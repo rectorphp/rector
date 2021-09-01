@@ -15,8 +15,8 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\MethodReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210831\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210831\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class BuilderFormNodeFactory
 {
     /**
@@ -40,7 +40,7 @@ final class BuilderFormNodeFactory
         }
         $formBuilderParam = $this->createBuilderParam();
         $optionsParam = $this->createOptionsParam();
-        $classMethodBuilder = new \RectorPrefix20210831\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('buildForm');
+        $classMethodBuilder = new \RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('buildForm');
         $classMethodBuilder->makePublic();
         $classMethodBuilder->addParams([$formBuilderParam, $optionsParam]);
         // raw copy stmts from ctor
@@ -50,13 +50,13 @@ final class BuilderFormNodeFactory
     }
     private function createBuilderParam() : \PhpParser\Node\Param
     {
-        $builderParamBuilder = new \RectorPrefix20210831\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('builder');
+        $builderParamBuilder = new \RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('builder');
         $builderParamBuilder->setType(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Form\\FormBuilderInterface'));
         return $builderParamBuilder->getNode();
     }
     private function createOptionsParam() : \PhpParser\Node\Param
     {
-        $optionsParamBuilder = new \RectorPrefix20210831\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('options');
+        $optionsParamBuilder = new \RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('options');
         $optionsParamBuilder->setType('array');
         return $optionsParamBuilder->getNode();
     }

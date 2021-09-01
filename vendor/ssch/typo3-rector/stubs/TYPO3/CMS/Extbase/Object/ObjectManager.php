@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix20210831\TYPO3\CMS\Extbase\Object;
+namespace RectorPrefix20210901\TYPO3\CMS\Extbase\Object;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\ObjectManager')) {
     return;
 }
-class ObjectManager implements \RectorPrefix20210831\TYPO3\CMS\Extbase\Object\ObjectManagerInterface
+class ObjectManager implements \RectorPrefix20210901\TYPO3\CMS\Extbase\Object\ObjectManagerInterface
 {
     /**
      * @param $objectName

@@ -5,26 +5,44 @@ namespace Rector\Nette\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
+use PhpParser\Node\Stmt\While_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Nette\ValueObject\AlwaysTemplateParameterAssign;
 use Rector\Nette\ValueObject\ParameterAssign;
 use Rector\Nette\ValueObject\TemplateParametersAssigns;
 use Rector\NodeNestingScope\ScopeNestingComparator;
-use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class TemplatePropertyAssignCollector
 {
     /**
      * @var array<class-string<Node>>
      */
-    private const NODE_TYPES = \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES;
+    private const NODE_TYPES = [
+        // these situations happens only if condition is met
+        \PhpParser\Node\Stmt\If_::class,
+        \PhpParser\Node\Stmt\While_::class,
+        \PhpParser\Node\Stmt\Do_::class,
+        \PhpParser\Node\Stmt\Catch_::class,
+        \PhpParser\Node\Stmt\Case_::class,
+        \PhpParser\Node\Expr\Match_::class,
+        \PhpParser\Node\Stmt\Switch_::class,
+        \PhpParser\Node\Stmt\Foreach_::class,
+        // FunctionLike must be last, so we know the variable is defined in main stmt
+        \PhpParser\Node\FunctionLike::class,
+    ];
     /**
      * @var \PhpParser\Node\Stmt\Return_|null
      */
@@ -70,17 +88,7 @@ final class TemplatePropertyAssignCollector
         $this->conditionalTemplateParameterAssigns = [];
         $this->defaultChangeableTemplateParameterAssigns = [];
         $this->lastReturn = $this->returnAnalyzer->findLastClassMethodReturn($classMethod);
-        /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\Assign::class);
-        $assignsOfPropertyFetches = [];
-        foreach ($assigns as $assign) {
-            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
-                continue;
-            }
-            $assignsOfPropertyFetches[] = $assign;
-        }
-        // re-index from 0
-        $assignsOfPropertyFetches = \array_values($assignsOfPropertyFetches);
+        $assignsOfPropertyFetches = $this->findAssignToPropertyFetches($classMethod);
         $this->collectVariableFromAssign($assignsOfPropertyFetches);
         return new \Rector\Nette\ValueObject\TemplateParametersAssigns($this->alwaysTemplateParameterAssigns, $this->conditionalTemplateParameterAssigns, $this->defaultChangeableTemplateParameterAssigns);
     }
@@ -90,13 +98,15 @@ final class TemplatePropertyAssignCollector
     private function getFoundParents(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : array
     {
         $foundParents = [];
-        // FunctionLike must be last, so we know the variable is defined in main stmt
-        $nodeTypes = \array_merge(self::NODE_TYPES, [\PhpParser\Node\FunctionLike::class]);
         /** @var class-string<Node> $nodeType */
-        foreach ($nodeTypes as $nodeType) {
+        foreach (self::NODE_TYPES as $nodeType) {
             $parentType = $this->betterNodeFinder->findParentType($propertyFetch->var, $nodeType);
             if ($parentType instanceof \PhpParser\Node) {
                 $foundParents[] = $parentType;
+                $parentParentType = $this->betterNodeFinder->findParentType($parentType, $nodeType);
+                if ($parentParentType instanceof \PhpParser\Node) {
+                    $foundParents[] = $parentParentType;
+                }
             }
         }
         return $foundParents;
@@ -139,6 +149,10 @@ final class TemplatePropertyAssignCollector
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $foundParents = $this->getFoundParents($propertyFetch);
+        // nested conditions, unreliable, might not be defined
+        if (\count($foundParents) >= 3) {
+            return;
+        }
         foreach ($foundParents as $foundParent) {
             if ($this->scopeNestingComparator->isInBothIfElseBranch($foundParent, $propertyFetch)) {
                 $this->conditionalTemplateParameterAssigns[] = new \Rector\Nette\ValueObject\ParameterAssign($assign, $parameterName);
@@ -166,5 +180,22 @@ final class TemplatePropertyAssignCollector
             return;
         }
         $this->alwaysTemplateParameterAssigns[] = new \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign($assign, $parameterName, $assign->expr);
+    }
+    /**
+     * @return Assign[]
+     */
+    private function findAssignToPropertyFetches(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    {
+        /** @var Assign[] $assigns */
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\Assign::class);
+        $assignsOfPropertyFetches = [];
+        foreach ($assigns as $assign) {
+            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+                continue;
+            }
+            $assignsOfPropertyFetches[] = $assign;
+        }
+        // re-index from 0
+        return \array_values($assignsOfPropertyFetches);
     }
 }

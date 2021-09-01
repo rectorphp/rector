@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210831;
+namespace RectorPrefix20210901;
 
 if (\class_exists('tx_reports_tasks_SystemStatusUpdateTask')) {
     return;
