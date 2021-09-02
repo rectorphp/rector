@@ -167,4 +167,19 @@ final class PhpVersionFeature
      * @var int
      */
     public const VARIADIC_PARAM = \Rector\Core\ValueObject\PhpVersion::PHP_56;
+    /**
+     * @see https://wiki.php.net/rfc/readonly_and_immutable_properties
+     * @var int
+     */
+    public const READONLY_PROPERTY = \Rector\Core\ValueObject\PhpVersion::PHP_81;
+    /**
+     * @see https://wiki.php.net/rfc/final_class_const
+     * @var int
+     */
+    public const FINAL_CLASS_CONSTANTS = \Rector\Core\ValueObject\PhpVersion::PHP_81;
+    /**
+     * @see https://wiki.php.net/rfc/enumerations
+     * @var int
+     */
+    public const ENUM = \Rector\Core\ValueObject\PhpVersion::PHP_81;
 }
