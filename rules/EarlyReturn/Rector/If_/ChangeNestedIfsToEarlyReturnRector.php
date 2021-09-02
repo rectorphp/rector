@@ -110,7 +110,7 @@ CODE_SAMPLE
         foreach ($nestedIfsWithOnlyReturn as $key => $nestedIfWithOnlyReturn) {
             // last item → the return node
             if ($nestedIfsWithOnlyReturnCount === $key + 1) {
-                $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+                $this->nodesToAddCollector->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
             } else {
                 $this->addStandaloneIfsWithReturn($nestedIfWithOnlyReturn, $if, $nextReturn);
             }
@@ -127,17 +127,17 @@ CODE_SAMPLE
         if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->left));
             $booleanNotPartIf->stmts = [clone $return];
-            $this->addNodeAfterNode($booleanNotPartIf, $if);
+            $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
 
             $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
             $booleanNotPartIf->stmts = [clone $return];
-            $this->addNodeAfterNode($booleanNotPartIf, $if);
+            $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
             return;
         }
 
         $nestedIfWithOnlyReturn->cond = $invertedCondition;
         $nestedIfWithOnlyReturn->stmts = [clone $return];
 
-        $this->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
+        $this->nodesToAddCollector->addNodeAfterNode($nestedIfWithOnlyReturn, $if);
     }
 }

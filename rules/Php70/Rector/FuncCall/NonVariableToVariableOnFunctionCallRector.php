@@ -86,7 +86,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             $current = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
             $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-            $this->addNodeBeforeNode(
+            $this->nodesToAddCollector->addNodeBeforeNode(
                 $replacements->getAssign(),
                 $current instanceof Return_ ? $current : $currentStatement
             );

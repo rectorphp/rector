@@ -70,7 +70,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->addNodeAfterNode(new Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
+                $this->nodesToAddCollector->addNodeAfterNode(new Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
             }
         }
 

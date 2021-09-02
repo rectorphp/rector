@@ -196,7 +196,7 @@ CODE_SAMPLE
         }
 
         if ($this->phpVersionConstraint >= $value->value) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
             $this->removeNode($if);
         }
 
@@ -214,7 +214,7 @@ CODE_SAMPLE
         }
 
         if ($this->phpVersionConstraint >= $value->value) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
             $this->removeNode($if);
         }
 
@@ -259,7 +259,7 @@ CODE_SAMPLE
         }
 
         if ($this->phpVersionConstraint >= $value->value) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
             $this->removeNode($if);
         }
 

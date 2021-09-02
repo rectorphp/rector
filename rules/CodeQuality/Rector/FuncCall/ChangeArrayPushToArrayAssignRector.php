@@ -92,7 +92,7 @@ CODE_SAMPLE
                 $this->mirrorComments($assignExpression, $node);
             }
 
-            $this->addNodeAfterNode($assignExpression, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($assignExpression, $node);
 
             ++$position;
         }

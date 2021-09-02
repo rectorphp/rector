@@ -111,7 +111,7 @@ CODE_SAMPLE
         }
 
         $countAssign = new Assign(new Variable($variableName), $countInCond);
-        $this->addNodeBeforeNode($countAssign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($countAssign, $node);
 
         return $node;
     }

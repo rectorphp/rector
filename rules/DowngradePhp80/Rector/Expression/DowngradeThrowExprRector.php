@@ -139,7 +139,7 @@ CODE_SAMPLE
             ? $ternary->cond
             : $ternary->if;
 
-        $this->addNodeAfterNode(new Expression($assign), $if);
+        $this->nodesToAddCollector->addNodeAfterNode(new Expression($assign), $if);
         return $if;
     }
 
@@ -160,7 +160,7 @@ CODE_SAMPLE
         }
 
         $assign->expr = $coalesce->left;
-        $this->addNodeAfterNode(new Expression($assign), $if);
+        $this->nodesToAddCollector->addNodeAfterNode(new Expression($assign), $if);
         return $if;
     }
 

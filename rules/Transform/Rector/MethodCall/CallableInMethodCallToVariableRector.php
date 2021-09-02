@@ -109,7 +109,7 @@ CODE_SAMPLE
             $unwrappedNodes = $this->unwrapClosureFactory->createAssign($resultVariable, $arg);
 
             $arg->value = $resultVariable;
-            $this->addNodesBeforeNode($unwrappedNodes, $node);
+            $this->nodesToAddCollector->addNodesBeforeNode($unwrappedNodes, $node);
 
             return $node;
         }

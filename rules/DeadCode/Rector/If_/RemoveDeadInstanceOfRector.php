@@ -133,7 +133,7 @@ CODE_SAMPLE
         }
 
         if ($if->cond === $instanceof) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
         }
 
         $this->removeNode($if);

@@ -101,7 +101,7 @@ CODE_SAMPLE
         }
 
         $newStmts = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $node);
-        $this->addNodesBeforeNode($newStmts, $node);
+        $this->nodesToAddCollector->addNodesBeforeNode($newStmts, $node);
 
         // change new arg to root variable
         $newVariable = $this->variableFromNewFactory->create($new);

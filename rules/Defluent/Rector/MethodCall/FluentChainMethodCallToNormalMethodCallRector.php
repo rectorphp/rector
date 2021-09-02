@@ -106,7 +106,7 @@ CODE_SAMPLE
         }
 
         $this->removeCurrentNode($node);
-        $this->addNodesAfterNode($nodesToAdd, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($nodesToAdd, $node);
 
         return null;
     }

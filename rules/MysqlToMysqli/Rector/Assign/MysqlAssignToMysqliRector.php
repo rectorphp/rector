@@ -108,7 +108,7 @@ CODE_SAMPLE
         $newFuncCall = new FuncCall(new Name('mysql_fetch_array'), [$funcCall->args[0]]);
         $newAssignNode = new Assign($assign->var, new ArrayDimFetch($newFuncCall, new LNumber(0)));
 
-        $this->addNodeAfterNode($newAssignNode, $assign);
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
         return $funcCall;
     }
@@ -120,10 +120,10 @@ CODE_SAMPLE
         $mysqlFetchRowFuncCall = new FuncCall(new Name('mysqli_fetch_row'), [$funcCall->args[0]]);
         $fetchVariable = new Variable('fetch');
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchRowFuncCall);
-        $this->addNodeAfterNode($newAssignNode, $assign);
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
         $newAssignNode = new Assign($assign->var, new ArrayDimFetch($fetchVariable, new LNumber(0)));
-        $this->addNodeAfterNode($newAssignNode, $assign);
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
         return $funcCall;
     }
@@ -133,7 +133,7 @@ CODE_SAMPLE
         $funcCall->name = new Name('mysqli_select_db');
 
         $newAssignNode = new Assign($assign->var, new FuncCall(new Name('mysqli_query'), [$funcCall->args[1]]));
-        $this->addNodeAfterNode($newAssignNode, $assign);
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
         unset($funcCall->args[1]);
 
@@ -162,10 +162,10 @@ CODE_SAMPLE
         $mysqlFetchArrayFuncCall = new FuncCall(new Name('mysqli_fetch_array'), [$funcCall->args[0]]);
         $fetchVariable = new Variable('fetch');
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchArrayFuncCall);
-        $this->addNodeAfterNode($newAssignNode, $assign);
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
         $newAssignNode = new Assign($assign->var, new ArrayDimFetch($fetchVariable, $fetchField ?? new LNumber(0)));
-        $this->addNodeAfterNode($newAssignNode, $assign);
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
         return $funcCall;
     }

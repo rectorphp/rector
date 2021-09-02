@@ -113,7 +113,7 @@ CODE_SAMPLE
         }
 
         $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        $this->nodesToAddCollector->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
 
         return null;
     }

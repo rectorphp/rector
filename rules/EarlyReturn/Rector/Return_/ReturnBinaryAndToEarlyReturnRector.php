@@ -85,14 +85,14 @@ CODE_SAMPLE
 
         $this->mirrorComments($ifNegations[0], $node);
         foreach ($ifNegations as $ifNegation) {
-            $this->addNodeBeforeNode($ifNegation, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($ifNegation, $node);
         }
 
         /** @var BooleanAnd $booleanAnd */
         $booleanAnd = $node->expr;
 
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanAnd->right);
-        $this->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
         $this->removeNode($node);
 
         return $node;

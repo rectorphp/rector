@@ -142,7 +142,7 @@ CODE_SAMPLE
         $preAssign = new Assign($assignVariable, $array);
 
         $currentStatement = $funcCall->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->addNodeBeforeNode($preAssign, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStatement);
 
         return $expr;
     }

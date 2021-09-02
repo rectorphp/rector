@@ -104,7 +104,7 @@ CODE_SAMPLE
         $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
 
         if (! $ifNextReturn instanceof Return_) {
-            $this->addNodeAfterNode($node->stmts[0], $node);
+            $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
             return $this->processReplaceIfs($node, $booleanAndConditions, new Return_());
         }
 
@@ -114,7 +114,7 @@ CODE_SAMPLE
 
         $this->removeNode($ifNextReturn);
         $ifNextReturn = $node->stmts[0];
-        $this->addNodeAfterNode($ifNextReturn, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($ifNextReturn, $node);
 
         $ifNextReturnClone = $ifNextReturn instanceof Return_
             ? clone $ifNextReturn
@@ -128,7 +128,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodeAfterNode(new Return_(), $node);
+        $this->nodesToAddCollector->addNodeAfterNode(new Return_(), $node);
         return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
     }
 
@@ -142,7 +142,7 @@ CODE_SAMPLE
         $this->mirrorComments($ifs[0], $node);
 
         foreach ($ifs as $if) {
-            $this->addNodeBeforeNode($if, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         }
 
         $this->removeNode($node);

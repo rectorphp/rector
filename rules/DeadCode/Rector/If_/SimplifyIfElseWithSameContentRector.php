@@ -70,7 +70,7 @@ CODE_SAMPLE
         }
 
         foreach ($node->stmts as $stmt) {
-            $this->addNodeBeforeNode($stmt, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($stmt, $node);
         }
 
         $this->removeNode($node);

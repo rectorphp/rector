@@ -117,7 +117,7 @@ CODE_SAMPLE
                 $jsonDataVariable = new Variable(self::JSON_DATA);
                 $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
 
-                $this->addNodeBeforeNode($jsonDataAssign, $node);
+                $this->nodesToAddCollector->addNodeBeforeNode($jsonDataAssign, $node);
 
                 return $jsonEncodeAssign;
             }
@@ -242,7 +242,7 @@ CODE_SAMPLE
         $jsonDataVariable = new Variable(self::JSON_DATA);
         $jsonDataAssign = new Assign($jsonDataVariable, $jsonArray);
 
-        $this->addNodeBeforeNode($jsonDataAssign, $assign);
+        $this->nodesToAddCollector->addNodeBeforeNode($jsonDataAssign, $assign);
 
         return $this->createJsonEncodeAssign($assign->var, $jsonArray);
     }

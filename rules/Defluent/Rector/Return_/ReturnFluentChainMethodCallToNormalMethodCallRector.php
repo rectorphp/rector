@@ -90,7 +90,7 @@ CODE_SAMPLE
         }
 
         $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($nodesToAdd, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($nodesToAdd, $node);
 
         return null;
     }

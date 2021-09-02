@@ -109,7 +109,7 @@ CODE_SAMPLE
 
         // Add new nodes to do the assignment by reference
         $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
-        $this->addNodesAfterNode($newNodes, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($newNodes, $node);
 
         // Remove the stale params right-most-side
         return $this->removeStaleParams($node, $rightSideRemovableParamsCount);

@@ -101,7 +101,7 @@ CODE_SAMPLE
 
         if ($parent instanceof Assign) {
             $this->mirrorComments($assignExpressions[0], $parentExpression);
-            $this->addNodesBeforeNode($assignExpressions, $node);
+            $this->nodesToAddCollector->addNodesBeforeNode($assignExpressions, $node);
             $this->removeNode($parentExpression);
 
             return $node;
@@ -117,7 +117,7 @@ CODE_SAMPLE
             if ($stmts === []) {
                 $parent->stmts = $assignExpressions;
             } else {
-                $this->addNodesBeforeNode($assignExpressions, $parent->stmts[0]);
+                $this->nodesToAddCollector->addNodesBeforeNode($assignExpressions, $parent->stmts[0]);
             }
 
             return $parent->valueVar;

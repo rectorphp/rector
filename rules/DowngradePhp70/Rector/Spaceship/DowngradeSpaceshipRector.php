@@ -99,7 +99,7 @@ CODE_SAMPLE
         $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
         $variableAssign = new Variable($variableAssignName);
         $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
-        $this->addNodeBeforeNode($assignExpression, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $currentStatement);
 
         return new FuncCall($variableAssign, [new Arg($node->left), new Arg($node->right)]);
     }

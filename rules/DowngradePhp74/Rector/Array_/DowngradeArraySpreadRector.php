@@ -210,7 +210,7 @@ CODE_SAMPLE
         );
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new Variable($variableName);
-        $this->addNodeBeforeNode(new Assign($newVariable, $arrayItem->value), $array);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Assign($newVariable, $arrayItem->value), $array);
         return $newVariable;
     }
 

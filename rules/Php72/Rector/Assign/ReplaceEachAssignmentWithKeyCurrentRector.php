@@ -73,7 +73,7 @@ CODE_SAMPLE
         $assignVariable = $node->var;
 
         $newNodes = $this->createNewNodes($assignVariable, $eachedVariable);
-        $this->addNodesAfterNode($newNodes, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($newNodes, $node);
         $this->removeNode($node);
 
         return null;

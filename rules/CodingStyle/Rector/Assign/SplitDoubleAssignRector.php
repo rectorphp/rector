@@ -78,12 +78,12 @@ CODE_SAMPLE
         $newAssign = new Assign($node->var, $node->expr->expr);
 
         if (! $this->isExprCallOrNew($node->expr->expr)) {
-            $this->addNodeAfterNode($node->expr, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($node->expr, $node);
             return $newAssign;
         }
 
         $varAssign = new Assign($node->expr->var, $node->var);
-        $this->addNodeBeforeNode(new Expression($newAssign), $node);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($newAssign), $node);
 
         return $varAssign;
     }

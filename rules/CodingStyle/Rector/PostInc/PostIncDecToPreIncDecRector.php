@@ -118,7 +118,7 @@ CODE_SAMPLE
         }
 
         $arrayDimFetch->dim = $node->var;
-        $this->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
+        $this->nodesToAddCollector->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
 
         return $arrayDimFetch->dim;
     }

@@ -75,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodeAfterNode($node->right, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($node->right, $node);
 
         return $node->left;
     }

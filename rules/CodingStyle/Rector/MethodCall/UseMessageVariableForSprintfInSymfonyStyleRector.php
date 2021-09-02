@@ -86,7 +86,7 @@ CODE_SAMPLE
 
         $messageVariable = new Variable('message');
         $assign = new Assign($messageVariable, $argValue);
-        $this->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
 
         $node->args[0]->value = $messageVariable;
 

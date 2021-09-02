@@ -258,7 +258,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             $methodCall->args = [];
             $funcCall->args[] = new Arg($methodCall);
 
-            $this->addNodesAfterNode([$assign, $funcCall], $methodCall);
+            $this->nodesToAddCollector->addNodesAfterNode([$assign, $funcCall], $methodCall);
 
             $this->removeNode($methodCall);
 

@@ -82,7 +82,7 @@ CODE_SAMPLE
             $funcName = new Name('ini_set');
             $iniSet = new FuncCall($funcName, [new Arg($sessionKey), new Arg($option->value)]);
 
-            $this->addNodeBeforeNode(new Expression($iniSet), $currentStatement);
+            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($iniSet), $currentStatement);
         }
 
         unset($node->args[0]);

@@ -101,7 +101,7 @@ CODE_SAMPLE
         $function = $this->createClosure();
         $assign = new Assign(new Variable('streamIsatty'), $function);
 
-        $this->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
 
         return new FuncCall(new Variable('streamIsatty'), $node->args);
     }

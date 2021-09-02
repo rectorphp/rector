@@ -129,7 +129,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->addNodesBeforeNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        $this->nodesToAddCollector->addNodesBeforeNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
         return $assignAndRootExprAndNodesToAdd->getRootCallerExpr();
     }
 
@@ -144,7 +144,7 @@ CODE_SAMPLE
         $newVariable = $this->variableFromNewFactory->create($new);
         $nodesToAdd[] = $this->fluentMethodCallAsArgFactory->createFluentAsArg($methodCall, $newVariable);
 
-        $this->addNodesBeforeNode($nodesToAdd, $methodCall);
+        $this->nodesToAddCollector->addNodesBeforeNode($nodesToAdd, $methodCall);
         $this->removeParentParent($methodCall);
     }
 

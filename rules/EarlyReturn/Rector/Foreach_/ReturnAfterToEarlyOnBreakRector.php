@@ -141,7 +141,7 @@ CODE_SAMPLE
         Foreach_ $foreach
     ): Foreach_ {
         $this->removeNode($expression);
-        $this->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
         $this->removeNode($breaks[0]);
 
         $return->expr = $assignPreviousVariable->expr;

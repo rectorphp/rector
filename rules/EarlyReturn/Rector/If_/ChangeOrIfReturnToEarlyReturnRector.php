@@ -99,7 +99,7 @@ CODE_SAMPLE
                 $this->mirrorComments($if, $node);
             }
 
-            $this->addNodeBeforeNode($if, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         }
 
         $this->removeNode($node);

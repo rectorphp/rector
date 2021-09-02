@@ -275,7 +275,7 @@ CODE_SAMPLE
     {
         $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
-            $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
+            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
             return $funcCall;
         }
 
@@ -316,12 +316,12 @@ CODE_SAMPLE
                 ? $cond->right
                 : $cond->left;
             if ($this->valueResolver->isFalse($valueCompare)) {
-                $this->addNodeAfterNode($replaceEmptystringToNull, $if);
+                $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $if);
             }
         }
 
         if ($cond instanceof BooleanNot) {
-            $this->addNodeAfterNode($replaceEmptystringToNull, $if);
+            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $if);
         }
 
         return $funcCall;
@@ -331,7 +331,7 @@ CODE_SAMPLE
     {
         if ($if->stmts !== []) {
             $firstStmt = $if->stmts[0];
-            $this->addNodeBeforeNode($funcCall, $firstStmt);
+            $this->nodesToAddCollector->addNodeBeforeNode($funcCall, $firstStmt);
         } else {
             $if->stmts[0] = new Expression($funcCall);
         }
