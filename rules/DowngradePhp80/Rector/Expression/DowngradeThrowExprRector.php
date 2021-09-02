@@ -128,7 +128,7 @@ CODE_SAMPLE
             return $if;
         }
         $assign->expr = $ternary->if === null ? $ternary->cond : $ternary->if;
-        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
         return $if;
     }
     private function processCoalesce(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce, ?\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\If_
@@ -145,7 +145,7 @@ CODE_SAMPLE
             return $if;
         }
         $assign->expr = $coalesce->left;
-        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Expression($assign), $if);
         return $if;
     }
     private function hasThrowInAssignExpr(\PhpParser\Node\Expr\Assign $assign) : bool

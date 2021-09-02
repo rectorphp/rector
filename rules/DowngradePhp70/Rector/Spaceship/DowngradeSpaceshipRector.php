@@ -87,7 +87,7 @@ CODE_SAMPLE
         $variableAssignName = $this->variableNaming->createCountedValueName('battleShipcompare', $scope);
         $variableAssign = new \PhpParser\Node\Expr\Variable($variableAssignName);
         $assignExpression = $this->getAssignExpression($anonymousFunction, $variableAssign);
-        $this->addNodeBeforeNode($assignExpression, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $currentStatement);
         return new \PhpParser\Node\Expr\FuncCall($variableAssign, [new \PhpParser\Node\Arg($node->left), new \PhpParser\Node\Arg($node->right)]);
     }
     private function getAssignExpression(\PhpParser\Node\Expr\Closure $closure, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Stmt\Expression

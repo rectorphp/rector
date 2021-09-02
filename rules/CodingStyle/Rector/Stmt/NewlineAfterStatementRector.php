@@ -113,7 +113,7 @@ CODE_SAMPLE
             }
         }
         $this->stmtsHashed[$hash] = \true;
-        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
         return $node;
     }
     private function shouldSkip(\PhpParser\Node $nextNode) : bool

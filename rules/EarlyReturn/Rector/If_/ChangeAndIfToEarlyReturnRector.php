@@ -111,7 +111,7 @@ CODE_SAMPLE
         $expr = $node->cond;
         $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
         if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
-            $this->addNodeAfterNode($node->stmts[0], $node);
+            $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
             return $this->processReplaceIfs($node, $booleanAndConditions, new \PhpParser\Node\Stmt\Return_());
         }
         if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturn->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
@@ -119,7 +119,7 @@ CODE_SAMPLE
         }
         $this->removeNode($ifNextReturn);
         $ifNextReturn = $node->stmts[0];
-        $this->addNodeAfterNode($ifNextReturn, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($ifNextReturn, $node);
         $ifNextReturnClone = $ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ ? clone $ifNextReturn : new \PhpParser\Node\Stmt\Return_();
         if (!$this->contextAnalyzer->isInLoop($node)) {
             return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
@@ -127,7 +127,7 @@ CODE_SAMPLE
         if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Return_(), $node);
+        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Return_(), $node);
         return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
     }
     /**
@@ -139,7 +139,7 @@ CODE_SAMPLE
         $ifs = $this->invertedIfFactory->createFromConditions($node, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $node);
         foreach ($ifs as $if) {
-            $this->addNodeBeforeNode($if, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         }
         $this->removeNode($node);
         if (!$node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr) {

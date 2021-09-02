@@ -85,7 +85,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
             $current = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
             $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-            $this->addNodeBeforeNode($replacements->getAssign(), $current instanceof \PhpParser\Node\Stmt\Return_ ? $current : $currentStatement);
+            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $current instanceof \PhpParser\Node\Stmt\Return_ ? $current : $currentStatement);
             $node->args[$key]->value = $replacements->getVariable();
             // add variable name to scope, so we prevent duplication of new variable of the same name
             $currentScope = $currentScope->assignExpression($replacements->getVariable(), $currentScope->getType($replacements->getVariable()));

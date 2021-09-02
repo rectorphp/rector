@@ -213,7 +213,7 @@ CODE_SAMPLE
     {
         $parent = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\Stmt\Expression) {
-            $this->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
+            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $funcCall);
             return $funcCall;
         }
         if ($parent instanceof \PhpParser\Node\Stmt\If_ && $parent->cond === $funcCall) {
@@ -243,11 +243,11 @@ CODE_SAMPLE
         if ($cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $valueCompare = $cond->left === $funcCall ? $cond->right : $cond->left;
             if ($this->valueResolver->isFalse($valueCompare)) {
-                $this->addNodeAfterNode($replaceEmptystringToNull, $if);
+                $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $if);
             }
         }
         if ($cond instanceof \PhpParser\Node\Expr\BooleanNot) {
-            $this->addNodeAfterNode($replaceEmptystringToNull, $if);
+            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $if);
         }
         return $funcCall;
     }
@@ -255,7 +255,7 @@ CODE_SAMPLE
     {
         if ($if->stmts !== []) {
             $firstStmt = $if->stmts[0];
-            $this->addNodeBeforeNode($funcCall, $firstStmt);
+            $this->nodesToAddCollector->addNodeBeforeNode($funcCall, $firstStmt);
         } else {
             $if->stmts[0] = new \PhpParser\Node\Stmt\Expression($funcCall);
         }

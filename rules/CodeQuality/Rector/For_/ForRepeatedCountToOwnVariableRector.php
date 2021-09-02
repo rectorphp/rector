@@ -86,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
         $countAssign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($variableName), $countInCond);
-        $this->addNodeBeforeNode($countAssign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($countAssign, $node);
         return $node;
     }
 }

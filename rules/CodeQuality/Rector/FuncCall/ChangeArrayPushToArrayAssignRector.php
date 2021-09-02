@@ -75,7 +75,7 @@ CODE_SAMPLE
             if ($position === 1) {
                 $this->mirrorComments($assignExpression, $node);
             }
-            $this->addNodeAfterNode($assignExpression, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($assignExpression, $node);
             ++$position;
         }
         $this->removeNode($node);

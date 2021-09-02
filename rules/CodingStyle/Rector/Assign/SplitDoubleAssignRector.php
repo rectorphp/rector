@@ -64,11 +64,11 @@ CODE_SAMPLE
         }
         $newAssign = new \PhpParser\Node\Expr\Assign($node->var, $node->expr->expr);
         if (!$this->isExprCallOrNew($node->expr->expr)) {
-            $this->addNodeAfterNode($node->expr, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($node->expr, $node);
             return $newAssign;
         }
         $varAssign = new \PhpParser\Node\Expr\Assign($node->expr->var, $node->var);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($newAssign), $node);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($newAssign), $node);
         return $varAssign;
     }
     private function isExprCallOrNew(\PhpParser\Node\Expr $expr) : bool

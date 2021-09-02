@@ -236,7 +236,7 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
             $methodCall->var = $this->getTestedObjectPropertyFetch();
             $methodCall->args = [];
             $funcCall->args[] = new \PhpParser\Node\Arg($methodCall);
-            $this->addNodesAfterNode([$assign, $funcCall], $methodCall);
+            $this->nodesToAddCollector->addNodesAfterNode([$assign, $funcCall], $methodCall);
             $this->removeNode($methodCall);
             return;
         }

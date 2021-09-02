@@ -57,7 +57,7 @@ CODE_SAMPLE
                 if ($keyCatchType === 0) {
                     continue;
                 }
-                $this->addNodeAfterNode(new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
+                $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
             }
         }
         if ($this->nodeComparator->areNodesEqual($originalCatches, $node->catches)) {

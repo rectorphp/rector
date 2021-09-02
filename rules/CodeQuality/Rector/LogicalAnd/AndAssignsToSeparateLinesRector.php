@@ -64,7 +64,7 @@ CODE_SAMPLE
         if (!$parentNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        $this->addNodeAfterNode($node->right, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($node->right, $node);
         return $node->left;
     }
 }

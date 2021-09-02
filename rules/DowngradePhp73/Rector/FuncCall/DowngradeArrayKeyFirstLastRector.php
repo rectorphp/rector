@@ -63,7 +63,7 @@ CODE_SAMPLE
     {
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
-        $this->addNodeBeforeNode($resetFuncCall, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
         $funcCall->name = new \PhpParser\Node\Name('key');
         return $funcCall;
     }
@@ -71,7 +71,7 @@ CODE_SAMPLE
     {
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
-        $this->addNodeBeforeNode($resetFuncCall, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
         $funcCall->name = new \PhpParser\Node\Name('key');
         return $funcCall;
     }

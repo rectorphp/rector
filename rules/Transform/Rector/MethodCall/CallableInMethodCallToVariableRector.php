@@ -91,7 +91,7 @@ CODE_SAMPLE
             $resultVariable = new \PhpParser\Node\Expr\Variable('result');
             $unwrappedNodes = $this->unwrapClosureFactory->createAssign($resultVariable, $arg);
             $arg->value = $resultVariable;
-            $this->addNodesBeforeNode($unwrappedNodes, $node);
+            $this->nodesToAddCollector->addNodesBeforeNode($unwrappedNodes, $node);
             return $node;
         }
         return null;

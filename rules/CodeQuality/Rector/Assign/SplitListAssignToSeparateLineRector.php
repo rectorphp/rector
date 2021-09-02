@@ -61,7 +61,7 @@ CODE_SAMPLE
         /** @var Array_ $rightArray */
         $rightArray = $node->expr;
         $standaloneAssigns = $this->createStandaloneAssigns($leftArray, $rightArray);
-        $this->addNodesAfterNode($standaloneAssigns, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($standaloneAssigns, $node);
         $this->removeNode($node);
         return $node;
     }

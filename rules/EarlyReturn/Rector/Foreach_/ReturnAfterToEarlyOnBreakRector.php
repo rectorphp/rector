@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function processEarlyReturn(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Assign $assign, array $breaks, \PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Expr\Assign $assignPreviousVariable, \PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Stmt\Foreach_
     {
         $this->removeNode($expression);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($assign->expr), $breaks[0]);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($assign->expr), $breaks[0]);
         $this->removeNode($breaks[0]);
         $return->expr = $assignPreviousVariable->expr;
         $this->removeNode($assignPreviousVariable);

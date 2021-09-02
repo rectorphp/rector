@@ -69,7 +69,7 @@ CODE_SAMPLE
         // only value: list(, $value) = each($values);
         if ($listNode->items[1] && $listNode->items[0] === null) {
             $nextFuncCall = $this->nodeFactory->createFuncCall('next', $eachFuncCall->args);
-            $this->addNodeAfterNode($nextFuncCall, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
             $currentFuncCall = $this->nodeFactory->createFuncCall('current', $eachFuncCall->args);
             $secondArrayItem = $listNode->items[1];
             return new \PhpParser\Node\Expr\Assign($secondArrayItem->value, $currentFuncCall);
@@ -81,9 +81,9 @@ CODE_SAMPLE
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $assign = new \PhpParser\Node\Expr\Assign($secondArrayItem->value, $currentFuncCall);
-        $this->addNodeAfterNode($assign, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($assign, $node);
         $nextFuncCall = $this->nodeFactory->createFuncCall('next', $eachFuncCall->args);
-        $this->addNodeAfterNode($nextFuncCall, $node);
+        $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
         $keyFuncCall = $this->nodeFactory->createFuncCall('key', $eachFuncCall->args);
         $firstArrayItem = $listNode->items[0];
         if (!$firstArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {

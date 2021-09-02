@@ -88,7 +88,7 @@ CODE_SAMPLE
             $nodesToAdd[\key($nodesToAdd)] = new \PhpParser\Node\Stmt\Return_($lastNodeToAdd);
         }
         $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($nodesToAdd, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($nodesToAdd, $node);
         return $node;
     }
     private function matchReturnMethodCall(\PhpParser\Node\Stmt\Return_ $return) : ?\PhpParser\Node\Expr

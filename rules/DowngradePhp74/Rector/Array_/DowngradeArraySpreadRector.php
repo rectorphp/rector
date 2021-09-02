@@ -182,7 +182,7 @@ CODE_SAMPLE
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($array, $nodeScope, 'item' . $position . 'Unpacked');
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new \PhpParser\Node\Expr\Variable($variableName);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($newVariable, $arrayItem->value), $array);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($newVariable, $arrayItem->value), $array);
         return $newVariable;
     }
     /**

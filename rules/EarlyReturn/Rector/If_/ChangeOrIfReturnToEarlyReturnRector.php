@@ -88,7 +88,7 @@ CODE_SAMPLE
             if ($key === 0) {
                 $this->mirrorComments($if, $node);
             }
-            $this->addNodeBeforeNode($if, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         }
         $this->removeNode($node);
         return $node;

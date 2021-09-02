@@ -73,7 +73,7 @@ CODE_SAMPLE
             $originalNode = clone $node;
             $if = new \PhpParser\Node\Stmt\If_($node->cond);
             $if->stmts = $node->stmts;
-            $this->addNodeBeforeNode($if, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
             $this->mirrorComments($if, $node);
             /** @var ElseIf_ $firstElseIf */
             $firstElseIf = \array_shift($node->elseifs);
@@ -82,16 +82,16 @@ CODE_SAMPLE
             $this->mirrorComments($node, $firstElseIf);
             $statements = $this->getStatementsElseIfs($node);
             if ($statements !== []) {
-                $this->addNodesAfterNode($statements, $node);
+                $this->nodesToAddCollector->addNodesAfterNode($statements, $node);
             }
             if ($originalNode->else instanceof \PhpParser\Node\Stmt\Else_) {
                 $node->else = null;
-                $this->addNodeAfterNode($originalNode->else, $node);
+                $this->nodesToAddCollector->addNodeAfterNode($originalNode->else, $node);
             }
             return $node;
         }
         if ($node->else !== null) {
-            $this->addNodesAfterNode($node->else->stmts, $node);
+            $this->nodesToAddCollector->addNodesAfterNode($node->else->stmts, $node);
             $node->else = null;
             return $node;
         }

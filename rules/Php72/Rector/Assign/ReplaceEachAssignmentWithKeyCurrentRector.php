@@ -61,7 +61,7 @@ CODE_SAMPLE
         $eachedVariable = $eachFuncCall->args[0]->value;
         $assignVariable = $node->var;
         $newNodes = $this->createNewNodes($assignVariable, $eachedVariable);
-        $this->addNodesAfterNode($newNodes, $node);
+        $this->nodesToAddCollector->addNodesAfterNode($newNodes, $node);
         $this->removeNode($node);
         return null;
     }

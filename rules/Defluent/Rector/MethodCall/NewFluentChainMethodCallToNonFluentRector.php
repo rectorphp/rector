@@ -105,7 +105,7 @@ CODE_SAMPLE
             return null;
         }
         $this->fluentNodeRemover->removeCurrentNode($node);
-        $this->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        $this->nodesToAddCollector->addNodesAfterNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
         return null;
     }
     private function isFoundInPrevious(\PhpParser\Node\Stmt $stmt, ?\PhpParser\Node $previous) : bool

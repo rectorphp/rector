@@ -96,7 +96,7 @@ CODE_SAMPLE
         }
         $function = $this->createClosure();
         $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('streamIsatty'), $function);
-        $this->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Expr\Variable('streamIsatty'), $node->args);
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure

@@ -106,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
         $newStmts = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $node);
-        $this->addNodesBeforeNode($newStmts, $node);
+        $this->nodesToAddCollector->addNodesBeforeNode($newStmts, $node);
         // change new arg to root variable
         $newVariable = $this->variableFromNewFactory->create($new);
         $rootMethodCall->args = [new \PhpParser\Node\Arg($newVariable)];

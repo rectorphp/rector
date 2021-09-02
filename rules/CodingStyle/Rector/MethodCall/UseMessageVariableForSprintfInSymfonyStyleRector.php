@@ -71,7 +71,7 @@ CODE_SAMPLE
         }
         $messageVariable = new \PhpParser\Node\Expr\Variable('message');
         $assign = new \PhpParser\Node\Expr\Assign($messageVariable, $argValue);
-        $this->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
         $node->args[0]->value = $messageVariable;
         return $node;
     }

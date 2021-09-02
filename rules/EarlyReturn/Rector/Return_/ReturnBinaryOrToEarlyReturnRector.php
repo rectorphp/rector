@@ -90,10 +90,10 @@ CODE_SAMPLE
         }
         $this->mirrorComments($ifs[0], $node);
         foreach ($ifs as $if) {
-            $this->addNodeBeforeNode($if, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         }
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
-        $this->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($lastReturnExpr), $node);
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($lastReturnExpr), $node);
         $this->removeNode($node);
         return $node;
     }

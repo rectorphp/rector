@@ -134,7 +134,7 @@ CODE_SAMPLE
         if (!$assignAndRootExprAndNodesToAdd instanceof \Rector\Defluent\ValueObject\AssignAndRootExprAndNodesToAdd) {
             return null;
         }
-        $this->addNodesBeforeNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
+        $this->nodesToAddCollector->addNodesBeforeNode($assignAndRootExprAndNodesToAdd->getNodesToAdd(), $node);
         return $assignAndRootExprAndNodesToAdd->getRootCallerExpr();
     }
     private function refactorNew(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\New_ $new) : void
@@ -145,7 +145,7 @@ CODE_SAMPLE
         $nodesToAdd = $this->nonFluentChainMethodCallFactory->createFromNewAndRootMethodCall($new, $methodCall);
         $newVariable = $this->variableFromNewFactory->create($new);
         $nodesToAdd[] = $this->fluentMethodCallAsArgFactory->createFluentAsArg($methodCall, $newVariable);
-        $this->addNodesBeforeNode($nodesToAdd, $methodCall);
+        $this->nodesToAddCollector->addNodesBeforeNode($nodesToAdd, $methodCall);
         $this->removeParentParent($methodCall);
     }
     private function removeParentParent(\PhpParser\Node\Expr\MethodCall $methodCall) : void

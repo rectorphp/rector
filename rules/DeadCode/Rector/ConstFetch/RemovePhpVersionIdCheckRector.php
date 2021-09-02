@@ -162,7 +162,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->phpVersionConstraint >= $value->value) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
             $this->removeNode($if);
         }
         return $constFetch;
@@ -174,7 +174,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->phpVersionConstraint >= $value->value) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
             $this->removeNode($if);
         }
         return $constFetch;
@@ -207,7 +207,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->phpVersionConstraint >= $value->value) {
-            $this->addNodesBeforeNode($if->stmts, $if);
+            $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
             $this->removeNode($if);
         }
         return $constFetch;

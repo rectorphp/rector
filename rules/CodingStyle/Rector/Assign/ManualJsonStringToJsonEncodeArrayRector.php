@@ -122,7 +122,7 @@ CODE_SAMPLE
                 $jsonEncodeAssign = $this->createJsonEncodeAssign($node->var, $jsonArray);
                 $jsonDataVariable = new \PhpParser\Node\Expr\Variable(self::JSON_DATA);
                 $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
-                $this->addNodeBeforeNode($jsonDataAssign, $node);
+                $this->nodesToAddCollector->addNodeBeforeNode($jsonDataAssign, $node);
                 return $jsonEncodeAssign;
             }
             // B. just start of a json? join with all the strings that concat so same variable
@@ -201,7 +201,7 @@ CODE_SAMPLE
         $jsonArray = $this->jsonArrayFactory->createFromJsonStringAndPlaceholders($stringValue, $placeholderNodes);
         $jsonDataVariable = new \PhpParser\Node\Expr\Variable(self::JSON_DATA);
         $jsonDataAssign = new \PhpParser\Node\Expr\Assign($jsonDataVariable, $jsonArray);
-        $this->addNodeBeforeNode($jsonDataAssign, $assign);
+        $this->nodesToAddCollector->addNodeBeforeNode($jsonDataAssign, $assign);
         return $this->createJsonEncodeAssign($assign->var, $jsonArray);
     }
     /**

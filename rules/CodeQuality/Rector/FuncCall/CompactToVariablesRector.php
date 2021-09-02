@@ -126,7 +126,7 @@ CODE_SAMPLE
         $assignVariable = $funcCall->args[0]->value;
         $preAssign = new \PhpParser\Node\Expr\Assign($assignVariable, $array);
         $currentStatement = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $this->addNodeBeforeNode($preAssign, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStatement);
         return $expr;
     }
     private function refactorAssignArray(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr

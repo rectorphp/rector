@@ -103,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
         $arrayDimFetch->dim = $node->var;
-        $this->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
+        $this->nodesToAddCollector->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
         return $arrayDimFetch->dim;
     }
     /**
