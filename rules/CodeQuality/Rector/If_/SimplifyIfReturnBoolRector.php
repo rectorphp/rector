@@ -125,6 +125,7 @@ CODE_SAMPLE
         if ($nextNode->expr === null) {
             return true;
         }
+
         // negate + negate → skip for now
         if (! $this->valueResolver->isFalse($returnedExpr)) {
             return ! $this->valueResolver->isTrueOrFalse($nextNode->expr);

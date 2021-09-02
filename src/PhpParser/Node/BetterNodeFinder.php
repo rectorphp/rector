@@ -193,6 +193,7 @@ final class BetterNodeFinder
             if (! $node instanceof ClassLike) {
                 return false;
             }
+
             // skip anonymous classes
             return ! ($node instanceof Class_ && $this->classAnalyzer->isAnonymousClass($node));
         });

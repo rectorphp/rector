@@ -97,6 +97,7 @@ CODE_SAMPLE
         if (! $this->nodeComparator->areNodesEqual($ternary->cond->left, $nestedTernary->cond->left)) {
             return true;
         }
+
         // $a X $b ? . : ($a X $b ? . : .)
         return ! $this->nodeComparator->areNodesEqual($ternary->cond->right, $nestedTernary->cond->right);
     }

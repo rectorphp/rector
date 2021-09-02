@@ -149,6 +149,7 @@ CODE_SAMPLE
                     // Reset the accumulated items
                     $accumulatedItems = [];
                 }
+
                 // Add the current item, still with "unpack = true" (it will be removed later on)
                 $newItems[] = $item;
                 continue;
@@ -157,6 +158,7 @@ CODE_SAMPLE
             // Normal item, it goes into the accumulated array
             $accumulatedItems[] = $item;
         }
+
         // Add the remaining accumulated items
         if ($accumulatedItems !== []) {
             $newItems[] = $this->createArrayItem($accumulatedItems);
@@ -249,6 +251,7 @@ CODE_SAMPLE
             if ($type instanceof ArrayType) {
                 return new Arg($arrayItem);
             }
+
             // If it is iterable, then directly return `iterator_to_array`
             if ($this->isIterableType($type)) {
                 return new Arg($iteratorToArrayFuncCall);

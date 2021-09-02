@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -78,28 +77,17 @@ CODE_SAMPLE
 
         $tempVariable = new Variable($tempVariableName);
 
-        $assignment = new Expression(
-            new Assign(
-                $tempVariable,
-                $node->args[0]->value
-            )
-        );
+        $expression = new Expression(new Assign($tempVariable, $node->args[0]->value));
 
         $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
-        $this->addNodeBeforeNode($assignment, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStatement);
 
-        $closure = new Closure;
+        $closure = new Closure();
         $closure->uses[] = new ClosureUse($tempVariable);
 
         $innerFuncCall = new FuncCall(
             $tempVariable,
-            [
-                new Arg(
-                    $this->nodeFactory->createFuncCall('func_get_args'),
-                    false,
-                    true
-                )
-            ]
+            [new Arg($this->nodeFactory->createFuncCall('func_get_args'), false, true)]
         );
 
         $closure->stmts[] = new Return_($innerFuncCall);

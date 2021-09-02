@@ -75,6 +75,7 @@ CODE_SAMPLE
 
             return $node;
         }
+
         // nothing we can do
         return null;
     }

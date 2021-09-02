@@ -183,6 +183,7 @@ final class EregToPcreTransformer
             if ($i >= $l) {
                 break;
             }
+
             // piece after the atom (only ONE of them is possible)
             $char = $content[$i];
             if ($char === '*' || $char === '+' || $char === '?') {

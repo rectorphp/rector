@@ -133,7 +133,21 @@ CODE_SAMPLE
         $rangeLine = $line - $endLine;
 
         if ($rangeLine > 1) {
-            return null;
+            $comments = $nextNode->getAttribute(AttributeKey::COMMENTS);
+            if ($comments === null) {
+                return null;
+            }
+
+            if (! isset($comments[0])) {
+                return null;
+            }
+
+            $line = $comments[0]->getLine();
+            $rangeLine = $line - $endLine;
+
+            if ($rangeLine > 1) {
+                return null;
+            }
         }
 
         $this->stmtsHashed[$hash] = true;

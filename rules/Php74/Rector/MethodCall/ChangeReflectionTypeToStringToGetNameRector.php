@@ -206,6 +206,7 @@ CODE_SAMPLE
         if ($parentNode instanceof String_) {
             return false;
         }
+
         // probably already converted
         return ! $parentNode instanceof Concat;
     }

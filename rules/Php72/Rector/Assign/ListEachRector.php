@@ -131,6 +131,7 @@ CODE_SAMPLE
         if (count($listNode->items) !== 2) {
             return true;
         }
+
         // empty list → cannot handle
         if ($listNode->items[0] !== null) {
             return false;

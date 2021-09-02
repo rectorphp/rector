@@ -90,6 +90,7 @@ final class NamedToUnnamedArgs
             if ($i > $highestParameterPosition) {
                 continue;
             }
+
             /** @var ParameterReflection|PhpParameterReflection $parameterReflection */
             if ($isNativeFunctionReflection) {
                 /** @var ReflectionFunction $functionLikeReflection */

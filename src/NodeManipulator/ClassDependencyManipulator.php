@@ -248,6 +248,7 @@ final class ClassDependencyManipulator
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
             return false;
         }
+
         // only if the property does not exist yet
         $existingProperty = $class->getProperty($propertyMetadata->getName());
         if (! $existingProperty instanceof Property) {

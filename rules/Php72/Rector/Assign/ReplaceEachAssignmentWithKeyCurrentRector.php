@@ -93,6 +93,7 @@ CODE_SAMPLE
         if ($parentNode instanceof While_) {
             return true;
         }
+
         // skip assign to List
         if (! $parentNode instanceof Assign) {
             return false;

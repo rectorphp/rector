@@ -176,6 +176,7 @@ CODE_SAMPLE
                 ++$count;
                 continue;
             }
+
             // If it is a nested list, check if all its items are by reference
             $isNested = $listItem->value instanceof List_ || $listItem->value instanceof Array_;
             if ($isNested) {
@@ -186,6 +187,7 @@ CODE_SAMPLE
                     continue;
                 }
             }
+
             // Item not by reference. Reach the end
             return $count;
         }
@@ -213,6 +215,7 @@ CODE_SAMPLE
             if ($listItem->value instanceof Variable && ! $listItem->byRef) {
                 continue;
             }
+
             // Access the key, if provided, or the position otherwise
             $key = $this->getArrayItemKey($listItem, $position);
             // Either the item is a variable, or a nested list
@@ -231,6 +234,7 @@ CODE_SAMPLE
                 );
                 continue;
             }
+
             // Nested list. Combine with the nodes from the recursive call
             /** @var List_ $nestedList */
             $nestedList = $listItem->value;
@@ -347,6 +351,7 @@ CODE_SAMPLE
             if ($condition === self::ALL) {
                 return $this->hasAllItemsByRef($nestedList->items);
             }
+
             // $condition === self::ANY
             return $this->hasAnyItemByRef($nestedList->items);
         }
