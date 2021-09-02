@@ -61,15 +61,11 @@ CODE_SAMPLE
     private function refactorLogicalToBoolean(LogicalOr|LogicalAnd $node): BooleanAnd|BooleanOr
     {
         if ($node->left instanceof LogicalOr || $node->left instanceof LogicalAnd) {
-            $node->left = $this->refactorLogicalToBoolean(
-                $node->left,
-            );
+            $node->left = $this->refactorLogicalToBoolean($node->left,);
         }
 
         if ($node->right instanceof LogicalOr || $node->right instanceof LogicalAnd) {
-            $node->right = $this->refactorLogicalToBoolean(
-                $node->right,
-            );
+            $node->right = $this->refactorLogicalToBoolean($node->right,);
         }
 
         if ($node instanceof LogicalOr) {

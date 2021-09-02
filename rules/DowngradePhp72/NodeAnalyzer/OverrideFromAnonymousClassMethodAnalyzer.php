@@ -8,6 +8,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -23,36 +24,58 @@ final class OverrideFromAnonymousClassMethodAnalyzer
     ) {
     }
 
-    public function isOverrideParentMethod(ClassLike $classLike, ClassMethod $classMethod): bool
-    {
+    public function matchAncestorClassReflectionOverrideable(
+        ClassLike $classLike,
+        ClassMethod $classMethod
+    ): ?ClassReflection {
         if (! $this->classAnalyzer->isAnonymousClass($classLike)) {
-            return false;
+            return null;
+        }
+
+        /** @var Class_ $classLike */
+        $interfaces = $classLike->implements;
+        foreach ($interfaces as $interface) {
+            if (! $interface instanceof FullyQualified) {
+                continue;
+            }
+
+            $resolve = $this->resolveClassReflectionWithNotPrivateMethod($interface, $classMethod);
+            if ($resolve instanceof ClassReflection) {
+                return $resolve;
+            }
         }
 
         /** @var Class_ $classLike */
         if (! $classLike->extends instanceof FullyQualified) {
-            return false;
+            return null;
         }
 
-        $extendsClass = $classLike->extends->toString();
-        if (! $this->reflectionProvider->hasClass($extendsClass)) {
-            return false;
+        return $this->resolveClassReflectionWithNotPrivateMethod($classLike->extends, $classMethod);
+    }
+
+    private function resolveClassReflectionWithNotPrivateMethod(FullyQualified $fullyQualified, ClassMethod $classMethod): ?ClassReflection
+    {
+        $ancestorClassLike = $fullyQualified->toString();
+        if (! $this->reflectionProvider->hasClass($ancestorClassLike)) {
+            return null;
         }
 
-        $classReflection = $this->reflectionProvider->getClass($extendsClass);
+        $classReflection = $this->reflectionProvider->getClass($ancestorClassLike);
         $methodName = $this->nodeNameResolver->getName($classMethod);
-
         if (! $classReflection->hasMethod($methodName)) {
-            return false;
+            return null;
         }
 
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         $method = $classReflection->getMethod($methodName, $scope);
-
         if (! $method instanceof PhpMethodReflection) {
-            return false;
+            return null;
         }
 
-        return ! $method->isPrivate();
+        if ($method->isPrivate()) {
+            return null;
+        }
+
+        return $classReflection;
     }
 }

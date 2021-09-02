@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
 use Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer;
@@ -56,7 +55,6 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
         private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
         private BuiltInMethodAnalyzer $builtInMethodAnalyzer,
         private OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer,
-        private AstResolver $astResolver,
         private SealedClassAnalyzer $sealedClassAnalyzer
     ) {
     }
@@ -122,17 +120,13 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->overrideFromAnonymousClassMethodAnalyzer->isOverrideParentMethod($classLike, $node)) {
-            $classReflection = $this->reflectionProvider->getClass($classLike->extends->toString());
-            $methodName = $this->nodeNameResolver->getName($node);
-            /** @var ClassMethod $classMethod */
-            $classMethod = $this->astResolver->resolveClassMethod($classReflection->getName(), $methodName);
+        $ancestorOverridableAnonymousClass = $this->overrideFromAnonymousClassMethodAnalyzer->matchAncestorClassReflectionOverrideable(
+            $classLike,
+            $node
+        );
 
-            if ($this->shouldSkip($classReflection, $classMethod)) {
-                return null;
-            }
-
-            return $this->processRemoveParamTypeFromMethod($node);
+        if ($ancestorOverridableAnonymousClass instanceof ClassReflection) {
+            return $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $node);
         }
 
         $className = $this->nodeNameResolver->getName($classLike);
@@ -145,15 +139,7 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($this->shouldSkip($classReflection, $node)) {
-            return null;
-        }
-
-        if ($this->builtInMethodAnalyzer->isImplementsBuiltInInterface($classReflection, $node)) {
-            return null;
-        }
-
-        return $this->processRemoveParamTypeFromMethod($node);
+        return $this->processRemoveParamTypeFromMethod($classReflection, $node);
     }
 
     /**
@@ -192,8 +178,16 @@ CODE_SAMPLE
         return $this->shouldSkipClassMethod($classMethod);
     }
 
-    private function processRemoveParamTypeFromMethod(ClassMethod $classMethod): ClassMethod
+    private function processRemoveParamTypeFromMethod(ClassReflection $classReflection, ClassMethod $classMethod): ?ClassMethod
     {
+        if ($this->shouldSkip($classReflection, $classMethod)) {
+            return null;
+        }
+
+        if ($this->builtInMethodAnalyzer->isImplementsBuiltInInterface($classReflection, $classMethod)) {
+            return null;
+        }
+
         // Downgrade every scalar parameter, just to be sure
         foreach (array_keys($classMethod->params) as $paramPosition) {
             $this->removeParamTypeFromMethod($classMethod, $paramPosition);

@@ -105,6 +105,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected File $file;
 
+    protected NodesToAddCollector $nodesToAddCollector;
+
     private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
 
     private SymfonyStyle $symfonyStyle;
@@ -121,8 +123,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var string|null
      */
     private $previousAppliedClass;
-
-    protected NodesToAddCollector $nodesToAddCollector;
 
     private CurrentFileProvider $currentFileProvider;
 
