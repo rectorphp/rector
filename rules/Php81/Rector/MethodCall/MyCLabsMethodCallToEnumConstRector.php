@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector\MyCLabsMethodCallToEnumConstRectorTest
  */
-final class MyCLabsMethodCallToEnumConstRector extends AbstractRector
+final class MyCLabsMethodCallToEnumConstRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -73,5 +75,10 @@ CODE_SAMPLE
         }
 
         return $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ENUM;
     }
 }

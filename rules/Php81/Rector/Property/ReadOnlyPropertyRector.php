@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\Property\ReadOnlyPropertyRector\ReadOnlyPropertyRectorTest
  */
-final class ReadOnlyPropertyRector extends AbstractRector
+final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private PropertyManipulator $propertyManipulator
@@ -110,5 +112,10 @@ CODE_SAMPLE
 
         $this->visibilityManipulator->makeReadonly($param);
         return $param;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::READONLY_PROPERTY;
     }
 }
