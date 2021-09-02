@@ -127,6 +127,10 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      */
     protected $file;
     /**
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    protected $nodesToAddCollector;
+    /**
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
@@ -154,10 +158,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      * @var string|null
      */
     private $previousAppliedClass;
-    /**
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    protected $nodesToAddCollector;
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider
      */

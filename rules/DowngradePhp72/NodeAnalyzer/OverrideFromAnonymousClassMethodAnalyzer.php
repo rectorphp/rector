@@ -7,6 +7,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -32,29 +33,47 @@ final class OverrideFromAnonymousClassMethodAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isOverrideParentMethod(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    public function matchAncestorClassReflectionOverrideable(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\ClassReflection
     {
         if (!$this->classAnalyzer->isAnonymousClass($classLike)) {
-            return \false;
+            return null;
+        }
+        /** @var Class_ $classLike */
+        $interfaces = $classLike->implements;
+        foreach ($interfaces as $interface) {
+            if (!$interface instanceof \PhpParser\Node\Name\FullyQualified) {
+                continue;
+            }
+            $resolve = $this->resolveClassReflectionWithNotPrivateMethod($interface, $classMethod);
+            if ($resolve instanceof \PHPStan\Reflection\ClassReflection) {
+                return $resolve;
+            }
         }
         /** @var Class_ $classLike */
         if (!$classLike->extends instanceof \PhpParser\Node\Name\FullyQualified) {
-            return \false;
+            return null;
         }
-        $extendsClass = $classLike->extends->toString();
-        if (!$this->reflectionProvider->hasClass($extendsClass)) {
-            return \false;
+        return $this->resolveClassReflectionWithNotPrivateMethod($classLike->extends, $classMethod);
+    }
+    private function resolveClassReflectionWithNotPrivateMethod(\PhpParser\Node\Name\FullyQualified $fullyQualified, \PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\ClassReflection
+    {
+        $ancestorClassLike = $fullyQualified->toString();
+        if (!$this->reflectionProvider->hasClass($ancestorClassLike)) {
+            return null;
         }
-        $classReflection = $this->reflectionProvider->getClass($extendsClass);
+        $classReflection = $this->reflectionProvider->getClass($ancestorClassLike);
         $methodName = $this->nodeNameResolver->getName($classMethod);
         if (!$classReflection->hasMethod($methodName)) {
-            return \false;
+            return null;
         }
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $method = $classReflection->getMethod($methodName, $scope);
         if (!$method instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
-            return \false;
+            return null;
         }
-        return !$method->isPrivate();
+        if ($method->isPrivate()) {
+            return null;
+        }
+        return $classReflection;
     }
 }
