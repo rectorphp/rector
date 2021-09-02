@@ -13,7 +13,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionFunction;
-use RectorPrefix20210901\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210902\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class VariableToConstantGuard
 {
     /**
@@ -32,7 +32,7 @@ final class VariableToConstantGuard
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210901\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20210902\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;

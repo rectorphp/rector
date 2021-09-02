@@ -40,8 +40,8 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210901\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20210902\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210902\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 final class InitializeArgumentsClassMethodFactory
 {
     /**
@@ -88,7 +88,7 @@ final class InitializeArgumentsClassMethodFactory
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20210901\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20210902\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
     {
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -129,7 +129,7 @@ final class InitializeArgumentsClassMethodFactory
     }
     private function createNewClassMethod() : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20210901\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::METHOD_NAME);
+        $methodBuilder = new \RectorPrefix20210902\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::METHOD_NAME);
         $methodBuilder->makePublic();
         $methodBuilder->setReturnType('void');
         return $methodBuilder->getNode();

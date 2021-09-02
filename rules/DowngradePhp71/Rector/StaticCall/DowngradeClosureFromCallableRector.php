@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -64,9 +63,9 @@ CODE_SAMPLE
         }
         $tempVariableName = $this->variableNaming->createCountedValueName('callable', $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
         $tempVariable = new \PhpParser\Node\Expr\Variable($tempVariableName);
-        $assignment = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($tempVariable, $node->args[0]->value));
+        $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($tempVariable, $node->args[0]->value));
         $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        $this->addNodeBeforeNode($assignment, $currentStatement);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $currentStatement);
         $closure = new \PhpParser\Node\Expr\Closure();
         $closure->uses[] = new \PhpParser\Node\Expr\ClosureUse($tempVariable);
         $innerFuncCall = new \PhpParser\Node\Expr\FuncCall($tempVariable, [new \PhpParser\Node\Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);

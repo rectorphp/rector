@@ -10,7 +10,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
-use RectorPrefix20210901\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20210902\Symfony\Contracts\Service\Attribute\Required;
 final class NullableTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**

@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20210901\TYPO3\CMS\Core\Site\Entity;
+namespace RectorPrefix20210902\TYPO3\CMS\Core\Site\Entity;
 
-use RectorPrefix20210901\TYPO3\CMS\Core\Routing\PageRouter;
+use RectorPrefix20210902\TYPO3\CMS\Core\Routing\PageRouter;
 if (\class_exists('TYPO3\\CMS\\Core\\Site\\Entity\\Site')) {
     return;
 }
@@ -13,6 +13,6 @@ class Site
      */
     public function getRouter()
     {
-        return new \RectorPrefix20210901\TYPO3\CMS\Core\Routing\PageRouter();
+        return new \RectorPrefix20210902\TYPO3\CMS\Core\Routing\PageRouter();
     }
 }

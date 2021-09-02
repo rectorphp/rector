@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210901\Symplify\ComposerJsonManipulator\DependencyInjection\Extension;
+namespace RectorPrefix20210902\Symplify\ComposerJsonManipulator\DependencyInjection\Extension;
 
-use RectorPrefix20210901\Symfony\Component\Config\FileLocator;
-use RectorPrefix20210901\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210901\Symfony\Component\DependencyInjection\Extension\Extension;
-use RectorPrefix20210901\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-final class ComposerJsonManipulatorExtension extends \RectorPrefix20210901\Symfony\Component\DependencyInjection\Extension\Extension
+use RectorPrefix20210902\Symfony\Component\Config\FileLocator;
+use RectorPrefix20210902\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210902\Symfony\Component\DependencyInjection\Extension\Extension;
+use RectorPrefix20210902\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+final class ComposerJsonManipulatorExtension extends \RectorPrefix20210902\Symfony\Component\DependencyInjection\Extension\Extension
 {
     /**
      * @param string[] $configs
@@ -15,7 +15,7 @@ final class ComposerJsonManipulatorExtension extends \RectorPrefix20210901\Symfo
      */
     public function load($configs, $containerBuilder) : void
     {
-        $phpFileLoader = new \RectorPrefix20210901\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210901\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
+        $phpFileLoader = new \RectorPrefix20210902\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210902\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
         $phpFileLoader->load('config.php');
     }
 }

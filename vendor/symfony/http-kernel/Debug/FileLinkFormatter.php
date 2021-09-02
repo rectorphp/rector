@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210901\Symfony\Component\HttpKernel\Debug;
+namespace RectorPrefix20210902\Symfony\Component\HttpKernel\Debug;
 
-use RectorPrefix20210901\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20210901\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20210901\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use RectorPrefix20210902\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20210902\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20210902\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Formats debug file links.
  *
@@ -30,7 +30,7 @@ class FileLinkFormatter
     /**
      * @param string|\Closure $urlFormat the URL format, or a closure that returns it on-demand
      */
-    public function __construct(string $fileLinkFormat = null, \RectorPrefix20210901\Symfony\Component\HttpFoundation\RequestStack $requestStack = null, string $baseDir = null, $urlFormat = null)
+    public function __construct(string $fileLinkFormat = null, \RectorPrefix20210902\Symfony\Component\HttpFoundation\RequestStack $requestStack = null, string $baseDir = null, $urlFormat = null)
     {
         $fileLinkFormat = (self::FORMATS[$fileLinkFormat] ?? $fileLinkFormat ?: \ini_get('xdebug.file_link_format')) ?: \get_cfg_var('xdebug.file_link_format');
         if ($fileLinkFormat && !\is_array($fileLinkFormat)) {
@@ -66,7 +66,7 @@ class FileLinkFormatter
     /**
      * @internal
      */
-    public static function generateUrlFormat(\RectorPrefix20210901\Symfony\Component\Routing\Generator\UrlGeneratorInterface $router, string $routeName, string $queryString) : ?string
+    public static function generateUrlFormat(\RectorPrefix20210902\Symfony\Component\Routing\Generator\UrlGeneratorInterface $router, string $routeName, string $queryString) : ?string
     {
         try {
             return $router->generate($routeName) . $queryString;
@@ -81,7 +81,7 @@ class FileLinkFormatter
         }
         if ($this->requestStack && $this->baseDir && $this->urlFormat) {
             $request = $this->requestStack->getMainRequest();
-            if ($request instanceof \RectorPrefix20210901\Symfony\Component\HttpFoundation\Request && (!$this->urlFormat instanceof \Closure || ($this->urlFormat = ($this->urlFormat)()))) {
+            if ($request instanceof \RectorPrefix20210902\Symfony\Component\HttpFoundation\Request && (!$this->urlFormat instanceof \Closure || ($this->urlFormat = ($this->urlFormat)()))) {
                 return [$request->getSchemeAndHttpHost() . $this->urlFormat, $this->baseDir . \DIRECTORY_SEPARATOR, ''];
             }
         }

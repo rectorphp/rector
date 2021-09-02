@@ -9,8 +9,8 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\FileFormatter\FileFormatter;
-use RectorPrefix20210901\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20210901\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20210902\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210902\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
@@ -40,7 +40,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20210901\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210901\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20210902\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20210902\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;

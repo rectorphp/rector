@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210901\Symfony\Component\HttpFoundation\Session\Storage;
+namespace RectorPrefix20210902\Symfony\Component\HttpFoundation\Session\Storage;
 
-use RectorPrefix20210901\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use RectorPrefix20210902\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 /**
  * Metadata container.
  *
@@ -18,7 +18,7 @@ use RectorPrefix20210901\Symfony\Component\HttpFoundation\Session\SessionBagInte
  *
  * @author Drak <drak@zikula.org>
  */
-class MetadataBag implements \RectorPrefix20210901\Symfony\Component\HttpFoundation\Session\SessionBagInterface
+class MetadataBag implements \RectorPrefix20210902\Symfony\Component\HttpFoundation\Session\SessionBagInterface
 {
     public const CREATED = 'c';
     public const UPDATED = 'u';

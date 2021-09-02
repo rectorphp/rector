@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210901\TYPO3\CMS\Backend\History;
+namespace RectorPrefix20210902\TYPO3\CMS\Backend\History;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\History\\RecordHistory')) {
     return;
