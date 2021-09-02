@@ -53,7 +53,10 @@ final class OverrideFromAnonymousClassMethodAnalyzer
         return $this->resolveClassReflectionWithNotPrivateMethod($classLike->extends, $classMethod);
     }
 
-    private function resolveClassReflectionWithNotPrivateMethod(FullyQualified $fullyQualified, ClassMethod $classMethod): ?ClassReflection
+    private function resolveClassReflectionWithNotPrivateMethod(
+        FullyQualified $fullyQualified,
+        ClassMethod $classMethod
+    ): ?ClassReflection
     {
         $ancestorClassLike = $fullyQualified->toString();
         if (! $this->reflectionProvider->hasClass($ancestorClassLike)) {

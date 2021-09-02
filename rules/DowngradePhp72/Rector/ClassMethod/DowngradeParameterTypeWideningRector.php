@@ -178,7 +178,10 @@ CODE_SAMPLE
         return $this->shouldSkipClassMethod($classMethod);
     }
 
-    private function processRemoveParamTypeFromMethod(ClassReflection $classReflection, ClassMethod $classMethod): ?ClassMethod
+    private function processRemoveParamTypeFromMethod(
+        ClassReflection $classReflection,
+        ClassMethod $classMethod
+    ): ?ClassMethod
     {
         if ($this->shouldSkip($classReflection, $classMethod)) {
             return null;
