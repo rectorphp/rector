@@ -421,6 +421,7 @@ parameters:
 
         - '#Class with base "StaticTypeMapper" name is already used in "Rector\\StaticTypeMapper\\StaticTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "UnionTypeMapper" name is already used in "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
+        - '#Class with base "UnionTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper", "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
 
         # allowed for ease api
         -
@@ -525,3 +526,8 @@ parameters:
                 - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
 
         - '#^Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 13, keep it under 9$#'
+
+        -
+            message: '#The string value "" is repeated 6 times\. Refactor to enum to avoid typos and make clear allowed values#'
+            paths:
+                - packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php #45
