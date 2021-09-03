@@ -16,15 +16,21 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 final class GenericClassStringTypeNormalizer
 {
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer
+     */
+    private $detailedTypeAnalyzer;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
     }
     /**
      * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType|\PHPStan\Type\Type
@@ -48,7 +54,36 @@ final class GenericClassStringTypeNormalizer
         if ($type instanceof \PHPStan\Type\UnionType) {
             return $this->resolveClassStringInUnionType($type);
         }
+        if ($type instanceof \PHPStan\Type\ArrayType && $type->getKeyType() instanceof \PHPStan\Type\UnionType) {
+            return $this->resolveArrayTypeWithUnionKeyType($type);
+        }
         return $type;
+    }
+    private function resolveArrayTypeWithUnionKeyType(\PHPStan\Type\ArrayType $arrayType) : \PHPStan\Type\ArrayType
+    {
+        $itemType = $arrayType->getItemType();
+        if (!$itemType instanceof \PHPStan\Type\UnionType) {
+            return $arrayType;
+        }
+        $keyType = $arrayType->getKeyType();
+        $isAllGenericClassStringType = $this->isAllGenericClassStringType($itemType);
+        if (!$isAllGenericClassStringType) {
+            return new \PHPStan\Type\ArrayType($keyType, new \PHPStan\Type\MixedType());
+        }
+        if ($this->detailedTypeAnalyzer->isTooDetailed($itemType)) {
+            return new \PHPStan\Type\ArrayType($keyType, new \PHPStan\Type\ClassStringType());
+        }
+        return $arrayType;
+    }
+    private function isAllGenericClassStringType(\PHPStan\Type\UnionType $unionType) : bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if (!$type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
+                return \false;
+            }
+        }
+        return \true;
     }
     /**
      * @return \PHPStan\Type\UnionType|\PHPStan\Type\ArrayType
