@@ -531,3 +531,4 @@ parameters:
             message: '#The string value "" is repeated 6 times\. Refactor to enum to avoid typos and make clear allowed values#'
             paths:
                 - packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php #45
+                - packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php #26

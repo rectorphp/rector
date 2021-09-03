@@ -17,6 +17,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new RenameProperty(ClassWithProperties::class, 'oldProperty', 'newProperty'),
                 new RenameProperty(ClassWithProperties::class, 'anotherOldProperty', 'anotherNewProperty'),
 
+                new RenameProperty(
+                    'Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\Fixture\ClassWithOldProperty',
+                    'oldProperty',
+                    'newProperty'
+                ),
+
             ]),
         ]]);
 };
