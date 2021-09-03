@@ -103,14 +103,18 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param Arg[] $args
+     * @param mixed[]|Arg[] $args
      */
     private function shouldSkip(array $args) : bool
     {
         foreach ($args as $arg) {
-            if ($arg->name instanceof \PhpParser\Node\Identifier) {
-                return \false;
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
             }
+            if (!$arg->name instanceof \PhpParser\Node\Identifier) {
+                continue;
+            }
+            return \false;
         }
         return \true;
     }
