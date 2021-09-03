@@ -6,8 +6,13 @@ namespace Rector\Renaming\Rector\PropertyFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\VarLikeIdentifier;
+use PHPStan\Type\ThisType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,12 +46,21 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         foreach ($this->renamedProperties as $renamedProperty) {
             if (!$this->isObjectType($node->var, $renamedProperty->getObjectType())) {
                 continue;
             }
-            if (!$this->isName($node, $renamedProperty->getOldProperty())) {
+            $oldProperty = $renamedProperty->getOldProperty();
+            if (!$this->isName($node, $oldProperty)) {
                 continue;
+            }
+            $nodeVarType = $this->nodeTypeResolver->resolve($node->var);
+            if ($nodeVarType instanceof \PHPStan\Type\ThisType && $class instanceof \PhpParser\Node\Stmt\ClassLike) {
+                $property = $class->getProperty($oldProperty);
+                if ($property instanceof \PhpParser\Node\Stmt\Property) {
+                    $property->props[0]->name = new \PhpParser\Node\VarLikeIdentifier($renamedProperty->getNewProperty());
+                }
             }
             $node->name = new \PhpParser\Node\Identifier($renamedProperty->getNewProperty());
             return $node;
