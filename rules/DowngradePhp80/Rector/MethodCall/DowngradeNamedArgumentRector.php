@@ -112,14 +112,20 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Arg[] $args
+     * @param mixed[]|Arg[] $args
      */
     private function shouldSkip(array $args): bool
     {
         foreach ($args as $arg) {
-            if ($arg->name instanceof Identifier) {
-                return false;
+            if (! $arg instanceof Arg) {
+                continue;
             }
+
+            if (! $arg->name instanceof Identifier) {
+                continue;
+            }
+
+            return false;
         }
 
         return true;
