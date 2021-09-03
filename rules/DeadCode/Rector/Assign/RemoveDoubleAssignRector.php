@@ -5,12 +5,15 @@ namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
+use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,10 +31,15 @@ final class RemoveDoubleAssignRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    public function __construct(\Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector)
+    /**
+     * @var \Rector\NodeNestingScope\ParentFinder
+     */
+    private $parentFinder;
+    public function __construct(\Rector\NodeNestingScope\ScopeNestingComparator $scopeNestingComparator, \Rector\DeadCode\SideEffect\SideEffectNodeDetector $sideEffectNodeDetector, \Rector\NodeNestingScope\ParentFinder $parentFinder)
     {
         $this->scopeNestingComparator = $scopeNestingComparator;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
+        $this->parentFinder = $parentFinder;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -87,7 +95,10 @@ CODE_SAMPLE
         if (!$this->areInSameClassMethod($assign, $expression)) {
             return \true;
         }
-        return !$this->scopeNestingComparator->areScopeNestingEqual($assign, $expression);
+        if (!$this->scopeNestingComparator->areScopeNestingEqual($assign, $expression)) {
+            return \true;
+        }
+        return (bool) $this->parentFinder->findByTypes($assign, [\PhpParser\Node\Expr\Ternary::class, \PhpParser\Node\Expr\BinaryOp\Coalesce::class]);
     }
     private function isSelfReferencing(\PhpParser\Node\Expr\Assign $assign) : bool
     {
