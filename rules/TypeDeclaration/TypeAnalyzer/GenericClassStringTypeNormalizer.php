@@ -17,11 +17,13 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 
 final class GenericClassStringTypeNormalizer
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private DetailedTypeAnalyzer $detailedTypeAnalyzer
     ) {
     }
 
@@ -50,7 +52,46 @@ final class GenericClassStringTypeNormalizer
             return $this->resolveClassStringInUnionType($type);
         }
 
+        if ($type instanceof ArrayType && $type->getKeyType() instanceof UnionType) {
+            return $this->resolveArrayTypeWithUnionKeyType($type);
+        }
+
         return $type;
+    }
+
+    private function resolveArrayTypeWithUnionKeyType(ArrayType $arrayType): ArrayType
+    {
+        $itemType = $arrayType->getItemType();
+
+        if (! $itemType instanceof UnionType) {
+            return $arrayType;
+        }
+
+        $keyType = $arrayType->getKeyType();
+        $isAllGenericClassStringType = $this->isAllGenericClassStringType($itemType);
+
+        if (! $isAllGenericClassStringType) {
+            return new ArrayType($keyType, new MixedType());
+        }
+
+        if ($this->detailedTypeAnalyzer->isTooDetailed($itemType)) {
+            return new ArrayType($keyType, new ClassStringType());
+        }
+
+        return $arrayType;
+    }
+
+    private function isAllGenericClassStringType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+
+        foreach ($types as $type) {
+            if (! $type instanceof GenericClassStringType) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function resolveClassStringInUnionType(UnionType $type): UnionType | ArrayType
