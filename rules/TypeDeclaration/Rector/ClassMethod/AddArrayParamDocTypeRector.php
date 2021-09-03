@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\CallableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -105,6 +106,9 @@ CODE_SAMPLE
             }
             $paramType = $this->paramTypeInferer->inferParam($param);
             if ($paramType instanceof \PHPStan\Type\MixedType) {
+                continue;
+            }
+            if ($paramType instanceof \PHPStan\Type\CallableType) {
                 continue;
             }
             if ($this->paramAnalyzer->isNullable($param) && !$paramType instanceof \PHPStan\Type\UnionType) {

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210902\Symplify\Skipper\DependencyInjection\Extension;
+namespace RectorPrefix20210903\Symplify\Skipper\DependencyInjection\Extension;
 
-use RectorPrefix20210902\Symfony\Component\Config\FileLocator;
-use RectorPrefix20210902\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210902\Symfony\Component\DependencyInjection\Extension\Extension;
-use RectorPrefix20210902\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-final class SkipperExtension extends \RectorPrefix20210902\Symfony\Component\DependencyInjection\Extension\Extension
+use RectorPrefix20210903\Symfony\Component\Config\FileLocator;
+use RectorPrefix20210903\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210903\Symfony\Component\DependencyInjection\Extension\Extension;
+use RectorPrefix20210903\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+final class SkipperExtension extends \RectorPrefix20210903\Symfony\Component\DependencyInjection\Extension\Extension
 {
     /**
      * @param string[] $configs
@@ -16,7 +16,7 @@ final class SkipperExtension extends \RectorPrefix20210902\Symfony\Component\Dep
     public function load($configs, $containerBuilder) : void
     {
         // needed for parameter shifting of sniff/fixer params
-        $phpFileLoader = new \RectorPrefix20210902\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210902\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
+        $phpFileLoader = new \RectorPrefix20210903\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, new \RectorPrefix20210903\Symfony\Component\Config\FileLocator(__DIR__ . '/../../../config'));
         $phpFileLoader->load('config.php');
     }
 }

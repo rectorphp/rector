@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210902;
+namespace RectorPrefix20210903;
 
 if (\class_exists('tx_scheduler_CronCmd_Normalize')) {
     return;

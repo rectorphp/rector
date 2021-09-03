@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210902\Tracy;
+namespace RectorPrefix20210903\Tracy;
 
 use ErrorException;
 /**
@@ -59,7 +59,7 @@ class Debugger
     /** @var string|array email(s) to which send error notifications */
     public static $email;
     /** for Debugger::log() and Debugger::fireLog() */
-    public const DEBUG = \RectorPrefix20210902\Tracy\ILogger::DEBUG, INFO = \RectorPrefix20210902\Tracy\ILogger::INFO, WARNING = \RectorPrefix20210902\Tracy\ILogger::WARNING, ERROR = \RectorPrefix20210902\Tracy\ILogger::ERROR, EXCEPTION = \RectorPrefix20210902\Tracy\ILogger::EXCEPTION, CRITICAL = \RectorPrefix20210902\Tracy\ILogger::CRITICAL;
+    public const DEBUG = \RectorPrefix20210903\Tracy\ILogger::DEBUG, INFO = \RectorPrefix20210903\Tracy\ILogger::INFO, WARNING = \RectorPrefix20210903\Tracy\ILogger::WARNING, ERROR = \RectorPrefix20210903\Tracy\ILogger::ERROR, EXCEPTION = \RectorPrefix20210903\Tracy\ILogger::EXCEPTION, CRITICAL = \RectorPrefix20210903\Tracy\ILogger::CRITICAL;
     /********************* misc ****************d*g**/
     /** @var float timestamp with microseconds of the start of the request */
     public static $time;
@@ -189,7 +189,7 @@ class Debugger
     {
         $error = \error_get_last();
         if (\in_array($error['type'] ?? null, [\E_ERROR, \E_CORE_ERROR, \E_COMPILE_ERROR, \E_PARSE, \E_RECOVERABLE_ERROR, \E_USER_ERROR], \true)) {
-            self::exceptionHandler(\RectorPrefix20210902\Tracy\Helpers::fixStack(new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line'])));
+            self::exceptionHandler(\RectorPrefix20210903\Tracy\Helpers::fixStack(new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line'])));
         } elseif (($error['type'] ?? null) === \E_COMPILE_WARNING) {
             \error_clear_last();
             self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
@@ -216,7 +216,7 @@ class Debugger
         if (!\headers_sent()) {
             \http_response_code(isset($_SERVER['HTTP_USER_AGENT']) && \strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE ') !== \false ? 503 : 500);
         }
-        \RectorPrefix20210902\Tracy\Helpers::improveException($exception);
+        \RectorPrefix20210903\Tracy\Helpers::improveException($exception);
         self::removeOutputBuffers(\true);
         if (self::$productionMode || \connection_aborted()) {
             try {
@@ -225,7 +225,7 @@ class Debugger
             }
             if (!$firstTime) {
                 // nothing
-            } elseif (\RectorPrefix20210902\Tracy\Helpers::isHtmlMode()) {
+            } elseif (\RectorPrefix20210903\Tracy\Helpers::isHtmlMode()) {
                 if (!\headers_sent()) {
                     \header('Content-Type: text/html; charset=UTF-8');
                 }
@@ -236,7 +236,7 @@ class Debugger
                 // @ triggers E_NOTICE when strerr is closed since PHP 7.4
                 @\fwrite(\STDERR, "ERROR: {$exception->getMessage()}\n" . (isset($e) ? 'Unable to log error. You may try enable debug mode to inspect the problem.' : 'Check log to see more info.') . "\n");
             }
-        } elseif ($firstTime && \RectorPrefix20210902\Tracy\Helpers::isHtmlMode() || \RectorPrefix20210902\Tracy\Helpers::isAjax()) {
+        } elseif ($firstTime && \RectorPrefix20210903\Tracy\Helpers::isHtmlMode() || \RectorPrefix20210903\Tracy\Helpers::isAjax()) {
             self::getBlueScreen()->render($exception);
         } else {
             self::fireLog($exception);
@@ -245,8 +245,8 @@ class Debugger
                 if ($file && !\headers_sent()) {
                     \header("X-Tracy-Error-Log: {$file}", \false);
                 }
-                if (\RectorPrefix20210902\Tracy\Helpers::detectColors()) {
-                    echo "\n\n" . \RectorPrefix20210902\Tracy\BlueScreen::highlightPhpCli($exception->getFile(), $exception->getLine()) . "\n";
+                if (\RectorPrefix20210903\Tracy\Helpers::detectColors()) {
+                    echo "\n\n" . \RectorPrefix20210903\Tracy\BlueScreen::highlightPhpCli($exception->getFile(), $exception->getLine()) . "\n";
                 }
                 echo "{$exception}\n" . ($file ? "\n(stored in {$file})\n" : '');
                 if ($file && self::$browser) {
@@ -293,7 +293,7 @@ class Debugger
             // workaround for PHP bug #80234
         }
         if ($severity === \E_RECOVERABLE_ERROR || $severity === \E_USER_ERROR) {
-            if (\RectorPrefix20210902\Tracy\Helpers::findTrace(\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS), '*::__toString')) {
+            if (\RectorPrefix20210903\Tracy\Helpers::findTrace(\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS), '*::__toString')) {
                 // workaround for PHP < 7.4
                 $previous = isset($context['e']) && $context['e'] instanceof \Throwable ? $context['e'] : null;
                 $e = new \ErrorException($message, 0, $severity, $file, $line, $previous);
@@ -310,9 +310,9 @@ class Debugger
             if (($severity & self::$logSeverity) === $severity) {
                 $e = new \ErrorException($message, 0, $severity, $file, $line);
                 $e->context = $context;
-                \RectorPrefix20210902\Tracy\Helpers::improveException($e);
+                \RectorPrefix20210903\Tracy\Helpers::improveException($e);
             } else {
-                $e = 'PHP ' . \RectorPrefix20210902\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20210902\Tracy\Helpers::improveError($message, (array) $context) . " in {$file}:{$line}";
+                $e = 'PHP ' . \RectorPrefix20210903\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20210903\Tracy\Helpers::improveError($message, (array) $context) . " in {$file}:{$line}";
             }
             try {
                 self::log($e, self::ERROR);
@@ -325,14 +325,14 @@ class Debugger
             self::exceptionHandler($e);
             exit(255);
         } else {
-            $message = 'PHP ' . \RectorPrefix20210902\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20210902\Tracy\Helpers::improveError($message, (array) $context);
+            $message = 'PHP ' . \RectorPrefix20210903\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20210903\Tracy\Helpers::improveError($message, (array) $context);
             $count =& self::getBar()->getPanel('Tracy:errors')->data["{$file}|{$line}|{$message}"];
             if ($count++) {
                 // repeated error
                 return null;
             } else {
                 self::fireLog(new \ErrorException($message, 0, $severity, $file, $line));
-                return \RectorPrefix20210902\Tracy\Helpers::isHtmlMode() || \RectorPrefix20210902\Tracy\Helpers::isAjax() ? null : \false;
+                return \RectorPrefix20210903\Tracy\Helpers::isHtmlMode() || \RectorPrefix20210903\Tracy\Helpers::isAjax() ? null : \false;
                 // false calls normal error handler
             }
         }
@@ -354,21 +354,21 @@ class Debugger
         }
     }
     /********************* services ****************d*g**/
-    public static function getBlueScreen() : \RectorPrefix20210902\Tracy\BlueScreen
+    public static function getBlueScreen() : \RectorPrefix20210903\Tracy\BlueScreen
     {
         if (!self::$blueScreen) {
-            self::$blueScreen = new \RectorPrefix20210902\Tracy\BlueScreen();
+            self::$blueScreen = new \RectorPrefix20210903\Tracy\BlueScreen();
             self::$blueScreen->info = ['PHP ' . \PHP_VERSION, $_SERVER['SERVER_SOFTWARE'] ?? null, 'Tracy ' . self::VERSION];
         }
         return self::$blueScreen;
     }
-    public static function getBar() : \RectorPrefix20210902\Tracy\Bar
+    public static function getBar() : \RectorPrefix20210903\Tracy\Bar
     {
         if (!self::$bar) {
-            self::$bar = new \RectorPrefix20210902\Tracy\Bar();
-            self::$bar->addPanel($info = new \RectorPrefix20210902\Tracy\DefaultBarPanel('info'), 'Tracy:info');
+            self::$bar = new \RectorPrefix20210903\Tracy\Bar();
+            self::$bar->addPanel($info = new \RectorPrefix20210903\Tracy\DefaultBarPanel('info'), 'Tracy:info');
             $info->cpuUsage = self::$cpuUsage;
-            self::$bar->addPanel(new \RectorPrefix20210902\Tracy\DefaultBarPanel('errors'), 'Tracy:errors');
+            self::$bar->addPanel(new \RectorPrefix20210903\Tracy\DefaultBarPanel('errors'), 'Tracy:errors');
             // filled by errorHandler()
         }
         return self::$bar;
@@ -380,20 +380,20 @@ class Debugger
     {
         self::$logger = $logger;
     }
-    public static function getLogger() : \RectorPrefix20210902\Tracy\ILogger
+    public static function getLogger() : \RectorPrefix20210903\Tracy\ILogger
     {
         if (!self::$logger) {
-            self::$logger = new \RectorPrefix20210902\Tracy\Logger(self::$logDirectory, self::$email, self::getBlueScreen());
+            self::$logger = new \RectorPrefix20210903\Tracy\Logger(self::$logDirectory, self::$email, self::getBlueScreen());
             self::$logger->directory =& self::$logDirectory;
             // back compatiblity
             self::$logger->email =& self::$email;
         }
         return self::$logger;
     }
-    public static function getFireLogger() : \RectorPrefix20210902\Tracy\ILogger
+    public static function getFireLogger() : \RectorPrefix20210903\Tracy\ILogger
     {
         if (!self::$fireLogger) {
-            self::$fireLogger = new \RectorPrefix20210902\Tracy\FireLogger();
+            self::$fireLogger = new \RectorPrefix20210903\Tracy\FireLogger();
         }
         return self::$fireLogger;
     }
@@ -408,12 +408,12 @@ class Debugger
     public static function dump($var, $return = \false)
     {
         if ($return) {
-            $options = [\RectorPrefix20210902\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210902\Tracy\Dumper::TRUNCATE => self::$maxLength];
-            return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg' ? \RectorPrefix20210902\Tracy\Dumper::toText($var) : \RectorPrefix20210902\Tracy\Helpers::capture(function () use($var, $options) {
-                \RectorPrefix20210902\Tracy\Dumper::dump($var, $options);
+            $options = [\RectorPrefix20210903\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210903\Tracy\Dumper::TRUNCATE => self::$maxLength];
+            return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg' ? \RectorPrefix20210903\Tracy\Dumper::toText($var) : \RectorPrefix20210903\Tracy\Helpers::capture(function () use($var, $options) {
+                \RectorPrefix20210903\Tracy\Dumper::dump($var, $options);
             });
         } elseif (!self::$productionMode) {
-            \RectorPrefix20210902\Tracy\Dumper::dump($var, [\RectorPrefix20210902\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210902\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20210902\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20210902\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20210902\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
+            \RectorPrefix20210903\Tracy\Dumper::dump($var, [\RectorPrefix20210903\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210903\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20210903\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20210903\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20210903\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
         }
         return $var;
     }
@@ -443,9 +443,9 @@ class Debugger
         if (!self::$productionMode) {
             static $panel;
             if (!$panel) {
-                self::getBar()->addPanel($panel = new \RectorPrefix20210902\Tracy\DefaultBarPanel('dumps'), 'Tracy:dumps');
+                self::getBar()->addPanel($panel = new \RectorPrefix20210903\Tracy\DefaultBarPanel('dumps'), 'Tracy:dumps');
             }
-            $panel->data[] = ['title' => $title, 'dump' => \RectorPrefix20210902\Tracy\Dumper::toHtml($var, $options + [\RectorPrefix20210902\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210902\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20210902\Tracy\Dumper::LOCATION => self::$showLocation ?: \RectorPrefix20210902\Tracy\Dumper::LOCATION_CLASS | \RectorPrefix20210902\Tracy\Dumper::LOCATION_SOURCE, \RectorPrefix20210902\Tracy\Dumper::LAZY => \true])];
+            $panel->data[] = ['title' => $title, 'dump' => \RectorPrefix20210903\Tracy\Dumper::toHtml($var, $options + [\RectorPrefix20210903\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20210903\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20210903\Tracy\Dumper::LOCATION => self::$showLocation ?: \RectorPrefix20210903\Tracy\Dumper::LOCATION_CLASS | \RectorPrefix20210903\Tracy\Dumper::LOCATION_SOURCE, \RectorPrefix20210903\Tracy\Dumper::LAZY => \true])];
         }
         return $var;
     }
@@ -455,7 +455,7 @@ class Debugger
      * @return mixed
      * @param string $level
      */
-    public static function log($message, $level = \RectorPrefix20210902\Tracy\ILogger::INFO)
+    public static function log($message, $level = \RectorPrefix20210903\Tracy\ILogger::INFO)
     {
         return self::getLogger()->log($message, $level);
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210902;
+namespace RectorPrefix20210903;
 
 if (\class_exists('tx_indexed_search_extparse')) {
     return;
