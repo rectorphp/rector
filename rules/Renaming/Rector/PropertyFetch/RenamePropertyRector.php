@@ -54,38 +54,19 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      */
     public function getNodeTypes(): array
     {
-        return [PropertyFetch::class];
+        return [PropertyFetch::class, ClassLike::class];
     }
 
     /**
-     * @param PropertyFetch $node
+     * @param PropertyFetch|ClassLike $node
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
-        foreach ($this->renamedProperties as $renamedProperty) {
-            if (! $this->isObjectType($node->var, $renamedProperty->getObjectType())) {
-                continue;
-            }
-
-            $oldProperty = $renamedProperty->getOldProperty();
-            if (! $this->isName($node, $oldProperty)) {
-                continue;
-            }
-
-            $nodeVarType = $this->nodeTypeResolver->resolve($node->var);
-            if ($nodeVarType instanceof ThisType && $class instanceof ClassLike) {
-                $property = $class->getProperty($oldProperty);
-                if ($property instanceof Property) {
-                    $property->props[0]->name = new VarLikeIdentifier($renamedProperty->getNewProperty());
-                }
-            }
-
-            $node->name = new Identifier($renamedProperty->getNewProperty());
-            return $node;
+        if ($node instanceof ClassLike) {
+            return $this->processFromClassLike($node);
         }
 
-        return null;
+        return $this->processFromPropertyFetch($node);
     }
 
     /**
@@ -96,5 +77,49 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
         Assert::allIsInstanceOf($renamedProperties, RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
+    }
+
+    private function processFromClassLike(ClassLike $classLike): ClassLike
+    {
+        foreach ($this->renamedProperties as $renamedProperty) {
+            $this->renameProperty($classLike, $renamedProperty);
+        }
+
+        return $classLike;
+    }
+
+    private function renameProperty(ClassLike $classLike, RenameProperty $renameProperty): void
+    {
+        $property = $classLike->getProperty($renameProperty->getOldProperty());
+        if (! $property instanceof Property) {
+            return;
+        }
+
+        $property->props[0]->name = new VarLikeIdentifier($renameProperty->getNewProperty());
+    }
+
+    private function processFromPropertyFetch(PropertyFetch $propertyFetch): ?PropertyFetch
+    {
+        $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        foreach ($this->renamedProperties as $renamedProperty) {
+            if (! $this->isObjectType($propertyFetch->var, $renamedProperty->getObjectType())) {
+                continue;
+            }
+
+            $oldProperty = $renamedProperty->getOldProperty();
+            if (! $this->isName($propertyFetch, $oldProperty)) {
+                continue;
+            }
+
+            $nodeVarType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+            if ($nodeVarType instanceof ThisType && $class instanceof ClassLike) {
+                $this->renameProperty($class, $renamedProperty);
+            }
+
+            $propertyFetch->name = new Identifier($renamedProperty->getNewProperty());
+            return $propertyFetch;
+        }
+
+        return null;
     }
 }
