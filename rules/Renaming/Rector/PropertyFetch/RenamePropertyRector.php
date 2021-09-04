@@ -39,33 +39,17 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\PropertyFetch::class];
+        return [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Stmt\ClassLike::class];
     }
     /**
-     * @param PropertyFetch $node
+     * @param PropertyFetch|ClassLike $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        foreach ($this->renamedProperties as $renamedProperty) {
-            if (!$this->isObjectType($node->var, $renamedProperty->getObjectType())) {
-                continue;
-            }
-            $oldProperty = $renamedProperty->getOldProperty();
-            if (!$this->isName($node, $oldProperty)) {
-                continue;
-            }
-            $nodeVarType = $this->nodeTypeResolver->resolve($node->var);
-            if ($nodeVarType instanceof \PHPStan\Type\ThisType && $class instanceof \PhpParser\Node\Stmt\ClassLike) {
-                $property = $class->getProperty($oldProperty);
-                if ($property instanceof \PhpParser\Node\Stmt\Property) {
-                    $property->props[0]->name = new \PhpParser\Node\VarLikeIdentifier($renamedProperty->getNewProperty());
-                }
-            }
-            $node->name = new \PhpParser\Node\Identifier($renamedProperty->getNewProperty());
-            return $node;
+        if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return $this->processFromClassLike($node);
         }
-        return null;
+        return $this->processFromPropertyFetch($node);
     }
     /**
      * @param array<string, RenameProperty[]> $configuration
@@ -75,5 +59,40 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
         \RectorPrefix20210904\Webmozart\Assert\Assert::allIsInstanceOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
+    }
+    private function processFromClassLike(\PhpParser\Node\Stmt\ClassLike $classLike) : \PhpParser\Node\Stmt\ClassLike
+    {
+        foreach ($this->renamedProperties as $renamedProperty) {
+            $this->renameProperty($classLike, $renamedProperty);
+        }
+        return $classLike;
+    }
+    private function renameProperty(\PhpParser\Node\Stmt\ClassLike $classLike, \Rector\Renaming\ValueObject\RenameProperty $renameProperty) : void
+    {
+        $property = $classLike->getProperty($renameProperty->getOldProperty());
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            return;
+        }
+        $property->props[0]->name = new \PhpParser\Node\VarLikeIdentifier($renameProperty->getNewProperty());
+    }
+    private function processFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node\Expr\PropertyFetch
+    {
+        $class = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        foreach ($this->renamedProperties as $renamedProperty) {
+            if (!$this->isObjectType($propertyFetch->var, $renamedProperty->getObjectType())) {
+                continue;
+            }
+            $oldProperty = $renamedProperty->getOldProperty();
+            if (!$this->isName($propertyFetch, $oldProperty)) {
+                continue;
+            }
+            $nodeVarType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+            if ($nodeVarType instanceof \PHPStan\Type\ThisType && $class instanceof \PhpParser\Node\Stmt\ClassLike) {
+                $this->renameProperty($class, $renamedProperty);
+            }
+            $propertyFetch->name = new \PhpParser\Node\Identifier($renamedProperty->getNewProperty());
+            return $propertyFetch;
+        }
+        return null;
     }
 }
