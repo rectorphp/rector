@@ -79,6 +79,9 @@ final class ArrayCallableMethodMatcher
         }
         $className = $calleeType->getClassName();
         $methodName = $secondItemValue->value;
+        if ($methodName === \Rector\Core\ValueObject\MethodName::CONSTRUCT) {
+            return null;
+        }
         return new \Rector\NodeCollector\ValueObject\ArrayCallable($firstItemValue, $className, $methodName);
     }
     /**
