@@ -8,6 +8,7 @@ use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
@@ -22,6 +23,8 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -53,7 +56,8 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
 
     public function __construct(
         private TypeChecker $typeChecker,
-        private CommentRemover $commentRemover
+        private CommentRemover $commentRemover,
+        private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
     ) {
     }
 
@@ -113,6 +117,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isUsedInNextNodeWithExtractPreviouslyCalled($node, $variableName)) {
+            return null;
+        }
+
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof Comment) {
             $this->commentRemover->rollbackComments($node, $comments[1]);
@@ -121,6 +129,27 @@ CODE_SAMPLE
 
         $phpDocInfo->removeByType(VarTagValueNode::class);
         return $node;
+    }
+
+    private function isUsedInNextNodeWithExtractPreviouslyCalled(Node $node, string $variableName): bool
+    {
+        $variable         = new Variable($variableName);
+        $isUsedInNextNode = (bool) $this->betterNodeFinder->findFirstNext(
+            $node,
+            fn (Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $variable)
+        );
+
+        if (! $isUsedInNextNode) {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (Node $subNode): bool {
+            if (! $subNode instanceof FuncCall) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($subNode, 'extract');
+        });
     }
 
     private function shouldSkip(Node $node): bool
