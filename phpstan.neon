@@ -532,3 +532,4 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php #45
                 - packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php #26
+                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php #289

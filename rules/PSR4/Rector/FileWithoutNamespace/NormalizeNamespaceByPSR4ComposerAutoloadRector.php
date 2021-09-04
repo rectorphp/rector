@@ -96,6 +96,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node instanceof Namespace_ && $this->hasNamespaceInPreviousNamespace($node)) {
+            return null;
+        }
+
         // to put declare_strict types on correct place
         if ($node instanceof FileWithoutNamespace) {
             return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
@@ -105,6 +109,14 @@ CODE_SAMPLE
         $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
 
         return $node;
+    }
+
+    private function hasNamespaceInPreviousNamespace(Namespace_ $namespace): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+            $namespace,
+            fn (Node $node): bool => $node instanceof Namespace_
+        );
     }
 
     private function refactorFileWithoutNamespace(
