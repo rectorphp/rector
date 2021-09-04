@@ -5,6 +5,7 @@ namespace Rector\NodeCollector\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
@@ -53,18 +54,20 @@ final class ArrayCallableMethodMatcher
         if (\count($arrayItems) !== 2) {
             return null;
         }
-        if ($array->items[0] === null) {
+        if ($this->shouldSkipNullItems($array)) {
             return null;
         }
-        if ($array->items[1] === null) {
-            return null;
-        }
-        $secondItemValue = $array->items[1]->value;
+        /** @var ArrayItem[] $items */
+        $items = $array->items;
+        $secondItemValue = $items[1]->value;
         if (!$secondItemValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
+        if ($this->shouldSkipAssociativeArray($array)) {
+            return null;
+        }
         // $this, self, static, FQN
-        $firstItemValue = $array->items[0]->value;
+        $firstItemValue = $items[0]->value;
         // static ::class reference?
         if ($firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             $calleeType = $this->resolveClassConstFetchType($firstItemValue);
@@ -83,6 +86,19 @@ final class ArrayCallableMethodMatcher
             return null;
         }
         return new \Rector\NodeCollector\ValueObject\ArrayCallable($firstItemValue, $className, $methodName);
+    }
+    private function shouldSkipNullItems(\PhpParser\Node\Expr\Array_ $array) : bool
+    {
+        if ($array->items[0] === null) {
+            return \true;
+        }
+        return $array->items[1] === null;
+    }
+    private function shouldSkipAssociativeArray(\PhpParser\Node\Expr\Array_ $array) : bool
+    {
+        $values = $this->valueResolver->getValue($array);
+        $keys = \array_keys($values);
+        return $keys !== [0, 1] && $keys !== [1];
     }
     /**
      * @param string[] $functionNames
