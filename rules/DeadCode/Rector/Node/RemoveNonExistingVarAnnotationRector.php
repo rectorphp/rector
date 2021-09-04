@@ -7,6 +7,7 @@ use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
@@ -21,6 +22,8 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20210904\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -43,10 +46,15 @@ final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Comments\CommentRemover
      */
     private $commentRemover;
-    public function __construct(\RectorPrefix20210904\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Comments\CommentRemover $commentRemover)
+    /**
+     * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
+     */
+    private $exprUsedInNodeAnalyzer;
+    public function __construct(\RectorPrefix20210904\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Comments\CommentRemover $commentRemover, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->typeChecker = $typeChecker;
         $this->commentRemover = $commentRemover;
+        $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -92,6 +100,9 @@ CODE_SAMPLE
         if ($this->hasVariableName($node, $variableName)) {
             return null;
         }
+        if ($this->isUsedInNextNodeWithExtractPreviouslyCalled($node, $variableName)) {
+            return null;
+        }
         $comments = $node->getComments();
         if (isset($comments[1]) && $comments[1] instanceof \PhpParser\Comment) {
             $this->commentRemover->rollbackComments($node, $comments[1]);
@@ -99,6 +110,22 @@ CODE_SAMPLE
         }
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
         return $node;
+    }
+    private function isUsedInNextNodeWithExtractPreviouslyCalled(\PhpParser\Node $node, string $variableName) : bool
+    {
+        $variable = new \PhpParser\Node\Expr\Variable($variableName);
+        $isUsedInNextNode = (bool) $this->betterNodeFinder->findFirstNext($node, function (\PhpParser\Node $node) use($variable) : bool {
+            return $this->exprUsedInNodeAnalyzer->isUsed($node, $variable);
+        });
+        if (!$isUsedInNextNode) {
+            return \false;
+        }
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $subNode) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($subNode, 'extract');
+        });
     }
     private function shouldSkip(\PhpParser\Node $node) : bool
     {
