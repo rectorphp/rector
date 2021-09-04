@@ -43,7 +43,7 @@
             "Resources\/functions\/dump.php"
         ],
         "psr-4": {
-            "RectorPrefix20210903\\Symfony\\Component\\VarDumper\\": ""
+            "RectorPrefix20210904\\Symfony\\Component\\VarDumper\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

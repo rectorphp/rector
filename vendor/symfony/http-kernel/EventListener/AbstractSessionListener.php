@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210903\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20210904\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20210903\Psr\Container\ContainerInterface;
-use RectorPrefix20210903\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20210903\Symfony\Component\HttpFoundation\Session\Session;
-use RectorPrefix20210903\Symfony\Component\HttpFoundation\Session\SessionInterface;
-use RectorPrefix20210903\Symfony\Component\HttpKernel\Event\FinishRequestEvent;
-use RectorPrefix20210903\Symfony\Component\HttpKernel\Event\RequestEvent;
-use RectorPrefix20210903\Symfony\Component\HttpKernel\Event\ResponseEvent;
-use RectorPrefix20210903\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException;
-use RectorPrefix20210903\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20210904\Psr\Container\ContainerInterface;
+use RectorPrefix20210904\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20210904\Symfony\Component\HttpFoundation\Session\Session;
+use RectorPrefix20210904\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use RectorPrefix20210904\Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use RectorPrefix20210904\Symfony\Component\HttpKernel\Event\RequestEvent;
+use RectorPrefix20210904\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use RectorPrefix20210904\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException;
+use RectorPrefix20210904\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Sets the session onto the request on the "kernel.request" event and saves
  * it on the "kernel.response" event.
@@ -34,13 +34,13 @@ use RectorPrefix20210903\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @internal
  */
-abstract class AbstractSessionListener implements \RectorPrefix20210903\Symfony\Component\EventDispatcher\EventSubscriberInterface
+abstract class AbstractSessionListener implements \RectorPrefix20210904\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     public const NO_AUTO_CACHE_CONTROL_HEADER = 'Symfony-Session-NoAutoCacheControl';
     protected $container;
     private $sessionUsageStack = [];
     private $debug;
-    public function __construct(\RectorPrefix20210903\Psr\Container\ContainerInterface $container = null, bool $debug = \false)
+    public function __construct(\RectorPrefix20210904\Psr\Container\ContainerInterface $container = null, bool $debug = \false)
     {
         $this->container = $container;
         $this->debug = $debug;
@@ -61,7 +61,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210903\Symfony\
             });
         }
         $session = $this->container && $this->container->has('initialized_session') ? $this->container->get('initialized_session') : null;
-        $this->sessionUsageStack[] = $session instanceof \RectorPrefix20210903\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() : 0;
+        $this->sessionUsageStack[] = $session instanceof \RectorPrefix20210904\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() : 0;
     }
     /**
      * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
@@ -106,7 +106,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210903\Symfony\
              */
             $session->save();
         }
-        if ($session instanceof \RectorPrefix20210903\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() === \end($this->sessionUsageStack) : !$session->isStarted()) {
+        if ($session instanceof \RectorPrefix20210904\Symfony\Component\HttpFoundation\Session\Session ? $session->getUsageIndex() === \end($this->sessionUsageStack) : !$session->isStarted()) {
             return;
         }
         if ($autoCacheControl) {
@@ -116,7 +116,7 @@ abstract class AbstractSessionListener implements \RectorPrefix20210903\Symfony\
             return;
         }
         if ($this->debug) {
-            throw new \RectorPrefix20210903\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
+            throw new \RectorPrefix20210904\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
         }
         if ($this->container->has('logger')) {
             $this->container->get('logger')->warning('Session was used while the request was declared stateless.');
@@ -156,15 +156,15 @@ abstract class AbstractSessionListener implements \RectorPrefix20210903\Symfony\
         if ($session->isStarted()) {
             $session->save();
         }
-        throw new \RectorPrefix20210903\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
+        throw new \RectorPrefix20210904\Symfony\Component\HttpKernel\Exception\UnexpectedSessionUsageException('Session was used while the request was declared stateless.');
     }
     public static function getSubscribedEvents() : array
     {
         return [
-            \RectorPrefix20210903\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['onKernelRequest', 128],
+            \RectorPrefix20210904\Symfony\Component\HttpKernel\KernelEvents::REQUEST => ['onKernelRequest', 128],
             // low priority to come after regular response listeners, but higher than StreamedResponseListener
-            \RectorPrefix20210903\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => ['onKernelResponse', -1000],
-            \RectorPrefix20210903\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => ['onFinishRequest'],
+            \RectorPrefix20210904\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => ['onKernelResponse', -1000],
+            \RectorPrefix20210904\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => ['onFinishRequest'],
         ];
     }
     /**

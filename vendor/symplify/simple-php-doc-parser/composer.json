@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20210903\\Symplify\\SimplePhpDocParser\\": "src"
+            "RectorPrefix20210904\\Symplify\\SimplePhpDocParser\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20210903\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
+            "RectorPrefix20210904\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
         }
     },
     "extra": {

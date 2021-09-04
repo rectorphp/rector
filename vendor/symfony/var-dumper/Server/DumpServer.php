@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210903\Symfony\Component\VarDumper\Server;
+namespace RectorPrefix20210904\Symfony\Component\VarDumper\Server;
 
-use RectorPrefix20210903\Psr\Log\LoggerInterface;
-use RectorPrefix20210903\Symfony\Component\VarDumper\Cloner\Data;
-use RectorPrefix20210903\Symfony\Component\VarDumper\Cloner\Stub;
+use RectorPrefix20210904\Psr\Log\LoggerInterface;
+use RectorPrefix20210904\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20210904\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * A server collecting Data clones sent by a ServerDumper.
  *
@@ -25,7 +25,7 @@ class DumpServer
     private $host;
     private $socket;
     private $logger;
-    public function __construct(string $host, \RectorPrefix20210903\Psr\Log\LoggerInterface $logger = null)
+    public function __construct(string $host, \RectorPrefix20210904\Psr\Log\LoggerInterface $logger = null)
     {
         if (\strpos($host, '://') === \false) {
             $host = 'tcp://' . $host;
@@ -48,7 +48,7 @@ class DumpServer
             if ($this->logger) {
                 $this->logger->info('Received a payload from client {clientId}', ['clientId' => $clientId]);
             }
-            $payload = @\unserialize(\base64_decode($message), ['allowed_classes' => [\RectorPrefix20210903\Symfony\Component\VarDumper\Cloner\Data::class, \RectorPrefix20210903\Symfony\Component\VarDumper\Cloner\Stub::class]]);
+            $payload = @\unserialize(\base64_decode($message), ['allowed_classes' => [\RectorPrefix20210904\Symfony\Component\VarDumper\Cloner\Data::class, \RectorPrefix20210904\Symfony\Component\VarDumper\Cloner\Stub::class]]);
             // Impossible to decode the message, give up.
             if (\false === $payload) {
                 if ($this->logger) {
@@ -56,7 +56,7 @@ class DumpServer
                 }
                 continue;
             }
-            if (!\is_array($payload) || \count($payload) < 2 || !$payload[0] instanceof \RectorPrefix20210903\Symfony\Component\VarDumper\Cloner\Data || !\is_array($payload[1])) {
+            if (!\is_array($payload) || \count($payload) < 2 || !$payload[0] instanceof \RectorPrefix20210904\Symfony\Component\VarDumper\Cloner\Data || !\is_array($payload[1])) {
                 if ($this->logger) {
                     $this->logger->warning('Invalid payload from {clientId} client. Expected an array of two elements (Data $data, array $context)', ['clientId' => $clientId]);
                 }

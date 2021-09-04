@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210903;
+namespace RectorPrefix20210904;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Form_AbstractFormViewHelper')) {
     return;
