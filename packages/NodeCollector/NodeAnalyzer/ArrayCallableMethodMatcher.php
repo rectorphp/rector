@@ -75,6 +75,11 @@ final class ArrayCallableMethodMatcher
 
         $className = $calleeType->getClassName();
         $methodName = $secondItemValue->value;
+
+        if ($methodName === MethodName::CONSTRUCT) {
+            return null;
+        }
+
         return new ArrayCallable($firstItemValue, $className, $methodName);
     }
 
