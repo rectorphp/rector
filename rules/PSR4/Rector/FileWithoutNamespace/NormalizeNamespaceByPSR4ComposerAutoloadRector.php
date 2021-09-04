@@ -91,6 +91,9 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->nodeNameResolver->isCaseSensitiveName($node, $expectedNamespace)) {
             return null;
         }
+        if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->hasNamespaceInPreviousNamespace($node)) {
+            return null;
+        }
         // to put declare_strict types on correct place
         if ($node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
             return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
@@ -98,6 +101,12 @@ CODE_SAMPLE
         $node->name = new \PhpParser\Node\Name($expectedNamespace);
         $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
         return $node;
+    }
+    private function hasNamespaceInPreviousNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($namespace, function (\PhpParser\Node $node) : bool {
+            return $node instanceof \PhpParser\Node\Stmt\Namespace_;
+        });
     }
     private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : \PhpParser\Node\Stmt\Namespace_
     {
