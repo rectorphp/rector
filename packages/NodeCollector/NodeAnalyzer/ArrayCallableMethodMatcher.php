@@ -97,6 +97,9 @@ final class ArrayCallableMethodMatcher
     private function shouldSkipAssociativeArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {
         $values = $this->valueResolver->getValue($array);
+        if (!\is_array($values)) {
+            return \false;
+        }
         $keys = \array_keys($values);
         return $keys !== [0, 1] && $keys !== [1];
     }
