@@ -69,11 +69,22 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
     }
     private function renameProperty(\PhpParser\Node\Stmt\ClassLike $classLike, \Rector\Renaming\ValueObject\RenameProperty $renameProperty) : void
     {
+        $classLikeName = $this->nodeNameResolver->getName($classLike);
+        $renamePropertyObjectType = $renameProperty->getObjectType();
+        $className = $renamePropertyObjectType->getClassName();
+        if ($classLikeName !== $className) {
+            return;
+        }
         $property = $classLike->getProperty($renameProperty->getOldProperty());
         if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
-        $property->props[0]->name = new \PhpParser\Node\VarLikeIdentifier($renameProperty->getNewProperty());
+        $newProperty = $renameProperty->getNewProperty();
+        $targetNewProperty = $classLike->getProperty($newProperty);
+        if ($targetNewProperty instanceof \PhpParser\Node\Stmt\Property) {
+            return;
+        }
+        $property->props[0]->name = new \PhpParser\Node\VarLikeIdentifier($newProperty);
     }
     private function processFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node\Expr\PropertyFetch
     {
