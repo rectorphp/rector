@@ -95,6 +95,11 @@ CODE_SAMPLE
         return $node;
     }
 
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::READONLY_PROPERTY;
+    }
+
     private function refactorParam(Param $param): Param | null
     {
         if ($param->flags === 0) {
@@ -112,10 +117,5 @@ CODE_SAMPLE
 
         $this->visibilityManipulator->makeReadonly($param);
         return $param;
-    }
-
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::READONLY_PROPERTY;
     }
 }

@@ -24,7 +24,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -133,7 +132,7 @@ CODE_SAMPLE
 
     private function isUsedInNextNodeWithExtractPreviouslyCalled(Node $node, string $variableName): bool
     {
-        $variable         = new Variable($variableName);
+        $variable = new Variable($variableName);
         $isUsedInNextNode = (bool) $this->betterNodeFinder->findFirstNext(
             $node,
             fn (Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $variable)
