@@ -85,6 +85,10 @@ CODE_SAMPLE
         $this->visibilityManipulator->makeReadonly($node);
         return $node;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::READONLY_PROPERTY;
+    }
     /**
      * @return \PhpParser\Node\Param|null
      */
@@ -102,9 +106,5 @@ CODE_SAMPLE
         }
         $this->visibilityManipulator->makeReadonly($param);
         return $param;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return \Rector\Core\ValueObject\PhpVersionFeature::READONLY_PROPERTY;
     }
 }

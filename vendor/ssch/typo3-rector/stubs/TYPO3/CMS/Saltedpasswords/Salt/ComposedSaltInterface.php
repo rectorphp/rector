@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210904\TYPO3\CMS\Saltedpasswords\Salt;
+namespace RectorPrefix20210905\TYPO3\CMS\Saltedpasswords\Salt;
 
 if (\interface_exists('TYPO3\\CMS\\Saltedpasswords\\Salt\\ComposedSaltInterface')) {
     return;

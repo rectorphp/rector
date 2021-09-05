@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210904\TYPO3\CMS\Extbase\Reflection;
+namespace RectorPrefix20210905\TYPO3\CMS\Extbase\Reflection;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Reflection\\ClassSchema')) {
     return;
