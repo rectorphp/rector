@@ -1,4 +1,4 @@
-# 474 Rules Overview
+# 476 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [CodeQuality](#codequality) (68)
 
-- [CodingStyle](#codingstyle) (38)
+- [CodingStyle](#codingstyle) (39)
 
 - [Composer](#composer) (6)
 
@@ -26,7 +26,7 @@
 
 - [DowngradePhp70](#downgradephp70) (11)
 
-- [DowngradePhp71](#downgradephp71) (9)
+- [DowngradePhp71](#downgradephp71) (10)
 
 - [DowngradePhp72](#downgradephp72) (4)
 
@@ -2095,6 +2095,27 @@ Convert manual JSON string to JSON::encode array
 +            'numberz' => ['id' => 10]
 +        ];
 +        $someJsonAsString = Json::encode($data);
+     }
+ }
+```
+
+<br>
+
+### NewlineAfterStatementRector
+
+Add new line after statements to tidify code
+
+- class: [`Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector`](../rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function test()
+     {
+     }
++
+     public function test2()
+     {
      }
  }
 ```
@@ -4439,6 +4460,22 @@ Downgrade class constant visibility
 +   const PROTECTED_CONST = 3;
 +   const PRIVATE_CONST = 4;
  }
+```
+
+<br>
+
+### DowngradeClosureFromCallableRector
+
+Converts `Closure::fromCallable()` to compatible alternative.
+
+- class: [`Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector`](../rules/DowngradePhp71/Rector/StaticCall/DowngradeClosureFromCallableRector.php)
+
+```diff
+-\Closure::fromCallable('callable');
++$callable = 'callable';
++function () use ($callable) {
++    return $callable(...func_get_args());
++};
 ```
 
 <br>
