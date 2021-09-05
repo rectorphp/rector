@@ -98,8 +98,11 @@ final class ArrayCallableMethodMatcher
     private function shouldSkipAssociativeArray(Array_ $array): bool
     {
         $values = $this->valueResolver->getValue($array);
-        $keys = array_keys($values);
+        if (! is_array($values)) {
+            return false;
+        }
 
+        $keys = array_keys($values);
         return $keys !== [0, 1] && $keys !== [1];
     }
 
