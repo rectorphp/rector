@@ -24,6 +24,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -62,13 +63,18 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower
      */
     private $unionTypeCommonTypeNarrower;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->boolUnionTypeAnalyzer = $boolUnionTypeAnalyzer;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @required
@@ -181,6 +187,12 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         }
         return null;
     }
+    private function hasObjectAndStaticType(\PhpParser\Node\UnionType $phpParserUnionType) : bool
+    {
+        $typeNames = $this->nodeNameResolver->getNames($phpParserUnionType->types);
+        $diff = \array_diff(['object', 'static'], $typeNames);
+        return $diff === [];
+    }
     /**
      * @return Name|FullyQualified|PhpParserUnionType|null
      */
@@ -193,6 +205,9 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
                 if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
                     return new \PhpParser\Node\Name('bool');
                 }
+                return null;
+            }
+            if ($this->hasObjectAndStaticType($phpParserUnionType)) {
                 return null;
             }
             return $phpParserUnionType;
