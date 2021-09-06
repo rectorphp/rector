@@ -10,6 +10,7 @@ use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
+use PHPStan\Type\Accessory\HasMethodType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -37,6 +38,10 @@ final class PHPStanStaticTypeMapper
 
         if ($type instanceof AccessoryNumericStringType) {
             return new IdentifierTypeNode('string');
+        }
+
+        if ($type instanceof HasMethodType) {
+            return new IdentifierTypeNode('object');
         }
 
         throw new NotImplementedYetException(__METHOD__ . ' for ' . $type::class);
