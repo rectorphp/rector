@@ -28,7 +28,10 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -119,9 +122,20 @@ CODE_SAMPLE
             return null;
         }
 
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        // avoid duplicated ifs when combined with ChangeOrIfReturnToEarlyReturnRector
+        if ($this->shouldSkip($conditionStaticType, $newConditionNode, $nextNode)) {
+            return null;
+        }
+
         $node->cond = $newConditionNode;
 
         return $node;
+    }
+
+    private function shouldSkip(Type $conditionStaticType, BinaryOp $binaryOp, ?Node $nextNode): bool
+    {
+        return $conditionStaticType instanceof StringType && $binaryOp instanceof BooleanOr && ! $nextNode instanceof Node;
     }
 
     private function resolveNewConditionNode(Expr $expr, bool $isNegated): ?BinaryOp
