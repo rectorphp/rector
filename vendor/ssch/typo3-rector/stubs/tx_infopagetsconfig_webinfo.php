@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210905;
+namespace RectorPrefix20210906;
 
 if (\class_exists('tx_infopagetsconfig_webinfo')) {
     return;

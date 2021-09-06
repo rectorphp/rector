@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210905\TYPO3\CMS\Fluid\Core\ViewHelper\Facets;
+namespace RectorPrefix20210906\TYPO3\CMS\Fluid\Core\ViewHelper\Facets;
 
 if (\interface_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\Facets\\PostParseInterface')) {
     return;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210905;
+namespace RectorPrefix20210906;
 
 use Rector\Doctrine\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;

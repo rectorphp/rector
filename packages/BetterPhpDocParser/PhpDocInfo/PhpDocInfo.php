@@ -28,7 +28,7 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20210905\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210906\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
@@ -274,17 +274,17 @@ final class PhpDocInfo
      */
     public function removeByType(string $typeToRemove) : void
     {
-        $phpDocNodeTraverser = new \RectorPrefix20210905\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210906\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($typeToRemove) : ?int {
             if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && \is_a($node->value, $typeToRemove, \true)) {
                 $this->markAsChanged();
-                return \RectorPrefix20210905\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                return \RectorPrefix20210906\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
             if (!\is_a($node, $typeToRemove, \true)) {
                 return null;
             }
             $this->markAsChanged();
-            return \RectorPrefix20210905\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+            return \RectorPrefix20210906\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
         });
     }
     /**
@@ -392,7 +392,7 @@ final class PhpDocInfo
             return \true;
         }
         // has a single node with missing start_end
-        $phpDocNodeTraverser = new \RectorPrefix20210905\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20210906\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $changedPhpDocNodeVisitor = new \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($changedPhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($this->phpDocNode);

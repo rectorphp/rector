@@ -27,7 +27,10 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -113,8 +116,17 @@ CODE_SAMPLE
         if (!$newConditionNode instanceof \PhpParser\Node\Expr\BinaryOp) {
             return null;
         }
+        $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        // avoid duplicated ifs when combined with ChangeOrIfReturnToEarlyReturnRector
+        if ($this->shouldSkip($conditionStaticType, $newConditionNode, $nextNode)) {
+            return null;
+        }
         $node->cond = $newConditionNode;
         return $node;
+    }
+    private function shouldSkip(\PHPStan\Type\Type $conditionStaticType, \PhpParser\Node\Expr\BinaryOp $binaryOp, ?\PhpParser\Node $nextNode) : bool
+    {
+        return $conditionStaticType instanceof \PHPStan\Type\StringType && $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr && !$nextNode instanceof \PhpParser\Node;
     }
     private function resolveNewConditionNode(\PhpParser\Node\Expr $expr, bool $isNegated) : ?\PhpParser\Node\Expr\BinaryOp
     {

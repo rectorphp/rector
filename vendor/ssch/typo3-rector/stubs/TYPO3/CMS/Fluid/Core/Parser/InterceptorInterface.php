@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210905\TYPO3\CMS\Fluid\Core\Parser;
+namespace RectorPrefix20210906\TYPO3\CMS\Fluid\Core\Parser;
 
 if (\interface_exists('TYPO3\\CMS\\Fluid\\Core\\Parser\\InterceptorInterface')) {
     return;

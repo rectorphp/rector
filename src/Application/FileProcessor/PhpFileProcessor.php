@@ -18,7 +18,7 @@ use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Configuration;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20210905\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210906\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
@@ -58,7 +58,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
-    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210905\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
+    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20210906\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
