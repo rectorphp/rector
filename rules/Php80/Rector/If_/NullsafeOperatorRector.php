@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -30,10 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NullsafeOperatorRector extends \Rector\Core\Rector\AbstractRector
 {
-    /**
-     * @var string
-     */
-    private const NAME = 'name';
     /**
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
@@ -200,16 +197,25 @@ CODE_SAMPLE
     }
     private function shouldProcessAssignInCurrentNode(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node $nextNode) : bool
     {
-        if (!\property_exists($assign->expr, self::NAME)) {
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_ && !$nextNode instanceof \PhpParser\Node\Stmt\Expression) {
             return \false;
         }
-        if (!\property_exists($nextNode, 'expr')) {
+        if ($nextNode->expr instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
-        if (!\property_exists($nextNode->expr, self::NAME)) {
+        if (!$nextNode->expr instanceof \PhpParser\Node) {
             return \false;
         }
-        return !$this->valueResolver->isNull($nextNode->expr);
+        if (!$assign->expr instanceof \PhpParser\Node\Expr\MethodCall && !$assign->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return !$this->valueResolver->isNull($nextNode->expr);
+        }
+        if (!$nextNode->expr instanceof \PhpParser\Node\Expr\MethodCall && !$nextNode->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return !$this->valueResolver->isNull($nextNode->expr);
+        }
+        if (!$this->nodeComparator->areNodesEqual($assign->expr->var, $nextNode->expr->var)) {
+            return !$this->valueResolver->isNull($nextNode->expr);
+        }
+        return \false;
     }
     private function processIfMayInNextNode(?\PhpParser\Node $nextNode = null) : ?\PhpParser\Node
     {
