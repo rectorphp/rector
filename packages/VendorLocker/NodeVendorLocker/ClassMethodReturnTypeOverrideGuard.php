@@ -17,6 +17,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -43,12 +44,17 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->astResolver = $astResolver;
     }
     public function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -72,10 +78,13 @@ final class ClassMethodReturnTypeOverrideGuard
         if ($childrenClassReflections === []) {
             return \false;
         }
-        if ($this->hasClassMethodExprReturn($classMethod)) {
+        if ($classMethod->returnType instanceof \PhpParser\Node) {
             return \false;
         }
-        return $classMethod->returnType === null;
+        if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod, $scope)) {
+            return \true;
+        }
+        return $this->hasClassMethodExprReturn($classMethod);
     }
     public function shouldSkipClassMethodOldTypeWithNewType(\PHPStan\Type\Type $oldType, \PHPStan\Type\Type $newType) : bool
     {
@@ -87,6 +96,27 @@ final class ClassMethodReturnTypeOverrideGuard
             return \false;
         }
         return $oldType->isSuperTypeOf($newType)->yes();
+    }
+    /**
+     * @param ClassReflection[] $childrenClassReflections
+     */
+    private function shouldSkipHasChildNoReturn(array $childrenClassReflections, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : bool
+    {
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        foreach ($childrenClassReflections as $childClassReflection) {
+            if (!$childClassReflection->hasMethod($methodName)) {
+                continue;
+            }
+            $methodReflection = $childClassReflection->getMethod($methodName, $scope);
+            $method = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
+            if (!$method instanceof \PhpParser\Node\Stmt\ClassMethod) {
+                continue;
+            }
+            if ($method->returnType === null) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function shouldSkipChaoticClassMethods(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
