@@ -18,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -36,7 +37,8 @@ final class ClassMethodReturnTypeOverrideGuard
         private NodeNameResolver $nodeNameResolver,
         private ReflectionProvider $reflectionProvider,
         private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private AstResolver $astResolver
     ) {
     }
 
@@ -67,11 +69,15 @@ final class ClassMethodReturnTypeOverrideGuard
             return false;
         }
 
-        if ($this->hasClassMethodExprReturn($classMethod)) {
+        if ($classMethod->returnType instanceof Node) {
             return false;
         }
 
-        return $classMethod->returnType === null;
+        if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod, $scope)) {
+            return true;
+        }
+
+        return $this->hasClassMethodExprReturn($classMethod);
     }
 
     public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType): bool
@@ -87,6 +93,35 @@ final class ClassMethodReturnTypeOverrideGuard
 
         return $oldType->isSuperTypeOf($newType)
             ->yes();
+    }
+
+    /**
+     * @param ClassReflection[] $childrenClassReflections
+     */
+    private function shouldSkipHasChildNoReturn(
+        array $childrenClassReflections,
+        ClassMethod $classMethod,
+        Scope $scope
+    ): bool {
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        foreach ($childrenClassReflections as $childClassReflection) {
+            if (! $childClassReflection->hasMethod($methodName)) {
+                continue;
+            }
+
+            $methodReflection = $childClassReflection->getMethod($methodName, $scope);
+            $method = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
+
+            if (! $method instanceof ClassMethod) {
+                continue;
+            }
+
+            if ($method->returnType === null) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private function shouldSkipChaoticClassMethods(ClassMethod $classMethod): bool
