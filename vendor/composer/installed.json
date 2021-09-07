@@ -4163,19 +4163,19 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/console-package-builder.git",
-                "reference": "13cc4d30133c3a323168d04208d73ea2c4379228"
+                "reference": "a0ae84186e84e76121bfbb2990189bdca21d455a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/console-package-builder\/zipball\/13cc4d30133c3a323168d04208d73ea2c4379228",
-                "reference": "13cc4d30133c3a323168d04208d73ea2c4379228",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/console-package-builder\/zipball\/a0ae84186e84e76121bfbb2990189bdca21d455a",
+                "reference": "a0ae84186e84e76121bfbb2990189bdca21d455a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
                 "symfony\/console": "^5.3|^6.0",
                 "symfony\/dependency-injection": "^5.3|^6.0",
-                "symplify\/symplify-kernel": "^9.4.58"
+                "symplify\/symplify-kernel": "^9.5"
             },
             "conflict": {
                 "symplify\/amnesia": "<9.4.58",
@@ -4209,9 +4209,9 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/http-kernel": "^5.3|^6.0",
-                "symplify\/package-builder": "^9.4.58"
+                "symplify\/package-builder": "^9.5"
             },
-            "time": "2021-09-07T06:26:59+00:00",
+            "time": "2021-09-07T13:20:36+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -4231,7 +4231,7 @@
             ],
             "description": "Package to speed up building command line applications",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/console-package-builder\/tree\/9.4.58"
+                "source": "https:\/\/github.com\/symplify\/console-package-builder\/tree\/main"
             },
             "install-path": "..\/symplify\/console-package-builder"
         },

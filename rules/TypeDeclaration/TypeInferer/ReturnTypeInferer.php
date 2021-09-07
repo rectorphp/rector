@@ -4,16 +4,20 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
@@ -44,14 +48,19 @@ final class ReturnTypeInferer
      */
     private $parameterProvider;
     /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20210907\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20210907\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->parameterProvider = $parameterProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
     }
     public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
@@ -87,7 +96,8 @@ final class ReturnTypeInferer
                 continue;
             }
             // normalize ConstStringType to ClassStringType
-            return $this->genericClassStringTypeNormalizer->normalize($type);
+            $resolvedType = $this->genericClassStringTypeNormalizer->normalize($type);
+            return $this->resolveTypeWithVoidHandling($functionLike, $resolvedType);
         }
         return new \PHPStan\Type\MixedType();
     }
@@ -122,6 +132,21 @@ final class ReturnTypeInferer
             return null;
         }
         return new \PHPStan\Type\UnionType($types);
+    }
+    private function resolveTypeWithVoidHandling(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
+    {
+        if ($resolvedType instanceof \PHPStan\Type\VoidType) {
+            $hasReturnValue = (bool) $this->betterNodeFinder->findFirst((array) $functionLike->getStmts(), function (\PhpParser\Node $subNode) : bool {
+                if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
+                    return \false;
+                }
+                return $subNode->expr instanceof \PhpParser\Node\Expr;
+            });
+            if ($hasReturnValue) {
+                return new \PHPStan\Type\MixedType();
+            }
+        }
+        return $resolvedType;
     }
     private function isAutoImportWithFullyQualifiedReturn(bool $isAutoImport, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
