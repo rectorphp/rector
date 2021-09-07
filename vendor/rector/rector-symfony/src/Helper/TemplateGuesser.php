@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Helper;
 
-use RectorPrefix20210906\Nette\Utils\Strings;
+use RectorPrefix20210907\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -78,7 +78,7 @@ final class TemplateGuesser
     {
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
-        $action = \RectorPrefix20210906\Nette\Utils\Strings::replace($method, self::ACTION_MATCH_REGEX, '');
+        $action = \RectorPrefix20210907\Nette\Utils\Strings::replace($method, self::ACTION_MATCH_REGEX, '');
         $fullPath = '';
         if ($bundle !== '') {
             $fullPath .= $bundle . '/';
@@ -94,17 +94,17 @@ final class TemplateGuesser
         if ($shortBundleClass !== null) {
             return '@' . $shortBundleClass;
         }
-        $bundle = \RectorPrefix20210906\Nette\Utils\Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
-        $bundle = \RectorPrefix20210906\Nette\Utils\Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
+        $bundle = \RectorPrefix20210907\Nette\Utils\Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
+        $bundle = \RectorPrefix20210907\Nette\Utils\Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
         return $bundle !== '' ? '@' . $bundle : '';
     }
     private function resolveController(string $class) : string
     {
-        $match = \RectorPrefix20210906\Nette\Utils\Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
+        $match = \RectorPrefix20210907\Nette\Utils\Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
         if (!$match) {
             return '';
         }
-        $controller = \RectorPrefix20210906\Nette\Utils\Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
+        $controller = \RectorPrefix20210907\Nette\Utils\Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
         return \str_replace('\\', '/', $controller);
     }
 }

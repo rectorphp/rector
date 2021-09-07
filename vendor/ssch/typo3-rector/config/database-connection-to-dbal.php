@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210906;
+namespace RectorPrefix20210907;
 
 use Ssch\TYPO3Rector\Rector\v9\v0\DatabaseConnectionToDbalRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

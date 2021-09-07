@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210906\TYPO3\CMS\Core\DataHandling;
+namespace RectorPrefix20210907\TYPO3\CMS\Core\DataHandling;
 
 if (\class_exists('TYPO3\\CMS\\Core\\DataHandling\\DataHandler')) {
     return;

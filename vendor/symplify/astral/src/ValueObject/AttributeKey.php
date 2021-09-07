@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210906\Symplify\Astral\ValueObject;
+namespace RectorPrefix20210907\Symplify\Astral\ValueObject;
 
 final class AttributeKey
 {

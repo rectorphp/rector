@@ -36,3 +36,16 @@ spl_autoload_register(function (string $class): void {
         }
     }
 });
+
+if (! interface_exists('UnitEnum')) {
+    /**
+     * @since 8.1
+     */
+    interface UnitEnum
+    {
+        /**
+         * @return static[]
+         */
+        public static function cases(): array;
+    }
+}
