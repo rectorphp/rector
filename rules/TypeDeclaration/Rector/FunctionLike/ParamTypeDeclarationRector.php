@@ -14,6 +14,7 @@ use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
+use Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
@@ -40,7 +41,8 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
         private VendorLockResolver $vendorLockResolver,
         private ParamTypeInferer $paramTypeInferer,
         private TraitTypeAnalyzer $traitTypeAnalyzer,
-        private ParamTagRemover $paramTagRemover
+        private ParamTagRemover $paramTagRemover,
+        private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 
@@ -129,8 +131,8 @@ CODE_SAMPLE
             return null;
         }
 
-        foreach ($node->params as $param) {
-            $this->refactorParam($param, $node);
+        foreach ($node->params as $position => $param) {
+            $this->refactorParam($param, $position, $node);
         }
 
         if ($this->hasChanged) {
@@ -145,7 +147,7 @@ CODE_SAMPLE
         return PhpVersionFeature::SCALAR_TYPES;
     }
 
-    private function refactorParam(Param $param, ClassMethod | Function_ $functionLike): void
+    private function refactorParam(Param $param, int $position, ClassMethod | Function_ $functionLike): void
     {
         if ($this->shouldSkipParam($param, $functionLike)) {
             return;
@@ -171,6 +173,14 @@ CODE_SAMPLE
 
         $parentNode = $functionLike->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Interface_ && $parentNode->extends !== []) {
+            return;
+        }
+
+        if ($functionLike instanceof ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethodDifferentType(
+            $functionLike,
+            $position,
+            $inferedType
+        )) {
             return;
         }
 
