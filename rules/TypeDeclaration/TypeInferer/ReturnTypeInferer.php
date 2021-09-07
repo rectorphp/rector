@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
@@ -39,7 +43,8 @@ final class ReturnTypeInferer
         TypeInfererSorter $typeInfererSorter,
         private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
         private PhpVersionProvider $phpVersionProvider,
-        private ParameterProvider $parameterProvider
+        private ParameterProvider $parameterProvider,
+        private BetterNodeFinder $betterNodeFinder
     ) {
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
     }
@@ -87,7 +92,8 @@ final class ReturnTypeInferer
             }
 
             // normalize ConstStringType to ClassStringType
-            return $this->genericClassStringTypeNormalizer->normalize($type);
+            $resolvedType = $this->genericClassStringTypeNormalizer->normalize($type);
+            return $this->resolveTypeWithVoidHandling($functionLike, $resolvedType);
         }
 
         return new MixedType();
@@ -131,6 +137,28 @@ final class ReturnTypeInferer
         }
 
         return new UnionType($types);
+    }
+
+    private function resolveTypeWithVoidHandling(FunctionLike $functionLike, Type $resolvedType): Type
+    {
+        if ($resolvedType instanceof VoidType) {
+            $hasReturnValue = (bool) $this->betterNodeFinder->findFirst(
+                (array) $functionLike->getStmts(),
+                function (Node $subNode): bool {
+                    if (! $subNode instanceof Return_) {
+                        return false;
+                    }
+
+                    return $subNode->expr instanceof Expr;
+                }
+            );
+
+            if ($hasReturnValue) {
+                return new MixedType();
+            }
+        }
+
+        return $resolvedType;
     }
 
     private function isAutoImportWithFullyQualifiedReturn(bool $isAutoImport, FunctionLike $functionLike): bool
