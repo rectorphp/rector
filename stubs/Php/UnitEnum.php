@@ -11,8 +11,6 @@ if (interface_exists('UnitEnum')) {
  */
 interface UnitEnum
 {
-    public string $name;
-
     /**
      * @return static[]
      */
