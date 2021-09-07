@@ -13,6 +13,7 @@ use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
+use Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
@@ -52,12 +53,17 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
-    public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
+    /**
+     * @var \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard
+     */
+    private $parentClassMethodTypeOverrideGuard;
+    public function __construct(\Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer $traitTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\Defluent\ConflictGuard\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->vendorLockResolver = $vendorLockResolver;
         $this->paramTypeInferer = $paramTypeInferer;
         $this->traitTypeAnalyzer = $traitTypeAnalyzer;
         $this->paramTagRemover = $paramTagRemover;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     /**
      * @return array<class-string<Node>>
@@ -133,8 +139,8 @@ CODE_SAMPLE
         if ($node->params === []) {
             return null;
         }
-        foreach ($node->params as $param) {
-            $this->refactorParam($param, $node);
+        foreach ($node->params as $position => $param) {
+            $this->refactorParam($param, $position, $node);
         }
         if ($this->hasChanged) {
             return $node;
@@ -148,7 +154,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    private function refactorParam(\PhpParser\Node\Param $param, $functionLike) : void
+    private function refactorParam(\PhpParser\Node\Param $param, int $position, $functionLike) : void
     {
         if ($this->shouldSkipParam($param, $functionLike)) {
             return;
@@ -169,6 +175,9 @@ CODE_SAMPLE
         }
         $parentNode = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentNode instanceof \PhpParser\Node\Stmt\Interface_ && $parentNode->extends !== []) {
+            return;
+        }
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->parentClassMethodTypeOverrideGuard->hasParentClassMethodDifferentType($functionLike, $position, $inferedType)) {
             return;
         }
         $param->type = $paramTypeNode;

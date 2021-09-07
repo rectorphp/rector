@@ -7,9 +7,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\Type;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use RectorPrefix20210907\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
@@ -25,11 +28,21 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20210907\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
+     * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
+     */
+    private $paramTypeInferer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20210907\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->vendorLocationDetector = $vendorLocationDetector;
         $this->pathNormalizer = $pathNormalizer;
+        $this->astResolver = $astResolver;
+        $this->paramTypeInferer = $paramTypeInferer;
     }
     public function hasParentMethodOutsideVendor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -75,6 +88,28 @@ final class ParentClassMethodTypeOverrideGuard
     public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         return $this->getParentClassMethod($classMethod) instanceof \PHPStan\Reflection\MethodReflection;
+    }
+    public function hasParentClassMethodDifferentType(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $position, \PHPStan\Type\Type $currentType) : bool
+    {
+        if ($classMethod->isPrivate()) {
+            return \false;
+        }
+        $methodReflection = $this->getParentClassMethod($classMethod);
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+            return \false;
+        }
+        $classMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return \false;
+        }
+        if ($classMethod->isPrivate()) {
+            return \false;
+        }
+        if (!isset($classMethod->params[$position])) {
+            return \false;
+        }
+        $inferedType = $this->paramTypeInferer->inferParam($classMethod->params[$position]);
+        return \get_class($inferedType) !== \get_class($currentType);
     }
     private function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
     {
