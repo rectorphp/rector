@@ -69,8 +69,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return null|If_[]
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if (!$this->ifManipulator->isIfWithOnly($node, \PhpParser\Node\Stmt\Return_::class)) {
             return null;
@@ -84,14 +85,12 @@ CODE_SAMPLE
         /** @var Return_ $return */
         $return = $node->stmts[0];
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
-        foreach ($ifs as $key => $if) {
-            if ($key === 0) {
-                $this->mirrorComments($if, $node);
-            }
-            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
+        // ensure ifs not removed by other rules
+        if ($ifs === []) {
+            return null;
         }
-        $this->removeNode($node);
-        return $node;
+        $this->mirrorComments($ifs[0], $node);
+        return $ifs;
     }
     /**
      * @param If_[] $ifs
