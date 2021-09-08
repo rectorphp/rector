@@ -116,6 +116,10 @@ CODE_SAMPLE
             $propertiesToComplete
         );
 
+        if ($newProperties === []) {
+            return null;
+        }
+
         $node->stmts = array_merge($newProperties, $node->stmts);
 
         return $node;
