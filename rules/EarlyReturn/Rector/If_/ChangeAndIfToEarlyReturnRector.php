@@ -147,7 +147,9 @@ CODE_SAMPLE
 
         $this->removeNode($node);
 
-        if (! $node->stmts[0] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr) {
+        if (! $node->stmts[0] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr && ! $this->contextAnalyzer->isInLoop(
+            $node
+        )) {
             return [$node, $ifNextReturnClone];
         }
 
