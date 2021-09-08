@@ -70,7 +70,7 @@ final class ClassMethodReturnTypeOverrideGuard
         }
 
         if ($classMethod->returnType instanceof Node) {
-            return false;
+            return true;
         }
 
         if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod, $scope)) {
