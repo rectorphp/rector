@@ -103,8 +103,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            $this->refactorClassMethod($node);
-            return $node;
+            return $this->refactorClassMethod($node);
         }
         return $this->refactorProperty($node);
     }
@@ -153,19 +152,20 @@ CODE_SAMPLE
         }
         return $node instanceof \PhpParser\Node\NullableType;
     }
-    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         if ($this->shouldSkipExactlyReturnDateTime($classMethod)) {
-            return;
+            return null;
         }
         $fromObjectType = new \PHPStan\Type\ObjectType(self::DATE_TIME);
         $fullyQualified = new \PhpParser\Node\Name\FullyQualified('DateTimeInterface');
         $unionType = new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectType(self::DATE_TIME), new \PHPStan\Type\ObjectType('DateTimeImmutable')]);
         $this->classMethodParameterTypeManipulator->refactorFunctionParameters($classMethod, $fromObjectType, $fullyQualified, $unionType, self::METHODS_RETURNING_CLASS_INSTANCE_MAP);
         if (!$classMethod->returnType instanceof \PhpParser\Node) {
-            return;
+            return null;
         }
         $this->classMethodReturnTypeManipulator->refactorFunctionReturnType($classMethod, $fromObjectType, $fullyQualified, $unionType);
+        return $classMethod;
     }
     private function shouldSkipExactlyReturnDateTime(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
