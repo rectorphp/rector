@@ -5,11 +5,13 @@ namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\If_;
@@ -128,11 +130,35 @@ CODE_SAMPLE
         if (!$instanceof->expr instanceof \PhpParser\Node\Expr\Variable && !$this->isInPropertyPromotedParams($instanceof->expr) && $this->isSkippedPropertyFetch($instanceof->expr)) {
             return null;
         }
+        if ($this->shouldSkipFromNotTypedParam($instanceof)) {
+            return null;
+        }
         if ($if->cond === $instanceof) {
             $this->nodesToAddCollector->addNodesBeforeNode($if->stmts, $if);
         }
         $this->removeNode($if);
         return $if;
+    }
+    private function shouldSkipFromNotTypedParam(\PhpParser\Node\Expr\Instanceof_ $instanceof) : bool
+    {
+        $functionLike = $this->betterNodeFinder->findParentType($instanceof, \PhpParser\Node\FunctionLike::class);
+        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
+            return \false;
+        }
+        $variable = $instanceof->expr;
+        $isReassign = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($instanceof, function (\PhpParser\Node $subNode) use($variable) : bool {
+            return $subNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable);
+        });
+        if ($isReassign) {
+            return \false;
+        }
+        $params = $functionLike->getParams();
+        foreach ($params as $param) {
+            if ($this->nodeComparator->areNodesEqual($param->var, $instanceof->expr)) {
+                return $param->type === null;
+            }
+        }
+        return \false;
     }
     private function isSkippedPropertyFetch(\PhpParser\Node\Expr $expr) : bool
     {
