@@ -96,8 +96,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassMethod) {
-            $this->refactorClassMethod($node);
-            return $node;
+            return $this->refactorClassMethod($node);
         }
 
         return $this->refactorProperty($node);
@@ -161,10 +160,10 @@ CODE_SAMPLE
         return $node instanceof NullableType;
     }
 
-    private function refactorClassMethod(ClassMethod $classMethod): void
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
         if ($this->shouldSkipExactlyReturnDateTime($classMethod)) {
-            return;
+            return null;
         }
 
         $fromObjectType = new ObjectType(self::DATE_TIME);
@@ -179,7 +178,7 @@ CODE_SAMPLE
             self::METHODS_RETURNING_CLASS_INSTANCE_MAP
         );
         if (! $classMethod->returnType instanceof Node) {
-            return;
+            return null;
         }
 
         $this->classMethodReturnTypeManipulator->refactorFunctionReturnType(
@@ -188,6 +187,7 @@ CODE_SAMPLE
             $fullyQualified,
             $unionType
         );
+        return $classMethod;
     }
 
     private function shouldSkipExactlyReturnDateTime(ClassMethod $classMethod): bool
