@@ -79,7 +79,7 @@ final class ClassMethodReturnTypeOverrideGuard
             return \false;
         }
         if ($classMethod->returnType instanceof \PhpParser\Node) {
-            return \false;
+            return \true;
         }
         if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod, $scope)) {
             return \true;
