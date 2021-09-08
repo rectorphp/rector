@@ -118,6 +118,9 @@ CODE_SAMPLE
         }
         $propertiesToComplete = $this->filterOutExistingProperties($node, $classReflection, $propertiesToComplete);
         $newProperties = $this->missingPropertiesFactory->create($fetchedLocalPropertyNameToTypes, $propertiesToComplete);
+        if ($newProperties === []) {
+            return null;
+        }
         $node->stmts = \array_merge($newProperties, $node->stmts);
         return $node;
     }
