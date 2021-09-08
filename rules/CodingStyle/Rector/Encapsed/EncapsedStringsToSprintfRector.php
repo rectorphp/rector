@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use RectorPrefix20210907\Nette\Utils\Strings;
+use RectorPrefix20210908\Nette\Utils\Strings;
 use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -91,7 +91,7 @@ CODE_SAMPLE
             $this->sprintfFormat .= '%s';
             return;
         }
-        $this->sprintfFormat .= \RectorPrefix20210907\Nette\Utils\Strings::replace($stringValue, '#%#', '%%');
+        $this->sprintfFormat .= \RectorPrefix20210908\Nette\Utils\Strings::replace($stringValue, '#%#', '%%');
     }
     private function collectExpr(\PhpParser\Node\Expr $expr) : void
     {

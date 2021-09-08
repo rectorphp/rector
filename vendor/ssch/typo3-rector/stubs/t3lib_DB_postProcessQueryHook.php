@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210907;
+namespace RectorPrefix20210908;
 
 if (\class_exists('t3lib_DB_postProcessQueryHook')) {
     return;

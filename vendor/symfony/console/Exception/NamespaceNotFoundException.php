@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210907\Symfony\Component\Console\Exception;
+namespace RectorPrefix20210908\Symfony\Component\Console\Exception;
 
 /**
  * Represents an incorrect namespace typed in the console.
  *
  * @author Pierre du Plessis <pdples@gmail.com>
  */
-class NamespaceNotFoundException extends \RectorPrefix20210907\Symfony\Component\Console\Exception\CommandNotFoundException
+class NamespaceNotFoundException extends \RectorPrefix20210908\Symfony\Component\Console\Exception\CommandNotFoundException
 {
 }
