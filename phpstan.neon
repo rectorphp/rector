@@ -274,7 +274,6 @@ parameters:
             paths:
                 # on PhpParser Nodes
                 - src/NodeManipulator/ClassMethodAssignManipulator.php
-                - rules/Php80/Rector/If_/NullsafeOperatorRector.php
                 - packages/NodeTypeResolver/NodeVisitor/FunctionMethodAndClassNodeVisitor.php
                 - packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php
                 - packages/NodeNameResolver/NodeNameResolver.php
@@ -416,9 +415,6 @@ parameters:
         # false positive
         - '#Attribute class JetBrains\\PhpStorm\\Immutable does not exist#'
 
-        # generics single place
-        - '#Method Rector\\Php80\\NodeResolver\\ArgumentSorter\:\:sortArgsByExpectedParamOrder\(\) should return array<T of PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\> but returns array<PhpParser\\Node\\Arg\|PhpParser\\Node\\Param\>#'
-
         - '#Class with base "StaticTypeMapper" name is already used in "Rector\\StaticTypeMapper\\StaticTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "UnionTypeMapper" name is already used in "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
         - '#Class with base "UnionTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper", "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
@@ -515,21 +511,8 @@ parameters:
                 - src/PhpParser/Node/BetterNodeFinder.php
 
         -
-            message: '#Parameter \#1 \$separator of function explode expects non\-empty\-string, string given#'
-            paths:
-                - rules/PSR4/FileRelocationResolver.php
-                - rules/Privatization/Rector/Class_/RepeatedLiteralToClassConstantRector.php
-
-        -
             message: '#Parameter \#2 \$length of function str_split expects int<1, max\>, int given#'
             paths:
                 - rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php
 
         - '#^Cognitive complexity for "Rector\\CodingStyle\\Naming\\NameRenamer\:\:renameNameNode\(\)" is 13, keep it under 9$#'
-
-        -
-            message: '#The string value "" is repeated 6 times\. Refactor to enum to avoid typos and make clear allowed values#'
-            paths:
-                - packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php #45
-                - packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php #26
-                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php #289
