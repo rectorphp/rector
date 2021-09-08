@@ -142,7 +142,7 @@ CODE_SAMPLE
             $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
         }
         $this->removeNode($node);
-        if (!$node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr) {
+        if (!$node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr && !$this->contextAnalyzer->isInLoop($node)) {
             return [$node, $ifNextReturnClone];
         }
         return $node;
