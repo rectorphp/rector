@@ -166,20 +166,25 @@ CODE_SAMPLE
     private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Stmt\Class_ $class, array $readOnlyVariableAssigns) : void
     {
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
-            $this->removeNode($readOnlyVariableAssign);
             /** @var Variable|ClassConstFetch $variable */
             $variable = $readOnlyVariableAssign->var;
             // already overridden
             if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
-            $classConst = $this->createPrivateClassConst($variable, $readOnlyVariableAssign->expr);
-            // replace $variable usage in the code with constant
-            $this->propertyToAddCollector->addConstantToClass($class, $classConst);
             $variableName = $this->getName($variable);
             if ($variableName === null) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
+            foreach ($classMethod->getParams() as $param) {
+                if ($this->nodeNameResolver->isName($param->var, $variableName)) {
+                    continue 2;
+                }
+            }
+            $this->removeNode($readOnlyVariableAssign);
+            $classConst = $this->createPrivateClassConst($variable, $readOnlyVariableAssign->expr);
+            // replace $variable usage in the code with constant
+            $this->propertyToAddCollector->addConstantToClass($class, $classConst);
             $this->replaceVariableWithClassConstFetch($classMethod, $variableName, $classConst);
         }
     }
