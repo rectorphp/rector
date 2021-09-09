@@ -70,8 +70,9 @@ CODE_SAMPLE
 
     /**
      * @param Return_ $node
+     * @return null|Node[]
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
         if (! $node->expr instanceof BooleanOr) {
             return null;
@@ -83,6 +84,7 @@ CODE_SAMPLE
         $left = $booleanOr->left;
         $ifs = $this->createMultipleIfs($left, $node, []);
 
+        // ensure ifs not removed by other rules
         if ($ifs === []) {
             return null;
         }
@@ -92,15 +94,9 @@ CODE_SAMPLE
         }
 
         $this->mirrorComments($ifs[0], $node);
-        foreach ($ifs as $if) {
-            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
-        }
 
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
-        $this->nodesToAddCollector->addNodeBeforeNode(new Return_($lastReturnExpr), $node);
-        $this->removeNode($node);
-
-        return $node;
+        return array_merge($ifs, [new Return_($lastReturnExpr)]);
     }
 
     /**
