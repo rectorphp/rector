@@ -385,7 +385,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
                 $ifStmt->setAttribute(AttributeKey::COMMENTS, $node->getComments());
             }
 
-            $this->addNodeAfterNode($ifStmt, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($ifStmt, $node);
         }
     }
 
