@@ -79,8 +79,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
+     * @return null|If_[]
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?array
     {
         if (! $this->ifManipulator->isIfWithOnly($node, Continue_::class)) {
             return null;
@@ -93,22 +94,23 @@ CODE_SAMPLE
         return $this->processMultiIfContinue($node);
     }
 
-    private function processMultiIfContinue(If_ $if): If_
+    /**
+     * @return null|If_[]
+     */
+    private function processMultiIfContinue(If_ $if): ?array
     {
         $node = clone $if;
         /** @var Continue_ $continue */
         $continue = $if->stmts[0];
         $ifs = $this->createMultipleIfs($if->cond, $continue, []);
-        foreach ($ifs as $key => $if) {
-            if ($key === 0) {
-                $this->mirrorComments($if, $node);
-            }
 
-            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
+        // ensure ifs not removed by other rules
+        if ($ifs === []) {
+            return null;
         }
 
-        $this->removeNode($node);
-        return $node;
+        $this->mirrorComments($ifs[0], $node);
+        return $ifs;
     }
 
     /**
