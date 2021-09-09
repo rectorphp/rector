@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210908\TYPO3\CMS\Core\Mail;
+namespace RectorPrefix20210909\TYPO3\CMS\Core\Mail;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Mail\\MailMessage')) {
     return;

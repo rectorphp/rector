@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit\Behavior;
 
-use RectorPrefix20210908\Nette\Utils\FileSystem;
+use RectorPrefix20210909\Nette\Utils\FileSystem;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 trait MultipleFilesChangedTrait
@@ -26,12 +26,12 @@ trait MultipleFilesChangedTrait
         if (\trim($expectedContent)) {
             $fixtureContent .= $separator . $expectedContent;
         }
-        \RectorPrefix20210908\Nette\Utils\FileSystem::write($fixturePath, $fixtureContent);
+        \RectorPrefix20210909\Nette\Utils\FileSystem::write($fixturePath, $fixtureContent);
         $newFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fixturePath);
         $this->doTestFileInfo($newFileInfo, $allowMatches);
         $this->checkAdditionalChanges($expectedFileChanges);
         if (\file_exists($fixturePath)) {
-            \RectorPrefix20210908\Nette\Utils\FileSystem::delete($fixturePath);
+            \RectorPrefix20210909\Nette\Utils\FileSystem::delete($fixturePath);
         }
     }
     /**
@@ -50,7 +50,7 @@ trait MultipleFilesChangedTrait
             $input = isset($additionalFileChange[1]) ? \trim($additionalFileChange[1]) : null;
             if ($input) {
                 $this->createFixtureDir($fullPath);
-                \RectorPrefix20210908\Nette\Utils\FileSystem::write($fullPath, $input);
+                \RectorPrefix20210909\Nette\Utils\FileSystem::write($fullPath, $input);
             }
             $expectedFileChanges[$fullPath] = isset($additionalFileChange[2]) ? \trim($additionalFileChange[2]) : '';
         }
@@ -75,7 +75,7 @@ trait MultipleFilesChangedTrait
             $realFileContent = $addedFile ? \trim($addedFile->getFileContent()) : null;
             $this->assertSame($expectedFileChange, $realFileContent);
             if (\file_exists($path)) {
-                \RectorPrefix20210908\Nette\Utils\FileSystem::delete($path);
+                \RectorPrefix20210909\Nette\Utils\FileSystem::delete($path);
             }
         }
     }

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210908\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20210909\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20210908\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210909\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Remove private aliases from the container. They were only used to establish
  * dependencies between services, and these dependencies have been resolved in
@@ -18,7 +18,7 @@ use RectorPrefix20210908\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class RemovePrivateAliasesPass implements \RectorPrefix20210908\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class RemovePrivateAliasesPass implements \RectorPrefix20210909\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * Removes private aliases from the ContainerBuilder.

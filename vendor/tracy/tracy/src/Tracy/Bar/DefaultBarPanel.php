@@ -5,13 +5,13 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210908\Tracy;
+namespace RectorPrefix20210909\Tracy;
 
 /**
  * IBarPanel implementation helper.
  * @internal
  */
-class DefaultBarPanel implements \RectorPrefix20210908\Tracy\IBarPanel
+class DefaultBarPanel implements \RectorPrefix20210909\Tracy\IBarPanel
 {
     public $data;
     private $id;
@@ -24,7 +24,7 @@ class DefaultBarPanel implements \RectorPrefix20210908\Tracy\IBarPanel
      */
     public function getTab() : string
     {
-        return \RectorPrefix20210908\Tracy\Helpers::capture(function () {
+        return \RectorPrefix20210909\Tracy\Helpers::capture(function () {
             $data = $this->data;
             require __DIR__ . "/panels/{$this->id}.tab.phtml";
         });
@@ -34,7 +34,7 @@ class DefaultBarPanel implements \RectorPrefix20210908\Tracy\IBarPanel
      */
     public function getPanel() : string
     {
-        return \RectorPrefix20210908\Tracy\Helpers::capture(function () {
+        return \RectorPrefix20210909\Tracy\Helpers::capture(function () {
             if (\is_file(__DIR__ . "/panels/{$this->id}.panel.phtml")) {
                 $data = $this->data;
                 require __DIR__ . "/panels/{$this->id}.panel.phtml";

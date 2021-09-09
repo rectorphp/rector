@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210908\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20210909\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\AspectInterface')) {
     return;

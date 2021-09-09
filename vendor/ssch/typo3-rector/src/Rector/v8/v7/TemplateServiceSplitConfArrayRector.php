@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210908\TYPO3\CMS\Core\TypoScript\TemplateService;
+use RectorPrefix20210909\TYPO3\CMS\Core\TypoScript\TemplateService;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-78650-TemplateService-splitConfArray.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\TemplateServiceSplitConfArrayRector\TemplateServiceSplitConfArrayRectorTest

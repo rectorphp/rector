@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20210908\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20210909\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class UseImportsTraverser
 {
     /**
@@ -19,7 +19,7 @@ final class UseImportsTraverser
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20210908\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(\RectorPrefix20210909\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
