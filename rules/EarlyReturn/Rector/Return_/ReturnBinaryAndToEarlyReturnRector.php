@@ -71,27 +71,27 @@ CODE_SAMPLE
     }
     /**
      * @param Return_ $node
+     * @return null|Node[]
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return null;
         }
         $left = $node->expr->left;
         $ifNegations = $this->createMultipleIfsNegation($left, $node, []);
+        // ensure ifs not removed by other rules
+        if ($ifNegations === []) {
+            return null;
+        }
         if (!$this->callAnalyzer->doesIfHasObjectCall($ifNegations)) {
             return null;
         }
         $this->mirrorComments($ifNegations[0], $node);
-        foreach ($ifNegations as $ifNegation) {
-            $this->nodesToAddCollector->addNodeBeforeNode($ifNegation, $node);
-        }
         /** @var BooleanAnd $booleanAnd */
         $booleanAnd = $node->expr;
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanAnd->right);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($lastReturnExpr), $node);
-        $this->removeNode($node);
-        return $node;
+        return \array_merge($ifNegations, [new \PhpParser\Node\Stmt\Return_($lastReturnExpr)]);
     }
     /**
      * @param If_[] $ifNegations

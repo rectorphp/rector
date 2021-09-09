@@ -72,8 +72,9 @@ CODE_SAMPLE
     }
     /**
      * @param Return_ $node
+     * @return null|Node[]
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return null;
@@ -82,6 +83,7 @@ CODE_SAMPLE
         $booleanOr = $node->expr;
         $left = $booleanOr->left;
         $ifs = $this->createMultipleIfs($left, $node, []);
+        // ensure ifs not removed by other rules
         if ($ifs === []) {
             return null;
         }
@@ -89,13 +91,8 @@ CODE_SAMPLE
             return null;
         }
         $this->mirrorComments($ifs[0], $node);
-        foreach ($ifs as $if) {
-            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
-        }
         $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
-        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Return_($lastReturnExpr), $node);
-        $this->removeNode($node);
-        return $node;
+        return \array_merge($ifs, [new \PhpParser\Node\Stmt\Return_($lastReturnExpr)]);
     }
     /**
      * @param If_[] $ifs
