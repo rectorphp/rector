@@ -362,7 +362,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
                 // move // comments
                 $ifStmt->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $node->getComments());
             }
-            $this->addNodeAfterNode($ifStmt, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($ifStmt, $node);
         }
     }
     /**
