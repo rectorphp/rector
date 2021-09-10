@@ -93,6 +93,7 @@ CODE_SAMPLE
         }
 
         $node->type = $propertyTypeNode;
+        $node->props[0]->default = null;
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
