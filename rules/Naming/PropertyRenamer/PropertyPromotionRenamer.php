@@ -17,6 +17,7 @@ use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
+use Rector\Naming\VariableRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class PropertyPromotionRenamer
@@ -28,7 +29,8 @@ final class PropertyPromotionRenamer
         private PhpDocInfoFactory $phpDocInfoFactory,
         private ParamRenamer $paramRenamer,
         private PropertyFetchRenamer $propertyFetchRenamer,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private VariableRenamer $variableRenamer
     ) {
     }
 
@@ -66,11 +68,11 @@ final class PropertyPromotionRenamer
                 continue;
             }
 
-            $this->renameParamVarName($classLike, $constructClassMethod, $desiredPropertyName, $param);
+            $this->renameParamVarNameAndVariableUsage($classLike, $constructClassMethod, $desiredPropertyName, $param);
         }
     }
 
-    private function renameParamVarName(
+    private function renameParamVarNameAndVariableUsage(
         ClassLike $classLike,
         ClassMethod $classMethod,
         string $desiredPropertyName,
@@ -90,6 +92,8 @@ final class PropertyPromotionRenamer
         $paramVarName = $param->var->name;
         $this->renameParamDoc($classMethodPhpDocInfo, $param, $paramVarName, $desiredPropertyName);
         $param->var->name = $desiredPropertyName;
+
+        $this->variableRenamer->renameVariableInFunctionLike($classMethod, $paramVarName, $desiredPropertyName);
     }
 
     private function renameParamDoc(
