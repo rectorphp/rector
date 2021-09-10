@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210909;
+namespace RectorPrefix20210910;
 
 if (\class_exists('tx_lowlevel_cleaner_core')) {
     return;

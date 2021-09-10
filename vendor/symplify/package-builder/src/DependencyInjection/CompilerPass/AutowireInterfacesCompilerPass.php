@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210909\Symplify\PackageBuilder\DependencyInjection\CompilerPass;
+namespace RectorPrefix20210910\Symplify\PackageBuilder\DependencyInjection\CompilerPass;
 
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\ContainerBuilder;
-final class AutowireInterfacesCompilerPass implements \RectorPrefix20210909\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\ContainerBuilder;
+final class AutowireInterfacesCompilerPass implements \RectorPrefix20210910\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * @var string[]

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210909\TYPO3\CMS\Extbase\Object;
+namespace RectorPrefix20210910\TYPO3\CMS\Extbase\Object;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\ObjectManagerInterface')) {
     return;

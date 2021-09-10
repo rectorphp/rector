@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210909;
+namespace RectorPrefix20210910;
 
 if (\class_exists('t3lib_beUserAuth')) {
     return;

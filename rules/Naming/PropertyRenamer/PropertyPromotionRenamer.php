@@ -16,6 +16,7 @@ use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\ParamRenamer\ParamRenamer;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\ValueObjectFactory\ParamRenameFactory;
+use Rector\Naming\VariableRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyPromotionRenamer
 {
@@ -47,7 +48,11 @@ final class PropertyPromotionRenamer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, \Rector\Naming\ValueObjectFactory\ParamRenameFactory $paramRenameFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Naming\ParamRenamer\ParamRenamer $paramRenamer, \Rector\Naming\PropertyRenamer\PropertyFetchRenamer $propertyFetchRenamer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \Rector\Naming\VariableRenamer
+     */
+    private $variableRenamer;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, \Rector\Naming\ValueObjectFactory\ParamRenameFactory $paramRenameFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Naming\ParamRenamer\ParamRenamer $paramRenamer, \Rector\Naming\PropertyRenamer\PropertyFetchRenamer $propertyFetchRenamer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\VariableRenamer $variableRenamer)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->matchParamTypeExpectedNameResolver = $matchParamTypeExpectedNameResolver;
@@ -56,6 +61,7 @@ final class PropertyPromotionRenamer
         $this->paramRenamer = $paramRenamer;
         $this->propertyFetchRenamer = $propertyFetchRenamer;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->variableRenamer = $variableRenamer;
     }
     public function renamePropertyPromotion(\PhpParser\Node\Stmt\ClassLike $classLike) : void
     {
@@ -84,10 +90,10 @@ final class PropertyPromotionRenamer
             if ($this->isNameSuffixed($currentParamName, $desiredPropertyName)) {
                 continue;
             }
-            $this->renameParamVarName($classLike, $constructClassMethod, $desiredPropertyName, $param);
+            $this->renameParamVarNameAndVariableUsage($classLike, $constructClassMethod, $desiredPropertyName, $param);
         }
     }
-    private function renameParamVarName(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\Stmt\ClassMethod $classMethod, string $desiredPropertyName, \PhpParser\Node\Param $param) : void
+    private function renameParamVarNameAndVariableUsage(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\Stmt\ClassMethod $classMethod, string $desiredPropertyName, \PhpParser\Node\Param $param) : void
     {
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $currentParamName = $this->nodeNameResolver->getName($param);
@@ -96,6 +102,7 @@ final class PropertyPromotionRenamer
         $paramVarName = $param->var->name;
         $this->renameParamDoc($classMethodPhpDocInfo, $param, $paramVarName, $desiredPropertyName);
         $param->var->name = $desiredPropertyName;
+        $this->variableRenamer->renameVariableInFunctionLike($classMethod, $paramVarName, $desiredPropertyName);
     }
     private function renameParamDoc(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Param $param, string $paramVarName, string $desiredPropertyName) : void
     {

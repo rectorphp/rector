@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210909\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20210910\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\Reference;
-final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20210909\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\Reference;
+final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20210910\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     private $tagName;
     private $aliases = [];
@@ -30,8 +30,8 @@ final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20210909\Symf
      */
     protected function processValue($value, $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20210909\Symfony\Component\DependencyInjection\Reference && isset($this->aliases[$id = (string) $value])) {
-            return new \RectorPrefix20210909\Symfony\Component\DependencyInjection\Reference($this->aliases[$id], $value->getInvalidBehavior());
+        if ($value instanceof \RectorPrefix20210910\Symfony\Component\DependencyInjection\Reference && isset($this->aliases[$id = (string) $value])) {
+            return new \RectorPrefix20210910\Symfony\Component\DependencyInjection\Reference($this->aliases[$id], $value->getInvalidBehavior());
         }
         return parent::processValue($value, $isRoot);
     }
@@ -43,10 +43,10 @@ final class AliasDeprecatedPublicServicesPass extends \RectorPrefix20210909\Symf
     {
         foreach ($container->findTaggedServiceIds($this->tagName) as $id => $tags) {
             if (null === ($package = $tags[0]['package'] ?? null)) {
-                throw new \RectorPrefix20210909\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "package" attribute is mandatory for the "%s" tag on the "%s" service.', $this->tagName, $id));
+                throw new \RectorPrefix20210910\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "package" attribute is mandatory for the "%s" tag on the "%s" service.', $this->tagName, $id));
             }
             if (null === ($version = $tags[0]['version'] ?? null)) {
-                throw new \RectorPrefix20210909\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "version" attribute is mandatory for the "%s" tag on the "%s" service.', $this->tagName, $id));
+                throw new \RectorPrefix20210910\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The "version" attribute is mandatory for the "%s" tag on the "%s" service.', $this->tagName, $id));
             }
             $definition = $container->getDefinition($id);
             if (!$definition->isPublic() || $definition->isPrivate()) {

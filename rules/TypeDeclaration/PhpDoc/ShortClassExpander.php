@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\PhpDoc;
 
-use RectorPrefix20210909\Nette\Utils\Strings;
+use RectorPrefix20210910\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
@@ -54,6 +54,6 @@ final class ShortClassExpander
     }
     private function getCleanedUpTargetEntity(string $targetEntity) : string
     {
-        return \RectorPrefix20210909\Nette\Utils\Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
+        return \RectorPrefix20210910\Nette\Utils\Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
     }
 }

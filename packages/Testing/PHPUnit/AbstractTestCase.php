@@ -6,7 +6,7 @@ namespace Rector\Testing\PHPUnit;
 use PHPUnit\Framework\TestCase;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {

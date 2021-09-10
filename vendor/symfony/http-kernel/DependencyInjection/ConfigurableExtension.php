@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210909\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20210910\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20210909\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20210910\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * This extension sub-class provides first-class integration with the
  * Config/Definition Component.
@@ -23,7 +23,7 @@ use RectorPrefix20210909\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-abstract class ConfigurableExtension extends \RectorPrefix20210909\Symfony\Component\HttpKernel\DependencyInjection\Extension
+abstract class ConfigurableExtension extends \RectorPrefix20210910\Symfony\Component\HttpKernel\DependencyInjection\Extension
 {
     /**
      * {@inheritdoc}

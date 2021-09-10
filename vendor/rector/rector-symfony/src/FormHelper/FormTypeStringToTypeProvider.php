@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\FormHelper;
 
-use RectorPrefix20210909\Nette\Utils\Strings;
+use RectorPrefix20210910\Nette\Utils\Strings;
 use Rector\Symfony\Contract\Tag\TagInterface;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class FormTypeStringToTypeProvider
@@ -27,8 +27,8 @@ final class FormTypeStringToTypeProvider
     public function matchClassForNameWithPrefix(string $name) : ?string
     {
         $nameToTypeMap = $this->getNameToTypeMap();
-        if (\RectorPrefix20210909\Nette\Utils\Strings::startsWith($name, 'form.type.')) {
-            $name = \RectorPrefix20210909\Nette\Utils\Strings::substring($name, \strlen('form.type.'));
+        if (\RectorPrefix20210910\Nette\Utils\Strings::startsWith($name, 'form.type.')) {
+            $name = \RectorPrefix20210910\Nette\Utils\Strings::substring($name, \strlen('form.type.'));
         }
         return $nameToTypeMap[$name] ?? null;
     }
