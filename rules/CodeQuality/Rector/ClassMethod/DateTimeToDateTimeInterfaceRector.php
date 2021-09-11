@@ -164,8 +164,7 @@ CODE_SAMPLE
         if (!$classMethod->returnType instanceof \PhpParser\Node) {
             return null;
         }
-        $this->classMethodReturnTypeManipulator->refactorFunctionReturnType($classMethod, $fromObjectType, $fullyQualified, $unionType);
-        return $classMethod;
+        return $this->classMethodReturnTypeManipulator->refactorFunctionReturnType($classMethod, $fromObjectType, $fullyQualified, $unionType);
     }
     private function shouldSkipExactlyReturnDateTime(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

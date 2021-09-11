@@ -37,11 +37,11 @@ final class ClassMethodReturnTypeManipulator
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
      */
-    public function refactorFunctionReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, $replaceIntoType, \PHPStan\Type\Type $phpDocType) : void
+    public function refactorFunctionReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, $replaceIntoType, \PHPStan\Type\Type $phpDocType) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $returnType = $classMethod->returnType;
         if ($returnType === null) {
-            return;
+            return null;
         }
         $isNullable = \false;
         if ($returnType instanceof \PhpParser\Node\NullableType) {
@@ -49,11 +49,11 @@ final class ClassMethodReturnTypeManipulator
             $returnType = $returnType->type;
         }
         if (!$this->nodeTypeResolver->isObjectType($returnType, $objectType)) {
-            return;
+            return null;
         }
         $paramType = $this->nodeTypeResolver->resolve($returnType);
         if (!$paramType->isSuperTypeOf($objectType)->yes()) {
-            return;
+            return null;
         }
         if ($isNullable) {
             if ($phpDocType instanceof \PHPStan\Type\UnionType) {
@@ -70,5 +70,6 @@ final class ClassMethodReturnTypeManipulator
         $classMethod->returnType = $replaceIntoType;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $phpDocType);
+        return $classMethod;
     }
 }
