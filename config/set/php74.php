@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector;
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;
 use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php74\Rector\Double\RealToFloatTypeCastRector;
@@ -61,4 +62,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeReflectionTypeToStringToGetNameRector::class);
 
     $services->set(RestoreDefaultNullToNullableTypePropertyRector::class);
+
+    $services->set(CurlyToSquareBracketArrayStringRector::class);
 };
