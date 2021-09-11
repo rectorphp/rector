@@ -349,13 +349,26 @@ CODE_SAMPLE
         if (!$this->canTernaryReturnNull($ternary)) {
             return \true;
         }
-        if ($ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
-            return !$this->hasNullComparison($ternary->cond);
+        if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical && !$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+            return \true;
         }
-        if ($ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
-            return !$this->hasNullComparison($ternary->cond);
+        if (!$this->hasNullComparison($ternary->cond)) {
+            return \true;
         }
-        return \true;
+        return $this->hasIndirectUsageOnElse($ternary->cond, $ternary->else);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $cond
+     */
+    private function hasIndirectUsageOnElse($cond, \PhpParser\Node\Expr $expr) : bool
+    {
+        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall && !$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return \false;
+        }
+        $left = $cond->left;
+        $right = $cond->right;
+        $object = $this->valueResolver->isNull($left) ? $right : $left;
+        return !$this->nodeComparator->areNodesEqual($expr->var, $object);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Identical $check
