@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6
+class ComposerStaticInitc373b2dc4e52def312178f7dde82817e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3074,6 +3074,7 @@ class ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6
         'Rector\\Php73\\Rector\\FuncCall\\StringifyStrNeedlesRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/StringifyStrNeedlesRector.php',
         'Rector\\Php73\\Rector\\String_\\SensitiveHereNowDocRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/String_/SensitiveHereNowDocRector.php',
         'Rector\\Php74\\NodeAnalyzer\\ClosureArrowFunctionAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/NodeAnalyzer/ClosureArrowFunctionAnalyzer.php',
+        'Rector\\Php74\\Rector\\ArrayDimFetch\\CurlyToSquareBracketArrayStringRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/ArrayDimFetch/CurlyToSquareBracketArrayStringRector.php',
         'Rector\\Php74\\Rector\\Assign\\NullCoalescingOperatorRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Assign/NullCoalescingOperatorRector.php',
         'Rector\\Php74\\Rector\\Closure\\ClosureToArrowFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Closure/ClosureToArrowFunctionRector.php',
         'Rector\\Php74\\Rector\\Double\\RealToFloatTypeCastRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php',
@@ -3088,6 +3089,7 @@ class ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6
         'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
         'Rector\\Php74\\Rector\\Property\\TypedPropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/TypedPropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
+        'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
@@ -3856,9 +3858,9 @@ class ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5fa286bfa2514f75aab290c1259d4bc6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc373b2dc4e52def312178f7dde82817e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc373b2dc4e52def312178f7dde82817e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc373b2dc4e52def312178f7dde82817e::$classMap;
 
         }, null, ClassLoader::class);
     }
