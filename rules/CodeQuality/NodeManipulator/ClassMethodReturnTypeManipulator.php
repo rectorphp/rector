@@ -30,10 +30,10 @@ final class ClassMethodReturnTypeManipulator
         ObjectType $objectType,
         Identifier|Name|NullableType $replaceIntoType,
         Type $phpDocType
-    ): void {
+    ): ?ClassMethod {
         $returnType = $classMethod->returnType;
         if ($returnType === null) {
-            return;
+            return null;
         }
 
         $isNullable = false;
@@ -43,12 +43,12 @@ final class ClassMethodReturnTypeManipulator
         }
 
         if (! $this->nodeTypeResolver->isObjectType($returnType, $objectType)) {
-            return;
+            return null;
         }
 
         $paramType = $this->nodeTypeResolver->resolve($returnType);
         if (! $paramType->isSuperTypeOf($objectType)->yes()) {
-            return;
+            return null;
         }
 
         if ($isNullable) {
@@ -68,5 +68,7 @@ final class ClassMethodReturnTypeManipulator
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $phpDocType);
+
+        return $classMethod;
     }
 }

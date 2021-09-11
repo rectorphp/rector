@@ -181,13 +181,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->classMethodReturnTypeManipulator->refactorFunctionReturnType(
+        return $this->classMethodReturnTypeManipulator->refactorFunctionReturnType(
             $classMethod,
             $fromObjectType,
             $fullyQualified,
             $unionType
         );
-        return $classMethod;
     }
 
     private function shouldSkipExactlyReturnDateTime(ClassMethod $classMethod): bool
