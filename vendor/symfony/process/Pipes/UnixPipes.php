@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210910\Symfony\Component\Process\Pipes;
+namespace RectorPrefix20210911\Symfony\Component\Process\Pipes;
 
-use RectorPrefix20210910\Symfony\Component\Process\Process;
+use RectorPrefix20210911\Symfony\Component\Process\Process;
 /**
  * UnixPipes implementation uses unix pipes as handles.
  *
@@ -18,7 +18,7 @@ use RectorPrefix20210910\Symfony\Component\Process\Process;
  *
  * @internal
  */
-class UnixPipes extends \RectorPrefix20210910\Symfony\Component\Process\Pipes\AbstractPipes
+class UnixPipes extends \RectorPrefix20210911\Symfony\Component\Process\Pipes\AbstractPipes
 {
     private $ttyMode;
     private $ptyMode;
@@ -57,7 +57,7 @@ class UnixPipes extends \RectorPrefix20210910\Symfony\Component\Process\Pipes\Ab
         if ($this->ttyMode) {
             return [['file', '/dev/tty', 'r'], ['file', '/dev/tty', 'w'], ['file', '/dev/tty', 'w']];
         }
-        if ($this->ptyMode && \RectorPrefix20210910\Symfony\Component\Process\Process::isPtySupported()) {
+        if ($this->ptyMode && \RectorPrefix20210911\Symfony\Component\Process\Process::isPtySupported()) {
             return [['pty'], ['pty'], ['pty']];
         }
         return [
@@ -88,7 +88,7 @@ class UnixPipes extends \RectorPrefix20210910\Symfony\Component\Process\Pipes\Ab
         unset($r[0]);
         // let's have a look if something changed in streams
         \set_error_handler([$this, 'handleError']);
-        if (($r || $w) && \false === \stream_select($r, $w, $e, 0, $blocking ? \RectorPrefix20210910\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0 : 0)) {
+        if (($r || $w) && \false === \stream_select($r, $w, $e, 0, $blocking ? \RectorPrefix20210911\Symfony\Component\Process\Process::TIMEOUT_PRECISION * 1000000.0 : 0)) {
             \restore_error_handler();
             // if a system call has been interrupted, forget about it, let's try again
             // otherwise, an error occurred, let's reset pipes

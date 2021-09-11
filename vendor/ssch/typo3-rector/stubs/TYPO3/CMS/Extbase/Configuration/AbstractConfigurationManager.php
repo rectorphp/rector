@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210910\TYPO3\CMS\Extbase\Configuration;
+namespace RectorPrefix20210911\TYPO3\CMS\Extbase\Configuration;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Configuration\\AbstractConfigurationManager')) {
     return;

@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php 
-namespace RectorPrefix20210910;
+namespace RectorPrefix20210911;
 
 /*
  * This file is part of the Symfony package.
@@ -15,18 +15,18 @@ namespace RectorPrefix20210910;
  *
  * @author Jan Schädlich <jan.schaedlich@sensiolabs.de>
  */
-use RectorPrefix20210910\Symfony\Component\Console\Application;
-use RectorPrefix20210910\Symfony\Component\Yaml\Command\LintCommand;
+use RectorPrefix20210911\Symfony\Component\Console\Application;
+use RectorPrefix20210911\Symfony\Component\Yaml\Command\LintCommand;
 function includeIfExists(string $file) : bool
 {
     return \file_exists($file) && (include $file);
 }
-if (!\RectorPrefix20210910\includeIfExists(__DIR__ . '/../../../../autoload.php') && !\RectorPrefix20210910\includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !\RectorPrefix20210910\includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
+if (!\RectorPrefix20210911\includeIfExists(__DIR__ . '/../../../../autoload.php') && !\RectorPrefix20210911\includeIfExists(__DIR__ . '/../../vendor/autoload.php') && !\RectorPrefix20210911\includeIfExists(__DIR__ . '/../../../../../../vendor/autoload.php')) {
     \fwrite(\STDERR, 'Install dependencies using Composer.' . \PHP_EOL);
     exit(1);
 }
-if (!\class_exists(\RectorPrefix20210910\Symfony\Component\Console\Application::class)) {
+if (!\class_exists(\RectorPrefix20210911\Symfony\Component\Console\Application::class)) {
     \fwrite(\STDERR, 'You need the "symfony/console" component in order to run the Yaml linter.' . \PHP_EOL);
     exit(1);
 }
-(new \RectorPrefix20210910\Symfony\Component\Console\Application())->add($command = new \RectorPrefix20210910\Symfony\Component\Yaml\Command\LintCommand())->getApplication()->setDefaultCommand($command->getName(), \true)->run();
+(new \RectorPrefix20210911\Symfony\Component\Console\Application())->add($command = new \RectorPrefix20210911\Symfony\Component\Yaml\Command\LintCommand())->getApplication()->setDefaultCommand($command->getName(), \true)->run();

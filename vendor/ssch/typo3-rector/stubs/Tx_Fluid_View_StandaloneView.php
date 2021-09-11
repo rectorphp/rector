@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210910;
+namespace RectorPrefix20210911;
 
 if (\class_exists('Tx_Fluid_View_StandaloneView')) {
     return;

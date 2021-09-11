@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210910;
+namespace RectorPrefix20210911;
 
 if (\class_exists('tx_install_report_InstallStatus')) {
     return;

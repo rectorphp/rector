@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210910\TYPO3\TestingFramework\Core;
+namespace RectorPrefix20210911\TYPO3\TestingFramework\Core;
 
 if (\interface_exists('TYPO3\\TestingFramework\\Core\\AccessibleObjectInterface')) {
     return;

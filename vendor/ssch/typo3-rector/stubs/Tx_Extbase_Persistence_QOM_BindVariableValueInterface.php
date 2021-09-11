@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210910;
+namespace RectorPrefix20210911;
 
 if (\interface_exists('Tx_Extbase_Persistence_QOM_BindVariableValueInterface')) {
     return;

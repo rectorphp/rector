@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210910\Symfony\Component\HttpKernel\Exception;
+namespace RectorPrefix20210911\Symfony\Component\HttpKernel\Exception;
 
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  */
-class UnauthorizedHttpException extends \RectorPrefix20210910\Symfony\Component\HttpKernel\Exception\HttpException
+class UnauthorizedHttpException extends \RectorPrefix20210911\Symfony\Component\HttpKernel\Exception\HttpException
 {
     /**
      * @param string          $challenge WWW-Authenticate challenge string
