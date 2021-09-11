@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -54,18 +56,28 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
 
     public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
+        if (! $this->isStrlenWithNeedleExpr($strStartsWith) &&
+            ! $this->isHardcodedStringWithLNumberLength($strStartsWith)) {
+            return null;
+        }
+
+        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+    }
+
+    private function isStrlenWithNeedleExpr(StrStartsWith $strStartsWith): bool
+    {
         $substrFuncCall = $strStartsWith->getFuncCall();
         if (! $this->valueResolver->isValue($substrFuncCall->args[1]->value, 0)) {
-            return null;
+            return false;
         }
 
         $secondFuncCallArgValue = $substrFuncCall->args[2]->value;
         if (! $secondFuncCallArgValue instanceof FuncCall) {
-            return null;
+            return false;
         }
 
         if (! $this->nodeNameResolver->isName($secondFuncCallArgValue, 'strlen')) {
-            return null;
+            return false;
         }
 
         /** @var FuncCall $strlenFuncCall */
@@ -73,10 +85,26 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         $needleExpr = $strlenFuncCall->args[0]->value;
 
         $comparedNeedleExpr = $strStartsWith->getNeedleExpr();
-        if (! $this->nodeComparator->areNodesEqual($needleExpr, $comparedNeedleExpr)) {
-            return null;
+        return $this->nodeComparator->areNodesEqual($needleExpr, $comparedNeedleExpr);
+    }
+
+    private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith): bool
+    {
+        $substrFuncCall = $strStartsWith->getFuncCall();
+        if (! $this->valueResolver->isValue($substrFuncCall->args[1]->value, 0)) {
+            return false;
         }
 
-        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        $hardcodedStringNeedle = $strStartsWith->getNeedleExpr();
+        if (! $hardcodedStringNeedle instanceof String_) {
+            return false;
+        }
+
+        $lNumberLength = $substrFuncCall->args[2]->value;
+        if (! $lNumberLength instanceof LNumber) {
+            return false;
+        }
+
+        return $lNumberLength->value === strlen($hardcodedStringNeedle->value);
     }
 }
