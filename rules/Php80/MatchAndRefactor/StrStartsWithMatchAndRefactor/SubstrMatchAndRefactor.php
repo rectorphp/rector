@@ -56,12 +56,15 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
 
     public function refactorStrStartsWith(StrStartsWith $strStartsWith): ?Node
     {
-        if (! $this->isStrlenWithNeedleExpr($strStartsWith) &&
-            ! $this->isHardcodedStringWithLNumberLength($strStartsWith)) {
-            return null;
+        if ($this->isStrlenWithNeedleExpr($strStartsWith)) {
+            return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
         }
 
-        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        if ($this->isHardcodedStringWithLNumberLength($strStartsWith)) {
+            return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        }
+
+        return null;
     }
 
     private function isStrlenWithNeedleExpr(StrStartsWith $strStartsWith): bool

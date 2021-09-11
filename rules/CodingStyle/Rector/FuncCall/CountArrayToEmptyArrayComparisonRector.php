@@ -85,6 +85,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $parentScope = $parent->getAttribute(AttributeKey::SCOPE);
+        if (! $parentScope instanceof Scope) {
+            return null;
+        }
+
         $processIdentical = $this->processIdenticalOrNotIdentical($parent, $node, $expr);
         if ($processIdentical !== null) {
             return $processIdentical;
