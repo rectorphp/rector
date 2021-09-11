@@ -68,6 +68,10 @@ CODE_SAMPLE
         if (!$parent instanceof \PhpParser\Node) {
             return null;
         }
+        $parentScope = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$parentScope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
         $processIdentical = $this->processIdenticalOrNotIdentical($parent, $node, $expr);
         if ($processIdentical !== null) {
             return $processIdentical;

@@ -67,10 +67,13 @@ final class StrncmpMatchAndRefactor implements \Rector\Php80\Contract\StrStartWi
      */
     public function refactorStrStartsWith($strStartsWith) : ?\PhpParser\Node
     {
-        if (!$this->isNeedleExprWithStrlen($strStartsWith) && !$this->isHardcodedStringWithLNumberLength($strStartsWith)) {
-            return null;
+        if ($this->isNeedleExprWithStrlen($strStartsWith)) {
+            return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
         }
-        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        if ($this->isHardcodedStringWithLNumberLength($strStartsWith)) {
+            return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        }
+        return null;
     }
     private function isNeedleExprWithStrlen(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : bool
     {

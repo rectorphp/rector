@@ -66,10 +66,13 @@ final class SubstrMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
      */
     public function refactorStrStartsWith($strStartsWith) : ?\PhpParser\Node
     {
-        if (!$this->isStrlenWithNeedleExpr($strStartsWith) && !$this->isHardcodedStringWithLNumberLength($strStartsWith)) {
-            return null;
+        if ($this->isStrlenWithNeedleExpr($strStartsWith)) {
+            return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
         }
-        return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        if ($this->isHardcodedStringWithLNumberLength($strStartsWith)) {
+            return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);
+        }
+        return null;
     }
     private function isStrlenWithNeedleExpr(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : bool
     {
