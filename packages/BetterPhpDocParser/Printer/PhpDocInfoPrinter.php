@@ -50,7 +50,7 @@ final class PhpDocInfoPrinter
     /**
      * @var string Uses a hardcoded unix-newline since most codes use it (even on windows) - otherwise we would need to normalize newlines
      */
-    private const NEWLINE_WITH_ASTERISK = "\n" . ' * ';
+    private const NEWLINE_WITH_ASTERISK = "\n" . ' *';
     /**
      * @see https://regex101.com/r/WR3goY/1/
      * @var string
@@ -190,7 +190,7 @@ final class PhpDocInfoPrinter
                 $printedNode = (string) $phpDocChildNode;
                 // remove extra space between tags
                 $printedNode = \RectorPrefix20210912\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
-                return self::NEWLINE_WITH_ASTERISK . $printedNode;
+                return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
             }
         }
         /** @var StartAndEnd|null $startAndEnd */
@@ -275,9 +275,10 @@ final class PhpDocInfoPrinter
     }
     private function standardPrintPhpDocChildNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode $phpDocChildNode) : string
     {
+        $printedNode = (string) $phpDocChildNode;
         if ($this->getCurrentPhpDocInfo()->isSingleLine()) {
-            return ' ' . $phpDocChildNode;
+            return ' ' . $printedNode;
         }
-        return self::NEWLINE_WITH_ASTERISK . $phpDocChildNode;
+        return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
     }
 }
