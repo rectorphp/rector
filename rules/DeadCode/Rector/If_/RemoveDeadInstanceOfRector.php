@@ -156,7 +156,10 @@ CODE_SAMPLE
         $variable = $instanceof->expr;
         $isReassign = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
             $instanceof,
-            fn (Node $subNode): bool => $subNode instanceof Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable)
+            fn (Node $subNode): bool => $subNode instanceof Assign && $this->nodeComparator->areNodesEqual(
+                $subNode->var,
+                $variable
+            )
         );
 
         if ($isReassign) {

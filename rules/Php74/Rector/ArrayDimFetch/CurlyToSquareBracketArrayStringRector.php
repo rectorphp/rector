@@ -18,8 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CurlyToSquareBracketArrayStringRector extends AbstractRector
 {
-    public function __construct(private FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer)
-    {
+    public function __construct(
+        private FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

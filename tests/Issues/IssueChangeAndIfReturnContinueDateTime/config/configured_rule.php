@@ -13,5 +13,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DateTimeToDateTimeInterfaceRector::class);
     $services->set(ChangeAndIfToEarlyReturnRector::class);
     $services->set(ChangeOrIfContinueToMultiContinueRector::class);
-
 };
