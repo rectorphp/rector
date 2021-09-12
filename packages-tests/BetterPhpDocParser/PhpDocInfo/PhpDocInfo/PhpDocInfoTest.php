@@ -63,7 +63,7 @@ final class PhpDocInfoTest extends AbstractTestCase
         $this->assertStringEqualsFile(__DIR__ . '/Source/expected-replaced-tag.txt', $printedPhpDocInfo);
     }
 
-    public function testDoNotAddSpaseWhenAddEmptyString()
+    public function testDoNotAddSpaseWhenAddEmptyString(): void
     {
         $this->phpDocInfo->addPhpDocTagNode(new PhpDocTextNode(''));
         $this->phpDocInfo->addPhpDocTagNode(new PhpDocTextNode('Some text'));
