@@ -6,6 +6,7 @@ namespace Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Stmt\Nop;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -60,6 +61,18 @@ final class PhpDocInfoTest extends AbstractTestCase
 
         $printedPhpDocInfo = $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         $this->assertStringEqualsFile(__DIR__ . '/Source/expected-replaced-tag.txt', $printedPhpDocInfo);
+    }
+
+    public function testDoNotAddSpaseWhenAddEmptyString()
+    {
+        $this->phpDocInfo->addPhpDocTagNode(new PhpDocTextNode(''));
+        $this->phpDocInfo->addPhpDocTagNode(new PhpDocTextNode('Some text'));
+
+        $printedPhpDocInfo = $this->phpDocInfoPrinter->printFormatPreserving($this->phpDocInfo);
+        $this->assertStringEqualsFile(
+            __DIR__ . '/Source/expected-without-space-when-add-empty-string.txt',
+            $printedPhpDocInfo
+        );
     }
 
     private function createPhpDocInfoFromFile(string $path): ?PhpDocInfo
