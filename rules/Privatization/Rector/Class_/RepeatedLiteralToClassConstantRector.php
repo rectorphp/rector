@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractRector;
@@ -143,16 +144,42 @@ CODE_SAMPLE
      */
     private function replaceStringsWithClassConstReferences(\PhpParser\Node\Stmt\Class_ $class, array $stringsToReplace) : void
     {
-        $this->traverseNodesWithCallable($class, function (\PhpParser\Node $node) use($stringsToReplace) : ?ClassConstFetch {
+        $classConsts = $class->getConstants();
+        $this->traverseNodesWithCallable($class, function (\PhpParser\Node $node) use($stringsToReplace, $classConsts) : ?ClassConstFetch {
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return null;
             }
             if (!$this->valueResolver->isValues($node, $stringsToReplace)) {
                 return null;
             }
+            $isInMethod = (bool) $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+            if (!$isInMethod) {
+                return null;
+            }
             $constantName = $this->createConstName($node->value);
+            if ($this->isClassConstExistsWithDifferentValue($classConsts, $constantName, $node->value)) {
+                return null;
+            }
             return $this->nodeFactory->createSelfFetchConstant($constantName, $node);
         });
+    }
+    /**
+     * @param ClassConst[] $classConsts
+     */
+    private function isClassConstExistsWithDifferentValue(array $classConsts, string $constantName, string $value) : bool
+    {
+        foreach ($classConsts as $classConst) {
+            $consts = $classConst->consts;
+            foreach ($consts as $const) {
+                if (!$this->nodeNameResolver->isName($const->name, $constantName)) {
+                    continue;
+                }
+                if (!$this->valueResolver->isValue($const->value, $value)) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     /**
      * @param string[] $stringsToReplace

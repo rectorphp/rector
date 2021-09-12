@@ -4242,12 +4242,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-testing.git",
-                "reference": "f905e7ede14b439c18f1abd69cae5b0fa7ba51dd"
+                "reference": "e5e12450fd1d8276cf55e7f9dc8e14a1c8e8a3af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/f905e7ede14b439c18f1abd69cae5b0fa7ba51dd",
-                "reference": "f905e7ede14b439c18f1abd69cae5b0fa7ba51dd",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/e5e12450fd1d8276cf55e7f9dc8e14a1c8e8a3af",
+                "reference": "e5e12450fd1d8276cf55e7f9dc8e14a1c8e8a3af",
                 "shasum": ""
             },
             "require": {
@@ -4291,7 +4291,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-09-08T22:27:54+00:00",
+            "time": "2021-09-12T15:17:26+00:00",
             "default-branch": true,
             "bin": [
                 "bin\/easy-testing"

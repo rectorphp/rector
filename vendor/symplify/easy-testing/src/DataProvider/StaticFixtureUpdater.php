@@ -7,7 +7,10 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20210912\Symplify\SmartFileSystem\SmartFileSystem;
 final class StaticFixtureUpdater
 {
-    public static function updateFixtureContent(\Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo, string $changedContent, \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo) : void
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
+     */
+    public static function updateFixtureContent($originalFileInfo, string $changedContent, \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo) : void
     {
         if (!\getenv('UPDATE_TESTS') && !\getenv('UT')) {
             return;
@@ -26,11 +29,19 @@ final class StaticFixtureUpdater
     {
         return new \RectorPrefix20210912\Symplify\SmartFileSystem\SmartFileSystem();
     }
-    private static function resolveNewFixtureContent(\Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo, string $changedContent) : string
+    /**
+     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
+     */
+    private static function resolveNewFixtureContent($originalFileInfo, string $changedContent) : string
     {
-        if ($originalFileInfo->getContents() === $changedContent) {
-            return $originalFileInfo->getContents();
+        if ($originalFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+            $originalContent = $originalFileInfo->getContents();
+        } else {
+            $originalContent = $originalFileInfo;
         }
-        return $originalFileInfo->getContents() . '-----' . \PHP_EOL . $changedContent;
+        if ($originalContent === $changedContent) {
+            return $originalContent;
+        }
+        return $originalContent . '-----' . \PHP_EOL . $changedContent;
     }
 }
