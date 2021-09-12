@@ -1,4 +1,4 @@
-# 476 Rules Overview
+# 477 Rules Overview
 
 <br>
 
@@ -70,7 +70,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (14)
+- [Php74](#php74) (15)
 
 - [Php80](#php80) (17)
 
@@ -7442,6 +7442,23 @@ Change closure to arrow function
 +        return array_filter($meetups, fn(Meetup $meetup) => is_object($meetup));
      }
  }
+```
+
+<br>
+
+### CurlyToSquareBracketArrayStringRector
+
+Change curly based array and string to square bracket
+
+- class: [`Rector\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector`](../rules/Php74/Rector/ArrayDimFetch/CurlyToSquareBracketArrayStringRector.php)
+
+```diff
+ $string = 'test';
+-echo $string{0};
++echo $string[0];
+ $array = ['test'];
+-echo $array{0};
++echo $array[0];
 ```
 
 <br>
