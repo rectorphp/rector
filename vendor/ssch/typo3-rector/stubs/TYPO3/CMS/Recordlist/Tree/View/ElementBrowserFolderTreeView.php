@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210911\TYPO3\CMS\Recordlist\Tree\View;
+namespace RectorPrefix20210912\TYPO3\CMS\Recordlist\Tree\View;
 
 if (\class_exists('TYPO3\\CMS\\Recordlist\\Tree\\View\\ElementBrowserFolderTreeView')) {
     return;

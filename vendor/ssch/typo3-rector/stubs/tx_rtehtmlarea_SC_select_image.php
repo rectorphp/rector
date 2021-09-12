@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210911;
+namespace RectorPrefix20210912;
 
 if (\class_exists('tx_rtehtmlarea_SC_select_image')) {
     return;
