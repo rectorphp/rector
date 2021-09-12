@@ -53,15 +53,24 @@ class ConstExprParser
             }
             if ($tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_DOUBLE_COLON)) {
                 $classConstantName = '';
-                if ($tokens->currentTokenType() === \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER) {
-                    $classConstantName .= $tokens->currentTokenValue();
-                    $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER);
-                    if ($tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD)) {
-                        $classConstantName .= '*';
+                $lastType = null;
+                while (\true) {
+                    if ($lastType !== \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER && $tokens->currentTokenType() === \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER) {
+                        $classConstantName .= $tokens->currentTokenValue();
+                        $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER);
+                        $lastType = \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER;
+                        continue;
                     }
-                } else {
-                    $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD);
-                    $classConstantName .= '*';
+                    if ($lastType !== \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD && $tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD)) {
+                        $classConstantName .= '*';
+                        $lastType = \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD;
+                        continue;
+                    }
+                    if ($lastType === null) {
+                        // trigger parse error if nothing valid was consumed
+                        $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD);
+                    }
+                    break;
                 }
                 return new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode($identifier, $classConstantName);
             }
