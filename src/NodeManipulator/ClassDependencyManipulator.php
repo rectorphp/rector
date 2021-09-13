@@ -204,7 +204,7 @@ final class ClassDependencyManipulator
             return $this->isParamInConstructor($class, $propertyMetadata->getName());
         }
         // is inject/autowired property?
-        return $property instanceof \PhpParser\Node\Stmt\Property && $this->autowiredClassMethodOrPropertyAnalyzer->detect($property);
+        return $property instanceof \PhpParser\Node\Stmt\Property;
     }
     private function hasMethodParameter(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name) : bool
     {
