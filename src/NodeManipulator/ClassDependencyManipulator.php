@@ -229,7 +229,7 @@ final class ClassDependencyManipulator
         }
 
         // is inject/autowired property?
-        return $property instanceof Property && $this->autowiredClassMethodOrPropertyAnalyzer->detect($property);
+        return $property instanceof Property;
     }
 
     private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
