@@ -65,7 +65,7 @@ final class SimpleNodeFinder
     }
     /**
      * @template T of Node
-     * @param class-string<T>[] $nodeTypes
+     * @param array<class-string<T>&class-string<Node>> $nodeTypes
      * @return T|null
      */
     public function findFirstParentByTypes(\PhpParser\Node $node, array $nodeTypes) : ?\PhpParser\Node

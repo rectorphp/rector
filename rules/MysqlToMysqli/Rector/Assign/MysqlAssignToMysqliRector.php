@@ -91,8 +91,8 @@ CODE_SAMPLE
         $fetchVariable = new \PhpParser\Node\Expr\Variable('fetch');
         $newAssignNode = new \PhpParser\Node\Expr\Assign($fetchVariable, $mysqlFetchRowFuncCall);
         $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
-        $newAssignNode = new \PhpParser\Node\Expr\Assign($assign->var, new \PhpParser\Node\Expr\ArrayDimFetch($fetchVariable, new \PhpParser\Node\Scalar\LNumber(0)));
-        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
+        $newAssignNodeAfter = new \PhpParser\Node\Expr\Assign($assign->var, new \PhpParser\Node\Expr\ArrayDimFetch($fetchVariable, new \PhpParser\Node\Scalar\LNumber(0)));
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNodeAfter, $assign);
         return $funcCall;
     }
     private function processMysqliSelectDb(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
@@ -120,8 +120,8 @@ CODE_SAMPLE
         $fetchVariable = new \PhpParser\Node\Expr\Variable('fetch');
         $newAssignNode = new \PhpParser\Node\Expr\Assign($fetchVariable, $mysqlFetchArrayFuncCall);
         $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
-        $newAssignNode = new \PhpParser\Node\Expr\Assign($assign->var, new \PhpParser\Node\Expr\ArrayDimFetch($fetchVariable, $fetchField ?? new \PhpParser\Node\Scalar\LNumber(0)));
-        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
+        $newAssignNodeAfter = new \PhpParser\Node\Expr\Assign($assign->var, new \PhpParser\Node\Expr\ArrayDimFetch($fetchVariable, $fetchField ?? new \PhpParser\Node\Scalar\LNumber(0)));
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNodeAfter, $assign);
         return $funcCall;
     }
     private function processFieldToFieldDirect(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\Assign

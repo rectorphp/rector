@@ -94,9 +94,9 @@ CODE_SAMPLE
         $lastIfStmtKey = \key($node->stmts);
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
-        $return = new \PhpParser\Node\Stmt\Return_($assign->expr);
-        $this->mirrorComments($return, $assign);
-        $node->stmts[$lastIfStmtKey] = $return;
+        $returnLastIf = new \PhpParser\Node\Stmt\Return_($assign->expr);
+        $this->mirrorComments($returnLastIf, $assign);
+        $node->stmts[$lastIfStmtKey] = $returnLastIf;
         $else = $node->else;
         if (!$else instanceof \PhpParser\Node\Stmt\Else_) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
@@ -106,9 +106,9 @@ CODE_SAMPLE
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($elseStmts);
         \end($elseStmts);
         $lastElseStmtKey = \key($elseStmts);
-        $return = new \PhpParser\Node\Stmt\Return_($assign->expr);
-        $this->mirrorComments($return, $assign);
-        $elseStmts[$lastElseStmtKey] = $return;
+        $returnLastElse = new \PhpParser\Node\Stmt\Return_($assign->expr);
+        $this->mirrorComments($returnLastElse, $assign);
+        $elseStmts[$lastElseStmtKey] = $returnLastElse;
         $node->else = null;
         $this->removeNode($nextNode);
         return \array_merge([$node], $elseStmts);

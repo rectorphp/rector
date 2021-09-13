@@ -79,28 +79,28 @@ final class NodeScopeAndMetadataDecorator
         $nodes = $nodeTraverser->traverse($nodes);
         $smartFileInfo = $file->getSmartFileInfo();
         $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nodeTraverserForPreservingName = new \PhpParser\NodeTraverser();
         $preservingNameResolver = new \PhpParser\NodeVisitor\NameResolver(null, [
             self::OPTION_PRESERVE_ORIGINAL_NAMES => \true,
             // this option would override old non-fqn-namespaced nodes otherwise, so it needs to be disabled
             self::OPTION_REPLACE_NODES => \false,
         ]);
-        $nodeTraverser->addVisitor($preservingNameResolver);
-        $nodes = $nodeTraverser->traverse($nodes);
-        $nodeTraverser = new \PhpParser\NodeTraverser();
+        $nodeTraverserForPreservingName->addVisitor($preservingNameResolver);
+        $nodes = $nodeTraverserForPreservingName->traverse($nodes);
+        $nodeTraverserForFormatPreservePrinting = new \PhpParser\NodeTraverser();
         // needed also for format preserving printing
-        $nodeTraverser->addVisitor($this->cloningVisitor);
-        $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
-        $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
-        $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->cloningVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->nodeConnectingVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionMethodAndClassNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
         $fileNodeVisitor = new \Rector\NodeTypeResolver\NodeVisitor\FileNodeVisitor($file);
-        $nodeTraverser->addVisitor($fileNodeVisitor);
-        $nodes = $nodeTraverser->traverse($nodes);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($fileNodeVisitor);
+        $nodes = $nodeTraverserForFormatPreservePrinting->traverse($nodes);
         // this split is needed, so nodes have names, classes and namespaces
-        $nodeTraverser = new \PhpParser\NodeTraverser();
-        $nodeTraverser->addVisitor($this->statementNodeVisitor);
-        return $nodeTraverser->traverse($nodes);
+        $nodeTraverserForStmtNodeVisitor = new \PhpParser\NodeTraverser();
+        $nodeTraverserForStmtNodeVisitor->addVisitor($this->statementNodeVisitor);
+        return $nodeTraverserForStmtNodeVisitor->traverse($nodes);
     }
     /**
      * @param Stmt[] $nodes
