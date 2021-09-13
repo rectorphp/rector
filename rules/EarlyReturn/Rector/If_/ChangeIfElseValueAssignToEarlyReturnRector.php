@@ -99,9 +99,9 @@ CODE_SAMPLE
         /** @var Assign $assign */
         $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
 
-        $return = new Return_($assign->expr);
-        $this->mirrorComments($return, $assign);
-        $node->stmts[$lastIfStmtKey] = $return;
+        $returnLastIf = new Return_($assign->expr);
+        $this->mirrorComments($returnLastIf, $assign);
+        $node->stmts[$lastIfStmtKey] = $returnLastIf;
 
         $else = $node->else;
         if (! $else instanceof Else_) {
@@ -115,9 +115,9 @@ CODE_SAMPLE
 
         $lastElseStmtKey = array_key_last($elseStmts);
 
-        $return = new Return_($assign->expr);
-        $this->mirrorComments($return, $assign);
-        $elseStmts[$lastElseStmtKey] = $return;
+        $returnLastElse = new Return_($assign->expr);
+        $this->mirrorComments($returnLastElse, $assign);
+        $elseStmts[$lastElseStmtKey] = $returnLastElse;
 
         $node->else = null;
         $this->removeNode($nextNode);

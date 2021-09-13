@@ -122,8 +122,8 @@ CODE_SAMPLE
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchRowFuncCall);
         $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
-        $newAssignNode = new Assign($assign->var, new ArrayDimFetch($fetchVariable, new LNumber(0)));
-        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
+        $newAssignNodeAfter = new Assign($assign->var, new ArrayDimFetch($fetchVariable, new LNumber(0)));
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNodeAfter, $assign);
 
         return $funcCall;
     }
@@ -164,8 +164,8 @@ CODE_SAMPLE
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchArrayFuncCall);
         $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
-        $newAssignNode = new Assign($assign->var, new ArrayDimFetch($fetchVariable, $fetchField ?? new LNumber(0)));
-        $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
+        $newAssignNodeAfter = new Assign($assign->var, new ArrayDimFetch($fetchVariable, $fetchField ?? new LNumber(0)));
+        $this->nodesToAddCollector->addNodeAfterNode($newAssignNodeAfter, $assign);
 
         return $funcCall;
     }

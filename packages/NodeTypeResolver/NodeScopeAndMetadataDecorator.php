@@ -59,7 +59,7 @@ final class NodeScopeAndMetadataDecorator
         $smartFileInfo = $file->getSmartFileInfo();
         $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
 
-        $nodeTraverser = new NodeTraverser();
+        $nodeTraverserForPreservingName = new NodeTraverser();
 
         $preservingNameResolver = new NameResolver(null, [
             self::OPTION_PRESERVE_ORIGINAL_NAMES => true,
@@ -67,27 +67,27 @@ final class NodeScopeAndMetadataDecorator
             self::OPTION_REPLACE_NODES => false,
         ]);
 
-        $nodeTraverser->addVisitor($preservingNameResolver);
-        $nodes = $nodeTraverser->traverse($nodes);
+        $nodeTraverserForPreservingName->addVisitor($preservingNameResolver);
+        $nodes = $nodeTraverserForPreservingName->traverse($nodes);
 
-        $nodeTraverser = new NodeTraverser();
+        $nodeTraverserForFormatPreservePrinting = new NodeTraverser();
         // needed also for format preserving printing
-        $nodeTraverser->addVisitor($this->cloningVisitor);
-        $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
-        $nodeTraverser->addVisitor($this->namespaceNodeVisitor);
-        $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->cloningVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->nodeConnectingVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionMethodAndClassNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->namespaceNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
 
         $fileNodeVisitor = new FileNodeVisitor($file);
-        $nodeTraverser->addVisitor($fileNodeVisitor);
+        $nodeTraverserForFormatPreservePrinting->addVisitor($fileNodeVisitor);
 
-        $nodes = $nodeTraverser->traverse($nodes);
+        $nodes = $nodeTraverserForFormatPreservePrinting->traverse($nodes);
 
         // this split is needed, so nodes have names, classes and namespaces
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->statementNodeVisitor);
+        $nodeTraverserForStmtNodeVisitor = new NodeTraverser();
+        $nodeTraverserForStmtNodeVisitor->addVisitor($this->statementNodeVisitor);
 
-        return $nodeTraverser->traverse($nodes);
+        return $nodeTraverserForStmtNodeVisitor->traverse($nodes);
     }
 
     /**
