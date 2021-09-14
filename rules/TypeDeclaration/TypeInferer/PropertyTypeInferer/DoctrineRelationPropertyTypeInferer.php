@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use RectorPrefix20210913\Nette\Utils\Strings;
+use RectorPrefix20210914\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\ArrayType;
@@ -85,7 +85,7 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
             return new \PHPStan\Type\MixedType();
         }
         if (\substr_compare($targetEntity, '::class', -\strlen('::class')) === 0) {
-            $targetEntity = \RectorPrefix20210913\Nette\Utils\Strings::before($targetEntity, '::class');
+            $targetEntity = \RectorPrefix20210914\Nette\Utils\Strings::before($targetEntity, '::class');
         }
         // resolve to FQN
         $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);

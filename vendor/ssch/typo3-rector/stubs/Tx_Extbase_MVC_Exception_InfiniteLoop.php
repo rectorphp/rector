@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210913;
+namespace RectorPrefix20210914;
 
 if (\class_exists('Tx_Extbase_MVC_Exception_InfiniteLoop')) {
     return;

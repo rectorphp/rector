@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210913;
+namespace RectorPrefix20210914;
 
 use Rector\Core\Configuration\Option;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210913;
+namespace RectorPrefix20210914;
 
 if (\class_exists('tx_wizardcrpages_webfunc_2')) {
     return;

@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -118,14 +117,10 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($ifNextReturn);
-        $ifNextReturn = $node->stmts[0];
-        $this->nodesToAddCollector->addNodeAfterNode($ifNextReturn, $node);
-        $ifNextReturnClone = $ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ ? clone $ifNextReturn : new \PhpParser\Node\Stmt\Return_();
+        $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
+        $ifNextReturnClone = $node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ ? clone $node->stmts[0] : new \PhpParser\Node\Stmt\Return_();
         if (!$this->contextAnalyzer->isInLoop($node)) {
             return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
-        }
-        if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Expression) {
-            return null;
         }
         $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Return_(), $node);
         return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
@@ -134,18 +129,16 @@ CODE_SAMPLE
      * @param Expr[] $conditions
      * @return \PhpParser\Node\Stmt\If_|mixed[]
      */
-    private function processReplaceIfs(\PhpParser\Node\Stmt\If_ $node, array $conditions, \PhpParser\Node\Stmt\Return_ $ifNextReturnClone)
+    private function processReplaceIfs(\PhpParser\Node\Stmt\If_ $if, array $conditions, \PhpParser\Node\Stmt\Return_ $ifNextReturnClone)
     {
-        $ifs = $this->invertedIfFactory->createFromConditions($node, $conditions, $ifNextReturnClone);
-        $this->mirrorComments($ifs[0], $node);
-        foreach ($ifs as $if) {
-            $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
+        $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturnClone);
+        $this->mirrorComments($ifs[0], $if);
+        $this->nodesToAddCollector->addNodesBeforeNode($ifs, $if);
+        $this->removeNode($if);
+        if (!$if->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr && !$this->contextAnalyzer->isInLoop($if)) {
+            return [$if, $ifNextReturnClone];
         }
-        $this->removeNode($node);
-        if (!$node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr && !$this->contextAnalyzer->isInLoop($node)) {
-            return [$node, $ifNextReturnClone];
-        }
-        return $node;
+        return $if;
     }
     private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {

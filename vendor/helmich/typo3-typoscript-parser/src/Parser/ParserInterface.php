@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210913\Helmich\TypoScriptParser\Parser;
+namespace RectorPrefix20210914\Helmich\TypoScriptParser\Parser;
 
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 interface ParserInterface

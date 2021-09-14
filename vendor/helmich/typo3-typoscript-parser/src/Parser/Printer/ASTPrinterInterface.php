@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210913\Helmich\TypoScriptParser\Parser\Printer;
+namespace RectorPrefix20210914\Helmich\TypoScriptParser\Parser\Printer;
 
-use RectorPrefix20210913\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210914\Symfony\Component\Console\Output\OutputInterface;
 interface ASTPrinterInterface
 {
     /**
