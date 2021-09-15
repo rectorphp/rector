@@ -75,11 +75,11 @@ CODE_SAMPLE
         if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-        $exprType = $this->nodeTypeResolver->resolve($node->expr);
-        if (!$exprType instanceof \PHPStan\Type\VoidType) {
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var, \true)) {
             return null;
         }
-        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var)) {
+        $exprType = $this->nodeTypeResolver->resolve($node->expr);
+        if (!$exprType instanceof \PHPStan\Type\VoidType) {
             return null;
         }
         return $node->expr;
