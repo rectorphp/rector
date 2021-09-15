@@ -135,7 +135,28 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->hasIndirectUsageOnNextOfIf($prevExpr->var, $nextNode)) {
+            return null;
+        }
+
         return $this->processAssign($prevExpr, $prevNode, $nextNode, $isStartIf);
+    }
+
+    private function hasIndirectUsageOnNextOfIf(Expr $expr, Node $nextNode): bool
+    {
+        if (! $nextNode instanceof Return_ && ! $nextNode instanceof Expression) {
+            return false;
+        }
+
+        if ($nextNode->expr instanceof PropertyFetch) {
+            return ! $this->nodeComparator->areNodesEqual($expr, $nextNode->expr->var);
+        }
+
+        if ($nextNode->expr instanceof MethodCall) {
+            return ! $this->nodeComparator->areNodesEqual($expr, $nextNode->expr->var);
+        }
+
+        return false;
     }
 
     private function processNullSafeOperatorNotIdentical(If_ $if, ?Expr $expr = null): ?Node
