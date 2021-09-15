@@ -85,9 +85,9 @@ CODE_SAMPLE
 
     /**
      * @param If_ $node
-     * @return Node|Node[]|null
+     * @return Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): ?array
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -98,53 +98,62 @@ CODE_SAMPLE
             return null;
         }
 
-        /** @var BooleanAnd $expr */
-        $expr = $node->cond;
-        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
-
-        if (! $ifNextReturn instanceof Return_) {
-            $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
-            return $this->processReplaceIfs($node, $booleanAndConditions, new Return_());
-        }
-
         if ($ifNextReturn instanceof Return_ && $ifNextReturn->expr instanceof BooleanAnd) {
             return null;
         }
 
+        /** @var BooleanAnd $expr */
+        $expr = $node->cond;
+        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
+        $afters = [];
+
+        if (! $ifNextReturn instanceof Return_) {
+            $afters[] = $node->stmts[0];
+            return $this->processReplaceIfs($node, $booleanAndConditions, new Return_(), $afters);
+        }
+
         $this->removeNode($ifNextReturn);
-        $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
+        $afters[] = $node->stmts[0];
 
         $ifNextReturnClone = $node->stmts[0] instanceof Return_
             ? clone $node->stmts[0]
             : new Return_();
 
-        if (! $this->contextAnalyzer->isInLoop($node)) {
-            return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
+        if ($this->contextAnalyzer->isInLoop($node)) {
+            $afters[] = new Return_();
         }
 
-        $this->nodesToAddCollector->addNodeAfterNode(new Return_(), $node);
-        return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
+        return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone, $afters);
     }
 
     /**
      * @param Expr[] $conditions
-     * @return If_|Node[]
+     * @param Node[] $afters
+     * @return Node[]
      */
-    private function processReplaceIfs(If_ $if, array $conditions, Return_ $ifNextReturnClone): If_ | array
-    {
+    private function processReplaceIfs(
+        If_ $if,
+        array $conditions,
+        Return_ $ifNextReturnClone,
+        array $afters
+    ): array {
         $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $if);
 
-        $this->nodesToAddCollector->addNodesBeforeNode($ifs, $if);
-        $this->removeNode($if);
-
-        if (! $if->stmts[0] instanceof Return_ && $ifNextReturnClone->expr instanceof Expr && ! $this->contextAnalyzer->isInLoop(
-            $if
-        )) {
-            return [$if, $ifNextReturnClone];
+        $result = array_merge($ifs, $afters);
+        if ($if->stmts[0] instanceof Return_) {
+            return $result;
         }
 
-        return $if;
+        if (! $ifNextReturnClone->expr instanceof Expr) {
+            return $result;
+        }
+
+        if ($this->contextAnalyzer->isInLoop($if)) {
+            return $result;
+        }
+
+        return array_merge($result, [$ifNextReturnClone]);
     }
 
     private function shouldSkip(If_ $if): bool
