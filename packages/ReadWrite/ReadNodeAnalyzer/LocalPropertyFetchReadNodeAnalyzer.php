@@ -5,6 +5,7 @@ namespace Rector\ReadWrite\ReadNodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -35,7 +36,7 @@ final class LocalPropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Cont
      */
     public function supports($node) : bool
     {
-        return $node instanceof \PhpParser\Node\Expr\PropertyFetch;
+        return $node instanceof \PhpParser\Node\Expr\PropertyFetch || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
     }
     /**
      * @param \PhpParser\Node $node

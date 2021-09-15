@@ -72,15 +72,18 @@ final class PropertyFetchFinder
         return $this->findPropertyFetchesInNonAnonymousClassLike($nodes, $propertyName);
     }
     /**
-     * @return PropertyFetch[]
+     * @return PropertyFetch[]|StaticPropertyFetch[]
      */
     public function findLocalPropertyFetchesByName(\PhpParser\Node\Stmt\Class_ $class, string $paramName) : array
     {
-        /** @var PropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\PropertyFetch::class);
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->findInstancesOf($class, [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class]);
         $foundPropertyFetches = [];
         foreach ($propertyFetches as $propertyFetch) {
-            if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+            if ($propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                continue;
+            }
+            if ($propertyFetch instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->class, 'self')) {
                 continue;
             }
             if (!$this->nodeNameResolver->isName($propertyFetch->name, $paramName)) {
