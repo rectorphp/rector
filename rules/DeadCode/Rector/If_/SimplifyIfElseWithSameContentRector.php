@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -50,8 +51,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($node->else === null) {
             return null;
@@ -59,11 +61,7 @@ CODE_SAMPLE
         if (!$this->isIfWithConstantReturns($node)) {
             return null;
         }
-        foreach ($node->stmts as $stmt) {
-            $this->nodesToAddCollector->addNodeBeforeNode($stmt, $node);
-        }
-        $this->removeNode($node);
-        return $node;
+        return $node->stmts;
     }
     private function isIfWithConstantReturns(\PhpParser\Node\Stmt\If_ $if) : bool
     {
