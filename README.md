@@ -48,7 +48,7 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 - [How to Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
 - [How to Generate New Rector Rule](/docs/create_own_rule.md)
 - [How to add Test for Rector Rule](/docs/how_to_add_test_for_rector_rule.md)
-- [How to create a custom FileProcessor](/docs/create_custom_fileprocessor.md)
+- [How to create a custom FileProcessor](/docs/how_to_create_custom_fileprocessor.md)
 <br>
 
 ## Install
