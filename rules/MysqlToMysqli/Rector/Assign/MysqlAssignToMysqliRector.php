@@ -164,7 +164,9 @@ CODE_SAMPLE
         $newAssignNode = new Assign($fetchVariable, $mysqlFetchArrayFuncCall);
         $this->nodesToAddCollector->addNodeAfterNode($newAssignNode, $assign);
 
-        $newAssignNodeAfter = new Assign($assign->var, new ArrayDimFetch($fetchVariable, $fetchField ?? new LNumber(0)));
+        $newAssignNodeAfter = new Assign($assign->var, new ArrayDimFetch($fetchVariable, $fetchField ?? new LNumber(
+            0
+        )));
         $this->nodesToAddCollector->addNodeAfterNode($newAssignNodeAfter, $assign);
 
         return $funcCall;
