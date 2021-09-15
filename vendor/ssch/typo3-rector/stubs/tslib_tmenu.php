@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210914;
+namespace RectorPrefix20210915;
 
 if (\class_exists('tslib_tmenu')) {
     return;

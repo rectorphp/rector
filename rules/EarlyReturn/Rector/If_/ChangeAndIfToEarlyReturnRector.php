@@ -95,9 +95,9 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return Node|Node[]|null
+     * @return Node[]|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -106,39 +106,45 @@ CODE_SAMPLE
         if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ && $this->isIfStmtExprUsedInNextReturn($node, $ifNextReturn)) {
             return null;
         }
-        /** @var BooleanAnd $expr */
-        $expr = $node->cond;
-        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
-        if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
-            $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
-            return $this->processReplaceIfs($node, $booleanAndConditions, new \PhpParser\Node\Stmt\Return_());
-        }
         if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturn->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return null;
         }
-        $this->removeNode($ifNextReturn);
-        $this->nodesToAddCollector->addNodeAfterNode($node->stmts[0], $node);
-        $ifNextReturnClone = $node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ ? clone $node->stmts[0] : new \PhpParser\Node\Stmt\Return_();
-        if (!$this->contextAnalyzer->isInLoop($node)) {
-            return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
+        /** @var BooleanAnd $expr */
+        $expr = $node->cond;
+        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
+        $afters = [];
+        if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
+            $afters[] = $node->stmts[0];
+            return $this->processReplaceIfs($node, $booleanAndConditions, new \PhpParser\Node\Stmt\Return_(), $afters);
         }
-        $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Return_(), $node);
-        return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone);
+        $this->removeNode($ifNextReturn);
+        $afters[] = $node->stmts[0];
+        $ifNextReturnClone = $node->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ ? clone $node->stmts[0] : new \PhpParser\Node\Stmt\Return_();
+        if ($this->contextAnalyzer->isInLoop($node)) {
+            $afters[] = new \PhpParser\Node\Stmt\Return_();
+        }
+        return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone, $afters);
     }
     /**
      * @param Expr[] $conditions
-     * @return \PhpParser\Node\Stmt\If_|mixed[]
+     * @param Node[] $afters
+     * @return Node[]
      */
-    private function processReplaceIfs(\PhpParser\Node\Stmt\If_ $if, array $conditions, \PhpParser\Node\Stmt\Return_ $ifNextReturnClone)
+    private function processReplaceIfs(\PhpParser\Node\Stmt\If_ $if, array $conditions, \PhpParser\Node\Stmt\Return_ $ifNextReturnClone, array $afters) : array
     {
         $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturnClone);
         $this->mirrorComments($ifs[0], $if);
-        $this->nodesToAddCollector->addNodesBeforeNode($ifs, $if);
-        $this->removeNode($if);
-        if (!$if->stmts[0] instanceof \PhpParser\Node\Stmt\Return_ && $ifNextReturnClone->expr instanceof \PhpParser\Node\Expr && !$this->contextAnalyzer->isInLoop($if)) {
-            return [$if, $ifNextReturnClone];
+        $result = \array_merge($ifs, $afters);
+        if ($if->stmts[0] instanceof \PhpParser\Node\Stmt\Return_) {
+            return $result;
         }
-        return $if;
+        if (!$ifNextReturnClone->expr instanceof \PhpParser\Node\Expr) {
+            return $result;
+        }
+        if ($this->contextAnalyzer->isInLoop($if)) {
+            return $result;
+        }
+        return \array_merge($result, [$ifNextReturnClone]);
     }
     private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
