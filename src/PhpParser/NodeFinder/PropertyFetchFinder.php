@@ -60,17 +60,30 @@ final class PropertyFetchFinder
     }
 
     /**
-     * @return PropertyFetch[]
+     * @return PropertyFetch[]|StaticPropertyFetch[]
      */
     public function findLocalPropertyFetchesByName(Class_ $class, string $paramName): array
     {
-        /** @var PropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->findInstanceOf($class, PropertyFetch::class);
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->findInstancesOf(
+            $class,
+            [PropertyFetch::class, StaticPropertyFetch::class]
+        );
 
         $foundPropertyFetches = [];
 
         foreach ($propertyFetches as $propertyFetch) {
-            if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+            if ($propertyFetch instanceof PropertyFetch && ! $this->nodeNameResolver->isName(
+                $propertyFetch->var,
+                'this'
+            )) {
+                continue;
+            }
+
+            if ($propertyFetch instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName(
+                $propertyFetch->class,
+                'self'
+            )) {
                 continue;
             }
 
