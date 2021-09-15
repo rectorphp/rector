@@ -85,12 +85,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $exprType = $this->nodeTypeResolver->resolve($node->expr);
-        if (! $exprType instanceof VoidType) {
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var, true)) {
             return null;
         }
 
-        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var)) {
+        $exprType = $this->nodeTypeResolver->resolve($node->expr);
+        if (! $exprType instanceof VoidType) {
             return null;
         }
 
