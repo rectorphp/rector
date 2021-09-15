@@ -1830,8 +1830,8 @@
         },
         {
             "name": "symfony\/console",
-            "version": "5.3.x-dev",
-            "version_normalized": "5.3.9999999.9999999-dev",
+            "version": "v5.3.7",
+            "version_normalized": "5.3.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
@@ -1879,7 +1879,6 @@
                 "symfony\/process": ""
             },
             "time": "2021-08-25T20:02:16+00:00",
-            "default-branch": true,
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1933,17 +1932,17 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "5.3.x-dev",
-            "version_normalized": "5.3.9999999.9999999-dev",
+            "version": "v5.3.7",
+            "version_normalized": "5.3.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "999cfcf6400502bbc145b2bf36935770770ba6ca"
+                "reference": "a665946279f566d94ed5eb98999cfa65c6fa5a78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/999cfcf6400502bbc145b2bf36935770770ba6ca",
-                "reference": "999cfcf6400502bbc145b2bf36935770770ba6ca",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/a665946279f566d94ed5eb98999cfa65c6fa5a78",
+                "reference": "a665946279f566d94ed5eb98999cfa65c6fa5a78",
                 "shasum": ""
             },
             "require": {
@@ -1976,8 +1975,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-08-31T18:22:06+00:00",
-            "default-branch": true,
+            "time": "2021-08-02T16:16:27+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2005,7 +2003,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/5.3"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v5.3.7"
             },
             "funding": [
                 {
