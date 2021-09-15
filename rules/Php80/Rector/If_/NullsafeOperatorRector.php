@@ -120,7 +120,23 @@ CODE_SAMPLE
         if (!$this->ifManipulator->isIfCondUsingAssignIdenticalVariable($if, $prevExpr)) {
             return null;
         }
+        if ($this->hasIndirectUsageOnNextOfIf($prevExpr->var, $nextNode)) {
+            return null;
+        }
         return $this->processAssign($prevExpr, $prevNode, $nextNode, $isStartIf);
+    }
+    private function hasIndirectUsageOnNextOfIf(\PhpParser\Node\Expr $expr, \PhpParser\Node $nextNode) : bool
+    {
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_ && !$nextNode instanceof \PhpParser\Node\Stmt\Expression) {
+            return \false;
+        }
+        if ($nextNode->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return !$this->nodeComparator->areNodesEqual($expr, $nextNode->expr->var);
+        }
+        if ($nextNode->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+            return !$this->nodeComparator->areNodesEqual($expr, $nextNode->expr->var);
+        }
+        return \false;
     }
     private function processNullSafeOperatorNotIdentical(\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node\Expr $expr = null) : ?\PhpParser\Node
     {
