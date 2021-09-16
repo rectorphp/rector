@@ -25,8 +25,14 @@ final class NullsafeManipulator
         }
         return null;
     }
-    public function processNullSafeExprResult(?\PhpParser\Node\Expr $expr, \PhpParser\Node\Identifier $nextExprIdentifier) : ?\PhpParser\Node\Expr
+    /**
+     * @param Identifier|mixed $nextExprIdentifier
+     */
+    public function processNullSafeExprResult(?\PhpParser\Node\Expr $expr, $nextExprIdentifier) : ?\PhpParser\Node\Expr
     {
+        if (!$nextExprIdentifier instanceof \PhpParser\Node\Identifier) {
+            return null;
+        }
         if ($expr === null) {
             return null;
         }

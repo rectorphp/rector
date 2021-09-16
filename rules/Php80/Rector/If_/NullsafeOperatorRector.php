@@ -35,6 +35,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NullsafeOperatorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var array<class-string<Expr>>
+     */
+    private const ALLOWED_NEXT_NODE_EXPRS = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\NullsafePropertyFetch::class];
+    /**
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
@@ -305,6 +309,9 @@ CODE_SAMPLE
     }
     private function processAssignInCurrentNode(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node $nextNode, bool $isStartIf) : ?\PhpParser\Node
     {
+        if (!\in_array(\get_class($nextNode->expr), self::ALLOWED_NEXT_NODE_EXPRS, \true)) {
+            return null;
+        }
         $assignNullSafe = $isStartIf ? $assign->expr : $this->nullsafeManipulator->processNullSafeExpr($assign->expr);
         $nullSafe = $this->nullsafeManipulator->processNullSafeExprResult($assignNullSafe, $nextNode->expr->name);
         $prevAssign = $expression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
