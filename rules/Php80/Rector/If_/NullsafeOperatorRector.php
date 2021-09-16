@@ -14,11 +14,14 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\NodeManipulator\NullsafeManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -39,10 +42,15 @@ final class NullsafeOperatorRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\NodeManipulator\NullsafeManipulator
      */
     private $nullsafeManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeManipulator\NullsafeManipulator $nullsafeManipulator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeManipulator\NullsafeManipulator $nullsafeManipulator, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->nullsafeManipulator = $nullsafeManipulator;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -138,9 +146,48 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function processNullSafeOperatorNotIdentical(\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node\Expr $expr = null) : ?\PhpParser\Node
+    private function shouldSkipNeverNullDefinedBefore(\PhpParser\Node\Expr\Assign $assign) : bool
+    {
+        $variable = $assign->var;
+        $isReassign = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($assign, function (\PhpParser\Node $subNode) use($variable) : bool {
+            return $subNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable) && !$this->valueResolver->isNull($subNode->expr);
+        });
+        if ($isReassign) {
+            return \true;
+        }
+        $functionLike = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\FunctionLike::class);
+        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
+            return \false;
+        }
+        $params = $functionLike->getParams();
+        foreach ($params as $param) {
+            if ($this->nodeComparator->areNodesEqual($param->var, $variable)) {
+                return $this->isNotNullableAndNotHasDefaultNullValue($param);
+            }
+        }
+        return \false;
+    }
+    private function isNotNullableAndNotHasDefaultNullValue(\PhpParser\Node\Param $param) : bool
+    {
+        if ($this->paramAnalyzer->isNullable($param)) {
+            return \false;
+        }
+        return !$this->paramAnalyzer->hasDefaultNull($param);
+    }
+    private function verifyAssignMatchIfNotNullNextAssignment(\PhpParser\Node\Stmt\If_ $if) : ?\PhpParser\Node\Expr\Assign
     {
         $assign = $this->ifManipulator->matchIfNotNullNextAssignment($if);
+        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        if ($this->shouldSkipNeverNullDefinedBefore($assign)) {
+            return null;
+        }
+        return $assign;
+    }
+    private function processNullSafeOperatorNotIdentical(\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node\Expr $expr = null) : ?\PhpParser\Node
+    {
+        $assign = $this->verifyAssignMatchIfNotNullNextAssignment($if);
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
