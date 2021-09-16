@@ -15,11 +15,14 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\NullsafePropertyFetch;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\NodeManipulator\NullsafeManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -35,7 +38,8 @@ final class NullsafeOperatorRector extends AbstractRector
 {
     public function __construct(
         private IfManipulator $ifManipulator,
-        private NullsafeManipulator $nullsafeManipulator
+        private NullsafeManipulator $nullsafeManipulator,
+        private ParamAnalyzer $paramAnalyzer
     ) {
     }
 
@@ -159,9 +163,62 @@ CODE_SAMPLE
         return false;
     }
 
-    private function processNullSafeOperatorNotIdentical(If_ $if, ?Expr $expr = null): ?Node
+    private function shouldSkipNeverNullDefinedBefore(Assign $assign): bool
+    {
+        $variable = $assign->var;
+        $isReassign = (bool) $this->betterNodeFinder->findFirstPreviousOfNode(
+            $assign,
+            fn (Node $subNode): bool => $subNode instanceof Assign && $this->nodeComparator->areNodesEqual(
+                $subNode->var,
+                $variable
+            ) && ! $this->valueResolver->isNull($subNode->expr)
+        );
+
+        if ($isReassign) {
+            return true;
+        }
+
+        $functionLike = $this->betterNodeFinder->findParentType($assign, FunctionLike::class);
+        if (! $functionLike instanceof FunctionLike) {
+            return false;
+        }
+
+        $params = $functionLike->getParams();
+        foreach ($params as $param) {
+            if ($this->nodeComparator->areNodesEqual($param->var, $variable)) {
+                return $this->isNotNullableAndNotHasDefaultNullValue($param);
+            }
+        }
+
+        return false;
+    }
+
+    private function isNotNullableAndNotHasDefaultNullValue(Param $param): bool
+    {
+        if ($this->paramAnalyzer->isNullable($param)) {
+            return false;
+        }
+
+        return ! $this->paramAnalyzer->hasDefaultNull($param);
+    }
+
+    private function verifyAssignMatchIfNotNullNextAssignment(If_ $if): ?Assign
     {
         $assign = $this->ifManipulator->matchIfNotNullNextAssignment($if);
+        if (! $assign instanceof Assign) {
+            return null;
+        }
+
+        if ($this->shouldSkipNeverNullDefinedBefore($assign)) {
+            return null;
+        }
+
+        return $assign;
+    }
+
+    private function processNullSafeOperatorNotIdentical(If_ $if, ?Expr $expr = null): ?Node
+    {
+        $assign = $this->verifyAssignMatchIfNotNullNextAssignment($if);
         if (! $assign instanceof Assign) {
             return null;
         }
