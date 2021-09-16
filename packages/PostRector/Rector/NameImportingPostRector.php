@@ -40,9 +40,14 @@ final class NameImportingPostRector extends AbstractPostRector
             return null;
         }
 
+        $file = $this->currentFileProvider->getFile();
+
         if ($node instanceof Name) {
-            $file = $this->currentFileProvider->getFile();
             if (! $file instanceof File) {
+                return null;
+            }
+
+            if (! $this->shouldApply($file)) {
                 return null;
             }
 
@@ -50,6 +55,10 @@ final class NameImportingPostRector extends AbstractPostRector
         }
 
         if (! $this->parameterProvider->provideBoolParameter(Option::IMPORT_DOC_BLOCKS)) {
+            return null;
+        }
+
+        if ($file instanceof File && ! $this->shouldApply($file)) {
             return null;
         }
 
@@ -127,5 +136,14 @@ CODE_SAMPLE
         }
 
         return $this->reflectionProvider->hasFunction(new Name($name->getLast()), null);
+    }
+
+    private function shouldApply(File $file): bool
+    {
+        if (! $this->parameterProvider->provideBoolParameter(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
+            return true;
+        }
+
+        return $file->hasContentChanged();
     }
 }
