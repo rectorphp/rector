@@ -21,7 +21,6 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 
 final class VarTagRemover
 {
@@ -29,7 +28,6 @@ final class VarTagRemover
         private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         private StaticTypeMapper $staticTypeMapper,
         private PhpDocInfoFactory $phpDocInfoFactory,
-        private ClassLikeExistenceChecker $classLikeExistenceChecker,
         private DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
     ) {
     }
@@ -85,7 +83,7 @@ final class VarTagRemover
     {
         if ($varTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             foreach ($varTagValueNode->type->types as $type) {
-                if ($type instanceof SpacingAwareArrayTypeNode && $this->isArrayOfExistingClassNode($node, $type)) {
+                if ($type instanceof SpacingAwareArrayTypeNode && $this->isArrayOfClass($node, $type)) {
                     return true;
                 }
             }
@@ -103,10 +101,11 @@ final class VarTagRemover
         return $varTagValueNode->type instanceof ArrayTypeNode;
     }
 
-    private function isArrayOfExistingClassNode(
-        Node $node,
-        SpacingAwareArrayTypeNode $spacingAwareArrayTypeNode
-    ): bool {
+    private function isArrayOfClass(Node $node, SpacingAwareArrayTypeNode $spacingAwareArrayTypeNode): bool {
+        if ($spacingAwareArrayTypeNode->type instanceof SpacingAwareArrayTypeNode) {
+            return $this->isArrayOfClass($node, $spacingAwareArrayTypeNode->type);
+        }
+
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
             $spacingAwareArrayTypeNode,
             $node
@@ -117,12 +116,6 @@ final class VarTagRemover
         }
 
         $itemType = $staticType->getItemType();
-        if (! $itemType instanceof ObjectType) {
-            return false;
-        }
-
-        $className = $itemType->getClassName();
-
-        return $this->classLikeExistenceChecker->doesClassLikeExist($className);
+        return $itemType instanceof ObjectType;
     }
 }
