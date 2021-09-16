@@ -95,6 +95,10 @@ final class VarTagRemover
                 if ($type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode && $this->isArrayOfClass($node, $type)) {
                     return \true;
                 }
+                // keep generic types
+                if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+                    return \true;
+                }
             }
         }
         if (!$this->isArrayTypeNode($varTagValueNode)) {
