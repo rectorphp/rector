@@ -1,6 +1,6 @@
 # Auto Import Names
 
-Rector works with all class names as fully qualified by default, so it know the exact types. In most coding standard, that's not desired behavior, because short version with `use` statement is preferred:
+Rector works with all class names as fully qualified by default, so it knows the exact types. In most coding standard, that's not desired behavior, because short version with `use` statement is preferred:
 
 ```diff
 -$object = new \App\Some\Namespace\SomeClass();
@@ -46,6 +46,16 @@ Do you want to keep those?
 
 ```php
 $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
+```
+
+<br>
+
+If you have set Option::AUTO_IMPORT_NAMES to true, rector is applying this to every analyzed file, even if no real change by a rector was applied to the file.
+The reason is that a so-called post rector is responsible for this, namely the NameImportingPostRector.
+If you like to apply the Option::AUTO_IMPORT_NAMES only for real changed files, you can configure this.
+
+```php
+$parameters->set(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY, true);
 ```
 
 ## How to Remove Unused Imports?

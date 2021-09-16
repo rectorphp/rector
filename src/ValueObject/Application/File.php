@@ -75,6 +75,10 @@ final class File
         $this->fileContent = $newFileContent;
         $this->hasChanged = \true;
     }
+    public function hasContentChanged() : bool
+    {
+        return $this->fileContent !== $this->originalFileContent;
+    }
     public function getOriginalFileContent() : string
     {
         return $this->originalFileContent;

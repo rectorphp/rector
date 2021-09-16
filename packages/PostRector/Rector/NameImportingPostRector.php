@@ -68,14 +68,20 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
             return null;
         }
+        $file = $this->currentFileProvider->getFile();
         if ($node instanceof \PhpParser\Node\Name) {
-            $file = $this->currentFileProvider->getFile();
             if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+                return null;
+            }
+            if (!$this->shouldApply($file)) {
                 return null;
             }
             return $this->processNodeName($node, $file);
         }
         if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_DOC_BLOCKS)) {
+            return null;
+        }
+        if ($file instanceof \Rector\Core\ValueObject\Application\File && !$this->shouldApply($file)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -137,5 +143,12 @@ CODE_SAMPLE
             return \true;
         }
         return $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($name->getLast()), null);
+    }
+    private function shouldApply(\Rector\Core\ValueObject\Application\File $file) : bool
+    {
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
+            return \true;
+        }
+        return $file->hasContentChanged();
     }
 }
