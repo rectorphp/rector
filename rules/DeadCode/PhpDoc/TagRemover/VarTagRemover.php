@@ -86,6 +86,11 @@ final class VarTagRemover
                 if ($type instanceof SpacingAwareArrayTypeNode && $this->isArrayOfClass($node, $type)) {
                     return true;
                 }
+
+                // keep generic types
+                if ($type instanceof GenericTypeNode) {
+                    return true;
+                }
             }
         }
 
@@ -101,7 +106,8 @@ final class VarTagRemover
         return $varTagValueNode->type instanceof ArrayTypeNode;
     }
 
-    private function isArrayOfClass(Node $node, SpacingAwareArrayTypeNode $spacingAwareArrayTypeNode): bool {
+    private function isArrayOfClass(Node $node, SpacingAwareArrayTypeNode $spacingAwareArrayTypeNode): bool
+    {
         if ($spacingAwareArrayTypeNode->type instanceof SpacingAwareArrayTypeNode) {
             return $this->isArrayOfClass($node, $spacingAwareArrayTypeNode->type);
         }
