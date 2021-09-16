@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210915\TYPO3\CMS\Extbase\Object;
+namespace RectorPrefix20210916\TYPO3\CMS\Extbase\Object;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\UnresolvedDependenciesException')) {
     return;

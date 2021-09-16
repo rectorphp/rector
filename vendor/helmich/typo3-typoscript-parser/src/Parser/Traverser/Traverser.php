@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210915\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20210916\Helmich\TypoScriptParser\Parser\Traverser;
 
-use RectorPrefix20210915\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
-use RectorPrefix20210915\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
+use RectorPrefix20210916\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
+use RectorPrefix20210916\Helmich\TypoScriptParser\Parser\AST\NestedAssignment;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**
  * Class Traverser
@@ -24,7 +24,7 @@ class Traverser
     public function __construct(array $statements)
     {
         $this->statements = $statements;
-        $this->visitors = new \RectorPrefix20210915\Helmich\TypoScriptParser\Parser\Traverser\AggregatingVisitor();
+        $this->visitors = new \RectorPrefix20210916\Helmich\TypoScriptParser\Parser\Traverser\AggregatingVisitor();
     }
     /**
      * @param Visitor $visitor
@@ -50,9 +50,9 @@ class Traverser
     {
         foreach ($statements as $statement) {
             $this->visitors->enterNode($statement);
-            if ($statement instanceof \RectorPrefix20210915\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
+            if ($statement instanceof \RectorPrefix20210916\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
                 $statement->statements = $this->walkRecursive($statement->statements);
-            } elseif ($statement instanceof \RectorPrefix20210915\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
+            } elseif ($statement instanceof \RectorPrefix20210916\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
                 $statement->ifStatements = $this->walkRecursive($statement->ifStatements);
                 $statement->elseStatements = $this->walkRecursive($statement->elseStatements);
             }
@@ -67,4 +67,4 @@ class Traverser
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\Traverser
  */
-\class_alias('RectorPrefix20210915\\Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', 'Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', \false);
+\class_alias('RectorPrefix20210916\\Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', 'Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', \false);

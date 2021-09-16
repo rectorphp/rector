@@ -9,4 +9,4 @@ final class ReturnTypeWillChange
     {
     }
 }
-\class_alias('RectorPrefix20210915\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);
+\class_alias('RectorPrefix20210916\\ReturnTypeWillChange', 'ReturnTypeWillChange', \false);

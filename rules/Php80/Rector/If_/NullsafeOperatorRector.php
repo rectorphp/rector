@@ -222,13 +222,15 @@ CODE_SAMPLE
         if (!$nextNode->expr instanceof \PhpParser\Node) {
             return \false;
         }
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\MethodCall && !$assign->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$this->isMethodCallOrPropertyFetch($assign->expr)) {
             return !$this->valueResolver->isNull($nextNode->expr);
         }
-        if (!$nextNode->expr instanceof \PhpParser\Node\Expr\MethodCall && !$nextNode->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return !$this->valueResolver->isNull($nextNode->expr);
+        /** @var MethodCall|PropertyFetch $expr */
+        $expr = $assign->expr;
+        if (!$this->isMethodCallOrPropertyFetch($expr->var)) {
+            return !$this->valueResolver->isNull($expr);
         }
-        if (!$this->nodeComparator->areNodesEqual($assign->expr->var, $nextNode->expr->var)) {
+        if (!$this->isMethodCallOrPropertyFetch($nextNode->expr)) {
             return !$this->valueResolver->isNull($nextNode->expr);
         }
         return \false;
@@ -371,20 +373,32 @@ CODE_SAMPLE
         if (!$this->hasNullComparison($ternary->cond)) {
             return \true;
         }
-        return $this->hasIndirectUsageOnElse($ternary->cond, $ternary->else);
+        return $this->hasIndirectUsageOnElse($ternary->cond, $ternary->if, $ternary->else);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $cond
      */
-    private function hasIndirectUsageOnElse($cond, \PhpParser\Node\Expr $expr) : bool
+    private function hasIndirectUsageOnElse($cond, ?\PhpParser\Node\Expr $if, \PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall && !$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return \false;
-        }
         $left = $cond->left;
         $right = $cond->right;
         $object = $this->valueResolver->isNull($left) ? $right : $left;
-        return !$this->nodeComparator->areNodesEqual($expr->var, $object);
+        if ($this->valueResolver->isNull($expr)) {
+            if ($this->isMethodCallOrPropertyFetch($if)) {
+                /** @var MethodCall|PropertyFetch $if */
+                return !$this->nodeComparator->areNodesEqual($if->var, $object);
+            }
+            return \false;
+        }
+        if ($this->isMethodCallOrPropertyFetch($expr)) {
+            /** @var MethodCall|PropertyFetch $expr */
+            return !$this->nodeComparator->areNodesEqual($expr->var, $object);
+        }
+        return \false;
+    }
+    private function isMethodCallOrPropertyFetch(?\PhpParser\Node\Expr $expr) : bool
+    {
+        return $expr instanceof \PhpParser\Node\Expr\MethodCall || $expr instanceof \PhpParser\Node\Expr\PropertyFetch;
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Identical $check
