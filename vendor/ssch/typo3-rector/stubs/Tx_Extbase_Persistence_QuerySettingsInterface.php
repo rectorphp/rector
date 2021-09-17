@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210916;
+namespace RectorPrefix20210917;
 
 if (\interface_exists('Tx_Extbase_Persistence_QuerySettingsInterface')) {
     return;

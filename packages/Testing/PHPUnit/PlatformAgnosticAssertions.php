@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix20210916\Nette\Utils\FileSystem;
+use RectorPrefix20210917\Nette\Utils\FileSystem;
 use PHPUnit\Framework\Constraint\IsEqual;
 /**
  * Relaxes phpunit assertions to be forgiving about platform issues, like directory-separators or newlines.
@@ -70,7 +70,7 @@ trait PlatformAgnosticAssertions
     }
     private static function getNormalizedFileContents(string $filePath) : string
     {
-        $expectedString = \RectorPrefix20210916\Nette\Utils\FileSystem::read($filePath);
+        $expectedString = \RectorPrefix20210917\Nette\Utils\FileSystem::read($filePath);
         return self::normalize($expectedString);
     }
 }

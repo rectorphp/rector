@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210916\Symplify\PackageBuilder\Console;
+namespace RectorPrefix20210917\Symplify\PackageBuilder\Console;
 
-use RectorPrefix20210916\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210917\Symfony\Component\Console\Command\Command;
 /**
  * @deprecated Use symfony constants in directly
  * @see Command::FAILURE

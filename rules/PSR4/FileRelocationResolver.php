@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PSR4;
 
-use RectorPrefix20210916\Nette\Utils\Strings;
+use RectorPrefix20210917\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
@@ -117,7 +117,7 @@ final class FileRelocationResolver
     private function replaceRelativeFilePathsWithBeforeAfter(\Symplify\SmartFileSystem\SmartFileInfo $oldSmartFileInfo, array $beforeToAfterPart) : string
     {
         // A. first "dir has changed" dummy detection
-        $relativeFilePathParts = \RectorPrefix20210916\Nette\Utils\Strings::split(
+        $relativeFilePathParts = \RectorPrefix20210917\Nette\Utils\Strings::split(
             $this->normalizeDirectorySeparator($oldSmartFileInfo->getRelativeFilePath()),
             // the windows dir separator would be interpreted as a regex-escape char, therefore quote it.
             '#' . \preg_quote(\DIRECTORY_SEPARATOR, '#') . '#'

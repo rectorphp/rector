@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210916\Symfony\Component\VarDumper\Caster;
+namespace RectorPrefix20210917\Symfony\Component\VarDumper\Caster;
 
-use RectorPrefix20210916\Symfony\Component\VarDumper\Cloner\Stub;
+use RectorPrefix20210917\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * @author Jan Schädlich <jan.schaedlich@sensiolabs.de>
  *
@@ -20,9 +20,9 @@ class MemcachedCaster
 {
     private static $optionConstants;
     private static $defaultOptions;
-    public static function castMemcached(\Memcached $c, array $a, \RectorPrefix20210916\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
+    public static function castMemcached(\Memcached $c, array $a, \RectorPrefix20210917\Symfony\Component\VarDumper\Cloner\Stub $stub, bool $isNested)
     {
-        $a += [\RectorPrefix20210916\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(), \RectorPrefix20210916\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'options' => new \RectorPrefix20210916\Symfony\Component\VarDumper\Caster\EnumStub(self::getNonDefaultOptions($c))];
+        $a += [\RectorPrefix20210917\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'servers' => $c->getServerList(), \RectorPrefix20210917\Symfony\Component\VarDumper\Caster\Caster::PREFIX_VIRTUAL . 'options' => new \RectorPrefix20210917\Symfony\Component\VarDumper\Caster\EnumStub(self::getNonDefaultOptions($c))];
         return $a;
     }
     private static function getNonDefaultOptions(\Memcached $c) : array

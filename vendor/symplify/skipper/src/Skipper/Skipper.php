@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210916\Symplify\Skipper\Skipper;
+namespace RectorPrefix20210917\Symplify\Skipper\Skipper;
 
-use RectorPrefix20210916\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20210917\Symplify\Skipper\Contract\SkipVoterInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\Skipper\Tests\Skipper\Skipper\SkipperTest

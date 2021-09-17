@@ -75,7 +75,7 @@ final class GenericClassStringTypeNormalizer
         }
         return $arrayType;
     }
-    private function isAllGenericClassStringType(\PHPStan\Type\UnionType $unionType) : bool
+    public function isAllGenericClassStringType(\PHPStan\Type\UnionType $unionType) : bool
     {
         $types = $unionType->getTypes();
         foreach ($types as $type) {
