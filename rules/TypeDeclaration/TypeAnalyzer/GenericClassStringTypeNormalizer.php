@@ -81,7 +81,7 @@ final class GenericClassStringTypeNormalizer
         return $arrayType;
     }
 
-    private function isAllGenericClassStringType(UnionType $unionType): bool
+    public function isAllGenericClassStringType(UnionType $unionType): bool
     {
         $types = $unionType->getTypes();
 

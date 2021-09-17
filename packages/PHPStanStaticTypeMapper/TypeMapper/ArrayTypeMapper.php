@@ -11,6 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Generic\GenericClassStringType;
@@ -26,6 +27,8 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
+use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
@@ -46,17 +49,25 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
     private ReflectionProvider $reflectionProvider;
 
+    private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer;
+
+    private DetailedTypeAnalyzer $detailedTypeAnalyzer;
+
     // To avoid circular dependency
 
     #[Required]
     public function autowireArrayTypeMapper(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
-        ReflectionProvider $reflectionProvider
+        ReflectionProvider $reflectionProvider,
+        GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        DetailedTypeAnalyzer $detailedTypeAnalyzer
     ): void {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
         $this->reflectionProvider = $reflectionProvider;
+        $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
+        $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
     }
 
     /**
@@ -166,10 +177,8 @@ final class ArrayTypeMapper implements TypeMapperInterface
         TypeKind $typeKind,
         bool $withKey = false
     ): GenericTypeNode {
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(
-            $arrayType->getItemType(),
-            $typeKind
-        );
+        $itemType = $arrayType->getItemType();
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType, $typeKind);
         $identifierTypeNode = new IdentifierTypeNode('array');
 
         // is class-string[] list only
@@ -182,7 +191,15 @@ final class ArrayTypeMapper implements TypeMapperInterface
                 $arrayType->getKeyType(),
                 $typeKind
             );
-            $genericTypes = [$keyTypeNode, $itemTypeNode];
+
+            if ($itemTypeNode instanceof BracketsAwareUnionTypeNode && $this->isPairClassTooDetailed($itemType)) {
+                $genericTypes = [$keyTypeNode, $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(
+                    new ClassStringType(),
+                    $typeKind
+                )];
+            } else {
+                $genericTypes = [$keyTypeNode, $itemTypeNode];
+            }
         } else {
             $genericTypes = [$itemTypeNode];
         }
@@ -196,6 +213,19 @@ final class ArrayTypeMapper implements TypeMapperInterface
 
         $identifierTypeNode->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
         return new GenericTypeNode($identifierTypeNode, $genericTypes);
+    }
+
+    private function isPairClassTooDetailed(Type $itemType): bool
+    {
+        if (! $itemType instanceof UnionType) {
+            return false;
+        }
+
+        if (! $this->genericClassStringTypeNormalizer->isAllGenericClassStringType($itemType)) {
+            return false;
+        }
+
+        return $this->detailedTypeAnalyzer->isTooDetailed($itemType);
     }
 
     private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType): bool
@@ -234,7 +264,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
     private function createTypeNodeFromGenericClassStringType(
         GenericClassStringType $genericClassStringType,
         TypeKind $typeKind
-    ): TypeNode {
+    ): IdentifierTypeNode|GenericTypeNode {
         $genericType = $genericClassStringType->getGenericType();
         if ($genericType instanceof ObjectType && ! $this->reflectionProvider->hasClass($genericType->getClassName())) {
             return new IdentifierTypeNode($genericType->getClassName());
