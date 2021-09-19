@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 final class ArgumentAdder
 {
     /**
@@ -27,17 +28,18 @@ final class ArgumentAdder
      */
     private $argumentDefaultValue = null;
     /**
-     * @var string|null
+     * @var \PHPStan\Type\Type|null
      */
-    private $argumentType;
+    private $argumentType = null;
     /**
      * @var string|null
      */
     private $scope;
     /**
      * @param mixed|null $argumentDefaultValue
+     * @param \PHPStan\Type\Type|null $argumentType
      */
-    public function __construct(string $class, string $method, int $position, ?string $argumentName = null, $argumentDefaultValue = null, ?string $argumentType = null, ?string $scope = null)
+    public function __construct(string $class, string $method, int $position, ?string $argumentName = null, $argumentDefaultValue = null, $argumentType = null, ?string $scope = null)
     {
         $this->class = $class;
         $this->method = $method;
@@ -70,7 +72,7 @@ final class ArgumentAdder
     {
         return $this->argumentDefaultValue;
     }
-    public function getArgumentType() : ?string
+    public function getArgumentType() : ?\PHPStan\Type\Type
     {
         return $this->argumentType;
     }

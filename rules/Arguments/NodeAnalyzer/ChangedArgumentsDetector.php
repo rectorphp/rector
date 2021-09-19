@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\Arguments\NodeAnalyzer;
 
 use PhpParser\Node\Param;
+use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ChangedArgumentsDetector
 {
     /**
@@ -13,13 +15,18 @@ final class ChangedArgumentsDetector
      */
     private $valueResolver;
     /**
-     * @var \Rector\NodeNameResolver\NodeNameResolver
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
-    private $nodeNameResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    private $staticTypeMapper;
+    /**
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
     {
         $this->valueResolver = $valueResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->staticTypeMapper = $staticTypeMapper;
+        $this->typeComparator = $typeComparator;
     }
     /**
      * @param mixed $value
@@ -31,14 +38,15 @@ final class ChangedArgumentsDetector
         }
         return !$this->valueResolver->isValue($param->default, $value);
     }
-    public function isTypeChanged(\PhpParser\Node\Param $param, ?string $type) : bool
+    public function isTypeChanged(\PhpParser\Node\Param $param, ?\PHPStan\Type\Type $newType) : bool
     {
         if ($param->type === null) {
             return \false;
         }
-        if ($type === null) {
+        if ($newType === null) {
             return \true;
         }
-        return !$this->nodeNameResolver->isName($param->type, $type);
+        $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+        return !$this->typeComparator->areTypesEqual($currentParamType, $newType);
     }
 }

@@ -109,6 +109,7 @@ This Rector adds new default arguments in calls of defined methods and class typ
 - class: [`Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector`](../rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php)
 
 ```php
+use PHPStan\Type\ObjectType;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -120,7 +121,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, 'SomeType', null),
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType(
+                    'SomeType',
+                    null,
+                    null,
+                    [],
+                    null,
+                    null,
+                    [],
+                    [],
+                    [],
+                    [
+                ]), null),
             ]),
         ]]);
 };

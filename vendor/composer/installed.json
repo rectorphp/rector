@@ -1113,17 +1113,17 @@
         },
         {
             "name": "rector\/extension-installer",
-            "version": "0.11.0",
-            "version_normalized": "0.11.0.0",
+            "version": "0.11.1",
+            "version_normalized": "0.11.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/extension-installer.git",
-                "reference": "10aedb0fab9a759ed9fa5a3396bd021960c10eab"
+                "reference": "527fcbd19f7aeb79a6fd043e1edfeab7831b59af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/extension-installer\/zipball\/10aedb0fab9a759ed9fa5a3396bd021960c10eab",
-                "reference": "10aedb0fab9a759ed9fa5a3396bd021960c10eab",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/extension-installer\/zipball\/527fcbd19f7aeb79a6fd043e1edfeab7831b59af",
+                "reference": "527fcbd19f7aeb79a6fd043e1edfeab7831b59af",
                 "shasum": ""
             },
             "require": {
@@ -1132,17 +1132,20 @@
             },
             "require-dev": {
                 "composer\/composer": "^2.0",
-                "composer\/xdebug-handler": "2.0 as 1.4",
+                "composer\/xdebug-handler": "^2.0",
                 "phpstan\/extension-installer": "^1.1",
                 "rector\/phpstan-rules": "^0.3.4",
                 "rector\/rector-src": "dev-main",
-                "symplify\/easy-coding-standard": "^9.4.22",
-                "symplify\/phpstan-extensions": "^9.4.22"
+                "symplify\/easy-coding-standard": "^9.4.60",
+                "symplify\/phpstan-extensions": "^9.4.60"
             },
-            "time": "2021-07-22T22:17:50+00:00",
+            "time": "2021-09-19T10:14:22+00:00",
             "type": "composer-plugin",
             "extra": {
-                "class": "Rector\\RectorInstaller\\Plugin"
+                "class": "Rector\\RectorInstaller\\Plugin",
+                "branch-alias": {
+                    "dev-main": "0.11.x-dev"
+                }
             },
             "installation-source": "dist",
             "autoload": {
@@ -1157,7 +1160,7 @@
             "description": "Composer plugin for automatic installation of Rector extensions",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/extension-installer\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/extension-installer\/tree\/0.11.0"
+                "source": "https:\/\/github.com\/rectorphp\/extension-installer\/tree\/0.11.1"
             },
             "install-path": "..\/rector\/extension-installer"
         },

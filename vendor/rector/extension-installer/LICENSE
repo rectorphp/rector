@@ -1,6 +1,9 @@
 The MIT License
 ---------------
 
+This package is heavily inspired by https://github.com/phpstan/extension-installer by Ondřej Mirtes.
+
+Original work Copyright (c) 2021 Ondřej Mirtes
 Copyright (c) 2021-present Tomáš Votruba (https://tomasvotruba.cz)
 
 Permission is hereby granted, free of charge, to any person
