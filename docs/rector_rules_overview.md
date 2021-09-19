@@ -1,4 +1,4 @@
-# 477 Rules Overview
+# 476 Rules Overview
 
 <br>
 
@@ -72,7 +72,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (17)
+- [Php80](#php80) (16)
 
 - [Php81](#php81) (5)
 
@@ -7842,30 +7842,6 @@ Change ternary type resolve to `get_debug_type()`
      {
 -        return is_object($value) ? get_class($value) : gettype($value);
 +        return get_debug_type($value);
-     }
- }
-```
-
-<br>
-
-### NullsafeOperatorRector
-
-Change if null check with nullsafe operator ?-> with full short circuiting
-
-- class: [`Rector\Php80\Rector\If_\NullsafeOperatorRector`](../rules/Php80/Rector/If_/NullsafeOperatorRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($someObject)
-     {
--        $someObject2 = $someObject->mayFail1();
--        if ($someObject2 === null) {
--            return null;
--        }
--
--        return $someObject2->mayFail2();
-+        return $someObject->mayFail1()?->mayFail2();
      }
  }
 ```

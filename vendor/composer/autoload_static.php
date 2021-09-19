@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93
+class ComposerStaticInit9e1d851a011b50a50ed96db5d82dacdd
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2225,7 +2225,6 @@ class ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93
         'Rector\\Core\\NodeManipulator\\IfManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/IfManipulator.php',
         'Rector\\Core\\NodeManipulator\\MagicPropertyFetchAnalyzer' => __DIR__ . '/../..' . '/src/NodeManipulator/MagicPropertyFetchAnalyzer.php',
         'Rector\\Core\\NodeManipulator\\MethodCallManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/MethodCallManipulator.php',
-        'Rector\\Core\\NodeManipulator\\NullsafeManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/NullsafeManipulator.php',
         'Rector\\Core\\NodeManipulator\\PropertyFetchAssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyFetchAssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\PropertyManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyManipulator.php',
         'Rector\\Core\\NodeManipulator\\StmtsManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/StmtsManipulator.php',
@@ -3124,7 +3123,6 @@ class ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93
         'Rector\\Php80\\Rector\\FunctionLike\\UnionTypesRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FunctionLike/UnionTypesRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrEndsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrEndsWithRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrStartsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrStartsWithRector.php',
-        'Rector\\Php80\\Rector\\If_\\NullsafeOperatorRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/If_/NullsafeOperatorRector.php',
         'Rector\\Php80\\Rector\\NotIdentical\\StrContainsRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/NotIdentical/StrContainsRector.php',
         'Rector\\Php80\\Rector\\Switch_\\ChangeSwitchToMatchRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Switch_/ChangeSwitchToMatchRector.php',
         'Rector\\Php80\\Rector\\Ternary\\GetDebugTypeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Ternary/GetDebugTypeRector.php',
@@ -3859,9 +3857,9 @@ class ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb73967c99942f44a43c4b9e971bd0f93::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9e1d851a011b50a50ed96db5d82dacdd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9e1d851a011b50a50ed96db5d82dacdd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9e1d851a011b50a50ed96db5d82dacdd::$classMap;
 
         }, null, ClassLoader::class);
     }
