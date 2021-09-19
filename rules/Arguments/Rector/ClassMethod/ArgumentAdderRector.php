@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
+use Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -46,9 +47,14 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
     private $argumentAddingScope;
-    public function __construct(\Rector\Arguments\NodeAnalyzer\ArgumentAddingScope $argumentAddingScope)
+    /**
+     * @var \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector
+     */
+    private $changedArgumentsDetector;
+    public function __construct(\Rector\Arguments\NodeAnalyzer\ArgumentAddingScope $argumentAddingScope, \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector $changedArgumentsDetector)
     {
         $this->argumentAddingScope = $argumentAddingScope;
+        $this->changedArgumentsDetector = $changedArgumentsDetector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -173,7 +179,17 @@ CODE_SAMPLE
             if (!isset($node->params[$position])) {
                 return \false;
             }
-            return $this->isName($node->params[$position], $argumentName);
+            $param = $node->params[$position];
+            // argument added and name has been changed
+            if (!$this->isName($param, $argumentName)) {
+                return \true;
+            }
+            // argument added and default has been changed
+            if ($this->changedArgumentsDetector->isDefaultValueChanged($param, $argumentAdder->getArgumentDefaultValue())) {
+                return \true;
+            }
+            // argument added and type has been changed
+            return $this->changedArgumentsDetector->isTypeChanged($param, $argumentAdder->getArgumentType());
         }
         if (isset($node->args[$position])) {
             return \true;

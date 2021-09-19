@@ -6,11 +6,14 @@ namespace Rector\Arguments;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
+use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class ArgumentDefaultValueReplacer
@@ -37,15 +40,44 @@ final class ArgumentDefaultValueReplacer
             if (!isset($node->params[$replaceArgumentDefaultValue->getPosition()])) {
                 return null;
             }
-        } elseif (isset($node->args[$replaceArgumentDefaultValue->getPosition()])) {
-            $this->processArgs($node, $replaceArgumentDefaultValue);
+            return $this->processParams($node, $replaceArgumentDefaultValue);
         }
-        return $node;
+        if (!isset($node->args[$replaceArgumentDefaultValue->getPosition()])) {
+            return null;
+        }
+        return $this->processArgs($node, $replaceArgumentDefaultValue);
+    }
+    /**
+     * @param mixed $value
+     */
+    public function isDefaultValueMatched(?\PhpParser\Node\Expr $expr, $value) : bool
+    {
+        // allow any values before, also allow param without default value
+        if ($value === \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue::ANY_VALUE_BEFORE) {
+            return \true;
+        }
+        if ($expr === null) {
+            return \false;
+        }
+        if ($this->valueResolver->isValue($expr, $value)) {
+            return \true;
+        }
+        // ValueResolver::isValue returns false when default value is `null`
+        return $value === null && $this->valueResolver->isNull($expr);
+    }
+    private function processParams(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?\PhpParser\Node\Stmt\ClassMethod
+    {
+        $position = $replaceArgumentDefaultValue->getPosition();
+        if (!$this->isDefaultValueMatched($classMethod->params[$position]->default, $replaceArgumentDefaultValue->getValueBefore())) {
+            return null;
+        }
+        $classMethod->params[$position]->default = $this->normalizeValue($replaceArgumentDefaultValue->getValueAfter());
+        return $classMethod;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    private function processArgs($expr, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : void
+    private function processArgs($expr, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : \PhpParser\Node\Expr
     {
         $position = $replaceArgumentDefaultValue->getPosition();
         $argValue = $this->valueResolver->getValue($expr->args[$position]->value);
@@ -57,19 +89,27 @@ final class ArgumentDefaultValueReplacer
                 $expr->args = $newArgs;
             }
         }
+        return $expr;
     }
     /**
      * @param mixed $value
      */
     private function normalizeValueToArgument($value) : \PhpParser\Node\Arg
     {
+        return new \PhpParser\Node\Arg($this->normalizeValue($value));
+    }
+    /**
+     * @param mixed $value
+     * @return \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr
+     */
+    private function normalizeValue($value)
+    {
         // class constants → turn string to composite
         if (\is_string($value) && \strpos($value, '::') !== \false) {
             [$class, $constant] = \explode('::', $value);
-            $classConstFetch = $this->nodeFactory->createClassConstFetch($class, $constant);
-            return new \PhpParser\Node\Arg($classConstFetch);
+            return $this->nodeFactory->createClassConstFetch($class, $constant);
         }
-        return new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($value));
+        return \PhpParser\BuilderHelpers::normalizeValue($value);
     }
     /**
      * @param Arg[] $argumentNodes

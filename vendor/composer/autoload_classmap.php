@@ -1490,6 +1490,7 @@ return array(
     'Rector\\Arguments\\ArgumentDefaultValueReplacer' => $baseDir . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
     'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => $baseDir . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
     'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => $baseDir . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
+    'Rector\\Arguments\\NodeAnalyzer\\ChangedArgumentsDetector' => $baseDir . '/rules/Arguments/NodeAnalyzer/ChangedArgumentsDetector.php',
     'Rector\\Arguments\\Rector\\ClassMethod\\ArgumentAdderRector' => $baseDir . '/rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php',
     'Rector\\Arguments\\Rector\\ClassMethod\\ReplaceArgumentDefaultValueRector' => $baseDir . '/rules/Arguments/Rector/ClassMethod/ReplaceArgumentDefaultValueRector.php',
     'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => $baseDir . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',

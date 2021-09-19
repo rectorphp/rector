@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2ecd80168824b0ba5abef5ededdbc492
+class ComposerStaticInit34f2d773ddf7d761551322a8fa07b86e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1850,6 +1850,7 @@ class ComposerStaticInit2ecd80168824b0ba5abef5ededdbc492
         'Rector\\Arguments\\ArgumentDefaultValueReplacer' => __DIR__ . '/../..' . '/rules/Arguments/ArgumentDefaultValueReplacer.php',
         'Rector\\Arguments\\Contract\\ReplaceArgumentDefaultValueInterface' => __DIR__ . '/../..' . '/rules/Arguments/Contract/ReplaceArgumentDefaultValueInterface.php',
         'Rector\\Arguments\\NodeAnalyzer\\ArgumentAddingScope' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ArgumentAddingScope.php',
+        'Rector\\Arguments\\NodeAnalyzer\\ChangedArgumentsDetector' => __DIR__ . '/../..' . '/rules/Arguments/NodeAnalyzer/ChangedArgumentsDetector.php',
         'Rector\\Arguments\\Rector\\ClassMethod\\ArgumentAdderRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php',
         'Rector\\Arguments\\Rector\\ClassMethod\\ReplaceArgumentDefaultValueRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/ClassMethod/ReplaceArgumentDefaultValueRector.php',
         'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',
@@ -3858,9 +3859,9 @@ class ComposerStaticInit2ecd80168824b0ba5abef5ededdbc492
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2ecd80168824b0ba5abef5ededdbc492::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2ecd80168824b0ba5abef5ededdbc492::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2ecd80168824b0ba5abef5ededdbc492::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit34f2d773ddf7d761551322a8fa07b86e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit34f2d773ddf7d761551322a8fa07b86e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit34f2d773ddf7d761551322a8fa07b86e::$classMap;
 
         }, null, ClassLoader::class);
     }
