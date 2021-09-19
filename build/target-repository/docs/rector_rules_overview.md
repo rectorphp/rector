@@ -7638,6 +7638,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TypedPropertyRector::class)
         ->call('configure', [[
             TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => false,
+            TypedPropertyRector::PRIVATE_PROPERTY_ONLY => false,
         ]]);
 };
 ```
