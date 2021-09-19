@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
@@ -13,6 +17,9 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $arrayType = new ArrayType(new MixedType(), new MixedType());
+
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
@@ -23,10 +30,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     0,
                     'request',
                     null,
-                    'Illuminate\Http\Illuminate\Http'
+                    new ObjectType('Illuminate\Http\Illuminate\Http')
                 ),
                 new ArgumentAdder(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
-                new ArgumentAdder(SomeContainerBuilder::class, 'addCompilerPass', 2, 'priority', 0, 'int'),
+                new ArgumentAdder(
+                    SomeContainerBuilder::class,
+                    'addCompilerPass',
+                    2,
+                    'priority',
+                    0,
+                    new IntegerType()
+                ),
                 // scoped
                 new ArgumentAdder(
                     SomeParentClient::class,
@@ -34,7 +48,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     2,
                     'serverParameters',
                     [],
-                    'array',
+                    $arrayType,
                     ArgumentAddingScope::SCOPE_PARENT_CALL
                 ),
                 new ArgumentAdder(
@@ -43,10 +57,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     2,
                     'serverParameters',
                     [],
-                    'array',
+                    $arrayType,
                     ArgumentAddingScope::SCOPE_CLASS_METHOD
                 ),
-                new ArgumentAdder(SomeClass::class, 'withoutTypeOrDefaultValue', 0, 'arguments', [], 'array'),
+                new ArgumentAdder(SomeClass::class, 'withoutTypeOrDefaultValue', 0, 'arguments', [], $arrayType),
             ]),
         ]]);
 };

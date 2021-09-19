@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 
 final class ArgumentAdder
 {
@@ -17,7 +18,7 @@ final class ArgumentAdder
         private int $position,
         private ?string $argumentName = null,
         private $argumentDefaultValue = null,
-        private ?string $argumentType = null,
+        private Type | null $argumentType = null,
         private ?string $scope = null
     ) {
     }
@@ -50,7 +51,7 @@ final class ArgumentAdder
         return $this->argumentDefaultValue;
     }
 
-    public function getArgumentType(): ?string
+    public function getArgumentType(): ?Type
     {
         return $this->argumentType;
     }

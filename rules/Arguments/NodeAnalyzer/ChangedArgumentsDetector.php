@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace Rector\Arguments\NodeAnalyzer;
 
 use PhpParser\Node\Param;
+use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ChangedArgumentsDetector
 {
     public function __construct(
         private ValueResolver $valueResolver,
-        private NodeNameResolver $nodeNameResolver
+        private StaticTypeMapper $staticTypeMapper,
+        private TypeComparator $typeComparator
     ) {
     }
 
@@ -28,16 +31,18 @@ final class ChangedArgumentsDetector
         return ! $this->valueResolver->isValue($param->default, $value);
     }
 
-    public function isTypeChanged(Param $param, ?string $type): bool
+    public function isTypeChanged(Param $param, ?Type $newType): bool
     {
         if ($param->type === null) {
             return false;
         }
 
-        if ($type === null) {
+        if ($newType === null) {
             return true;
         }
 
-        return ! $this->nodeNameResolver->isName($param->type, $type);
+        $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
+
+        return ! $this->typeComparator->areTypesEqual($currentParamType, $newType);
     }
 }

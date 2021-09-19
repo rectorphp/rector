@@ -10,13 +10,12 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
@@ -24,6 +23,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -53,9 +53,11 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
 
     public function getRuleDefinition(): RuleDefinition
     {
+        $objectType = new ObjectType('SomeType');
+
         $exampleConfiguration = [
             self::ADDED_ARGUMENTS => [
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, 'SomeType'),
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, $objectType),
             ],
         ];
 
@@ -234,7 +236,7 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         ArgumentAdder $argumentAdder,
         mixed $defaultValue,
-        ?string $type,
+        ?Type $type,
         int $position
     ): void {
         $argumentName = $argumentAdder->getArgumentName();
@@ -243,8 +245,9 @@ CODE_SAMPLE
         }
 
         $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($defaultValue));
-        if ($type) {
-            $param->type = ctype_upper($type[0]) ? new FullyQualified($type) : new Identifier($type);
+        if ($type !== null) {
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM());
+            $param->type = $typeNode;
         }
 
         $classMethod->params[$position] = $param;
