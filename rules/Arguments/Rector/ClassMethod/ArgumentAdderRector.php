@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
+use Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -45,7 +46,8 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     private bool $haveArgumentsChanged = false;
 
     public function __construct(
-        private ArgumentAddingScope $argumentAddingScope
+        private ArgumentAddingScope $argumentAddingScope,
+        private ChangedArgumentsDetector $changedArgumentsDetector
     ) {
     }
 
@@ -202,7 +204,22 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isName($node->params[$position], $argumentName);
+            $param = $node->params[$position];
+            // argument added and name has been changed
+            if (! $this->isName($param, $argumentName)) {
+                return true;
+            }
+
+            // argument added and default has been changed
+            if ($this->changedArgumentsDetector->isDefaultValueChanged(
+                $param,
+                $argumentAdder->getArgumentDefaultValue()
+            )) {
+                return true;
+            }
+
+            // argument added and type has been changed
+            return $this->changedArgumentsDetector->isTypeChanged($param, $argumentAdder->getArgumentType());
         }
 
         if (isset($node->args[$position])) {

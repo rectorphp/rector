@@ -10,6 +10,11 @@ use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**
+     * @var string
+     */
+    public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
+
+    /**
      * @param mixed $valueBefore
      * @param mixed $valueAfter
      */

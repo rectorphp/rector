@@ -49,6 +49,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'Symfony\Component\Yaml\Yaml::DUMP_EXCEPTION_ON_INVALID_TYPE'
                 ),
 
+                new ReplaceArgumentDefaultValue(
+                    'Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\Source\SomeClassWithAnyDefaultValue',
+                    'someMethod',
+                    0,
+                    ReplaceArgumentDefaultValue::ANY_VALUE_BEFORE,
+                    []
+                ),
+                new ReplaceArgumentDefaultValue(
+                    'Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\Source\SomeClassWithAnyDefaultValue',
+                    'paramWithNull',
+                    0,
+                    null,
+                    []
+                ),
             ]),
         ]]);
 };
