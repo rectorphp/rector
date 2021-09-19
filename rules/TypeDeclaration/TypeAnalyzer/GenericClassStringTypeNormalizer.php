@@ -59,6 +59,19 @@ final class GenericClassStringTypeNormalizer
         return $type;
     }
 
+    public function isAllGenericClassStringType(UnionType $unionType): bool
+    {
+        $types = $unionType->getTypes();
+
+        foreach ($types as $type) {
+            if (! $type instanceof GenericClassStringType) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private function resolveArrayTypeWithUnionKeyType(ArrayType $arrayType): ArrayType
     {
         $itemType = $arrayType->getItemType();
@@ -79,19 +92,6 @@ final class GenericClassStringTypeNormalizer
         }
 
         return $arrayType;
-    }
-
-    public function isAllGenericClassStringType(UnionType $unionType): bool
-    {
-        $types = $unionType->getTypes();
-
-        foreach ($types as $type) {
-            if (! $type instanceof GenericClassStringType) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     private function resolveClassStringInUnionType(UnionType $type): UnionType | ArrayType
