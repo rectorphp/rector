@@ -59,6 +59,16 @@ final class GenericClassStringTypeNormalizer
         }
         return $type;
     }
+    public function isAllGenericClassStringType(\PHPStan\Type\UnionType $unionType) : bool
+    {
+        $types = $unionType->getTypes();
+        foreach ($types as $type) {
+            if (!$type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
+                return \false;
+            }
+        }
+        return \true;
+    }
     private function resolveArrayTypeWithUnionKeyType(\PHPStan\Type\ArrayType $arrayType) : \PHPStan\Type\ArrayType
     {
         $itemType = $arrayType->getItemType();
@@ -74,16 +84,6 @@ final class GenericClassStringTypeNormalizer
             return new \PHPStan\Type\ArrayType($keyType, new \PHPStan\Type\ClassStringType());
         }
         return $arrayType;
-    }
-    public function isAllGenericClassStringType(\PHPStan\Type\UnionType $unionType) : bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if (!$type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
-                return \false;
-            }
-        }
-        return \true;
     }
     /**
      * @return \PHPStan\Type\UnionType|\PHPStan\Type\ArrayType
