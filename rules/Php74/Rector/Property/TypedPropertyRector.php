@@ -44,10 +44,20 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      */
     public const CLASS_LIKE_TYPE_ONLY = 'class_like_type_only';
     /**
+     * @var string
+     */
+    public const PRIVATE_PROPERTY_ONLY = 'PRIVATE_PROPERTY_ONLY';
+    /**
      * Useful for refactoring of huge applications. Taking types first narrows scope
      * @var bool
      */
     private $classLikeTypeOnly = \false;
+    /**
+     * If want to keep BC, it can be set to true
+     * @see https://3v4l.org/spl4P
+     * @var bool
+     */
+    private $privatePropertyOnly = \false;
     /**
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
      */
@@ -103,7 +113,7 @@ final class SomeClass
     private int $count;
 }
 CODE_SAMPLE
-, [self::CLASS_LIKE_TYPE_ONLY => \false])]);
+, [self::CLASS_LIKE_TYPE_ONLY => \false, self::PRIVATE_PROPERTY_ONLY => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -151,6 +161,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? \false;
+        $this->privatePropertyOnly = $configuration[self::PRIVATE_PROPERTY_ONLY] ?? \false;
     }
     public function provideMinPhpVersion() : int
     {
@@ -234,6 +245,9 @@ CODE_SAMPLE
             return \true;
         }
         // skip multiple properties
-        return \count($property->props) > 1;
+        if (\count($property->props) > 1) {
+            return \true;
+        }
+        return $this->privatePropertyOnly && !$property->isPrivate();
     }
 }
