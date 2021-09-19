@@ -86,7 +86,6 @@ parameters:
             paths:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
-                - rules/Php80/Rector/If_/NullsafeOperatorRector.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
                 - rules/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php
 
@@ -171,12 +170,6 @@ parameters:
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\:\:\$propertyTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PropertyTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
 
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
-
-        # @todo loop magic, resolve later
-        -
-            message: '#Access to an undefined property PhpParser\\Node\:\:\$expr#'
-            paths:
-                - rules/Php80/Rector/If_/NullsafeOperatorRector.php
 
         -
             message: '#Comparison operation "<" between 0 and 2 is always true#'

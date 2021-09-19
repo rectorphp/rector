@@ -11,8 +11,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
@@ -61,40 +59,6 @@ final class IfManipulator
         }
 
         return $this->matchComparedAndReturnedNode($if->cond, $insideIfNode);
-    }
-
-    /**
-     * Matches:
-     *
-     * if (<$value> !== null) {
-     *     $anotherValue = $value;
-     * }
-     */
-    public function matchIfNotNullNextAssignment(If_ $if): ?Assign
-    {
-        if ($if->stmts === []) {
-            return null;
-        }
-
-        if (! $if->cond instanceof NotIdentical) {
-            return null;
-        }
-
-        if (! $this->isNotIdenticalNullCompare($if->cond)) {
-            return null;
-        }
-
-        $insideIfNode = $if->stmts[0];
-        if (! $insideIfNode instanceof Expression) {
-            return null;
-        }
-
-        $assignedExpr = $insideIfNode->expr;
-        if (! $assignedExpr instanceof Assign) {
-            return null;
-        }
-
-        return $assignedExpr;
     }
 
     /**
@@ -282,32 +246,6 @@ final class IfManipulator
         return count($if->stmts) === 1;
     }
 
-    public function isIfCondUsingAssignIdenticalVariable(Node $if, Node $assign): bool
-    {
-        if (! ($if instanceof If_ && $assign instanceof Assign)) {
-            return false;
-        }
-
-        if (! $if->cond instanceof Identical) {
-            return false;
-        }
-
-        return $this->nodeComparator->areNodesEqual($this->getIfCondVar($if), $assign->var);
-    }
-
-    public function isIfCondUsingAssignNotIdenticalVariable(If_ $if, Node $node): bool
-    {
-        if (! $node instanceof MethodCall && ! $node instanceof PropertyFetch) {
-            return false;
-        }
-
-        if (! $if->cond instanceof NotIdentical) {
-            return false;
-        }
-
-        return ! $this->nodeComparator->areNodesEqual($this->getIfCondVar($if), $node->var);
-    }
-
     public function isIfWithoutElseAndElseIfs(If_ $if): bool
     {
         if ($if->else !== null) {
@@ -359,19 +297,6 @@ final class IfManipulator
         return null;
     }
 
-    private function isNotIdenticalNullCompare(NotIdentical $notIdentical): bool
-    {
-        if ($this->nodeComparator->areNodesEqual($notIdentical->left, $notIdentical->right)) {
-            return false;
-        }
-
-        if ($this->valueResolver->isNull($notIdentical->right)) {
-            return true;
-        }
-
-        return $this->valueResolver->isNull($notIdentical->left);
-    }
-
     private function isIfWithOnlyStmtIf(If_ $if): bool
     {
         if (! $this->isIfWithoutElseAndElseIfs($if)) {
@@ -392,13 +317,5 @@ final class IfManipulator
         }
 
         return is_a($stmts[0], $desiredType);
-    }
-
-    private function getIfCondVar(If_ $if): Expr
-    {
-        /** @var Identical|NotIdentical $ifCond */
-        $ifCond = $if->cond;
-
-        return $this->valueResolver->isNull($ifCond->left) ? $ifCond->right : $ifCond->left;
     }
 }
