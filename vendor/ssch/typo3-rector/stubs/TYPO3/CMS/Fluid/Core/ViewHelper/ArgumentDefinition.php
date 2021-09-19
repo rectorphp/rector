@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210917\TYPO3\CMS\Fluid\Core\ViewHelper;
+namespace RectorPrefix20210919\TYPO3\CMS\Fluid\Core\ViewHelper;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\ArgumentDefinition')) {
     return;
