@@ -24,6 +24,7 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -141,7 +142,7 @@ CODE_SAMPLE
 
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
 
-        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
+        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node, $varType)) {
             return null;
         }
 
@@ -180,14 +181,15 @@ CODE_SAMPLE
 
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn(
         Name | NullableType | PhpParserUnionType | null $node,
-        Property $property
+        Property $property,
+        Type $type
     ): bool {
         if (! $node instanceof Node) {
             return true;
         }
 
         // is not class-type and should be skipped
-        if ($this->shouldSkipNonClassLikeType($node)) {
+        if ($this->shouldSkipNonClassLikeType($node, $type)) {
             return true;
         }
 
@@ -203,7 +205,7 @@ CODE_SAMPLE
         return true;
     }
 
-    private function shouldSkipNonClassLikeType(Name | NullableType | PhpParserUnionType $node): bool
+    private function shouldSkipNonClassLikeType(Name | NullableType | PhpParserUnionType $node, Type $type): bool
     {
         // unwrap nullable type
         if ($node instanceof NullableType) {
@@ -225,6 +227,10 @@ CODE_SAMPLE
 
         if (! $this->classLikeTypeOnly) {
             return false;
+        }
+
+        if ($type instanceof AliasedObjectType) {
+            $typeName = $type->getFullyQualifiedClass();
         }
 
         return ! $this->reflectionProvider->hasClass($typeName);
