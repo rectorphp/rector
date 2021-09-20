@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210919;
+namespace RectorPrefix20210920;
 
 if (\class_exists('tx_reports_reports_status_WarningMessagePostProcessor')) {
     return;

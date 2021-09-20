@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210919;
+namespace RectorPrefix20210920;
 
 if (\class_exists('tx_recycler_model_tables')) {
     return;

@@ -27,6 +27,7 @@ In package nette/utils you will find a set of [useful classes](https://doc.nette
 - [Strings](https://doc.nette.org/strings) - useful text functions
 - [SmartObject](https://doc.nette.org/smartobject) - PHP object enhancements
 - [Validation](https://doc.nette.org/validators) - validate inputs
+- [Type](https://doc.nette.org/type) - PHP data type
 
 
 Installation
@@ -38,7 +39,7 @@ The recommended way to install is via Composer:
 composer require nette/utils
 ```
 
-- Nette Utils 3.2 is compatible with PHP 7.2 to 8.0
+- Nette Utils 3.2 is compatible with PHP 7.2 to 8.1
 - Nette Utils 3.1 is compatible with PHP 7.1 to 8.0
 - Nette Utils 3.0 is compatible with PHP 7.1 to 8.0
 - Nette Utils 2.5 is compatible with PHP 5.6 to 8.0

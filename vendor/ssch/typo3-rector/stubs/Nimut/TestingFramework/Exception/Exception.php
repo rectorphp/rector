@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210919\Nimut\TestingFramework\Exception;
+namespace RectorPrefix20210920\Nimut\TestingFramework\Exception;
 
 if (\class_exists('Nimut\\TestingFramework\\Exception\\Exception')) {
     return;

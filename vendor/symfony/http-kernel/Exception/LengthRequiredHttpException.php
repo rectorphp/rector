@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210919\Symfony\Component\HttpKernel\Exception;
+namespace RectorPrefix20210920\Symfony\Component\HttpKernel\Exception;
 
 /**
  * @author Ben Ramsey <ben@benramsey.com>
  */
-class LengthRequiredHttpException extends \RectorPrefix20210919\Symfony\Component\HttpKernel\Exception\HttpException
+class LengthRequiredHttpException extends \RectorPrefix20210920\Symfony\Component\HttpKernel\Exception\HttpException
 {
     /**
      * @param string|null     $message  The internal exception message

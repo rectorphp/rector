@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210919;
+namespace RectorPrefix20210920;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20210919\Tracy\Debugger;
-use RectorPrefix20210919\Tracy\Dumper;
+use RectorPrefix20210920\Tracy\Debugger;
+use RectorPrefix20210920\Tracy\Dumper;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20210919\Tracy\Debugger::enable(\RectorPrefix20210919\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20210920\Tracy\Debugger::enable(\RectorPrefix20210920\Tracy\Debugger::DETECT, __DIR__ . '/log');
 ?>
 <!DOCTYPE html><link rel="stylesheet" href="assets/style.css">
 
@@ -22,21 +22,21 @@ class Test
     protected $z = 30;
     private $y = 'hello';
 }
-\class_alias('RectorPrefix20210919\\Test', 'Test', \false);
+\class_alias('RectorPrefix20210920\\Test', 'Test', \false);
 $arr = [10, 'hello', \fopen(__FILE__, 'r')];
-$obj = new \RectorPrefix20210919\Test();
+$obj = new \RectorPrefix20210920\Test();
 $snapshot = [];
-echo \RectorPrefix20210919\Tracy\Dumper::toHtml($arr, [\RectorPrefix20210919\Tracy\Dumper::SNAPSHOT => &$snapshot]);
-echo \RectorPrefix20210919\Tracy\Dumper::toHtml($obj, [\RectorPrefix20210919\Tracy\Dumper::SNAPSHOT => &$snapshot]);
+echo \RectorPrefix20210920\Tracy\Dumper::toHtml($arr, [\RectorPrefix20210920\Tracy\Dumper::SNAPSHOT => &$snapshot]);
+echo \RectorPrefix20210920\Tracy\Dumper::toHtml($obj, [\RectorPrefix20210920\Tracy\Dumper::SNAPSHOT => &$snapshot]);
 // changed array is detected
 $arr[0] = 'CHANGED!';
-echo \RectorPrefix20210919\Tracy\Dumper::toHtml($arr, [\RectorPrefix20210919\Tracy\Dumper::SNAPSHOT => &$snapshot]);
+echo \RectorPrefix20210920\Tracy\Dumper::toHtml($arr, [\RectorPrefix20210920\Tracy\Dumper::SNAPSHOT => &$snapshot]);
 // changed object is not detected, because is part of snapshot
 $obj->x = 'CHANGED!';
-echo \RectorPrefix20210919\Tracy\Dumper::toHtml($obj, [\RectorPrefix20210919\Tracy\Dumper::SNAPSHOT => &$snapshot]);
+echo \RectorPrefix20210920\Tracy\Dumper::toHtml($obj, [\RectorPrefix20210920\Tracy\Dumper::SNAPSHOT => &$snapshot]);
 // prints snapshot
-echo '<meta itemprop=tracy-snapshot content=', \RectorPrefix20210919\Tracy\Dumper::formatSnapshotAttribute($snapshot), '>';
+echo '<meta itemprop=tracy-snapshot content=', \RectorPrefix20210920\Tracy\Dumper::formatSnapshotAttribute($snapshot), '>';
 echo '</div>';
-if (\RectorPrefix20210919\Tracy\Debugger::$productionMode) {
+if (\RectorPrefix20210920\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }

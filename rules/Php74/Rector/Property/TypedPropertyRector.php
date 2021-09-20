@@ -23,6 +23,7 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -142,7 +143,7 @@ CODE_SAMPLE
             }
         }
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
-        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
+        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node, $varType)) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -170,13 +171,13 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
      */
-    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property) : bool
+    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type) : bool
     {
         if (!$node instanceof \PhpParser\Node) {
             return \true;
         }
         // is not class-type and should be skipped
-        if ($this->shouldSkipNonClassLikeType($node)) {
+        if ($this->shouldSkipNonClassLikeType($node, $type)) {
             return \true;
         }
         // false positive
@@ -191,7 +192,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
      */
-    private function shouldSkipNonClassLikeType($node) : bool
+    private function shouldSkipNonClassLikeType($node, \PHPStan\Type\Type $type) : bool
     {
         // unwrap nullable type
         if ($node instanceof \PhpParser\Node\NullableType) {
@@ -209,6 +210,9 @@ CODE_SAMPLE
         }
         if (!$this->classLikeTypeOnly) {
             return \false;
+        }
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+            $typeName = $type->getFullyQualifiedClass();
         }
         return !$this->reflectionProvider->hasClass($typeName);
     }

@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210919\Nette\Utils;
+namespace RectorPrefix20210920\Nette\Utils;
 
-use RectorPrefix20210919\Nette;
-use RectorPrefix20210919\Nette\HtmlStringable;
+use RectorPrefix20210920\Nette;
+use RectorPrefix20210920\Nette\HtmlStringable;
 use function is_array, is_float, is_object, is_string;
 /**
  * HTML helper.
@@ -227,7 +227,7 @@ use function is_array, is_float, is_object, is_string;
  * @method self width(?int $val)
  * @method self wrap(?string $val)
  */
-class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefix20210919\Nette\HtmlStringable
+class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefix20210920\Nette\HtmlStringable
 {
     use Nette\SmartObject;
     /** @var array<string, mixed>  element's attributes */
@@ -236,7 +236,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
     public static $xhtml = \false;
     /** @var array<string, int>  void elements */
     public static $emptyElements = ['img' => 1, 'hr' => 1, 'br' => 1, 'input' => 1, 'meta' => 1, 'area' => 1, 'embed' => 1, 'keygen' => 1, 'source' => 1, 'base' => 1, 'col' => 1, 'link' => 1, 'param' => 1, 'basefont' => 1, 'frame' => 1, 'isindex' => 1, 'wbr' => 1, 'command' => 1, 'track' => 1];
-    /** @var array<int, Html|string> nodes */
+    /** @var array<int, HtmlStringable|string> nodes */
     protected $children = [];
     /** @var string  element's name */
     private $name;
@@ -259,7 +259,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
             $el->setText($attrs);
         }
         if (isset($parts[1])) {
-            foreach (\RectorPrefix20210919\Nette\Utils\Strings::matchAll($parts[1] . ' ', '#([a-z0-9:-]+)(?:=(["\'])?(.*?)(?(2)\\2|\\s))?#i') as $m) {
+            foreach (\RectorPrefix20210920\Nette\Utils\Strings::matchAll($parts[1] . ' ', '#([a-z0-9:-]+)(?:=(["\'])?(.*?)(?(2)\\2|\\s))?#i') as $m) {
                 $el->attrs[$m[1]] = $m[3] ?? \true;
             }
         }
@@ -517,7 +517,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
      */
     public final function setText($text)
     {
-        if (!$text instanceof \RectorPrefix20210919\Nette\HtmlStringable) {
+        if (!$text instanceof \RectorPrefix20210920\Nette\HtmlStringable) {
             $text = \htmlspecialchars((string) $text, \ENT_NOQUOTES, 'UTF-8');
         }
         $this->children = [(string) $text];
@@ -546,7 +546,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
      */
     public function addText($text)
     {
-        if (!$text instanceof \RectorPrefix20210919\Nette\HtmlStringable) {
+        if (!$text instanceof \RectorPrefix20210920\Nette\HtmlStringable) {
             $text = \htmlspecialchars((string) $text, \ENT_NOQUOTES, 'UTF-8');
         }
         return $this->insert(null, $text);
@@ -593,8 +593,9 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
     /**
      * Returns child node (\ArrayAccess implementation).
      * @param  int  $index
-     * @return static|string
+     * @return HtmlStringable|string
      */
+    #[\ReturnTypeWillChange]
     public final function offsetGet($index)
     {
         return $this->children[$index];
@@ -633,6 +634,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
     }
     /**
      * Iterates over elements.
+     * @return \ArrayIterator<int, HtmlStringable|string>
      */
     public final function getIterator() : \ArrayIterator
     {
@@ -721,7 +723,7 @@ class Html implements \ArrayAccess, \Countable, \IteratorAggregate, \RectorPrefi
                 continue;
             } elseif (\is_array($value)) {
                 if (\strncmp($key, 'data-', 5) === 0) {
-                    $value = \RectorPrefix20210919\Nette\Utils\Json::encode($value);
+                    $value = \RectorPrefix20210920\Nette\Utils\Json::encode($value);
                 } else {
                     $tmp = null;
                     foreach ($value as $k => $v) {

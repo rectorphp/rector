@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210919\Symplify\EasyTesting\Console;
+namespace RectorPrefix20210920\Symplify\EasyTesting\Console;
 
-use RectorPrefix20210919\Symfony\Component\Console\Application;
-use RectorPrefix20210919\Symfony\Component\Console\Command\Command;
-use RectorPrefix20210919\Symplify\PackageBuilder\Console\Command\CommandNaming;
-final class EasyTestingConsoleApplication extends \RectorPrefix20210919\Symfony\Component\Console\Application
+use RectorPrefix20210920\Symfony\Component\Console\Application;
+use RectorPrefix20210920\Symfony\Component\Console\Command\Command;
+use RectorPrefix20210920\Symplify\PackageBuilder\Console\Command\CommandNaming;
+final class EasyTestingConsoleApplication extends \RectorPrefix20210920\Symfony\Component\Console\Application
 {
     /**
      * @param Command[] $commands
      */
-    public function __construct(\RectorPrefix20210919\Symplify\PackageBuilder\Console\Command\CommandNaming $commandNaming, array $commands)
+    public function __construct(\RectorPrefix20210920\Symplify\PackageBuilder\Console\Command\CommandNaming $commandNaming, array $commands)
     {
         foreach ($commands as $command) {
             $commandName = $commandNaming->resolveFromCommand($command);

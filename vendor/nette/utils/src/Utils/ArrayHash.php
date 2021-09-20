@@ -5,18 +5,19 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20210919\Nette\Utils;
+namespace RectorPrefix20210920\Nette\Utils;
 
-use RectorPrefix20210919\Nette;
+use RectorPrefix20210920\Nette;
 /**
  * Provides objects to work as array.
+ * @template T
  */
 class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
      * Transforms array to ArrayHash.
+     * @param  array<T>  $array
      * @return static
-     * @param mixed[] $array
      * @param bool $recursive
      */
     public static function from($array, $recursive = \true)
@@ -29,6 +30,7 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
     }
     /**
      * Returns an iterator over all items.
+     * @return \RecursiveArrayIterator<array-key, T>
      */
     public function getIterator() : \RecursiveArrayIterator
     {
@@ -44,21 +46,22 @@ class ArrayHash extends \stdClass implements \ArrayAccess, \Countable, \Iterator
     /**
      * Replaces or appends a item.
      * @param  string|int  $key
-     * @param  mixed  $value
+     * @param  T  $value
      */
     public function offsetSet($key, $value) : void
     {
         if (!\is_scalar($key)) {
             // prevents null
-            throw new \RectorPrefix20210919\Nette\InvalidArgumentException(\sprintf('Key must be either a string or an integer, %s given.', \gettype($key)));
+            throw new \RectorPrefix20210920\Nette\InvalidArgumentException(\sprintf('Key must be either a string or an integer, %s given.', \gettype($key)));
         }
         $this->{$key} = $value;
     }
     /**
      * Returns a item.
      * @param  string|int  $key
-     * @return mixed
+     * @return T
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->{$key};
