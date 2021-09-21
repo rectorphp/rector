@@ -129,7 +129,7 @@ CODE_SAMPLE
 
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::MATCH;
+        return PhpVersionFeature::MATCH_EXPRESSION;
     }
 
     private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign
