@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -12,8 +11,6 @@ use Stringable;
 
 final class SpacingAwareCallableTypeNode extends CallableTypeNode implements Stringable
 {
-    use NodeAttributes;
-
     public function __toString(): string
     {
         // keep original (Psalm?) format, see https://github.com/rectorphp/rector/issues/2841

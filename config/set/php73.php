@@ -9,6 +9,7 @@ use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php73\Rector\FuncCall\RegexDashEscapeRector;
 use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;
+use Rector\Php73\Rector\FuncCall\SetCookieRector;
 use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
@@ -47,4 +48,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(JsonThrowOnErrorRector::class);
     $services->set(RegexDashEscapeRector::class);
     $services->set(ContinueToBreakInSwitchRector::class);
+    $services->set(SetCookieRector::class);
 };

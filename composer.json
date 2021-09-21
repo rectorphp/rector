@@ -93,7 +93,9 @@
                 "rules-tests"
             ],
             "Rector\\Core\\Tests\\": "tests",
-            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src"
+            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
+            "Rector\\PHPStanRules\\": "utils/phpstan-rules/src",
+            "Rector\\PHPStanRules\\Tests\\": "utils/phpstan-rules/tests"
         },
         "classmap": [
             "stubs",
