@@ -186,7 +186,7 @@ final class PhpVersionFeature
      * @see https://wiki.php.net/rfc/match_expression_v2
      * @var int
      */
-    public const MATCH = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    public const MATCH_EXPRESSION = \Rector\Core\ValueObject\PhpVersion::PHP_80;
     /**
      * @see https://wiki.php.net/rfc/non-capturing_catches
      * @var int
