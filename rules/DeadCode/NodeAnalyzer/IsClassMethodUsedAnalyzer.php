@@ -120,6 +120,9 @@ final class IsClassMethodUsedAnalyzer
                 return \true;
             }
             $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
+            if ($arrayCallable instanceof \PhpParser\Node\Expr\Array_) {
+                return \true;
+            }
             if ($this->shouldSkipArrayCallable($class, $arrayCallable)) {
                 continue;
             }
@@ -131,7 +134,10 @@ final class IsClassMethodUsedAnalyzer
         }
         return \false;
     }
-    private function shouldSkipArrayCallable(\PhpParser\Node\Stmt\Class_ $class, ?\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable) : bool
+    /**
+     * @param null|\PhpParser\Node\Expr\Array_|\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable
+     */
+    private function shouldSkipArrayCallable(\PhpParser\Node\Stmt\Class_ $class, $arrayCallable) : bool
     {
         if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {
             return \true;

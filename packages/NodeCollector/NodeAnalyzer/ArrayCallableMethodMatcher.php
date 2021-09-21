@@ -47,8 +47,12 @@ final class ArrayCallableMethodMatcher
     }
     /**
      * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
+     * Returns back value $array when unknown method of callable used, eg: [$this, $other]
+     * @see https://github.com/rectorphp/rector-src/pull/908
+     * @see https://github.com/rectorphp/rector-src/pull/909
+     * @return null|\PhpParser\Node\Expr\Array_|\Rector\NodeCollector\ValueObject\ArrayCallable
      */
-    public function match(\PhpParser\Node\Expr\Array_ $array) : ?\Rector\NodeCollector\ValueObject\ArrayCallable
+    public function match(\PhpParser\Node\Expr\Array_ $array)
     {
         $arrayItems = $array->items;
         if (\count($arrayItems) !== 2) {
@@ -59,22 +63,21 @@ final class ArrayCallableMethodMatcher
         }
         /** @var ArrayItem[] $items */
         $items = $array->items;
-        $secondItemValue = $items[1]->value;
-        if (!$secondItemValue instanceof \PhpParser\Node\Scalar\String_) {
-            return null;
-        }
-        if ($this->shouldSkipAssociativeArray($array)) {
-            return null;
-        }
         // $this, self, static, FQN
         $firstItemValue = $items[0]->value;
-        // static ::class reference?
-        if ($firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
-            $calleeType = $this->resolveClassConstFetchType($firstItemValue);
-        } else {
-            $calleeType = $this->nodeTypeResolver->resolve($firstItemValue);
-        }
+        $calleeType = $firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch ? $this->resolveClassConstFetchType($firstItemValue) : $this->nodeTypeResolver->resolve($firstItemValue);
         if (!$calleeType instanceof \PHPStan\Type\TypeWithClassName) {
+            return null;
+        }
+        $values = $this->valueResolver->getValue($array);
+        if ($values === []) {
+            return $array;
+        }
+        if ($this->shouldSkipAssociativeArray($values)) {
+            return null;
+        }
+        $secondItemValue = $items[1]->value;
+        if (!$secondItemValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         if ($this->isCallbackAtFunctionNames($array, ['register_shutdown_function', 'forward_static_call'])) {
@@ -94,9 +97,11 @@ final class ArrayCallableMethodMatcher
         }
         return $array->items[1] === null;
     }
-    private function shouldSkipAssociativeArray(\PhpParser\Node\Expr\Array_ $array) : bool
+    /**
+     * @param mixed $values
+     */
+    private function shouldSkipAssociativeArray($values) : bool
     {
-        $values = $this->valueResolver->getValue($array);
         if (!\is_array($values)) {
             return \false;
         }
