@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210920;
+namespace RectorPrefix20210921;
 
 if (\class_exists('t3lib_TCEmain_processUploadHook')) {
     return;

@@ -1,9 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210920;
+namespace RectorPrefix20210921;
 
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
+use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
 use Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
@@ -16,4 +17,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector::class);
     $services->set(\Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector::class);
     $services->set(\Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class);
+    $services->set(\Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector::class);
 };

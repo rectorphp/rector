@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210920\Symplify\SmartFileSystem;
+namespace RectorPrefix20210921\Symplify\SmartFileSystem;
 
-use RectorPrefix20210920\Nette\Utils\Strings;
-use RectorPrefix20210920\Symfony\Component\Filesystem\Exception\IOException;
-use RectorPrefix20210920\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix20210921\Nette\Utils\Strings;
+use RectorPrefix20210921\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix20210921\Symfony\Component\Filesystem\Filesystem;
 /**
  * @see \Symplify\SmartFileSystem\Tests\SmartFileSystem\SmartFileSystemTest
  */
-final class SmartFileSystem extends \RectorPrefix20210920\Symfony\Component\Filesystem\Filesystem
+final class SmartFileSystem extends \RectorPrefix20210921\Symfony\Component\Filesystem\Filesystem
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ final class SmartFileSystem extends \RectorPrefix20210920\Symfony\Component\File
         $source = @\file_get_contents($filename);
         if (!$source) {
             $message = \sprintf('Failed to read "%s" file: "%s"', $filename, $this->getLastError());
-            throw new \RectorPrefix20210920\Symfony\Component\Filesystem\Exception\IOException($message, 0, null, $filename);
+            throw new \RectorPrefix20210921\Symfony\Component\Filesystem\Exception\IOException($message, 0, null, $filename);
         }
         return $source;
     }
@@ -68,6 +68,6 @@ final class SmartFileSystem extends \RectorPrefix20210920\Symfony\Component\File
     {
         $message = \error_get_last()['message'] ?? '';
         $htmlMessage = \ini_get('html_errors') ? $this->htmlToText($message) : $message;
-        return \RectorPrefix20210920\Nette\Utils\Strings::replace($htmlMessage, self::BEFORE_COLLON_REGEX, '');
+        return \RectorPrefix20210921\Nette\Utils\Strings::replace($htmlMessage, self::BEFORE_COLLON_REGEX, '');
     }
 }

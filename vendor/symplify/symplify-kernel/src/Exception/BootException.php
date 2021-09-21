@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210920\Symplify\SymplifyKernel\Exception;
+namespace RectorPrefix20210921\Symplify\SymplifyKernel\Exception;
 
 use Exception;
 final class BootException extends \Exception

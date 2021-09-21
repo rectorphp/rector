@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210920;
+namespace RectorPrefix20210921;
 
 use Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;

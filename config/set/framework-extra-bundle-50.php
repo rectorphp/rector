@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210920;
+namespace RectorPrefix20210921;
 
 use Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

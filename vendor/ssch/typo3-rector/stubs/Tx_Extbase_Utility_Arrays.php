@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210920;
+namespace RectorPrefix20210921;
 
 if (\class_exists('Tx_Extbase_Utility_Arrays')) {
     return;

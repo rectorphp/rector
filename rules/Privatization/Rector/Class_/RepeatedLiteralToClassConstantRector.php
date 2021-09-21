@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Privatization\Rector\Class_;
 
-use RectorPrefix20210920\Nette\Utils\Strings;
+use RectorPrefix20210921\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Scalar\String_;
@@ -206,7 +206,7 @@ CODE_SAMPLE
             return \true;
         }
         // is replaceable value?
-        $matches = \RectorPrefix20210920\Nette\Utils\Strings::match($value, '#(?<' . self::VALUE . '>[\\w\\-\\/\\_]+)#');
+        $matches = \RectorPrefix20210921\Nette\Utils\Strings::match($value, '#(?<' . self::VALUE . '>[\\w\\-\\/\\_]+)#');
         if (!isset($matches[self::VALUE])) {
             return \true;
         }
@@ -220,10 +220,10 @@ CODE_SAMPLE
     private function createConstName(string $value) : string
     {
         // replace slashes and dashes
-        $value = \RectorPrefix20210920\Nette\Utils\Strings::replace($value, self::SLASH_AND_DASH_REGEX, self::UNDERSCORE);
+        $value = \RectorPrefix20210921\Nette\Utils\Strings::replace($value, self::SLASH_AND_DASH_REGEX, self::UNDERSCORE);
         // find beginning numbers
         $beginningNumbers = '';
-        $matches = \RectorPrefix20210920\Nette\Utils\Strings::match($value, '#(?<' . self::NUMBERS . '>[0-9]*)(?<' . self::VALUE . '>.*)#');
+        $matches = \RectorPrefix20210921\Nette\Utils\Strings::match($value, '#(?<' . self::NUMBERS . '>[0-9]*)(?<' . self::VALUE . '>.*)#');
         if (isset($matches[self::NUMBERS])) {
             $beginningNumbers = $matches[self::NUMBERS];
         }
@@ -240,7 +240,7 @@ CODE_SAMPLE
             $parts = \array_merge(['CONST', $beginningNumbers], $parts);
         }
         $value = \implode(self::UNDERSCORE, $parts);
-        return \strtoupper(\RectorPrefix20210920\Nette\Utils\Strings::replace($value, '#_+#', self::UNDERSCORE));
+        return \strtoupper(\RectorPrefix20210921\Nette\Utils\Strings::replace($value, '#_+#', self::UNDERSCORE));
     }
     private function isNativeConstantResemblingValue(string $value) : bool
     {

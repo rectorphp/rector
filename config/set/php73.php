@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210920;
+namespace RectorPrefix20210921;
 
 use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;
@@ -10,6 +10,7 @@ use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector;
 use Rector\Php73\Rector\FuncCall\RegexDashEscapeRector;
 use Rector\Php73\Rector\FuncCall\SensitiveDefineRector;
+use Rector\Php73\Rector\FuncCall\SetCookieRector;
 use Rector\Php73\Rector\FuncCall\StringifyStrNeedlesRector;
 use Rector\Php73\Rector\String_\SensitiveHereNowDocRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
@@ -42,4 +43,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\Php73\Rector\FuncCall\JsonThrowOnErrorRector::class);
     $services->set(\Rector\Php73\Rector\FuncCall\RegexDashEscapeRector::class);
     $services->set(\Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector::class);
+    $services->set(\Rector\Php73\Rector\FuncCall\SetCookieRector::class);
 };

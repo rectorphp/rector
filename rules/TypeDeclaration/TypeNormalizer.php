@@ -16,8 +16,8 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
-use RectorPrefix20210920\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20210920\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20210921\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20210921\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
@@ -39,7 +39,7 @@ final class TypeNormalizer
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \RectorPrefix20210920\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \RectorPrefix20210921\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->typeFactory = $typeFactory;
         $this->unionTypeFactory = $unionTypeFactory;
