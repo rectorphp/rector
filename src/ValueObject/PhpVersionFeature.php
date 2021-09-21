@@ -182,4 +182,14 @@ final class PhpVersionFeature
      * @var int
      */
     public const ENUM = \Rector\Core\ValueObject\PhpVersion::PHP_81;
+    /**
+     * @see https://wiki.php.net/rfc/match_expression_v2
+     * @var int
+     */
+    public const MATCH = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @see https://wiki.php.net/rfc/non-capturing_catches
+     * @var int
+     */
+    public const NON_CAPTURING_CATCH = \Rector\Core\ValueObject\PhpVersion::PHP_80;
 }
