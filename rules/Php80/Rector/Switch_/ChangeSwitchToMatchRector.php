@@ -14,12 +14,14 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_ as ThrowsStmt;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -29,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\ChangeSwitchToMatchRectorTest
  */
-final class ChangeSwitchToMatchRector extends AbstractRector
+final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private SwitchExprsResolver $switchExprsResolver,
@@ -123,6 +125,11 @@ CODE_SAMPLE
         }
 
         return $match;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::MATCH;
     }
 
     private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr): Assign

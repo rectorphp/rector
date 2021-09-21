@@ -8,7 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Catch_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector\RemoveUnusedVariableInCatchRectorTest
  */
-final class RemoveUnusedVariableInCatchRector extends AbstractRector
+final class RemoveUnusedVariableInCatchRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
@@ -84,6 +86,11 @@ CODE_SAMPLE
         $node->var = null;
 
         return $node;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NON_CAPTURING_CATCH;
     }
 
     /**
