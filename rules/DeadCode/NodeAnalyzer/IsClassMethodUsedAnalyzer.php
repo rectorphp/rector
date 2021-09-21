@@ -118,6 +118,10 @@ final class IsClassMethodUsedAnalyzer
             }
 
             $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
+            if ($arrayCallable instanceof Array_) {
+                return true;
+            }
+
             if ($this->shouldSkipArrayCallable($class, $arrayCallable)) {
                 continue;
             }
@@ -132,7 +136,7 @@ final class IsClassMethodUsedAnalyzer
         return false;
     }
 
-    private function shouldSkipArrayCallable(Class_ $class, ?ArrayCallable $arrayCallable): bool
+    private function shouldSkipArrayCallable(Class_ $class, null | Array_ | ArrayCallable $arrayCallable): bool
     {
         if (! $arrayCallable instanceof ArrayCallable) {
             return true;

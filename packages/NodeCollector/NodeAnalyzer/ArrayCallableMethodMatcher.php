@@ -34,8 +34,11 @@ final class ArrayCallableMethodMatcher
 
     /**
      * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
+     * Returns back value $array when unknown method of callable used, eg: [$this, $other]
+     * @see https://github.com/rectorphp/rector-src/pull/908
+     * @see https://github.com/rectorphp/rector-src/pull/909
      */
-    public function match(Array_ $array): ?ArrayCallable
+    public function match(Array_ $array): null | Array_ | ArrayCallable
     {
         $arrayItems = $array->items;
         if (count($arrayItems) !== 2) {
@@ -48,27 +51,30 @@ final class ArrayCallableMethodMatcher
 
         /** @var ArrayItem[] $items */
         $items = $array->items;
-        $secondItemValue = $items[1]->value;
-
-        if (! $secondItemValue instanceof String_) {
-            return null;
-        }
-
-        if ($this->shouldSkipAssociativeArray($array)) {
-            return null;
-        }
 
         // $this, self, static, FQN
         $firstItemValue = $items[0]->value;
 
-        // static ::class reference?
-        if ($firstItemValue instanceof ClassConstFetch) {
-            $calleeType = $this->resolveClassConstFetchType($firstItemValue);
-        } else {
-            $calleeType = $this->nodeTypeResolver->resolve($firstItemValue);
-        }
+        $calleeType = $firstItemValue instanceof ClassConstFetch
+            // static ::class reference?
+            ? $this->resolveClassConstFetchType($firstItemValue)
+            : $this->nodeTypeResolver->resolve($firstItemValue);
 
         if (! $calleeType instanceof TypeWithClassName) {
+            return null;
+        }
+
+        $values = $this->valueResolver->getValue($array);
+        if ($values === []) {
+            return $array;
+        }
+
+        if ($this->shouldSkipAssociativeArray($values)) {
+            return null;
+        }
+
+        $secondItemValue = $items[1]->value;
+        if (! $secondItemValue instanceof String_) {
             return null;
         }
 
@@ -95,9 +101,11 @@ final class ArrayCallableMethodMatcher
         return $array->items[1] === null;
     }
 
-    private function shouldSkipAssociativeArray(Array_ $array): bool
+    /**
+     * @param mixed $values
+     */
+    private function shouldSkipAssociativeArray($values): bool
     {
-        $values = $this->valueResolver->getValue($array);
         if (! is_array($values)) {
             return false;
         }
