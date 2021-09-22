@@ -19,9 +19,10 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20210921\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20210921\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210921\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20210922\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20210922\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20210922\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210922\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var PhpParserNode|null
@@ -47,13 +48,18 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210921\Symplif
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210921\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    /**
+     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     */
+    private $classLikeExistenceChecker;
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20210922\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \RectorPrefix20210922\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->parameterProvider = $parameterProvider;
         $this->classNameImportSkipper = $classNameImportSkipper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->currentFileProvider = $currentFileProvider;
+        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
     }
     public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
@@ -107,13 +113,13 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210921\Symplif
             if (!$this->useNodesToAddCollector->isImportShortable($file, $fullyQualifiedObjectType)) {
                 return null;
             }
-            if ($newNode->name !== $identifierTypeNode->name) {
+            if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
                 $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
                 return $newNode;
             }
             return null;
         }
-        if ($newNode->name !== $identifierTypeNode->name) {
+        if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
             // do not import twice
             if ($this->useNodesToAddCollector->isShortImported($file, $fullyQualifiedObjectType)) {
                 return null;
@@ -122,6 +128,14 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20210921\Symplif
             return $newNode;
         }
         return null;
+    }
+    private function shouldImport(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $newNode, \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    {
+        if ($newNode->name === $identifierTypeNode->name) {
+            return \false;
+        }
+        $className = $fullyQualifiedObjectType->getClassName();
+        return $this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($className);
     }
     private function shouldSkipShortClassName(\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {

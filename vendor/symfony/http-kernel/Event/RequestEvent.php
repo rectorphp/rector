@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210921\Symfony\Component\HttpKernel\Event;
+namespace RectorPrefix20210922\Symfony\Component\HttpKernel\Event;
 
-use RectorPrefix20210921\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20210922\Symfony\Component\HttpFoundation\Response;
 /**
  * Allows to create a response for a request.
  *
@@ -20,7 +20,7 @@ use RectorPrefix20210921\Symfony\Component\HttpFoundation\Response;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-class RequestEvent extends \RectorPrefix20210921\Symfony\Component\HttpKernel\Event\KernelEvent
+class RequestEvent extends \RectorPrefix20210922\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $response;
     /**

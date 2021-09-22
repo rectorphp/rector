@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210921\Symfony\Component\Console\Input;
+namespace RectorPrefix20210922\Symfony\Component\Console\Input;
 
-use RectorPrefix20210921\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20210922\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException;
 /**
  * A InputDefinition represents a set of valid command line arguments and options.
  *
@@ -49,7 +49,7 @@ class InputDefinition
         $arguments = [];
         $options = [];
         foreach ($definition as $item) {
-            if ($item instanceof \RectorPrefix20210921\Symfony\Component\Console\Input\InputOption) {
+            if ($item instanceof \RectorPrefix20210922\Symfony\Component\Console\Input\InputOption) {
                 $options[] = $item;
             } else {
                 $arguments[] = $item;
@@ -91,13 +91,13 @@ class InputDefinition
     public function addArgument($argument)
     {
         if (isset($this->arguments[$argument->getName()])) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('An argument with name "%s" already exists.', $argument->getName()));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('An argument with name "%s" already exists.', $argument->getName()));
         }
         if (null !== $this->lastArrayArgument) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('Cannot add a required argument "%s" after an array argument "%s".', $argument->getName(), $this->lastArrayArgument->getName()));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('Cannot add a required argument "%s" after an array argument "%s".', $argument->getName(), $this->lastArrayArgument->getName()));
         }
         if ($argument->isRequired() && null !== $this->lastOptionalArgument) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('Cannot add a required argument "%s" after an optional one "%s".', $argument->getName(), $this->lastOptionalArgument->getName()));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('Cannot add a required argument "%s" after an optional one "%s".', $argument->getName(), $this->lastOptionalArgument->getName()));
         }
         if ($argument->isArray()) {
             $this->lastArrayArgument = $argument;
@@ -121,7 +121,7 @@ class InputDefinition
     public function getArgument($name)
     {
         if (!$this->hasArgument($name)) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
         }
         $arguments = \is_int($name) ? \array_values($this->arguments) : $this->arguments;
         return $arguments[$name];
@@ -206,15 +206,15 @@ class InputDefinition
     public function addOption($option)
     {
         if (isset($this->options[$option->getName()]) && !$option->equals($this->options[$option->getName()])) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $option->getName()));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $option->getName()));
         }
         if (isset($this->negations[$option->getName()])) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $option->getName()));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $option->getName()));
         }
         if ($option->getShortcut()) {
             foreach (\explode('|', $option->getShortcut()) as $shortcut) {
                 if (isset($this->shortcuts[$shortcut]) && !$option->equals($this->options[$this->shortcuts[$shortcut]])) {
-                    throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('An option with shortcut "%s" already exists.', $shortcut));
+                    throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('An option with shortcut "%s" already exists.', $shortcut));
                 }
             }
         }
@@ -227,7 +227,7 @@ class InputDefinition
         if ($option->isNegatable()) {
             $negatedName = 'no-' . $option->getName();
             if (isset($this->options[$negatedName])) {
-                throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $negatedName));
+                throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $negatedName));
             }
             $this->negations[$negatedName] = $option->getName();
         }
@@ -243,7 +243,7 @@ class InputDefinition
     public function getOption($name)
     {
         if (!$this->hasOption($name)) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $name));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $name));
         }
         return $this->options[$name];
     }
@@ -319,7 +319,7 @@ class InputDefinition
     public function shortcutToName($shortcut) : string
     {
         if (!isset($this->shortcuts[$shortcut])) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "-%s" option does not exist.', $shortcut));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "-%s" option does not exist.', $shortcut));
         }
         return $this->shortcuts[$shortcut];
     }
@@ -334,7 +334,7 @@ class InputDefinition
     public function negationToName($negation) : string
     {
         if (!isset($this->negations[$negation])) {
-            throw new \RectorPrefix20210921\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $negation));
+            throw new \RectorPrefix20210922\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $negation));
         }
         return $this->negations[$negation];
     }
