@@ -21,6 +21,7 @@ use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
@@ -32,7 +33,8 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         private ParameterProvider $parameterProvider,
         private ClassNameImportSkipper $classNameImportSkipper,
         private UseNodesToAddCollector $useNodesToAddCollector,
-        private CurrentFileProvider $currentFileProvider
+        private CurrentFileProvider $currentFileProvider,
+        private ClassLikeExistenceChecker $classLikeExistenceChecker
     ) {
     }
 
@@ -112,7 +114,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
                 return null;
             }
 
-            if ($newNode->name !== $identifierTypeNode->name) {
+            if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
                 $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
                 return $newNode;
             }
@@ -120,7 +122,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return null;
         }
 
-        if ($newNode->name !== $identifierTypeNode->name) {
+        if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
             // do not import twice
             if ($this->useNodesToAddCollector->isShortImported($file, $fullyQualifiedObjectType)) {
                 return null;
@@ -131,6 +133,20 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
 
         return null;
+    }
+
+    private function shouldImport(
+        IdentifierTypeNode $newNode,
+        IdentifierTypeNode $identifierTypeNode,
+        FullyQualifiedObjectType $fullyQualifiedObjectType
+    ): bool
+    {
+        if ($newNode->name === $identifierTypeNode->name) {
+            return false;
+        }
+
+        $className = $fullyQualifiedObjectType->getClassName();
+        return $this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($className);
     }
 
     private function shouldSkipShortClassName(FullyQualifiedObjectType $fullyQualifiedObjectType): bool
