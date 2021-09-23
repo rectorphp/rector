@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210922;
+namespace RectorPrefix20210923;
 
 if (\class_exists('Tx_Extbase_Validation_Exception_InvalidValidationOptions')) {
     return;

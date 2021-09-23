@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210922\TYPO3\CMS\Extbase\Mvc\View;
+namespace RectorPrefix20210923\TYPO3\CMS\Extbase\Mvc\View;
 
 if (\interface_exists('TYPO3\\CMS\\Extbase\\Mvc\\View\\ViewInterface')) {
     return;

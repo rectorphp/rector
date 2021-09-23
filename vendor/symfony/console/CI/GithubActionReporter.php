@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210922\Symfony\Component\Console\CI;
+namespace RectorPrefix20210923\Symfony\Component\Console\CI;
 
-use RectorPrefix20210922\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210923\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Utility class for Github actions.
  *
@@ -27,7 +27,7 @@ class GithubActionReporter
      * @see https://github.com/actions/toolkit/blob/5e5e1b7aacba68a53836a34db4a288c3c1c1585b/packages/core/src/command.ts#L87-L94
      */
     private const ESCAPED_PROPERTIES = ['%' => '%25', "\r" => '%0D', "\n" => '%0A', ':' => '%3A', ',' => '%2C'];
-    public function __construct(\RectorPrefix20210922\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(\RectorPrefix20210923\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $this->output = $output;
     }
