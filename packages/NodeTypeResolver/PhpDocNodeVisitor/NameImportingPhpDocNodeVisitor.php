@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
+use Nette\Utils\Strings;
 use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -139,14 +140,31 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         IdentifierTypeNode $newNode,
         IdentifierTypeNode $identifierTypeNode,
         FullyQualifiedObjectType $fullyQualifiedObjectType
-    ): bool
-    {
+    ): bool {
         if ($newNode->name === $identifierTypeNode->name) {
             return false;
         }
 
+        if (str_starts_with($identifierTypeNode->name, '\\')) {
+            return true;
+        }
+
         $className = $fullyQualifiedObjectType->getClassName();
-        return $this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($className);
+        if (! $this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($className)) {
+            return false;
+        }
+
+        $firstPath = Strings::before($identifierTypeNode->name, '\\' . $newNode->name);
+        if ($firstPath === null) {
+            return true;
+        }
+
+        if ($firstPath === '') {
+            return true;
+        }
+
+        $namespaceParts = explode('\\', ltrim($firstPath, '\\'));
+        return count($namespaceParts) > 1;
     }
 
     private function shouldSkipShortClassName(FullyQualifiedObjectType $fullyQualifiedObjectType): bool
