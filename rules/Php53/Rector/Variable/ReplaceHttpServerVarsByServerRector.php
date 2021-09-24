@@ -7,6 +7,8 @@ namespace Rector\Php53\Rector\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -14,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector\ReplaceHttpServerVarsByServerRectorTest
  * @changelog https://blog.tigertech.net/posts/php-5-3-http-server-vars/
  */
-final class ReplaceHttpServerVarsByServerRector extends AbstractRector
+final class ReplaceHttpServerVarsByServerRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var array<string, string>
@@ -28,6 +30,11 @@ final class ReplaceHttpServerVarsByServerRector extends AbstractRector
         'HTTP_ENV_VARS' => '_ENV',
         'HTTP_COOKIE_VARS' => '_COOKIE',
     ];
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::SERVER_VAR;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

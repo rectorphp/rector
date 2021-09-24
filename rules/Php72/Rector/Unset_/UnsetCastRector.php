@@ -9,15 +9,22 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Unset_;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php72\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
  */
-final class UnsetCastRector extends AbstractRector
+final class UnsetCastRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_UNSET_CAST;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Removes (unset) cast', [

@@ -13,6 +13,8 @@ use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\ConstantType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,8 +22,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://stackoverflow.com/a/12349889/1348344
  * @see \Rector\Tests\Php52\Rector\Switch_\ContinueToBreakInSwitchRector\ContinueToBreakInSwitchRectorTest
  */
-final class ContinueToBreakInSwitchRector extends AbstractRector
+final class ContinueToBreakInSwitchRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::CONTINUE_TO_BREAK;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Use break instead of continue in switch statements', [

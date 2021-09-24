@@ -8,8 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 use Rector\Php80\ValueObject\StrStartsWith;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\StrStartsWithRectorTest
  */
-final class StrStartsWithRector extends AbstractRector
+final class StrStartsWithRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @param StrStartWithMatchAndRefactorInterface[] $strStartWithMatchAndRefactors
@@ -29,6 +31,11 @@ final class StrStartsWithRector extends AbstractRector
     public function __construct(
         private array $strStartWithMatchAndRefactors
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::STR_STARTS_WITH;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -8,7 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php81\NodeFactory\EnumFactory;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,11 +20,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\Class_\SpatieEnumClassToEnumRector\SpatieEnumClassToEnumRectorTest
  */
-final class SpatieEnumClassToEnumRector extends AbstractRector
+final class SpatieEnumClassToEnumRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private EnumFactory $enumFactory
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ENUM;
     }
 
     public function getRuleDefinition(): RuleDefinition

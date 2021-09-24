@@ -7,14 +7,21 @@ namespace Rector\Php54\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php54\Rector\FuncCall\RemoveReferenceFromCallRector\RemoveReferenceFromCallRectorTest
  */
-final class RemoveReferenceFromCallRector extends AbstractRector
+final class RemoveReferenceFromCallRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_REFERENCE_IN_ARG;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove & from function and method calls', [

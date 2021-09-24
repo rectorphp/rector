@@ -16,6 +16,8 @@ use PHPStan\Reflection\Type\UnionTypeMethodReflection;
 use Rector\Core\NodeAnalyzer\VariadicAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,12 +27,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\RemoveExtraParametersRector\RemoveExtraParametersRectorTest
  */
-final class RemoveExtraParametersRector extends AbstractRector
+final class RemoveExtraParametersRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private VariadicAnalyzer $variadicAnalyzer,
         private ReflectionResolver $reflectionResolver
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_EXTRA_PARAMETERS;
     }
 
     public function getRuleDefinition(): RuleDefinition

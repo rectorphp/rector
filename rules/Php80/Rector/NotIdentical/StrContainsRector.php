@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,12 +21,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
  */
-final class StrContainsRector extends AbstractRector
+final class StrContainsRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string[]
      */
     private const OLD_STR_NAMES = ['strpos', 'strstr'];
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::STR_CONTAINS;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

@@ -8,6 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,8 +18,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Ternary\GetDebugTypeRector\GetDebugTypeRectorTest
  */
-final class GetDebugTypeRector extends AbstractRector
+final class GetDebugTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::GET_DEBUG_TYPE;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(

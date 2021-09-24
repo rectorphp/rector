@@ -9,7 +9,9 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,8 +20,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector\ParseStrWithResultArgumentRectorTest
  */
-final class ParseStrWithResultArgumentRector extends AbstractRector
+final class ParseStrWithResultArgumentRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::RESULT_ARG_IN_PARSE_STR;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(

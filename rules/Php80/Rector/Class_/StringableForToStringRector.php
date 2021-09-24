@@ -11,7 +11,9 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\StringableForToStringRector\StringableForToStringRectorTest
  */
-final class StringableForToStringRector extends AbstractRector
+final class StringableForToStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -30,6 +32,11 @@ final class StringableForToStringRector extends AbstractRector
     public function __construct(
         private FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::STRINGABLE;
     }
 
     public function getRuleDefinition(): RuleDefinition

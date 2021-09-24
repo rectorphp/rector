@@ -10,6 +10,12 @@ final class PhpVersion
      * @api
      * @var int
      */
+    public const PHP_52 = 50200;
+
+    /**
+     * @api
+     * @var int
+     */
     public const PHP_53 = 50300;
 
     /**

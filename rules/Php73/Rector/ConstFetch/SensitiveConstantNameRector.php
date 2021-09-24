@@ -10,7 +10,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
-final class SensitiveConstantNameRector extends AbstractRector
+final class SensitiveConstantNameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @see http://php.net/manual/en/reserved.constants.php
@@ -87,6 +89,11 @@ final class SensitiveConstantNameRector extends AbstractRector
     public function __construct(
         private ReflectionProvider $reflectionProvider
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
     }
 
     public function getRuleDefinition(): RuleDefinition

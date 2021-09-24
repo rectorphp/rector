@@ -25,6 +25,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
 use Rector\Php71\NodeAnalyzer\CountableAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -33,7 +34,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\CountOnNullRectorTest
  */
-final class CountOnNullRector extends AbstractRector
+final class CountOnNullRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -44,6 +45,11 @@ final class CountOnNullRector extends AbstractRector
         private CountableTypeAnalyzer $countableTypeAnalyzer,
         private CountableAnalyzer $countableAnalyzer
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::COUNT_ON_NULL;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -17,6 +17,10 @@ services:
         class: Rector\PHPStanRules\Rules\PhpUpgradeDowngradeRegisteredInSetRule
         tags: [phpstan.rules.rule]
 
+    -
+        class: Rector\PHPStanRules\Rules\PhpUpgradeImplementsMinPhpVersionInterfaceRule
+        tags: [phpstan.rules.rule]
+
 parameters:
     level: max
 

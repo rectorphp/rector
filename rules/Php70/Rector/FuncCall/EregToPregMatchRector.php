@@ -16,8 +16,10 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\EregToPcreTransformer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\FuncCall\EregToPregMatchRector\EregToPregMatchRectorTest
  */
-final class EregToPregMatchRector extends AbstractRector
+final class EregToPregMatchRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var array<string, string>
@@ -43,6 +45,11 @@ final class EregToPregMatchRector extends AbstractRector
     public function __construct(
         private EregToPcreTransformer $eregToPcreTransformer
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_EREG_FUNCTION;
     }
 
     public function getRuleDefinition(): RuleDefinition

@@ -8,7 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/deprecations_php_7_3#string_search_functions_with_integer_needle
  * @see \Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\StringifyStrNeedlesRectorTest
  */
-final class StringifyStrNeedlesRector extends AbstractRector
+final class StringifyStrNeedlesRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string[]
@@ -37,6 +39,11 @@ final class StringifyStrNeedlesRector extends AbstractRector
     public function __construct(
         private NodeTypeAnalyzer $nodeTypeAnalyzer
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::DEPRECATE_INT_IN_STR_NEEDLES;
     }
 
     public function getRuleDefinition(): RuleDefinition

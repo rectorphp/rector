@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://stackoverflow.com/a/47965344/1348344
  * @see \Rector\Tests\Php70\Rector\Assign\ListSplitStringRector\ListSplitStringRectorTest
  */
-final class ListSplitStringRector extends AbstractRector
+final class ListSplitStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -26,6 +28,11 @@ final class ListSplitStringRector extends AbstractRector
             'list() cannot split string directly anymore, use str_split()',
             [new CodeSample('list($foo) = "string";', 'list($foo) = str_split("string");')]
         );
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_LIST_SPLIT_STRING;
     }
 
     /**

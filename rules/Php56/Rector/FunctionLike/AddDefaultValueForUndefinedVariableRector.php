@@ -16,7 +16,9 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php56\NodeAnalyzer\UndefinedVariableResolver;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php56\Rector\FunctionLike\AddDefaultValueForUndefinedVariableRector\AddDefaultValueForUndefinedVariableRectorTest
  */
-final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
+final class AddDefaultValueForUndefinedVariableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -37,6 +39,11 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector
         private UndefinedVariableResolver $undefinedVariableResolver,
         private InlineHTMLAnalyzer $inlineHTMLAnalyzer
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::REQUIRE_DEFAULT_VALUE;
     }
 
     public function getRuleDefinition(): RuleDefinition

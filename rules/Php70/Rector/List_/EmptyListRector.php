@@ -9,6 +9,8 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog http://php.net/manual/en/migration70.incompatible.php#migration70.incompatible.variable-handling.list
  * @see \Rector\Tests\Php70\Rector\List_\EmptyListRector\EmptyListRectorTest
  */
-final class EmptyListRector extends AbstractRector
+final class EmptyListRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition(): RuleDefinition
     {
@@ -32,6 +34,11 @@ CODE_SAMPLE
 CODE_SAMPLE
             )]
         );
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_EMPTY_LIST;
     }
 
     /**

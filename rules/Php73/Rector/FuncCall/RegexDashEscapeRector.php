@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/dRG8U
  * @see \Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\RegexDashEscapeRectorTest
  */
-final class RegexDashEscapeRector extends AbstractRector
+final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -44,6 +46,11 @@ final class RegexDashEscapeRector extends AbstractRector
     public function __construct(
         private RegexPatternArgumentManipulator $regexPatternArgumentManipulator
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::ESCAPE_DASH_IN_REGEX;
     }
 
     public function getRuleDefinition(): RuleDefinition

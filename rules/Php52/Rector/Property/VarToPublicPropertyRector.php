@@ -7,14 +7,21 @@ namespace Rector\Php52\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php52\Rector\Property\VarToPublicPropertyRector\VarToPublicPropertyRectorTest
  */
-final class VarToPublicPropertyRector extends AbstractRector
+final class VarToPublicPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::PROPERTY_MODIFIER;
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change property modifier from `var` to `public`', [

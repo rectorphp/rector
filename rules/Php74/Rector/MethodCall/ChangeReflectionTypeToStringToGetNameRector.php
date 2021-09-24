@@ -14,7 +14,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,7 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\ChangeReflectionTypeToStringToGetNameRectorTest
  */
-final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector
+final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -38,6 +40,11 @@ final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector
      * @var string[][]
      */
     private array $callsByVariable = [];
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::REFLECTION_TYPE_GETNAME;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

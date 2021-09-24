@@ -10,8 +10,10 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php55\RegexMatcher;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -20,12 +22,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
-final class PregReplaceEModifierRector extends AbstractRector
+final class PregReplaceEModifierRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private AnonymousFunctionFactory $anonymousFunctionFactory,
         private RegexMatcher $regexMatcher
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::PREG_REPLACE_CALLBACK_E_MODIFIER;
     }
 
     public function getRuleDefinition(): RuleDefinition

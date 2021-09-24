@@ -7,8 +7,10 @@ namespace Rector\Php74\Rector\ArrayDimFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php74\Tokenizer\FollowedByCurlyBracketAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -16,11 +18,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://www.php.net/manual/en/migration74.deprecated.php
  * @see \Rector\Tests\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector\CurlyToSquareBracketArrayStringRectorTest
  */
-final class CurlyToSquareBracketArrayStringRector extends AbstractRector
+final class CurlyToSquareBracketArrayStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer
     ) {
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::DEPRECATE_CURLY_BRACKET_ARRAY_STRING;
     }
 
     public function getRuleDefinition(): RuleDefinition

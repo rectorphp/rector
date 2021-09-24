@@ -23,10 +23,12 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -35,7 +37,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\NonVariableToVariableOnFunctionCallRectorTest
  */
-final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
+final class NonVariableToVariableOnFunctionCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private VariableNaming $variableNaming,
@@ -50,6 +52,11 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector
             'Transform non variable like arguments to variable where a function or method expects an argument passed by reference',
             [new CodeSample('reset(a());', '$a = a(); reset($a);')]
         );
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::VARIABLE_ON_FUNC_CALL;
     }
 
     /**

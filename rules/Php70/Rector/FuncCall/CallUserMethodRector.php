@@ -8,13 +8,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Php70\Rector\FuncCall\CallUserMethodRector\CallUserMethodRectorTest
  */
-final class CallUserMethodRector extends AbstractRector
+final class CallUserMethodRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var array<string, string>
@@ -23,6 +25,11 @@ final class CallUserMethodRector extends AbstractRector
         'call_user_method' => 'call_user_func',
         'call_user_method_array' => 'call_user_func_array',
     ];
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::NO_CALL_USER_METHOD;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

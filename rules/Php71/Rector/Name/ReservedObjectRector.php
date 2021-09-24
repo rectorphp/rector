@@ -10,7 +10,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\Name\ReservedObjectRector\ReservedObjectRectorTest
  */
-final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface
+final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @var string
@@ -30,6 +32,11 @@ final class ReservedObjectRector extends AbstractRector implements ConfigurableR
      * @var array<string, string>
      */
     private array $reservedKeywordsToReplacements = [];
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::RESERVED_OBJECT_KEYWORD;
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
