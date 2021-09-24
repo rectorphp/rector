@@ -20,6 +20,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyFetchFinder
 {
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
+
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
@@ -75,7 +80,7 @@ final class PropertyFetchFinder
         foreach ($propertyFetches as $propertyFetch) {
             if ($propertyFetch instanceof PropertyFetch && ! $this->nodeNameResolver->isName(
                 $propertyFetch->var,
-                'this'
+                self::THIS
             )) {
                 continue;
             }
@@ -125,15 +130,19 @@ final class PropertyFetchFinder
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->find($nodes, function (Node $node) use ($propertyName): bool {
             // property + static fetch
-            if ($node instanceof PropertyFetch) {
+            if ($node instanceof PropertyFetch && $this->nodeNameResolver->isName($node->var, self::THIS)) {
                 return $this->nodeNameResolver->isName($node, $propertyName);
             }
 
-            if ($node instanceof StaticPropertyFetch) {
-                return $this->nodeNameResolver->isName($node, $propertyName);
+            if (! $node instanceof StaticPropertyFetch) {
+                return false;
             }
 
-            return false;
+            if (! $this->nodeNameResolver->isNames($node->class, ['self', self::THIS, 'static'])) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($node, $propertyName);
         });
 
         return $propertyFetches;

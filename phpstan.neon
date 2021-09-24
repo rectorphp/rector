@@ -517,3 +517,11 @@ parameters:
         - '#Register Rector\\Php71\\Rector\\Name\\ReservedObjectRector to php71 config set#'
         - '#Register Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector to php80 config set#'
         - '#Register Rector\\Php80\\Rector\\Class_\\DoctrineAnnotationClassToAttributeRector to php80 config set#'
+
+        -
+            message: '#Class has a static method must so must contains "Static" in its name#'
+            paths:
+                - packages/FileFormatter/ValueObject/Indent.php #17
+                - packages/FileFormatter/ValueObject/NewLine.php #15
+                - src/Application/VersionResolver.php #16
+                - utils/compiler/src/Unprefixer.php #9
