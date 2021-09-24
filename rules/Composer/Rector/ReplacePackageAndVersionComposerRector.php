@@ -6,10 +6,10 @@ namespace Rector\Composer\Rector;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\Guard\VersionGuard;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
-use RectorPrefix20210923\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20210924\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210923\Webmozart\Assert\Assert;
+use RectorPrefix20210924\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\ReplacePackageAndVersionComposerRector\ReplacePackageAndVersionComposerRectorTest
  */
@@ -31,7 +31,7 @@ final class ReplacePackageAndVersionComposerRector implements \Rector\Composer\C
     {
         $this->versionGuard = $versionGuard;
     }
-    public function refactor(\RectorPrefix20210923\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20210924\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->replacePackagesAndVersions as $replacePackageAndVersion) {
             $composerJson->replacePackage($replacePackageAndVersion->getOldPackageName(), $replacePackageAndVersion->getNewPackageName(), $replacePackageAndVersion->getVersion());
@@ -61,7 +61,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? [];
-        \RectorPrefix20210923\Webmozart\Assert\Assert::allIsInstanceOf($replacePackagesAndVersions, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
+        \RectorPrefix20210924\Webmozart\Assert\Assert::allIsInstanceOf($replacePackagesAndVersions, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
         $this->versionGuard->validate($replacePackagesAndVersions);
         $this->replacePackagesAndVersions = $replacePackagesAndVersions;
     }

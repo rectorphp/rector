@@ -14,8 +14,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class ConfigureOptionsNodeFactory
 {
     /**
@@ -26,7 +26,7 @@ final class ConfigureOptionsNodeFactory
         $resolverParam = $this->createParam();
         $args = $this->createArgs($namesToArgs);
         $setDefaultsMethodCall = new \PhpParser\Node\Expr\MethodCall($resolverParam->var, new \PhpParser\Node\Identifier('setDefaults'), $args);
-        $methodBuilder = new \RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('configureOptions');
+        $methodBuilder = new \RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('configureOptions');
         $methodBuilder->makePublic();
         $methodBuilder->addParam($resolverParam);
         $methodBuilder->addStmt($setDefaultsMethodCall);
@@ -34,7 +34,7 @@ final class ConfigureOptionsNodeFactory
     }
     private function createParam() : \PhpParser\Node\Param
     {
-        $paramBuilder = new \RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('resolver');
+        $paramBuilder = new \RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('resolver');
         $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\OptionsResolver\\OptionsResolver'));
         return $paramBuilder->getNode();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210923;
+namespace RectorPrefix20210924;
 
 if (\class_exists('Tx_Workspaces_Service_GridData')) {
     return;

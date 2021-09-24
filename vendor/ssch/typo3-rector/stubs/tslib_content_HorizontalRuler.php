@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210923;
+namespace RectorPrefix20210924;
 
 if (\class_exists('tslib_content_HorizontalRuler')) {
     return;

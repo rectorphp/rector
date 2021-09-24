@@ -12,8 +12,8 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -87,9 +87,9 @@ CODE_SAMPLE
     }
     private function addMethodGetControllerConfiguration(\PhpParser\Node\Stmt\Class_ $node) : void
     {
-        $methodBuilder = new \RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('getControllerConfiguration');
+        $methodBuilder = new \RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('getControllerConfiguration');
         $methodBuilder->makeProtected();
-        $methodBuilder->addParams([(new \RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('extensionName'))->getNode(), (new \RectorPrefix20210923\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('pluginName'))->getNode()]);
+        $methodBuilder->addParams([(new \RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('extensionName'))->getNode(), (new \RectorPrefix20210924\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('pluginName'))->getNode()]);
         $newMethod = $methodBuilder->getNode();
         $newMethod->returnType = new \PhpParser\Node\Identifier('array');
         $newMethod->stmts[] = new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createMethodCall('this', 'getSwitchableControllerActions', [new \PhpParser\Node\Expr\Variable('extensionName'), new \PhpParser\Node\Expr\Variable('pluginName')]));

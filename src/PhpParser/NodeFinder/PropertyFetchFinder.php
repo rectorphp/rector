@@ -19,6 +19,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyFetchFinder
 {
     /**
+     * @var string
+     */
+    private const THIS = 'this';
+    /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -80,7 +84,7 @@ final class PropertyFetchFinder
         $propertyFetches = $this->betterNodeFinder->findInstancesOf($class, [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class]);
         $foundPropertyFetches = [];
         foreach ($propertyFetches as $propertyFetch) {
-            if ($propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+            if ($propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
                 continue;
             }
             if ($propertyFetch instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->class, 'self')) {
@@ -118,13 +122,16 @@ final class PropertyFetchFinder
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->find($nodes, function (\PhpParser\Node $node) use($propertyName) : bool {
             // property + static fetch
-            if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if ($node instanceof \PhpParser\Node\Expr\PropertyFetch && $this->nodeNameResolver->isName($node->var, self::THIS)) {
                 return $this->nodeNameResolver->isName($node, $propertyName);
             }
-            if ($node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
-                return $this->nodeNameResolver->isName($node, $propertyName);
+            if (!$node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+                return \false;
             }
-            return \false;
+            if (!$this->nodeNameResolver->isNames($node->class, ['self', self::THIS, 'static'])) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($node, $propertyName);
         });
         return $propertyFetches;
     }
