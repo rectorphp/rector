@@ -22,10 +22,12 @@ use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -33,7 +35,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\FuncCall\NonVariableToVariableOnFunctionCallRector\NonVariableToVariableOnFunctionCallRectorTest
  */
-final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Rector\AbstractRector
+final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Naming\Naming\VariableNaming
@@ -56,6 +58,10 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Transform non variable like arguments to variable where a function or method expects an argument passed by reference', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('reset(a());', '$a = a(); reset($a);')]);
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::VARIABLE_ON_FUNC_CALL;
     }
     /**
      * @return array<class-string<Node>>

@@ -10,14 +10,16 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://3v4l.org/dRG8U
  * @see \Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\RegexDashEscapeRectorTest
  */
-final class RegexDashEscapeRector extends \Rector\Core\Rector\AbstractRector
+final class RegexDashEscapeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -43,6 +45,10 @@ final class RegexDashEscapeRector extends \Rector\Core\Rector\AbstractRector
     public function __construct(\Rector\Core\Php\Regex\RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
     {
         $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::ESCAPE_DASH_IN_REGEX;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -11,15 +11,17 @@ use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeCollector\StaticAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://3v4l.org/rkiSC
  * @see \Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\ThisCallOnStaticMethodToStaticCallRectorTest
  */
-final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector\AbstractRector
+final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\NodeCollector\StaticAnalyzer
@@ -33,6 +35,10 @@ final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector
     {
         $this->staticAnalyzer = $staticAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::STATIC_CALL;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
 use Rector\Php80\ValueObject\StrStartsWith;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\StrStartsWithRectorTest
  */
-final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector
+final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface[]
@@ -31,6 +33,10 @@ final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector
     public function __construct(array $strStartWithMatchAndRefactors)
     {
         $this->strStartWithMatchAndRefactors = $strStartWithMatchAndRefactors;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::STR_STARTS_WITH;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

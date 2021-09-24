@@ -14,8 +14,10 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeCollector\StaticAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */
-final class StaticCallOnNonStaticToInstanceCallRector extends \Rector\Core\Rector\AbstractRector
+final class StaticCallOnNonStaticToInstanceCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\NodeCollector\StaticAnalyzer
@@ -48,6 +50,10 @@ final class StaticCallOnNonStaticToInstanceCallRector extends \Rector\Core\Recto
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::INSTANCE_CALL;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

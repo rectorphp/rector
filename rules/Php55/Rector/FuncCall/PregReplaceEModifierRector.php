@@ -9,8 +9,10 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php55\RegexMatcher;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
-final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector
+final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
@@ -32,6 +34,10 @@ final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRecto
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->regexMatcher = $regexMatcher;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::PREG_REPLACE_CALLBACK_E_MODIFIER;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

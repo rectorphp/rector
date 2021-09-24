@@ -13,7 +13,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -24,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\ChangeReflectionTypeToStringToGetNameRectorTest
  */
-final class ChangeReflectionTypeToStringToGetNameRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeReflectionTypeToStringToGetNameRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -35,6 +37,10 @@ final class ChangeReflectionTypeToStringToGetNameRector extends \Rector\Core\Rec
      * @var string[][]
      */
     private $callsByVariable = [];
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::REFLECTION_TYPE_GETNAME;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change string calls on ReflectionType', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'

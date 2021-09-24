@@ -15,11 +15,13 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttributeFlagFactory;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20210924\Webmozart\Assert\Assert;
@@ -31,7 +33,7 @@ use RectorPrefix20210924\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector\DoctrineAnnotationClassToAttributeRectorTest
  */
-final class DoctrineAnnotationClassToAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class DoctrineAnnotationClassToAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -85,6 +87,10 @@ final class DoctrineAnnotationClassToAttributeRector extends \Rector\Core\Rector
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->propertyToAddCollector = $propertyToAddCollector;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::ATTRIBUTES;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

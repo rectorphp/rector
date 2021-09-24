@@ -14,8 +14,10 @@ use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
 use Rector\Nette\ValueObject\FuncCallAndExpr;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\Identical\StrEndsWithRector\StrEndsWithRectorTest
  */
-final class StrEndsWithRector extends \Rector\Core\Rector\AbstractRector
+final class StrEndsWithRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer
@@ -32,6 +34,10 @@ final class StrEndsWithRector extends \Rector\Core\Rector\AbstractRector
     public function __construct(\Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer $binaryOpAnalyzer)
     {
         $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::STR_ENDS_WITH;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

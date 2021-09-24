@@ -10,12 +10,13 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php71\IsArrayAndDualCheckToAble;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php71\Rector\BooleanOr\IsIterableRector\IsIterableRectorTest
  */
-final class IsIterableRector extends \Rector\Core\Rector\AbstractRector
+final class IsIterableRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Php71\IsArrayAndDualCheckToAble
@@ -29,6 +30,10 @@ final class IsIterableRector extends \Rector\Core\Rector\AbstractRector
     {
         $this->isArrayAndDualCheckToAble = $isArrayAndDualCheckToAble;
         $this->reflectionProvider = $reflectionProvider;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::IS_ITERABLE;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

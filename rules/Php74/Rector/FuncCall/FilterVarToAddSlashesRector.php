@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -14,8 +16,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/9rLjE
  * @see \Rector\Tests\Php74\Rector\FuncCall\FilterVarToAddSlashesRector\FilterVarToAddSlashesRectorTest
  */
-final class FilterVarToAddSlashesRector extends \Rector\Core\Rector\AbstractRector
+final class FilterVarToAddSlashesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::FILTER_VAR_TO_ADD_SLASHES;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change filter_var() with slash escaping to addslashes()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'

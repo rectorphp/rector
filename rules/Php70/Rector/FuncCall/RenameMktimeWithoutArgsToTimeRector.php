@@ -7,13 +7,15 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://3v4l.org/F5GE8
  * @see \Rector\Tests\Php70\Rector\FuncCall\RenameMktimeWithoutArgsToTimeRector\RenameMktimeWithoutArgsToTimeRectorTest
  */
-final class RenameMktimeWithoutArgsToTimeRector extends \Rector\Core\Rector\AbstractRector
+final class RenameMktimeWithoutArgsToTimeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -38,6 +40,10 @@ class SomeClass
 }
 CODE_SAMPLE
 )]);
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::NO_MKTIME_WITHOUT_ARG;
     }
     /**
      * @return array<class-string<Node>>

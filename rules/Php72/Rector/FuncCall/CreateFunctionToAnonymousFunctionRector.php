@@ -20,7 +20,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -28,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
-final class CreateFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector
+final class CreateFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
@@ -47,6 +49,10 @@ final class CreateFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\
         $this->inlineCodeParser = $inlineCodeParser;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_CREATE_FUNCTION;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

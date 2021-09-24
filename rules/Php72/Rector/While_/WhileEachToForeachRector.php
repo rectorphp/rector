@@ -12,6 +12,8 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php72\Rector\While_\WhileEachToForeachRector\WhileEachToForeachRectorTest
  */
-final class WhileEachToForeachRector extends \Rector\Core\Rector\AbstractRector
+final class WhileEachToForeachRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Core\NodeManipulator\AssignManipulator
@@ -28,6 +30,10 @@ final class WhileEachToForeachRector extends \Rector\Core\Rector\AbstractRector
     public function __construct(\Rector\Core\NodeManipulator\AssignManipulator $assignManipulator)
     {
         $this->assignManipulator = $assignManipulator;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_EACH;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

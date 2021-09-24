@@ -7,7 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ContextAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -16,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/Qtelt
  * @see \Rector\Tests\Php70\Rector\Break_\BreakNotInLoopOrSwitchToReturnRector\BreakNotInLoopOrSwitchToReturnRectorTest
  */
-final class BreakNotInLoopOrSwitchToReturnRector extends \Rector\Core\Rector\AbstractRector
+final class BreakNotInLoopOrSwitchToReturnRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\NodeNestingScope\ContextAnalyzer
@@ -25,6 +27,10 @@ final class BreakNotInLoopOrSwitchToReturnRector extends \Rector\Core\Rector\Abs
     public function __construct(\Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)
     {
         $this->contextAnalyzer = $contextAnalyzer;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::NO_BREAK_OUTSIDE_LOOP;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

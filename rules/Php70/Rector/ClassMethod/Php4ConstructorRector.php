@@ -16,15 +16,17 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/remove_php4_constructors
  * @see \Rector\Tests\Php70\Rector\ClassMethod\Php4ConstructorRector\Php4ConstructorRectorTest
  */
-final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractRector
+final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer
@@ -33,6 +35,10 @@ final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractRector
     public function __construct(\Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer)
     {
         $this->php4ConstructorClassMethodAnalyzer = $php4ConstructorClassMethodAnalyzer;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::NO_PHP4_CONSTRUCTOR;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

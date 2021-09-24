@@ -8,11 +8,35 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const PROPERTY_MODIFIER = \Rector\Core\ValueObject\PhpVersion::PHP_52;
+    /**
+     * @var int
+     */
+    public const CONTINUE_TO_BREAK = \Rector\Core\ValueObject\PhpVersion::PHP_52;
+    /**
+     * @var int
+     */
+    public const NO_REFERENCE_IN_NEW = \Rector\Core\ValueObject\PhpVersion::PHP_53;
+    /**
+     * @var int
+     */
+    public const SERVER_VAR = \Rector\Core\ValueObject\PhpVersion::PHP_53;
+    /**
+     * @var int
+     */
     public const DIR_CONSTANT = \Rector\Core\ValueObject\PhpVersion::PHP_53;
     /**
      * @var int
      */
     public const ELVIS_OPERATOR = \Rector\Core\ValueObject\PhpVersion::PHP_53;
+    /**
+     * @var int
+     */
+    public const NO_ZERO_BREAK = \Rector\Core\ValueObject\PhpVersion::PHP_54;
+    /**
+     * @var int
+     */
+    public const NO_REFERENCE_IN_ARG = \Rector\Core\ValueObject\PhpVersion::PHP_54;
     /**
      * @var int
      */
@@ -22,10 +46,21 @@ final class PhpVersionFeature
      * @var int
      */
     public const CLASSNAME_CONSTANT = \Rector\Core\ValueObject\PhpVersion::PHP_55;
+    /*
+     * @var int
+     */
+    /**
+     * @var int
+     */
+    public const PREG_REPLACE_CALLBACK_E_MODIFIER = \Rector\Core\ValueObject\PhpVersion::PHP_55;
     /**
      * @var int
      */
     public const EXP_OPERATOR = \Rector\Core\ValueObject\PhpVersion::PHP_56;
+    /**
+     * @var int
+     */
+    public const REQUIRE_DEFAULT_VALUE = \Rector\Core\ValueObject\PhpVersion::PHP_56;
     /**
      * @var int
      */
@@ -57,6 +92,54 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const NO_LIST_SPLIT_STRING = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_BREAK_OUTSIDE_LOOP = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_PHP4_CONSTRUCTOR = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_CALL_USER_METHOD = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_EREG_FUNCTION = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const VARIABLE_ON_FUNC_CALL = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_MKTIME_WITHOUT_ARG = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_EMPTY_LIST = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const STATIC_CALL = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const INSTANCE_CALL = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const NO_MULTIPLE_DEFAULT_SWITCH = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
+    public const WRAP_VARIABLE_VARIABLE = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    /**
+     * @var int
+     */
     public const ITERABLE_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_71;
     /**
      * @var int
@@ -77,7 +160,59 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const NO_ASSIGN_ARRAY_TO_STRING = \Rector\Core\ValueObject\PhpVersion::PHP_71;
+    /**
+     * @var int
+     */
+    public const BINARY_OP_NUMBER_STRING = \Rector\Core\ValueObject\PhpVersion::PHP_71;
+    /**
+     * @var int
+     */
+    public const NO_EXTRA_PARAMETERS = \Rector\Core\ValueObject\PhpVersion::PHP_71;
+    /**
+     * @var int
+     */
+    public const RESERVED_OBJECT_KEYWORD = \Rector\Core\ValueObject\PhpVersion::PHP_71;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_EACH = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
     public const OBJECT_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const NO_EACH_OUTSIDE_LOOP = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_CREATE_FUNCTION = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const NO_NULL_ON_GET_CLASS = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const INVERTED_BOOL_IS_OBJECT_INCOMPLETE_CLASS = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const RESULT_ARG_IN_PARSE_STR = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const STRING_IN_FIRST_DEFINE_ARG = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const STRING_IN_ASSERT_ARG = \Rector\Core\ValueObject\PhpVersion::PHP_72;
+    /**
+     * @var int
+     */
+    public const NO_UNSET_CAST = \Rector\Core\ValueObject\PhpVersion::PHP_72;
     /**
      * @var int
      */
@@ -94,6 +229,26 @@ final class PhpVersionFeature
      * @var int
      */
     public const SETCOOKIE_ACCEPT_ARRAY_OPTIONS = \Rector\Core\ValueObject\PhpVersion::PHP_73;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_INSENSITIVE_CONSTANT_NAME = \Rector\Core\ValueObject\PhpVersion::PHP_73;
+    /**
+     * @var int
+     */
+    public const ESCAPE_DASH_IN_REGEX = \Rector\Core\ValueObject\PhpVersion::PHP_73;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_INSENSITIVE_CONSTANT_DEFINE = \Rector\Core\ValueObject\PhpVersion::PHP_73;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_INT_IN_STR_NEEDLES = \Rector\Core\ValueObject\PhpVersion::PHP_73;
+    /**
+     * @var int
+     */
+    public const SENSITIVE_HERE_NOW_DOC = \Rector\Core\ValueObject\PhpVersion::PHP_73;
     /**
      * @var int
      */
@@ -122,6 +277,38 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const DEPRECATE_CURLY_BRACKET_ARRAY_STRING = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_REAL = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const ARRAY_KEY_EXISTS_TO_PROPERTY_EXISTS = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const FILTER_VAR_TO_ADD_SLASHES = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const CHANGE_MB_STRPOS_ARG_POSITION = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const RESERVED_FN_FUNCTION_NAME = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const REFLECTION_TYPE_GETNAME = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
+    public const EXPORT_TO_REFLECTION_FUNCTION = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
     public const UNION_TYPES = \Rector\Core\ValueObject\PhpVersion::PHP_80;
     /**
      * @var int
@@ -131,6 +318,18 @@ final class PhpVersionFeature
      * @var int
      */
     public const STATIC_RETURN_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const NO_FINAL_PRIVATE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_REQUIRED_PARAMETER_AFTER_OPTIONAL = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const STATIC_VISIBILITY_SET_STATE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
     /**
      * @var int
      */
@@ -157,6 +356,30 @@ final class PhpVersionFeature
      * @var int
      */
     public const ATTRIBUTES = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const STRINGABLE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const PHP_TOKEN = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const STR_ENDS_WITH = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const STR_STARTS_WITH = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const STR_CONTAINS = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const GET_DEBUG_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
     /**
      * @see https://wiki.php.net/rfc/noreturn_type
      * @var int

@@ -6,15 +6,17 @@ namespace Rector\Php74\Rector\ArrayDimFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php74\Tokenizer\FollowedByCurlyBracketAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/migration74.deprecated.php
  * @see \Rector\Tests\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector\CurlyToSquareBracketArrayStringRectorTest
  */
-final class CurlyToSquareBracketArrayStringRector extends \Rector\Core\Rector\AbstractRector
+final class CurlyToSquareBracketArrayStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Php74\Tokenizer\FollowedByCurlyBracketAnalyzer
@@ -23,6 +25,10 @@ final class CurlyToSquareBracketArrayStringRector extends \Rector\Core\Rector\Ab
     public function __construct(\Rector\Php74\Tokenizer\FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer)
     {
         $this->followedByCurlyBracketAnalyzer = $followedByCurlyBracketAnalyzer;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_CURLY_BRACKET_ARRAY_STRING;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

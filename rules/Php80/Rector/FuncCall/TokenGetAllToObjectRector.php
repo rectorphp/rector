@@ -13,9 +13,11 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeManipulator\TokenManipulator;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\FuncCall\TokenGetAllToObjectRector\TokenGetAllToObjectRectorTest
  */
-final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector
+final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var \Rector\Php80\NodeManipulator\TokenManipulator
@@ -37,6 +39,10 @@ final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector
     {
         $this->tokenManipulator = $tokenManipulator;
         $this->parentFinder = $parentFinder;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::PHP_TOKEN;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
