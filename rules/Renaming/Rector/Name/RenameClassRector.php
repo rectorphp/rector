@@ -5,11 +5,16 @@ namespace Rector\Renaming\Rector\Name;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Use_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -32,6 +37,10 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var string
      */
     public const CLASS_MAP_FILES = 'class_map_files';
+    /**
+     * @var bool
+     */
+    private $classDocImported = \false;
     /**
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -78,15 +87,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Name::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
+        return [\PhpParser\Node\Name::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\Stmt\Use_::class];
     }
     /**
-     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
+     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace|Use_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        return $this->classRenamer->renameNode($node, $oldToNewClasses);
+        if (!$node instanceof \PhpParser\Node\Stmt\Use_) {
+            if ($this->shouldClassDocImported($node)) {
+                $this->classDocImported = \true;
+            }
+            return $this->classRenamer->renameNode($node, $oldToNewClasses);
+        }
+        if (!$this->classDocImported) {
+            return null;
+        }
+        return $this->processCleanUpUse($node, $oldToNewClasses);
     }
     /**
      * @param array<string, array<string, string>> $configuration
@@ -101,6 +119,37 @@ CODE_SAMPLE
             $oldToNewClasses = (require_once $classMapFile);
             $this->addOldToNewClasses($oldToNewClasses);
         }
+    }
+    /**
+     * @param \PhpParser\Node\FunctionLike|\PhpParser\Node\Name|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Property|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $node
+     */
+    private function shouldClassDocImported($node) : bool
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
+            return \false;
+        }
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            return \false;
+        }
+        if (!$varTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+            return \false;
+        }
+        return \strpos($varTagValueNode->type->name, '\\') === \false;
+    }
+    /**
+     * @param array<string, string> $oldToNewClasses
+     */
+    private function processCleanUpUse(\PhpParser\Node\Stmt\Use_ $use, array $oldToNewClasses) : ?\PhpParser\Node\Stmt\Use_
+    {
+        foreach ($use->uses as $useUse) {
+            if ($useUse->name instanceof \PhpParser\Node\Name && !$useUse->alias instanceof \PhpParser\Node\Identifier && isset($oldToNewClasses[$useUse->name->toString()])) {
+                $this->removeNode($use);
+                return $use;
+            }
+        }
+        return null;
     }
     /**
      * @param array<string, string> $oldToNewClasses
