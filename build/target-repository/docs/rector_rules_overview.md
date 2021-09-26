@@ -121,18 +121,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentAdderRector::class)
         ->call('configure', [[
             ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType(
-                    'SomeType',
-                    null,
-                    null,
-                    [],
-                    null,
-                    null,
-                    [],
-                    [],
-                    [],
-                    [
-                ]), null),
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType('SomeType')),
             ]),
         ]]);
 };
@@ -5174,7 +5163,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeAttributeToAnnotationRector::class)
         ->call('configure', [[
             DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
-                new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route', null),
+                new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route'),
             ]),
         ]]);
 };
@@ -7692,7 +7681,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AnnotationToAttributeRector::class)
         ->call('configure', [[
             AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
-                new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route', null),
+                new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
             ]),
         ]]);
 };
@@ -9832,7 +9821,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArgumentFuncCallToMethodCallRector::class)
         ->call('configure', [[
             ArgumentFuncCallToMethodCallRector::FUNCTIONS_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make', null),
+                new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make'),
             ]),
         ]]);
 };
@@ -10729,7 +10718,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PropertyFetchToMethodCallRector::class)
         ->call('configure', [[
             PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => ValueObjectInliner::inline([
-                new PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', null, ['someArg']), ]
+                new PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', ['someArg']), ]
             ),
         ]]);
 };
@@ -11382,12 +11371,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddReturnTypeDeclarationRector::class)
         ->call('configure', [[
             AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => ValueObjectInliner::inline([
-                new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(
-                    false,
-                    null
-                ), new MixedType(
-                    false,
-                    null
+                new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(false), new MixedType(
+                    false
                 ))),
             ]),
         ]]);
