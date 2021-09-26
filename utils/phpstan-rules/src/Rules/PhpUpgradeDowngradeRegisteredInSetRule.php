@@ -6,7 +6,6 @@ namespace Rector\PHPStanRules\Rules;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use Symplify\PHPStanRules\Rules\AbstractSymplifyRule;

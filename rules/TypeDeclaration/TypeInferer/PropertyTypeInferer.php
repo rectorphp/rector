@@ -11,7 +11,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
@@ -89,7 +88,7 @@ final class PropertyTypeInferer
                 continue;
             }
 
-            if ($property->type == null && $type instanceof AliasedObjectType && $hasByVarName) {
+            if ($property->type === null && $type instanceof AliasedObjectType && $hasByVarName) {
                 return [];
             }
 
