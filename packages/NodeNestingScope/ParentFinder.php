@@ -5,7 +5,7 @@ namespace Rector\NodeNestingScope;
 
 use PhpParser\Node;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20210924\Webmozart\Assert\Assert;
+use RectorPrefix20210926\Webmozart\Assert\Assert;
 final class ParentFinder
 {
     /**
@@ -15,7 +15,7 @@ final class ParentFinder
      */
     public function findByTypes(\PhpParser\Node $node, array $types) : ?\PhpParser\Node
     {
-        \RectorPrefix20210924\Webmozart\Assert\Assert::allIsAOf($types, \PhpParser\Node::class);
+        \RectorPrefix20210926\Webmozart\Assert\Assert::allIsAOf($types, \PhpParser\Node::class);
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parent instanceof \PhpParser\Node) {
             return null;

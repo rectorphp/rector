@@ -238,7 +238,7 @@ CODE_SAMPLE
         $if->stmts[] = new \PhpParser\Node\Stmt\Return_($responseVariable);
         $thisRenderMethodCall->args[1] = new \PhpParser\Node\Arg($responseVariable);
         $returnThisRender = new \PhpParser\Node\Stmt\Return_($thisRenderMethodCall);
-        $this->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
+        $this->nodesToAddCollector->addNodesAfterNode([$assign, $if, $returnThisRender], $return);
     }
     private function removeDoctrineAnnotationTagValueNode(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {

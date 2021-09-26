@@ -10,7 +10,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
@@ -100,7 +99,7 @@ final class PropertyTypeInferer
             if ($type instanceof \PHPStan\Type\VoidType) {
                 continue;
             }
-            if ($property->type == null && $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $hasByVarName) {
+            if ($property->type === null && $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $hasByVarName) {
                 return [];
             }
             $resolvedTypes[] = $type;

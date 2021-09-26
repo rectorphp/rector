@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210924;
+namespace RectorPrefix20210926;
 
 if (\class_exists('tx_t3editor_hooks_tstemplateinfo')) {
     return;

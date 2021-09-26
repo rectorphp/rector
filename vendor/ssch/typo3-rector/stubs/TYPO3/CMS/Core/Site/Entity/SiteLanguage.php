@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210924\TYPO3\CMS\Core\Site\Entity;
+namespace RectorPrefix20210926\TYPO3\CMS\Core\Site\Entity;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Site\\Entity\\SiteLanguage')) {
     return;

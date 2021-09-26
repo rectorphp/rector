@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210924\Symfony\Component\Console\Helper;
+namespace RectorPrefix20210926\Symfony\Component\Console\Helper;
 
-use RectorPrefix20210924\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix20210924\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20210924\Symfony\Component\Console\Question\ChoiceQuestion;
-use RectorPrefix20210924\Symfony\Component\Console\Question\ConfirmationQuestion;
-use RectorPrefix20210924\Symfony\Component\Console\Question\Question;
-use RectorPrefix20210924\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20210926\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix20210926\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20210926\Symfony\Component\Console\Question\ChoiceQuestion;
+use RectorPrefix20210926\Symfony\Component\Console\Question\ConfirmationQuestion;
+use RectorPrefix20210926\Symfony\Component\Console\Question\Question;
+use RectorPrefix20210926\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Symfony Style Guide compliant question helper.
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-class SymfonyQuestionHelper extends \RectorPrefix20210924\Symfony\Component\Console\Helper\QuestionHelper
+class SymfonyQuestionHelper extends \RectorPrefix20210926\Symfony\Component\Console\Helper\QuestionHelper
 {
     /**
      * {@inheritdoc}
@@ -30,7 +30,7 @@ class SymfonyQuestionHelper extends \RectorPrefix20210924\Symfony\Component\Cons
      */
     protected function writePrompt($output, $question)
     {
-        $text = \RectorPrefix20210924\Symfony\Component\Console\Formatter\OutputFormatter::escapeTrailingBackslash($question->getQuestion());
+        $text = \RectorPrefix20210926\Symfony\Component\Console\Formatter\OutputFormatter::escapeTrailingBackslash($question->getQuestion());
         $default = $question->getDefault();
         if ($question->isMultiline()) {
             $text .= \sprintf(' (press %s to continue)', $this->getEofShortcut());
@@ -39,27 +39,27 @@ class SymfonyQuestionHelper extends \RectorPrefix20210924\Symfony\Component\Cons
             case null === $default:
                 $text = \sprintf(' <info>%s</info>:', $text);
                 break;
-            case $question instanceof \RectorPrefix20210924\Symfony\Component\Console\Question\ConfirmationQuestion:
+            case $question instanceof \RectorPrefix20210926\Symfony\Component\Console\Question\ConfirmationQuestion:
                 $text = \sprintf(' <info>%s (yes/no)</info> [<comment>%s</comment>]:', $text, $default ? 'yes' : 'no');
                 break;
-            case $question instanceof \RectorPrefix20210924\Symfony\Component\Console\Question\ChoiceQuestion && $question->isMultiselect():
+            case $question instanceof \RectorPrefix20210926\Symfony\Component\Console\Question\ChoiceQuestion && $question->isMultiselect():
                 $choices = $question->getChoices();
                 $default = \explode(',', $default);
                 foreach ($default as $key => $value) {
                     $default[$key] = $choices[\trim($value)];
                 }
-                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, \RectorPrefix20210924\Symfony\Component\Console\Formatter\OutputFormatter::escape(\implode(', ', $default)));
+                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, \RectorPrefix20210926\Symfony\Component\Console\Formatter\OutputFormatter::escape(\implode(', ', $default)));
                 break;
-            case $question instanceof \RectorPrefix20210924\Symfony\Component\Console\Question\ChoiceQuestion:
+            case $question instanceof \RectorPrefix20210926\Symfony\Component\Console\Question\ChoiceQuestion:
                 $choices = $question->getChoices();
-                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, \RectorPrefix20210924\Symfony\Component\Console\Formatter\OutputFormatter::escape($choices[$default] ?? $default));
+                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, \RectorPrefix20210926\Symfony\Component\Console\Formatter\OutputFormatter::escape($choices[$default] ?? $default));
                 break;
             default:
-                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, \RectorPrefix20210924\Symfony\Component\Console\Formatter\OutputFormatter::escape($default));
+                $text = \sprintf(' <info>%s</info> [<comment>%s</comment>]:', $text, \RectorPrefix20210926\Symfony\Component\Console\Formatter\OutputFormatter::escape($default));
         }
         $output->writeln($text);
         $prompt = ' > ';
-        if ($question instanceof \RectorPrefix20210924\Symfony\Component\Console\Question\ChoiceQuestion) {
+        if ($question instanceof \RectorPrefix20210926\Symfony\Component\Console\Question\ChoiceQuestion) {
             $output->writeln($this->formatChoiceQuestionChoices($question, 'comment'));
             $prompt = $question->getPrompt();
         }
@@ -72,7 +72,7 @@ class SymfonyQuestionHelper extends \RectorPrefix20210924\Symfony\Component\Cons
      */
     protected function writeError($output, $error)
     {
-        if ($output instanceof \RectorPrefix20210924\Symfony\Component\Console\Style\SymfonyStyle) {
+        if ($output instanceof \RectorPrefix20210926\Symfony\Component\Console\Style\SymfonyStyle) {
             $output->newLine();
             $output->error($error->getMessage());
             return;

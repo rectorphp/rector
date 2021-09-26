@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210924;
+namespace RectorPrefix20210926;
 
 if (\class_exists('t3lib_pageSelect_getRecordOverlayHook')) {
     return;
