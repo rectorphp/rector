@@ -35,3 +35,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PATHS, [__DIR__ . '/src']);
 };
 ```
+
+Note that if you are looking for the downgrade categories, there is already the `DowngradeSetList`:
+
+```php
+<?php
+// rector.php
+declare(strict_types=1);
+
+use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\DowngradeSetList;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $containerConfigurator->import(DowngradeSetList::PHP_70)
+
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(Option::PATHS, [__DIR__ . '/src']);
+};
+```
