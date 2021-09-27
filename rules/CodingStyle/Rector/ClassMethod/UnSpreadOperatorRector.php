@@ -164,6 +164,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             $variadicArgs[] = $arg;
         }
 

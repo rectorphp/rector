@@ -6,6 +6,7 @@ namespace Rector\Core\Php\Regex;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -89,6 +90,10 @@ final class RegexPatternArgumentManipulator
                 return [];
             }
 
+            if (! $funcCall->args[$argumentPosition] instanceof Arg) {
+                return [];
+            }
+
             return $this->resolveArgumentValues($funcCall->args[$argumentPosition]->value);
         }
 
@@ -111,6 +116,10 @@ final class RegexPatternArgumentManipulator
                 }
 
                 if (! isset($staticCall->args[$argumentPosition])) {
+                    return [];
+                }
+
+                if (! $staticCall->args[$argumentPosition] instanceof Arg) {
                     return [];
                 }
 

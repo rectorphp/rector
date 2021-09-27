@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -31,7 +33,7 @@ final class CallerParamMatcher
         StaticCall | MethodCall | FuncCall $call,
         Param $param,
         Scope $scope
-    ): null | Identifier | Name | NullableType | UnionType {
+    ): null | Identifier | Name | NullableType | UnionType | ComplexType {
         $callParam = $this->matchCallParam($call, $param, $scope);
         if (! $callParam instanceof Param) {
             return null;
@@ -76,6 +78,10 @@ final class CallerParamMatcher
         $paramName = $this->nodeNameResolver->getName($param);
 
         foreach ($call->args as $argPosition => $arg) {
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             if (! $arg->value instanceof Variable) {
                 continue;
             }

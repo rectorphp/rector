@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -104,6 +105,10 @@ CODE_SAMPLE
         $array = new Array_();
 
         foreach ($funcCall->args as $arg) {
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             // cannot handle unpacked arguments
             if ($arg->unpack) {
                 return null;
@@ -144,8 +149,10 @@ CODE_SAMPLE
     private function resolveValue(Expr $expr): Expr
     {
         if ($expr instanceof FuncCall && $this->isIteratorToArrayFuncCall($expr)) {
+            /** @var Arg $arg */
+            $arg = $expr->args[0];
             /** @var FuncCall $expr */
-            $expr = $expr->args[0]->value;
+            $expr = $arg->value;
         }
 
         if (! $expr instanceof Ternary) {
@@ -194,6 +201,14 @@ CODE_SAMPLE
             return false;
         }
 
-        return $this->nodeNameResolver->isName($expr, 'iterator_to_array');
+        if (! $this->nodeNameResolver->isName($expr, 'iterator_to_array')) {
+            return false;
+        }
+
+        if (! isset($expr->args[0])) {
+            return false;
+        }
+
+        return $expr->args[0] instanceof Arg;
     }
 }

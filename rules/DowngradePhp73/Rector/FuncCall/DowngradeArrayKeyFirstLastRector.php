@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp73\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
@@ -71,8 +72,16 @@ CODE_SAMPLE
         return null;
     }
 
-    private function refactorArrayKeyFirst(FuncCall $funcCall): FuncCall
+    private function refactorArrayKeyFirst(FuncCall $funcCall): ?FuncCall
     {
+        if (! isset($funcCall->args[0])) {
+            return null;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
+            return null;
+        }
+
         $array = $funcCall->args[0]->value;
 
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
@@ -83,8 +92,16 @@ CODE_SAMPLE
         return $funcCall;
     }
 
-    private function refactorArrayKeyLast(FuncCall $funcCall): FuncCall
+    private function refactorArrayKeyLast(FuncCall $funcCall): ?FuncCall
     {
+        if (! isset($funcCall->args[0])) {
+            return null;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
+            return null;
+        }
+
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
         $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);

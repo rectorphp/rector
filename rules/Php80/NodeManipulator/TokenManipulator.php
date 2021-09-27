@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -38,7 +39,8 @@ final class TokenManipulator
         private NodeTypeResolver $nodeTypeResolver,
         private NodesToRemoveCollector $nodesToRemoveCollector,
         private ValueResolver $valueResolver,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -184,7 +186,13 @@ final class TokenManipulator
                 return null;
             }
 
-            if (! $this->nodeComparator->areNodesEqual($node->args[0]->value, $singleTokenVariable)) {
+            if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+                return null;
+            }
+
+            /** @var Arg $firstArg */
+            $firstArg = $node->args[0];
+            if (! $this->nodeComparator->areNodesEqual($firstArg->value, $singleTokenVariable)) {
                 return null;
             }
 
@@ -217,7 +225,13 @@ final class TokenManipulator
                 return null;
             }
 
-            $possibleTokenArray = $node->args[0]->value;
+            if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+                return null;
+            }
+
+            /** @var Arg $firstArg */
+            $firstArg = $node->args[0];
+            $possibleTokenArray = $firstArg->value;
             if (! $possibleTokenArray instanceof ArrayDimFetch) {
                 return null;
             }

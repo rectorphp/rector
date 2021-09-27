@@ -99,7 +99,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $allowableTagsParam = $node->args[1]->value;
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        $allowableTagsParam = $secondArg->value;
 
         if ($allowableTagsParam instanceof Array_) {
             // If it is an array, convert it to string
@@ -138,6 +140,14 @@ CODE_SAMPLE
 
         // If param not provided, do nothing
         if (count($funcCall->args) < 2) {
+            return true;
+        }
+
+        if (! isset($funcCall->args[1])) {
+            return true;
+        }
+
+        if (! $funcCall->args[1] instanceof Arg) {
             return true;
         }
 

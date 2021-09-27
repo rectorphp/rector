@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -20,7 +21,7 @@ final class PhpParserTypeAnalyzer
 
     public function isCovariantSubtypeOf(
         Name | NullableType | UnionType | Identifier $possibleSubtype,
-        Name | NullableType | UnionType | Identifier $possibleParentType
+        Name | NullableType | UnionType | Identifier | ComplexType $possibleParentType
     ): bool {
         // skip until PHP 8 is out
         if ($this->isUnionType($possibleSubtype, $possibleParentType)) {

@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -20,6 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeStrContainsRector extends AbstractRector
 {
+    public function __construct(
+        private ArgsAnalyzer $argsAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -70,8 +77,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $haystack = $funcCall->args[0]->value;
-        $needle = $funcCall->args[1]->value;
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($funcCall->args, [0, 1])) {
+            return null;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $funcCall->args[0];
+        $haystack = $firstArg->value;
+
+        /** @var Arg $secondArg */
+        $secondArg = $funcCall->args[1];
+        $needle = $secondArg->value;
 
         $funcCall = $this->nodeFactory->createFuncCall('strpos', [$haystack, $needle]);
 

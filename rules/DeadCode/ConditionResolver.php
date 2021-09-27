@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -88,7 +89,7 @@ final class ConditionResolver
 
         // includes compare sign as 3rd argument
         $versionCompareSign = null;
-        if (isset($funcCall->args[2])) {
+        if (isset($funcCall->args[2]) && $funcCall->args[2] instanceof Arg) {
             $versionCompareSign = $this->valueResolver->getValue($funcCall->args[2]->value);
         }
 
@@ -112,6 +113,14 @@ final class ConditionResolver
 
     private function resolveArgumentValue(FuncCall $funcCall, int $argumentPosition): ?int
     {
+        if (! isset($funcCall->args[$argumentPosition])) {
+            return null;
+        }
+
+        if (! $funcCall->args[$argumentPosition] instanceof Arg) {
+            return null;
+        }
+
         $firstArgValue = $funcCall->args[$argumentPosition]->value;
 
         /** @var mixed|null $version */

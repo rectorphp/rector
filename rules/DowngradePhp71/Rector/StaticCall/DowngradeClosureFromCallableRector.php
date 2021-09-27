@@ -70,6 +70,14 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! isset($node->args[0])) {
+            return null;
+        }
+
+        if (! $node->args[0] instanceof Arg) {
+            return null;
+        }
+
         $tempVariableName = $this->variableNaming->createCountedValueName(
             'callable',
             $node->getAttribute(AttributeKey::SCOPE)

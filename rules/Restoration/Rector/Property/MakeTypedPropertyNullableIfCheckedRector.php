@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Restoration\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -80,6 +81,10 @@ CODE_SAMPLE
 
         $isPropretyNullChecked = $this->isPropertyNullChecked($onlyProperty);
         if (! $isPropretyNullChecked) {
+            return null;
+        }
+
+        if ($node->type instanceof ComplexType) {
             return null;
         }
 

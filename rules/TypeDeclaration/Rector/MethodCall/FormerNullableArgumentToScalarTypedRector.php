@@ -92,6 +92,10 @@ CODE_SAMPLE
         }
 
         foreach ($node->args as $key => $arg) {
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             if (! $this->valueResolver->isNull($arg->value)) {
                 continue;
             }

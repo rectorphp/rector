@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -16,6 +18,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
 {
+    public function __construct(private ArgsAnalyzer $argsAnalyzer)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -41,20 +47,27 @@ final class InArrayAndArrayKeysToArrayKeyExistsRector extends AbstractRector
             return null;
         }
 
-        $secondArgument = $node->args[1]->value;
-        if (! $secondArgument instanceof FuncCall) {
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($node->args, [0, 1])) {
             return null;
         }
 
-        if (! $this->isName($secondArgument, 'array_keys')) {
+        /** @var Arg $secondArgument */
+        $secondArgument = $node->args[1];
+        if (! $secondArgument->value instanceof FuncCall) {
             return null;
         }
 
-        if (count($secondArgument->args) > 1) {
+        if (! $this->isName($secondArgument->value, 'array_keys')) {
             return null;
         }
 
+        if (count($secondArgument->value->args) > 1) {
+            return null;
+        }
+
+        /** @var Arg $keyArg */
         $keyArg = $node->args[0];
+        /** @var Arg $arrayArg */
         $arrayArg = $node->args[1];
 
         /** @var FuncCall $innerFuncCallNode */

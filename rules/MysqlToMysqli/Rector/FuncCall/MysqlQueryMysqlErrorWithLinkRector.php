@@ -131,9 +131,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            $args = $node->getArgs();
             if (
-                $node->args === []
-                || ! $this->isProbablyMysql($node->args[0]->value)
+                $args === []
+                || ! $this->isProbablyMysql($args[0]->value)
             ) {
                 $connectionVariable = $this->findConnectionVariable($node);
 
@@ -143,7 +144,7 @@ CODE_SAMPLE
                     return null;
                 }
 
-                $node->args = array_merge([new Arg($connectionVariable)], $node->args);
+                $node->args = array_merge([new Arg($connectionVariable)], $node->getArgs());
             }
 
             $node->name = new Name($newFunction);

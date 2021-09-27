@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Removing\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -120,6 +121,10 @@ CODE_SAMPLE
     private function isArgumentPositionValueMatch(FuncCall $funcCall, int $argumentPosition, array $values): bool
     {
         if (! isset($funcCall->args[$argumentPosition])) {
+            return false;
+        }
+
+        if (! $funcCall->args[$argumentPosition] instanceof Arg) {
             return false;
         }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MysqlToMysqli\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\FuncCall;
@@ -64,6 +65,14 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'mysql_pconnect')) {
+            return null;
+        }
+
+        if (! isset($node->args[0])) {
+            return null;
+        }
+
+        if (! $node->args[0] instanceof Arg) {
             return null;
         }
 

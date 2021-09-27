@@ -62,6 +62,14 @@ CODE_SAMPLE
 
         $currentStatement = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
+        if (! isset($node->args[0])) {
+            return null;
+        }
+
+        if (! $node->args[0] instanceof Arg) {
+            return null;
+        }
+
         /** @var Array_ $options */
         $options = $node->args[0]->value;
 
@@ -96,6 +104,10 @@ CODE_SAMPLE
         }
 
         if (! isset($funcCall->args[0])) {
+            return true;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
             return true;
         }
 

@@ -42,7 +42,7 @@ parameters:
     scanDirectories:
         - stubs
 
-    # reportUnmatchedIgnoredErrors: false
+    reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
@@ -106,7 +106,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Transform\\Rector\\Class_\\AddInterfaceByParentRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
 
-        - '#Parameter \#1 \$type of class PhpParser\\Node\\NullableType constructor expects PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|string, PhpParser\\Node\\Identifier\|PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
         - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         # known value
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
@@ -358,12 +357,6 @@ parameters:
 
         - '#Cannot call method getSmartFileInfo\(\) on Rector\\Core\\ValueObject\\Application\\File\|null#'
 
-        # doc typo in php-parser
-        - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg\>, array<int, PhpParser\\Node\\Arg\|null\> given#'
-
-        # php-parser bug
-        - '#Parameter \#1 \$type of method PhpParser\\Builder\\FunctionLike\:\:setReturnType\(\) expects PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|string, PhpParser\\Node\\Name\|PhpParser\\Node\\NullableType\|PhpParser\\Node\\UnionType given#'
-
         - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
 
         -
@@ -514,6 +507,3 @@ parameters:
                 - packages/FileFormatter/ValueObject/NewLine.php #15
                 - src/Application/VersionResolver.php #16
                 - utils/compiler/src/Unprefixer.php #9
-
-       # false positive, class exists is right above
-        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'

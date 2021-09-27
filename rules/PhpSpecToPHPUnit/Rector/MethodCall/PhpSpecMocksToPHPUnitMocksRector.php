@@ -103,7 +103,9 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
                 throw new ShouldNotHappenException();
             }
 
-            $expectedArg = $methodCall->var->args[0]->value ?? null;
+            $arg = $methodCall->var->args[0] ?? null;
+
+            $expectedArg = $arg instanceof Arg ? $arg->value : null;
 
             $methodCall->var->name = new Identifier('expects');
             $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
@@ -221,11 +223,12 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function createIsTypeOrIsInstanceOf(StaticCall $staticCall): MethodCall
     {
-        $type = $this->valueResolver->getValue($staticCall->args[0]->value);
+        $args = $staticCall->getArgs();
+        $type = $this->valueResolver->getValue($args[0]->value);
 
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
 
-        return $this->nodeFactory->createLocalMethodCall($name, $staticCall->args);
+        return $this->nodeFactory->createLocalMethodCall($name, $args);
     }
 
     private function createMockVarDoc(Param $param, Name $name): string

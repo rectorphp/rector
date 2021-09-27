@@ -27,10 +27,14 @@ final class DuringMethodCallFactory
             throw new ShouldNotHappenException();
         }
 
+        if (! $methodCall->args[0] instanceof Arg) {
+            throw new ShouldNotHappenException();
+        }
+
         $name = $this->valueResolver->getValue($methodCall->args[0]->value);
         $thisObjectPropertyMethodCall = new MethodCall($propertyFetch, $name);
 
-        if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof Array_) {
+        if (isset($methodCall->args[1]) && $methodCall->args[1] instanceof Arg && $methodCall->args[1]->value instanceof Array_) {
             /** @var Array_ $array */
             $array = $methodCall->args[1]->value;
 

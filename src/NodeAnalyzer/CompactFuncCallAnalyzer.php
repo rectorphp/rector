@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\VariadicPlaceholder;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class CompactFuncCallAnalyzer
@@ -34,15 +35,16 @@ final class CompactFuncCallAnalyzer
     }
 
     /**
-     * @param array<int, Arg|ArrayItem|null> $nodes
+     * @param array<int, Arg|VariadicPlaceholder|ArrayItem|null> $nodes
      */
     private function isInArgOrArrayItemNodes(array $nodes, string $variableName): bool
     {
         foreach ($nodes as $node) {
-            if ($node === null) {
+            if ($this->shouldSkip($node)) {
                 continue;
             }
 
+            /** @var Arg|ArrayItem $node */
             if ($node->value instanceof Array_) {
                 if ($this->isInArgOrArrayItemNodes($node->value->items, $variableName)) {
                     return true;
@@ -61,5 +63,14 @@ final class CompactFuncCallAnalyzer
         }
 
         return false;
+    }
+
+    private function shouldSkip(Arg|VariadicPlaceholder|ArrayItem|null $node): bool
+    {
+        if ($node === null) {
+            return true;
+        }
+
+        return $node instanceof VariadicPlaceholder;
     }
 }

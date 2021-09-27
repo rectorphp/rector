@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,7 +44,8 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
     ];
 
     public function __construct(
-        private EregToPcreTransformer $eregToPcreTransformer
+        private EregToPcreTransformer $eregToPcreTransformer,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -68,21 +70,34 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         return [FuncCall::class];
     }
 
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        $functionName = $this->getName($funcCall);
+        if ($functionName === null) {
+            return true;
+        }
+
+        if (! isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
+            return true;
+        }
+
+        return ! $this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0);
+    }
+
     /**
      * @param FuncCall $node
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
+
+        /** @var string $functionName */
         $functionName = $this->getName($node);
-        if ($functionName === null) {
-            return null;
-        }
-
-        if (! isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
-            return null;
-        }
-
-        $patternNode = $node->args[0]->value;
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        $patternNode = $firstArg->value;
         if ($patternNode instanceof String_) {
             $this->processStringPattern($node, $patternNode, $functionName);
         } elseif ($patternNode instanceof Variable) {
@@ -94,7 +109,7 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         $node->name = new Name(self::OLD_NAMES_TO_NEW_ONES[$functionName]);
 
         // ereg|eregi 3rd argument return value fix
-        if (in_array($functionName, ['ereg', 'eregi'], true) && isset($node->args[2])) {
+        if (in_array($functionName, ['ereg', 'eregi'], true) && isset($node->args[2]) && $node->args[2] instanceof Arg) {
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof Assign) {
                 return $this->createTernaryWithStrlenOfFirstMatch($node);
@@ -109,7 +124,9 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         $pattern = $string->value;
         $pattern = $this->eregToPcreTransformer->transform($pattern, $this->isCaseInsensitiveFunction($functionName));
 
-        $funcCall->args[0]->value = new String_($pattern);
+        /** @var Arg $arg */
+        $arg = $funcCall->args[0];
+        $arg->value = new String_($pattern);
     }
 
     private function processVariablePattern(FuncCall $funcCall, Variable $variable, string $functionName): void
@@ -124,7 +141,9 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         $endDelimiter = $this->isCaseInsensitiveFunction($functionName) ? '#mi' : '#m';
         $concat = new Concat($startConcat, new String_($endDelimiter));
 
-        $funcCall->args[0]->value = $concat;
+        /** @var Arg $arg */
+        $arg = $funcCall->args[0];
+        $arg->value = $concat;
     }
 
     /**
@@ -135,6 +154,14 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
      */
     private function processSplitLimitArgument(FuncCall $funcCall, string $functionName): void
     {
+        if (! isset($funcCall->args[2])) {
+            return;
+        }
+
+        if (! $funcCall->args[2] instanceof Arg) {
+            return;
+        }
+
         if (! \str_starts_with($functionName, 'split')) {
             return;
         }
@@ -159,7 +186,9 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
 
     private function createTernaryWithStrlenOfFirstMatch(FuncCall $funcCall): Ternary
     {
-        $arrayDimFetch = new ArrayDimFetch($funcCall->args[2]->value, new LNumber(0));
+        /** @var Arg $thirdArg */
+        $thirdArg = $funcCall->args[2];
+        $arrayDimFetch = new ArrayDimFetch($thirdArg->value, new LNumber(0));
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$arrayDimFetch]);
 
         return new Ternary($funcCall, $strlenFuncCall, $this->nodeFactory->createFalse());

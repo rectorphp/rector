@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,7 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsistentImplodeRector extends AbstractRector
 {
     public function __construct(
-        private StringTypeAnalyzer $stringTypeAnalyzer
+        private StringTypeAnalyzer $stringTypeAnalyzer,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -86,17 +88,32 @@ CODE_SAMPLE
             return $node;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+            return null;
+        }
+
+        /** @var Arg $arg0 */
+        $arg0 = $node->args[0];
+        $firstArgumentValue = $arg0->value;
         if ($firstArgumentValue instanceof String_) {
             return null;
         }
 
-        if (count($node->args) === 2 && $this->stringTypeAnalyzer->isStringOrUnionStringOnlyType(
-            $node->args[1]->value
-        )) {
-            $node->args = array_reverse($node->args);
+        if (count($node->args) !== 2) {
+            return null;
         }
 
-        return $node;
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 1)) {
+            return null;
+        }
+
+        /** @var Arg $arg1 */
+        $arg1 = $node->args[1];
+        if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($arg1->value)) {
+            $node->args = array_reverse($node->args);
+            return $node;
+        }
+
+        return null;
     }
 }

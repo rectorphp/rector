@@ -104,12 +104,12 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($funcCall->args[2]->value instanceof Array_) {
+        if ($funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Array_) {
             return true;
         }
 
         if ($argsCount === 3) {
-            return $funcCall->args[2]->value instanceof Variable;
+            return $funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Variable;
         }
 
         return false;
@@ -122,7 +122,7 @@ CODE_SAMPLE
     {
         $items = [];
 
-        $args = $funcCall->args;
+        $args = $funcCall->getArgs();
 
         $newArgs = [];
         $newArgs[] = $args[0];

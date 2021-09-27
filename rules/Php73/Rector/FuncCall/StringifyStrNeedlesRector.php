@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
@@ -77,6 +78,14 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isNames($node, self::NEEDLE_STRING_SENSITIVE_FUNCTIONS)) {
+            return null;
+        }
+
+        if (! isset($node->args[1])) {
+            return null;
+        }
+
+        if (! $node->args[1] instanceof Arg) {
             return null;
         }
 

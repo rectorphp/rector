@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
@@ -74,6 +75,14 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'get_class')) {
+            return null;
+        }
+
+        if (! isset($node->args[0])) {
+            return null;
+        }
+
+        if (! $node->args[0] instanceof Arg) {
             return null;
         }
 
@@ -149,6 +158,14 @@ CODE_SAMPLE
             return false;
         }
 
+        if (! isset($funcCall->args[0])) {
+            return false;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
+            return false;
+        }
+
         if ($this->nodeComparator->areNodesEqual(
             $ternary->cond->left,
             $funcCall->args[0]->value
@@ -169,6 +186,14 @@ CODE_SAMPLE
     private function isNotIdenticalToNull(FuncCall $funcCall, Ternary $ternary): bool
     {
         if (! $ternary->cond instanceof NotIdentical) {
+            return false;
+        }
+
+        if (! isset($funcCall->args[0])) {
+            return false;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
             return false;
         }
 

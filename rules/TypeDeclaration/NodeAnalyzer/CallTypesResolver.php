@@ -59,6 +59,10 @@ final class CallTypesResolver
             }
 
             foreach ($call->args as $position => $arg) {
+                if (! $arg instanceof Arg) {
+                    continue;
+                }
+
                 $argValueType = $this->resolveArgValueType($typeStrictness, $arg);
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }

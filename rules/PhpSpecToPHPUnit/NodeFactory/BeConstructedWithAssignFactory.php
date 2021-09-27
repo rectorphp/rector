@@ -36,6 +36,14 @@ final class BeConstructedWithAssignFactory
         }
 
         if ($this->nodeNameResolver->isName($methodCall->name, 'beConstructedThrough')) {
+            if (! isset($methodCall->args[0])) {
+                return null;
+            }
+
+            if (! $methodCall->args[0] instanceof Arg) {
+                return null;
+            }
+
             $methodName = $this->valueResolver->getValue($methodCall->args[0]->value);
             $staticCall = $this->nodeFactory->createStaticCall($testedClass, $methodName);
 
@@ -50,6 +58,10 @@ final class BeConstructedWithAssignFactory
     private function moveConstructorArguments(MethodCall $methodCall, StaticCall $staticCall): void
     {
         if (! isset($methodCall->args[1])) {
+            return;
+        }
+
+        if (! $methodCall->args[1] instanceof Arg) {
             return;
         }
 

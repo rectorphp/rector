@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php70\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -21,6 +22,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -42,7 +44,8 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
     public function __construct(
         private VariableNaming $variableNaming,
         private ParentScopeFinder $parentScopeFinder,
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -88,6 +91,10 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
         }
 
         foreach ($arguments as $key => $argument) {
+            if (! $node->args[$key] instanceof Arg) {
+                continue;
+            }
+
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
 
             $current = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
@@ -129,7 +136,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
             /** @var ParameterReflection $parameterReflection */
             foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
                 // omitted optional parameter
-                if (! isset($call->args[$key])) {
+                if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($call->args, $key)) {
                     continue;
                 }
 
@@ -137,7 +144,9 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
                     continue;
                 }
 
-                $argument = $call->args[$key]->value;
+                /** @var Arg $arg */
+                $arg = $call->args[$key];
+                $argument = $arg->value;
 
                 if ($this->isVariableLikeNode($argument)) {
                     continue;

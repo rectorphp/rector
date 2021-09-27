@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php54\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -63,6 +64,10 @@ CODE_SAMPLE
     public function refactor(Node $node): FuncCall
     {
         foreach ($node->args as $nodeArg) {
+            if (! $nodeArg instanceof Arg) {
+                continue;
+            }
+
             if ($nodeArg->byRef) {
                 $nodeArg->byRef = false;
             }

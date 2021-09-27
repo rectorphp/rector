@@ -18,6 +18,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
@@ -37,7 +38,8 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractRector imple
     public function __construct(
         private InlineCodeParser $inlineCodeParser,
         private AnonymousFunctionFactory $anonymousFunctionFactory,
-        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -96,8 +98,17 @@ CODE_SAMPLE
             return null;
         }
 
-        $params = $this->createParamsFromString($node->args[0]->value);
-        $stmts = $this->parseStringToBody($node->args[1]->value);
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($node->args, [0, 1])) {
+            return null;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+
+        $params = $this->createParamsFromString($firstArg->value);
+        $stmts = $this->parseStringToBody($secondArg->value);
 
         $refactored = $this->anonymousFunctionFactory->create($params, $stmts, null);
         foreach ($refactored->uses as $key => $use) {

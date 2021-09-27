@@ -87,7 +87,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $countedNode = $node->args[0]->value;
+        /** @var Arg $arg0 */
+        $arg0 = $node->args[0];
+        $countedNode = $arg0->value;
         if ($this->countableTypeAnalyzer->isCountableType($countedNode)) {
             return null;
         }
@@ -140,6 +142,10 @@ CODE_SAMPLE
         }
 
         if (! isset($funcCall->args[0])) {
+            return true;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
             return true;
         }
 

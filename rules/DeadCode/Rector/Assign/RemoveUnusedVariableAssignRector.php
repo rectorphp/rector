@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -158,6 +159,10 @@ CODE_SAMPLE
         Assign $assign
     ): bool {
         foreach ($expr->args as $arg) {
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             $variable = $arg->value;
             if (! $variable instanceof Variable) {
                 continue;

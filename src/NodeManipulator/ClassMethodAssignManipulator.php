@@ -285,6 +285,14 @@ final class ClassMethodAssignManipulator
             return false;
         }
 
+        if (! isset($node->args[0])) {
+            return false;
+        }
+
+        if (! $node->args[0] instanceof Arg) {
+            return false;
+        }
+
         // is 1t argument
         return $node->args[0]->value !== $variable;
     }

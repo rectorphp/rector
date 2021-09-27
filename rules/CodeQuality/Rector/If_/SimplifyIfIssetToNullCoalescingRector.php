@@ -15,6 +15,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,6 +25,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyIfIssetToNullCoalescingRector extends AbstractRector
 {
+    public function __construct(private ArgsAnalyzer $argsAnalyzer)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Simplify binary if to null coalesce', [
@@ -108,11 +113,19 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeComparator->areNodesEqual($firstAssign->expr->args[0]->value, $valueNode)) {
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($firstAssign->expr->args, [0, 1])) {
             return null;
         }
 
-        if (! $this->nodeComparator->areNodesEqual($secondAssign->expr, $firstAssign->expr->args[1]->value)) {
+        /** @var Arg $firstArg */
+        $firstArg = $firstAssign->expr->args[0];
+        if (! $this->nodeComparator->areNodesEqual($firstArg->value, $valueNode)) {
+            return null;
+        }
+
+        /** @var Arg $secondArg */
+        $secondArg = $firstAssign->expr->args[1];
+        if (! $this->nodeComparator->areNodesEqual($secondAssign->expr, $secondArg->value)) {
             return null;
         }
 

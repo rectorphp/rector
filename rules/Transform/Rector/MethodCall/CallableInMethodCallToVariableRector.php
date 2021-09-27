@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ClosureType;
@@ -94,11 +95,16 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! isset($node->args[$singleCallableInMethodCallToVariable->getArgumentPosition()])) {
+            $position = $singleCallableInMethodCallToVariable->getArgumentPosition();
+            if (! isset($node->args[$position])) {
                 continue;
             }
 
-            $arg = $node->args[$singleCallableInMethodCallToVariable->getArgumentPosition()];
+            if (! $node->args[$position] instanceof Arg) {
+                continue;
+            }
+
+            $arg = $node->args[$position];
             $argValueType = $this->getStaticType($arg->value);
             if (! $argValueType instanceof ClosureType) {
                 continue;

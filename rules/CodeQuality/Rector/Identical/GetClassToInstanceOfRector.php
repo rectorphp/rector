@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -76,6 +77,14 @@ final class GetClassToInstanceOfRector extends AbstractRector
 
         /** @var FuncCall $funcCall */
         $funcCall = $twoNodeMatch->getSecondExpr();
+
+        if (! isset($funcCall->args[0])) {
+            return null;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
+            return null;
+        }
 
         $varNode = $funcCall->args[0]->value;
 

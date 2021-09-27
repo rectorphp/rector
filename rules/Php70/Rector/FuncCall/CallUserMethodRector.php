@@ -65,7 +65,7 @@ final class CallUserMethodRector extends AbstractRector implements MinPhpVersion
         $newName = self::OLD_TO_NEW_FUNCTIONS[$this->getName($node)];
         $node->name = new Name($newName);
 
-        $oldArgs = $node->args;
+        $oldArgs = $node->getArgs();
 
         unset($node->args[1]);
 

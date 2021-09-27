@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\Rector\New_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -82,6 +83,10 @@ CODE_SAMPLE
             }
 
             if (! isset($node->args[0])) {
+                return null;
+            }
+
+            if (! $node->args[0] instanceof Arg) {
                 return null;
             }
 

@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ImplodeAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -29,11 +32,17 @@ final class ImplodeAnalyzer
             return false;
         }
 
-        if (! isset($expr->args[1])) {
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($expr->args, 1)) {
             return false;
         }
 
-        $firstArgumentValue = $expr->args[0]->value;
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($expr->args, 0)) {
+            return false;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $expr->args[0];
+        $firstArgumentValue = $firstArg->value;
         if (! $firstArgumentValue instanceof String_) {
             return true;
         }

@@ -124,6 +124,10 @@ CODE_SAMPLE
                     continue;
                 }
 
+                if (! $node->args[$position] instanceof Arg) {
+                    continue;
+                }
+
                 $this->refactorArgument($node->args[$position]);
 
                 return $node;
@@ -142,6 +146,10 @@ CODE_SAMPLE
     {
         foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
             if (! $this->isName($funcCall, $function)) {
+                continue;
+            }
+
+            if (! $funcCall->args[$position] instanceof Arg) {
                 continue;
             }
 

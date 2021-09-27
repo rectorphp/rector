@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\If_;
@@ -38,6 +39,14 @@ final class FunctionExistsFunCallAnalyzer
 
         /** @var FuncCall $functionExists */
         $functionExists = $firstParentIf->cond;
+
+        if (! isset($functionExists->args[0])) {
+            return false;
+        }
+
+        if (! $functionExists->args[0] instanceof Arg) {
+            return false;
+        }
 
         return $this->valueResolver->isValue($functionExists->args[0]->value, $functionName);
     }

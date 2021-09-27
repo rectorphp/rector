@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\NodeFactory;
 
 use Nette\Utils\Json;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -60,8 +61,14 @@ final class JsonArrayFactory
                 $placeholderNode = $this->matchPlaceholderNode($onlyItem->value, $placeholderNodes);
 
                 if ($placeholderNode && $this->implodeAnalyzer->isImplodeToJson($placeholderNode)) {
-                    /** @var FuncCall $placeholderNode */
-                    return $placeholderNode->args[1]->value;
+                    /**
+                     * @var FuncCall $placeholderNode
+                     * @var Arg $firstArg
+                     *
+                     * Arg check already on $this->implodeAnalyzer->isImplodeToJson() above
+                     */
+                    $firstArg = $placeholderNode->args[1];
+                    return $firstArg->value;
                 }
             }
 

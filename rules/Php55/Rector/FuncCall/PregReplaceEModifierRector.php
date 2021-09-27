@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\Php55\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php55\RegexMatcher;
@@ -26,7 +28,8 @@ final class PregReplaceEModifierRector extends AbstractRector implements MinPhpV
 {
     public function __construct(
         private AnonymousFunctionFactory $anonymousFunctionFactory,
-        private RegexMatcher $regexMatcher
+        private RegexMatcher $regexMatcher,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -84,13 +87,21 @@ CODE_SAMPLE
             return null;
         }
 
-        $firstArgumentValue = $node->args[0]->value;
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($node->args, [0, 1])) {
+            return null;
+        }
+
+        /** @var Arg $firstArgument */
+        $firstArgument = $node->args[0];
+        $firstArgumentValue = $firstArgument->value;
         $patternWithoutE = $this->regexMatcher->resolvePatternExpressionWithoutEIfFound($firstArgumentValue);
         if (! $patternWithoutE instanceof Expr) {
             return null;
         }
 
-        $secondArgumentValue = $node->args[1]->value;
+        /** @var Arg $secondArgument */
+        $secondArgument = $node->args[1];
+        $secondArgumentValue = $secondArgument->value;
         $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromString(
             $secondArgumentValue
         );
@@ -99,8 +110,8 @@ CODE_SAMPLE
         }
 
         $node->name = new Name('preg_replace_callback');
-        $node->args[0]->value = $patternWithoutE;
-        $node->args[1]->value = $anonymousFunction;
+        $firstArgument->value = $patternWithoutE;
+        $secondArgument->value = $anonymousFunction;
 
         return $node;
     }

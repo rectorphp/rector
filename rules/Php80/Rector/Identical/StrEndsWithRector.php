@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -14,6 +15,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
@@ -30,7 +32,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StrEndsWithRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private BinaryOpAnalyzer $binaryOpAnalyzer
+        private BinaryOpAnalyzer $binaryOpAnalyzer,
+        private ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -128,15 +131,23 @@ CODE_SAMPLE
             return null;
         }
 
-        $haystack = $substrFuncCall->args[0]->value;
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($substrFuncCall->args, [0, 1])) {
+            return null;
+        }
 
-        if (! $this->isUnaryMinusStrlenFuncCallArgValue($substrFuncCall->args[1]->value, $comparedNeedleExpr) &&
-            ! $this->isHardCodedLNumberAndString($substrFuncCall->args[1]->value, $comparedNeedleExpr)
+        /** @var Arg $secondArg */
+        $secondArg = $substrFuncCall->args[1];
+        if (! $this->isUnaryMinusStrlenFuncCallArgValue($secondArg->value, $comparedNeedleExpr) &&
+            ! $this->isHardCodedLNumberAndString($secondArg->value, $comparedNeedleExpr)
         ) {
             return null;
         }
 
+        /** @var Arg $firstArg */
+        $firstArg = $substrFuncCall->args[0];
+        $haystack = $firstArg->value;
         $isPositive = $binaryOp instanceof Identical;
+
         return $this->buildReturnNode($haystack, $comparedNeedleExpr, $isPositive);
     }
 
@@ -153,11 +164,24 @@ CODE_SAMPLE
         }
 
         $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
-        $haystack = $substrCompareFuncCall->args[0]->value;
-        $needle = $substrCompareFuncCall->args[1]->value;
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($substrCompareFuncCall->args, [0, 1, 2])) {
+            return null;
+        }
 
-        if (! $this->isUnaryMinusStrlenFuncCallArgValue($substrCompareFuncCall->args[2]->value, $needle) &&
-            ! $this->isHardCodedLNumberAndString($substrCompareFuncCall->args[2]->value, $needle)
+        /** @var Arg $firstArg */
+        $firstArg = $substrCompareFuncCall->args[0];
+        $haystack = $firstArg->value;
+
+        /** @var Arg $secondArg */
+        $secondArg = $substrCompareFuncCall->args[1];
+        $needle = $secondArg->value;
+
+        /** @var Arg $thirdArg */
+        $thirdArg = $substrCompareFuncCall->args[2];
+        $thirdArgValue = $thirdArg->value;
+
+        if (! $this->isUnaryMinusStrlenFuncCallArgValue($thirdArgValue, $needle) &&
+            ! $this->isHardCodedLNumberAndString($thirdArgValue, $needle)
         ) {
             return null;
         }
@@ -180,6 +204,14 @@ CODE_SAMPLE
         $funcCall = $substrOffset->expr;
 
         if (! $this->nodeNameResolver->isName($funcCall, 'strlen')) {
+            return false;
+        }
+
+        if (! isset($funcCall->args[0])) {
+            return false;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
             return false;
         }
 

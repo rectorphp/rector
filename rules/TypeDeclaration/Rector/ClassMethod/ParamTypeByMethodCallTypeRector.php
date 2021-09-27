@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -163,7 +164,7 @@ CODE_SAMPLE
 
     private function mirrorParamType(
         Param $decoratedParam,
-        Identifier | Name | NullableType | UnionType $paramType
+        Identifier | Name | NullableType | UnionType | ComplexType $paramType
     ): void {
         // mimic type
         $newParamType = $paramType;

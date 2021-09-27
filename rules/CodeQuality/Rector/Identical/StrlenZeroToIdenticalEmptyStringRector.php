@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
 {
+    public function __construct(
+        private ArgsAnalyzer $argsAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -61,32 +68,58 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $variable = null;
         if ($node->left instanceof FuncCall) {
-            if (! $this->isName($node->left, 'strlen')) {
-                return null;
-            }
+            return $this->processLeftIdentical($node, $node->left);
+        }
 
-            if (! $this->valueResolver->isValue($node->right, 0)) {
-                return null;
-            }
+        if ($node->right instanceof FuncCall) {
+            return $this->processRightIdentical($node, $node->right);
+        }
 
-            $variable = $node->left->args[0]->value;
-        } elseif ($node->right instanceof FuncCall) {
-            if (! $this->isName($node->right, 'strlen')) {
-                return null;
-            }
+        return null;
+    }
 
-            if (! $this->valueResolver->isValue($node->left, 0)) {
-                return null;
-            }
-
-            $variable = $node->right->args[0]->value;
-        } else {
+    private function processLeftIdentical(Identical $identical, FuncCall $funcCall): ?Identical
+    {
+        if (! $this->isName($funcCall, 'strlen')) {
             return null;
         }
 
+        if (! $this->valueResolver->isValue($identical->right, 0)) {
+            return null;
+        }
+
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
+            return null;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $funcCall->args[0];
         /** @var Expr $variable */
+        $variable = $firstArg->value;
+
+        return new Identical($variable, new String_(''));
+    }
+
+    private function processRightIdentical(Identical $identical, FuncCall $funcCall): ?Identical
+    {
+        if (! $this->isName($funcCall, 'strlen')) {
+            return null;
+        }
+
+        if (! $this->valueResolver->isValue($identical->left, 0)) {
+            return null;
+        }
+
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
+            return null;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $funcCall->args[0];
+        /** @var Expr $variable */
+        $variable = $firstArg->value;
+
         return new Identical($variable, new String_(''));
     }
 }

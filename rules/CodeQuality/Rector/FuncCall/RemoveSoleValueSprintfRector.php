@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,6 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveSoleValueSprintfRector extends AbstractRector
 {
+    public function __construct(private ArgsAnalyzer $argsAnalyzer)
+    {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove sprintf() wrapper if not needed', [
@@ -71,7 +77,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $maskArgument = $node->args[0]->value;
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($node->args, [0, 1])) {
+            return null;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        $maskArgument = $firstArg->value;
         if (! $maskArgument instanceof String_) {
             return null;
         }
@@ -80,7 +92,9 @@ CODE_SAMPLE
             return null;
         }
 
-        $valueArgument = $node->args[1]->value;
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        $valueArgument = $secondArg->value;
         if (! $this->nodeTypeResolver->isStaticType($valueArgument, StringType::class)) {
             return null;
         }

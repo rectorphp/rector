@@ -119,12 +119,22 @@ CODE_SAMPLE
             return true;
         }
 
+        if (! isset($methodCall->args[0])) {
+            return true;
+        }
+
+        if (! $methodCall->args[0] instanceof Arg) {
+            return true;
+        }
+
         return ! $this->getStaticType($methodCall->args[0]->value) instanceof StringType;
     }
 
     private function updateNode(MethodCall $methodCall): MethodCall
     {
-        $methodCall->args[0] = new Arg($this->createNewAnonymousEventClass($methodCall->args[0]->value));
+        /** @var Arg $firstArg */
+        $firstArg = $methodCall->args[0];
+        $methodCall->args[0] = new Arg($this->createNewAnonymousEventClass($firstArg->value));
         return $methodCall;
     }
 

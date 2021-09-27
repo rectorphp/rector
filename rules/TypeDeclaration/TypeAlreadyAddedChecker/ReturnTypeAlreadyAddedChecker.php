@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeAlreadyAddedChecker;
 
 use Iterator;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -92,7 +93,7 @@ final class ReturnTypeAlreadyAddedChecker
     }
 
     private function isArrayIterableIteratorCoType(
-        Identifier | Name | NullableType | PhpParserUnionType $returnTypeNode,
+        Identifier | Name | NullableType | PhpParserUnionType | ComplexType $returnTypeNode,
         Type $returnType
     ): bool {
         if (! $this->nodeNameResolver->isNames($returnTypeNode, self::FOREACHABLE_TYPES)) {
@@ -103,7 +104,7 @@ final class ReturnTypeAlreadyAddedChecker
     }
 
     private function isUnionCoType(
-        Identifier | Name | NullableType | PhpParserUnionType $returnTypeNode,
+        Identifier | Name | NullableType | PhpParserUnionType | ComplexType $returnTypeNode,
         Type $type
     ): bool {
         if (! $type instanceof UnionType) {

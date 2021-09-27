@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Carbon\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -79,6 +80,10 @@ CODE_SAMPLE
         }
 
         if (! isset($node->args[1])) {
+            return null;
+        }
+
+        if (! $node->args[1] instanceof Arg) {
             return null;
         }
 

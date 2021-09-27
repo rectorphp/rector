@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
@@ -70,6 +71,14 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if (! $this->isName($node, 'array_key_exists')) {
+            return null;
+        }
+
+        if (! isset($node->args[1])) {
+            return null;
+        }
+
+        if (! $node->args[1] instanceof Arg) {
             return null;
         }
 

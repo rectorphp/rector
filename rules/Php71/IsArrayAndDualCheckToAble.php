@@ -54,6 +54,14 @@ final class IsArrayAndDualCheckToAble
             return null;
         }
 
+        if (! isset($funcCall->args[0])) {
+            return null;
+        }
+
+        if (! $funcCall->args[0] instanceof Arg) {
+            return null;
+        }
+
         // both use same var
         if (! $funcCall->args[0]->value instanceof Variable) {
             return null;

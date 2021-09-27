@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -65,6 +66,10 @@ CODE_SAMPLE
         );
     }
 
+    public function __construct(private ArgsAnalyzer $argsAnalyzer)
+    {
+    }
+
     /**
      * @return array<class-string<Node>>
      */
@@ -102,7 +107,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! ($funcCall->args[2]->value instanceof Array_);
+        return ! ($funcCall->args[2] instanceof Arg && $funcCall->args[2]->value instanceof Array_);
     }
 
     /**
@@ -112,10 +117,23 @@ CODE_SAMPLE
     {
         $this->highestIndex = 1;
 
-        $newArgs = [$funcCall->args[0], $funcCall->args[1]];
+        if (! $this->argsAnalyzer->isArgsInstanceInArgsPositions($funcCall->args, [0, 1, 2])) {
+            return [];
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $funcCall->args[0];
+
+        /** @var Arg $secondArg */
+        $secondArg = $funcCall->args[1];
+
+        $newArgs = [$firstArg, $secondArg];
+
+        /** @var Arg $thirdArg */
+        $thirdArg = $funcCall->args[2];
 
         /** @var Array_ $optionsArray */
-        $optionsArray = $funcCall->args[2]->value;
+        $optionsArray = $thirdArg->value;
         /** @var ArrayItem|null $arrayItem */
         foreach ($optionsArray->items as $arrayItem) {
             if ($arrayItem === null) {

@@ -117,11 +117,12 @@ CODE_SAMPLE
 
     private function processArgs(FuncCall | MethodCall | StaticCall | New_ $node): ?Node
     {
-        if ($node->args === []) {
+        $args = $node->getArgs();
+        if ($args === []) {
             return null;
         }
 
-        return $this->cleanTrailingComma($node, $node->args);
+        return $this->cleanTrailingComma($node, $args);
     }
 
     private function processUses(Closure $node): void

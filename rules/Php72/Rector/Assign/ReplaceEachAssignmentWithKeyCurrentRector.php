@@ -75,6 +75,15 @@ CODE_SAMPLE
 
         /** @var FuncCall $eachFuncCall */
         $eachFuncCall = $node->expr;
+
+        if (! isset($eachFuncCall->args[0])) {
+            return null;
+        }
+
+        if (! $eachFuncCall->args[0] instanceof Arg) {
+            return null;
+        }
+
         $eachedVariable = $eachFuncCall->args[0]->value;
 
         $assignVariable = $node->var;

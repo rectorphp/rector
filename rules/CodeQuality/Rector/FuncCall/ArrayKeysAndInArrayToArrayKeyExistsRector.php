@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\FunctionLike;
@@ -66,6 +67,14 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! isset($node->args[1])) {
+            return null;
+        }
+
+        if (! $node->args[1] instanceof Arg) {
+            return null;
+        }
+
         $arrayVariable = $node->args[1]->value;
 
         /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
@@ -107,8 +116,24 @@ CODE_SAMPLE
         return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
     }
 
-    private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): FuncCall
+    private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall): ?FuncCall
     {
+        if (! isset($inArrayFuncCall->args[0])) {
+            return null;
+        }
+
+        if (! $inArrayFuncCall->args[0] instanceof Arg) {
+            return null;
+        }
+
+        if (! isset($arrayKeysFuncCall->args[0])) {
+            return null;
+        }
+
+        if (! $arrayKeysFuncCall->args[0] instanceof Arg) {
+            return null;
+        }
+
         $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
 
         return new FuncCall(new Name('array_key_exists'), $arguments);

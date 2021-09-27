@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser;
 
 use Nette\Utils\Strings;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -95,6 +96,10 @@ final class NodeTransformer
         $stringArgument = null;
         $arrayItems = [];
         foreach ($sprintfFuncCall->args as $i => $arg) {
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             if ($i === 0) {
                 $stringArgument = $arg->value;
             } else {

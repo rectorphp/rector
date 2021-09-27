@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Defluent\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PHPStan\Type\MixedType;
@@ -33,6 +34,14 @@ final class NewFluentChainMethodCallNodeAnalyzer
     public function matchNewInFluentSetterMethodCall(MethodCall $methodCall): ?New_
     {
         if (count($methodCall->args) !== 1) {
+            return null;
+        }
+
+        if (! isset($methodCall->args[0])) {
+            return null;
+        }
+
+        if (! $methodCall->args[0] instanceof Arg) {
             return null;
         }
 

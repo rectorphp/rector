@@ -6,6 +6,7 @@ namespace Rector\Php72\NodeFactory;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -68,7 +69,7 @@ final class AnonymousFunctionFactory
     public function create(
         array $params,
         array $stmts,
-        Identifier | Name | NullableType | UnionType | null $returnTypeNode
+        Identifier | Name | NullableType | UnionType | ComplexType | null $returnTypeNode
     ): Closure {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
 

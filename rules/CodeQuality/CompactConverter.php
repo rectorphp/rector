@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
@@ -22,6 +23,11 @@ final class CompactConverter
     public function hasAllArgumentsNamed(FuncCall $funcCall): bool
     {
         foreach ($funcCall->args as $arg) {
+            // VariadicPlaceholder doesn't has name, so it return false directly
+            if (! $arg instanceof Arg) {
+                return false;
+            }
+
             /** @var string|null $variableName */
             $variableName = $this->valueResolver->getValue($arg->value);
             if (! is_string($variableName)) {
@@ -37,6 +43,10 @@ final class CompactConverter
         $array = new Array_();
 
         foreach ($funcCall->args as $arg) {
+            if (! $arg instanceof Arg) {
+                throw new ShouldNotHappenException();
+            }
+
             /** @var string|null $variableName */
             $variableName = $this->valueResolver->getValue($arg->value);
             if (! is_string($variableName)) {

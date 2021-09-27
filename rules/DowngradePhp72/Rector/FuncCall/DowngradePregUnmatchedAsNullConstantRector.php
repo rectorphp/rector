@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use Nette\NotImplementedException;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -70,7 +71,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
             return null;
         }
 
-        $args = $node->args;
+        $args = $node->getArgs();
         if (! isset($args[3])) {
             return null;
         }
@@ -81,7 +82,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 
         if ($flags instanceof BitwiseOr) {
             $this->cleanBitWiseOrFlags($node, $flags);
-            if (! $this->nodeComparator->areNodesEqual($flags, $node->args[3]->value)) {
+            if (! $this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
                 return $this->handleEmptyStringToNullMatch($node, $variable);
             }
 
@@ -243,6 +244,10 @@ CODE_SAMPLE
             self::FLAG
         )) {
             $bitwiseOr = $bitwiseOr->right;
+        }
+
+        if (! $funcCall->args[3] instanceof Arg) {
+            return;
         }
 
         $funcCall->args[3]->value = $bitwiseOr;

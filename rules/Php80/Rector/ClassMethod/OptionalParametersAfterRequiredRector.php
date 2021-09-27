@@ -144,12 +144,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $new->args);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $new->getArgs());
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
 
-        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
+        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->getArgs(), $expectedArgOrParamOrder);
         $new->setAttribute(self::ALREADY_SORTED, true);
 
         return $new;
@@ -162,13 +162,13 @@ CODE_SAMPLE
             return null;
         }
 
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->args);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->getArgs());
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
 
         $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder(
-            $methodCall->args,
+            $methodCall->getArgs(),
             $expectedArgOrParamOrder
         );
 

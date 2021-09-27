@@ -68,6 +68,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $node->args[0] instanceof Arg) {
+            return null;
+        }
+
         $firstArgumentStaticType = $this->getStaticType($node->args[0]->value);
         if (! $firstArgumentStaticType instanceof StringType) {
             return null;

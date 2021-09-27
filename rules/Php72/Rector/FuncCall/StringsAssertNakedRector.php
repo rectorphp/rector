@@ -76,6 +76,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (! $node->args[0] instanceof Arg) {
+            return null;
+        }
+
         if (! $node->args[0]->value instanceof String_) {
             return null;
         }

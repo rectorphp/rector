@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,6 +44,10 @@ final class SetTypeToCastRector extends AbstractRector
         'object' => Object_::class,
         'string' => String_::class,
     ];
+
+    public function __construct(private ArgsAnalyzer $argsAnalyzer)
+    {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {
@@ -92,14 +97,26 @@ CODE_SAMPLE
             return null;
         }
 
-        $typeNode = $this->valueResolver->getValue($node->args[1]->value);
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 1)) {
+            return null;
+        }
+
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        $typeNode = $this->valueResolver->getValue($secondArg->value);
         if ($typeNode === null) {
             return null;
         }
 
         $typeNode = strtolower($typeNode);
 
-        $varNode = $node->args[0]->value;
+        if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+            return null;
+        }
+
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        $varNode = $firstArg->value;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         // result of function or probably used

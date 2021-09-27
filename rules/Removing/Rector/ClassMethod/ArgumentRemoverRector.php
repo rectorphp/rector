@@ -9,6 +9,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
@@ -150,8 +151,12 @@ CODE_SAMPLE
     /**
      * @param mixed[] $values
      */
-    private function isArgumentValueMatch(Arg $arg, array $values): bool
+    private function isArgumentValueMatch(Arg|VariadicPlaceholder $arg, array $values): bool
     {
+        if (! $arg instanceof Arg) {
+            return false;
+        }
+
         $nodeValue = $this->valueResolver->getValue($arg->value);
         return in_array($nodeValue, $values, true);
     }

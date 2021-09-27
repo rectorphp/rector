@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -73,6 +74,7 @@ CODE_SAMPLE
             $args[] = $arrayItem instanceof ArrayItem ? new Arg($arrayItem->value) : null;
         }
 
+        /** @var Arg[]|VariadicPlaceholder[] $args */
         return new FuncCall(new Name('list'), $args);
     }
 }

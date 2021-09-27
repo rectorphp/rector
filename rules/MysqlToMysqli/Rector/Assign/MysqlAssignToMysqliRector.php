@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\MysqlToMysqli\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -152,7 +153,7 @@ CODE_SAMPLE
     private function processMysqlResult(Assign $assign, FuncCall $funcCall): FuncCall
     {
         $fetchField = null;
-        if (isset($funcCall->args[2])) {
+        if (isset($funcCall->args[2]) && $funcCall->args[2] instanceof Arg) {
             $fetchField = $funcCall->args[2]->value;
             unset($funcCall->args[2]);
         }

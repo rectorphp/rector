@@ -87,8 +87,11 @@ final class ArgumentDefaultValueReplacer
     private function processArgs(
         MethodCall | StaticCall | FuncCall $expr,
         ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue
-    ): Expr {
+    ): ?Expr {
         $position = $replaceArgumentDefaultValue->getPosition();
+        if (! $expr->args[$position] instanceof Arg) {
+            return null;
+        }
 
         $argValue = $this->valueResolver->getValue($expr->args[$position]->value);
 
@@ -97,7 +100,7 @@ final class ArgumentDefaultValueReplacer
         ) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
             $expr->args[$position] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
         } elseif (is_array($replaceArgumentDefaultValue->getValueBefore())) {
-            $newArgs = $this->processArrayReplacement($expr->args, $replaceArgumentDefaultValue);
+            $newArgs = $this->processArrayReplacement($expr->getArgs(), $replaceArgumentDefaultValue);
 
             if ($newArgs) {
                 $expr->args = $newArgs;

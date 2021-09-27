@@ -82,25 +82,26 @@ final class MultiDirnameRector extends AbstractRector implements MinPhpVersionIn
             return null;
         }
 
-        if (count($funcCall->args) >= 3) {
+        $args = $funcCall->getArgs();
+        if (count($args) >= 3) {
             return null;
         }
 
         // dirname($path, <LEVEL>);
-        if (count($funcCall->args) === 2) {
-            if (! $funcCall->args[1]->value instanceof LNumber) {
+        if (count($args) === 2) {
+            if (! $args[1]->value instanceof LNumber) {
                 return null;
             }
 
             /** @var LNumber $levelNumber */
-            $levelNumber = $funcCall->args[1]->value;
+            $levelNumber = $args[1]->value;
 
             $this->nestingLevel += $levelNumber->value;
         } else {
             ++$this->nestingLevel;
         }
 
-        $nestedFuncCallNode = $funcCall->args[0]->value;
+        $nestedFuncCallNode = $args[0]->value;
         if (! $nestedFuncCallNode instanceof FuncCall) {
             return null;
         }
