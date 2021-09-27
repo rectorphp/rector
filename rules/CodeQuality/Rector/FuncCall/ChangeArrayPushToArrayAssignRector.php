@@ -91,7 +91,7 @@ CODE_SAMPLE
         $arrayDimFetch = new ArrayDimFetch($node->args[0]->value);
 
         $position = 1;
-        while (isset($node->args[$position]) &&  $node->args[$position] instanceof Arg) {
+        while (isset($node->args[$position]) && $node->args[$position] instanceof Arg) {
             $assign = new Assign($arrayDimFetch, $node->args[$position]->value);
             $assignExpression = new Expression($assign);
 

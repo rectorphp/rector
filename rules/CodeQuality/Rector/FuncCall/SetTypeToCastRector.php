@@ -45,8 +45,9 @@ final class SetTypeToCastRector extends AbstractRector
         'string' => String_::class,
     ];
 
-    public function __construct(private ArgsAnalyzer $argsAnalyzer)
-    {
+    public function __construct(
+        private ArgsAnalyzer $argsAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition

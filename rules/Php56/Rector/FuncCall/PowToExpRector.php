@@ -20,8 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class PowToExpRector extends AbstractRector implements MinPhpVersionInterface
 {
-    public function __construct(private ArgsAnalyzer $argsAnalyzer)
-    {
+    public function __construct(
+        private ArgsAnalyzer $argsAnalyzer
+    ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
@@ -62,7 +63,7 @@ final class PowToExpRector extends AbstractRector implements MinPhpVersionInterf
         /** @var Arg $secondArgument */
         $secondArgument = $node->args[1];
 
-        return new Pow($firstArgument->value,  $secondArgument->value);
+        return new Pow($firstArgument->value, $secondArgument->value);
     }
 
     public function provideMinPhpVersion(): int

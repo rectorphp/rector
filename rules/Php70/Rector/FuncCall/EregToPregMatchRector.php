@@ -70,20 +70,6 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         return [FuncCall::class];
     }
 
-    private function shouldSkip(FuncCall $funcCall): bool
-    {
-        $functionName = $this->getName($funcCall);
-        if ($functionName === null) {
-            return true;
-        }
-
-        if (! isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
-            return true;
-        }
-
-        return ! $this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0);
-    }
-
     /**
      * @param FuncCall $node
      */
@@ -109,7 +95,11 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         $node->name = new Name(self::OLD_NAMES_TO_NEW_ONES[$functionName]);
 
         // ereg|eregi 3rd argument return value fix
-        if (in_array($functionName, ['ereg', 'eregi'], true) && isset($node->args[2]) && $node->args[2] instanceof Arg) {
+        if (in_array(
+            $functionName,
+            ['ereg', 'eregi'],
+            true
+        ) && isset($node->args[2]) && $node->args[2] instanceof Arg) {
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof Assign) {
                 return $this->createTernaryWithStrlenOfFirstMatch($node);
@@ -117,6 +107,20 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         }
 
         return $node;
+    }
+
+    private function shouldSkip(FuncCall $funcCall): bool
+    {
+        $functionName = $this->getName($funcCall);
+        if ($functionName === null) {
+            return true;
+        }
+
+        if (! isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
+            return true;
+        }
+
+        return ! $this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0);
     }
 
     private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName): void

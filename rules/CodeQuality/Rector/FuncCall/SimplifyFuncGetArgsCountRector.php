@@ -41,7 +41,7 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
             return null;
         }
 
-        if (!  $node->args[0] instanceof Arg) {
+        if (! $node->args[0] instanceof Arg) {
             return null;
         }
 

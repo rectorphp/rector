@@ -71,7 +71,10 @@ CODE_SAMPLE
             $node->args[0] = new Arg(new String_('SHOW DATABASES'));
         }
 
-        if ($this->isName($node, 'mysql_list_fields') && $node->args[0] instanceof Arg && $node->args[1] instanceof Arg) {
+        if ($this->isName(
+            $node,
+            'mysql_list_fields'
+        ) && $node->args[0] instanceof Arg && $node->args[1] instanceof Arg) {
             $node->name = new Name(self::MYSQLI_QUERY);
             $node->args[0]->value = $this->joinStringWithNode('SHOW COLUMNS FROM', $node->args[1]->value);
 

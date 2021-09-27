@@ -162,7 +162,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->getArgs());
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent(
+            $methodReflection,
+            $methodCall->getArgs()
+        );
         if ($expectedArgOrParamOrder === null) {
             return null;
         }

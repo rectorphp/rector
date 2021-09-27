@@ -11,8 +11,9 @@ use Rector\Php80\ValueObject\StrStartsWith;
 
 final class StrStartsWithFactory
 {
-    public function __construct(private ArgsAnalyzer $argsAnalyzer)
-    {
+    public function __construct(
+        private ArgsAnalyzer $argsAnalyzer
+    ) {
     }
 
     public function createFromFuncCall(FuncCall $funcCall, bool $isPositive): ?StrStartsWith

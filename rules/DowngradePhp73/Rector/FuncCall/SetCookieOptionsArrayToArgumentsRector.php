@@ -48,6 +48,11 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
 
     private int $highestIndex = 1;
 
+    public function __construct(
+        private ArgsAnalyzer $argsAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -64,10 +69,6 @@ CODE_SAMPLE
                 ),
             ]
         );
-    }
-
-    public function __construct(private ArgsAnalyzer $argsAnalyzer)
-    {
     }
 
     /**

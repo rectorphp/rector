@@ -37,6 +37,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
 
+    // bleeding edge 16x faster speed
+    $parameters->set(Option::PARALLEL, true);
+
     $parameters->set(Option::PATHS, [
         __DIR__ . '/bin',
         __DIR__ . '/src',

@@ -113,9 +113,7 @@ CODE_SAMPLE
 
         /** @var Arg[] $args */
         $args = $node->args;
-        if (! $this->isPhpVersionConstant($args[0]->value) && ! $this->isPhpVersionConstant(
-            $args[1]->value
-        )) {
+        if (! $this->isPhpVersionConstant($args[0]->value) && ! $this->isPhpVersionConstant($args[1]->value)) {
             return null;
         }
 
