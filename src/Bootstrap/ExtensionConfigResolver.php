@@ -24,10 +24,13 @@ final class ExtensionConfigResolver
         $generatedConfigDirectory = \dirname($generatedConfigReflectionClass->getFileName());
         foreach (\Rector\RectorInstaller\GeneratedConfig::EXTENSIONS as $extensionConfig) {
             $includedFiles = $extensionConfig['extra']['includes'] ?? [];
+            /** @var string[] $includedFiles */
             foreach ($includedFiles as $includedFile) {
                 $includedFilePath = $this->resolveIncludeFilePath($extensionConfig, $generatedConfigDirectory, $includedFile);
                 if ($includedFilePath === null) {
-                    $includedFilePath = \sprintf('%s/%s', $extensionConfig['install_path'], $includedFile);
+                    /** @var string $installPath */
+                    $installPath = $extensionConfig['install_path'];
+                    $includedFilePath = \sprintf('%s/%s', $installPath, $includedFile);
                 }
                 $configFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($includedFilePath);
             }
