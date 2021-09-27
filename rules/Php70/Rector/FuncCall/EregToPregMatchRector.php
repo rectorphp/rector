@@ -61,17 +61,6 @@ final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector imp
     {
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
-    {
-        $functionName = $this->getName($funcCall);
-        if ($functionName === null) {
-            return \true;
-        }
-        if (!isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
-            return \true;
-        }
-        return !$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0);
-    }
     /**
      * @param FuncCall $node
      */
@@ -100,6 +89,17 @@ final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector imp
             }
         }
         return $node;
+    }
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    {
+        $functionName = $this->getName($funcCall);
+        if ($functionName === null) {
+            return \true;
+        }
+        if (!isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
+            return \true;
+        }
+        return !$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0);
     }
     private function processStringPattern(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Scalar\String_ $string, string $functionName) : void
     {

@@ -38,6 +38,10 @@ final class SetCookieOptionsArrayToArgumentsRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert setcookie option array to arguments', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -47,10 +51,6 @@ CODE_SAMPLE
 setcookie('name', $value, 360);
 CODE_SAMPLE
 )]);
-    }
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
-    {
-        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
