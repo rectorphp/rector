@@ -42,7 +42,7 @@ parameters:
     scanDirectories:
         - stubs
 
-    reportUnmatchedIgnoredErrors: false
+    # reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
     excludes_analyse:
@@ -116,22 +116,20 @@ parameters:
         # is nested expr
         - '#Access to an undefined property PhpParser\\Node\\Expr\:\:\$expr#'
 
+        # 3rd party package
         -
             message: '#Array (with keys|destruct) is not allowed\. Use value object to pass data instead#'
-            paths:
-                # 3rd party package
-                - rules/Php70/EregToPcreTransformer.php
+            path: rules/Php70/EregToPcreTransformer.php
 
+        # 3rd party code
         -
             message: '#Use explicit return value over magic &reference#'
-            paths:
-                # 3rd party code
-                -  rules/Php70/EregToPcreTransformer.php
+            path: rules/Php70/EregToPcreTransformer.php
 
-        # symfony/console
+        # 3rd party code
         -
             message: '#Use value object over return of values#'
-            path: 'rules/Php70/EregToPcreTransformer.php'
+            path: rules/Php70/EregToPcreTransformer.php
 
         -
             message: '#Nested foreach with empty statement is not allowed#'
@@ -369,11 +367,6 @@ parameters:
         - '#Method Rector\\Core\\Tests\\DependencyInjection\\ConfigurableRectorImportConfigCallsMergeTest\:\:provideData\(\) return type has no value type specified in iterable type Iterator#'
 
         -
-            message: '#Use value object over return of values#'
-            paths:
-                 - rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
-
-        -
             message: '#Function "function_exists\(\)" cannot be used/left in the code#'
             paths:
                  - src/functions/node_helper.php
@@ -410,16 +403,8 @@ parameters:
         # union false positive
         - '#Method Rector\\Comments\\CommentRemover\:\:removeFromNode\(\) has parameter \$node with no value type specified in iterable type array#'
 
-        -
-            message: '#Class with base "StaticTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper", "Rector\\StaticTypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
-            path: packages/StaticTypeMapper/StaticTypeMapper.php #31
-
         # false positive
         - '#Attribute class JetBrains\\PhpStorm\\Immutable does not exist#'
-
-        - '#Class with base "StaticTypeMapper" name is already used in "Rector\\StaticTypeMapper\\StaticTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\StaticTypeMapper"\. Use unique name to make classes easy to recognize#'
-        - '#Class with base "UnionTypeMapper" name is already used in "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper", "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
-        - '#Class with base "UnionTypeMapper" name is already used in "Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper", "Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper"\. Use unique name to make classes easy to recognize#'
 
         # allowed for ease api
         -
@@ -529,3 +514,6 @@ parameters:
                 - packages/FileFormatter/ValueObject/NewLine.php #15
                 - src/Application/VersionResolver.php #16
                 - utils/compiler/src/Unprefixer.php #9
+
+       # false positive, class exists is right above
+        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'

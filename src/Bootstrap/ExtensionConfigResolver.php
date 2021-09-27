@@ -30,6 +30,7 @@ final class ExtensionConfigResolver
         foreach (GeneratedConfig::EXTENSIONS as $extensionConfig) {
             $includedFiles = $extensionConfig['extra']['includes'] ?? [];
 
+            /** @var string[] $includedFiles */
             foreach ($includedFiles as $includedFile) {
                 $includedFilePath = $this->resolveIncludeFilePath(
                     $extensionConfig,
@@ -38,7 +39,9 @@ final class ExtensionConfigResolver
                 );
 
                 if ($includedFilePath === null) {
-                    $includedFilePath = sprintf('%s/%s', $extensionConfig['install_path'], $includedFile);
+                    /** @var string $installPath */
+                    $installPath = $extensionConfig['install_path'];
+                    $includedFilePath = sprintf('%s/%s', $installPath, $includedFile);
                 }
 
                 $configFileInfos[] = new SmartFileInfo($includedFilePath);
