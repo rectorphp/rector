@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class FuncCallManipulator
@@ -24,6 +25,9 @@ final class FuncCallManipulator
         $arguments = [];
         foreach ($compactFuncCalls as $compactFuncCall) {
             foreach ($compactFuncCall->args as $arg) {
+                if (!$arg instanceof \PhpParser\Node\Arg) {
+                    continue;
+                }
                 $value = $this->valueResolver->getValue($arg->value);
                 if ($value === null) {
                     continue;

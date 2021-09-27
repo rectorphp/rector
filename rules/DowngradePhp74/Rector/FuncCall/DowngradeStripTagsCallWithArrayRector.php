@@ -90,7 +90,9 @@ CODE_SAMPLE
         if ($this->shouldSkipFuncCall($node)) {
             return null;
         }
-        $allowableTagsParam = $node->args[1]->value;
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        $allowableTagsParam = $secondArg->value;
         if ($allowableTagsParam instanceof \PhpParser\Node\Expr\Array_) {
             // If it is an array, convert it to string
             $newExpr = $this->createArrayFromString($allowableTagsParam);
@@ -119,6 +121,12 @@ CODE_SAMPLE
         }
         // If param not provided, do nothing
         if (\count($funcCall->args) < 2) {
+            return \true;
+        }
+        if (!isset($funcCall->args[1])) {
+            return \true;
+        }
+        if (!$funcCall->args[1] instanceof \PhpParser\Node\Arg) {
             return \true;
         }
         // Process anything other than String and null (eg: variables, function calls)

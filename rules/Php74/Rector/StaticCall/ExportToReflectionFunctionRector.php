@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -22,6 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ExportToReflectionFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::EXPORT_TO_REFLECTION_FUNCTION;
@@ -60,8 +69,18 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'export')) {
             return null;
         }
-        $new = new \PhpParser\Node\Expr\New_($node->class, [new \PhpParser\Node\Arg($node->args[0]->value)]);
-        if (isset($node->args[1]) && $this->valueResolver->isTrue($node->args[1]->value)) {
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+            return null;
+        }
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        $new = new \PhpParser\Node\Expr\New_($node->class, [new \PhpParser\Node\Arg($firstArg->value)]);
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 1)) {
+            return $new;
+        }
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        if ($this->valueResolver->isTrue($secondArg->value)) {
             return new \PhpParser\Node\Expr\Cast\String_($new);
         }
         return $new;

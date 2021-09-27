@@ -61,6 +61,12 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $tempVariableName = $this->variableNaming->createCountedValueName('callable', $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
         $tempVariable = new \PhpParser\Node\Expr\Variable($tempVariableName);
         $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($tempVariable, $node->args[0]->value));

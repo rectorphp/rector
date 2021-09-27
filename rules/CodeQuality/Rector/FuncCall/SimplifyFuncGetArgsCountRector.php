@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,6 +31,9 @@ final class SimplifyFuncGetArgsCountRector extends \Rector\Core\Rector\AbstractR
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'count')) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if (!$node->args[0]->value instanceof \PhpParser\Node\Expr\FuncCall) {

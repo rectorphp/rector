@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp73\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
@@ -59,16 +60,28 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorArrayKeyFirst(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
+    private function refactorArrayKeyFirst(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
+        if (!isset($funcCall->args[0])) {
+            return null;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
         $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
         $funcCall->name = new \PhpParser\Node\Name('key');
         return $funcCall;
     }
-    private function refactorArrayKeyLast(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
+    private function refactorArrayKeyLast(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
+        if (!isset($funcCall->args[0])) {
+            return null;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $array = $funcCall->args[0]->value;
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
         $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);

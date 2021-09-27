@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -13,6 +14,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
@@ -31,9 +33,14 @@ final class StrEndsWithRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var \Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer
      */
     private $binaryOpAnalyzer;
-    public function __construct(\Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer $binaryOpAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer $binaryOpAnalyzer, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->binaryOpAnalyzer = $binaryOpAnalyzer;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     public function provideMinPhpVersion() : int
     {
@@ -118,10 +125,17 @@ CODE_SAMPLE
         } else {
             return null;
         }
-        $haystack = $substrFuncCall->args[0]->value;
-        if (!$this->isUnaryMinusStrlenFuncCallArgValue($substrFuncCall->args[1]->value, $comparedNeedleExpr) && !$this->isHardCodedLNumberAndString($substrFuncCall->args[1]->value, $comparedNeedleExpr)) {
+        if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($substrFuncCall->args, [0, 1])) {
             return null;
         }
+        /** @var Arg $secondArg */
+        $secondArg = $substrFuncCall->args[1];
+        if (!$this->isUnaryMinusStrlenFuncCallArgValue($secondArg->value, $comparedNeedleExpr) && !$this->isHardCodedLNumberAndString($secondArg->value, $comparedNeedleExpr)) {
+            return null;
+        }
+        /** @var Arg $firstArg */
+        $firstArg = $substrFuncCall->args[0];
+        $haystack = $firstArg->value;
         $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
         return $this->buildReturnNode($haystack, $comparedNeedleExpr, $isPositive);
     }
@@ -139,9 +153,19 @@ CODE_SAMPLE
             return null;
         }
         $substrCompareFuncCall = $funcCallAndExpr->getFuncCall();
-        $haystack = $substrCompareFuncCall->args[0]->value;
-        $needle = $substrCompareFuncCall->args[1]->value;
-        if (!$this->isUnaryMinusStrlenFuncCallArgValue($substrCompareFuncCall->args[2]->value, $needle) && !$this->isHardCodedLNumberAndString($substrCompareFuncCall->args[2]->value, $needle)) {
+        if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($substrCompareFuncCall->args, [0, 1, 2])) {
+            return null;
+        }
+        /** @var Arg $firstArg */
+        $firstArg = $substrCompareFuncCall->args[0];
+        $haystack = $firstArg->value;
+        /** @var Arg $secondArg */
+        $secondArg = $substrCompareFuncCall->args[1];
+        $needle = $secondArg->value;
+        /** @var Arg $thirdArg */
+        $thirdArg = $substrCompareFuncCall->args[2];
+        $thirdArgValue = $thirdArg->value;
+        if (!$this->isUnaryMinusStrlenFuncCallArgValue($thirdArgValue, $needle) && !$this->isHardCodedLNumberAndString($thirdArgValue, $needle)) {
             return null;
         }
         $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
@@ -157,6 +181,12 @@ CODE_SAMPLE
         }
         $funcCall = $substrOffset->expr;
         if (!$this->nodeNameResolver->isName($funcCall, 'strlen')) {
+            return \false;
+        }
+        if (!isset($funcCall->args[0])) {
+            return \false;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return \false;
         }
         return $this->nodeComparator->areNodesEqual($funcCall->args[0]->value, $needle);

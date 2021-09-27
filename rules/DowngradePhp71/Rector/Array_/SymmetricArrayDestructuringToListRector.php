@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -60,6 +61,7 @@ CODE_SAMPLE
         foreach ($array->items as $arrayItem) {
             $args[] = $arrayItem instanceof \PhpParser\Node\Expr\ArrayItem ? new \PhpParser\Node\Arg($arrayItem->value) : null;
         }
+        /** @var Arg[]|VariadicPlaceholder[] $args */
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('list'), $args);
     }
 }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
@@ -67,6 +68,12 @@ CODE_SAMPLE
         if (!$this->isName($node, 'get_class')) {
             return null;
         }
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $firstArgValue = $node->args[0]->value;
         // only relevant inside the class
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -121,6 +128,12 @@ CODE_SAMPLE
         if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return \false;
         }
+        if (!isset($funcCall->args[0])) {
+            return \false;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
         if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && !$this->valueResolver->isNull($ternary->cond->right)) {
             return \true;
         }
@@ -135,6 +148,12 @@ CODE_SAMPLE
     private function isNotIdenticalToNull(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Ternary $ternary) : bool
     {
         if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+            return \false;
+        }
+        if (!isset($funcCall->args[0])) {
+            return \false;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return \false;
         }
         if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && $this->valueResolver->isNull($ternary->cond->right)) {

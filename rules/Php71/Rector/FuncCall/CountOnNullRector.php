@@ -82,7 +82,9 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $countedNode = $node->args[0]->value;
+        /** @var Arg $arg0 */
+        $arg0 = $node->args[0];
+        $countedNode = $arg0->value;
         if ($this->countableTypeAnalyzer->isCountableType($countedNode)) {
             return null;
         }
@@ -120,6 +122,9 @@ CODE_SAMPLE
             return \true;
         }
         if (!isset($funcCall->args[0])) {
+            return \true;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return \true;
         }
         if ($funcCall->args[0]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {

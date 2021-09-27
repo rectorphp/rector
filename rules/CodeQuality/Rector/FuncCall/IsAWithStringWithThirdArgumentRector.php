@@ -55,6 +55,9 @@ CODE_SAMPLE
         if (isset($node->args[2])) {
             return null;
         }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $firstArgumentStaticType = $this->getStaticType($node->args[0]->value);
         if (!$firstArgumentStaticType instanceof \PHPStan\Type\StringType) {
             return null;

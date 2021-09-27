@@ -77,14 +77,17 @@ final class ArgumentDefaultValueReplacer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
      */
-    private function processArgs($expr, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : \PhpParser\Node\Expr
+    private function processArgs($expr, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?\PhpParser\Node\Expr
     {
         $position = $replaceArgumentDefaultValue->getPosition();
+        if (!$expr->args[$position] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $argValue = $this->valueResolver->getValue($expr->args[$position]->value);
         if (\is_scalar($replaceArgumentDefaultValue->getValueBefore()) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
             $expr->args[$position] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
         } elseif (\is_array($replaceArgumentDefaultValue->getValueBefore())) {
-            $newArgs = $this->processArrayReplacement($expr->args, $replaceArgumentDefaultValue);
+            $newArgs = $this->processArrayReplacement($expr->getArgs(), $replaceArgumentDefaultValue);
             if ($newArgs) {
                 $expr->args = $newArgs;
             }

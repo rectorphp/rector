@@ -98,11 +98,19 @@ CODE_SAMPLE
         if (!$this->nodeTypeResolver->isObjectTypes($methodCall->var, [new \PHPStan\Type\ObjectType('League\\Event\\EventDispatcher'), new \PHPStan\Type\ObjectType('League\\Event\\Emitter')])) {
             return \true;
         }
+        if (!isset($methodCall->args[0])) {
+            return \true;
+        }
+        if (!$methodCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return \true;
+        }
         return !$this->getStaticType($methodCall->args[0]->value) instanceof \PHPStan\Type\StringType;
     }
     private function updateNode(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
-        $methodCall->args[0] = new \PhpParser\Node\Arg($this->createNewAnonymousEventClass($methodCall->args[0]->value));
+        /** @var Arg $firstArg */
+        $firstArg = $methodCall->args[0];
+        $methodCall->args[0] = new \PhpParser\Node\Arg($this->createNewAnonymousEventClass($firstArg->value));
         return $methodCall;
     }
     private function createNewAnonymousEventClass(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\New_

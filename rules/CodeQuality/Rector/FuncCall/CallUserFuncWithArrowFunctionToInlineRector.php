@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -67,7 +68,14 @@ CODE_SAMPLE
             return null;
         }
         // change the node
-        $firstArgValue = $node->args[0]->value;
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        $firstArg = $node->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $firstArgValue = $firstArg->value;
         if ($firstArgValue instanceof \PhpParser\Node\Expr\ArrowFunction) {
             return $firstArgValue->expr;
         }

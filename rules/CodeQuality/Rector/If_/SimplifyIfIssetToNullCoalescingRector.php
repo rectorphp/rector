@@ -14,6 +14,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -22,6 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyIfIssetToNullCoalescingRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify binary if to null coalesce', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -90,10 +99,17 @@ CODE_SAMPLE
         if (!$this->isName($firstAssign->expr, 'array_merge')) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($firstAssign->expr->args[0]->value, $valueNode)) {
+        if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($firstAssign->expr->args, [0, 1])) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($secondAssign->expr, $firstAssign->expr->args[1]->value)) {
+        /** @var Arg $firstArg */
+        $firstArg = $firstAssign->expr->args[0];
+        if (!$this->nodeComparator->areNodesEqual($firstArg->value, $valueNode)) {
+            return null;
+        }
+        /** @var Arg $secondArg */
+        $secondArg = $firstAssign->expr->args[1];
+        if (!$this->nodeComparator->areNodesEqual($secondAssign->expr, $secondArg->value)) {
             return null;
         }
         $args = [new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\BinaryOp\Coalesce($valueNode, new \PhpParser\Node\Expr\Array_([]))), new \PhpParser\Node\Arg($secondAssign->expr)];

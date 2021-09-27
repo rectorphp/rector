@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use RectorPrefix20210927\Nette\NotImplementedException;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -66,7 +67,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         if (!$this->isRegexFunctionNames($node)) {
             return null;
         }
-        $args = $node->args;
+        $args = $node->getArgs();
         if (!isset($args[3])) {
             return null;
         }
@@ -75,7 +76,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         $variable = $args[2]->value;
         if ($flags instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
             $this->cleanBitWiseOrFlags($node, $flags);
-            if (!$this->nodeComparator->areNodesEqual($flags, $node->args[3]->value)) {
+            if (!$this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
                 return $this->handleEmptyStringToNullMatch($node, $variable);
             }
             return null;
@@ -192,6 +193,9 @@ CODE_SAMPLE
         }
         if ($bitwiseOr instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr && $bitwiseOr->left instanceof \PhpParser\Node\Expr\ConstFetch && $this->isName($bitwiseOr->left, self::FLAG)) {
             $bitwiseOr = $bitwiseOr->right;
+        }
+        if (!$funcCall->args[3] instanceof \PhpParser\Node\Arg) {
+            return;
         }
         $funcCall->args[3]->value = $bitwiseOr;
     }

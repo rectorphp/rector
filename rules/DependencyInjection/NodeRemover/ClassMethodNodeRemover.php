@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DependencyInjection\NodeRemover;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
@@ -81,6 +82,9 @@ final class ClassMethodNodeRemover
     private function removeParamFromArgs(\PhpParser\Node\Expr\StaticCall $staticCall, string $paramName) : void
     {
         foreach ($staticCall->args as $key => $arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             if (!$this->nodeNameResolver->isName($arg->value, $paramName)) {
                 continue;
             }

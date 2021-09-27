@@ -146,6 +146,9 @@ CODE_SAMPLE
             if ($position < $firstSpreadParamPosition) {
                 continue;
             }
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             $variadicArgs[] = $arg;
         }
         return $variadicArgs;

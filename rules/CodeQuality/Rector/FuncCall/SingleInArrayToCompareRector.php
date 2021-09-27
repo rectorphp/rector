@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\Equal;
@@ -58,6 +59,12 @@ CODE_SAMPLE
         if (!$this->isName($node, 'in_array')) {
             return null;
         }
+        if (!isset($node->args[1])) {
+            return null;
+        }
+        if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         if (!$node->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
@@ -68,6 +75,12 @@ CODE_SAMPLE
         }
         $firstArrayItem = $arrayNode->items[0];
         if (!$firstArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            return null;
+        }
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $firstArrayItemValue = $firstArrayItem->value;

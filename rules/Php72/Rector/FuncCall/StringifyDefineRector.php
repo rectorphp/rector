@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
@@ -68,6 +69,12 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'define')) {
+            return null;
+        }
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node->args[0]->value)) {

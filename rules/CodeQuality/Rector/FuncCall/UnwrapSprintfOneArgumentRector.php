@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,6 +16,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class UnwrapSprintfOneArgumentRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('unwrap sprintf() with one argument', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -42,9 +52,14 @@ CODE_SAMPLE
         if (\count($node->args) > 1) {
             return null;
         }
-        if ($node->args[0]->unpack) {
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
             return null;
         }
-        return $node->args[0]->value;
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        if ($firstArg->unpack) {
+            return null;
+        }
+        return $firstArg->value;
     }
 }

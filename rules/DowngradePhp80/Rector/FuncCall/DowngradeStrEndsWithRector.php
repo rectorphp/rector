@@ -52,8 +52,8 @@ final class DowngradeStrEndsWithRector extends \Rector\Core\Rector\AbstractRecto
     }
     private function createSubstrCompareFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
     {
-        $args = $funcCall->args;
-        $strlenFuncCall = $this->createStrlenFuncCall($funcCall->args[1]->value);
+        $args = $funcCall->getArgs();
+        $strlenFuncCall = $this->createStrlenFuncCall($args[1]->value);
         $args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\UnaryMinus($strlenFuncCall));
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('substr_compare'), $args);
     }

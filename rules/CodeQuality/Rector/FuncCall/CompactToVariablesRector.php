@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
@@ -89,7 +90,9 @@ CODE_SAMPLE
         if ($this->compactConverter->hasAllArgumentsNamed($node)) {
             return $this->compactConverter->convertToArray($node);
         }
-        $firstValue = $node->args[0]->value;
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        $firstValue = $firstArg->value;
         $firstValueStaticType = $this->getStaticType($firstValue);
         if (!$firstValueStaticType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return null;
@@ -123,7 +126,9 @@ CODE_SAMPLE
         }
         $this->removeNode($assign);
         $this->arrayCompacter->compactStringToVariableArray($array);
-        $assignVariable = $funcCall->args[0]->value;
+        /** @var Arg $firstArg */
+        $firstArg = $funcCall->args[0];
+        $assignVariable = $firstArg->value;
         $preAssign = new \PhpParser\Node\Expr\Assign($assignVariable, $array);
         $currentStatement = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStatement);

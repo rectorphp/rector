@@ -49,6 +49,12 @@ CODE_SAMPLE
             return null;
         }
         $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         /** @var Array_ $options */
         $options = $node->args[0]->value;
         foreach ($options->items as $option) {
@@ -75,6 +81,9 @@ CODE_SAMPLE
             return \true;
         }
         if (!isset($funcCall->args[0])) {
+            return \true;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return \true;
         }
         return !$funcCall->args[0]->value instanceof \PhpParser\Node\Expr\Array_;

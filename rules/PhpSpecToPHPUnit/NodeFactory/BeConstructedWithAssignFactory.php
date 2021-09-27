@@ -43,6 +43,12 @@ final class BeConstructedWithAssignFactory
             return new \PhpParser\Node\Expr\Assign($propertyFetch, $new);
         }
         if ($this->nodeNameResolver->isName($methodCall->name, 'beConstructedThrough')) {
+            if (!isset($methodCall->args[0])) {
+                return null;
+            }
+            if (!$methodCall->args[0] instanceof \PhpParser\Node\Arg) {
+                return null;
+            }
             $methodName = $this->valueResolver->getValue($methodCall->args[0]->value);
             $staticCall = $this->nodeFactory->createStaticCall($testedClass, $methodName);
             $this->moveConstructorArguments($methodCall, $staticCall);
@@ -53,6 +59,9 @@ final class BeConstructedWithAssignFactory
     private function moveConstructorArguments(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
         if (!isset($methodCall->args[1])) {
+            return;
+        }
+        if (!$methodCall->args[1] instanceof \PhpParser\Node\Arg) {
             return;
         }
         if (!$methodCall->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {

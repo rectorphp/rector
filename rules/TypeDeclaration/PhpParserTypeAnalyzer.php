@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -21,7 +22,7 @@ final class PhpParserTypeAnalyzer
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\Identifier $possibleSubtype
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\Identifier $possibleParentType
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType $possibleParentType
      */
     public function isCovariantSubtypeOf($possibleSubtype, $possibleParentType) : bool
     {

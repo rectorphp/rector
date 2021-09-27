@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -33,12 +34,17 @@ final class PregMatchTypeCorrector
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->nodeComparator = $nodeComparator;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * Special case for "preg_match(), preg_match_all()" - with 3rd argument
@@ -65,11 +71,13 @@ final class PregMatchTypeCorrector
             if (!$this->nodeNameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
                 continue;
             }
-            if (!isset($funcCallNode->args[2])) {
+            if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCallNode->args, 2)) {
                 continue;
             }
+            /** @var Arg $thirdArg */
+            $thirdArg = $funcCallNode->args[2];
             // are the same variables
-            if (!$this->nodeComparator->areNodesEqual($funcCallNode->args[2]->value, $node)) {
+            if (!$this->nodeComparator->areNodesEqual($thirdArg->value, $node)) {
                 continue;
             }
             return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());

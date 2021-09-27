@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\MockeryToProphecy\Collector;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -43,6 +44,12 @@ final class MockVariableCollector
         $variable = $parentNode->var;
         /** @var string $variableName */
         $variableName = $this->nodeNameResolver->getName($variable);
+        if (!isset($node->args[0])) {
+            return [];
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return [];
+        }
         $type = $node->args[0]->value;
         $mockedType = $this->valueResolver->getValue($type);
         $mockVariableTypesByNames[$variableName] = $mockedType;

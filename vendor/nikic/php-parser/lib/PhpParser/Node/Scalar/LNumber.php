@@ -56,6 +56,10 @@ class LNumber extends \PhpParser\Node\Scalar
         if (!$allowInvalidOctal && \strpbrk($str, '89')) {
             throw new \PhpParser\Error('Invalid numeric literal', $attributes);
         }
+        // Strip optional explicit octal prefix.
+        if ('o' === $str[1] || 'O' === $str[1]) {
+            $str = \substr($str, 2);
+        }
         // use intval instead of octdec to get proper cutting behavior with malformed numbers
         $attributes['kind'] = \PhpParser\Node\Scalar\LNumber::KIND_OCT;
         return new \PhpParser\Node\Scalar\LNumber(\intval($str, 8), $attributes);

@@ -60,6 +60,9 @@ final class CallTypesResolver
                 continue;
             }
             foreach ($call->args as $position => $arg) {
+                if (!$arg instanceof \PhpParser\Node\Arg) {
+                    continue;
+                }
                 $argValueType = $this->resolveArgValueType($typeStrictness, $arg);
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }

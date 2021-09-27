@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\FuncCall;
@@ -78,8 +79,16 @@ CODE_SAMPLE
      */
     private function areArrayKeysExistsArgsMatchingDimFetch(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
-        $keyExpr = $funcCall->args[0]->value;
-        $valuesExpr = $funcCall->args[1]->value;
+        $firstArg = $funcCall->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
+        $keyExpr = $firstArg->value;
+        $secondArg = $funcCall->args[1];
+        if (!$secondArg instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
+        $valuesExpr = $secondArg->value;
         if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $valuesExpr)) {
             return \false;
         }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\FunctionLike;
@@ -54,6 +55,12 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($node, 'in_array')) {
             return null;
         }
+        if (!isset($node->args[1])) {
+            return null;
+        }
+        if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $arrayVariable = $node->args[1]->value;
         /** @var Assign|Node|null $previousAssignArraysKeysFuncCall */
         $previousAssignArraysKeysFuncCall = $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $node) use($arrayVariable) : bool {
@@ -82,8 +89,20 @@ CODE_SAMPLE
         $this->removeNode($previousAssignArraysKeysFuncCall);
         return $this->createArrayKeyExists($node, $arrayKeysFuncCall);
     }
-    private function createArrayKeyExists(\PhpParser\Node\Expr\FuncCall $inArrayFuncCall, \PhpParser\Node\Expr\FuncCall $arrayKeysFuncCall) : \PhpParser\Node\Expr\FuncCall
+    private function createArrayKeyExists(\PhpParser\Node\Expr\FuncCall $inArrayFuncCall, \PhpParser\Node\Expr\FuncCall $arrayKeysFuncCall) : ?\PhpParser\Node\Expr\FuncCall
     {
+        if (!isset($inArrayFuncCall->args[0])) {
+            return null;
+        }
+        if (!$inArrayFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        if (!isset($arrayKeysFuncCall->args[0])) {
+            return null;
+        }
+        if (!$arrayKeysFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
         return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_key_exists'), $arguments);
     }

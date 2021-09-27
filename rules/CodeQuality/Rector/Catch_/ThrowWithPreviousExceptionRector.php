@@ -119,6 +119,7 @@ CODE_SAMPLE
             // get previous code
             $new->args[1] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\MethodCall($catchedThrowableVariable, 'getCode'));
         }
+        /** @var Arg $arg1 */
         $arg1 = $new->args[1];
         if ($arg1->name instanceof \PhpParser\Node\Identifier && $arg1->name->toString() === 'previous') {
             $new->args[1] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\MethodCall($catchedThrowableVariable, 'getCode'));

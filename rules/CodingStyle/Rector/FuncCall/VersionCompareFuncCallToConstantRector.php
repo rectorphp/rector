@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Greater;
@@ -17,6 +18,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,9 +36,14 @@ final class VersionCompareFuncCallToConstantRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
-    public function __construct(\Rector\Core\Util\PhpVersionFactory $phpVersionFactory)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\Util\PhpVersionFactory $phpVersionFactory, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->phpVersionFactory = $phpVersionFactory;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -78,11 +85,16 @@ CODE_SAMPLE
         if (\count($node->args) !== 3) {
             return null;
         }
-        if (!$this->isPhpVersionConstant($node->args[0]->value) && !$this->isPhpVersionConstant($node->args[1]->value)) {
+        if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($node->args, [0, 1, 2])) {
             return null;
         }
-        $left = $this->getNewNodeForArg($node->args[0]->value);
-        $right = $this->getNewNodeForArg($node->args[1]->value);
+        /** @var Arg[] $args */
+        $args = $node->args;
+        if (!$this->isPhpVersionConstant($args[0]->value) && !$this->isPhpVersionConstant($args[1]->value)) {
+            return null;
+        }
+        $left = $this->getNewNodeForArg($args[0]->value);
+        $right = $this->getNewNodeForArg($args[1]->value);
         if ($left === null) {
             return null;
         }
@@ -90,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var String_ $operator */
-        $operator = $node->args[2]->value;
+        $operator = $args[2]->value;
         $comparisonClass = self::OPERATOR_TO_COMPARISON[$operator->value];
         return new $comparisonClass($left, $right);
     }

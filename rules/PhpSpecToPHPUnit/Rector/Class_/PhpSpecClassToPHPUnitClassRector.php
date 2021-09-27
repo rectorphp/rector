@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PhpSpecToPHPUnit\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -119,6 +120,12 @@ final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Re
                 continue;
             }
             if (!$this->isName($innerClassMethodStmt->name, 'shouldHaveType')) {
+                continue;
+            }
+            if (!isset($innerClassMethodStmt->args[0])) {
+                continue;
+            }
+            if (!$innerClassMethodStmt->args[0] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             // not the tested type

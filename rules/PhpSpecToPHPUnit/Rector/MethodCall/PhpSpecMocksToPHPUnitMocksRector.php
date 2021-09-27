@@ -96,7 +96,8 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
             if ($mockMethodName === null) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $expectedArg = $methodCall->var->args[0]->value ?? null;
+            $arg = $methodCall->var->args[0] ?? null;
+            $expectedArg = $arg instanceof \PhpParser\Node\Arg ? $arg->value : null;
             $methodCall->var->name = new \PhpParser\Node\Identifier('expects');
             $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
             $methodCall->var->args = [new \PhpParser\Node\Arg($thisOnceMethodCall)];
@@ -184,9 +185,10 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
     }
     private function createIsTypeOrIsInstanceOf(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Expr\MethodCall
     {
-        $type = $this->valueResolver->getValue($staticCall->args[0]->value);
+        $args = $staticCall->getArgs();
+        $type = $this->valueResolver->getValue($args[0]->value);
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
-        return $this->nodeFactory->createLocalMethodCall($name, $staticCall->args);
+        return $this->nodeFactory->createLocalMethodCall($name, $args);
     }
     private function createMockVarDoc(\PhpParser\Node\Param $param, \PhpParser\Node\Name $name) : string
     {

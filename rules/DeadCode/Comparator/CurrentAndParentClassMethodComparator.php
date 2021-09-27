@@ -7,6 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -63,7 +64,7 @@ final class CurrentAndParentClassMethodComparator
         return $this->nodeNameResolver->isName($staticCall->class, 'parent');
     }
     /**
-     * @param Arg[] $parentStaticCallArgs
+     * @param Arg[]|VariadicPlaceholder[] $parentStaticCallArgs
      * @param Param[] $currentClassMethodParams
      */
     private function areArgsAndParamsEqual(array $parentStaticCallArgs, array $currentClassMethodParams) : bool
@@ -77,6 +78,9 @@ final class CurrentAndParentClassMethodComparator
         foreach ($parentStaticCallArgs as $key => $arg) {
             if (!isset($currentClassMethodParams[$key])) {
                 return \false;
+            }
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
             }
             // this only compares variable name, but those can be differnt, so its kinda useless
             $param = $currentClassMethodParams[$key];

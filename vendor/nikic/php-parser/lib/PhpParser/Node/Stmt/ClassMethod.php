@@ -15,7 +15,7 @@ class ClassMethod extends \PhpParser\Node\Stmt implements \PhpParser\Node\Functi
     public $name;
     /** @var Node\Param[] Parameters */
     public $params;
-    /** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */
+    /** @var null|Node\Identifier|Node\Name|Node\ComplexType Return type */
     public $returnType;
     /** @var Node\Stmt[]|null Statements */
     public $stmts;

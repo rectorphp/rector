@@ -5,6 +5,7 @@ namespace Rector\Core\Php\Regex;
 
 use RectorPrefix20210927\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
@@ -84,6 +85,9 @@ final class RegexPatternArgumentManipulator
             if (!isset($funcCall->args[$argumentPosition])) {
                 return [];
             }
+            if (!$funcCall->args[$argumentPosition] instanceof \PhpParser\Node\Arg) {
+                return [];
+            }
             return $this->resolveArgumentValues($funcCall->args[$argumentPosition]->value);
         }
         return [];
@@ -102,6 +106,9 @@ final class RegexPatternArgumentManipulator
                     continue;
                 }
                 if (!isset($staticCall->args[$argumentPosition])) {
+                    return [];
+                }
+                if (!$staticCall->args[$argumentPosition] instanceof \PhpParser\Node\Arg) {
                     return [];
                 }
                 return $this->resolveArgumentValues($staticCall->args[$argumentPosition]->value);

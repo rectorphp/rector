@@ -97,10 +97,11 @@ CODE_SAMPLE
      */
     private function processArgs($node) : ?\PhpParser\Node
     {
-        if ($node->args === []) {
+        $args = $node->getArgs();
+        if ($args === []) {
             return null;
         }
-        return $this->cleanTrailingComma($node, $node->args);
+        return $this->cleanTrailingComma($node, $args);
     }
     private function processUses(\PhpParser\Node\Expr\Closure $node) : void
     {

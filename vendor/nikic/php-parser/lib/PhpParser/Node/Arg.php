@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace PhpParser\Node;
 
+use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeAbstract;
 class Arg extends \PhpParser\NodeAbstract
 {

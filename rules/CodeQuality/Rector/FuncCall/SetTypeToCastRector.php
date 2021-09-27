@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,6 +32,14 @@ final class SetTypeToCastRector extends \Rector\Core\Rector\AbstractRector
      * @var array<string, class-string<Cast>>
      */
     private const TYPE_TO_CAST = ['array' => \PhpParser\Node\Expr\Cast\Array_::class, 'bool' => \PhpParser\Node\Expr\Cast\Bool_::class, 'boolean' => \PhpParser\Node\Expr\Cast\Bool_::class, 'double' => \PhpParser\Node\Expr\Cast\Double::class, 'float' => \PhpParser\Node\Expr\Cast\Double::class, 'int' => \PhpParser\Node\Expr\Cast\Int_::class, 'integer' => \PhpParser\Node\Expr\Cast\Int_::class, 'object' => \PhpParser\Node\Expr\Cast\Object_::class, 'string' => \PhpParser\Node\Expr\Cast\String_::class];
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes settype() to (type) where possible', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -72,12 +81,22 @@ CODE_SAMPLE
         if (!$this->isName($node, 'settype')) {
             return null;
         }
-        $typeNode = $this->valueResolver->getValue($node->args[1]->value);
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 1)) {
+            return null;
+        }
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        $typeNode = $this->valueResolver->getValue($secondArg->value);
         if ($typeNode === null) {
             return null;
         }
         $typeNode = \strtolower($typeNode);
-        $varNode = $node->args[0]->value;
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+            return null;
+        }
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        $varNode = $firstArg->value;
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // result of function or probably used
         if ($parentNode instanceof \PhpParser\Node\Expr || $parentNode instanceof \PhpParser\Node\Arg) {

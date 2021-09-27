@@ -24,6 +24,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
     {
         return ($node->name ? $node->name->toString() . ': ' : '') . ($node->byRef ? '&' : '') . ($node->unpack ? '...' : '') . $this->p($node->value);
     }
+    protected function pVariadicPlaceholder(\PhpParser\Node\VariadicPlaceholder $node)
+    {
+        return '...';
+    }
     protected function pConst(\PhpParser\Node\Const_ $node)
     {
         return $node->name . ' = ' . $this->p($node->value);
@@ -35,6 +39,10 @@ class Standard extends \PhpParser\PrettyPrinterAbstract
     protected function pUnionType(\PhpParser\Node\UnionType $node)
     {
         return $this->pImplode($node->types, '|');
+    }
+    protected function pIntersectionType(\PhpParser\Node\IntersectionType $node)
+    {
+        return $this->pImplode($node->types, '&');
     }
     protected function pIdentifier(\PhpParser\Node\Identifier $node)
     {

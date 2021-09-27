@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
@@ -64,6 +65,10 @@ CODE_SAMPLE
         }
         $array = new \PhpParser\Node\Expr\Array_();
         foreach ($node->args as $arg) {
+            // found non Arg? return early
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                return null;
+            }
             $nestedArrayItem = $arg->value;
             if (!$nestedArrayItem instanceof \PhpParser\Node\Expr\Array_) {
                 return null;

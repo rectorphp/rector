@@ -92,6 +92,9 @@ CODE_SAMPLE
                 if (!$this->isName($node->name, $method)) {
                     continue;
                 }
+                if (!$node->args[$position] instanceof \PhpParser\Node\Arg) {
+                    continue;
+                }
                 $this->refactorArgument($node->args[$position]);
                 return $node;
             }
@@ -106,6 +109,9 @@ CODE_SAMPLE
     {
         foreach (self::FUNCTIONS_WITH_REGEX_PATTERN as $function => $position) {
             if (!$this->isName($funcCall, $function)) {
+                continue;
+            }
+            if (!$funcCall->args[$position] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             $this->refactorArgument($funcCall->args[$position]);

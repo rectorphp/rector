@@ -153,11 +153,12 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
             return $this->beConstructedWithAssignFactory->create($node, $this->getTestedClass(), $this->getTestedObjectPropertyFetch());
         }
         $this->processMatchersKeys($node);
+        $args = $node->getArgs();
         foreach (self::NEW_METHOD_TO_OLD_METHODS as $newMethod => $oldMethods) {
             if (!$this->isNames($node->name, $oldMethods)) {
                 continue;
             }
-            return $this->assertMethodCallFactory->createAssertMethod($newMethod, $node->var, $node->args[0]->value ?? null, $this->getTestedObjectPropertyFetch());
+            return $this->assertMethodCallFactory->createAssertMethod($newMethod, $node->var, $args[0]->value ?? null, $this->getTestedObjectPropertyFetch());
         }
         if ($this->shouldSkip($node)) {
             return null;

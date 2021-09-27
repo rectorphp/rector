@@ -173,7 +173,7 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
             $node->type = $this->resolveType($node->type);
             return $node;
         }
-        if ($node instanceof \PhpParser\Node\UnionType) {
+        if ($node instanceof \PhpParser\Node\UnionType || $node instanceof \PhpParser\Node\IntersectionType) {
             foreach ($node->types as &$type) {
                 $type = $this->resolveType($type);
             }

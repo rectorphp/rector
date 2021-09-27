@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp70\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
@@ -11,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeNestingScope\ParentFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -24,9 +26,14 @@ final class DowngradeDefineArrayConstantRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\NodeNestingScope\ParentFinder
      */
     private $parentFinder;
-    public function __construct(\Rector\NodeNestingScope\ParentFinder $parentFinder)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\NodeNestingScope\ParentFinder $parentFinder, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->parentFinder = $parentFinder;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
@@ -65,11 +72,13 @@ CODE_SAMPLE
         if ($this->shouldSkip($funcCall)) {
             return null;
         }
+        /** @var Arg[] $args */
+        $args = $funcCall->args;
         /** @var String_ $arg0 */
-        $arg0 = $funcCall->args[0]->value;
+        $arg0 = $args[0]->value;
         $arg0Value = $arg0->value;
         /** @var Array_ $arg1Value */
-        $arg1Value = $funcCall->args[1]->value;
+        $arg1Value = $args[1]->value;
         return new \PhpParser\Node\Stmt\Const_([new \PhpParser\Node\Const_($arg0Value, $arg1Value)]);
     }
     private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
@@ -78,6 +87,10 @@ CODE_SAMPLE
             return \true;
         }
         $args = $funcCall->args;
+        if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($args, [0, 1])) {
+            return \true;
+        }
+        /** @var Arg[] $args */
         if (!$args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
             return \true;
         }

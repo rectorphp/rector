@@ -21,7 +21,7 @@ interface FunctionLike extends \PhpParser\Node
     /**
      * Get the declared return type or null
      *
-     * @return null|Identifier|Name|NullableType|UnionType
+     * @return null|Identifier|Name|ComplexType
      */
     public function getReturnType();
     /**

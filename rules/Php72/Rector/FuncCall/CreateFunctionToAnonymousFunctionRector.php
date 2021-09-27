@@ -17,6 +17,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractRector;
@@ -44,11 +45,16 @@ final class CreateFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\Parser\InlineCodeParser $inlineCodeParser, \Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Core\Php\ReservedKeywordAnalyzer $reservedKeywordAnalyzer, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     public function provideMinPhpVersion() : int
     {
@@ -94,8 +100,15 @@ CODE_SAMPLE
         if (!$this->isName($node, 'create_function')) {
             return null;
         }
-        $params = $this->createParamsFromString($node->args[0]->value);
-        $stmts = $this->parseStringToBody($node->args[1]->value);
+        if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($node->args, [0, 1])) {
+            return null;
+        }
+        /** @var Arg $firstArg */
+        $firstArg = $node->args[0];
+        /** @var Arg $secondArg */
+        $secondArg = $node->args[1];
+        $params = $this->createParamsFromString($firstArg->value);
+        $stmts = $this->parseStringToBody($secondArg->value);
         $refactored = $this->anonymousFunctionFactory->create($params, $stmts, null);
         foreach ($refactored->uses as $key => $use) {
             $variableName = $this->getName($use->var);

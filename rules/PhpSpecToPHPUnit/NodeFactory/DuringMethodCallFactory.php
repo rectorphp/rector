@@ -31,9 +31,12 @@ final class DuringMethodCallFactory
         if (!isset($methodCall->args[0])) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
+        if (!$methodCall->args[0] instanceof \PhpParser\Node\Arg) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $name = $this->valueResolver->getValue($methodCall->args[0]->value);
         $thisObjectPropertyMethodCall = new \PhpParser\Node\Expr\MethodCall($propertyFetch, $name);
-        if (isset($methodCall->args[1]) && $methodCall->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if (isset($methodCall->args[1]) && $methodCall->args[1] instanceof \PhpParser\Node\Arg && $methodCall->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
             /** @var Array_ $array */
             $array = $methodCall->args[1]->value;
             if (isset($array->items[0])) {

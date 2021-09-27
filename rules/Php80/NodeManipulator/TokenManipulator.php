@@ -18,6 +18,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -56,7 +57,11 @@ final class TokenManipulator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\RectorPrefix20210927\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\RectorPrefix20210927\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -64,6 +69,7 @@ final class TokenManipulator
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->valueResolver = $valueResolver;
         $this->nodeComparator = $nodeComparator;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * @param Node[] $nodes
@@ -170,7 +176,12 @@ final class TokenManipulator
             if (!$this->nodeNameResolver->isName($node, 'is_array')) {
                 return null;
             }
-            if (!$this->nodeComparator->areNodesEqual($node->args[0]->value, $singleTokenVariable)) {
+            if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+                return null;
+            }
+            /** @var Arg $firstArg */
+            $firstArg = $node->args[0];
+            if (!$this->nodeComparator->areNodesEqual($firstArg->value, $singleTokenVariable)) {
                 return null;
             }
             if ($this->shouldSkipNodeRemovalForPartOfIf($node)) {
@@ -195,7 +206,12 @@ final class TokenManipulator
             if (!$this->nodeNameResolver->isName($node, 'token_name')) {
                 return null;
             }
-            $possibleTokenArray = $node->args[0]->value;
+            if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+                return null;
+            }
+            /** @var Arg $firstArg */
+            $firstArg = $node->args[0];
+            $possibleTokenArray = $firstArg->value;
             if (!$possibleTokenArray instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
                 return null;
             }

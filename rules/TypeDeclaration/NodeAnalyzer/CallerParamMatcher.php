@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -34,7 +36,7 @@ final class CallerParamMatcher
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
-     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType
+     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType
      */
     public function matchCallParamType($call, \PhpParser\Node\Param $param, \PHPStan\Analyser\Scope $scope)
     {
@@ -80,6 +82,9 @@ final class CallerParamMatcher
     {
         $paramName = $this->nodeNameResolver->getName($param);
         foreach ($call->args as $argPosition => $arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             if (!$arg->value instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }

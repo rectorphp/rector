@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
@@ -83,6 +84,12 @@ CODE_SAMPLE
         }
         /** @var FuncCall $funcCall */
         $funcCall = $node->cond;
+        if (!isset($funcCall->args[0])) {
+            return null;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $functionToExistName = $this->valueResolver->getValue($funcCall->args[0]->value);
         if (!\is_string($functionToExistName)) {
             return null;

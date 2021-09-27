@@ -3,9 +3,11 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ImplodeAnalyzer
 {
@@ -13,9 +15,14 @@ final class ImplodeAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * Matches: "implode('","', $items)"
@@ -28,10 +35,15 @@ final class ImplodeAnalyzer
         if (!$this->nodeNameResolver->isName($expr, 'implode')) {
             return \false;
         }
-        if (!isset($expr->args[1])) {
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($expr->args, 1)) {
             return \false;
         }
-        $firstArgumentValue = $expr->args[0]->value;
+        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($expr->args, 0)) {
+            return \false;
+        }
+        /** @var Arg $firstArg */
+        $firstArg = $expr->args[0];
+        $firstArgumentValue = $firstArg->value;
         if (!$firstArgumentValue instanceof \PhpParser\Node\Scalar\String_) {
             return \true;
         }

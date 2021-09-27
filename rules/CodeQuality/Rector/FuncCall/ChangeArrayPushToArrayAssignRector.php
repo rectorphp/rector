@@ -66,9 +66,15 @@ CODE_SAMPLE
         if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($node->args[0]->value);
         $position = 1;
-        while (isset($node->args[$position])) {
+        while (isset($node->args[$position]) && $node->args[$position] instanceof \PhpParser\Node\Arg) {
             $assign = new \PhpParser\Node\Expr\Assign($arrayDimFetch, $node->args[$position]->value);
             $assignExpression = new \PhpParser\Node\Stmt\Expression($assign);
             // keep comments of first line

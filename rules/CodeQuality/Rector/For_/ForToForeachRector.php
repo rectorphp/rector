@@ -5,6 +5,7 @@ namespace Rector\CodeQuality\Rector\For_;
 
 use RectorPrefix20210927\Doctrine\Inflector\Inflector;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
@@ -192,7 +193,7 @@ CODE_SAMPLE
                 continue;
             }
             $funcCall = $initExpr->expr;
-            if ($this->nodeNameResolver->isName($funcCall, self::COUNT)) {
+            if ($this->nodeNameResolver->isName($funcCall, self::COUNT) && $funcCall->args[0] instanceof \PhpParser\Node\Arg) {
                 $this->countValueVariableExpr = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $funcCall->args[0]->value;
@@ -219,7 +220,7 @@ CODE_SAMPLE
         if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
-        if ($this->nodeNameResolver->isName($funcCall, self::COUNT)) {
+        if ($this->nodeNameResolver->isName($funcCall, self::COUNT) && $funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             $this->iteratedExpr = $funcCall->args[0]->value;
             return \true;
         }

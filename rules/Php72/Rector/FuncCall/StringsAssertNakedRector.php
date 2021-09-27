@@ -66,6 +66,9 @@ CODE_SAMPLE
         if (!$this->isName($node, 'assert')) {
             return null;
         }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         if (!$node->args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }

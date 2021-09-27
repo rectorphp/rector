@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp71\Rector\String_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Minus;
@@ -85,11 +86,17 @@ CODE_SAMPLE
         if (!isset($args[2])) {
             return null;
         }
-        if (!$args[2]->value instanceof \PhpParser\Node\Expr\UnaryMinus) {
+        if ($args[2] instanceof \PhpParser\Node\Arg && !$args[2]->value instanceof \PhpParser\Node\Expr\UnaryMinus) {
+            return null;
+        }
+        if (!$args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        if (!$funcCall->args[2] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$args[0]]);
-        $funcCall->args[2]->value = new \PhpParser\Node\Expr\BinaryOp\Minus($strlenFuncCall, $args[2]->value->expr);
+        $funcCall->args[2]->value = new \PhpParser\Node\Expr\BinaryOp\Minus($strlenFuncCall, $funcCall->args[2]->value->expr);
         return $funcCall;
     }
 }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
@@ -50,6 +51,9 @@ CODE_SAMPLE
             return null;
         }
         if (!isset($node->args[1])) {
+            return null;
+        }
+        if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if (!$this->isName($node->args[1]->value, 'FILTER_SANITIZE_MAGIC_QUOTES')) {

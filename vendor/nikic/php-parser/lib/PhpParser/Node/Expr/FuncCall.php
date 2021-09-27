@@ -5,18 +5,18 @@ namespace PhpParser\Node\Expr;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-class FuncCall extends \PhpParser\Node\Expr
+class FuncCall extends \PhpParser\Node\Expr\CallLike
 {
     /** @var Node\Name|Expr Function name */
     public $name;
-    /** @var Node\Arg[] Arguments */
+    /** @var array<Node\Arg|Node\VariadicPlaceholder> Arguments */
     public $args;
     /**
      * Constructs a function call node.
      *
-     * @param Node\Name|Expr $name       Function name
-     * @param Node\Arg[]     $args       Arguments
-     * @param array          $attributes Additional attributes
+     * @param Node\Name|Expr                           $name       Function name
+     * @param array<Node\Arg|Node\VariadicPlaceholder> $args       Arguments
+     * @param array                                    $attributes Additional attributes
      */
     public function __construct($name, array $args = [], array $attributes = [])
     {
@@ -31,5 +31,9 @@ class FuncCall extends \PhpParser\Node\Expr
     public function getType() : string
     {
         return 'Expr_FuncCall';
+    }
+    public function getRawArgs() : array
+    {
+        return $this->args;
     }
 }

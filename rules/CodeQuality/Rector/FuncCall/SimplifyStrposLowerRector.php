@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
@@ -34,6 +35,9 @@ final class SimplifyStrposLowerRector extends \Rector\Core\Rector\AbstractRector
             return null;
         }
         if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if (!$node->args[0]->value instanceof \PhpParser\Node\Expr\FuncCall) {

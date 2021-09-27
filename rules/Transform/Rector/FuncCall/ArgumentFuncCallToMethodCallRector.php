@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -216,6 +217,9 @@ CODE_SAMPLE
     {
         if ($funcCall->args === []) {
             return $propertyFetch;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
         }
         if ($arrayFuncCallToMethodCall->getArrayMethod() && $this->arrayTypeAnalyzer->isArrayType($funcCall->args[0]->value)) {
             return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $arrayFuncCallToMethodCall->getArrayMethod(), $funcCall->args);

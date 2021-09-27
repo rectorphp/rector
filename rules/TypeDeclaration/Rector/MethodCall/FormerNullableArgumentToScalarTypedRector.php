@@ -82,6 +82,9 @@ CODE_SAMPLE
             return null;
         }
         foreach ($node->args as $key => $arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             if (!$this->valueResolver->isNull($arg->value)) {
                 continue;
             }

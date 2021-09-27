@@ -16,7 +16,7 @@ class Closure extends \PhpParser\Node\Expr implements \PhpParser\Node\FunctionLi
     public $params;
     /** @var ClosureUse[] use()s */
     public $uses;
-    /** @var null|Node\Identifier|Node\Name|Node\NullableType|Node\UnionType Return type */
+    /** @var null|Node\Identifier|Node\Name|Node\ComplexType Return type */
     public $returnType;
     /** @var Node\Stmt[] Statements */
     public $stmts;

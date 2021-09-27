@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -58,6 +59,9 @@ CODE_SAMPLE
         }
         if (!isset($node->args[0])) {
             return new \PhpParser\Node\Expr\ClassConstFetch(new \PhpParser\Node\Name('self'), 'class');
+        }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
         }
         $object = $node->args[0]->value;
         return new \PhpParser\Node\Expr\ClassConstFetch($object, 'class');

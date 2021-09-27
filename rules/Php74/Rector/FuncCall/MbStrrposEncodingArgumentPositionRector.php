@@ -49,6 +49,9 @@ final class MbStrrposEncodingArgumentPositionRector extends \Rector\Core\Rector\
         if (isset($node->args[3])) {
             return null;
         }
+        if (!$node->args[2] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $secondArgType = $this->getStaticType($node->args[2]->value);
         if ($secondArgType instanceof \PHPStan\Type\IntegerType) {
             return null;

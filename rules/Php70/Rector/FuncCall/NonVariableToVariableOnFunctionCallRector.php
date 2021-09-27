@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
@@ -20,6 +21,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\MixedType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -49,11 +51,16 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->variableNaming = $variableNaming;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->reflectionResolver = $reflectionResolver;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -88,6 +95,9 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             return null;
         }
         foreach ($arguments as $key => $argument) {
+            if (!$node->args[$key] instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             $replacements = $this->getReplacementsFor($argument, $currentScope, $scopeNode);
             $current = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
             $currentStatement = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
@@ -114,13 +124,15 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             /** @var ParameterReflection $parameterReflection */
             foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
                 // omitted optional parameter
-                if (!isset($call->args[$key])) {
+                if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($call->args, $key)) {
                     continue;
                 }
                 if ($parameterReflection->passedByReference()->no()) {
                     continue;
                 }
-                $argument = $call->args[$key]->value;
+                /** @var Arg $arg */
+                $arg = $call->args[$key];
+                $argument = $arg->value;
                 if ($this->isVariableLikeNode($argument)) {
                     continue;
                 }

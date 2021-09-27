@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use Rector\Core\Rector\AbstractRector;
@@ -64,6 +65,12 @@ CODE_SAMPLE
         }
         /** @var FuncCall $funcCall */
         $funcCall = $node->if;
+        if (!isset($funcCall->args[0])) {
+            return null;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $firstExpr = $funcCall->args[0]->value;
         return $this->nodeFactory->createFuncCall('get_debug_type', [$firstExpr]);
     }
@@ -90,12 +97,21 @@ CODE_SAMPLE
     {
         /** @var FuncCall $isObjectFuncCall */
         $isObjectFuncCall = $ternary->cond;
+        if (!$isObjectFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
         $firstExpr = $isObjectFuncCall->args[0]->value;
         /** @var FuncCall $getClassFuncCall */
         $getClassFuncCall = $ternary->if;
+        if (!$getClassFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
         $secondExpr = $getClassFuncCall->args[0]->value;
         /** @var FuncCall $gettypeFuncCall */
         $gettypeFuncCall = $ternary->else;
+        if (!$gettypeFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
         $thirdExpr = $gettypeFuncCall->args[0]->value;
         if (!$this->nodeComparator->areNodesEqual($firstExpr, $secondExpr)) {
             return \false;

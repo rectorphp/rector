@@ -197,6 +197,12 @@ final class VariableNaming
     }
     private function resolveBareFuncCallArgumentName(\PhpParser\Node\Expr\FuncCall $funcCall, string $fallbackName, string $suffix) : string
     {
+        if (!isset($funcCall->args[0])) {
+            return '';
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return '';
+        }
         $argumentValue = $funcCall->args[0]->value;
         if ($argumentValue instanceof \PhpParser\Node\Expr\MethodCall || $argumentValue instanceof \PhpParser\Node\Expr\StaticCall) {
             $name = $this->nodeNameResolver->getName($argumentValue->name);

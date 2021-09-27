@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -62,6 +63,9 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $argValue = $node->args[0]->value;
         if (!$argValue instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
@@ -72,6 +76,9 @@ CODE_SAMPLE
         $messageVariable = new \PhpParser\Node\Expr\Variable('message');
         $assign = new \PhpParser\Node\Expr\Assign($messageVariable, $argValue);
         $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $node->args[0]->value = $messageVariable;
         return $node;
     }

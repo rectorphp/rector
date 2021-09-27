@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Arguments\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Arguments\ValueObject\SwapFuncCallArguments;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -102,6 +103,9 @@ CODE_SAMPLE
                 continue;
             }
             if (!isset($funcCall->args[$newPosition])) {
+                continue;
+            }
+            if (!$funcCall->args[$oldPosition] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             $newArguments[$newPosition] = $funcCall->args[$oldPosition];

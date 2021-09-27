@@ -4,28 +4,27 @@ declare (strict_types=1);
 namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
 class Property extends \PhpParser\Node\Stmt
 {
     /** @var int Modifiers */
     public $flags;
     /** @var PropertyProperty[] Properties */
     public $props;
-    /** @var null|Identifier|Name|NullableType|UnionType Type declaration */
+    /** @var null|Identifier|Name|ComplexType Type declaration */
     public $type;
     /** @var Node\AttributeGroup[] PHP attribute groups */
     public $attrGroups;
     /**
      * Constructs a class property list node.
      *
-     * @param int                                                $flags      Modifiers
-     * @param PropertyProperty[]                                 $props      Properties
-     * @param array                                              $attributes Additional attributes
-     * @param null|string|Identifier|Name|NullableType|UnionType $type       Type declaration
-     * @param Node\AttributeGroup[]                              $attrGroups PHP attribute groups
+     * @param int                                     $flags      Modifiers
+     * @param PropertyProperty[]                      $props      Properties
+     * @param array                                   $attributes Additional attributes
+     * @param null|string|Identifier|Name|ComplexType $type       Type declaration
+     * @param Node\AttributeGroup[]                   $attrGroups PHP attribute groups
      */
     public function __construct(int $flags, array $props, array $attributes = [], $type = null, array $attrGroups = [])
     {

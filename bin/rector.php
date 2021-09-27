@@ -28,7 +28,8 @@ $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 $extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php';
 if (\file_exists($extractedPhpstanAutoload)) {
     require_once $extractedPhpstanAutoload;
-} elseif (\RectorPrefix20210927\should_include_preload()) {
+}
+if (\file_exists(__DIR__ . '/../preload.php')) {
     require_once __DIR__ . '/../preload.php';
 }
 require_once __DIR__ . '/../src/constants.php';
@@ -111,15 +112,3 @@ final class AutoloadIncluder
     }
 }
 \class_alias('RectorPrefix20210927\\AutoloadIncluder', 'AutoloadIncluder', \false);
-// load local php-parser only in prefixed version or development repository
-function should_include_preload() : bool
-{
-    if (\file_exists(__DIR__ . '/../vendor/scoper-autoload.php')) {
-        return \true;
-    }
-    if (!\file_exists(\getcwd() . '/composer.json')) {
-        return \false;
-    }
-    $composerJsonFileContent = \file_get_contents(\getcwd() . '/composer.json');
-    return \strpos($composerJsonFileContent, '"name": "rector/rector"') !== \false;
-}

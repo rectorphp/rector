@@ -48,6 +48,12 @@ final class IsArrayAndDualCheckToAble
         if (!$this->nodeNameResolver->isName($funcCall, 'is_array')) {
             return null;
         }
+        if (!isset($funcCall->args[0])) {
+            return null;
+        }
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         // both use same var
         if (!$funcCall->args[0]->value instanceof \PhpParser\Node\Expr\Variable) {
             return null;

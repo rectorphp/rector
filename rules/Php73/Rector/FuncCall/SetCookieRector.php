@@ -77,11 +77,11 @@ CODE_SAMPLE
         if ($argsCount <= 2) {
             return \true;
         }
-        if ($funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_) {
+        if ($funcCall->args[2] instanceof \PhpParser\Node\Arg && $funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Array_) {
             return \true;
         }
         if ($argsCount === 3) {
-            return $funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Variable;
+            return $funcCall->args[2] instanceof \PhpParser\Node\Arg && $funcCall->args[2]->value instanceof \PhpParser\Node\Expr\Variable;
         }
         return \false;
     }
@@ -91,7 +91,7 @@ CODE_SAMPLE
     private function composeNewArgs(\PhpParser\Node\Expr\FuncCall $funcCall) : array
     {
         $items = [];
-        $args = $funcCall->args;
+        $args = $funcCall->getArgs();
         $newArgs = [];
         $newArgs[] = $args[0];
         $newArgs[] = $args[1];

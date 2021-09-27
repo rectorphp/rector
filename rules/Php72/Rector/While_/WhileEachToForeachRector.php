@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\While_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -83,6 +84,12 @@ CODE_SAMPLE
         $eachFuncCall = $assignNode->expr;
         /** @var List_ $listNode */
         $listNode = $assignNode->var;
+        if (!isset($eachFuncCall->args[0])) {
+            return null;
+        }
+        if (!$eachFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $foreachedExpr = \count($listNode->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$eachFuncCall->args[0]]) : $eachFuncCall->args[0]->value;
         /** @var ArrayItem $arrayItem */
         $arrayItem = \array_pop($listNode->items);

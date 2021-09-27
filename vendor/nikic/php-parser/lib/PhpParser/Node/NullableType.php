@@ -3,8 +3,7 @@
 declare (strict_types=1);
 namespace PhpParser\Node;
 
-use PhpParser\NodeAbstract;
-class NullableType extends \PhpParser\NodeAbstract
+class NullableType extends \PhpParser\Node\ComplexType
 {
     /** @var Identifier|Name Type */
     public $type;

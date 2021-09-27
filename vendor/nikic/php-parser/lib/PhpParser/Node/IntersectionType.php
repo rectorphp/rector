@@ -3,12 +3,13 @@
 declare (strict_types=1);
 namespace PhpParser\Node;
 
-class UnionType extends \PhpParser\Node\ComplexType
+use PhpParser\NodeAbstract;
+class IntersectionType extends \PhpParser\Node\ComplexType
 {
     /** @var (Identifier|Name)[] Types */
     public $types;
     /**
-     * Constructs a union type.
+     * Constructs an intersection type.
      *
      * @param (Identifier|Name)[] $types      Types
      * @param array               $attributes Additional attributes
@@ -24,6 +25,6 @@ class UnionType extends \PhpParser\Node\ComplexType
     }
     public function getType() : string
     {
-        return 'UnionType';
+        return 'IntersectionType';
     }
 }

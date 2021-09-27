@@ -9,6 +9,7 @@ use PhpParser\Lexer;
 use PhpParser\Lexer\TokenEmulator\AttributeEmulator;
 use PhpParser\Lexer\TokenEmulator\EnumTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator;
+use PhpParser\Lexer\TokenEmulator\ExplicitOctalEmulator;
 use PhpParser\Lexer\TokenEmulator\FlexibleDocStringEmulator;
 use PhpParser\Lexer\TokenEmulator\FnTokenEmulator;
 use PhpParser\Lexer\TokenEmulator\MatchTokenEmulator;
@@ -39,7 +40,7 @@ class Emulative extends \PhpParser\Lexer
         $this->targetPhpVersion = $options['phpVersion'] ?? \PhpParser\Lexer\Emulative::PHP_8_1;
         unset($options['phpVersion']);
         parent::__construct($options);
-        $emulators = [new \PhpParser\Lexer\TokenEmulator\FlexibleDocStringEmulator(), new \PhpParser\Lexer\TokenEmulator\FnTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\MatchTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator(), new \PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\AttributeEmulator(), new \PhpParser\Lexer\TokenEmulator\EnumTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\ReadonlyTokenEmulator()];
+        $emulators = [new \PhpParser\Lexer\TokenEmulator\FlexibleDocStringEmulator(), new \PhpParser\Lexer\TokenEmulator\FnTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\MatchTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\CoaleseEqualTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\NumericLiteralSeparatorEmulator(), new \PhpParser\Lexer\TokenEmulator\NullsafeTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\AttributeEmulator(), new \PhpParser\Lexer\TokenEmulator\EnumTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\ReadonlyTokenEmulator(), new \PhpParser\Lexer\TokenEmulator\ExplicitOctalEmulator()];
         // Collect emulators that are relevant for the PHP version we're running
         // and the PHP version we're targeting for emulation.
         foreach ($emulators as $emulator) {
