@@ -147,8 +147,7 @@ CODE_SAMPLE
 
     private function shouldClassDocImported(
         FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
-    ): bool
-    {
+    ): bool {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
 
