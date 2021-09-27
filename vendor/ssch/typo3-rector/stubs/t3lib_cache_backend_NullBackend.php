@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210926;
+namespace RectorPrefix20210927;
 
 if (\class_exists('t3lib_cache_backend_NullBackend')) {
     return;

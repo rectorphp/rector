@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210926;
+namespace RectorPrefix20210927;
 
 if (\class_exists('Tx_Fluid_View_Exception_InvalidSectionException')) {
     return;

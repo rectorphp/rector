@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210926;
+namespace RectorPrefix20210927;
 
 if (\class_exists('SC_show_item')) {
     return;

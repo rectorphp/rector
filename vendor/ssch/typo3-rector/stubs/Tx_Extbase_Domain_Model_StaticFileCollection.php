@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210926;
+namespace RectorPrefix20210927;
 
 if (\class_exists('Tx_Extbase_Domain_Model_StaticFileCollection')) {
     return;

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210926\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
+namespace RectorPrefix20210927\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
 
 /**
  * Preprocessor that combines multiple preprocessors
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class ProcessorChain implements \RectorPrefix20210926\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class ProcessorChain implements \RectorPrefix20210927\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
 {
     /** @var Preprocessor[] */
     protected $processors = [];

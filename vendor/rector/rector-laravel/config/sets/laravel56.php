@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210926;
+namespace RectorPrefix20210927;
 
 use Rector\Core\ValueObject\Visibility;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

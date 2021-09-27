@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210926\Symplify\SmartFileSystem\Finder;
+namespace RectorPrefix20210927\Symplify\SmartFileSystem\Finder;
 
-use RectorPrefix20210926\Nette\Utils\Finder as NetteFinder;
+use RectorPrefix20210927\Nette\Utils\Finder as NetteFinder;
 use SplFileInfo;
-use RectorPrefix20210926\Symfony\Component\Finder\Finder as SymfonyFinder;
-use RectorPrefix20210926\Symfony\Component\Finder\SplFileInfo as SymfonySplFileInfo;
+use RectorPrefix20210927\Symfony\Component\Finder\Finder as SymfonyFinder;
+use RectorPrefix20210927\Symfony\Component\Finder\SplFileInfo as SymfonySplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\SmartFileSystem\Tests\Finder\FinderSanitizer\FinderSanitizerTest
