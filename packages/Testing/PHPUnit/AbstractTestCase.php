@@ -10,7 +10,6 @@ use RectorPrefix20210928\Symfony\Component\DependencyInjection\ContainerInterfac
 use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
-    use PlatformAgnosticAssertions;
     /**
      * @var array<string, RectorKernel>
      */
