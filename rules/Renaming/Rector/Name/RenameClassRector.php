@@ -41,8 +41,6 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
      */
     public const CLASS_MAP_FILES = 'class_map_files';
 
-    private bool $classDocImported = false;
-
     public function __construct(
         private RenamedClassesDataCollector $renamedClassesDataCollector,
         private ClassRenamer $classRenamer
@@ -113,14 +111,10 @@ CODE_SAMPLE
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
 
         if (! $node instanceof Use_) {
-            if ($this->shouldClassDocImported($node)) {
-                $this->classDocImported = true;
-            }
-
             return $this->classRenamer->renameNode($node, $oldToNewClasses);
         }
 
-        if (! $this->classDocImported) {
+        if (! $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
             return null;
         }
 
@@ -143,27 +137,6 @@ CODE_SAMPLE
             $oldToNewClasses = require_once $classMapFile;
             $this->addOldToNewClasses($oldToNewClasses);
         }
-    }
-
-    private function shouldClassDocImported(
-        FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
-    ): bool {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-
-        if (! $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
-            return false;
-        }
-
-        if (! $varTagValueNode instanceof VarTagValueNode) {
-            return false;
-        }
-
-        if (! $varTagValueNode->type instanceof IdentifierTypeNode) {
-            return false;
-        }
-
-        return ! str_contains($varTagValueNode->type->name, '\\');
     }
 
     /**
