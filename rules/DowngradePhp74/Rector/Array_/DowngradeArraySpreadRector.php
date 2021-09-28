@@ -32,6 +32,16 @@ use Traversable;
 final class DowngradeArraySpreadRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var bool
+     */
+    private $shouldIncrement = \false;
+    /**
+     * Handle different result in CI
+     *
+     * @var array<string, int>
+     */
+    private $lastPositionCurrentFile = [];
+    /**
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
@@ -89,6 +99,12 @@ CODE_SAMPLE
         if (!$this->shouldRefactor($node)) {
             return null;
         }
+        $this->shouldIncrement = (bool) $this->betterNodeFinder->findFirstNext($node, function (\PhpParser\Node $subNode) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Array_) {
+                return \false;
+            }
+            return $this->shouldRefactor($subNode);
+        });
         return $this->refactorNode($node);
     }
     private function shouldRefactor(\PhpParser\Node\Expr\Array_ $array) : bool
@@ -179,7 +195,13 @@ CODE_SAMPLE
         // depending on their position.
         // The number can't be at the end of the var name, or it would
         // conflict with the counter (for if that name is already taken)
+        $smartFileInfo = $this->file->getSmartFileInfo();
+        $realPath = $smartFileInfo->getRealPath();
+        $position = $this->lastPositionCurrentFile[$realPath] ?? $position;
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($array, $nodeScope, 'item' . $position . 'Unpacked');
+        if ($this->shouldIncrement) {
+            $this->lastPositionCurrentFile[$realPath] = ++$position;
+        }
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new \PhpParser\Node\Expr\Variable($variableName);
         $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Expr\Assign($newVariable, $arrayItem->value), $array);

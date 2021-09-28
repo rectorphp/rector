@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\MatchArm;
@@ -73,6 +75,9 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Stmt\Expression) {
             if (!$node->expr instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
@@ -92,6 +97,18 @@ CODE_SAMPLE
         }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match->arms);
         return new \PhpParser\Node\Stmt\Switch_($match->cond, $switchCases);
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     */
+    private function shouldSkip($node) : bool
+    {
+        if ($node->expr instanceof \PhpParser\Node\Expr) {
+            return (bool) $this->betterNodeFinder->findFirst($node->expr, function (\PhpParser\Node $subNode) : bool {
+                return $subNode instanceof \PhpParser\Node\Expr\ArrayItem && $subNode->unpack;
+            });
+        }
+        return \false;
     }
     /**
      * @param MatchArm[] $matchArms
