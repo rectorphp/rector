@@ -1,5 +1,5 @@
 <?php
 
-namespace RectorPrefix20210927;
+namespace RectorPrefix20210928;
 
 return ['TYPO3\\CMS\\Recordlist\\RecordList' => 'TYPO3\\CMS\\Recordlist\\Controller\\RecordListController'];

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210927\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20210928\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\DateTimeAspect')) {
     return;

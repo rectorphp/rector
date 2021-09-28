@@ -16,7 +16,7 @@ use Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder;
 use Rector\Nette\NodeFinder\FormVariableFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210927\Webmozart\Assert\Assert;
+use RectorPrefix20210928\Webmozart\Assert\Assert;
 /**
  * @see https://doc.nette.org/en/3.1/form-presenter#toc-mapping-to-classes
  * @see \Rector\Nette\Tests\Rector\Class_\FormDataRector\FormDataRectorTest
@@ -108,11 +108,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         if (isset($configuration[self::FORM_DATA_CLASS_PARENT])) {
-            \RectorPrefix20210927\Webmozart\Assert\Assert::string($configuration[self::FORM_DATA_CLASS_PARENT]);
+            \RectorPrefix20210928\Webmozart\Assert\Assert::string($configuration[self::FORM_DATA_CLASS_PARENT]);
             $this->formDataClassParent = $configuration[self::FORM_DATA_CLASS_PARENT];
         }
         if (isset($configuration[self::FORM_DATA_CLASS_TRAITS])) {
-            \RectorPrefix20210927\Webmozart\Assert\Assert::isArray($configuration[self::FORM_DATA_CLASS_TRAITS]);
+            \RectorPrefix20210928\Webmozart\Assert\Assert::isArray($configuration[self::FORM_DATA_CLASS_TRAITS]);
             $this->formDataClassTraits = $configuration[self::FORM_DATA_CLASS_TRAITS];
         }
     }

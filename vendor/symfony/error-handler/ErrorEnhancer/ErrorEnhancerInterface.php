@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20210927\Symfony\Component\ErrorHandler\ErrorEnhancer;
+namespace RectorPrefix20210928\Symfony\Component\ErrorHandler\ErrorEnhancer;
 
 interface ErrorEnhancerInterface
 {

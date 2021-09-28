@@ -22,7 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20210927\Webmozart\Assert\Assert;
+use RectorPrefix20210928\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
@@ -37,10 +37,6 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      * @var string
      */
     public const CLASS_MAP_FILES = 'class_map_files';
-    /**
-     * @var bool
-     */
-    private $classDocImported = \false;
     /**
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -96,12 +92,9 @@ CODE_SAMPLE
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if (!$node instanceof \PhpParser\Node\Stmt\Use_) {
-            if ($this->shouldClassDocImported($node)) {
-                $this->classDocImported = \true;
-            }
             return $this->classRenamer->renameNode($node, $oldToNewClasses);
         }
-        if (!$this->classDocImported) {
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
             return null;
         }
         return $this->processCleanUpUse($node, $oldToNewClasses);
@@ -113,30 +106,12 @@ CODE_SAMPLE
     {
         $this->addOldToNewClasses($configuration[self::OLD_TO_NEW_CLASSES] ?? []);
         $classMapFiles = $configuration[self::CLASS_MAP_FILES] ?? [];
-        \RectorPrefix20210927\Webmozart\Assert\Assert::allString($classMapFiles);
+        \RectorPrefix20210928\Webmozart\Assert\Assert::allString($classMapFiles);
         foreach ($classMapFiles as $classMapFile) {
-            \RectorPrefix20210927\Webmozart\Assert\Assert::fileExists($classMapFile);
+            \RectorPrefix20210928\Webmozart\Assert\Assert::fileExists($classMapFile);
             $oldToNewClasses = (require_once $classMapFile);
             $this->addOldToNewClasses($oldToNewClasses);
         }
-    }
-    /**
-     * @param \PhpParser\Node\FunctionLike|\PhpParser\Node\Name|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Namespace_|\PhpParser\Node\Stmt\Property|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $node
-     */
-    private function shouldClassDocImported($node) : bool
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
-            return \false;
-        }
-        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
-            return \false;
-        }
-        if (!$varTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
-            return \false;
-        }
-        return \strpos($varTagValueNode->type->name, '\\') === \false;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -156,8 +131,8 @@ CODE_SAMPLE
      */
     private function addOldToNewClasses(array $oldToNewClasses) : void
     {
-        \RectorPrefix20210927\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
-        \RectorPrefix20210927\Webmozart\Assert\Assert::allString($oldToNewClasses);
+        \RectorPrefix20210928\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
+        \RectorPrefix20210928\Webmozart\Assert\Assert::allString($oldToNewClasses);
         $this->renamedClassesDataCollector->addOldToNewClasses($oldToNewClasses);
     }
 }
