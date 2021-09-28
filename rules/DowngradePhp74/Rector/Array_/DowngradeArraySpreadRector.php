@@ -33,6 +33,15 @@ use Traversable;
  */
 final class DowngradeArraySpreadRector extends AbstractRector
 {
+    private bool $shouldIncrement = false;
+
+    /**
+     * Handle different result in CI
+     *
+     * @var array<string, int>
+     */
+    private array $lastPositionCurrentFile = [];
+
     public function __construct(
         private VariableNaming $variableNaming
     ) {
@@ -97,6 +106,14 @@ CODE_SAMPLE
         if (! $this->shouldRefactor($node)) {
             return null;
         }
+
+        $this->shouldIncrement = (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $subNode): bool {
+            if (! $subNode instanceof Array_) {
+                return false;
+            }
+
+            return $this->shouldRefactor($subNode);
+        });
 
         return $this->refactorNode($node);
     }
@@ -203,11 +220,20 @@ CODE_SAMPLE
         // depending on their position.
         // The number can't be at the end of the var name, or it would
         // conflict with the counter (for if that name is already taken)
+        $smartFileInfo = $this->file->getSmartFileInfo();
+        $realPath = $smartFileInfo->getRealPath();
+        $position = $this->lastPositionCurrentFile[$realPath] ?? $position;
+
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName(
             $array,
             $nodeScope,
             'item' . $position . 'Unpacked'
         );
+
+        if ($this->shouldIncrement) {
+            $this->lastPositionCurrentFile[$realPath] = ++$position;
+        }
+
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new Variable($variableName);
         $this->nodesToAddCollector->addNodeBeforeNode(new Assign($newVariable, $arrayItem->value), $array);
