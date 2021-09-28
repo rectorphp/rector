@@ -1339,6 +1339,8 @@ return array(
     'RectorPrefix20210928\\Symplify\\Astral\\NodeNameResolver\\PropertyNodeNameResolver' => $vendorDir . '/symplify/astral/src/NodeNameResolver/PropertyNodeNameResolver.php',
     'RectorPrefix20210928\\Symplify\\Astral\\NodeTraverser\\SimpleCallableNodeTraverser' => $vendorDir . '/symplify/astral/src/NodeTraverser/SimpleCallableNodeTraverser.php',
     'RectorPrefix20210928\\Symplify\\Astral\\NodeValue\\NodeValueResolver' => $vendorDir . '/symplify/astral/src/NodeValue/NodeValueResolver.php',
+    'RectorPrefix20210928\\Symplify\\Astral\\NodeValue\\UnionTypeValueResolver' => $vendorDir . '/symplify/astral/src/NodeValue/UnionTypeValueResolver.php',
+    'RectorPrefix20210928\\Symplify\\Astral\\NodeVisitor\\CallableNodeVisitor' => $vendorDir . '/symplify/astral/src/NodeVisitor/CallableNodeVisitor.php',
     'RectorPrefix20210928\\Symplify\\Astral\\StaticFactory\\SimpleNameResolverStaticFactory' => $vendorDir . '/symplify/astral/src/StaticFactory/SimpleNameResolverStaticFactory.php',
     'RectorPrefix20210928\\Symplify\\Astral\\ValueObject\\AttributeKey' => $vendorDir . '/symplify/astral/src/ValueObject/AttributeKey.php',
     'RectorPrefix20210928\\Symplify\\Astral\\ValueObject\\NodeBuilder\\ClassBuilder' => $vendorDir . '/symplify/astral/src/ValueObject/NodeBuilder/ClassBuilder.php',

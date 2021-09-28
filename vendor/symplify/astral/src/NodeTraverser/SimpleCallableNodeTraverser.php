@@ -4,11 +4,8 @@ declare (strict_types=1);
 namespace RectorPrefix20210928\Symplify\Astral\NodeTraverser;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitorAbstract;
+use RectorPrefix20210928\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
 final class SimpleCallableNodeTraverser
 {
     /**
@@ -26,36 +23,8 @@ final class SimpleCallableNodeTraverser
             $nodes = [$nodes];
         }
         $nodeTraverser = new \PhpParser\NodeTraverser();
-        $callableNodeVisitor = $this->createNodeVisitor($callable);
+        $callableNodeVisitor = new \RectorPrefix20210928\Symplify\Astral\NodeVisitor\CallableNodeVisitor($callable);
         $nodeTraverser->addVisitor($callableNodeVisitor);
         $nodeTraverser->traverse($nodes);
-    }
-    private function createNodeVisitor(callable $callable) : \PhpParser\NodeVisitorAbstract
-    {
-        return new class($callable) extends \PhpParser\NodeVisitorAbstract
-        {
-            /**
-             * @var callable
-             */
-            private $callable;
-            public function __construct(callable $callable)
-            {
-                $this->callable = $callable;
-            }
-            /**
-             * @return int|Node|null
-             */
-            public function enterNode(\PhpParser\Node $node)
-            {
-                $originalNode = $node;
-                $callable = $this->callable;
-                /** @var int|Node|null $newNode */
-                $newNode = $callable($node);
-                if ($originalNode instanceof \PhpParser\Node\Stmt && $newNode instanceof \PhpParser\Node\Expr) {
-                    return new \PhpParser\Node\Stmt\Expression($newNode);
-                }
-                return $newNode;
-            }
-        };
     }
 }

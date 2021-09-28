@@ -76,30 +76,39 @@ class VarCloner extends \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner
             foreach ($vals as $k => $v) {
                 // $v is the original value or a stub object in case of hard references
                 if (\PHP_VERSION_ID >= 70400) {
-                    $zvalIsRef = null !== \ReflectionReference::fromArrayElement($vals, $k);
+                    $zvalRef = ($r = \ReflectionReference::fromArrayElement($vals, $k)) ? $r->getId() : null;
                 } else {
                     $refs[$k] = $cookie;
-                    $zvalIsRef = $vals[$k] === $cookie;
+                    $zvalRef = $vals[$k] === $cookie;
                 }
-                if ($zvalIsRef) {
+                if ($zvalRef) {
                     $vals[$k] =& $stub;
                     // Break hard references to make $queue completely
                     unset($stub);
                     // independent from the original structure
-                    if ($v instanceof \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub && isset($hardRefs[\spl_object_id($v)])) {
-                        $vals[$k] = $refs[$k] = $v;
+                    if (\PHP_VERSION_ID >= 70400 ? null !== ($vals[$k] = $hardRefs[$zvalRef] ?? null) : $v instanceof \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub && isset($hardRefs[\spl_object_id($v)])) {
+                        if (\PHP_VERSION_ID >= 70400) {
+                            $v = $vals[$k];
+                        } else {
+                            $refs[$k] = $vals[$k] = $v;
+                        }
                         if ($v->value instanceof \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub && (\RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT === $v->value->type || \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE === $v->value->type)) {
                             ++$v->value->refCount;
                         }
                         ++$v->refCount;
                         continue;
                     }
-                    $refs[$k] = $vals[$k] = new \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub();
-                    $refs[$k]->value = $v;
-                    $h = \spl_object_id($refs[$k]);
-                    $hardRefs[$h] =& $refs[$k];
-                    $values[$h] = $v;
+                    $vals[$k] = new \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub();
+                    $vals[$k]->value = $v;
                     $vals[$k]->handle = ++$refsCounter;
+                    if (\PHP_VERSION_ID >= 70400) {
+                        $hardRefs[$zvalRef] = $vals[$k];
+                    } else {
+                        $refs[$k] = $vals[$k];
+                        $h = \spl_object_id($refs[$k]);
+                        $hardRefs[$h] =& $refs[$k];
+                        $values[$h] = $v;
+                    }
                 }
                 // Create $stub when the original value $v can not be used directly
                 // If $v is a nested structure, put that structure in array $a
@@ -155,12 +164,17 @@ class VarCloner extends \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner
                                 unset($v[$gid]);
                                 $a = [];
                                 foreach ($v as $gk => &$gv) {
-                                    if ($v === $gv) {
+                                    if ($v === $gv && (\PHP_VERSION_ID < 70400 || !isset($hardRefs[\ReflectionReference::fromArrayElement($v, $gk)->getId()]))) {
                                         unset($v);
                                         $v = new \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub();
                                         $v->value = [$v->cut = \count($gv), \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY => 0];
                                         $v->handle = -1;
-                                        $gv =& $hardRefs[\spl_object_id($v)];
+                                        if (\PHP_VERSION_ID >= 70400) {
+                                            $gv =& $a[$gk];
+                                            $hardRefs[\ReflectionReference::fromArrayElement($a, $gk)->getId()] =& $gv;
+                                        } else {
+                                            $gv =& $hardRefs[\spl_object_id($v)];
+                                        }
                                         $gv = $v;
                                     }
                                     $a[$gk] =& $gv;
@@ -254,10 +268,12 @@ class VarCloner extends \RectorPrefix20210928\Symfony\Component\VarDumper\Cloner
                         self::$arrayCache[$arrayStub->class][$arrayStub->position] = $stub = [$arrayStub->class => $arrayStub->position];
                     }
                 }
-                if ($zvalIsRef) {
-                    $refs[$k]->value = $stub;
-                } else {
+                if (!$zvalRef) {
                     $vals[$k] = $stub;
+                } elseif (\PHP_VERSION_ID >= 70400) {
+                    $hardRefs[$zvalRef]->value = $stub;
+                } else {
+                    $refs[$k]->value = $stub;
                 }
             }
             if ($fromObjCast) {

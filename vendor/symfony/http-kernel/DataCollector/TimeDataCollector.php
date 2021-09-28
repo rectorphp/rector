@@ -42,7 +42,7 @@ class TimeDataCollector extends \RectorPrefix20210928\Symfony\Component\HttpKern
         } else {
             $startTime = $request->server->get('REQUEST_TIME_FLOAT');
         }
-        $this->data = ['token' => $response->headers->get('X-Debug-Token'), 'start_time' => $startTime * 1000, 'events' => [], 'stopwatch_installed' => \class_exists(\RectorPrefix20210928\Symfony\Component\Stopwatch\Stopwatch::class, \false)];
+        $this->data = ['token' => $request->attributes->get('_stopwatch_token'), 'start_time' => $startTime * 1000, 'events' => [], 'stopwatch_installed' => \class_exists(\RectorPrefix20210928\Symfony\Component\Stopwatch\Stopwatch::class, \false)];
     }
     /**
      * {@inheritdoc}

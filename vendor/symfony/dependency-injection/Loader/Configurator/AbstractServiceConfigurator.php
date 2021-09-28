@@ -28,8 +28,8 @@ abstract class AbstractServiceConfigurator extends \RectorPrefix20210928\Symfony
     {
         // default tags should be added last
         foreach ($this->defaultTags as $name => $attributes) {
-            foreach ($attributes as $attributes) {
-                $this->definition->addTag($name, $attributes);
+            foreach ($attributes as $attribute) {
+                $this->definition->addTag($name, $attribute);
             }
         }
         $this->defaultTags = [];

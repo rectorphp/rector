@@ -19,10 +19,8 @@ use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Constant\ConstantFloatType;
-use PHPStan\Type\Constant\ConstantIntegerType;
-use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\ConstantScalarType;
+use PHPStan\Type\UnionType;
 use ReflectionClassConstant;
 use RectorPrefix20210928\Symplify\Astral\Exception\ShouldNotHappenException;
 use RectorPrefix20210928\Symplify\Astral\Naming\SimpleNameResolver;
@@ -41,6 +39,10 @@ final class NodeValueResolver
      * @var string|null
      */
     private $currentFilePath;
+    /**
+     * @var \Symplify\Astral\NodeValue\UnionTypeValueResolver
+     */
+    private $unionTypeValueResolver;
     /**
      * @var \Symplify\Astral\Naming\SimpleNameResolver
      */
@@ -61,6 +63,7 @@ final class NodeValueResolver
         $this->constExprEvaluator = new \PhpParser\ConstExprEvaluator(function (\PhpParser\Node\Expr $expr) {
             return $this->resolveByNode($expr);
         });
+        $this->unionTypeValueResolver = new \RectorPrefix20210928\Symplify\Astral\NodeValue\UnionTypeValueResolver();
     }
     /**
      * @return array|bool|float|int|mixed|string|null
@@ -73,17 +76,11 @@ final class NodeValueResolver
         } catch (\PhpParser\ConstExprEvaluationException $exception) {
         }
         $exprType = $scope->getType($expr);
-        if ($exprType instanceof \PHPStan\Type\Constant\ConstantStringType) {
+        if ($exprType instanceof \PHPStan\Type\ConstantScalarType) {
             return $exprType->getValue();
         }
-        if ($exprType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
-            return $exprType->getValue();
-        }
-        if ($exprType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
-            return $exprType->getValue();
-        }
-        if ($exprType instanceof \PHPStan\Type\Constant\ConstantFloatType) {
-            return $exprType->getValue();
+        if ($exprType instanceof \PHPStan\Type\UnionType) {
+            return $this->unionTypeValueResolver->resolveConstantTypes($exprType);
         }
         return null;
     }

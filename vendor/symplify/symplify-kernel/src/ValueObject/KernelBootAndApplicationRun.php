@@ -15,21 +15,22 @@ use Throwable;
 final class KernelBootAndApplicationRun
 {
     /**
-     * @var class-string
+     * @var class-string<\Symfony\Component\HttpKernel\KernelInterface>
      */
     private $kernelClass;
     /**
-     * @var string[]|SmartFileInfo[]
+     * @var string[]|\Symplify\SmartFileSystem\SmartFileInfo[]
      */
     private $extraConfigs = [];
     /**
-     * @param class-string $kernelClass
+     * @param class-string<KernelInterface> $kernelClass
      * @param string[]|SmartFileInfo[] $extraConfigs
      */
     public function __construct(string $kernelClass, array $extraConfigs = [])
     {
-        $this->setKernelClass($kernelClass);
+        $this->kernelClass = $kernelClass;
         $this->extraConfigs = $extraConfigs;
+        $this->validateKernelClass($this->kernelClass);
     }
     public function run() : void
     {
@@ -79,12 +80,11 @@ final class KernelBootAndApplicationRun
     /**
      * @param class-string $kernelClass
      */
-    private function setKernelClass(string $kernelClass) : void
+    private function validateKernelClass(string $kernelClass) : void
     {
         if (!\is_a($kernelClass, \RectorPrefix20210928\Symfony\Component\HttpKernel\KernelInterface::class, \true)) {
             $message = \sprintf('Class "%s" must by type of "%s"', $kernelClass, \RectorPrefix20210928\Symfony\Component\HttpKernel\KernelInterface::class);
             throw new \RectorPrefix20210928\Symplify\SymplifyKernel\Exception\BootException($message);
         }
-        $this->kernelClass = $kernelClass;
     }
 }
