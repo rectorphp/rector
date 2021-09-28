@@ -10,6 +10,8 @@ use PHPUnit\Framework\Constraint\IsEqual;
 /**
  * Relaxes phpunit assertions to be forgiving about platform issues, like directory-separators or newlines.
  * Mostly required to make assertion work on Windows.
+ *
+ * @note Cannot be used, as it breaks compatibility with PHPUnit 8 and 9 @see https://github.com/rectorphp/rector/issues/6709
  */
 trait PlatformAgnosticAssertions
 {
