@@ -18,6 +18,10 @@ jobs:
                         run: composer validate --ansi
 
                     -
+                        name: 'Preload php-parser Order'
+                        run: php preload.php
+
+                    -
                         name: 'Validate Max File Length'
                         run: vendor/bin/easy-ci validate-file-length packages rules src tests
 

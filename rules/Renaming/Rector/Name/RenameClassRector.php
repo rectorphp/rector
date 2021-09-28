@@ -13,8 +13,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;

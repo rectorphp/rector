@@ -507,3 +507,6 @@ parameters:
                 - packages/FileFormatter/ValueObject/NewLine.php #15
                 - src/Application/VersionResolver.php #16
                 - utils/compiler/src/Unprefixer.php #9
+
+        # false positive - class_exists check is right above it
+        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'
