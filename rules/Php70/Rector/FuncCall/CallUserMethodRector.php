@@ -46,7 +46,7 @@ final class CallUserMethodRector extends \Rector\Core\Rector\AbstractRector impl
         }
         $newName = self::OLD_TO_NEW_FUNCTIONS[$this->getName($node)];
         $node->name = new \PhpParser\Node\Name($newName);
-        $oldArgs = $node->getArgs();
+        $oldArgs = $node->args;
         unset($node->args[1]);
         $newArgs = [$this->nodeFactory->createArg([$oldArgs[1]->value, $oldArgs[0]->value])];
         unset($oldArgs[0]);

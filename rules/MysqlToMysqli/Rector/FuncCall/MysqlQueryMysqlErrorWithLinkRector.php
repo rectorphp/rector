@@ -80,14 +80,14 @@ CODE_SAMPLE
             if (!$this->isName($node, $oldFunction)) {
                 continue;
             }
-            $args = $node->getArgs();
+            $args = $node->args;
             if ($args === [] || !$this->isProbablyMysql($args[0]->value)) {
                 $connectionVariable = $this->findConnectionVariable($node);
                 $this->removeExistingConnectionParameter($node);
                 if (!$connectionVariable instanceof \PhpParser\Node\Expr) {
                     return null;
                 }
-                $node->args = \array_merge([new \PhpParser\Node\Arg($connectionVariable)], $node->getArgs());
+                $node->args = \array_merge([new \PhpParser\Node\Arg($connectionVariable)], $node->args);
             }
             $node->name = new \PhpParser\Node\Name($newFunction);
             return $node;

@@ -67,7 +67,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         if (!$this->isRegexFunctionNames($node)) {
             return null;
         }
-        $args = $node->getArgs();
+        $args = $node->args;
         if (!isset($args[3])) {
             return null;
         }

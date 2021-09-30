@@ -67,7 +67,7 @@ final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implem
         if (!$this->isName($funcCall, self::DIRNAME)) {
             return null;
         }
-        $args = $funcCall->getArgs();
+        $args = $funcCall->args;
         if (\count($args) >= 3) {
             return null;
         }

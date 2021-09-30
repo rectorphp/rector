@@ -97,7 +97,7 @@ CODE_SAMPLE
      */
     private function processArgs($node) : ?\PhpParser\Node
     {
-        $args = $node->getArgs();
+        $args = $node->args;
         if ($args === []) {
             return null;
         }

@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -86,12 +87,12 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @return Arg[]
+     * @return Arg[]|VariadicPlaceholder[]
      */
     private function composeNewArgs(\PhpParser\Node\Expr\FuncCall $funcCall) : array
     {
         $items = [];
-        $args = $funcCall->getArgs();
+        $args = $funcCall->args;
         $newArgs = [];
         $newArgs[] = $args[0];
         $newArgs[] = $args[1];

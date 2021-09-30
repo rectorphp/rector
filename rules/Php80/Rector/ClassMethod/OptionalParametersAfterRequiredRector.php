@@ -129,11 +129,11 @@ CODE_SAMPLE
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $new->getArgs());
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $new->args);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->getArgs(), $expectedArgOrParamOrder);
+        $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->args, $expectedArgOrParamOrder);
         $new->setAttribute(self::ALREADY_SORTED, \true);
         return $new;
     }
@@ -143,11 +143,11 @@ CODE_SAMPLE
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->getArgs());
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->args);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->getArgs(), $expectedArgOrParamOrder);
+        $newArgs = $this->argumentSorter->sortArgsByExpectedParamOrder($methodCall->args, $expectedArgOrParamOrder);
         if ($methodCall->args === $newArgs) {
             return null;
         }

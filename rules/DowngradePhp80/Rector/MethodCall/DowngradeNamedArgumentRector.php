@@ -77,7 +77,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $args = $node->getArgs();
+        $args = $node->args;
         if ($this->shouldSkip($args)) {
             return null;
         }

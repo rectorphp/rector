@@ -185,7 +185,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
     }
     private function createIsTypeOrIsInstanceOf(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Expr\MethodCall
     {
-        $args = $staticCall->getArgs();
+        $args = $staticCall->args;
         $type = $this->valueResolver->getValue($args[0]->value);
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
         return $this->nodeFactory->createLocalMethodCall($name, $args);
