@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210928;
+namespace RectorPrefix20210930;
 
 if (\class_exists('SC_login_frameset')) {
     return;

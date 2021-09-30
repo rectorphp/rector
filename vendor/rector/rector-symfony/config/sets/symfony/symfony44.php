@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210928;
+namespace RectorPrefix20210930;
 
 use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

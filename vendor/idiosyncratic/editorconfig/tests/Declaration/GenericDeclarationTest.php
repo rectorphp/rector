@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20210928\PHPUnit\Framework\TestCase;
-class GenericDeclarationTest extends \RectorPrefix20210928\PHPUnit\Framework\TestCase
+use RectorPrefix20210930\PHPUnit\Framework\TestCase;
+class GenericDeclarationTest extends \RectorPrefix20210930\PHPUnit\Framework\TestCase
 {
     public function testGetName() : void
     {
-        $declaration = new \RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'string');
+        $declaration = new \RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'string');
         $this->assertEquals('declaration', $declaration->getName());
     }
     public function testGetValue() : void
     {
-        $declaration = new \RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'string');
+        $declaration = new \RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'string');
         $this->assertIsString($declaration->getValue());
         $this->assertEquals('string', $declaration->getValue());
-        $declaration = new \RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', '1');
+        $declaration = new \RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', '1');
         $this->assertIsInt($declaration->getValue());
         $this->assertSame(1, $declaration->getValue());
         $this->assertSame('1', $declaration->getStringValue());
-        $declaration = new \RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'true');
+        $declaration = new \RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'true');
         $this->assertIsBool($declaration->getValue());
         $this->assertTrue($declaration->getValue());
         $this->assertSame('true', $declaration->getStringValue());
-        $declaration = new \RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', '1.1');
+        $declaration = new \RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', '1.1');
         $this->assertIsString($declaration->getValue());
         $this->assertSame('1.1', $declaration->getValue());
         $this->assertSame('1.1', $declaration->getStringValue());
     }
     public function testToString() : void
     {
-        $declaration = new \RectorPrefix20210928\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'string');
+        $declaration = new \RectorPrefix20210930\Idiosyncratic\EditorConfig\Declaration\GenericDeclaration('declaration', 'string');
         $this->assertEquals('declaration=string', (string) $declaration);
     }
 }

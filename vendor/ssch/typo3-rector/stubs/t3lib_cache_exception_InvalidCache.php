@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210928;
+namespace RectorPrefix20210930;
 
 if (\class_exists('t3lib_cache_exception_InvalidCache')) {
     return;

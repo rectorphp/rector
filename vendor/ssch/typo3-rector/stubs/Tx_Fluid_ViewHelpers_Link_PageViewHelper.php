@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210928;
+namespace RectorPrefix20210930;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Link_PageViewHelper')) {
     return;
