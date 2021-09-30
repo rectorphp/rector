@@ -64,7 +64,7 @@ final class DowngradeStrEndsWithRector extends AbstractRector
 
     private function createSubstrCompareFuncCall(FuncCall $funcCall): FuncCall
     {
-        $args = $funcCall->getArgs();
+        $args = $funcCall->args;
 
         $strlenFuncCall = $this->createStrlenFuncCall($args[1]->value);
         $args[] = new Arg(new UnaryMinus($strlenFuncCall));

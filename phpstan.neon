@@ -498,3 +498,8 @@ parameters:
 
         # false positive - class_exists check is right above it
         - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'
+
+        # waits for phpstan upgrade to php-parser 4.13
+        - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
+        - '#(.*?), array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\> given#'
+        - '#(.*?) but returns array<int, PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\>#'

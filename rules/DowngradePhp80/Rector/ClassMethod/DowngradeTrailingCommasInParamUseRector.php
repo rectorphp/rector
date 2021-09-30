@@ -117,7 +117,7 @@ CODE_SAMPLE
 
     private function processArgs(FuncCall | MethodCall | StaticCall | New_ $node): ?Node
     {
-        $args = $node->getArgs();
+        $args = $node->args;
         if ($args === []) {
             return null;
         }

@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $args = $node->getArgs();
+        $args = $node->args;
         if ($this->shouldSkip($args)) {
             return null;
         }

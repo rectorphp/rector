@@ -223,7 +223,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function createIsTypeOrIsInstanceOf(StaticCall $staticCall): MethodCall
     {
-        $args = $staticCall->getArgs();
+        $args = $staticCall->args;
         $type = $this->valueResolver->getValue($args[0]->value);
 
         $name = $this->typeAnalyzer->isPhpReservedType($type) ? 'isType' : 'isInstanceOf';
