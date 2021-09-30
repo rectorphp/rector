@@ -176,6 +176,7 @@ CODE_SAMPLE
         if (!$node instanceof \PhpParser\Node) {
             return \true;
         }
+        $type = $this->resolveTypePossibleUnionNullableType($node, $type);
         // is not class-type and should be skipped
         if ($this->shouldSkipNonClassLikeType($node, $type)) {
             return \true;
@@ -188,6 +189,25 @@ CODE_SAMPLE
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
         return \true;
+    }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
+     */
+    private function resolveTypePossibleUnionNullableType($node, \PHPStan\Type\Type $possibleUnionType) : \PHPStan\Type\Type
+    {
+        if (!$node instanceof \PhpParser\Node\NullableType) {
+            return $possibleUnionType;
+        }
+        if (!$possibleUnionType instanceof \PHPStan\Type\UnionType) {
+            return $possibleUnionType;
+        }
+        $types = $possibleUnionType->getTypes();
+        foreach ($types as $type) {
+            if (!$type instanceof \PHPStan\Type\NullType) {
+                return $type;
+            }
+        }
+        return $possibleUnionType;
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node

@@ -2929,6 +2929,7 @@ return array(
     'Rector\\StaticTypeMapper\\Mapper\\ScalarStringToTypeMapper' => $baseDir . '/packages/StaticTypeMapper/Mapper/ScalarStringToTypeMapper.php',
     'Rector\\StaticTypeMapper\\Naming\\NameScopeFactory' => $baseDir . '/packages/StaticTypeMapper/Naming/NameScopeFactory.php',
     'Rector\\StaticTypeMapper\\PhpDocParser\\IdentifierTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDocParser/IdentifierTypeMapper.php',
+    'Rector\\StaticTypeMapper\\PhpDocParser\\NullableTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDocParser/NullableTypeMapper.php',
     'Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDocParser/UnionTypeMapper.php',
     'Rector\\StaticTypeMapper\\PhpDoc\\PhpDocTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDoc/PhpDocTypeMapper.php',
     'Rector\\StaticTypeMapper\\PhpParser\\ExprNodeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpParser/ExprNodeMapper.php',
