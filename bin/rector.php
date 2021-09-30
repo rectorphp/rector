@@ -29,7 +29,7 @@ $extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vend
 if (\file_exists($extractedPhpstanAutoload)) {
     require_once $extractedPhpstanAutoload;
 }
-if (\file_exists(__DIR__ . '/../preload.php')) {
+if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }
 require_once __DIR__ . '/../src/constants.php';
