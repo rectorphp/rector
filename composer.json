@@ -56,7 +56,7 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^0.12.19",
         "phpunit/phpunit": "^9.5",
-        "rector/phpstan-rules": "^0.3.5",
+        "rector/phpstan-rules": "^0.3.8",
         "rector/rector-generator": "^0.3",
         "spatie/enum": "^3.9",
         "symplify/coding-standard": "^9.4.65",
@@ -93,9 +93,7 @@
                 "rules-tests"
             ],
             "Rector\\Core\\Tests\\": "tests",
-            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
-            "Rector\\PHPStanRules\\": "utils/phpstan-rules/src",
-            "Rector\\PHPStanRules\\Tests\\": "utils/phpstan-rules/tests"
+            "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src"
         },
         "classmap": [
             "stubs",

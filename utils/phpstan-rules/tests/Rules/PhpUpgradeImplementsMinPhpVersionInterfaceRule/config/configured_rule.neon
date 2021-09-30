@@ -1,5 +1,0 @@
-services:
-    - Symplify\SmartFileSystem\SmartFileSystem
-    -
-        class: Rector\PHPStanRules\Rules\PhpUpgradeImplementsMinPhpVersionInterfaceRule
-        tags: [phpstan.rules.rule]

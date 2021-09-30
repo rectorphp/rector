@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
+use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

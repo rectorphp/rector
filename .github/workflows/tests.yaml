@@ -20,7 +20,6 @@ jobs:
                     - tests
                     - rules-tests
                     - packages-tests
-                    - utils/phpstan-rules/tests
 
         name: PHP ${{ matrix.php }} tests for ${{ matrix.path }}
         steps:
