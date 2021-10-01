@@ -7,6 +7,8 @@ namespace Rector\EarlyReturn\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
@@ -119,11 +121,26 @@ CODE_SAMPLE
             ? clone $node->stmts[0]
             : new Return_();
 
-        if ($this->contextAnalyzer->isInLoop($node)) {
+        if ($this->isInLoopWithoutContinueOrBreak($node)) {
             $afters[] = new Return_();
         }
 
         return $this->processReplaceIfs($node, $booleanAndConditions, $ifNextReturnClone, $afters);
+    }
+
+    private function isInLoopWithoutContinueOrBreak(If_ $if): bool
+    {
+        if (!$this->contextAnalyzer->isInLoop(
+            $if
+        )) {
+            return false;
+        }
+
+        if ($if->stmts[0] instanceof Continue_) {
+            return false;
+        }
+
+        return ! $if->stmts[0] instanceof Break_;
     }
 
     /**
