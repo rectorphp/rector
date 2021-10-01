@@ -13,6 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -34,6 +35,12 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Conf
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const INNER_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#s';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/EyXsV6/6
+     */
+    private const DOUBLE_QUOTED_REGEX = '#^"(?<delimiter>.{1}).{1,}\k<delimiter>[imsxeADSUXJu]*"$#';
 
     /**
      * All with pattern as 1st argument
@@ -169,9 +176,12 @@ CODE_SAMPLE
 
         /** @var String_ $string */
         $string = $arg->value;
-        $value = $string->value;
+        $string->value = Strings::replace($string->value, self::INNER_REGEX, function (array $match) use (&$string): string {
+            $printedString = $this->betterStandardPrinter->print($string);
+            if (Strings::match($printedString, self::DOUBLE_QUOTED_REGEX)) {
+                $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
+            }
 
-        $string->value = Strings::replace($value, self::INNER_REGEX, function (array $match): string {
             $innerPattern = $match['content'];
             $positionDelimiter = strpos($innerPattern, $this->delimiter);
 
