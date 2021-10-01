@@ -15,4 +15,6 @@ abstract class SomeParent
      * @var string
      */
     protected $typedName;
+
+    protected bool $anAlreadyReplacedPropertyInParentClass = false;
 }

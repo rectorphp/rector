@@ -7,6 +7,8 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Type\MixedType;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,14 +41,14 @@ final class PropertyTypeVendorLockResolver
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        if ($this->isParentClassLocked($classReflection, $propertyName)) {
+        if ($this->isParentClassLocked($classReflection, $propertyName, $scope)) {
             return true;
         }
 
         return $this->isChildClassLocked($property, $classReflection, $propertyName);
     }
 
-    private function isParentClassLocked(ClassReflection $classReflection, string $propertyName): bool
+    private function isParentClassLocked(ClassReflection $classReflection, string $propertyName, Scope $scope): bool
     {
         $fileName = $classReflection->getFileName();
         // extract to some "inherited parent method" service
@@ -59,9 +61,19 @@ final class PropertyTypeVendorLockResolver
                 continue;
             }
 
-            // validate type is conflicting
-            // parent class property in external scope → it's not ok
-            return true;
+            $property = $parentClassReflection->getProperty($propertyName, $scope);
+            if (! $property instanceof PhpPropertyReflection) {
+                // validate type is conflicting
+                // parent class property in external scope → it's not ok
+                return true;
+            }
+
+            if ($property->getNativeType() instanceof MixedType) {
+                // validate parent not typed yet → it's not ok
+                return true;
+            }
+
+            continue;
         }
 
         return false;
