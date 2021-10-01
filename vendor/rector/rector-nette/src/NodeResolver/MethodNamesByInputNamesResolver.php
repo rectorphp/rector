@@ -8,9 +8,9 @@ use Rector\Nette\Contract\FormControlTypeResolverInterface;
 final class MethodNamesByInputNamesResolver
 {
     /**
-     * @var FormControlTypeResolverInterface[]
+     * @var \Rector\Nette\Contract\FormControlTypeResolverInterface[]
      */
-    private $formControlTypeResolvers = [];
+    private $formControlTypeResolvers;
     /**
      * @param FormControlTypeResolverInterface[] $formControlTypeResolvers
      */

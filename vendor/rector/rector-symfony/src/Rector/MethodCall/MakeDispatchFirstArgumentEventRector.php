@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -69,12 +70,20 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArg = $node->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $firstArgumentValue = $firstArg->value;
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($firstArgumentValue)) {
             $this->refactorStringArgument($node);
             return $node;
         }
-        $secondArgumentValue = $node->args[1]->value;
+        $secondArg = $node->args[1];
+        if (!$secondArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $secondArgumentValue = $secondArg->value;
         if ($secondArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
             $this->refactorGetCallFuncCall($node, $secondArgumentValue, $firstArgumentValue);
             return $node;
@@ -104,7 +113,11 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'get_class')) {
             return;
         }
-        $getClassArgumentValue = $funcCall->args[0]->value;
+        $firstArg = $funcCall->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return;
+        }
+        $getClassArgumentValue = $firstArg->value;
         if (!$this->nodeComparator->areNodesEqual($expr, $getClassArgumentValue)) {
             return;
         }
@@ -115,11 +128,19 @@ CODE_SAMPLE
      */
     private function isEventNameSameAsEventObjectClass(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$methodCall->args[1]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+        $secondArg = $methodCall->args[1];
+        if (!$secondArg instanceof \PhpParser\Node\Arg) {
             return \false;
         }
-        $classConst = $this->valueResolver->getValue($methodCall->args[1]->value);
-        $eventStaticType = $this->getStaticType($methodCall->args[0]->value);
+        if (!$secondArg->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            return \false;
+        }
+        $classConst = $this->valueResolver->getValue($secondArg->value);
+        $firstArg = $methodCall->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
+        $eventStaticType = $this->getStaticType($firstArg->value);
         if (!$eventStaticType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210930\Nimut\TestingFramework\MockObject;
+namespace RectorPrefix20211001\Nimut\TestingFramework\MockObject;
 
 if (\interface_exists('Nimut\\TestingFramework\\MockObject\\AccessibleMockObjectInterface')) {
     return;

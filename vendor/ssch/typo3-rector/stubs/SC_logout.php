@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20210930;
+namespace RectorPrefix20211001;
 
 if (\class_exists('SC_logout')) {
     return;

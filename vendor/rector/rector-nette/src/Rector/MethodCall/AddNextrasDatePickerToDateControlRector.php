@@ -78,7 +78,7 @@ CODE_SAMPLE
             $node->var = new \PhpParser\Node\Expr\Variable($controlName);
             // this fixes printing indent
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
-            $this->addNodeBeforeNode($assign, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
             return $node;
         }
         // 2. assign call

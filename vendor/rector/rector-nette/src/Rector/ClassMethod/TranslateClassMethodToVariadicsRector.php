@@ -113,7 +113,7 @@ CODE_SAMPLE
             $assign = $this->createCoalesceAssign($node);
             $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
             $positionNode = $currentStmt ?? $node;
-            $this->addNodeBeforeNode($assign, $positionNode);
+            $this->nodesToAddCollector->addNodeBeforeNode($assign, $positionNode);
             return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
     }

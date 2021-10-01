@@ -65,7 +65,7 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
                 continue;
             }
             $assignExpression = $this->appAssignFactory->createAssignExpression($serviceNameTypeAndVariableName, $methodCall->var);
-            $this->addNodeBeforeNode($assignExpression, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
             $methodCall->var = new \PhpParser\Node\Expr\Variable($serviceNameTypeAndVariableName->getVariableName());
             return $node;
         }

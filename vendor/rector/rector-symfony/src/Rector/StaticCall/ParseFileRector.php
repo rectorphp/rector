@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\StaticCall;
 
-use RectorPrefix20210930\Nette\Utils\Strings;
+use RectorPrefix20211001\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\StaticCall;
@@ -67,14 +67,18 @@ final class ParseFileRector extends \Rector\Core\Rector\AbstractRector
     }
     private function isArgumentYamlFile(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        $possibleFileNode = $staticCall->args[0]->value;
+        $firstArg = $staticCall->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return \false;
+        }
+        $possibleFileNode = $firstArg->value;
         $possibleFileNodeAsString = $this->print($possibleFileNode);
         // is yml/yaml file
-        if (\RectorPrefix20210930\Nette\Utils\Strings::match($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
+        if (\RectorPrefix20211001\Nette\Utils\Strings::match($possibleFileNodeAsString, self::YAML_SUFFIX_IN_QUOTE_REGEX)) {
             return \true;
         }
         // is probably a file variable
-        if (\RectorPrefix20210930\Nette\Utils\Strings::match($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
+        if (\RectorPrefix20211001\Nette\Utils\Strings::match($possibleFileNodeAsString, self::FILE_SUFFIX_REGEX)) {
             return \true;
         }
         // try to detect current value
@@ -86,6 +90,6 @@ final class ParseFileRector extends \Rector\Core\Rector\AbstractRector
         if (!$nodeType instanceof \PHPStan\Type\Constant\ConstantStringType) {
             return \false;
         }
-        return (bool) \RectorPrefix20210930\Nette\Utils\Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
+        return (bool) \RectorPrefix20211001\Nette\Utils\Strings::match($nodeType->getValue(), self::YAML_SUFFIX_REGEX);
     }
 }

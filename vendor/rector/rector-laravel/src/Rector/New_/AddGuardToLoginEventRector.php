@@ -67,7 +67,7 @@ CODE_SAMPLE
         }
         $guardVariable = new \PhpParser\Node\Expr\Variable('guard');
         $assign = $this->createGuardAssign($guardVariable);
-        $this->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
         $node->args = \array_merge([new \PhpParser\Node\Arg($guardVariable)], $node->args);
         return $node;
     }

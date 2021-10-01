@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -61,14 +62,18 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'enableAnnotationMapping')) {
             return null;
         }
-        if ($this->valueResolver->isTrueOrFalse($node->args[0]->value)) {
+        $firstArg = $node->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        if (!$this->isObjectType($node->args[0]->value, new \PHPStan\Type\ObjectType('Doctrine\\Common\\Annotations\\Reader'))) {
+        if ($this->valueResolver->isTrueOrFalse($firstArg->value)) {
             return null;
         }
-        $readerType = $node->args[0]->value;
-        $node->args[0]->value = $this->nodeFactory->createTrue();
+        if (!$this->isObjectType($firstArg->value, new \PHPStan\Type\ObjectType('Doctrine\\Common\\Annotations\\Reader'))) {
+            return null;
+        }
+        $readerType = $firstArg->value;
+        $firstArg->value = $this->nodeFactory->createTrue();
         return $this->nodeFactory->createMethodCall($node, 'setDoctrineAnnotationReader', [$readerType]);
     }
 }

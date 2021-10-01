@@ -73,21 +73,27 @@ CODE_SAMPLE
             // 1. extract assign
             $dateTimeVariable = new \PhpParser\Node\Expr\Variable('dateTime');
             $assign = new \PhpParser\Node\Expr\Assign($dateTimeVariable, $argValue);
-            $this->addNodeBeforeNode($assign, $node);
+            $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
+            if (!$node->args[2] instanceof \PhpParser\Node\Arg) {
+                return null;
+            }
             $node->args[2]->value = $dateTimeVariable;
+            if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+                return null;
+            }
             // update assign ">" → ">="
             $this->changeCompareSignExpr($node->args[1]);
             // 2. add "whereTime()" time call
             $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);
-            $this->addNodeAfterNode($whereTimeMethodCall, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($whereTimeMethodCall, $node);
             return $node;
         }
-        if ($argValue instanceof \PhpParser\Node\Expr\Variable) {
+        if ($argValue instanceof \PhpParser\Node\Expr\Variable && $node->args[1] instanceof \PhpParser\Node\Arg) {
             $dateTimeVariable = $argValue;
             $this->changeCompareSignExpr($node->args[1]);
             // 2. add "whereTime()" time call
             $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);
-            $this->addNodeAfterNode($whereTimeMethodCall, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($whereTimeMethodCall, $node);
         }
         return null;
     }
@@ -102,12 +108,18 @@ CODE_SAMPLE
         if (!isset($methodCall->args[2])) {
             return null;
         }
+        if (!$methodCall->args[2] instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
         $argValue = $methodCall->args[2]->value;
         if (!$this->isObjectType($argValue, new \PHPStan\Type\ObjectType('DateTimeInterface'))) {
             return null;
         }
         // nothing to change
         if ($this->isCarbonTodayStaticCall($argValue)) {
+            return null;
+        }
+        if (!$methodCall->args[1] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         if ($this->valueResolver->isValues($methodCall->args[1]->value, ['>=', '<='])) {

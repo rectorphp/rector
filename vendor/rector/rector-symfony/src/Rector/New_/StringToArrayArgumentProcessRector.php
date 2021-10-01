@@ -17,8 +17,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20210930\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix20210930\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20211001\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix20211001\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -69,27 +69,31 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param New_|MethodCall $node
+     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function processArgumentPosition(\PhpParser\Node $node, int $argumentPosition) : ?\PhpParser\Node
+    private function processArgumentPosition($node, int $argumentPosition) : ?\PhpParser\Node
     {
         if (!isset($node->args[$argumentPosition])) {
             return null;
         }
-        $firstArgument = $node->args[$argumentPosition]->value;
-        if ($firstArgument instanceof \PhpParser\Node\Expr\Array_) {
+        $activeArg = $node->args[$argumentPosition];
+        if (!$activeArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $activeArgValue = $activeArg->value;
+        if ($activeArgValue instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         // type analyzer
-        if ($this->nodeTypeResolver->isStaticType($firstArgument, \PHPStan\Type\StringType::class)) {
-            $this->processStringType($node, $argumentPosition, $firstArgument);
+        if ($this->nodeTypeResolver->isStaticType($activeArgValue, \PHPStan\Type\StringType::class)) {
+            $this->processStringType($node, $argumentPosition, $activeArgValue);
         }
         return $node;
     }
     /**
-     * @param New_|MethodCall $expr
+     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $expr
      */
-    private function processStringType(\PhpParser\Node\Expr $expr, int $argumentPosition, \PhpParser\Node\Expr $firstArgumentExpr) : void
+    private function processStringType($expr, int $argumentPosition, \PhpParser\Node\Expr $firstArgumentExpr) : void
     {
         if ($firstArgumentExpr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);
@@ -114,8 +118,8 @@ CODE_SAMPLE
      */
     private function splitProcessCommandToItems(string $process) : array
     {
-        $privatesCaller = new \RectorPrefix20210930\Symplify\PackageBuilder\Reflection\PrivatesCaller();
-        return $privatesCaller->callPrivateMethod(new \RectorPrefix20210930\Symfony\Component\Console\Input\StringInput(''), 'tokenize', [$process]);
+        $privatesCaller = new \RectorPrefix20211001\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        return $privatesCaller->callPrivateMethod(new \RectorPrefix20211001\Symfony\Component\Console\Input\StringInput(''), 'tokenize', [$process]);
     }
     private function processPreviousAssign(\PhpParser\Node $node, \PhpParser\Node\Expr $firstArgumentExpr) : void
     {

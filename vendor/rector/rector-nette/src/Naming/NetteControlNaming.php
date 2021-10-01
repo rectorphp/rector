@@ -3,22 +3,21 @@
 declare (strict_types=1);
 namespace Rector\Nette\Naming;
 
-use RectorPrefix20210930\Nette\Utils\Strings;
-use RectorPrefix20210930\Stringy\Stringy;
+use RectorPrefix20211001\Stringy\Stringy;
 final class NetteControlNaming
 {
     public function createVariableName(string $shortName) : string
     {
-        $stringy = new \RectorPrefix20210930\Stringy\Stringy($shortName);
+        $stringy = new \RectorPrefix20211001\Stringy\Stringy($shortName);
         $variableName = (string) $stringy->camelize();
-        if (\RectorPrefix20210930\Nette\Utils\Strings::endsWith($variableName, 'Form')) {
+        if (\substr_compare($variableName, 'Form', -\strlen('Form')) === 0) {
             return $variableName;
         }
         return $variableName . 'Control';
     }
     public function createCreateComponentClassMethodName(string $shortName) : string
     {
-        $stringy = new \RectorPrefix20210930\Stringy\Stringy($shortName);
+        $stringy = new \RectorPrefix20211001\Stringy\Stringy($shortName);
         $componentName = (string) $stringy->upperCamelize();
         return 'createComponent' . $componentName;
     }

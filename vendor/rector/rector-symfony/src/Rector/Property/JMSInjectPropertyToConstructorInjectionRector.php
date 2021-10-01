@@ -9,8 +9,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
@@ -31,14 +29,6 @@ final class JMSInjectPropertyToConstructorInjectionRector extends \Rector\Core\R
      */
     private const INJECT_ANNOTATION_CLASS = 'JMS\\DiExtraBundle\\Annotation\\Inject';
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-    /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
-     */
-    private $phpDocTagRemover;
-    /**
      * @var \Rector\Symfony\TypeAnalyzer\JMSDITypeResolver
      */
     private $jmsDITypeResolver;
@@ -46,10 +36,8 @@ final class JMSInjectPropertyToConstructorInjectionRector extends \Rector\Core\R
      * @var \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator
      */
     private $propertyConstructorInjectionManipulator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Symfony\TypeAnalyzer\JMSDITypeResolver $jmsDITypeResolver, \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator)
+    public function __construct(\Rector\Symfony\TypeAnalyzer\JMSDITypeResolver $jmsDITypeResolver, \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator $propertyConstructorInjectionManipulator)
     {
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->phpDocTagRemover = $phpDocTagRemover;
         $this->jmsDITypeResolver = $jmsDITypeResolver;
         $this->propertyConstructorInjectionManipulator = $propertyConstructorInjectionManipulator;
     }

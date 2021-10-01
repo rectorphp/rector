@@ -105,7 +105,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @return array<class-string<\PhpParser\Node>>
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {

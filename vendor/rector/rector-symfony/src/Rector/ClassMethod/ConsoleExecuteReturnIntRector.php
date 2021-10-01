@@ -167,7 +167,6 @@ CODE_SAMPLE
         $staticType = $this->getStaticType($return->expr);
         if (!$staticType instanceof \PHPStan\Type\IntegerType) {
             $return->expr = new \PhpParser\Node\Expr\Cast\Int_($return->expr);
-            return;
         }
     }
     private function isSuccessfulRefactorTernaryReturn(\PhpParser\Node\Expr\Ternary $ternary) : bool

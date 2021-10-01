@@ -54,6 +54,7 @@ final class ChangeSetParametersArrayToArrayCollectionRector extends \Rector\Core
         if ($this->shouldSkipMethodCall($node)) {
             return null;
         }
+        /** @var Arg[] $methodArguments */
         $methodArguments = $node->args;
         if (\count($methodArguments) !== 1) {
             return null;

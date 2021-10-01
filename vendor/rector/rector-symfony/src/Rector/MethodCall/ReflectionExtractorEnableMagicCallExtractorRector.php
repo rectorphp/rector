@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -82,14 +83,21 @@ CODE_SAMPLE
         if ($contextOptionValue === null) {
             return null;
         }
-        /** @var Array_ $contextOptions */
-        $contextOptions = $node->args[2]->value;
+        $thirdArg = $node->args[2];
+        if (!$thirdArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $contextOptions = $thirdArg->value;
+        if (!$contextOptions instanceof \PhpParser\Node\Expr\Array_) {
+            return null;
+        }
         $contextOptions->items[] = new \PhpParser\Node\Expr\ArrayItem($this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue), new \PhpParser\Node\Scalar\String_(self::NEW_OPTION_NAME));
         return $node;
     }
     private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor'))) {
+        $reflectionExtractorObjectType = new \PHPStan\Type\ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
+        if (!$this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
             return \true;
         }
         if (!$this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
@@ -98,14 +106,26 @@ CODE_SAMPLE
         if (\count($methodCall->args) < 3) {
             return \true;
         }
-        /** @var Array_ $contextOptions */
-        $contextOptions = $methodCall->args[2]->value;
+        $thirdArg = $methodCall->args[2];
+        if (!$thirdArg instanceof \PhpParser\Node\Arg) {
+            return \true;
+        }
+        $contextOptions = $thirdArg->value;
+        if (!$contextOptions instanceof \PhpParser\Node\Expr\Array_) {
+            return \true;
+        }
         return $contextOptions->items === [];
     }
     private function getContextOptionValue(\PhpParser\Node\Expr\MethodCall $methodCall) : ?bool
     {
-        /** @var Array_ $contextOptions */
-        $contextOptions = $methodCall->args[2]->value;
+        $thirdArg = $methodCall->args[2];
+        if (!$thirdArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $contextOptions = $thirdArg->value;
+        if (!$contextOptions instanceof \PhpParser\Node\Expr\Array_) {
+            return null;
+        }
         $contextOptionValue = null;
         foreach ($contextOptions->items as $index => $arrayItem) {
             if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {

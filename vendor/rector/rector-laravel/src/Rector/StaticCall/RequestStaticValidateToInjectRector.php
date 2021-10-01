@@ -91,9 +91,9 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\MethodCall($variable, new \PhpParser\Node\Identifier($methodName), $node->args);
     }
     /**
-     * @param StaticCall|FuncCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $node
      */
-    private function shouldSkip(\PhpParser\Node $node) : bool
+    private function shouldSkip($node) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return !$this->nodeTypeResolver->isObjectTypes($node->class, $this->requestObjectTypes);

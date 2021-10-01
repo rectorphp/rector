@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\New_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -53,7 +54,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $isTrue = $this->valueResolver->isTrue($node->args[0]->value);
+        $firstArg = $node->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $isTrue = $this->valueResolver->isTrue($firstArg->value);
         $bitwiseOr = $this->prepareFlags($isTrue);
         $node->args[0] = $this->nodeFactory->createArg($bitwiseOr);
         return $node;
@@ -69,7 +74,11 @@ CODE_SAMPLE
         if (!isset($new->args[0])) {
             return \true;
         }
-        return !$this->valueResolver->isTrueOrFalse($new->args[0]->value);
+        $firstArg = $new->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return \true;
+        }
+        return !$this->valueResolver->isTrueOrFalse($firstArg->value);
     }
     private function prepareFlags(bool $currentValue) : \PhpParser\Node\Expr\BinaryOp\BitwiseOr
     {

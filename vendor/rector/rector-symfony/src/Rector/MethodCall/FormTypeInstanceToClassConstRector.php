@@ -18,8 +18,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
-use Rector\Symfony\NodeFactory\BuilderFormNodeFactory;
-use Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,14 +39,6 @@ final class FormTypeInstanceToClassConstRector extends \Rector\Core\Rector\Abstr
      */
     private $controllerObjectTypes = [];
     /**
-     * @var \Rector\Symfony\NodeFactory\BuilderFormNodeFactory
-     */
-    private $builderFormNodeFactory;
-    /**
-     * @var \Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory
-     */
-    private $configureOptionsNodeFactory;
-    /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
@@ -64,10 +54,8 @@ final class FormTypeInstanceToClassConstRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer
      */
     private $formCollectionAnalyzer;
-    public function __construct(\Rector\Symfony\NodeFactory\BuilderFormNodeFactory $builderFormNodeFactory, \Rector\Symfony\NodeFactory\ConfigureOptionsNodeFactory $configureOptionsNodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher, \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer $formCollectionAnalyzer)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer $formAddMethodCallAnalyzer, \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher $formOptionsArrayMatcher, \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer $formCollectionAnalyzer)
     {
-        $this->builderFormNodeFactory = $builderFormNodeFactory;
-        $this->configureOptionsNodeFactory = $configureOptionsNodeFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->formAddMethodCallAnalyzer = $formAddMethodCallAnalyzer;
         $this->formOptionsArrayMatcher = $formOptionsArrayMatcher;

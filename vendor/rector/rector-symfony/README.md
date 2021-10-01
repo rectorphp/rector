@@ -21,27 +21,17 @@ use Rector\Symfony\Set\SymfonySetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(SymfonySetList::SYMFONY_44);
-};
-```
-
-
-### Symfony Container
-
-To work with some Symfony rules, you now need to link your container XML file
-
-```php
-// rector.php
-use Rector\Core\Configuration\Option;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
+    // region Symfony Container
     $parameters = $containerConfigurator->parameters();
-
     $parameters->set(
         Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER,
-        __DIR__ . '/var/cache/dev/AppKernelDevDebugContainer.xml'
+        __DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml'
     );
+    // endregion
+
+    $containerConfigurator->import(SymfonySetList::SYMFONY_52);
+    $containerConfigurator->import(SymfonySetList::SYMFONY_CODE_QUALITY);
+    $containerConfigurator->import(SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION);
 };
 ```
 

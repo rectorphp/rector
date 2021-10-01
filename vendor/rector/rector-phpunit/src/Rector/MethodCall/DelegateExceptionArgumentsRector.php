@@ -65,13 +65,13 @@ CODE_SAMPLE
             $oldMethodName = $identifierNode->name;
             $call = $this->assertCallFactory->createCallWithName($node, self::OLD_TO_NEW_METHOD[$oldMethodName]);
             $call->args[] = $node->args[1];
-            $this->addNodeAfterNode($call, $node);
+            $this->nodesToAddCollector->addNodeAfterNode($call, $node);
             unset($node->args[1]);
             // add exception code method call
             if (isset($node->args[2])) {
                 $call = $this->assertCallFactory->createCallWithName($node, 'expectExceptionCode');
                 $call->args[] = $node->args[2];
-                $this->addNodeAfterNode($call, $node);
+                $this->nodesToAddCollector->addNodeAfterNode($call, $node);
                 unset($node->args[2]);
             }
         }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\New_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
@@ -59,7 +60,11 @@ CODE_SAMPLE
         if (!$rootMethodCallNode instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
-        $rootNameNode = $rootMethodCallNode->args[0]->value;
+        $firstArg = $rootMethodCallNode->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $rootNameNode = $firstArg->value;
         if (!$rootNameNode instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -63,17 +64,21 @@ CODE_SAMPLE
             return null;
         }
         // not a string
-        if (!$node->args[1]->value instanceof \PhpParser\Node\Scalar\String_) {
+        $firstArg = $node->args[1];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        if (!$firstArg->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         /** @var String_ $stringNode */
-        $stringNode = $node->args[1]->value;
+        $stringNode = $firstArg->value;
         // not a form type string
         $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringNode->value);
         if ($formClass === null) {
             return null;
         }
-        $node->args[1]->value = $this->nodeFactory->createClassConstReference($formClass);
+        $firstArg->value = $this->nodeFactory->createClassConstReference($formClass);
         return $node;
     }
 }

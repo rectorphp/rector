@@ -132,10 +132,10 @@ final class GetSubscribedEventsClassMethodFactory
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
     }
     /**
-     * @param ClassConstFetch|String_ $expr
      * @param ServiceDefinition[] $methodNamesWithPriorities
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Scalar\String_ $expr
      */
-    private function createSingleMethod(array $methodNamesWithPriorities, string $eventName, \PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Array_ $eventsToMethodsArray) : void
+    private function createSingleMethod(array $methodNamesWithPriorities, string $eventName, $expr, \PhpParser\Node\Expr\Array_ $eventsToMethodsArray) : void
     {
         $methodName = $this->resolveMethodName($methodNamesWithPriorities[0], $eventName);
         $priority = $this->resolvePriority($methodNamesWithPriorities[0], $eventName);
@@ -145,10 +145,10 @@ final class GetSubscribedEventsClassMethodFactory
         $eventsToMethodsArray->items[] = $this->createArrayItemFromMethodAndPriority($priority, $methodName, $expr);
     }
     /**
-     * @param ClassConstFetch|String_ $expr
      * @param ServiceDefinition[] $methodNamesWithPriorities
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Scalar\String_ $expr
      */
-    private function createMultipleMethods(array $methodNamesWithPriorities, \PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\Array_ $eventsToMethodsArray, string $eventName) : void
+    private function createMultipleMethods(array $methodNamesWithPriorities, $expr, \PhpParser\Node\Expr\Array_ $eventsToMethodsArray, string $eventName) : void
     {
         $eventItems = [];
         $alreadyUsedTags = [];

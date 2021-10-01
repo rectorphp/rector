@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Doctrine\TypeAnalyzer;
 
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\CompoundType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -32,10 +31,10 @@ final class TypeFinder
         return new \PHPStan\Type\MixedType();
     }
     /**
-     * @param UnionType|IntersectionType $compoundType
      * @param class-string<Type> $desiredTypeClass
+     * @param \PHPStan\Type\UnionType|\PHPStan\Type\IntersectionType $compoundType
      */
-    private function findInJoinedType(\PHPStan\Type\CompoundType $compoundType, string $desiredTypeClass) : \PHPStan\Type\Type
+    private function findInJoinedType($compoundType, string $desiredTypeClass) : \PHPStan\Type\Type
     {
         foreach ($compoundType->getTypes() as $joinedType) {
             $foundType = $this->find($joinedType, $desiredTypeClass);

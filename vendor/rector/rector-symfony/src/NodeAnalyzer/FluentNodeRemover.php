@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
@@ -21,9 +20,9 @@ final class FluentNodeRemover
         $this->nodeRemover = $nodeRemover;
     }
     /**
-     * @param MethodCall|Return_ $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Stmt\Return_ $node
      */
-    public function removeCurrentNode(\PhpParser\Node $node) : void
+    public function removeCurrentNode($node) : void
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\Expr\Assign) {

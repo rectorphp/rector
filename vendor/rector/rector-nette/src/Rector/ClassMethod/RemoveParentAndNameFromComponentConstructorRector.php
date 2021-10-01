@@ -19,7 +19,6 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\Nette\NodeFinder\ParamFinder;
-use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -52,18 +51,13 @@ final class RemoveParentAndNameFromComponentConstructorRector extends \Rector\Co
      */
     private $staticCallAnalyzer;
     /**
-     * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
-     */
-    private $methodParameterTypeResolver;
-    /**
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\NodeTypeResolver\MethodParameterTypeResolver $methodParameterTypeResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Nette\NodeFinder\ParamFinder $paramFinder, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->paramFinder = $paramFinder;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
-        $this->methodParameterTypeResolver = $methodParameterTypeResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->controlObjectType = new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Control');
     }

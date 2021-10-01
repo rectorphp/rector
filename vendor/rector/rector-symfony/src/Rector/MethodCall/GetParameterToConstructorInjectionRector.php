@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20210930\Nette\Utils\Strings;
+use RectorPrefix20211001\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
@@ -93,10 +94,16 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'getParameter')) {
             return null;
         }
-        /** @var String_ $stringArgument */
-        $stringArgument = $node->args[0]->value;
+        $firstArg = $node->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+            return null;
+        }
+        $stringArgument = $firstArg->value;
+        if (!$stringArgument instanceof \PhpParser\Node\Scalar\String_) {
+            return null;
+        }
         $parameterName = $stringArgument->value;
-        $parameterName = \RectorPrefix20210930\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
+        $parameterName = \RectorPrefix20211001\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
         $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {

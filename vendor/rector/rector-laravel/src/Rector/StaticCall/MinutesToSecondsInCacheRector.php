@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Laravel\Reflection\ClassConstantReflectionResolver;
 use Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,13 +38,8 @@ final class MinutesToSecondsInCacheRector extends \Rector\Core\Rector\AbstractRe
      * @var TypeToTimeMethodAndPosition[]
      */
     private $typeToTimeMethodsAndPositions = [];
-    /**
-     * @var \Rector\Laravel\Reflection\ClassConstantReflectionResolver
-     */
-    private $classConstantReflectionResolver;
-    public function __construct(\Rector\Laravel\Reflection\ClassConstantReflectionResolver $classConstantReflectionResolver)
+    public function __construct()
     {
-        $this->classConstantReflectionResolver = $classConstantReflectionResolver;
         $this->typeToTimeMethodsAndPositions = [new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::PUT, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::ADD, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::REMEMBER, 2), new \Rector\Laravel\ValueObject\TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', 'putMany', 1)];
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -90,6 +84,9 @@ CODE_SAMPLE
                 continue;
             }
             if (!isset($node->args[$typeToTimeMethodAndPosition->getPosition()])) {
+                continue;
+            }
+            if (!$node->args[$typeToTimeMethodAndPosition->getPosition()] instanceof \PhpParser\Node\Arg) {
                 continue;
             }
             $argValue = $node->args[$typeToTimeMethodAndPosition->getPosition()]->value;
