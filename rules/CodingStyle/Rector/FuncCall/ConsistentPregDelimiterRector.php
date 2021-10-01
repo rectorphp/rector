@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,6 +32,11 @@ final class ConsistentPregDelimiterRector extends \Rector\Core\Rector\AbstractRe
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const INNER_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#s';
+    /**
+     * @var string
+     * @see https://regex101.com/r/EyXsV6/6
+     */
+    private const DOUBLE_QUOTED_REGEX = '#^"(?<delimiter>.{1}).{1,}\\k<delimiter>[imsxeADSUXJu]*"$#';
     /**
      * All with pattern as 1st argument
      * @var array<string, int>
@@ -126,8 +132,11 @@ CODE_SAMPLE
         }
         /** @var String_ $string */
         $string = $arg->value;
-        $value = $string->value;
-        $string->value = \RectorPrefix20211001\Nette\Utils\Strings::replace($value, self::INNER_REGEX, function (array $match) : string {
+        $string->value = \RectorPrefix20211001\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
+            $printedString = $this->betterStandardPrinter->print($string);
+            if (\RectorPrefix20211001\Nette\Utils\Strings::match($printedString, self::DOUBLE_QUOTED_REGEX)) {
+                $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN, \true);
+            }
             $innerPattern = $match['content'];
             $positionDelimiter = \strpos($innerPattern, $this->delimiter);
             if ($positionDelimiter > 0) {
