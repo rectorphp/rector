@@ -1,4 +1,4 @@
-# 476 Rules Overview
+# 477 Rules Overview
 
 <br>
 
@@ -39,6 +39,8 @@
 - [DowngradePhp81](#downgradephp81) (1)
 
 - [EarlyReturn](#earlyreturn) (11)
+
+- [Generics](#generics) (1)
 
 - [LeagueEvent](#leagueevent) (1)
 
@@ -5842,6 +5844,51 @@ Changes Single return of || to early returns
 +            return true;
 +        }
 +        return (bool) $this->somethingElse();
+     }
+ }
+```
+
+<br>
+
+## Generics
+
+### GenericClassMethodParamRector
+
+Make class methods generic based on implemented interface
+
+:wrench: **configure it!**
+
+- class: [`Rector\Generics\Rector\ClassMethod\GenericClassMethodParamRector`](../rules/Generics/Rector/ClassMethod/GenericClassMethodParamRector.php)
+
+```php
+use Rector\Generics\Rector\ClassMethod\GenericClassMethodParamRector;
+use Rector\Generics\ValueObject\GenericClassMethodParam;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(GenericClassMethodParamRector::class)
+        ->call('configure', [[
+            GenericClassMethodParamRector::GENERIC_CLASS_METHOD_PARAMS => ValueObjectInliner::inline([
+                new GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface'),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass implements SomeInterface
+ {
+-    private method getParams(SomeSpecificType $someParam)
++    /**
++     * @param SomeSpecificType $someParam
++     */
++    public method getParams(ParamInterface $someParam)
+     {
      }
  }
 ```

@@ -130,9 +130,7 @@ CODE_SAMPLE
 
     private function isInLoopWithoutContinueOrBreak(If_ $if): bool
     {
-        if (!$this->contextAnalyzer->isInLoop(
-            $if
-        )) {
+        if (! $this->contextAnalyzer->isInLoop($if)) {
             return false;
         }
 
