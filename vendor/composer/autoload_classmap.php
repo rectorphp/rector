@@ -2247,6 +2247,8 @@ return array(
     'Rector\\FileSystemRector\\ValueObjectFactory\\AddedFileWithNodesFactory' => $baseDir . '/packages/FileSystemRector/ValueObjectFactory/AddedFileWithNodesFactory.php',
     'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => $baseDir . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
     'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => $baseDir . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
+    'Rector\\Generics\\Rector\\ClassMethod\\GenericClassMethodParamRector' => $baseDir . '/rules/Generics/Rector/ClassMethod/GenericClassMethodParamRector.php',
+    'Rector\\Generics\\ValueObject\\GenericClassMethodParam' => $baseDir . '/rules/Generics/ValueObject/GenericClassMethodParam.php',
     'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => $vendorDir . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
     'Rector\\Laravel\\NodeFactory\\ModelFactoryNodeFactory' => $vendorDir . '/rector/rector-laravel/src/NodeFactory/ModelFactoryNodeFactory.php',
     'Rector\\Laravel\\NodeFactory\\RouterRegisterNodeAnalyzer' => $vendorDir . '/rector/rector-laravel/src/NodeFactory/RouterRegisterNodeAnalyzer.php',

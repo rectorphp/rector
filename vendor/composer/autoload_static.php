@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2d624c5cf9ad5366d38c1a5834e53fe2
+class ComposerStaticInitcea735196a58412c721700164887f2c9
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2607,6 +2607,8 @@ class ComposerStaticInit2d624c5cf9ad5366d38c1a5834e53fe2
         'Rector\\FileSystemRector\\ValueObjectFactory\\AddedFileWithNodesFactory' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObjectFactory/AddedFileWithNodesFactory.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
+        'Rector\\Generics\\Rector\\ClassMethod\\GenericClassMethodParamRector' => __DIR__ . '/../..' . '/rules/Generics/Rector/ClassMethod/GenericClassMethodParamRector.php',
+        'Rector\\Generics\\ValueObject\\GenericClassMethodParam' => __DIR__ . '/../..' . '/rules/Generics/ValueObject/GenericClassMethodParam.php',
         'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
         'Rector\\Laravel\\NodeFactory\\ModelFactoryNodeFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/ModelFactoryNodeFactory.php',
         'Rector\\Laravel\\NodeFactory\\RouterRegisterNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/RouterRegisterNodeAnalyzer.php',
@@ -3884,9 +3886,9 @@ class ComposerStaticInit2d624c5cf9ad5366d38c1a5834e53fe2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2d624c5cf9ad5366d38c1a5834e53fe2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2d624c5cf9ad5366d38c1a5834e53fe2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2d624c5cf9ad5366d38c1a5834e53fe2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcea735196a58412c721700164887f2c9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcea735196a58412c721700164887f2c9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcea735196a58412c721700164887f2c9::$classMap;
 
         }, null, ClassLoader::class);
     }
