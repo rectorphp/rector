@@ -29,7 +29,7 @@ final class FilesystemTweaker
                 $absoluteDirectories = array_merge($absoluteDirectories, $foundDirectories);
             } else {
                 // is classic directory
-                $this->fileSystemGuard->ensureDirectoryExists($directory);
+                $this->fileSystemGuard->ensureDirectoryExists($directory, '');
                 $absoluteDirectories[] = $directory;
             }
         }

@@ -11,7 +11,6 @@ set -u
 
 
 
-
 composer install --no-dev --ansi
 
 rsync --exclude rector-build -av * rector-build --quiet

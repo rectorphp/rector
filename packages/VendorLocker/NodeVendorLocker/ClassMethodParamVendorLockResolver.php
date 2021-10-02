@@ -138,7 +138,7 @@ final class ClassMethodParamVendorLockResolver
                 return true;
             }
 
-            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
             if (str_contains($normalizedFileName, $filePathPartName)) {
                 return true;
             }

@@ -76,7 +76,7 @@ final class ParentClassMethodTypeOverrideGuard
             return false;
         }
 
-        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
         return ! str_contains($normalizedFileName, '/vendor/');
     }
 

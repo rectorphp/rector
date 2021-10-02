@@ -503,3 +503,5 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
         - '#(.*?), array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\> given#'
         - '#(.*?) but returns array<int, PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\>#'
+
+        - '#Parameter "\w+" cannot have default value#'
