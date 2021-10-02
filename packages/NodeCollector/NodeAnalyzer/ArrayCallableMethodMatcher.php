@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -139,16 +140,20 @@ final class ArrayCallableMethodMatcher
         if (!$this->reflectionProvider->hasClass($classConstantReference)) {
             return new \PHPStan\Type\MixedType();
         }
-        $classReflection = $this->reflectionProvider->getClass($classConstantReference);
         $scope = $classConstFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return new \PHPStan\Type\MixedType();
+        }
+        $classReflection = $this->reflectionProvider->getClass($classConstantReference);
         $hasConstruct = $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if ($hasConstruct) {
-            $methodReflection = $classReflection->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
-            $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
-            foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-                if ($parameterReflection->getDefaultValue() === null) {
-                    return new \PHPStan\Type\MixedType();
-                }
+        if (!$hasConstruct) {
+            return new \PHPStan\Type\ObjectType($classConstantReference, null, $classReflection);
+        }
+        $methodReflection = $classReflection->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+            if ($parameterReflection->getDefaultValue() === null) {
+                return new \PHPStan\Type\MixedType();
             }
         }
         return new \PHPStan\Type\ObjectType($classConstantReference, null, $classReflection);
