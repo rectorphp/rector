@@ -82,7 +82,7 @@ final class ParentClassMethodTypeOverrideGuard
         if ($fileName === \false) {
             return \false;
         }
-        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
         return \strpos($normalizedFileName, '/vendor/') === \false;
     }
     public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool

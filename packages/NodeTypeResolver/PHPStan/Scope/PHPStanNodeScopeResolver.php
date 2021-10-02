@@ -15,6 +15,7 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
+use PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection;
 use PHPStan\BetterReflection\Reflector\ClassReflector;
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
@@ -33,6 +34,7 @@ use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use RectorPrefix20211002\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Throwable;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
@@ -44,6 +46,11 @@ final class PHPStanNodeScopeResolver
      * @see https://regex101.com/r/aXsCkK/1
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\\w+)#';
+    /**
+     * @var string
+     * @see https://regex101.com/r/AIA24M/1
+     */
+    private const NOT_AN_INTERFACE_EXCEPTION_REGEX = '#^Provided node ".*" is not interface, but "class"$#';
     /**
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
@@ -151,7 +158,16 @@ final class PHPStanNodeScopeResolver
         if ($this->isMixinInSource($nodes)) {
             return $nodes;
         }
-        $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
+        try {
+            $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
+        } catch (\Throwable $throwable) {
+            if (!$throwable instanceof \PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection) {
+                throw $throwable;
+            }
+            if (!\RectorPrefix20211002\Nette\Utils\Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
+                throw $throwable;
+            }
+        }
         $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
         return $nodes;
     }

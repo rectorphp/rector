@@ -28,7 +28,7 @@ final class VendorLocationDetector
         if ($fileName === \false) {
             return \false;
         }
-        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
         return \strpos($normalizedFileName, '/vendor/') !== \false;
     }
     /**

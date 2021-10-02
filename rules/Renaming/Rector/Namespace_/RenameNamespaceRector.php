@@ -32,6 +32,10 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     private $oldToNewNamespaces = [];
     /**
+     * @var array<string, bool>
+     */
+    private $isChangedInNamespaces = [];
+    /**
      * @var \Rector\Naming\NamespaceMatcher
      */
     private $namespaceMatcher;
@@ -69,6 +73,7 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
             $newName = $renamedNamespaceValueObject->getNameInNewNamespace();
             $node->name = new \PhpParser\Node\Name($newName);
+            $this->isChangedInNamespaces[$newName] = \true;
             return $node;
         }
         if ($node instanceof \PhpParser\Node\Stmt\Use_) {
@@ -81,11 +86,13 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
         if ($parent instanceof \PhpParser\Node\Stmt\Namespace_) {
             return null;
         }
-        if ($parent instanceof \PhpParser\Node\Stmt\UseUse && $parent->type === \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN) {
-            return null;
+        if (!$parent instanceof \PhpParser\Node\Stmt\UseUse) {
+            return $this->processFullyQualified($node, $renamedNamespaceValueObject);
         }
-        $newName = $this->isPartialNamespace($node) ? $this->resolvePartialNewName($node, $renamedNamespaceValueObject) : $renamedNamespaceValueObject->getNameInNewNamespace();
-        return new \PhpParser\Node\Name\FullyQualified($newName);
+        if ($parent->type !== \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN) {
+            return $this->processFullyQualified($node, $renamedNamespaceValueObject);
+        }
+        return null;
     }
     /**
      * @param array<string, array<string, string>> $configuration
@@ -93,6 +100,18 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
     public function configure(array $configuration) : void
     {
         $this->oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? [];
+    }
+    private function processFullyQualified(\PhpParser\Node\Name $name, \Rector\Renaming\ValueObject\RenamedNamespace $renamedNamespace) : ?\PhpParser\Node\Name\FullyQualified
+    {
+        $newName = $this->isPartialNamespace($name) ? $this->resolvePartialNewName($name, $renamedNamespace) : $renamedNamespace->getNameInNewNamespace();
+        $values = \array_values($this->oldToNewNamespaces);
+        if (!isset($this->isChangedInNamespaces[$newName])) {
+            return new \PhpParser\Node\Name\FullyQualified($newName);
+        }
+        if (!\in_array($newName, $values, \true)) {
+            return new \PhpParser\Node\Name\FullyQualified($newName);
+        }
+        return null;
     }
     /**
      * Checks for "new \ClassNoNamespace;"

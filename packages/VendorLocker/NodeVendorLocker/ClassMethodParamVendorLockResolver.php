@@ -127,7 +127,7 @@ final class ClassMethodParamVendorLockResolver
             if ($filePathPartName === '') {
                 return \true;
             }
-            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName, '/');
+            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
             if (\strpos($normalizedFileName, $filePathPartName) !== \false) {
                 return \true;
             }

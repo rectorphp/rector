@@ -29,7 +29,7 @@ final class ComposerPackageSorter
      * @param array<string, string> $packages
      * @return array<string, string>
      */
-    public function sortPackages(array $packages = []) : array
+    public function sortPackages(array $packages) : array
     {
         \uksort($packages, function (string $firstPackageName, string $secondPackageName) : int {
             return $this->createNameWithPriority($firstPackageName) <=> $this->createNameWithPriority($secondPackageName);

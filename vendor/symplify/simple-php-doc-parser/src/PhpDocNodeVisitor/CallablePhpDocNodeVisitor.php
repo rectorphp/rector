@@ -14,7 +14,7 @@ final class CallablePhpDocNodeVisitor extends \RectorPrefix20211002\Symplify\Sim
      * @var string|null
      */
     private $docContent;
-    public function __construct(callable $callable, ?string $docContent = null)
+    public function __construct(callable $callable, ?string $docContent)
     {
         $this->docContent = $docContent;
         $this->callable = $callable;
