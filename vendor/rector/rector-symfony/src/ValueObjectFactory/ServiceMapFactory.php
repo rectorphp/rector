@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Symfony\ValueObjectFactory;
 
-use RectorPrefix20211001\Nette\Utils\Json;
-use RectorPrefix20211001\Nette\Utils\Strings;
+use RectorPrefix20211002\Nette\Utils\Json;
+use RectorPrefix20211002\Nette\Utils\Strings;
 use Rector\Symfony\Exception\XmlContainerNotExistsException;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use SimpleXMLElement;
-use RectorPrefix20211001\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211002\Symplify\SmartFileSystem\SmartFileSystem;
 final class ServiceMapFactory
 {
     /**
@@ -22,7 +22,7 @@ final class ServiceMapFactory
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20211001\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20211002\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
     }
@@ -85,7 +85,7 @@ final class ServiceMapFactory
     private function createServiceFromXmlAndTagsData(\SimpleXMLElement $attrs, array $tags) : \Rector\Symfony\ValueObject\ServiceDefinition
     {
         $tags = $this->createTagsFromData($tags);
-        return new \Rector\Symfony\ValueObject\ServiceDefinition(\strncmp((string) $attrs->id, '.', \strlen('.')) === 0 ? \RectorPrefix20211001\Nette\Utils\Strings::substring((string) $attrs->id, 1) : (string) $attrs->id, \property_exists($attrs, 'class') && $attrs->class !== null ? (string) $attrs->class : null, !(\property_exists($attrs, 'public') && $attrs->public !== null) || (string) $attrs->public !== 'false', \property_exists($attrs, 'synthetic') && $attrs->synthetic !== null && (string) $attrs->synthetic === 'true', \property_exists($attrs, 'alias') && $attrs->alias !== null ? (string) $attrs->alias : null, $tags);
+        return new \Rector\Symfony\ValueObject\ServiceDefinition(\strncmp((string) $attrs->id, '.', \strlen('.')) === 0 ? \RectorPrefix20211002\Nette\Utils\Strings::substring((string) $attrs->id, 1) : (string) $attrs->id, \property_exists($attrs, 'class') && $attrs->class !== null ? (string) $attrs->class : null, !(\property_exists($attrs, 'public') && $attrs->public !== null) || (string) $attrs->public !== 'false', \property_exists($attrs, 'synthetic') && $attrs->synthetic !== null && (string) $attrs->synthetic === 'true', \property_exists($attrs, 'alias') && $attrs->alias !== null ? (string) $attrs->alias : null, $tags);
     }
     /**
      * @param ServiceDefinition[] $aliases
@@ -135,7 +135,7 @@ final class ServiceMapFactory
      */
     private function convertXmlToArray(\SimpleXMLElement $simpleXMLElement) : array
     {
-        $data = \RectorPrefix20211001\Nette\Utils\Json::decode(\RectorPrefix20211001\Nette\Utils\Json::encode((array) $simpleXMLElement), \RectorPrefix20211001\Nette\Utils\Json::FORCE_ARRAY);
+        $data = \RectorPrefix20211002\Nette\Utils\Json::decode(\RectorPrefix20211002\Nette\Utils\Json::encode((array) $simpleXMLElement), \RectorPrefix20211002\Nette\Utils\Json::FORCE_ARRAY);
         $data = $this->unWrapAttributes($data);
         foreach ($data as $key => $value) {
             if (\is_array($value)) {

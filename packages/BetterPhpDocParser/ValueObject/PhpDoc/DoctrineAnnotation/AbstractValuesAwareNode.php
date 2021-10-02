@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use RectorPrefix20211001\Nette\Utils\Strings;
+use RectorPrefix20211002\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
@@ -84,7 +84,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     {
         // is quoted?
         if (isset($this->values[$key]) && \is_string($this->values[$key])) {
-            $isQuoted = (bool) \RectorPrefix20211001\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
+            $isQuoted = (bool) \RectorPrefix20211002\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
             if ($isQuoted) {
                 $value = '"' . $value . '"';
             }
@@ -111,7 +111,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     public function changeSilentValue($value) : void
     {
         // is quoted?
-        $isQuoted = (bool) \RectorPrefix20211001\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
+        $isQuoted = (bool) \RectorPrefix20211002\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
         if ($isQuoted) {
             $value = '"' . $value . '"';
         }
@@ -171,7 +171,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         if (!\is_string($value)) {
             return $value;
         }
-        $matches = \RectorPrefix20211001\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
+        $matches = \RectorPrefix20211002\Nette\Utils\Strings::match($value, self::UNQUOTED_VALUE_REGEX);
         if ($matches === null) {
             return $value;
         }

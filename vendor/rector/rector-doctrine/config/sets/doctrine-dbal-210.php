@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211001;
+namespace RectorPrefix20211002;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

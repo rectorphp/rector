@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211001\TYPO3\CMS\Extbase\Mvc\Exception;
+namespace RectorPrefix20211002\TYPO3\CMS\Extbase\Mvc\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Mvc\\Exception\\InvalidMarkerException')) {
     return;

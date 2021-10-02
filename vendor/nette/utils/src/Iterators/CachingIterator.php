@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211001\Nette\Iterators;
+namespace RectorPrefix20211002\Nette\Iterators;
 
-use RectorPrefix20211001\Nette;
+use RectorPrefix20211002\Nette;
 /**
  * Smarter caching iterator.
  *
@@ -38,7 +38,7 @@ class CachingIterator extends \CachingIterator implements \Countable
         } elseif ($iterator instanceof \Traversable) {
             $iterator = new \IteratorIterator($iterator);
         } else {
-            throw new \RectorPrefix20211001\Nette\InvalidArgumentException(\sprintf('Invalid argument passed to %s; array or Traversable expected, %s given.', self::class, \is_object($iterator) ? \get_class($iterator) : \gettype($iterator)));
+            throw new \RectorPrefix20211002\Nette\InvalidArgumentException(\sprintf('Invalid argument passed to %s; array or Traversable expected, %s given.', self::class, \is_object($iterator) ? \get_class($iterator) : \gettype($iterator)));
         }
         parent::__construct($iterator, 0);
     }
@@ -95,7 +95,7 @@ class CachingIterator extends \CachingIterator implements \Countable
         if ($inner instanceof \Countable) {
             return $inner->count();
         } else {
-            throw new \RectorPrefix20211001\Nette\NotSupportedException('Iterator is not countable.');
+            throw new \RectorPrefix20211002\Nette\NotSupportedException('Iterator is not countable.');
         }
     }
     /**

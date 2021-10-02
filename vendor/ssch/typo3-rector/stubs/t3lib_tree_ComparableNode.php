@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211001;
+namespace RectorPrefix20211002;
 
 if (\class_exists('t3lib_tree_ComparableNode')) {
     return;

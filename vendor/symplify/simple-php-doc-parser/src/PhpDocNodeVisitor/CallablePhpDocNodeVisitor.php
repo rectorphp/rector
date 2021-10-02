@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211001\Symplify\SimplePhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix20211002\Symplify\SimplePhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
-final class CallablePhpDocNodeVisitor extends \RectorPrefix20211001\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class CallablePhpDocNodeVisitor extends \RectorPrefix20211002\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var callable

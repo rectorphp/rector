@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211001\TYPO3\CMS\Extbase\DomainObject;
+namespace RectorPrefix20211002\TYPO3\CMS\Extbase\DomainObject;
 
 if (\interface_exists('TYPO3\\CMS\\Extbase\\DomainObject\\DomainObjectInterface')) {
     return;

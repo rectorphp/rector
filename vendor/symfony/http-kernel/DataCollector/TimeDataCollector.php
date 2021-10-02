@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211001\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20211002\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20211001\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211001\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20211001\Symfony\Component\HttpKernel\KernelInterface;
-use RectorPrefix20211001\Symfony\Component\Stopwatch\Stopwatch;
-use RectorPrefix20211001\Symfony\Component\Stopwatch\StopwatchEvent;
+use RectorPrefix20211002\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211002\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211002\Symfony\Component\HttpKernel\KernelInterface;
+use RectorPrefix20211002\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20211002\Symfony\Component\Stopwatch\StopwatchEvent;
 /**
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @final
  */
-class TimeDataCollector extends \RectorPrefix20211001\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20211001\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class TimeDataCollector extends \RectorPrefix20211002\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20211002\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
 {
     protected $kernel;
     protected $stopwatch;
-    public function __construct(\RectorPrefix20211001\Symfony\Component\HttpKernel\KernelInterface $kernel = null, \RectorPrefix20211001\Symfony\Component\Stopwatch\Stopwatch $stopwatch = null)
+    public function __construct(\RectorPrefix20211002\Symfony\Component\HttpKernel\KernelInterface $kernel = null, \RectorPrefix20211002\Symfony\Component\Stopwatch\Stopwatch $stopwatch = null)
     {
         $this->kernel = $kernel;
         $this->stopwatch = $stopwatch;
@@ -42,7 +42,7 @@ class TimeDataCollector extends \RectorPrefix20211001\Symfony\Component\HttpKern
         } else {
             $startTime = $request->server->get('REQUEST_TIME_FLOAT');
         }
-        $this->data = ['token' => $request->attributes->get('_stopwatch_token'), 'start_time' => $startTime * 1000, 'events' => [], 'stopwatch_installed' => \class_exists(\RectorPrefix20211001\Symfony\Component\Stopwatch\Stopwatch::class, \false)];
+        $this->data = ['token' => $request->attributes->get('_stopwatch_token'), 'start_time' => $startTime * 1000, 'events' => [], 'stopwatch_installed' => \class_exists(\RectorPrefix20211002\Symfony\Component\Stopwatch\Stopwatch::class, \false)];
     }
     /**
      * {@inheritdoc}

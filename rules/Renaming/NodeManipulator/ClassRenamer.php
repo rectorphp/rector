@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
+use RectorPrefix20211002\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
@@ -29,8 +30,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20211001\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20211001\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211002\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211002\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ClassRenamer
 {
     /**
@@ -77,7 +78,7 @@ final class ClassRenamer
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211001\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer $phpDocClassRenamer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeRemoval\NodeRemover $nodeRemover, \RectorPrefix20211001\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211002\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer $phpDocClassRenamer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer $docBlockClassRenamer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeRemoval\NodeRemover $nodeRemover, \RectorPrefix20211002\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -124,6 +125,25 @@ final class ClassRenamer
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
     }
+    private function shouldSkip(string $newName, \PhpParser\Node\Name $name, ?\PhpParser\Node $parentNode = null) : bool
+    {
+        // parent is not a Node, possibly removed by other rule
+        // skip change it
+        if (!$parentNode instanceof \PhpParser\Node) {
+            return \true;
+        }
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\Namespace_) {
+            return \false;
+        }
+        if ($parentNode->name !== $name) {
+            return \false;
+        }
+        $namespaceNewName = \RectorPrefix20211002\Nette\Utils\Strings::before($newName, '\\', -1);
+        if ($namespaceNewName === null) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($parentNode, $namespaceNewName);
+    }
     /**
      * @param array<string, string> $oldToNewClasses
      */
@@ -138,6 +158,9 @@ final class ClassRenamer
             return null;
         }
         $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($this->shouldSkip($newName, $name, $parentNode)) {
+            return null;
+        }
         // no need to preslash "use \SomeNamespace" of imported namespace
         if ($parentNode instanceof \PhpParser\Node\Stmt\UseUse && ($parentNode->type === \PhpParser\Node\Stmt\Use_::TYPE_NORMAL || $parentNode->type === \PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN)) {
             // no need to rename imports, they will be handled by autoimport and coding standard
