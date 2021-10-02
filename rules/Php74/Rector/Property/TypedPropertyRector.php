@@ -206,8 +206,10 @@ CODE_SAMPLE
         return true;
     }
 
-    private function resolveTypePossibleUnionNullableType(Name | NullableType | PhpParserUnionType $node, Type $possibleUnionType): Type
-    {
+    private function resolveTypePossibleUnionNullableType(
+        Name | NullableType | PhpParserUnionType $node,
+        Type $possibleUnionType
+    ): Type {
         if (! $node instanceof NullableType) {
             return $possibleUnionType;
         }
