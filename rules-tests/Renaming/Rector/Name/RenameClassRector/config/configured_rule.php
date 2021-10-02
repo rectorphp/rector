@@ -45,6 +45,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 SecondInterface::class => ThirdInterface::class,
                 \Acme\Foo\DoNotUpdateExistingTargetNamespace::class => DoNotUpdateExistingTargetNamespace::class,
                 SomeNonFinalClass::class => SomeFinalClass::class,
+                'Foo\Bar' => 'Foo\Bar\BarInterface',
             ],
         ]]);
 };
