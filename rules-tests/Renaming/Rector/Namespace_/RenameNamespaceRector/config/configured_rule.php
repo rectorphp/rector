@@ -14,6 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'OldNamespaceWith\OldSplitNamespace' => 'NewNamespaceWith\NewSplitNamespace',
                 'Old\Long\AnyNamespace' => 'Short\AnyNamespace',
                 'PHPUnit_Framework_' => 'PHPUnit\Framework\\',
+                'Foo\Bar' => 'Foo\Tmp',
             ],
         ]]);
 };
