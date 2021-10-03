@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211002;
+namespace RectorPrefix20211003;
 
 if (\class_exists('t3lib_svbase')) {
     return;

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211002\Symplify\Skipper\SkipCriteriaResolver;
+namespace RectorPrefix20211003\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix20211002\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20211002\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20211003\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211003\Symplify\Skipper\ValueObject\Option;
 final class SkippedClassAndCodesResolver
 {
     /**
@@ -15,7 +15,7 @@ final class SkippedClassAndCodesResolver
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20211002\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20211003\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
@@ -27,7 +27,7 @@ final class SkippedClassAndCodesResolver
         if ($this->skippedClassAndCodes !== []) {
             return $this->skippedClassAndCodes;
         }
-        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20211002\Symplify\Skipper\ValueObject\Option::SKIP);
+        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20211003\Symplify\Skipper\ValueObject\Option::SKIP);
         foreach ($skip as $key => $value) {
             // e.g. [SomeClass::class] → shift values to [SomeClass::class => null]
             if (\is_int($key)) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211002\TYPO3\CMS\Fluid\View;
+namespace RectorPrefix20211003\TYPO3\CMS\Fluid\View;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\View\\StandaloneView')) {
     return;

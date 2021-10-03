@@ -18,6 +18,7 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -48,10 +49,10 @@ final class ArrayCallableMethodMatcher
     }
     /**
      * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
-     * Returns back value $array when unknown method of callable used, eg: [$this, $other]
+     * Returns ArrayCallableDynamicMethod object when unknown method of callable used, eg: [$this, $other]
      * @see https://github.com/rectorphp/rector-src/pull/908
      * @see https://github.com/rectorphp/rector-src/pull/909
-     * @return null|\PhpParser\Node\Expr\Array_|\Rector\NodeCollector\ValueObject\ArrayCallable
+     * @return null|\Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod|\Rector\NodeCollector\ValueObject\ArrayCallable
      */
     public function match(\PhpParser\Node\Expr\Array_ $array)
     {
@@ -71,20 +72,20 @@ final class ArrayCallableMethodMatcher
             return null;
         }
         $values = $this->valueResolver->getValue($array);
+        $className = $calleeType->getClassName();
+        $secondItemValue = $items[1]->value;
         if ($values === []) {
-            return $array;
+            return new \Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod($firstItemValue, $className, $secondItemValue);
         }
         if ($this->shouldSkipAssociativeArray($values)) {
             return null;
         }
-        $secondItemValue = $items[1]->value;
         if (!$secondItemValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         if ($this->isCallbackAtFunctionNames($array, ['register_shutdown_function', 'forward_static_call'])) {
             return null;
         }
-        $className = $calleeType->getClassName();
         $methodName = $secondItemValue->value;
         if ($methodName === \Rector\Core\ValueObject\MethodName::CONSTRUCT) {
             return null;

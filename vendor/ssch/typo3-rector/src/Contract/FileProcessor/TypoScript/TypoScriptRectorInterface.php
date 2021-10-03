@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript;
 
-use RectorPrefix20211002\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
+use RectorPrefix20211003\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
 use Rector\Core\Contract\Rector\RectorInterface;
-interface TypoScriptRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface, \RectorPrefix20211002\Helmich\TypoScriptParser\Parser\Traverser\Visitor
+interface TypoScriptRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface, \RectorPrefix20211003\Helmich\TypoScriptParser\Parser\Traverser\Visitor
 {
 }

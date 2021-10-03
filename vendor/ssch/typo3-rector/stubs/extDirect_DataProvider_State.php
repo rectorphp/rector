@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211002;
+namespace RectorPrefix20211003;
 
 if (\class_exists('extDirect_DataProvider_State')) {
     return;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileSystemRector\ValueObjectFactory;
 
-use RectorPrefix20211002\Nette\Utils\Strings;
+use RectorPrefix20211003\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -71,7 +71,7 @@ final class AddedFileWithNodesFactory
         if ($oldClassName === $newClassName) {
             return null;
         }
-        if (\RectorPrefix20211002\Nette\Utils\Strings::match($oldClassName, '#\\b' . $desiredGroupName . '\\b#')) {
+        if (\RectorPrefix20211003\Nette\Utils\Strings::match($oldClassName, '#\\b' . $desiredGroupName . '\\b#')) {
             return null;
         }
         // 1. rename namespace
