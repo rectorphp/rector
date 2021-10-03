@@ -19,6 +19,7 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -35,11 +36,11 @@ final class ArrayCallableMethodMatcher
 
     /**
      * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
-     * Returns back value $array when unknown method of callable used, eg: [$this, $other]
+     * Returns ArrayCallableDynamicMethod object when unknown method of callable used, eg: [$this, $other]
      * @see https://github.com/rectorphp/rector-src/pull/908
      * @see https://github.com/rectorphp/rector-src/pull/909
      */
-    public function match(Array_ $array): null | Array_ | ArrayCallable
+    public function match(Array_ $array): null | ArrayCallableDynamicMethod | ArrayCallable
     {
         $arrayItems = $array->items;
         if (count($arrayItems) !== 2) {
@@ -66,15 +67,17 @@ final class ArrayCallableMethodMatcher
         }
 
         $values = $this->valueResolver->getValue($array);
+        $className = $calleeType->getClassName();
+        $secondItemValue = $items[1]->value;
+
         if ($values === []) {
-            return $array;
+            return new ArrayCallableDynamicMethod($firstItemValue, $className, $secondItemValue);
         }
 
         if ($this->shouldSkipAssociativeArray($values)) {
             return null;
         }
 
-        $secondItemValue = $items[1]->value;
         if (! $secondItemValue instanceof String_) {
             return null;
         }
@@ -83,9 +86,7 @@ final class ArrayCallableMethodMatcher
             return null;
         }
 
-        $className = $calleeType->getClassName();
         $methodName = $secondItemValue->value;
-
         if ($methodName === MethodName::CONSTRUCT) {
             return null;
         }

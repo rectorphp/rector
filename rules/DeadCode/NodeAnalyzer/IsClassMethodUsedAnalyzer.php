@@ -18,6 +18,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -118,7 +119,7 @@ final class IsClassMethodUsedAnalyzer
             }
 
             $arrayCallable = $this->arrayCallableMethodMatcher->match($array);
-            if ($arrayCallable instanceof Array_) {
+            if ($arrayCallable instanceof ArrayCallableDynamicMethod) {
                 return true;
             }
 
@@ -136,7 +137,7 @@ final class IsClassMethodUsedAnalyzer
         return false;
     }
 
-    private function shouldSkipArrayCallable(Class_ $class, null | Array_ | ArrayCallable $arrayCallable): bool
+    private function shouldSkipArrayCallable(Class_ $class, null | ArrayCallable $arrayCallable): bool
     {
         if (! $arrayCallable instanceof ArrayCallable) {
             return true;
