@@ -16,12 +16,12 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\Scope;
+use PHPStan\Analyser\ScopeContext;
 use PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection;
 use PHPStan\BetterReflection\Reflector\ClassReflector;
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Node\UnreachableStatementNode;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Caching\Detector\ChangedFilesDetector;
@@ -30,8 +30,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
+use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -62,7 +62,6 @@ final class PHPStanNodeScopeResolver
         private ReflectionProvider $reflectionProvider,
         private RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
         private ScopeFactory $scopeFactory,
-        private TraitNodeScopeCollector $traitNodeScopeCollector,
         private PrivatesAccessor $privatesAccessor,
         private RenamedClassesSourceLocator $renamedClassesSourceLocator,
         private ParentAttributeSourceLocator $parentAttributeSourceLocator,
@@ -81,26 +80,26 @@ final class PHPStanNodeScopeResolver
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
 
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, Scope $scope): void {
-            // traversing trait inside class that is using it scope (from referenced) - the trait traversed by Rector is different (directly from parsed file)
-            if ($scope->isInTrait()) {
-                // has just entereted trait, to avoid adding it for ever ynode
-                $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-                if ($parentNode instanceof Trait_) {
-                    /** @var ClassReflection $classReflection */
-                    $classReflection = $scope->getTraitReflection();
-                    $traitName = $classReflection->getName();
+        $nodeCallback = function (Node $node, MutatingScope $scope) use (&$nodeCallback): void {
+            if ($node instanceof Trait_) {
+                $traitName = $this->resolveClassName($node);
 
-                    $this->traitNodeScopeCollector->addForTrait($traitName, $scope);
-                }
+                $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
 
+                $scopeContext = $this->createDummyClassScopeContext($scope);
+                $traitScope = clone $scope;
+                $this->privatesAccessor->setPrivateProperty($traitScope, 'context', $scopeContext);
+
+                $traitScope = $traitScope->enterTrait($traitReflectionClass);
+
+                $this->nodeScopeResolver->processStmtNodes($node, $node->stmts, $traitScope, $nodeCallback);
                 return;
             }
 
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_) {
-                /** @var Scope $scope */
+                /** @var MutatingScope $scope */
                 $scope = $this->resolveClassOrInterfaceScope($node, $scope);
             }
 
@@ -217,24 +216,25 @@ final class PHPStanNodeScopeResolver
         $nodeTraverser->traverse($nodes);
     }
 
-    private function resolveClassOrInterfaceScope(Class_ | Interface_ $classLike, Scope $scope): Scope
-    {
+    private function resolveClassOrInterfaceScope(
+        Class_ | Interface_ $classLike,
+        MutatingScope $mutatingScope
+    ): Scope {
         $className = $this->resolveClassName($classLike);
 
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
         if ($classLike instanceof Class_ && Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
-            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $scope);
+            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
         } elseif (! $this->reflectionProvider->hasClass($className)) {
-            return $scope;
+            return $mutatingScope;
         } else {
             $classReflection = $this->reflectionProvider->getClass($className);
         }
 
-        /** @var MutatingScope $scope */
-        return $scope->enterClass($classReflection);
+        return $mutatingScope->enterClass($classReflection);
     }
 
-    private function resolveClassName(Class_ | Interface_ $classLike): string
+    private function resolveClassName(Class_ | Interface_ | Trait_ $classLike): string
     {
         if (property_exists($classLike, 'namespacedName')) {
             return (string) $classLike->namespacedName;
@@ -292,5 +292,17 @@ final class PHPStanNodeScopeResolver
             $this->parentAttributeSourceLocator,
         ]);
         $this->privatesAccessor->setPrivateProperty($classReflector, 'sourceLocator', $aggregateSourceLocator);
+    }
+
+    private function createDummyClassScopeContext(MutatingScope $mutatingScope): ScopeContext
+    {
+        // this has to be faked, because trait PHPStan does not traverse trait without a class
+        /** @var ScopeContext $scopeContext */
+        $scopeContext = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
+        $dummyClassReflection = $this->reflectionProvider->getClass(DummyTraitClass::class);
+
+        // faking a class reflection
+        return ScopeContext::create($scopeContext->getFile())
+            ->enterClass($dummyClassReflection);
     }
 }

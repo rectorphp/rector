@@ -184,7 +184,10 @@ parameters:
         # class_exists is forbidden to enforce static reflection, but in a compiler pass we want runtime autoloading
         -
             message:  '#Function "class_exists\(\)" cannot be used/left in the code#'
-            path: src/DependencyInjection/CompilerPass/VerifyRectorServiceExistsCompilerPass.php
+            paths:
+                 - src/DependencyInjection/CompilerPass/VerifyRectorServiceExistsCompilerPass.php
+                 # for config class reflection
+                 - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
 
         # known values from other methods
         -
@@ -505,3 +508,6 @@ parameters:
         - '#(.*?) but returns array<int, PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\>#'
 
         - '#Parameter "\w+" cannot have default value#'
+
+        # scope & mutating scope mish-mash
+        - '#Parameter \#4 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processStmtNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'

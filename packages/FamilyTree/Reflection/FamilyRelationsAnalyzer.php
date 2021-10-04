@@ -161,6 +161,7 @@ final class FamilyRelationsAnalyzer
             }
         }
 
+        /** @var string[] $ancestorNames */
         return $ancestorNames;
     }
 

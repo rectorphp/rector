@@ -70,6 +70,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($scope->isInTrait()) {
+            return null;
+        }
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;

@@ -57,6 +57,7 @@ final class NodeScopeAndMetadataDecorator
         $nodes = $nodeTraverser->traverse($nodes);
 
         $smartFileInfo = $file->getSmartFileInfo();
+
         $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
 
         $nodeTraverserForPreservingName = new NodeTraverser();

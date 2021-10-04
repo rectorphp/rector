@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Comments\Tests\CommentRemover;
+namespace Rector\Tests\Comments\CommentRemover;
 
 use Iterator;
 use Rector\Comments\CommentRemover;

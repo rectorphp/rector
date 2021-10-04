@@ -2,14 +2,6 @@
 
 namespace Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Fixture;
 
-class Value
-{
-    public function doSomething()
-    {
-
-    }
-}
-
 class SomeProperty
 {
     public $value;

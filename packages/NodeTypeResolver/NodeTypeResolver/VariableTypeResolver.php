@@ -7,7 +7,6 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -15,7 +14,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
 
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\VariableTypeResolver\VariableTypeResolverTest
@@ -29,7 +27,6 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private TraitNodeScopeCollector $traitNodeScopeCollector,
         private PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
@@ -83,18 +80,6 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
         $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
         if ($nodeScope !== null) {
             return $nodeScope;
-        }
-
-        // is node in trait
-        $classLike = $variable->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike instanceof Trait_) {
-            /** @var string $traitName */
-            $traitName = $variable->getAttribute(AttributeKey::CLASS_NAME);
-            $traitNodeScope = $this->traitNodeScopeCollector->getScopeForTrait($traitName);
-
-            if ($traitNodeScope !== null) {
-                return $traitNodeScope;
-            }
         }
 
         return $this->resolveFromParentNodes($variable);
