@@ -6,7 +6,7 @@ namespace Rector\Core\Php;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20211003\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211004\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionProviderTest
  */
@@ -20,7 +20,7 @@ final class PhpVersionProvider
      * @var \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;
-    public function __construct(\RectorPrefix20211003\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
+    public function __construct(\RectorPrefix20211004\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
     {
         $this->parameterProvider = $parameterProvider;
         $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;

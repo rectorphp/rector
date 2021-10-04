@@ -20,7 +20,7 @@ use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211003\Webmozart\Assert\Assert;
+use RectorPrefix20211004\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\AddParamTypeDeclarationRectorTest
  */
@@ -97,7 +97,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
-        \RectorPrefix20211003\Webmozart\Assert\Assert::allIsInstanceOf($parameterTypehints, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration::class);
+        \RectorPrefix20211004\Webmozart\Assert\Assert::allIsInstanceOf($parameterTypehints, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration::class);
         $this->parameterTypehints = $parameterTypehints;
     }
     private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool

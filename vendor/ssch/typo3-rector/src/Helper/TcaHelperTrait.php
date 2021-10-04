@@ -170,7 +170,7 @@ trait TcaHelperTrait
             }
             // search the config sub-array for this field
             foreach ($columnConfig->value->items as $configValue) {
-                if (null === (($configValue = $configValue) ? $configValue->key : null)) {
+                if (null === (($configValue2 = $configValue) ? $configValue2->key : null)) {
                     continue;
                 }
                 if (!$this->isValue($configValue->key, $keyName)) {

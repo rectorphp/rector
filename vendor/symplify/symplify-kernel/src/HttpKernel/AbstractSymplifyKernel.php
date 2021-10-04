@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211003\Symplify\SymplifyKernel\HttpKernel;
+namespace RectorPrefix20211004\Symplify\SymplifyKernel\HttpKernel;
 
-use RectorPrefix20211003\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20211003\Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use RectorPrefix20211003\Symfony\Component\HttpKernel\Kernel;
-use RectorPrefix20211003\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
+use RectorPrefix20211004\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20211004\Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use RectorPrefix20211004\Symfony\Component\HttpKernel\Kernel;
+use RectorPrefix20211004\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211003\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
-use RectorPrefix20211003\Symplify\SymplifyKernel\Strings\KernelUniqueHasher;
-abstract class AbstractSymplifyKernel extends \RectorPrefix20211003\Symfony\Component\HttpKernel\Kernel implements \RectorPrefix20211003\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface
+use RectorPrefix20211004\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
+use RectorPrefix20211004\Symplify\SymplifyKernel\Strings\KernelUniqueHasher;
+abstract class AbstractSymplifyKernel extends \RectorPrefix20211004\Symfony\Component\HttpKernel\Kernel implements \RectorPrefix20211004\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface
 {
     /**
      * @var string[]
@@ -29,7 +29,7 @@ abstract class AbstractSymplifyKernel extends \RectorPrefix20211003\Symfony\Comp
      */
     public function registerBundles() : iterable
     {
-        return [new \RectorPrefix20211003\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
+        return [new \RectorPrefix20211004\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
     }
     /**
      * @param string[]|SmartFileInfo[] $configs
@@ -54,7 +54,7 @@ abstract class AbstractSymplifyKernel extends \RectorPrefix20211003\Symfony\Comp
     }
     private function getUniqueKernelHash() : string
     {
-        $kernelUniqueHasher = new \RectorPrefix20211003\Symplify\SymplifyKernel\Strings\KernelUniqueHasher();
+        $kernelUniqueHasher = new \RectorPrefix20211004\Symplify\SymplifyKernel\Strings\KernelUniqueHasher();
         return $kernelUniqueHasher->hashKernelClass(static::class);
     }
 }

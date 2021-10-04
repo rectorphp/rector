@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\NodeFinder;
 
-use RectorPrefix20211003\Nette\Utils\Strings;
+use RectorPrefix20211004\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -31,7 +31,7 @@ final class FullyQualifiedFromUseFinder
                 return \false;
             }
             $loweredOriginalName = \strtolower($originalName->toString());
-            $loweredOriginalNameNamespace = \RectorPrefix20211003\Nette\Utils\Strings::before($loweredOriginalName, '\\');
+            $loweredOriginalNameNamespace = \RectorPrefix20211004\Nette\Utils\Strings::before($loweredOriginalName, '\\');
             return $loweredAliasName === $loweredOriginalNameNamespace;
         });
     }

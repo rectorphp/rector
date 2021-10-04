@@ -9,7 +9,7 @@ use PhpParser\Node;
 use Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
- * @see \Rector\Comments\Tests\CommentRemover\CommentRemoverTest
+ * @see \Rector\Tests\Comments\CommentRemover\CommentRemoverTest
  */
 final class CommentRemover
 {

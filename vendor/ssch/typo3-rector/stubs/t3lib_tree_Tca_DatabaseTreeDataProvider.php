@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211003;
+namespace RectorPrefix20211004;
 
 if (\class_exists('t3lib_tree_Tca_DatabaseTreeDataProvider')) {
     return;

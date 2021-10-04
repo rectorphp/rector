@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211003\TYPO3\CMS\Frontend\View;
+namespace RectorPrefix20211004\TYPO3\CMS\Frontend\View;
 
 if (\interface_exists('TYPO3\\CMS\\Frontend\\View\\AdminPanelViewHookInterface')) {
     return;

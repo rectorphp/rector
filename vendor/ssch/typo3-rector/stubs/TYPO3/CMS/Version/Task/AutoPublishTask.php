@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211003\TYPO3\CMS\Version\Task;
+namespace RectorPrefix20211004\TYPO3\CMS\Version\Task;
 
 if (\class_exists('TYPO3\\CMS\\Version\\Task\\AutoPublishTask')) {
     return;

@@ -61,6 +61,9 @@ CODE_SAMPLE
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }
+        if ($scope->isInTrait()) {
+            return null;
+        }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;

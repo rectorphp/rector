@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211003;
+namespace RectorPrefix20211004;
 
 if (\class_exists('Tx_Extbase_Service_ExtensionService')) {
     return;

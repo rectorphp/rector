@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211003\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20211004\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20211003\Symfony\Component\DependencyInjection\Extension\Extension as BaseExtension;
+use RectorPrefix20211004\Symfony\Component\DependencyInjection\Extension\Extension as BaseExtension;
 /**
  * Allow adding classes to the class cache.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Extension extends \RectorPrefix20211003\Symfony\Component\DependencyInjection\Extension\Extension
+abstract class Extension extends \RectorPrefix20211004\Symfony\Component\DependencyInjection\Extension\Extension
 {
     private $annotatedClasses = [];
     /**

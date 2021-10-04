@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211003\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20211004\Symplify\EasyTesting\ValueObject;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class InputFileInfoAndExpected

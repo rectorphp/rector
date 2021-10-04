@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211003\Nette\Localization;
+namespace RectorPrefix20211004\Nette\Localization;
 
 /**
  * Translator adapter.
@@ -19,4 +19,4 @@ interface Translator
      */
     function translate($message, ...$parameters) : string;
 }
-\interface_exists(\RectorPrefix20211003\Nette\Localization\ITranslator::class);
+\interface_exists(\RectorPrefix20211004\Nette\Localization\ITranslator::class);

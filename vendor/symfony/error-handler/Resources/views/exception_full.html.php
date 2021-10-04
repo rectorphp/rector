@@ -1,5 +1,5 @@
 <!-- <?php 
-namespace RectorPrefix20211003;
+namespace RectorPrefix20211004;
 
 echo $_message = \sprintf('%s (%d %s)', $exceptionMessage, $statusCode, $statusText);
 ?> -->
@@ -32,7 +32,7 @@ echo $this->include('assets/css/exception_full.css');
         </script>
 
         <?php 
-if (\class_exists(\RectorPrefix20211003\Symfony\Component\HttpKernel\Kernel::class)) {
+if (\class_exists(\RectorPrefix20211004\Symfony\Component\HttpKernel\Kernel::class)) {
     ?>
             <header>
                 <div class="container">
@@ -42,7 +42,7 @@ if (\class_exists(\RectorPrefix20211003\Symfony\Component\HttpKernel\Kernel::cla
 
                     <div class="help-link">
                         <a href="https://symfony.com/doc/<?php 
-    echo \RectorPrefix20211003\Symfony\Component\HttpKernel\Kernel::VERSION;
+    echo \RectorPrefix20211004\Symfony\Component\HttpKernel\Kernel::VERSION;
     ?>/index.html">
                             <span class="icon"><?php 
     echo $this->include('assets/images/icon-book.svg');

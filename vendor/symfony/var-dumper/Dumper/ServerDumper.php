@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211003\Symfony\Component\VarDumper\Dumper;
+namespace RectorPrefix20211004\Symfony\Component\VarDumper\Dumper;
 
-use RectorPrefix20211003\Symfony\Component\VarDumper\Cloner\Data;
-use RectorPrefix20211003\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
-use RectorPrefix20211003\Symfony\Component\VarDumper\Server\Connection;
+use RectorPrefix20211004\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20211004\Symfony\Component\VarDumper\Dumper\ContextProvider\ContextProviderInterface;
+use RectorPrefix20211004\Symfony\Component\VarDumper\Server\Connection;
 /**
  * ServerDumper forwards serialized Data clones to a server.
  *
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */
-class ServerDumper implements \RectorPrefix20211003\Symfony\Component\VarDumper\Dumper\DataDumperInterface
+class ServerDumper implements \RectorPrefix20211004\Symfony\Component\VarDumper\Dumper\DataDumperInterface
 {
     private $connection;
     private $wrappedDumper;
@@ -27,9 +27,9 @@ class ServerDumper implements \RectorPrefix20211003\Symfony\Component\VarDumper\
      * @param DataDumperInterface|null   $wrappedDumper    A wrapped instance used whenever we failed contacting the server
      * @param ContextProviderInterface[] $contextProviders Context providers indexed by context name
      */
-    public function __construct(string $host, \RectorPrefix20211003\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper = null, array $contextProviders = [])
+    public function __construct(string $host, \RectorPrefix20211004\Symfony\Component\VarDumper\Dumper\DataDumperInterface $wrappedDumper = null, array $contextProviders = [])
     {
-        $this->connection = new \RectorPrefix20211003\Symfony\Component\VarDumper\Server\Connection($host, $contextProviders);
+        $this->connection = new \RectorPrefix20211004\Symfony\Component\VarDumper\Server\Connection($host, $contextProviders);
         $this->wrappedDumper = $wrappedDumper;
     }
     public function getContextProviders() : array

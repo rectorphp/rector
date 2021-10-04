@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211003\Symplify\PackageBuilder\Exception\Configuration;
+namespace RectorPrefix20211004\Symplify\PackageBuilder\Exception\Configuration;
 
 use Exception;
 final class LevelNotFoundException extends \Exception

@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -16,8 +15,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector;
-use RectorPrefix20211003\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211004\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\PropertyFetchTypeResolverTest
  */
@@ -32,17 +30,12 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector
-     */
-    private $traitNodeScopeCollector;
-    /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\PHPStan\Collector\TraitNodeScopeCollector $traitNodeScopeCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->traitNodeScopeCollector = $traitNodeScopeCollector;
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
@@ -71,14 +64,6 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
         }
         /** @var Scope|null $scope */
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            $classNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-            if ($classNode instanceof \PhpParser\Node\Stmt\Trait_) {
-                /** @var string $traitName */
-                $traitName = $classNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-                $scope = $this->traitNodeScopeCollector->getScopeForTrait($traitName);
-            }
-        }
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             $classNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
             // fallback to class, since property fetches are not scoped by PHPStan

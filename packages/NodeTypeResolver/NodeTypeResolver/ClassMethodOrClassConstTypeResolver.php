@@ -13,7 +13,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20211003\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211004\Symfony\Contracts\Service\Attribute\Required;
 final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
