@@ -1,4 +1,44 @@
-# 11 Rules Overview
+# 19 Rules Overview
+
+## AddArgumentDefaultValueRector
+
+Adds default value for arguments in defined methods.
+
+:wrench: **configure it!**
+
+- class: [`Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector`](../src/Rector/ClassMethod/AddArgumentDefaultValueRector.php)
+
+```php
+use Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector;
+use Rector\Laravel\ValueObject\AddArgumentDefaultValue;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddArgumentDefaultValueRector::class)
+        ->call('configure', [[
+            AddArgumentDefaultValueRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+                new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
+            ]),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function someMethod($value)
++    public function someMethod($value = false)
+     {
+     }
+ }
+```
+
+<br>
 
 ## AddGuardToLoginEventRector
 
@@ -70,6 +110,45 @@ Add `parent::boot();` call to `boot()` class method in child of `Illuminate\Data
 
 <br>
 
+## AddParentRegisterToEventServiceProviderRector
+
+Add `parent::register();` call to `register()` class method in child of `Illuminate\Foundation\Support\Providers\EventServiceProvider`
+
+- class: [`Rector\Laravel\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector`](../src/Rector/ClassMethod/AddParentRegisterToEventServiceProviderRector.php)
+
+```diff
+ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+
+ class EventServiceProvider extends ServiceProvider
+ {
+     public function register()
+     {
++        parent::register();
+     }
+ }
+```
+
+<br>
+
+## AnonymousMigrationsRector
+
+Convert migrations to anonymous classes.
+
+- class: [`Rector\Laravel\Rector\Class_\AnonymousMigrationsRector`](../src/Rector/Class_/AnonymousMigrationsRector.php)
+
+```diff
+ use Illuminate\Database\Migrations\Migration;
+
+-class CreateUsersTable extends Migration
++return new class extends Migration
+ {
+     // ...
+-}
++};
+```
+
+<br>
+
 ## CallOnAppArrayAccessToStandaloneAssignRector
 
 Replace magical call on `$this->app["something"]` to standalone type assign variable
@@ -119,6 +198,64 @@ Add `parent::boot();` call to `boot()` class method in child of `Illuminate\Data
 
 <br>
 
+## FactoryApplyingStatesRector
+
+Call the state methods directly instead of specify the name of state.
+
+- class: [`Rector\Laravel\Rector\MethodCall\FactoryApplyingStatesRector`](../src/Rector/MethodCall/FactoryApplyingStatesRector.php)
+
+```diff
+-$factory->state('delinquent');
+-$factory->states('premium', 'delinquent');
++$factory->delinquent();
++$factory->premium()->delinquent();
+```
+
+<br>
+
+## FactoryDefinitionRector
+
+Upgrade legacy factories to support classes.
+
+- class: [`Rector\Laravel\Rector\Namespace_\FactoryDefinitionRector`](../src/Rector/Namespace_/FactoryDefinitionRector.php)
+
+```diff
+ use Faker\Generator as Faker;
+
+-$factory->define(App\User::class, function (Faker $faker) {
+-    return [
+-        'name' => $faker->name,
+-        'email' => $faker->unique()->safeEmail,
+-    ];
+-});
++class UserFactory extends \Illuminate\Database\Eloquent\Factories\Factory
++{
++    protected $model = App\User::class;
++    public function definition()
++    {
++        return [
++            'name' => $this->faker->name,
++            'email' => $this->faker->unique()->safeEmail,
++        ];
++    }
++}
+```
+
+<br>
+
+## FactoryFuncCallToStaticCallRector
+
+Use the static factory method instead of global factory function.
+
+- class: [`Rector\Laravel\Rector\FuncCall\FactoryFuncCallToStaticCallRector`](../src/Rector/FuncCall/FactoryFuncCallToStaticCallRector.php)
+
+```diff
+-factory(User::class);
++User::factory();
+```
+
+<br>
+
 ## HelperFuncCallToFacadeClassRector
 
 Change `app()` func calls to facade calls
@@ -132,38 +269,6 @@ Change `app()` func calls to facade calls
      {
 -        return app('translator')->trans('value');
 +        return \Illuminate\Support\Facades\App::get('translator')->trans('value');
-     }
- }
-```
-
-<br>
-
-## MakeTaggedPassedToParameterIterableTypeRector
-
-Change param type to iterable, if passed one
-
-- class: [`Rector\Laravel\Rector\New_\MakeTaggedPassedToParameterIterableTypeRector`](../src/Rector/New_/MakeTaggedPassedToParameterIterableTypeRector.php)
-
-```diff
- class AnotherClass
- {
-     /**
-      * @var \Illuminate\Contracts\Foundation\Application
-      */
-     private $app;
-
-     public function create()
-     {
-         $tagged = $this->app->tagged('some_tagged');
-         return new SomeClass($tagged);
-     }
- }
-
- class SomeClass
- {
--    public function __construct(array $items)
-+    public function __construct(iterable $items)
-     {
      }
  }
 ```
@@ -230,6 +335,26 @@ Change "redirect" call with 301 to "permanentRedirect"
 
 <br>
 
+## RemoveAllOnDispatchingMethodsWithJobChainingRector
+
+Remove `allOnQueue()` and `allOnConnection()` methods used with job chaining, use the `onQueue()` and `onConnection()` methods instead.
+
+- class: [`Rector\Laravel\Rector\MethodCall\RemoveAllOnDispatchingMethodsWithJobChainingRector`](../src/Rector/MethodCall/RemoveAllOnDispatchingMethodsWithJobChainingRector.php)
+
+```diff
+ Job::withChain([
+     new ChainJob(),
+ ])
+-    ->dispatch()
+-    ->allOnConnection('redis')
+-    ->allOnQueue('podcasts');
++    ->onQueue('podcasts')
++    ->onConnection('redis')
++    ->dispatch();
+```
+
+<br>
+
 ## RequestStaticValidateToInjectRector
 
 Change static `validate()` method to `$request->validate()`
@@ -247,6 +372,59 @@ Change static `validate()` method to `$request->validate()`
 -        $validatedData = Request::validate(['some_attribute' => 'required']);
 +        $validatedData = $request->validate(['some_attribute' => 'required']);
      }
+ }
+```
+
+<br>
+
+## RouteActionCallableRector
+
+Use PHP callable syntax instead of string syntax for controller route declarations.
+
+:wrench: **configure it!**
+
+- class: [`Rector\Laravel\Rector\StaticCall\RouteActionCallableRector`](../src/Rector/StaticCall/RouteActionCallableRector.php)
+
+```php
+use Rector\Laravel\Rector\StaticCall\RouteActionCallableRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RouteActionCallableRector::class)
+        ->call('configure', [[
+            RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
+        ]]);
+};
+```
+
+↓
+
+```diff
+-Route::get('/users', 'UserController@index');
++Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
+```
+
+<br>
+
+## UnifyModelDatesWithCastsRector
+
+Unify Model `$dates` property with `$casts`
+
+- class: [`Rector\Laravel\Rector\Class_\UnifyModelDatesWithCastsRector`](../src/Rector/Class_/UnifyModelDatesWithCastsRector.php)
+
+```diff
+ use Illuminate\Database\Eloquent\Model;
+
+ class Person extends Model
+ {
+     protected $casts = [
+-        'age' => 'integer',
++        'age' => 'integer', 'birthday' => 'datetime',
+     ];
+-
+-    protected $dates = ['birthday'];
  }
 ```
 

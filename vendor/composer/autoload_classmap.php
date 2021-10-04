@@ -2258,6 +2258,7 @@ return array(
     'Rector\\Laravel\\Rector\\ClassMethod\\AddParentBootToModelClassMethodRector' => $vendorDir . '/rector/rector-laravel/src/Rector/ClassMethod/AddParentBootToModelClassMethodRector.php',
     'Rector\\Laravel\\Rector\\ClassMethod\\AddParentRegisterToEventServiceProviderRector' => $vendorDir . '/rector/rector-laravel/src/Rector/ClassMethod/AddParentRegisterToEventServiceProviderRector.php',
     'Rector\\Laravel\\Rector\\Class_\\AddMockConsoleOutputFalseToConsoleTestsRector' => $vendorDir . '/rector/rector-laravel/src/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector.php',
+    'Rector\\Laravel\\Rector\\Class_\\AnonymousMigrationsRector' => $vendorDir . '/rector/rector-laravel/src/Rector/Class_/AnonymousMigrationsRector.php',
     'Rector\\Laravel\\Rector\\Class_\\PropertyDeferToDeferrableProviderToRector' => $vendorDir . '/rector/rector-laravel/src/Rector/Class_/PropertyDeferToDeferrableProviderToRector.php',
     'Rector\\Laravel\\Rector\\Class_\\UnifyModelDatesWithCastsRector' => $vendorDir . '/rector/rector-laravel/src/Rector/Class_/UnifyModelDatesWithCastsRector.php',
     'Rector\\Laravel\\Rector\\FuncCall\\FactoryFuncCallToStaticCallRector' => $vendorDir . '/rector/rector-laravel/src/Rector/FuncCall/FactoryFuncCallToStaticCallRector.php',

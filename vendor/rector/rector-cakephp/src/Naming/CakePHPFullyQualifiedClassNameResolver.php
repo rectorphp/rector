@@ -61,7 +61,7 @@ final class CakePHPFullyQualifiedClassNameResolver
             return $cakePhpVersion;
         }
         // C. is not plugin nor lib custom App class?
-        if (\RectorPrefix20211004\Nette\Utils\Strings::contains($pseudoNamespace, '\\') && !\RectorPrefix20211004\Nette\Utils\Strings::match($pseudoNamespace, self::PLUGIN_OR_LIB_REGEX)) {
+        if (\strpos($pseudoNamespace, '\\') !== \false && !\RectorPrefix20211004\Nette\Utils\Strings::match($pseudoNamespace, self::PLUGIN_OR_LIB_REGEX)) {
             return 'App\\' . $pseudoNamespace . '\\' . $shortClass;
         }
         return $pseudoNamespace . '\\' . $shortClass;
