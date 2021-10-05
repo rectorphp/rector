@@ -201,12 +201,6 @@ parameters:
         - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
         -
-            message: '#Use `\$class\-\>namespaceName` instead of `\$class\-\>name` that only returns short class name#'
-            paths:
-                - rules/CodingStyle/Naming/NameRenamer.php
-                - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
-
-        -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             paths:
                 - rules/Defluent/ValueObject/*
@@ -499,13 +493,9 @@ parameters:
                 - src/Application/VersionResolver.php #16
                 - utils/compiler/src/Unprefixer.php #9
 
-        # false positive - class_exists check is right above it
-        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'
-
         # waits for phpstan upgrade to php-parser 4.13
         - '#Access to an undefined property PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\:\:\$value#'
         - '#(.*?), array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\> given#'
-        - '#(.*?) but returns array<int, PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder\>#'
 
         - '#Parameter "\w+" cannot have default value#'
 
