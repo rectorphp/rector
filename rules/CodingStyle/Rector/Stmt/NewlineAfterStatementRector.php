@@ -111,6 +111,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $node = $this->resolveCurrentStatement($node);
+
         if (! in_array($node::class, self::STMTS_TO_HAVE_NEXT_NEWLINE, true)) {
             return null;
         }
@@ -157,6 +159,15 @@ CODE_SAMPLE
         $this->nodesToAddCollector->addNodeAfterNode(new Nop(), $node);
 
         return $node;
+    }
+
+    private function resolveCurrentStatement(Stmt $stmt): Stmt
+    {
+        $currentStatement = $stmt->getAttribute(AttributeKey::CURRENT_STATEMENT);
+
+        return $currentStatement instanceof Stmt
+            ? $currentStatement
+            : $stmt;
     }
 
     /**
