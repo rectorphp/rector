@@ -82,6 +82,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $node = $this->resolveCurrentStatement($node);
         if (!\in_array(\get_class($node), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true)) {
             return null;
         }
@@ -117,6 +118,11 @@ CODE_SAMPLE
         $this->stmtsHashed[$hash] = \true;
         $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Nop(), $node);
         return $node;
+    }
+    private function resolveCurrentStatement(\PhpParser\Node\Stmt $stmt) : \PhpParser\Node\Stmt
+    {
+        $currentStatement = $stmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        return $currentStatement instanceof \PhpParser\Node\Stmt ? $currentStatement : $stmt;
     }
     /**
      * @param null|Doc[] $comments
