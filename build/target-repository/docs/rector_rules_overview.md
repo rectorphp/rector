@@ -1,4 +1,4 @@
-# 477 Rules Overview
+# 482 Rules Overview
 
 <br>
 
@@ -91,6 +91,8 @@
 - [Renaming](#renaming) (11)
 
 - [Restoration](#restoration) (6)
+
+- [Strict](#strict) (5)
 
 - [Transform](#transform) (34)
 
@@ -9769,6 +9771,111 @@ Rename file to respect class name
 +// app/AnotherClass.php
  class AnotherClass
  {
+ }
+```
+
+<br>
+
+## Strict
+
+### BooleanInBooleanNotRuleFixerRector
+
+Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditions\BooleanInBooleanNotRule"
+
+- class: [`Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector`](../rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(string $name)
+     {
+-        if (! $name) {
++        if ($name !== '') {
+             return 'name';
+         }
+
+         return 'no name';
+     }
+ }
+```
+
+<br>
+
+### BooleanInIfConditionRuleFixerRector
+
+Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditions\BooleanInIfConditionRule"
+
+- class: [`Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector`](../rules/Strict/Rector/If_/BooleanInIfConditionRuleFixerRector.php)
+
+```diff
+ final class NegatedString
+ {
+     public function run(string $name)
+     {
+-        if ($name) {
++        if ($name !== '') {
+             return 'name';
+         }
+
+         return 'no name';
+     }
+ }
+```
+
+<br>
+
+### BooleanInTernaryOperatorRuleFixerRector
+
+Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditions\BooleanInTernaryOperatorRule"
+
+- class: [`Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector`](../rules/Strict/Rector/Ternary/BooleanInTernaryOperatorRuleFixerRector.php)
+
+```diff
+ final class ArrayCompare
+ {
+     public function run(array $data)
+     {
+-        return $data ? 1 : 2;
++        return $data !== [] ? 1 : 2;
+     }
+ }
+```
+
+<br>
+
+### DisallowedEmptyRuleFixerRector
+
+Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule"
+
+- class: [`Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector`](../rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php)
+
+```diff
+ final class SomeEmptyArray
+ {
+     public function run(array $items)
+     {
+-        return empty($items);
++        return $items === [];
+     }
+ }
+```
+
+<br>
+
+### DisallowedShortTernaryRuleFixerRector
+
+Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule"
+
+- class: [`Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector`](../rules/Strict/Rector/Ternary/DisallowedShortTernaryRuleFixerRector.php)
+
+```diff
+ final class ShortTernaryArray
+ {
+     public function run(array $array)
+     {
+-        return $array ?: 2;
++        return $array !== [] ? $array : 2;
+     }
  }
 ```
 
