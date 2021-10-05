@@ -37,10 +37,10 @@ class SomeClass
     public function run(string $name)
     {
         if (! $name) {
-            return 'name';
+            return 'no name';
         }
 
-        return 'no name';
+        return 'name';
     }
 }
 CODE_SAMPLE
@@ -49,11 +49,11 @@ class SomeClass
 {
     public function run(string $name)
     {
-        if ($name !== '') {
-            return 'name';
+        if ($name === '') {
+            return 'no name';
         }
 
-        return 'no name';
+        return 'name';
     }
 }
 CODE_SAMPLE

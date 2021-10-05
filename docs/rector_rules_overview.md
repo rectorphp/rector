@@ -9790,11 +9790,11 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
      public function run(string $name)
      {
 -        if (! $name) {
-+        if ($name !== '') {
-             return 'name';
++        if ($name === '') {
+             return 'no name';
          }
 
-         return 'no name';
+         return 'name';
      }
  }
 ```
