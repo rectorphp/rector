@@ -4,13 +4,14 @@ declare (strict_types=1);
 namespace Rector\Strict\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Fixer Rector for PHPStan rule:
@@ -18,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector\DisallowedShortTernaryRuleFixerRectorTest
  */
-final class DisallowedShortTernaryRuleFixerRector extends \Rector\Core\Rector\AbstractRector
+final class DisallowedShortTernaryRuleFixerRector extends \Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector
 {
     /**
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
@@ -31,7 +32,7 @@ final class DisallowedShortTernaryRuleFixerRector extends \Rector\Core\Rector\Ab
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\DisallowedConstructs\\DisallowedShortTernaryRule');
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class ShortTernaryArray
 {
     public function run(array $array)
@@ -49,7 +50,7 @@ final class ShortTernaryArray
     }
 }
 CODE_SAMPLE
-)]);
+, [self::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -77,12 +78,12 @@ CODE_SAMPLE
             return $node;
         }
         $exprType = $scope->getType($node->cond);
-        $falsyIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond);
-        if ($falsyIdentical === null) {
+        $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond, $this->treatAsNonEmpty);
+        if (!$compareExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $node->if = $node->cond;
-        $node->cond = $falsyIdentical;
+        $node->cond = $compareExpr;
         return $node;
     }
     private function refactorResetFuncCall(\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr\FuncCall $resetFuncCall, \PHPStan\Analyser\Scope $scope) : void
@@ -90,8 +91,8 @@ CODE_SAMPLE
         $ternary->if = $ternary->cond;
         $firstArgValue = $resetFuncCall->args[0]->value;
         $firstArgType = $scope->getType($firstArgValue);
-        $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($firstArgType, $firstArgValue);
-        if ($falsyCompareExpr === null) {
+        $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($firstArgType, $firstArgValue, $this->treatAsNonEmpty);
+        if (!$falsyCompareExpr instanceof \PhpParser\Node\Expr) {
             return;
         }
         $ternary->cond = $falsyCompareExpr;

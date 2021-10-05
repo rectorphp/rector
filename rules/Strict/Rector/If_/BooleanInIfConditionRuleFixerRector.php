@@ -4,12 +4,13 @@ declare (strict_types=1);
 namespace Rector\Strict\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Fixer Rector for PHPStan rules:
@@ -18,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector\BooleanInIfConditionRuleFixerRectorTest
  */
-final class BooleanInIfConditionRuleFixerRector extends \Rector\Core\Rector\AbstractRector
+final class BooleanInIfConditionRuleFixerRector extends \Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector
 {
     /**
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
@@ -31,7 +32,7 @@ final class BooleanInIfConditionRuleFixerRector extends \Rector\Core\Rector\Abst
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $errorMessage = \sprintf('Fixer for PHPStan reports by strict type rule - "%s"', 'PHPStan\\Rules\\BooleansInConditions\\BooleanInIfConditionRule');
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition($errorMessage, [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class NegatedString
 {
     public function run(string $name)
@@ -57,7 +58,7 @@ final class NegatedString
     }
 }
 CODE_SAMPLE
-)]);
+, [self::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -77,15 +78,15 @@ CODE_SAMPLE
         }
         // 1. if
         $ifCondExprType = $scope->getType($node->cond);
-        $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($ifCondExprType, $node->cond);
+        $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($ifCondExprType, $node->cond, $this->treatAsNonEmpty);
         if ($notIdentical !== null) {
             $node->cond = $notIdentical;
         }
         // 2. elseifs
         foreach ($node->elseifs as $elseif) {
             $elseifCondExprType = $scope->getType($elseif->cond);
-            $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($elseifCondExprType, $elseif->cond);
-            if ($notIdentical === null) {
+            $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($elseifCondExprType, $elseif->cond, $this->treatAsNonEmpty);
+            if (!$notIdentical instanceof \PhpParser\Node\Expr) {
                 continue;
             }
             $elseif->cond = $notIdentical;

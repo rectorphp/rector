@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd87bb4d6b2429001a11f93df21ff7afc
+class ComposerStaticInitb8a825bcc5a32aba1955fc41da5cfa8e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3321,6 +3321,7 @@ class ComposerStaticInitd87bb4d6b2429001a11f93df21ff7afc
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\SelfObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/SelfObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
         'Rector\\Strict\\NodeFactory\\ExactCompareFactory' => __DIR__ . '/../..' . '/rules/Strict/NodeFactory/ExactCompareFactory.php',
+        'Rector\\Strict\\Rector\\AbstractFalsyScalarRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php',
         'Rector\\Strict\\Rector\\BooleanNot\\BooleanInBooleanNotRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php',
         'Rector\\Strict\\Rector\\Empty_\\DisallowedEmptyRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php',
         'Rector\\Strict\\Rector\\If_\\BooleanInIfConditionRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/If_/BooleanInIfConditionRuleFixerRector.php',
@@ -3892,9 +3893,9 @@ class ComposerStaticInitd87bb4d6b2429001a11f93df21ff7afc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd87bb4d6b2429001a11f93df21ff7afc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd87bb4d6b2429001a11f93df21ff7afc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd87bb4d6b2429001a11f93df21ff7afc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb8a825bcc5a32aba1955fc41da5cfa8e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb8a825bcc5a32aba1955fc41da5cfa8e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb8a825bcc5a32aba1955fc41da5cfa8e::$classMap;
 
         }, null, ClassLoader::class);
     }
