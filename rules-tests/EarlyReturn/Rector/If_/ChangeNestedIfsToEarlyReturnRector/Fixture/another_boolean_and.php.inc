@@ -4,7 +4,7 @@ namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector
 
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-class BooleanAnd
+class AnotherBooleanAnd
 {
     private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
     {
@@ -27,7 +27,7 @@ namespace Rector\Tests\EarlyReturn\Rector\If_\ChangeNestedIfsToEarlyReturnRector
 
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
-class BooleanAnd
+class AnotherBooleanAnd
 {
     private function isPreviousExpressionVisuallySimilar(Expression $previousExpression, Node $previousNode): bool
     {

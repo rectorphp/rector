@@ -6,27 +6,33 @@ namespace Rector\Strict\NodeFactory;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
-use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\Node\NodeFactory;
 
 final class ExactCompareFactory
 {
-    public function createIdenticalFalsyCompare(Type $exprType, Expr $expr): ?Identical
+    public function __construct(
+        private NodeFactory $nodeFactory
+    ) {
+    }
+
+    public function createIdenticalFalsyCompare(Type $exprType, Expr $expr, bool $treatAsNonEmpty): Expr|null
     {
         if ($exprType instanceof StringType) {
             return new Identical($expr, new String_(''));
@@ -34,6 +40,10 @@ final class ExactCompareFactory
 
         if ($exprType instanceof IntegerType) {
             return new Identical($expr, new LNumber(0));
+        }
+
+        if ($exprType instanceof BooleanType) {
+            return new Identical($expr, $this->nodeFactory->createFalse());
         }
 
         if ($exprType instanceof ArrayType) {
@@ -44,14 +54,10 @@ final class ExactCompareFactory
             return null;
         }
 
-        if (! TypeCombinator::containsNull($exprType)) {
-            return null;
-        }
-
-        return $this->createTruthyFromUnionType($exprType, $expr);
+        return $this->createTruthyFromUnionType($exprType, $expr, $treatAsNonEmpty);
     }
 
-    public function createNotIdenticalFalsyCompare(Type $exprType, Expr $expr): NotIdentical|Identical|Instanceof_|null
+    public function createNotIdenticalFalsyCompare(Type $exprType, Expr $expr, bool $treatAsNotEmpty): Expr|null
     {
         if ($exprType instanceof StringType) {
             return new NotIdentical($expr, new String_(''));
@@ -69,74 +75,90 @@ final class ExactCompareFactory
             return null;
         }
 
-        if (! TypeCombinator::containsNull($exprType)) {
-            return null;
-        }
-
-        return $this->createFromUnionType($exprType, $expr);
+        return $this->createFromUnionType($exprType, $expr, $treatAsNotEmpty);
     }
 
-    private function createFromUnionType(Type|UnionType $exprType, Expr $expr): Identical|Instanceof_|NotIdentical
-    {
-        $exprType = TypeCombinator::removeNull($exprType);
-
-        if ($exprType instanceof BooleanType) {
-            $trueConstFetch = new ConstFetch(new Name('true'));
-            return new Identical($expr, $trueConstFetch);
-        }
-
-        if ($exprType instanceof TypeWithClassName) {
-            return new Instanceof_($expr, new FullyQualified($exprType->getClassName()));
-        }
-
-        $nullConstFetch = new ConstFetch(new Name('null'));
-        return new NotIdentical($expr, $nullConstFetch);
-    }
-
-    private function resolveFalsyTypesCount(UnionType $unionType): int
-    {
-        $falsyTypesCount = 0;
-
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof StringType) {
-                ++$falsyTypesCount;
-            }
-
-            if ($unionedType instanceof IntegerType) {
-                ++$falsyTypesCount;
-            }
-
-            if ($unionedType instanceof FloatType) {
-                ++$falsyTypesCount;
-            }
-
-            if ($unionedType instanceof ArrayType) {
-                ++$falsyTypesCount;
-            }
-        }
-
-        return $falsyTypesCount;
-    }
-
-    private function createTruthyFromUnionType(UnionType $unionType, Expr $expr): ?Identical
+    private function createFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNotEmpty): Expr|null
     {
         $unionType = TypeCombinator::removeNull($unionType);
 
         if ($unionType instanceof BooleanType) {
-            $trueConstFetch = new ConstFetch(new Name('true'));
-            return new Identical($expr, $trueConstFetch);
+            return new Identical($expr, $this->nodeFactory->createTrue());
         }
+
+        if ($unionType instanceof TypeWithClassName) {
+            return new Instanceof_($expr, new FullyQualified($unionType->getClassName()));
+        }
+
+        $nullConstFetch = $this->nodeFactory->createNull();
+        $toNullNotIdentical = new NotIdentical($expr, $nullConstFetch);
 
         if ($unionType instanceof UnionType) {
-            $falsyTypesCount = $this->resolveFalsyTypesCount($unionType);
+            $compareExprs = [];
 
-            // impossible to refactor to string value compare, as many falsy values can be provided
-            if ($falsyTypesCount > 1) {
-                return null;
+            foreach ($unionType->getTypes() as $unionedType) {
+                $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
             }
+
+            /** @var Expr $truthyExpr */
+            $truthyExpr = array_shift($compareExprs);
+            foreach ($compareExprs as $compareExpr) {
+                /** @var Expr $compareExpr */
+                $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
+            }
+
+            return $truthyExpr;
         }
 
-        $nullConstFetch = new ConstFetch(new Name('null'));
-        return new Identical($expr, $nullConstFetch);
+        $compareExpr = $this->createNotIdenticalFalsyCompare($unionType, $expr, $treatAsNotEmpty);
+        if (! $compareExpr instanceof Expr) {
+            return null;
+        }
+
+        return new BooleanAnd($toNullNotIdentical, $compareExpr);
+    }
+
+    private function createTruthyFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNonEmpty): Expr|null
+    {
+        $unionType = TypeCombinator::removeNull($unionType);
+
+        if ($unionType instanceof UnionType) {
+            $compareExprs = [];
+            foreach ($unionType->getTypes() as $unionedType) {
+                $compareExprs[] = $this->createIdenticalFalsyCompare($unionedType, $expr, $treatAsNonEmpty);
+            }
+
+            /** @var Expr $truthyExpr */
+            $truthyExpr = array_shift($compareExprs);
+            foreach ($compareExprs as $compareExpr) {
+                /** @var Expr $compareExpr */
+                $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
+            }
+
+            return $truthyExpr;
+        }
+
+        if ($unionType instanceof BooleanType) {
+            return new Identical($expr, $this->nodeFactory->createTrue());
+        }
+
+        if ($unionType instanceof TypeWithClassName) {
+            $instanceOf = new Instanceof_($expr, new FullyQualified($unionType->getClassName()));
+            return new BooleanNot($instanceOf);
+        }
+
+        $toNullIdentical = new Identical($expr, $this->nodeFactory->createNull());
+
+        // assume we have to check empty string, integer and bools
+        if (! $treatAsNonEmpty) {
+            $scalarFalsyIdentical = $this->createIdenticalFalsyCompare($unionType, $expr, $treatAsNonEmpty);
+            if (! $scalarFalsyIdentical instanceof Expr) {
+                return null;
+            }
+
+            return new BooleanOr($toNullIdentical, $scalarFalsyIdentical);
+        }
+
+        return $toNullIdentical;
     }
 }

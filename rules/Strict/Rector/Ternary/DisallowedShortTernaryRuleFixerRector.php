@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace Rector\Strict\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -20,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector\DisallowedShortTernaryRuleFixerRectorTest
  */
-final class DisallowedShortTernaryRuleFixerRector extends AbstractRector
+final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     public function __construct(
         private ExactCompareFactory $exactCompareFactory,
@@ -34,7 +35,7 @@ final class DisallowedShortTernaryRuleFixerRector extends AbstractRector
             'PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule'
         );
         return new RuleDefinition($errorMessage, [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class ShortTernaryArray
 {
@@ -54,6 +55,10 @@ final class ShortTernaryArray
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    self::TREAT_AS_NON_EMPTY => false,
+                ]
             ),
         ]);
     }
@@ -88,13 +93,17 @@ CODE_SAMPLE
         }
 
         $exprType = $scope->getType($node->cond);
-        $falsyIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond);
-        if ($falsyIdentical === null) {
+        $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare(
+            $exprType,
+            $node->cond,
+            $this->treatAsNonEmpty
+        );
+        if (! $compareExpr instanceof Expr) {
             return null;
         }
 
         $node->if = $node->cond;
-        $node->cond = $falsyIdentical;
+        $node->cond = $compareExpr;
 
         return $node;
     }
@@ -108,10 +117,11 @@ CODE_SAMPLE
 
         $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare(
             $firstArgType,
-            $firstArgValue
+            $firstArgValue,
+            $this->treatAsNonEmpty
         );
 
-        if ($falsyCompareExpr === null) {
+        if (! $falsyCompareExpr instanceof Expr) {
             return;
         }
 

@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\Fixture;
 
-final class UnionWithNull
+final class UnionWithStringNull
 {
-    /**
-     * @var string|null
-     */
-    private $value;
-
-    public function run()
+    public function run(string|null $value)
     {
-        if (! $this->value) {
+        if (!$value) {
             return 'empty';
         }
 
-        return 'set';
+        return 'full';
     }
 }
 
@@ -29,20 +24,15 @@ declare(strict_types=1);
 
 namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\Fixture;
 
-final class UnionWithNull
+final class UnionWithStringNull
 {
-    /**
-     * @var string|null
-     */
-    private $value;
-
-    public function run()
+    public function run(string|null $value)
     {
-        if ($this->value === null || $this->value === '') {
+        if ($value === null || $value === '') {
             return 'empty';
         }
 
-        return 'set';
+        return 'full';
     }
 }
 

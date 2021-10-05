@@ -9782,15 +9782,34 @@ Rename file to respect class name
 
 Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditions\BooleanInBooleanNotRule"
 
+:wrench: **configure it!**
+
 - class: [`Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector`](../rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php)
+
+```php
+use Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(BooleanInBooleanNotRuleFixerRector::class)
+        ->call('configure', [[
+            BooleanInBooleanNotRuleFixerRector::TREAT_AS_NON_EMPTY => true,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
  {
-     public function run(string $name)
+-    public function run(string|null $name)
++    public function run(string $name)
      {
 -        if (! $name) {
-+        if ($name === '') {
++        if ($name === null) {
              return 'no name';
          }
 
@@ -9805,7 +9824,25 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
 
 Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditions\BooleanInIfConditionRule"
 
+:wrench: **configure it!**
+
 - class: [`Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector`](../rules/Strict/Rector/If_/BooleanInIfConditionRuleFixerRector.php)
+
+```php
+use Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(BooleanInIfConditionRuleFixerRector::class)
+        ->call('configure', [[
+            BooleanInIfConditionRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class NegatedString
@@ -9828,7 +9865,25 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
 
 Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditions\BooleanInTernaryOperatorRule"
 
+:wrench: **configure it!**
+
 - class: [`Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector`](../rules/Strict/Rector/Ternary/BooleanInTernaryOperatorRuleFixerRector.php)
+
+```php
+use Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(BooleanInTernaryOperatorRuleFixerRector::class)
+        ->call('configure', [[
+            BooleanInTernaryOperatorRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class ArrayCompare
@@ -9847,7 +9902,25 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\BooleansInConditi
 
 Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule"
 
+:wrench: **configure it!**
+
 - class: [`Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector`](../rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php)
+
+```php
+use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DisallowedEmptyRuleFixerRector::class)
+        ->call('configure', [[
+            DisallowedEmptyRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class SomeEmptyArray
@@ -9866,7 +9939,25 @@ Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstru
 
 Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\DisallowedConstructs\DisallowedShortTernaryRule"
 
+:wrench: **configure it!**
+
 - class: [`Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector`](../rules/Strict/Rector/Ternary/DisallowedShortTernaryRuleFixerRector.php)
+
+```php
+use Rector\Strict\Rector\Ternary\DisallowedShortTernaryRuleFixerRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(DisallowedShortTernaryRuleFixerRector::class)
+        ->call('configure', [[
+            DisallowedShortTernaryRuleFixerRector::TREAT_AS_NON_EMPTY => false,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class ShortTernaryArray

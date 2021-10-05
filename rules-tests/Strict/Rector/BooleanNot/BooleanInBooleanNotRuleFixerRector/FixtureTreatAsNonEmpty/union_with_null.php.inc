@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\Fixture;
+namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\FixtureTreatAsNonEmpty;
 
 final class UnionWithNull
 {
@@ -27,7 +27,7 @@ final class UnionWithNull
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\Fixture;
+namespace Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\FixtureTreatAsNonEmpty;
 
 final class UnionWithNull
 {
@@ -38,7 +38,7 @@ final class UnionWithNull
 
     public function run()
     {
-        if ($this->value === null || $this->value === '') {
+        if ($this->value === null) {
             return 'empty';
         }
 

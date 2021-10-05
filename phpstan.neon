@@ -501,3 +501,13 @@ parameters:
 
         # scope & mutating scope mish-mash
         - '#Parameter \#4 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processStmtNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
+
+        # share configuration to avoid duplication in 5 rules
+        -
+            message: '#Instead of abstract class, use specific service with composition#'
+            path: rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php
+
+        # false positive - configured parmaeter
+        -
+            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
+            path: rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php

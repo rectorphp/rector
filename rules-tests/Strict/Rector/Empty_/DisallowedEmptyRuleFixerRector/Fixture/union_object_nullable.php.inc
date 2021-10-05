@@ -20,7 +20,7 @@ final class UnionObjectNullable
 {
     public function run(null|\DateTime $dateTime)
     {
-        return $dateTime === null;
+        return !$dateTime instanceof \DateTime;
     }
 }
 

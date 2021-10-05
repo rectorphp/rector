@@ -59,7 +59,7 @@ jobs:
             ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
             -   run: bin/rector process ${{ matrix.paths }} --ansi --no-progress-bar
 
-            -   run: vendor/bin/ecs check --match-git-diff --fix --ansi
+            -   run: vendor/bin/ecs check --fix --ansi
 
             # see https://github.com/EndBug/add-and-commit
             -

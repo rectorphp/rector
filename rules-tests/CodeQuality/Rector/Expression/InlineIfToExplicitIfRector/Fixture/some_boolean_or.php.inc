@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
-class BooleanOr
+class SomeBooleanOr
 {
     public function run()
     {
@@ -17,7 +17,7 @@ class BooleanOr
 
 namespace Rector\Tests\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector\Fixture;
 
-class BooleanOr
+class SomeBooleanOr
 {
     public function run()
     {

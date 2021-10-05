@@ -8,10 +8,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector\BooleanInTernaryOperatorRuleFixerRectorTest
  */
-final class BooleanInTernaryOperatorRuleFixerRector extends AbstractRector
+final class BooleanInTernaryOperatorRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     public function __construct(
         private ExactCompareFactory $exactCompareFactory
@@ -34,7 +34,7 @@ final class BooleanInTernaryOperatorRuleFixerRector extends AbstractRector
             'PHPStan\Rules\BooleansInConditions\BooleanInTernaryOperatorRule'
         );
         return new RuleDefinition($errorMessage, [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class ArrayCompare
 {
@@ -54,6 +54,10 @@ final class ArrayCompare
     }
 }
 CODE_SAMPLE
+            ,
+                [
+                    self::TREAT_AS_NON_EMPTY => false,
+                ]
             ),
         ]);
     }
@@ -83,7 +87,11 @@ CODE_SAMPLE
 
         $exprType = $scope->getType($node->cond);
 
-        $falsyIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond);
+        $falsyIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare(
+            $exprType,
+            $node->cond,
+            $this->treatAsNonEmpty
+        );
         if (! $falsyIdentical instanceof Expr) {
             return null;
         }

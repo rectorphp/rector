@@ -5,22 +5,20 @@ declare(strict_types=1);
 namespace Rector\Strict\Rector\Empty_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\Instanceof_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector\DisallowedEmptyRuleFixerRectorTest
  */
-final class DisallowedEmptyRuleFixerRector extends AbstractRector
+final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     public function __construct(
         private ExactCompareFactory $exactCompareFactory,
@@ -34,7 +32,7 @@ final class DisallowedEmptyRuleFixerRector extends AbstractRector
             'PHPStan\Rules\DisallowedConstructs\DisallowedEmptyRule'
         );
         return new RuleDefinition($errorMessage, [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeEmptyArray
 {
@@ -54,6 +52,10 @@ final class SomeEmptyArray
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    self::TREAT_AS_NON_EMPTY => false,
+                ]
             ),
         ]);
     }
@@ -69,7 +71,7 @@ CODE_SAMPLE
     /**
      * @param Empty_|BooleanNot $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node): Expr|null
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
@@ -80,10 +82,10 @@ CODE_SAMPLE
             return $this->refactorBooleanNot($node, $scope);
         }
 
-        return $this->refactorEmpty($node, $scope);
+        return $this->refactorEmpty($node, $scope, $this->treatAsNonEmpty);
     }
 
-    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope): NotIdentical|Identical|Instanceof_|null
+    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope): Expr|null
     {
         if (! $booleanNot->expr instanceof Empty_) {
             return null;
@@ -92,12 +94,16 @@ CODE_SAMPLE
         $empty = $booleanNot->expr;
         $emptyExprType = $scope->getType($empty->expr);
 
-        return $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr);
+        return $this->exactCompareFactory->createNotIdenticalFalsyCompare(
+            $emptyExprType,
+            $empty->expr,
+            $this->treatAsNonEmpty
+        );
     }
 
-    private function refactorEmpty(Empty_ $empty, Scope $scope): ?Identical
+    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty): Expr|null
     {
         $exprType = $scope->getType($empty->expr);
-        return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr);
+        return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
     }
 }
