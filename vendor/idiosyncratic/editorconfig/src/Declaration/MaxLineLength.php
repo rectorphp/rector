@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211004\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211005\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20211004\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20211005\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function is_int;
-final class MaxLineLength extends \RectorPrefix20211004\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class MaxLineLength extends \RectorPrefix20211005\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function getName() : string
     {
@@ -17,7 +17,7 @@ final class MaxLineLength extends \RectorPrefix20211004\Idiosyncratic\EditorConf
     public function validateValue($value) : void
     {
         if ($value !== 'off' && (\is_int($value) === \false || $value < 1 === \true)) {
-            throw new \RectorPrefix20211004\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
+            throw new \RectorPrefix20211005\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
         }
     }
 }

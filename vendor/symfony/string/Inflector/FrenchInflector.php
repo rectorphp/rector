@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211004\Symfony\Component\String\Inflector;
+namespace RectorPrefix20211005\Symfony\Component\String\Inflector;
 
 /**
  * French inflector.
  *
  * This class does only inflect nouns; not adjectives nor composed words like "soixante-dix".
  */
-final class FrenchInflector implements \RectorPrefix20211004\Symfony\Component\String\Inflector\InflectorInterface
+final class FrenchInflector implements \RectorPrefix20211005\Symfony\Component\String\Inflector\InflectorInterface
 {
     /**
      * A list of all rules for pluralise.
@@ -50,8 +50,8 @@ final class FrenchInflector implements \RectorPrefix20211004\Symfony\Component\S
         // Invariable words
         ['/^(cinquante|soixante|mille)$/i', '\\1'],
         // French titles
-        ['/^(mon|ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix20211004\\mes\\2s'],
-        ['/^(Mon|Ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix20211004\\Mes\\2s'],
+        ['/^(mon|ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix20211005\\mes\\2s'],
+        ['/^(Mon|Ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix20211005\\Mes\\2s'],
     ];
     /**
      * A list of all rules for singularize.
@@ -77,10 +77,10 @@ final class FrenchInflector implements \RectorPrefix20211004\Symfony\Component\S
         // Les mots finissant par "ou" prennent un "s" sauf bijou, caillou, chou, genou, hibou, joujou, pou
         ['/(bij|caill|ch|gen|hib|jouj|p)oux$/i', '\\1ou'],
         // French titles
-        ['/^mes(dame|demoiselle)s$/', 'RectorPrefix20211004\\ma\\1'],
-        ['/^Mes(dame|demoiselle)s$/', 'RectorPrefix20211004\\Ma\\1'],
-        ['/^mes(sieur|seigneur)s$/', 'RectorPrefix20211004\\mon\\1'],
-        ['/^Mes(sieur|seigneur)s$/', 'RectorPrefix20211004\\Mon\\1'],
+        ['/^mes(dame|demoiselle)s$/', 'RectorPrefix20211005\\ma\\1'],
+        ['/^Mes(dame|demoiselle)s$/', 'RectorPrefix20211005\\Ma\\1'],
+        ['/^mes(sieur|seigneur)s$/', 'RectorPrefix20211005\\mon\\1'],
+        ['/^Mes(sieur|seigneur)s$/', 'RectorPrefix20211005\\Mon\\1'],
         //Default rule
         ['/s$/i', ''],
     ];

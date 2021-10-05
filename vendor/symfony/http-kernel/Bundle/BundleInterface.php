@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211004\Symfony\Component\HttpKernel\Bundle;
+namespace RectorPrefix20211005\Symfony\Component\HttpKernel\Bundle;
 
-use RectorPrefix20211004\Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use RectorPrefix20211004\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211004\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20211005\Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use RectorPrefix20211005\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211005\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 /**
  * BundleInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface BundleInterface extends \RectorPrefix20211004\Symfony\Component\DependencyInjection\ContainerAwareInterface
+interface BundleInterface extends \RectorPrefix20211005\Symfony\Component\DependencyInjection\ContainerAwareInterface
 {
     /**
      * Boots the Bundle.

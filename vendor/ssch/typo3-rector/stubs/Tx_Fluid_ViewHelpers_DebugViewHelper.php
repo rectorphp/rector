@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211004;
+namespace RectorPrefix20211005;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_DebugViewHelper')) {
     return;

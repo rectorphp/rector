@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211004\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20211005\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
-use RectorPrefix20211004\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211004\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20211004\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20211004\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use RectorPrefix20211004\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher;
+use RectorPrefix20211005\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211005\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20211005\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211005\Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use RectorPrefix20211005\Symfony\Contracts\Service\ResetInterface;
 /**
  * EventDataCollector.
  *
@@ -23,12 +23,12 @@ use RectorPrefix20211004\Symfony\Contracts\Service\ResetInterface;
  *
  * @final
  */
-class EventDataCollector extends \RectorPrefix20211004\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20211004\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class EventDataCollector extends \RectorPrefix20211005\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20211005\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
 {
     protected $dispatcher;
     private $requestStack;
     private $currentRequest;
-    public function __construct(\RectorPrefix20211004\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher = null, \RectorPrefix20211004\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
+    public function __construct(\RectorPrefix20211005\Symfony\Contracts\EventDispatcher\EventDispatcherInterface $dispatcher = null, \RectorPrefix20211005\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
     {
         $this->dispatcher = $dispatcher;
         $this->requestStack = $requestStack;
@@ -47,13 +47,13 @@ class EventDataCollector extends \RectorPrefix20211004\Symfony\Component\HttpKer
     public function reset()
     {
         $this->data = [];
-        if ($this->dispatcher instanceof \RectorPrefix20211004\Symfony\Contracts\Service\ResetInterface) {
+        if ($this->dispatcher instanceof \RectorPrefix20211005\Symfony\Contracts\Service\ResetInterface) {
             $this->dispatcher->reset();
         }
     }
     public function lateCollect()
     {
-        if ($this->dispatcher instanceof \RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher) {
+        if ($this->dispatcher instanceof \RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\TraceableEventDispatcher) {
             $this->setCalledListeners($this->dispatcher->getCalledListeners($this->currentRequest));
             $this->setNotCalledListeners($this->dispatcher->getNotCalledListeners($this->currentRequest));
             $this->setOrphanedEvents($this->dispatcher->getOrphanedEvents($this->currentRequest));

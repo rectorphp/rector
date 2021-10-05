@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211004;
+namespace RectorPrefix20211005;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Fileupload')) {
     return;

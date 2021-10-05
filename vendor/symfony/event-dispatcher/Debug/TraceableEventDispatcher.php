@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug;
+namespace RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug;
 
-use RectorPrefix20211004\Psr\EventDispatcher\StoppableEventInterface;
-use RectorPrefix20211004\Psr\Log\LoggerInterface;
-use RectorPrefix20211004\Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use RectorPrefix20211004\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20211004\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211004\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20211004\Symfony\Component\Stopwatch\Stopwatch;
-use RectorPrefix20211004\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20211005\Psr\EventDispatcher\StoppableEventInterface;
+use RectorPrefix20211005\Psr\Log\LoggerInterface;
+use RectorPrefix20211005\Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use RectorPrefix20211005\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20211005\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211005\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20211005\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20211005\Symfony\Contracts\Service\ResetInterface;
 /**
  * Collects some data about event listeners.
  *
@@ -25,7 +25,7 @@ use RectorPrefix20211004\Symfony\Contracts\Service\ResetInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class TraceableEventDispatcher implements \RectorPrefix20211004\Symfony\Component\EventDispatcher\EventDispatcherInterface, \RectorPrefix20211004\Symfony\Contracts\Service\ResetInterface
+class TraceableEventDispatcher implements \RectorPrefix20211005\Symfony\Component\EventDispatcher\EventDispatcherInterface, \RectorPrefix20211005\Symfony\Contracts\Service\ResetInterface
 {
     protected $logger;
     protected $stopwatch;
@@ -35,7 +35,7 @@ class TraceableEventDispatcher implements \RectorPrefix20211004\Symfony\Componen
     private $orphanedEvents;
     private $requestStack;
     private $currentRequestHash = '';
-    public function __construct(\RectorPrefix20211004\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher, \RectorPrefix20211004\Symfony\Component\Stopwatch\Stopwatch $stopwatch, \RectorPrefix20211004\Psr\Log\LoggerInterface $logger = null, \RectorPrefix20211004\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
+    public function __construct(\RectorPrefix20211005\Symfony\Component\EventDispatcher\EventDispatcherInterface $dispatcher, \RectorPrefix20211005\Symfony\Component\Stopwatch\Stopwatch $stopwatch, \RectorPrefix20211005\Psr\Log\LoggerInterface $logger = null, \RectorPrefix20211005\Symfony\Component\HttpFoundation\RequestStack $requestStack = null)
     {
         $this->dispatcher = $dispatcher;
         $this->stopwatch = $stopwatch;
@@ -132,7 +132,7 @@ class TraceableEventDispatcher implements \RectorPrefix20211004\Symfony\Componen
             $this->callStack = new \SplObjectStorage();
         }
         $currentRequestHash = $this->currentRequestHash = $this->requestStack && ($request = $this->requestStack->getCurrentRequest()) ? \spl_object_hash($request) : '';
-        if (null !== $this->logger && $event instanceof \RectorPrefix20211004\Psr\EventDispatcher\StoppableEventInterface && $event->isPropagationStopped()) {
+        if (null !== $this->logger && $event instanceof \RectorPrefix20211005\Psr\EventDispatcher\StoppableEventInterface && $event->isPropagationStopped()) {
             $this->logger->debug(\sprintf('The "%s" event is already stopped. No listeners have been called.', $eventName));
         }
         $this->preProcess($eventName);
@@ -204,8 +204,8 @@ class TraceableEventDispatcher implements \RectorPrefix20211004\Symfony\Componen
         foreach ($allListeners as $eventName => $listeners) {
             foreach ($listeners as $listener) {
                 if (!\in_array($listener, $calledListeners, \true)) {
-                    if (!$listener instanceof \RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\WrappedListener) {
-                        $listener = new \RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\WrappedListener($listener, null, $this->stopwatch, $this);
+                    if (!$listener instanceof \RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\WrappedListener) {
+                        $listener = new \RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\WrappedListener($listener, null, $this->stopwatch, $this);
                     }
                     $notCalled[] = $listener->getInfo($eventName);
                 }
@@ -269,7 +269,7 @@ class TraceableEventDispatcher implements \RectorPrefix20211004\Symfony\Componen
         }
         foreach ($this->dispatcher->getListeners($eventName) as $listener) {
             $priority = $this->getListenerPriority($eventName, $listener);
-            $wrappedListener = new \RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\WrappedListener($listener instanceof \RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\WrappedListener ? $listener->getWrappedListener() : $listener, null, $this->stopwatch, $this);
+            $wrappedListener = new \RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\WrappedListener($listener instanceof \RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\WrappedListener ? $listener->getWrappedListener() : $listener, null, $this->stopwatch, $this);
             $this->wrappedListeners[$eventName][] = $wrappedListener;
             $this->dispatcher->removeListener($eventName, $listener);
             $this->dispatcher->addListener($eventName, $wrappedListener, $priority);
@@ -281,7 +281,7 @@ class TraceableEventDispatcher implements \RectorPrefix20211004\Symfony\Componen
         unset($this->wrappedListeners[$eventName]);
         $skipped = \false;
         foreach ($this->dispatcher->getListeners($eventName) as $listener) {
-            if (!$listener instanceof \RectorPrefix20211004\Symfony\Component\EventDispatcher\Debug\WrappedListener) {
+            if (!$listener instanceof \RectorPrefix20211005\Symfony\Component\EventDispatcher\Debug\WrappedListener) {
                 // #12845: a new listener was added during dispatch.
                 continue;
             }

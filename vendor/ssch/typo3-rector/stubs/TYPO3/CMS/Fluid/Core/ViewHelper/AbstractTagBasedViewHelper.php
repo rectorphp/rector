@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20211004\TYPO3\CMS\Fluid\Core\ViewHelper;
+namespace RectorPrefix20211005\TYPO3\CMS\Fluid\Core\ViewHelper;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\AbstractTagBasedViewHelper')) {
     return;
 }
-class AbstractTagBasedViewHelper extends \RectorPrefix20211004\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class AbstractTagBasedViewHelper extends \RectorPrefix20211005\TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
 }

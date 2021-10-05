@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211004\Symfony\Component\HttpFoundation\Session\Storage;
+namespace RectorPrefix20211005\Symfony\Component\HttpFoundation\Session\Storage;
 
-use RectorPrefix20211004\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211005\Symfony\Component\HttpFoundation\Request;
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20211004\Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage::class);
+\class_exists(\RectorPrefix20211005\Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage::class);
 /**
  * @author Jérémy Derussé <jeremy@derusse.com>
  */
-class MockFileSessionStorageFactory implements \RectorPrefix20211004\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
+class MockFileSessionStorageFactory implements \RectorPrefix20211005\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface
 {
     private $savePath;
     private $name;
@@ -24,14 +24,14 @@ class MockFileSessionStorageFactory implements \RectorPrefix20211004\Symfony\Com
     /**
      * @see MockFileSessionStorage constructor.
      */
-    public function __construct(string $savePath = null, string $name = 'MOCKSESSID', \RectorPrefix20211004\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
+    public function __construct(string $savePath = null, string $name = 'MOCKSESSID', \RectorPrefix20211005\Symfony\Component\HttpFoundation\Session\Storage\MetadataBag $metaBag = null)
     {
         $this->savePath = $savePath;
         $this->name = $name;
         $this->metaBag = $metaBag;
     }
-    public function createStorage(?\RectorPrefix20211004\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20211004\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
+    public function createStorage(?\RectorPrefix20211005\Symfony\Component\HttpFoundation\Request $request) : \RectorPrefix20211005\Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
     {
-        return new \RectorPrefix20211004\Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage($this->savePath, $this->name, $this->metaBag);
+        return new \RectorPrefix20211005\Symfony\Component\HttpFoundation\Session\Storage\MockFileSessionStorage($this->savePath, $this->name, $this->metaBag);
     }
 }

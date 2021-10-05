@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211004\TYPO3\CMS\Extbase\SignalSlot;
+namespace RectorPrefix20211005\TYPO3\CMS\Extbase\SignalSlot;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher')) {
     return;
