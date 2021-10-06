@@ -9,8 +9,8 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211005\SebastianBergmann\Diff;
+namespace RectorPrefix20211006\SebastianBergmann\Diff;
 
-class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20211005\SebastianBergmann\Diff\Exception
+class InvalidArgumentException extends \InvalidArgumentException implements \RectorPrefix20211006\SebastianBergmann\Diff\Exception
 {
 }

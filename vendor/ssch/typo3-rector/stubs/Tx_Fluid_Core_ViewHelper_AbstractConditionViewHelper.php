@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211005;
+namespace RectorPrefix20211006;
 
 if (\class_exists('Tx_Fluid_Core_ViewHelper_AbstractConditionViewHelper')) {
     return;

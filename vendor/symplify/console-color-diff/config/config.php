@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211005;
+namespace RectorPrefix20211006;
 
-use RectorPrefix20211005\SebastianBergmann\Diff\Differ;
+use RectorPrefix20211006\SebastianBergmann\Diff\Differ;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211005\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211006\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20211005\Symplify\\ConsoleColorDiff\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Bundle']);
-    $services->set(\RectorPrefix20211005\SebastianBergmann\Diff\Differ::class);
-    $services->set(\RectorPrefix20211005\Symplify\PackageBuilder\Reflection\PrivatesAccessor::class);
+    $services->load('RectorPrefix20211006\Symplify\\ConsoleColorDiff\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Bundle']);
+    $services->set(\RectorPrefix20211006\SebastianBergmann\Diff\Differ::class);
+    $services->set(\RectorPrefix20211006\Symplify\PackageBuilder\Reflection\PrivatesAccessor::class);
 };

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211005\Symfony\Component\HttpFoundation\Test\Constraint;
+namespace RectorPrefix20211006\Symfony\Component\HttpFoundation\Test\Constraint;
 
-use RectorPrefix20211005\PHPUnit\Framework\Constraint\Constraint;
-use RectorPrefix20211005\Symfony\Component\HttpFoundation\Cookie;
-use RectorPrefix20211005\Symfony\Component\HttpFoundation\Response;
-final class ResponseHasCookie extends \RectorPrefix20211005\PHPUnit\Framework\Constraint\Constraint
+use RectorPrefix20211006\PHPUnit\Framework\Constraint\Constraint;
+use RectorPrefix20211006\Symfony\Component\HttpFoundation\Cookie;
+use RectorPrefix20211006\Symfony\Component\HttpFoundation\Response;
+final class ResponseHasCookie extends \RectorPrefix20211006\PHPUnit\Framework\Constraint\Constraint
 {
     private $name;
     private $path;
@@ -56,10 +56,10 @@ final class ResponseHasCookie extends \RectorPrefix20211005\PHPUnit\Framework\Co
     {
         return 'the Response ' . $this->toString();
     }
-    private function getCookie(\RectorPrefix20211005\Symfony\Component\HttpFoundation\Response $response) : ?\RectorPrefix20211005\Symfony\Component\HttpFoundation\Cookie
+    private function getCookie(\RectorPrefix20211006\Symfony\Component\HttpFoundation\Response $response) : ?\RectorPrefix20211006\Symfony\Component\HttpFoundation\Cookie
     {
         $cookies = $response->headers->getCookies();
-        $filteredCookies = \array_filter($cookies, function (\RectorPrefix20211005\Symfony\Component\HttpFoundation\Cookie $cookie) {
+        $filteredCookies = \array_filter($cookies, function (\RectorPrefix20211006\Symfony\Component\HttpFoundation\Cookie $cookie) {
             return $cookie->getName() === $this->name && $cookie->getPath() === $this->path && $cookie->getDomain() === $this->domain;
         });
         return \reset($filteredCookies) ?: null;

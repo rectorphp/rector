@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211005\TYPO3\CMS\Core\Database;
+namespace RectorPrefix20211006\TYPO3\CMS\Core\Database;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\DatabaseConnection')) {
     return;
@@ -347,7 +347,7 @@ class DatabaseConnection
      */
     public function prepare_SELECTquery($select_fields, $from_table, $where_clause, $groupBy = '', $orderBy = '', $limit = '', $input_parameters = [])
     {
-        return new \RectorPrefix20211005\TYPO3\CMS\Core\Database\PreparedStatement();
+        return new \RectorPrefix20211006\TYPO3\CMS\Core\Database\PreparedStatement();
     }
     /**
      * Creates a SELECT prepared SQL statement based on input query parts array
@@ -359,7 +359,7 @@ class DatabaseConnection
      */
     public function prepare_SELECTqueryArray($queryParts, $input_parameters = [])
     {
-        return new \RectorPrefix20211005\TYPO3\CMS\Core\Database\PreparedStatement();
+        return new \RectorPrefix20211006\TYPO3\CMS\Core\Database\PreparedStatement();
     }
     /**************************************
      *

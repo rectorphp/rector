@@ -20,4 +20,4 @@ final class Attribute
         $this->flags = $flags;
     }
 }
-\class_alias('RectorPrefix20211005\\Attribute', 'Attribute', \false);
+\class_alias('RectorPrefix20211006\\Attribute', 'Attribute', \false);

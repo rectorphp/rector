@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211005;
+namespace RectorPrefix20211006;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Form_CheckboxViewHelper')) {
     return;

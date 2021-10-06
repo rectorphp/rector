@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211005\Nette\Neon;
+namespace RectorPrefix20211006\Nette\Neon;
 
 /**
  * Simple parser & generator for Nette Object Notation.
@@ -13,14 +13,14 @@ namespace RectorPrefix20211005\Nette\Neon;
  */
 final class Neon
 {
-    public const BLOCK = \RectorPrefix20211005\Nette\Neon\Encoder::BLOCK;
+    public const BLOCK = \RectorPrefix20211006\Nette\Neon\Encoder::BLOCK;
     public const CHAIN = '!!chain';
     /**
      * Returns value converted to NEON. The flag can be Neon::BLOCK, which will create multiline output.
      */
     public static function encode($value, int $flags = 0) : string
     {
-        $encoder = new \RectorPrefix20211005\Nette\Neon\Encoder();
+        $encoder = new \RectorPrefix20211006\Nette\Neon\Encoder();
         return $encoder->encode($value, $flags);
     }
     /**
@@ -30,7 +30,7 @@ final class Neon
      */
     public static function decode(string $input)
     {
-        $decoder = new \RectorPrefix20211005\Nette\Neon\Decoder();
+        $decoder = new \RectorPrefix20211006\Nette\Neon\Decoder();
         return $decoder->decode($input);
     }
 }

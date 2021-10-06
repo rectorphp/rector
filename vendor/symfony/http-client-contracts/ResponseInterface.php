@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211005\Symfony\Contracts\HttpClient;
+namespace RectorPrefix20211006\Symfony\Contracts\HttpClient;
 
-use RectorPrefix20211005\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use RectorPrefix20211005\Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
-use RectorPrefix20211005\Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
-use RectorPrefix20211005\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use RectorPrefix20211005\Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use RectorPrefix20211005\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use RectorPrefix20211006\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use RectorPrefix20211006\Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use RectorPrefix20211006\Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use RectorPrefix20211006\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use RectorPrefix20211006\Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use RectorPrefix20211006\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * A (lazily retrieved) HTTP response.
  *
