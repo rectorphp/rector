@@ -104,7 +104,7 @@ CODE_SAMPLE
     private function isNotThisTypePropertyFetch(\PhpParser\Node\Expr $expr) : bool
     {
         if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            $variableType = $this->getStaticType($expr->var);
+            $variableType = $this->getType($expr->var);
             return !$variableType instanceof \PHPStan\Type\ThisType;
         }
         return \false;

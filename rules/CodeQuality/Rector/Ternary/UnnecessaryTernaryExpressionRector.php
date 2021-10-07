@@ -92,7 +92,8 @@ final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\Abstr
     }
     private function processTrueIfExpressionWithFalseElseExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\BooleanType::class)) {
+        $exprType = $this->getType($expr);
+        if ($exprType instanceof \PHPStan\Type\BooleanType) {
             return $expr;
         }
         return new \PhpParser\Node\Expr\Cast\Bool_($expr);
@@ -100,12 +101,14 @@ final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\Abstr
     private function processFalseIfExpressionWithTrueElseExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
         if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
-            if ($this->nodeTypeResolver->isStaticType($expr->expr, \PHPStan\Type\BooleanType::class)) {
+            $negatedExprType = $this->getType($expr->expr);
+            if ($negatedExprType instanceof \PHPStan\Type\BooleanType) {
                 return $expr->expr;
             }
             return new \PhpParser\Node\Expr\Cast\Bool_($expr->expr);
         }
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\BooleanType::class)) {
+        $exprType = $this->getType($expr);
+        if ($exprType instanceof \PHPStan\Type\BooleanType) {
             return new \PhpParser\Node\Expr\BooleanNot($expr);
         }
         return new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Cast\Bool_($expr));

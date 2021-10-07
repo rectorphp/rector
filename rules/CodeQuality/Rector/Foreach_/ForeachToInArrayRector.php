@@ -133,7 +133,7 @@ CODE_SAMPLE
         if (!$this->valueResolver->isTrueOrFalse($returnExpression)) {
             return \true;
         }
-        $foreachValueStaticType = $this->getStaticType($foreach->expr);
+        $foreachValueStaticType = $this->getType($foreach->expr);
         if ($foreachValueStaticType instanceof \PHPStan\Type\ObjectType) {
             return \true;
         }

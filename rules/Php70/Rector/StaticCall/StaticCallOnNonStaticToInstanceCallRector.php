@@ -126,7 +126,7 @@ CODE_SAMPLE
     private function resolveStaticCallClassName(\PhpParser\Node\Expr\StaticCall $staticCall) : ?string
     {
         if ($staticCall->class instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            $objectType = $this->getObjectType($staticCall->class);
+            $objectType = $this->getType($staticCall->class);
             if ($objectType instanceof \PHPStan\Type\ObjectType) {
                 return $objectType->getClassName();
             }

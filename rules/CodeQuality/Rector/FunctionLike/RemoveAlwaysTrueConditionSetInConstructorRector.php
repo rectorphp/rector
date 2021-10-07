@@ -166,7 +166,7 @@ CODE_SAMPLE
         $resolvedTypes[] = $propertyTypeFromConstructor;
         $defaultValue = $property->props[0]->default;
         if ($defaultValue !== null) {
-            $resolvedTypes[] = $this->getStaticType($defaultValue);
+            $resolvedTypes[] = $this->getType($defaultValue);
         }
         $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($classLike->stmts, $propertyName);
         if ($resolveAssignedType !== null) {
@@ -203,7 +203,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
-            $resolvedTypes[] = $this->getStaticType($node->expr);
+            $resolvedTypes[] = $this->getType($node->expr);
             return null;
         });
         if ($resolvedTypes === []) {

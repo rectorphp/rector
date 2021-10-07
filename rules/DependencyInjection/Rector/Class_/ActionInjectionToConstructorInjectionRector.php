@@ -95,7 +95,7 @@ CODE_SAMPLE
             if (!$this->isActionInjectedParamNode($paramNode)) {
                 continue;
             }
-            $paramType = $this->getObjectType($paramNode);
+            $paramType = $this->getType($paramNode);
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
             $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($paramName, $paramType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
@@ -113,7 +113,7 @@ CODE_SAMPLE
         if ($typehint === null) {
             return \false;
         }
-        $paramStaticType = $this->getObjectType($param);
+        $paramStaticType = $this->getType($param);
         if (!$paramStaticType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }

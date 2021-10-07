@@ -86,7 +86,7 @@ CODE_SAMPLE
         if (!isset(self::CAST_CLASS_TO_NODE_TYPE[$nodeClass])) {
             return null;
         }
-        $nodeType = $this->getStaticType($node->expr);
+        $nodeType = $this->getType($node->expr);
         if ($nodeType instanceof \PHPStan\Type\MixedType) {
             return null;
         }

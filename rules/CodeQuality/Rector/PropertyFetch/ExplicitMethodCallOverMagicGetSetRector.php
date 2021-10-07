@@ -97,7 +97,7 @@ CODE_SAMPLE
      */
     private function refactorPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch)
     {
-        $callerType = $this->getObjectType($propertyFetch->var);
+        $callerType = $this->getType($propertyFetch->var);
         if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
@@ -126,7 +126,7 @@ CODE_SAMPLE
      */
     private function refactorMagicSet(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\PropertyFetch $propertyFetch)
     {
-        $propertyCallerType = $this->getObjectType($propertyFetch->var);
+        $propertyCallerType = $this->getType($propertyFetch->var);
         if (!$propertyCallerType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }

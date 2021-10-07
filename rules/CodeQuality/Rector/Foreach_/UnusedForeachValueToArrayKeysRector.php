@@ -121,7 +121,7 @@ CODE_SAMPLE
     }
     private function isArrayType(\PhpParser\Node\Expr $expr) : bool
     {
-        $exprType = $this->getStaticType($expr);
+        $exprType = $this->getType($expr);
         if ($exprType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }

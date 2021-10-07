@@ -93,7 +93,7 @@ CODE_SAMPLE
         /** @var Arg $firstArg */
         $firstArg = $node->args[0];
         $firstValue = $firstArg->value;
-        $firstValueStaticType = $this->getStaticType($firstValue);
+        $firstValueStaticType = $this->getType($firstValue);
         if (!$firstValueStaticType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return null;
         }

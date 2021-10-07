@@ -96,7 +96,7 @@ CODE_SAMPLE
      */
     private function processVariableNum($stmt, \PhpParser\Node\Expr\Variable $numVariable) : ?\PhpParser\Node
     {
-        $staticType = $this->getStaticType($numVariable);
+        $staticType = $this->getType($numVariable);
         if ($staticType instanceof \PHPStan\Type\ConstantType) {
             if ($staticType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
                 if ($staticType->getValue() === 0) {

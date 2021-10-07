@@ -126,7 +126,7 @@ CODE_SAMPLE
         if ($classMethod->stmts === null) {
             return null;
         }
-        if (\count($classMethod->stmts) !== 1) {
+        if (\count((array) $classMethod->stmts) !== 1) {
             return null;
         }
         // recount empty notes

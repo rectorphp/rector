@@ -19,7 +19,6 @@ use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -38,7 +37,6 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -134,7 +132,7 @@ final class NodeTypeResolver
         if ($node instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \false;
         }
-        $resolvedType = $this->resolve($node);
+        $resolvedType = $this->getType($node);
         if ($resolvedType instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
@@ -146,28 +144,25 @@ final class NodeTypeResolver
         }
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
+    /**
+     * @deprecated
+     * @see use NodeTypeResolver::getType() instead
+     */
     public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
+        return $this->getType($node);
+    }
+    public function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    {
         if ($node instanceof \PhpParser\Node\Expr\Ternary) {
-            if ($node->if !== null) {
-                $first = $this->resolve($node->if);
-                $second = $this->resolve($node->else);
-                if ($this->isUnionTypeable($first, $second)) {
-                    return new \PHPStan\Type\UnionType([$first, $second]);
-                }
-            }
-            $condType = $this->resolve($node->cond);
-            if ($this->isNullableType($node->cond) && $condType instanceof \PHPStan\Type\UnionType) {
-                $first = $condType->getTypes()[0];
-                $second = $this->resolve($node->else);
-                if ($this->isUnionTypeable($first, $second)) {
-                    return new \PHPStan\Type\UnionType([$first, $second]);
-                }
+            $ternaryType = $this->resolveTernaryType($node);
+            if (!$ternaryType instanceof \PHPStan\Type\MixedType) {
+                return $ternaryType;
             }
         }
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
-            $first = $this->resolve($node->left);
-            $second = $this->resolve($node->right);
+            $first = $this->getType($node->left);
+            $second = $this->getType($node->right);
             if ($this->isUnionTypeable($first, $second)) {
                 return new \PHPStan\Type\UnionType([$first, $second]);
             }
@@ -175,6 +170,7 @@ final class NodeTypeResolver
         $type = $this->resolveByNodeTypeResolvers($node);
         if ($type !== null) {
             $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
+            $type = $this->genericClassStringTypeCorrector->correct($type);
             return $this->hasOffsetTypeCorrector->correct($type);
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -200,6 +196,7 @@ final class NodeTypeResolver
         }
         $type = $scope->getType($node);
         $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
+        $type = $this->genericClassStringTypeCorrector->correct($type);
         // hot fix for phpstan not resolving chain method calls
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $type;
@@ -207,14 +204,14 @@ final class NodeTypeResolver
         if (!$type instanceof \PHPStan\Type\MixedType) {
             return $type;
         }
-        return $this->resolve($node->var);
+        return $this->getType($node->var);
     }
     /**
      * e.g. string|null, ObjectNull|null
      */
     public function isNullableType(\PhpParser\Node $node) : bool
     {
-        $nodeType = $this->resolve($node);
+        $nodeType = $this->getType($node);
         return \PHPStan\Type\TypeCombinator::containsNull($nodeType);
     }
     public function getNativeType(\PhpParser\Node\Expr $expr) : \PHPStan\Type\Type
@@ -227,14 +224,8 @@ final class NodeTypeResolver
     }
     public function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        if ($node instanceof \PhpParser\Node\Param) {
-            return $this->resolve($node);
-        }
-        if ($node instanceof \PhpParser\Node\Expr\New_) {
-            return $this->resolve($node);
-        }
-        if ($node instanceof \PhpParser\Node\Stmt\Return_) {
-            return $this->resolve($node);
+        if ($node instanceof \PhpParser\Node\Param || $node instanceof \PhpParser\Node\Expr\New_ || $node instanceof \PhpParser\Node\Stmt\Return_) {
+            return $this->getType($node);
         }
         if (!$node instanceof \PhpParser\Node\Expr) {
             return new \PHPStan\Type\MixedType();
@@ -243,7 +234,7 @@ final class NodeTypeResolver
             return $this->resolveArrayType($node);
         }
         if ($node instanceof \PhpParser\Node\Scalar) {
-            return $this->resolve($node);
+            return $this->getType($node);
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
@@ -260,42 +251,26 @@ final class NodeTypeResolver
     }
     public function isNumberType(\PhpParser\Node $node) : bool
     {
-        if ($this->isStaticType($node, \PHPStan\Type\IntegerType::class)) {
+        $nodeType = $this->getType($node);
+        if ($nodeType instanceof \PHPStan\Type\IntegerType) {
             return \true;
         }
-        return $this->isStaticType($node, \PHPStan\Type\FloatType::class);
-    }
-    /**
-     * @param class-string<Type> $staticTypeClass
-     */
-    public function isStaticType(\PhpParser\Node $node, string $staticTypeClass) : bool
-    {
-        if (!\is_a($staticTypeClass, \PHPStan\Type\Type::class, \true)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('"%s" in "%s()" must be type of "%s"', $staticTypeClass, __METHOD__, \PHPStan\Type\Type::class));
-        }
-        return \is_a($this->resolve($node), $staticTypeClass);
+        return $nodeType instanceof \PHPStan\Type\FloatType;
     }
     /**
      * @param class-string<Type> $desiredType
      */
     public function isNullableTypeOfSpecificType(\PhpParser\Node $node, string $desiredType) : bool
     {
-        $nodeType = $this->resolve($node);
+        $nodeType = $this->getType($node);
         if (!$nodeType instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         if (!\PHPStan\Type\TypeCombinator::containsNull($nodeType)) {
             return \false;
         }
-        if (\count($nodeType->getTypes()) !== 2) {
-            return \false;
-        }
-        foreach ($nodeType->getTypes() as $type) {
-            if (\is_a($type, $desiredType, \true)) {
-                return \true;
-            }
-        }
-        return \false;
+        $bareType = \PHPStan\Type\TypeCombinator::removeNull($nodeType);
+        return \is_a($bareType, $desiredType, \true);
     }
     /**
      * @return class-string
@@ -306,19 +281,6 @@ final class NodeTypeResolver
             return $typeWithClassName->getFullyQualifiedName();
         }
         return $typeWithClassName->getClassName();
-    }
-    /**
-     * @param Type[] $desiredTypes
-     */
-    public function isSameObjectTypes(\PHPStan\Type\ObjectType $objectType, array $desiredTypes) : bool
-    {
-        foreach ($desiredTypes as $desiredType) {
-            $desiredTypeEquals = $desiredType->equals($objectType);
-            if ($desiredTypeEquals) {
-                return \true;
-            }
-        }
-        return \false;
     }
     public function isMethodStaticCallOrClassMethodObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : bool
     {
@@ -334,18 +296,6 @@ final class NodeTypeResolver
             return \false;
         }
         return $this->isObjectType($classLike, $objectType);
-    }
-    public function resolveObjectTypeFromScope(\PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\ObjectType
-    {
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return null;
-        }
-        $className = $classReflection->getName();
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        return new \PHPStan\Type\ObjectType($className, null, $classReflection);
     }
     private function isUnionTypeable(\PHPStan\Type\Type $first, \PHPStan\Type\Type $second) : bool
     {
@@ -441,5 +391,27 @@ final class NodeTypeResolver
             return $this->isObjectTypeOfObjectType($resolvedObjectType, $requiredObjectType);
         }
         return \true;
+    }
+    /**
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\UnionType
+     */
+    private function resolveTernaryType(\PhpParser\Node\Expr\Ternary $ternary)
+    {
+        if ($ternary->if !== null) {
+            $first = $this->getType($ternary->if);
+            $second = $this->getType($ternary->else);
+            if ($this->isUnionTypeable($first, $second)) {
+                return new \PHPStan\Type\UnionType([$first, $second]);
+            }
+        }
+        $condType = $this->getType($ternary->cond);
+        if ($this->isNullableType($ternary->cond) && $condType instanceof \PHPStan\Type\UnionType) {
+            $first = $condType->getTypes()[0];
+            $second = $this->getType($ternary->else);
+            if ($this->isUnionTypeable($first, $second)) {
+                return new \PHPStan\Type\UnionType([$first, $second]);
+            }
+        }
+        return new \PHPStan\Type\MixedType();
     }
 }

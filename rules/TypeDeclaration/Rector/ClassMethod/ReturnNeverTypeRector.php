@@ -125,7 +125,7 @@ CODE_SAMPLE
             if ($stmt instanceof \PhpParser\Node\Stmt) {
                 continue;
             }
-            $stmtType = $this->getStaticType($stmt);
+            $stmtType = $this->getType($stmt);
             if ($stmtType instanceof \PHPStan\Type\NeverType) {
                 $hasNeverType = \true;
             }

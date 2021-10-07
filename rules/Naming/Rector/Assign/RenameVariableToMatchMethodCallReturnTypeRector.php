@@ -194,7 +194,7 @@ CODE_SAMPLE
      */
     private function isClassTypeWithChildren($expr) : bool
     {
-        $callStaticType = $this->getStaticType($expr);
+        $callStaticType = $this->getType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
         if (!$callStaticType instanceof \PHPStan\Type\ObjectType) {
             return \false;

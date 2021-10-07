@@ -68,7 +68,7 @@ CODE_SAMPLE
     }
     private function isNullableNonScalarType(\PhpParser\Node $node) : bool
     {
-        $staticType = $this->getStaticType($node);
+        $staticType = $this->getType($node);
         if ($staticType instanceof \PHPStan\Type\MixedType) {
             return \false;
         }

@@ -112,7 +112,7 @@ CODE_SAMPLE
         /** @var string $paramName */
         $paramName = $this->getName($param->var);
         $variable = new \PhpParser\Node\Expr\Variable($paramName);
-        $paramType = $this->getStaticType($param);
+        $paramType = $this->getType($param);
         $recastedVariable = $this->recastVariabletIfScalarType($variable, $paramType);
         if (!$recastedVariable instanceof \PhpParser\Node\Expr\Cast) {
             return null;

@@ -115,7 +115,7 @@ CODE_SAMPLE
         if (!$this->arrayTypeAnalyzer->isArrayType($expr)) {
             return \true;
         }
-        $arrayStaticType = $this->getStaticType($expr);
+        $arrayStaticType = $this->getType($expr);
         if ($this->isConstantArrayTypeWithStringKeyType($arrayStaticType)) {
             return \true;
         }

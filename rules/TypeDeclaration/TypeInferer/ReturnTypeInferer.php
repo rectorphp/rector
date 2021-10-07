@@ -74,8 +74,7 @@ final class ReturnTypeInferer
     {
         $isSupportedStaticReturnType = $this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE);
         $isAutoImport = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
-        $isAutoImportFullyQuafiedReturn = $this->isAutoImportWithFullyQualifiedReturn($isAutoImport, $functionLike);
-        if ($isAutoImportFullyQuafiedReturn) {
+        if ($this->isAutoImportWithFullyQualifiedReturn($isAutoImport, $functionLike)) {
             return new \PHPStan\Type\MixedType();
         }
         foreach ($this->returnTypeInferers as $returnTypeInferer) {

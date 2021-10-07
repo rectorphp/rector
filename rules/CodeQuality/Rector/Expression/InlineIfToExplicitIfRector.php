@@ -83,7 +83,7 @@ CODE_SAMPLE
     {
         /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;
-        $leftStaticType = $this->getStaticType($booleanExpr->left);
+        $leftStaticType = $this->getType($booleanExpr->left);
         if (!$leftStaticType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }

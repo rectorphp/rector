@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite2e70f72a121ecdb6eba21005e4b4e55
+class ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3287,13 +3287,10 @@ class ComposerStaticInite2e70f72a121ecdb6eba21005e4b4e55
         'Rector\\Renaming\\ValueObject\\RenamedNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenamedNamespace.php',
         'Rector\\Restoration\\Rector\\ClassConstFetch\\MissingClassConstantReferenceToStringRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php',
         'Rector\\Restoration\\Rector\\ClassLike\\UpdateFileNameByClassNameFileSystemRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php',
-        'Rector\\Restoration\\Rector\\ClassMethod\\InferParamFromClassMethodReturnRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassMethod/InferParamFromClassMethodReturnRector.php',
         'Rector\\Restoration\\Rector\\Class_\\RemoveFinalFromEntityRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php',
         'Rector\\Restoration\\Rector\\Namespace_\\CompleteImportForPartialAnnotationRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Namespace_/CompleteImportForPartialAnnotationRector.php',
         'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
-        'Rector\\Restoration\\Type\\ConstantReturnToParamTypeConverter' => __DIR__ . '/../..' . '/rules/Restoration/Type/ConstantReturnToParamTypeConverter.php',
         'Rector\\Restoration\\ValueObject\\CompleteImportForPartialAnnotation' => __DIR__ . '/../..' . '/rules/Restoration/ValueObject/CompleteImportForPartialAnnotation.php',
-        'Rector\\Restoration\\ValueObject\\InferParamFromClassMethodReturn' => __DIR__ . '/../..' . '/rules/Restoration/ValueObject/InferParamFromClassMethodReturn.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/packages/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/../..' . '/packages/Set/ValueObject/DowngradeSetList.php',
         'Rector\\Set\\ValueObject\\SetList' => __DIR__ . '/../..' . '/packages/Set/ValueObject/SetList.php',
@@ -3894,9 +3891,9 @@ class ComposerStaticInite2e70f72a121ecdb6eba21005e4b4e55
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite2e70f72a121ecdb6eba21005e4b4e55::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite2e70f72a121ecdb6eba21005e4b4e55::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite2e70f72a121ecdb6eba21005e4b4e55::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78::$classMap;
 
         }, null, ClassLoader::class);
     }

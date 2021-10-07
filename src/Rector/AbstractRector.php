@@ -309,17 +309,28 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     {
         return $this->nodeTypeResolver->isObjectType($node, $objectType);
     }
-    protected function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    /**
+     * Use this method for getting expr|node type
+     */
+    protected function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        return $this->nodeTypeResolver->getStaticType($node);
+        return $this->nodeTypeResolver->getType($node);
     }
     /**
      * @deprecated
-     * Use getStaticType() instead, as single method to get types
+     * Use @see AbstractRector::getType() instead, as single method to get types
      */
     protected function getObjectType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        return $this->nodeTypeResolver->resolve($node);
+        return $this->nodeTypeResolver->getType($node);
+    }
+    /**
+     * @deprecated
+     * Use @see AbstractRector::getType() instead, as single method to get types
+     */
+    protected function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    {
+        return $this->nodeTypeResolver->getType($node);
     }
     /**
      * @param Node|Node[] $nodes
@@ -334,14 +345,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     protected function print($node) : string
     {
         return $this->betterStandardPrinter->print($node);
-    }
-    /**
-     * @deprecated Use FQN PhpVersionProvider service directly instead or implements provideMinPhpVersion, this method will be removed soon
-     * Or implement \Rector\VersionBonding\Contract\MinPhpVersionInterface
-     */
-    protected function isAtLeastPhpVersion(int $version) : bool
-    {
-        return $this->phpVersionProvider->isAtLeastPhpVersion($version);
     }
     protected function mirrorComments(\PhpParser\Node $newNode, \PhpParser\Node $oldNode) : void
     {

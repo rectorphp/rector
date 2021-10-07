@@ -99,7 +99,7 @@ CODE_SAMPLE
         if ($this->isObjectType($expr, new \PHPStan\Type\ObjectType('mysqli'))) {
             return \true;
         }
-        $staticType = $this->getStaticType($expr);
+        $staticType = $this->getType($expr);
         $resourceType = new \PHPStan\Type\ResourceType();
         if ($staticType->equals($resourceType)) {
             return \true;

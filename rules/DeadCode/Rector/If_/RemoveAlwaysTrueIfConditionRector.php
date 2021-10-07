@@ -61,7 +61,7 @@ CODE_SAMPLE
         if ($node->elseifs !== []) {
             return null;
         }
-        $conditionStaticType = $this->getStaticType($node->cond);
+        $conditionStaticType = $this->getType($node->cond);
         if (!$conditionStaticType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return null;
         }

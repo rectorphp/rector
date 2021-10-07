@@ -66,10 +66,12 @@ CODE_SAMPLE
         }
         if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $identical = $node->expr;
-            if (!$this->nodeTypeResolver->isStaticType($identical->left, \PHPStan\Type\BooleanType::class)) {
+            $leftType = $this->getType($identical->left);
+            if (!$leftType instanceof \PHPStan\Type\BooleanType) {
                 return null;
             }
-            if (!$this->nodeTypeResolver->isStaticType($identical->right, \PHPStan\Type\BooleanType::class)) {
+            $rightType = $this->getType($identical->right);
+            if (!$rightType instanceof \PHPStan\Type\BooleanType) {
                 return null;
             }
             return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($identical->left, $identical->right);
@@ -78,10 +80,12 @@ CODE_SAMPLE
     }
     private function processIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\PhpParser\Node\Expr\BinaryOp\NotIdentical
     {
-        if (!$this->nodeTypeResolver->isStaticType($identical->left, \PHPStan\Type\BooleanType::class)) {
+        $leftType = $this->getType($identical->left);
+        if (!$leftType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
-        if (!$this->nodeTypeResolver->isStaticType($identical->right, \PHPStan\Type\BooleanType::class)) {
+        $rightType = $this->getType($identical->right);
+        if (!$rightType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
         if ($identical->left instanceof \PhpParser\Node\Expr\BooleanNot) {

@@ -104,7 +104,7 @@ CODE_SAMPLE
         if (!$methodCall->args[0] instanceof \PhpParser\Node\Arg) {
             return \true;
         }
-        return !$this->getStaticType($methodCall->args[0]->value) instanceof \PHPStan\Type\StringType;
+        return !$this->getType($methodCall->args[0]->value) instanceof \PHPStan\Type\StringType;
     }
     private function updateNode(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {

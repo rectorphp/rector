@@ -71,8 +71,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
-        //when second argument is string: do nothing
-        if ($this->nodeTypeResolver->isStaticType($node->args[1]->value, \PHPStan\Type\StringType::class)) {
+        // when second argument is string: do nothing
+        $secondArgType = $this->getStaticType($node->args[1]->value);
+        if ($secondArgType instanceof \PHPStan\Type\StringType) {
             return null;
         }
         //when less then 5 arguments given: do nothing

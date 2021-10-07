@@ -108,7 +108,7 @@ CODE_SAMPLE
         if ($conditionNode instanceof \PhpParser\Node\Expr\Cast\Bool_) {
             return null;
         }
-        $conditionStaticType = $this->getStaticType($conditionNode);
+        $conditionStaticType = $this->getType($conditionNode);
         if ($conditionStaticType instanceof \PHPStan\Type\BooleanType || $conditionStaticType instanceof \PHPStan\Type\Constant\ConstantIntegerType) {
             return null;
         }
@@ -139,10 +139,11 @@ CODE_SAMPLE
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($expr)) {
             return $this->resolveString($isNegated, $expr);
         }
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\IntegerType::class)) {
+        $exprType = $this->getType($expr);
+        if ($exprType instanceof \PHPStan\Type\IntegerType) {
             return $this->resolveInteger($isNegated, $expr);
         }
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\FloatType::class)) {
+        if ($exprType instanceof \PHPStan\Type\FloatType) {
             return $this->resolveFloat($isNegated, $expr);
         }
         if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, \PHPStan\Type\ObjectType::class)) {

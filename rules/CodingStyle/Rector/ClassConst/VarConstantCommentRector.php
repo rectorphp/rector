@@ -71,7 +71,7 @@ CODE_SAMPLE
         if (\count($node->consts) > 1) {
             return null;
         }
-        $constType = $this->getStaticType($node->consts[0]->value);
+        $constType = $this->getType($node->consts[0]->value);
         if ($constType instanceof \PHPStan\Type\MixedType) {
             return null;
         }

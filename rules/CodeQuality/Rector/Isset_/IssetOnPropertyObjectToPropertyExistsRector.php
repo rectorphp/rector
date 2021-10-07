@@ -90,7 +90,7 @@ CODE_SAMPLE
             if ($propertyFetchName === null) {
                 continue;
             }
-            $propertyFetchVarType = $this->getObjectType($issetVar->var);
+            $propertyFetchVarType = $this->getType($issetVar->var);
             if ($propertyFetchVarType instanceof \PHPStan\Type\TypeWithClassName) {
                 if (!$this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
                     continue;

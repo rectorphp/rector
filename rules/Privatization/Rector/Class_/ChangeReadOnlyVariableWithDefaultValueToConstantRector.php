@@ -205,7 +205,7 @@ CODE_SAMPLE
         $classConst = new \PhpParser\Node\Stmt\ClassConst([$const]);
         $classConst->flags = \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE;
         $this->mirrorComments($classConst, $variable);
-        $constantType = $this->getStaticType($classConst->consts[0]->value);
+        $constantType = $this->getType($classConst->consts[0]->value);
         $this->varAnnotationManipulator->decorateNodeWithType($classConst, $constantType);
         return $classConst;
     }

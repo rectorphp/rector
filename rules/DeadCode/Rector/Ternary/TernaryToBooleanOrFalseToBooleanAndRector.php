@@ -68,7 +68,7 @@ CODE_SAMPLE
         if ($this->valueResolver->isTrue($node->if)) {
             return null;
         }
-        $ifType = $this->getStaticType($node->if);
+        $ifType = $this->getType($node->if);
         if (!$ifType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }

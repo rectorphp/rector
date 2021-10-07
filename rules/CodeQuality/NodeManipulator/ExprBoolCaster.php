@@ -67,7 +67,8 @@ final class ExprBoolCaster
         if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
             return \false;
         }
-        if ($this->nodeTypeResolver->isStaticType($expr, \PHPStan\Type\BooleanType::class)) {
+        $exprType = $this->nodeTypeResolver->getType($expr);
+        if ($exprType instanceof \PHPStan\Type\BooleanType) {
             return \false;
         }
         return !$expr instanceof \PhpParser\Node\Expr\BinaryOp;

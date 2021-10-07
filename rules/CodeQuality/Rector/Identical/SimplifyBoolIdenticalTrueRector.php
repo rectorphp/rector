@@ -53,10 +53,12 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->nodeTypeResolver->isStaticType($node->left, \PHPStan\Type\BooleanType::class) && !$this->valueResolver->isTrueOrFalse($node->left)) {
+        $leftType = $this->getType($node->left);
+        if ($leftType instanceof \PHPStan\Type\BooleanType && !$this->valueResolver->isTrueOrFalse($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
-        if (!$this->nodeTypeResolver->isStaticType($node->right, \PHPStan\Type\BooleanType::class)) {
+        $rightType = $this->getType($node->right);
+        if (!$rightType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
         if ($this->valueResolver->isTrueOrFalse($node->right)) {

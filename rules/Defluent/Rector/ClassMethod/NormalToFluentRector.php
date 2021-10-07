@@ -62,7 +62,7 @@ CODE_SAMPLE
         if ($node->stmts === null) {
             return null;
         }
-        $classMethodStatementCount = \count($node->stmts);
+        $classMethodStatementCount = \count((array) $node->stmts);
         // iterate from bottom to up, so we can merge
         for ($i = $classMethodStatementCount - 1; $i >= 0; --$i) {
             if (!isset($node->stmts[$i])) {

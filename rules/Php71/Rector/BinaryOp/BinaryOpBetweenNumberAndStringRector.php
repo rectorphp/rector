@@ -92,7 +92,7 @@ CODE_SAMPLE
             return \false;
         }
         $value = null;
-        $exprStaticType = $this->getStaticType($expr);
+        $exprStaticType = $this->getType($expr);
         if ($expr instanceof \PhpParser\Node\Scalar\String_) {
             $value = $expr->value;
         } elseif ($exprStaticType instanceof \PHPStan\Type\Constant\ConstantStringType) {

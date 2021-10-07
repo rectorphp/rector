@@ -50,7 +50,8 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isStaticType($node->cond, \PHPStan\Type\BooleanType::class)) {
+        $condType = $this->getType($node->cond);
+        if (!$condType instanceof \PHPStan\Type\BooleanType) {
             return null;
         }
         if ($node->if === null) {

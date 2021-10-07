@@ -92,7 +92,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
         $type = $phpDocInfo->getVarType();
         if (!$type instanceof \PHPStan\Type\UnionType) {
-            $type = $this->getObjectType($assign->expr);
+            $type = $this->getType($assign->expr);
         }
         if (!$type instanceof \PHPStan\Type\UnionType) {
             return null;

@@ -90,12 +90,13 @@ CODE_SAMPLE
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $node->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         }
-        if ($node->stmts === null) {
+        $stmts = $node->stmts;
+        if ($stmts === null) {
             return null;
         }
-        if (\count($node->stmts) === 1) {
+        if (\count($stmts) === 1) {
             /** @var Expression|Expr $stmt */
-            $stmt = $node->stmts[0];
+            $stmt = $stmts[0];
             if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 return null;
             }

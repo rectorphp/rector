@@ -85,7 +85,8 @@ CODE_SAMPLE
             return null;
         }
         // type analyzer
-        if ($this->nodeTypeResolver->isStaticType($activeArgValue, \PHPStan\Type\StringType::class)) {
+        $activeValueType = $this->getStaticType($activeArgValue);
+        if ($activeValueType instanceof \PHPStan\Type\StringType) {
             $this->processStringType($node, $argumentPosition, $activeArgValue);
         }
         return $node;

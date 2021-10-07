@@ -86,7 +86,8 @@ CODE_SAMPLE
         /** @var Arg $secondArg */
         $secondArg = $node->args[1];
         $valueArgument = $secondArg->value;
-        if (!$this->nodeTypeResolver->isStaticType($valueArgument, \PHPStan\Type\StringType::class)) {
+        $valueType = $this->getType($valueArgument);
+        if (!$valueType instanceof \PHPStan\Type\StringType) {
             return null;
         }
         return $valueArgument;

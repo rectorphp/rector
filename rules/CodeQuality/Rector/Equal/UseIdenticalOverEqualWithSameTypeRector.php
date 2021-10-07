@@ -54,8 +54,8 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $leftStaticType = $this->getStaticType($node->left);
-        $rightStaticType = $this->getStaticType($node->right);
+        $leftStaticType = $this->getType($node->left);
+        $rightStaticType = $this->getType($node->right);
         // objects can be different by content
         if ($leftStaticType instanceof \PHPStan\Type\ObjectType) {
             return null;
