@@ -94,20 +94,7 @@ final class ExactCompareFactory
         $toNullNotIdentical = new NotIdentical($expr, $nullConstFetch);
 
         if ($unionType instanceof UnionType) {
-            $compareExprs = [];
-
-            foreach ($unionType->getTypes() as $unionedType) {
-                $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
-            }
-
-            /** @var Expr $truthyExpr */
-            $truthyExpr = array_shift($compareExprs);
-            foreach ($compareExprs as $compareExpr) {
-                /** @var Expr $compareExpr */
-                $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
-            }
-
-            return $truthyExpr;
+            return $this->resolveFromCleanedNullUnionType($unionType, $expr, $treatAsNotEmpty);
         }
 
         $compareExpr = $this->createNotIdenticalFalsyCompare($unionType, $expr, $treatAsNotEmpty);
@@ -116,6 +103,28 @@ final class ExactCompareFactory
         }
 
         return new BooleanAnd($toNullNotIdentical, $compareExpr);
+    }
+
+    private function resolveFromCleanedNullUnionType(UnionType $unionType, Expr $expr, bool $treatAsNotEmpty): ?Expr
+    {
+        $compareExprs = [];
+
+        foreach ($unionType->getTypes() as $unionedType) {
+            $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
+        }
+
+        /** @var Expr $truthyExpr */
+        $truthyExpr = array_shift($compareExprs);
+        foreach ($compareExprs as $compareExpr) {
+            if (! $compareExpr instanceof Expr) {
+                return null;
+            }
+
+            /** @var Expr $compareExpr */
+            $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
+        }
+
+        return $truthyExpr;
     }
 
     private function createTruthyFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNonEmpty): Expr|null
