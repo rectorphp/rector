@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211006\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20211007\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20211006\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20211006\Symfony\Component\HttpKernel\Event\ResponseEvent;
-use RectorPrefix20211006\Symfony\Component\HttpKernel\HttpCache\HttpCache;
-use RectorPrefix20211006\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface;
-use RectorPrefix20211006\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20211007\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20211007\Symfony\Component\HttpKernel\Event\ResponseEvent;
+use RectorPrefix20211007\Symfony\Component\HttpKernel\HttpCache\HttpCache;
+use RectorPrefix20211007\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface;
+use RectorPrefix20211007\Symfony\Component\HttpKernel\KernelEvents;
 /**
  * SurrogateListener adds a Surrogate-Control HTTP header when the Response needs to be parsed for Surrogates.
  *
@@ -22,10 +22,10 @@ use RectorPrefix20211006\Symfony\Component\HttpKernel\KernelEvents;
  *
  * @final
  */
-class SurrogateListener implements \RectorPrefix20211006\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class SurrogateListener implements \RectorPrefix20211007\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $surrogate;
-    public function __construct(\RectorPrefix20211006\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface $surrogate = null)
+    public function __construct(\RectorPrefix20211007\Symfony\Component\HttpKernel\HttpCache\SurrogateInterface $surrogate = null)
     {
         $this->surrogate = $surrogate;
     }
@@ -40,7 +40,7 @@ class SurrogateListener implements \RectorPrefix20211006\Symfony\Component\Event
         }
         $kernel = $event->getKernel();
         $surrogate = $this->surrogate;
-        if ($kernel instanceof \RectorPrefix20211006\Symfony\Component\HttpKernel\HttpCache\HttpCache) {
+        if ($kernel instanceof \RectorPrefix20211007\Symfony\Component\HttpKernel\HttpCache\HttpCache) {
             $surrogate = $kernel->getSurrogate();
             if (null !== $this->surrogate && $this->surrogate->getName() !== $surrogate->getName()) {
                 $surrogate = $this->surrogate;
@@ -53,6 +53,6 @@ class SurrogateListener implements \RectorPrefix20211006\Symfony\Component\Event
     }
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20211006\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
+        return [\RectorPrefix20211007\Symfony\Component\HttpKernel\KernelEvents::RESPONSE => 'onKernelResponse'];
     }
 }

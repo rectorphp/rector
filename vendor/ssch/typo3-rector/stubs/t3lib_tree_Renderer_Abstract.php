@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211006;
+namespace RectorPrefix20211007;
 
 if (\class_exists('t3lib_tree_Renderer_Abstract')) {
     return;

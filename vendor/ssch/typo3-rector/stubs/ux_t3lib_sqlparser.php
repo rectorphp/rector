@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211006;
+namespace RectorPrefix20211007;
 
 if (\class_exists('ux_t3lib_sqlparser')) {
     return;

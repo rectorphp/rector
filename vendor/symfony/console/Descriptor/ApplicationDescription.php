@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211006\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20211007\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20211006\Symfony\Component\Console\Application;
-use RectorPrefix20211006\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211006\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix20211007\Symfony\Component\Console\Application;
+use RectorPrefix20211007\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211007\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  *
@@ -36,7 +36,7 @@ class ApplicationDescription
      * @var Command[]
      */
     private $aliases;
-    public function __construct(\RectorPrefix20211006\Symfony\Component\Console\Application $application, string $namespace = null, bool $showHidden = \false)
+    public function __construct(\RectorPrefix20211007\Symfony\Component\Console\Application $application, string $namespace = null, bool $showHidden = \false)
     {
         $this->application = $application;
         $this->namespace = $namespace;
@@ -63,10 +63,10 @@ class ApplicationDescription
      * @throws CommandNotFoundException
      * @param string $name
      */
-    public function getCommand($name) : \RectorPrefix20211006\Symfony\Component\Console\Command\Command
+    public function getCommand($name) : \RectorPrefix20211007\Symfony\Component\Console\Command\Command
     {
         if (!isset($this->commands[$name]) && !isset($this->aliases[$name])) {
-            throw new \RectorPrefix20211006\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
+            throw new \RectorPrefix20211007\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));
         }
         return $this->commands[$name] ?? $this->aliases[$name];
     }

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211006\Symplify\EasyTesting\HttpKernel;
+namespace RectorPrefix20211007\Symplify\EasyTesting\HttpKernel;
 
-use RectorPrefix20211006\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20211006\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class EasyTestingKernel extends \RectorPrefix20211006\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+use RectorPrefix20211007\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20211007\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
+final class EasyTestingKernel extends \RectorPrefix20211007\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
     /**
      * @param \Symfony\Component\Config\Loader\LoaderInterface $loader

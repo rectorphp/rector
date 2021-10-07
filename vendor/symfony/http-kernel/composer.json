@@ -71,7 +71,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211006\\Symfony\\Component\\HttpKernel\\": ""
+            "RectorPrefix20211007\\Symfony\\Component\\HttpKernel\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

@@ -7,6 +7,9 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
@@ -47,12 +50,34 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         if (!$paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
-            return $paramTagValueNode->description === '';
+            return $this->isEmptyDescription($paramTagValueNode);
         }
         if (!$this->hasGenericType($paramTagValueNode->type)) {
-            return $paramTagValueNode->description === '';
+            return $this->isEmptyDescription($paramTagValueNode);
         }
         return \false;
+    }
+    private function isEmptyDescription(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode) : bool
+    {
+        if ($paramTagValueNode->description !== '') {
+            return \false;
+        }
+        $parent = $paramTagValueNode->getAttribute('parent');
+        if (!$parent instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+            return \true;
+        }
+        $parent = $parent->getAttribute('parent');
+        if (!$parent instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode) {
+            return \true;
+        }
+        $children = $parent->children;
+        if (!isset($children[1])) {
+            return \true;
+        }
+        if (!$children[1] instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
+            return \true;
+        }
+        return (string) $children[1] === '';
     }
     private function hasGenericType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
     {
