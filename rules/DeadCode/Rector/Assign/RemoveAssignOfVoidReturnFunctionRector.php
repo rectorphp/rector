@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $exprType = $this->nodeTypeResolver->resolve($node->expr);
+        $exprType = $this->nodeTypeResolver->getType($node->expr);
         if (! $exprType instanceof VoidType) {
             return null;
         }

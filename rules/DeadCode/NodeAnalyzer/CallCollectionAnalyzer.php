@@ -25,7 +25,7 @@ final class CallCollectionAnalyzer
     {
         foreach ($calls as $call) {
             $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
-            $callerType = $this->nodeTypeResolver->resolve($callerRoot);
+            $callerType = $this->nodeTypeResolver->getType($callerRoot);
 
             if (! $callerType instanceof TypeWithClassName) {
                 continue;

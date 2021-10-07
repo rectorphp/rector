@@ -34,7 +34,7 @@ final class ParamTypeInferer
 
             $inferedType = $this->genericClassStringTypeNormalizer->normalize($paramType);
             if ($param->default instanceof Node) {
-                $paramDefaultType = $this->nodeTypeResolver->resolve($param->default);
+                $paramDefaultType = $this->nodeTypeResolver->getType($param->default);
                 if (! $paramDefaultType instanceof $inferedType) {
                     return new MixedType();
                 }

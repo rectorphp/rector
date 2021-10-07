@@ -45,7 +45,7 @@ final class ArrayCallableToMethodCallFactory
             return null;
         }
 
-        $firstItemType = $this->nodeTypeResolver->resolve($firstItem->value);
+        $firstItemType = $this->nodeTypeResolver->getType($firstItem->value);
         if (! $firstItemType instanceof TypeWithClassName) {
             return null;
         }

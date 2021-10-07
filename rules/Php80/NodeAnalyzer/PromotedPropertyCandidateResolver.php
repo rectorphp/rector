@@ -177,7 +177,7 @@ final class PromotedPropertyCandidateResolver
             return false;
         }
 
-        $matchedParamType = $this->nodeTypeResolver->resolve($param);
+        $matchedParamType = $this->nodeTypeResolver->getType($param);
         if ($param->default !== null) {
             $defaultValueType = $this->nodeTypeResolver->getType($param->default);
             $matchedParamType = $this->typeFactory->createMixedPassedOrUnionType(

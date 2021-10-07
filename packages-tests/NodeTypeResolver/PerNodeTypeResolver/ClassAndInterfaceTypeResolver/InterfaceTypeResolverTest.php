@@ -23,7 +23,7 @@ final class InterfaceTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType($file, Interface_::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->getType($variableNodes[$nodePosition]);
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 
         /** @var TypeWithClassName $resolvedType */

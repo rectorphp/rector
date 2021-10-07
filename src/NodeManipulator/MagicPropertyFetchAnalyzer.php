@@ -33,7 +33,7 @@ final class MagicPropertyFetchAnalyzer
 
     public function isMagicOnType(PropertyFetch | StaticPropertyFetch $expr, Type $type): bool
     {
-        $varNodeType = $this->nodeTypeResolver->resolve($expr);
+        $varNodeType = $this->nodeTypeResolver->getType($expr);
 
         if ($varNodeType instanceof ErrorType) {
             return true;
@@ -65,7 +65,7 @@ final class MagicPropertyFetchAnalyzer
         if ($expr instanceof PropertyFetch) {
             $propertyFetchType = $scope->getType($expr->var);
         } else {
-            $propertyFetchType = $this->nodeTypeResolver->resolve($expr->class);
+            $propertyFetchType = $this->nodeTypeResolver->getType($expr->class);
         }
 
         if (! $propertyFetchType instanceof TypeWithClassName) {

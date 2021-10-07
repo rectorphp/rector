@@ -83,7 +83,7 @@ final class ContextAnalyzer
 
         foreach ($loopNodes as $loopNode) {
             $loopObjectType = new ObjectType($loopNode);
-            $parentType = $this->nodeTypeResolver->resolve($node);
+            $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);
             $isLoopType = $superType->yes();
 

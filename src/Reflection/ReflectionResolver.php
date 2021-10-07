@@ -76,7 +76,7 @@ final class ReflectionResolver
 
     public function resolveMethodReflectionFromStaticCall(StaticCall $staticCall): ?MethodReflection
     {
-        $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
+        $objectType = $this->nodeTypeResolver->getType($staticCall->class);
 
         /** @var array<class-string> $classes */
         $classes = TypeUtils::getDirectClassNames($objectType);
@@ -100,7 +100,7 @@ final class ReflectionResolver
 
     public function resolveMethodReflectionFromMethodCall(MethodCall $methodCall): ?MethodReflection
     {
-        $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
+        $callerType = $this->nodeTypeResolver->getType($methodCall->var);
         if (! $callerType instanceof TypeWithClassName) {
             return null;
         }
@@ -143,7 +143,7 @@ final class ReflectionResolver
 
     public function resolveMethodReflectionFromNew(New_ $new): ?MethodReflection
     {
-        $newClassType = $this->nodeTypeResolver->resolve($new->class);
+        $newClassType = $this->nodeTypeResolver->getType($new->class);
         if (! $newClassType instanceof TypeWithClassName) {
             return null;
         }
@@ -156,8 +156,8 @@ final class ReflectionResolver
         PropertyFetch | StaticPropertyFetch $propertyFetch
     ): ?PhpPropertyReflection {
         $fetcheeType = $propertyFetch instanceof PropertyFetch
-            ? $this->nodeTypeResolver->resolve($propertyFetch->var)
-            : $this->nodeTypeResolver->resolve($propertyFetch->class);
+            ? $this->nodeTypeResolver->getType($propertyFetch->var)
+            : $this->nodeTypeResolver->getType($propertyFetch->class);
 
         if (! $fetcheeType instanceof TypeWithClassName) {
             return null;

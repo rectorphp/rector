@@ -66,9 +66,9 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         }
 
         if ($node instanceof MethodCall) {
-            $callerType = $this->nodeTypeResolver->resolve($node->var);
+            $callerType = $this->nodeTypeResolver->getType($node->var);
         } else {
-            $callerType = $this->nodeTypeResolver->resolve($node->class);
+            $callerType = $this->nodeTypeResolver->getType($node->class);
         }
 
         foreach ($callerType->getReferencedClasses() as $referencedClass) {

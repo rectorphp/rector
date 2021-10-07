@@ -60,7 +60,7 @@ final class ArrayCallableMethodMatcher
         $calleeType = $firstItemValue instanceof ClassConstFetch
             // static ::class reference?
             ? $this->resolveClassConstFetchType($firstItemValue)
-            : $this->nodeTypeResolver->resolve($firstItemValue);
+            : $this->nodeTypeResolver->getType($firstItemValue);
 
         if (! $calleeType instanceof TypeWithClassName) {
             return null;

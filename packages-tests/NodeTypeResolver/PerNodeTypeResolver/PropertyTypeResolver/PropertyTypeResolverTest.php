@@ -28,7 +28,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $propertyNodes = $this->getNodesForFileOfType($file, Property::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($propertyNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->getType($propertyNodes[$nodePosition]);
 
         // type is as expected
         $expectedTypeClass = $expectedType::class;

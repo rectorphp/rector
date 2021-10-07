@@ -26,7 +26,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType($file, Class_::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->getType($variableNodes[$nodePosition]);
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 
         /** @var TypeWithClassName $resolvedType */
@@ -54,7 +54,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
 
         $variableNodes = $this->getNodesForFileOfType($file, Class_::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[0]);
+        $resolvedType = $this->nodeTypeResolver->getType($variableNodes[0]);
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 
         /** @var TypeWithClassName $resolvedType */

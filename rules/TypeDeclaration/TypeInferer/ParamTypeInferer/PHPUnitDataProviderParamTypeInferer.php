@@ -159,7 +159,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
 
     private function getTypeFromClassMethodYield(Array_ $classMethodYieldArrayNode): MixedType | ConstantArrayType
     {
-        $arrayTypes = $this->nodeTypeResolver->resolve($classMethodYieldArrayNode);
+        $arrayTypes = $this->nodeTypeResolver->getType($classMethodYieldArrayNode);
 
         // impossible to resolve
         if (! $arrayTypes instanceof ConstantArrayType) {
@@ -200,7 +200,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
                     continue;
                 }
 
-                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
+                $paramOnPositionTypes[] = $this->nodeTypeResolver->getType($singleDataProvidedSetItem->value);
             }
         }
 

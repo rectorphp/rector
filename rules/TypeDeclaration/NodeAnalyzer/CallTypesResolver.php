@@ -77,7 +77,7 @@ final class CallTypesResolver
         if ($typeStrictness->equals(TypeStrictness::STRICTNESS_TYPE_DECLARATION())) {
             $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         } else {
-            $argValueType = $this->nodeTypeResolver->resolve($arg->value);
+            $argValueType = $this->nodeTypeResolver->getType($arg->value);
         }
 
         // "self" in another object is not correct, this make it independent

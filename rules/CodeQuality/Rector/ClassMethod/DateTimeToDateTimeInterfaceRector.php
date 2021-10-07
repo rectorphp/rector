@@ -207,7 +207,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $type = $this->nodeTypeResolver->resolve($return->expr);
+        $type = $this->nodeTypeResolver->getType($return->expr);
         return $type instanceof ObjectType && $type->getClassName() === self::DATE_TIME;
     }
 }

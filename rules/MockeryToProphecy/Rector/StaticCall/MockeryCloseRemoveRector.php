@@ -39,7 +39,7 @@ final class MockeryCloseRemoveRector extends AbstractRector
             return null;
         }
 
-        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        $callerType = $this->nodeTypeResolver->getType($node->class);
         if (! $callerType->isSuperTypeOf(new ObjectType('Mockery'))->yes()) {
             return null;
         }

@@ -45,6 +45,6 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
             return new ObjectWithoutClassType();
         }
 
-        return $this->nodeTypeResolver->resolve($classLike);
+        return $this->nodeTypeResolver->getType($classLike);
     }
 }

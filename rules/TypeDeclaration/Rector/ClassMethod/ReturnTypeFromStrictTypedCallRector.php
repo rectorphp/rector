@@ -142,7 +142,7 @@ CODE_SAMPLE
 
     private function processArrowFunction(ArrowFunction $arrowFunction): ?ArrowFunction
     {
-        $resolvedType = $this->nodeTypeResolver->resolve($arrowFunction->expr);
+        $resolvedType = $this->nodeTypeResolver->getType($arrowFunction->expr);
 
         // void type is not accepted for arrow functions - https://www.php.net/manual/en/functions.arrow.php#125673
         if ($resolvedType instanceof VoidType) {
@@ -213,7 +213,7 @@ CODE_SAMPLE
         Identifier | Name | NullableType | PhpParserUnionType $returnedStrictTypeNode,
         ClassMethod | Function_ | Closure $functionLike
     ): Closure | ClassMethod | Function_ {
-        $resolvedType = $this->nodeTypeResolver->resolve($return);
+        $resolvedType = $this->nodeTypeResolver->getType($return);
 
         if ($resolvedType instanceof UnionType) {
             if (! $returnedStrictTypeNode instanceof NullableType) {

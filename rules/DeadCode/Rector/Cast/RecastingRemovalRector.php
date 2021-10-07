@@ -123,8 +123,8 @@ CODE_SAMPLE
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
         if (! $phpPropertyReflection instanceof PhpPropertyReflection) {
             $propertyType = $expr instanceof StaticPropertyFetch
-                ? $this->nodeTypeResolver->resolve($expr->class)
-                : $this->nodeTypeResolver->resolve($expr->var);
+                ? $this->nodeTypeResolver->getType($expr->class)
+                : $this->nodeTypeResolver->getType($expr->var);
 
             // need to UnionType check due rectify with RecastingRemovalRector + CountOnNullRector
             // cause add (array) cast on $node->args

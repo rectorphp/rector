@@ -79,7 +79,7 @@ final class LivingCodeManipulator
         }
 
         if ($expr instanceof ArrayDimFetch) {
-            $type = $this->nodeTypeResolver->resolve($expr->var);
+            $type = $this->nodeTypeResolver->getType($expr->var);
 
             if ($type instanceof ObjectType) {
                 $objectType = new ObjectType('ArrayAccess');

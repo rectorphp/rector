@@ -216,9 +216,9 @@ final class AstResolver
     public function resolveClassMethodFromCall(MethodCall | StaticCall $call): ?ClassMethod
     {
         if ($call instanceof MethodCall) {
-            $callerStaticType = $this->nodeTypeResolver->resolve($call->var);
+            $callerStaticType = $this->nodeTypeResolver->getType($call->var);
         } else {
-            $callerStaticType = $this->nodeTypeResolver->resolve($call->class);
+            $callerStaticType = $this->nodeTypeResolver->getType($call->class);
         }
 
         if (! $callerStaticType instanceof TypeWithClassName) {

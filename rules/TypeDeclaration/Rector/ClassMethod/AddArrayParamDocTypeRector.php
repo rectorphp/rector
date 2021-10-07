@@ -138,7 +138,7 @@ CODE_SAMPLE
         }
 
         // not an array type
-        $paramType = $this->nodeTypeResolver->resolve($param->type);
+        $paramType = $this->nodeTypeResolver->getType($param->type);
 
         // weird case for maybe interface
         if ($paramType->isIterable()->maybe() && ($paramType instanceof ObjectType)) {

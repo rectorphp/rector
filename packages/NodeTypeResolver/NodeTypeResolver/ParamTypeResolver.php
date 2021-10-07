@@ -110,7 +110,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
                     return null;
                 }
 
-                $paramStaticType = $this->nodeTypeResolver->resolve($node);
+                $paramStaticType = $this->nodeTypeResolver->getType($node);
 
                 return NodeTraverser::STOP_TRAVERSAL;
             }

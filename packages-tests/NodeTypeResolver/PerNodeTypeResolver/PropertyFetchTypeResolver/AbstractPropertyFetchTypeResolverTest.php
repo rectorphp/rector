@@ -22,7 +22,7 @@ abstract class AbstractPropertyFetchTypeResolverTest extends AbstractNodeTypeRes
         $expectedFileInfo = $inputFileInfoAndExpectedFileInfo->getExpectedFileInfo();
 
         $propertyFetchNodes = $this->getNodesForFileOfType($inputFileInfo->getRealPath(), PropertyFetch::class);
-        $resolvedType = $this->nodeTypeResolver->resolve($propertyFetchNodes[0]);
+        $resolvedType = $this->nodeTypeResolver->getType($propertyFetchNodes[0]);
 
         $expectedType = include $expectedFileInfo->getRealPath();
 

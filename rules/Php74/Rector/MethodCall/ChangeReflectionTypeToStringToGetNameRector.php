@@ -116,7 +116,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $this->nodeTypeResolver->resolve($node->expr);
+        $type = $this->nodeTypeResolver->getType($node->expr);
         if (! $type instanceof UnionType) {
             return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
         }

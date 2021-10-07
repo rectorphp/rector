@@ -39,6 +39,6 @@ final class ReturnTypeResolver implements NodeTypeResolverInterface
             return new VoidType();
         }
 
-        return $this->nodeTypeResolver->resolve($node->expr);
+        return $this->nodeTypeResolver->getType($node->expr);
     }
 }

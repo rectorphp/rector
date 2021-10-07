@@ -44,6 +44,6 @@ final class PropertyTypeResolver implements NodeTypeResolverInterface
         $propertyFetch = new PropertyFetch(new Variable('this'), (string) $node->props[0]->name);
         $propertyFetch->setAttribute(AttributeKey::SCOPE, $node->getAttribute(AttributeKey::SCOPE));
 
-        return $this->nodeTypeResolver->resolve($propertyFetch);
+        return $this->nodeTypeResolver->getType($propertyFetch);
     }
 }

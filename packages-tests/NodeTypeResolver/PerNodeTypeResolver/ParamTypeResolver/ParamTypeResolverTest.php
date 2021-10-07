@@ -23,7 +23,7 @@ final class ParamTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType($file, Param::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->getType($variableNodes[$nodePosition]);
 
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 

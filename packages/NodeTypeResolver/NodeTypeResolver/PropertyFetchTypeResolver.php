@@ -81,7 +81,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $varType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+        $varType = $this->nodeTypeResolver->getType($propertyFetch->var);
         if (! $varType instanceof ObjectType) {
             return new MixedType();
         }

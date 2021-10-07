@@ -29,7 +29,7 @@ final class CountableAnalyzer
             return false;
         }
 
-        $callerObjectType = $this->nodeTypeResolver->resolve($expr->var);
+        $callerObjectType = $this->nodeTypeResolver->getType($expr->var);
 
         $propertyName = $this->nodeNameResolver->getName($expr->name);
         if (! is_string($propertyName)) {

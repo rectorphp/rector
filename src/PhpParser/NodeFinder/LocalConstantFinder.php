@@ -27,7 +27,7 @@ final class LocalConstantFinder
             return null;
         }
 
-        $constantClassType = $this->nodeTypeResolver->resolve($classConstFetch->class);
+        $constantClassType = $this->nodeTypeResolver->getType($classConstFetch->class);
         if (! $constantClassType instanceof TypeWithClassName) {
             return null;
         }

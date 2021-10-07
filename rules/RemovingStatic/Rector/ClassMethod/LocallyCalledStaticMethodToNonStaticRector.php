@@ -155,7 +155,7 @@ CODE_SAMPLE
         $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
         $objectType = new ObjectType($className);
 
-        $callerType = $this->nodeTypeResolver->resolve($staticCall->class);
+        $callerType = $this->nodeTypeResolver->getType($staticCall->class);
         return $objectType->equals($callerType);
     }
 }

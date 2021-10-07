@@ -118,7 +118,7 @@ CODE_SAMPLE
 
     private function collectExpr(Expr $expr): void
     {
-        $type = $this->nodeTypeResolver->resolve($expr);
+        $type = $this->nodeTypeResolver->getType($expr);
         $found = false;
 
         foreach (self::FORMAT_SPECIFIERS as $key => $types) {

@@ -25,7 +25,7 @@ final class TraitTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $variableNodes = $this->getNodesForFileOfType($file, Trait_::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($variableNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->getType($variableNodes[$nodePosition]);
         $this->assertEquals($expectedType, $resolvedType);
     }
 

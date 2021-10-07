@@ -53,7 +53,7 @@ final class UselessIfCondBeforeForeachDetector
         }
 
         // is array though?
-        $arrayType = $this->nodeTypeResolver->resolve($empty->expr);
+        $arrayType = $this->nodeTypeResolver->getType($empty->expr);
         if (! $arrayType instanceof ArrayType) {
             return false;
         }

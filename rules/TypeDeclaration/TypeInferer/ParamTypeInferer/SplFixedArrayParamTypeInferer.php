@@ -25,7 +25,7 @@ final class SplFixedArrayParamTypeInferer implements ParamTypeInfererInterface
             return new MixedType();
         }
 
-        $paramType = $this->nodeTypeResolver->resolve($param->type);
+        $paramType = $this->nodeTypeResolver->getType($param->type);
         return $this->splArrayFixedTypeNarrower->narrow($paramType);
     }
 }

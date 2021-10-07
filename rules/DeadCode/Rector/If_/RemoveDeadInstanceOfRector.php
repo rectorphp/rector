@@ -118,8 +118,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $classType = $this->nodeTypeResolver->resolve($instanceof->class);
-        $exprType = $this->nodeTypeResolver->resolve($instanceof->expr);
+        $classType = $this->nodeTypeResolver->getType($instanceof->class);
+        $exprType = $this->nodeTypeResolver->getType($instanceof->expr);
 
         $isSameStaticTypeOrSubtype = $classType->equals($exprType) || $classType->isSuperTypeOf($exprType)
             ->yes();
