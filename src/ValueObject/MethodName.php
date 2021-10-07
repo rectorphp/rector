@@ -8,6 +8,14 @@ final class MethodName
     /**
      * @var string
      */
+    public const __SET = '__set';
+    /**
+     * @var string
+     */
+    public const __GET = '__get';
+    /**
+     * @var string
+     */
     public const CONSTRUCT = '__construct';
     /**
      * @var string

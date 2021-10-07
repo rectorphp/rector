@@ -1687,6 +1687,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Name\\FixClassCaseSensitivityNameRector' => $baseDir . '/rules/CodeQuality/Rector/Name/FixClassCaseSensitivityNameRector.php',
     'Rector\\CodeQuality\\Rector\\New_\\NewStaticToNewSelfRector' => $baseDir . '/rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php',
     'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => $baseDir . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
+    'Rector\\CodeQuality\\Rector\\PropertyFetch\\ExplicitMethodCallOverMagicGetSetRector' => $baseDir . '/rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php',
     'Rector\\CodeQuality\\Rector\\Return_\\SimplifyUselessVariableRector' => $baseDir . '/rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
