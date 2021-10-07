@@ -69,9 +69,9 @@ final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver
             return $nodeReturnType;
         }
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
-            $callerType = $this->nodeTypeResolver->resolve($node->var);
+            $callerType = $this->nodeTypeResolver->getType($node->var);
         } else {
-            $callerType = $this->nodeTypeResolver->resolve($node->class);
+            $callerType = $this->nodeTypeResolver->getType($node->class);
         }
         foreach ($callerType->getReferencedClasses() as $referencedClass) {
             $classMethodReturnType = $this->resolveClassMethodReturnType($referencedClass, $methodName, $scope);

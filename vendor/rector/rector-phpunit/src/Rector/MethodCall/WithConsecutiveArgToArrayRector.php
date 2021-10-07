@@ -137,7 +137,7 @@ CODE_SAMPLE
             if ($arg->value instanceof \PhpParser\Node\Expr\Array_) {
                 return \true;
             }
-            $argumentStaticType = $this->getStaticType($arg->value);
+            $argumentStaticType = $this->getType($arg->value);
             if ($argumentStaticType instanceof \PHPStan\Type\ArrayType) {
                 return \true;
             }

@@ -71,7 +71,7 @@ final class ClassMethodParameterTypeManipulator
             if (!$this->nodeTypeResolver->isObjectType($param, $objectType)) {
                 continue;
             }
-            $paramType = $this->nodeTypeResolver->resolve($param);
+            $paramType = $this->nodeTypeResolver->getType($param);
             if (!$paramType->isSuperTypeOf($objectType)->yes()) {
                 continue;
             }

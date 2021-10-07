@@ -38,6 +38,6 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
         if ($node->expr === null) {
             return new \PHPStan\Type\VoidType();
         }
-        return $this->nodeTypeResolver->resolve($node->expr);
+        return $this->nodeTypeResolver->getType($node->expr);
     }
 }

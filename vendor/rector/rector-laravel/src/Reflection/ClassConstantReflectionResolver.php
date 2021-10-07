@@ -31,7 +31,7 @@ final class ClassConstantReflectionResolver
     }
     public function resolveFromClassConstFetch(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch) : ?\PHPStan\Reflection\ConstantReflection
     {
-        $constClassType = $this->nodeTypeResolver->resolve($classConstFetch->class);
+        $constClassType = $this->nodeTypeResolver->getType($classConstFetch->class);
         if (!$constClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }

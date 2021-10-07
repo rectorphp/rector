@@ -101,7 +101,7 @@ CODE_SAMPLE
         if (!$this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('ReflectionType'))) {
             return null;
         }
-        $type = $this->nodeTypeResolver->resolve($node->expr);
+        $type = $this->nodeTypeResolver->getType($node->expr);
         if (!$type instanceof \PHPStan\Type\UnionType) {
             return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
         }

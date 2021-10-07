@@ -50,7 +50,7 @@ final class SideEffectNodeDetector
         if ($expr instanceof \PhpParser\Node\Expr\Assign) {
             return \true;
         }
-        $exprStaticType = $this->nodeTypeResolver->resolve($expr);
+        $exprStaticType = $this->nodeTypeResolver->getType($expr);
         if ($exprStaticType instanceof \PHPStan\Type\ConstantType) {
             return \false;
         }

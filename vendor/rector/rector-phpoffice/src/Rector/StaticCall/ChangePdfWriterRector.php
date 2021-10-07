@@ -56,7 +56,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        $callerType = $this->nodeTypeResolver->getType($node->class);
         if ($this->isSettingsPdfRendererStaticCall($callerType, $node)) {
             $this->removeNode($node);
             return null;

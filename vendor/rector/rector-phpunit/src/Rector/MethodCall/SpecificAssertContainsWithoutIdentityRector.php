@@ -72,7 +72,7 @@ CODE_SAMPLE
             return null;
         }
         // when second argument is string: do nothing
-        $secondArgType = $this->getStaticType($node->args[1]->value);
+        $secondArgType = $this->getType($node->args[1]->value);
         if ($secondArgType instanceof \PHPStan\Type\StringType) {
             return null;
         }

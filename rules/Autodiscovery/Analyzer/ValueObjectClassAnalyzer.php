@@ -62,7 +62,7 @@ final class ValueObjectClassAnalyzer
         }
         // resolve constructor types
         foreach ($constructClassMethod->params as $param) {
-            $paramType = $this->nodeTypeResolver->resolve($param);
+            $paramType = $this->nodeTypeResolver->getType($param);
             if (!$paramType instanceof \PHPStan\Type\ObjectType) {
                 continue;
             }

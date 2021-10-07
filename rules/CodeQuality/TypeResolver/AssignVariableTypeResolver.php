@@ -19,8 +19,8 @@ final class AssignVariableTypeResolver
     }
     public function resolve(\PhpParser\Node\Expr\Assign $assign) : \PHPStan\Type\Type
     {
-        $variableType = $this->nodeTypeResolver->resolve($assign->var);
-        $exprType = $this->nodeTypeResolver->resolve($assign->expr);
+        $variableType = $this->nodeTypeResolver->getType($assign->var);
+        $exprType = $this->nodeTypeResolver->getType($assign->expr);
         if ($exprType instanceof \PHPStan\Type\UnionType) {
             $variableType = $exprType;
         }

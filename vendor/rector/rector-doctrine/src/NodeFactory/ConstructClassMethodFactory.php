@@ -80,7 +80,7 @@ final class ConstructClassMethodFactory
     }
     private function createParam(\PhpParser\Node\Stmt\Property $property, string $propertyName) : \PhpParser\Node\Param
     {
-        $propertyType = $this->nodeTypeResolver->resolve($property);
+        $propertyType = $this->nodeTypeResolver->getType($property);
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
         $paramVariable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = new \PhpParser\Node\Param($paramVariable);

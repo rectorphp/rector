@@ -51,7 +51,7 @@ final class ClassMethodReturnTypeManipulator
         if (!$this->nodeTypeResolver->isObjectType($returnType, $objectType)) {
             return null;
         }
-        $paramType = $this->nodeTypeResolver->resolve($returnType);
+        $paramType = $this->nodeTypeResolver->getType($returnType);
         if (!$paramType->isSuperTypeOf($objectType)->yes()) {
             return null;
         }

@@ -62,7 +62,7 @@ final class UselessIfCondBeforeForeachDetector
             return \false;
         }
         // is array though?
-        $arrayType = $this->nodeTypeResolver->resolve($empty->expr);
+        $arrayType = $this->nodeTypeResolver->getType($empty->expr);
         if (!$arrayType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }

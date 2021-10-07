@@ -134,7 +134,7 @@ CODE_SAMPLE
     }
     private function processArrowFunction(\PhpParser\Node\Expr\ArrowFunction $arrowFunction) : ?\PhpParser\Node\Expr\ArrowFunction
     {
-        $resolvedType = $this->nodeTypeResolver->resolve($arrowFunction->expr);
+        $resolvedType = $this->nodeTypeResolver->getType($arrowFunction->expr);
         // void type is not accepted for arrow functions - https://www.php.net/manual/en/functions.arrow.php#125673
         if ($resolvedType instanceof \PHPStan\Type\VoidType) {
             return null;
@@ -198,7 +198,7 @@ CODE_SAMPLE
      */
     private function refactorSingleReturnType(\PhpParser\Node\Stmt\Return_ $return, $returnedStrictTypeNode, $functionLike)
     {
-        $resolvedType = $this->nodeTypeResolver->resolve($return);
+        $resolvedType = $this->nodeTypeResolver->getType($return);
         if ($resolvedType instanceof \PHPStan\Type\UnionType) {
             if (!$returnedStrictTypeNode instanceof \PhpParser\Node\NullableType) {
                 return $functionLike;

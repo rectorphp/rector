@@ -153,7 +153,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
      */
     private function getTypeFromClassMethodYield(\PhpParser\Node\Expr\Array_ $classMethodYieldArrayNode)
     {
-        $arrayTypes = $this->nodeTypeResolver->resolve($classMethodYieldArrayNode);
+        $arrayTypes = $this->nodeTypeResolver->getType($classMethodYieldArrayNode);
         // impossible to resolve
         if (!$arrayTypes instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return new \PHPStan\Type\MixedType();
@@ -185,7 +185,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
                 if (!$singleDataProvidedSetItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                     continue;
                 }
-                $paramOnPositionTypes[] = $this->nodeTypeResolver->resolve($singleDataProvidedSetItem->value);
+                $paramOnPositionTypes[] = $this->nodeTypeResolver->getType($singleDataProvidedSetItem->value);
             }
         }
         return $paramOnPositionTypes;

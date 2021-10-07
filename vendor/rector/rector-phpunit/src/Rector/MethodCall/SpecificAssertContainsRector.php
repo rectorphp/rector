@@ -82,7 +82,7 @@ CODE_SAMPLE
     }
     private function isPossiblyStringType(\PhpParser\Node\Expr $expr) : bool
     {
-        $exprType = $this->getStaticType($expr);
+        $exprType = $this->getType($expr);
         if ($exprType instanceof \PHPStan\Type\UnionType) {
             foreach ($exprType->getTypes() as $unionedType) {
                 if ($unionedType instanceof \PHPStan\Type\StringType) {

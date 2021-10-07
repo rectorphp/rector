@@ -67,7 +67,7 @@ final class ArrayCallableMethodMatcher
         $items = $array->items;
         // $this, self, static, FQN
         $firstItemValue = $items[0]->value;
-        $calleeType = $firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch ? $this->resolveClassConstFetchType($firstItemValue) : $this->nodeTypeResolver->resolve($firstItemValue);
+        $calleeType = $firstItemValue instanceof \PhpParser\Node\Expr\ClassConstFetch ? $this->resolveClassConstFetchType($firstItemValue) : $this->nodeTypeResolver->getType($firstItemValue);
         if (!$calleeType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }

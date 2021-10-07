@@ -84,7 +84,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
     }
     private function resolveClassReflectionByExpr(\PhpParser\Node\Expr $expr) : ?\PHPStan\Reflection\ClassReflection
     {
-        $staticType = $this->nodeTypeResolver->resolve($expr);
+        $staticType = $this->nodeTypeResolver->getType($expr);
         if (!$staticType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }

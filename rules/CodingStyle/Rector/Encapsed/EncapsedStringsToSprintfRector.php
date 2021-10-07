@@ -95,7 +95,7 @@ CODE_SAMPLE
     }
     private function collectExpr(\PhpParser\Node\Expr $expr) : void
     {
-        $type = $this->nodeTypeResolver->resolve($expr);
+        $type = $this->nodeTypeResolver->getType($expr);
         $found = \false;
         foreach (self::FORMAT_SPECIFIERS as $key => $types) {
             if (\in_array(\get_class($type), $types, \true)) {

@@ -109,7 +109,7 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
             if (!$this->nodeNameResolver->isName($node, $paramName)) {
                 return null;
             }
-            $paramStaticType = $this->nodeTypeResolver->resolve($node);
+            $paramStaticType = $this->nodeTypeResolver->getType($node);
             return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $paramStaticType;

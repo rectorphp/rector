@@ -80,7 +80,7 @@ CODE_SAMPLE
         if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $callerType = $this->nodeTypeResolver->resolve($node->var);
+        $callerType = $this->nodeTypeResolver->getType($node->var);
         $containerObjectType = new \PHPStan\Type\ObjectType('Nette\\DI\\Container');
         if (!$containerObjectType->isSuperTypeOf($callerType)->yes()) {
             return null;

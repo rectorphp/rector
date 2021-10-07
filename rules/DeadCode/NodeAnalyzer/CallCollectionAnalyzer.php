@@ -30,7 +30,7 @@ final class CallCollectionAnalyzer
     {
         foreach ($calls as $call) {
             $callerRoot = $call instanceof \PhpParser\Node\Expr\StaticCall ? $call->class : $call->var;
-            $callerType = $this->nodeTypeResolver->resolve($callerRoot);
+            $callerType = $this->nodeTypeResolver->getType($callerRoot);
             if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }

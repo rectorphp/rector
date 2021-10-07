@@ -80,7 +80,7 @@ final class ContextAnalyzer
         $loopNodes = self::LOOP_NODES;
         foreach ($loopNodes as $loopNode) {
             $loopObjectType = new \PHPStan\Type\ObjectType($loopNode);
-            $parentType = $this->nodeTypeResolver->resolve($node);
+            $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);
             $isLoopType = $superType->yes();
             if (!$isLoopType) {

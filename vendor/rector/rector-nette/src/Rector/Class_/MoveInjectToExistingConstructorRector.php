@@ -109,7 +109,7 @@ CODE_SAMPLE
             $this->removeInjectAnnotation($injectProperty);
             $this->changePropertyVisibility($injectProperty);
             $propertyName = $this->nodeNameResolver->getName($injectProperty);
-            $propertyType = $this->nodeTypeResolver->resolve($injectProperty);
+            $propertyType = $this->nodeTypeResolver->getType($injectProperty);
             $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $injectProperty->flags);
             $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {

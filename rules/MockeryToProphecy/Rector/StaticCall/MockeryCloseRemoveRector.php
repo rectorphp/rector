@@ -38,7 +38,7 @@ final class MockeryCloseRemoveRector extends \Rector\Core\Rector\AbstractRector
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        $callerType = $this->nodeTypeResolver->getType($node->class);
         if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('Mockery'))->yes()) {
             return null;
         }

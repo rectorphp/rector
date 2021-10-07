@@ -34,7 +34,7 @@ final class CountableTypeAnalyzer
     }
     public function isCountableType(\PhpParser\Node $node) : bool
     {
-        $nodeType = $this->nodeTypeResolver->resolve($node);
+        $nodeType = $this->nodeTypeResolver->getType($node);
         $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);
         foreach ($this->countableObjectTypes as $countableObjectType) {
             if ($countableObjectType->isSuperTypeOf($nodeType)->yes()) {

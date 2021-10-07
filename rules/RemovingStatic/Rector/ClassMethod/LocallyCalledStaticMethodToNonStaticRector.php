@@ -128,7 +128,7 @@ CODE_SAMPLE
     {
         $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         $objectType = new \PHPStan\Type\ObjectType($className);
-        $callerType = $this->nodeTypeResolver->resolve($staticCall->class);
+        $callerType = $this->nodeTypeResolver->getType($staticCall->class);
         return $objectType->equals($callerType);
     }
 }

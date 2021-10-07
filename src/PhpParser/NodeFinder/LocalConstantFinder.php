@@ -31,7 +31,7 @@ final class LocalConstantFinder
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        $constantClassType = $this->nodeTypeResolver->resolve($classConstFetch->class);
+        $constantClassType = $this->nodeTypeResolver->getType($classConstFetch->class);
         if (!$constantClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }

@@ -103,7 +103,7 @@ CODE_SAMPLE
         $this->changePropertyVisibility($property);
         $class = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         $propertyName = $this->nodeNameResolver->getName($property);
-        $propertyType = $this->nodeTypeResolver->resolve($property);
+        $propertyType = $this->nodeTypeResolver->getType($property);
         $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $property->flags);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::PROPERTY_PROMOTION)) {

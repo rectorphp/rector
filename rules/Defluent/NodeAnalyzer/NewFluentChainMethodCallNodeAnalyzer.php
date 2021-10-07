@@ -45,11 +45,11 @@ final class NewFluentChainMethodCallNodeAnalyzer
         if (!$onlyArgValue instanceof \PhpParser\Node\Expr\New_) {
             return null;
         }
-        $newType = $this->nodeTypeResolver->resolve($onlyArgValue);
+        $newType = $this->nodeTypeResolver->getType($onlyArgValue);
         if ($newType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        $parentMethodCallReturnType = $this->nodeTypeResolver->resolve($methodCall);
+        $parentMethodCallReturnType = $this->nodeTypeResolver->getType($methodCall);
         if (!$newType->equals($parentMethodCallReturnType)) {
             return null;
         }

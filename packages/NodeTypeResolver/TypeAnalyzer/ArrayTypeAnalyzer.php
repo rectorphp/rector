@@ -44,7 +44,7 @@ final class ArrayTypeAnalyzer
     }
     public function isArrayType(\PhpParser\Node $node) : bool
     {
-        $nodeStaticType = $this->nodeTypeResolver->resolve($node);
+        $nodeStaticType = $this->nodeTypeResolver->getType($node);
         $nodeStaticType = $this->pregMatchTypeCorrector->correct($node, $nodeStaticType);
         if ($this->isIntersectionArrayType($nodeStaticType)) {
             return \true;
@@ -109,9 +109,9 @@ final class ArrayTypeAnalyzer
         }
         // also possible 3rd party vendor
         if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            $propertyOwnerStaticType = $this->nodeTypeResolver->resolve($node->var);
+            $propertyOwnerStaticType = $this->nodeTypeResolver->getType($node->var);
         } else {
-            $propertyOwnerStaticType = $this->nodeTypeResolver->resolve($node->class);
+            $propertyOwnerStaticType = $this->nodeTypeResolver->getType($node->class);
         }
         if ($propertyOwnerStaticType instanceof \PHPStan\Type\ThisType) {
             return \false;

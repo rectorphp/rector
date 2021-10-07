@@ -69,7 +69,7 @@ final class ParamAndArgFromArrayResolver
                     continue;
                 }
                 $variable = new \PhpParser\Node\Expr\Variable($variableName . ($i === 1 ? '' : $i));
-                $itemsStaticType = $this->nodeTypeResolver->getStaticType($nestedArrayItem->value);
+                $itemsStaticType = $this->nodeTypeResolver->getType($nestedArrayItem->value);
                 $paramAndArgs[] = new \Rector\PHPUnit\ValueObject\ParamAndArg($variable, $itemsStaticType);
                 ++$i;
             }
@@ -84,7 +84,7 @@ final class ParamAndArgFromArrayResolver
                 if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                     continue;
                 }
-                $staticTypes[] = $this->nodeTypeResolver->getStaticType($arrayItem->value);
+                $staticTypes[] = $this->nodeTypeResolver->getType($arrayItem->value);
             }
         }
         return $this->typeFactory->createMixedPassedOrUnionType($staticTypes);

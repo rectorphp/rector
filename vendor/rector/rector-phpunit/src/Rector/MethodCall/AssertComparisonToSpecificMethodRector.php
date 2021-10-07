@@ -110,7 +110,7 @@ final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\A
     }
     private function isConstantValue(\PhpParser\Node\Expr $expr) : bool
     {
-        $staticType = $this->nodeTypeResolver->getStaticType($expr);
+        $staticType = $this->nodeTypeResolver->getType($expr);
         if ($staticType instanceof \PHPStan\Type\ConstantScalarType) {
             return \true;
         }

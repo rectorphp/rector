@@ -82,7 +82,7 @@ final class ReflectionResolver
     }
     public function resolveMethodReflectionFromStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PHPStan\Reflection\MethodReflection
     {
-        $objectType = $this->nodeTypeResolver->resolve($staticCall->class);
+        $objectType = $this->nodeTypeResolver->getType($staticCall->class);
         /** @var array<class-string> $classes */
         $classes = \PHPStan\Type\TypeUtils::getDirectClassNames($objectType);
         $methodName = $this->nodeNameResolver->getName($staticCall->name);
@@ -100,7 +100,7 @@ final class ReflectionResolver
     }
     public function resolveMethodReflectionFromMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Reflection\MethodReflection
     {
-        $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
+        $callerType = $this->nodeTypeResolver->getType($methodCall->var);
         if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
@@ -137,7 +137,7 @@ final class ReflectionResolver
     }
     public function resolveMethodReflectionFromNew(\PhpParser\Node\Expr\New_ $new) : ?\PHPStan\Reflection\MethodReflection
     {
-        $newClassType = $this->nodeTypeResolver->resolve($new->class);
+        $newClassType = $this->nodeTypeResolver->getType($new->class);
         if (!$newClassType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
@@ -149,7 +149,7 @@ final class ReflectionResolver
      */
     public function resolvePropertyReflectionFromPropertyFetch($propertyFetch) : ?\PHPStan\Reflection\Php\PhpPropertyReflection
     {
-        $fetcheeType = $propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch ? $this->nodeTypeResolver->resolve($propertyFetch->var) : $this->nodeTypeResolver->resolve($propertyFetch->class);
+        $fetcheeType = $propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch ? $this->nodeTypeResolver->getType($propertyFetch->var) : $this->nodeTypeResolver->getType($propertyFetch->class);
         if (!$fetcheeType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }

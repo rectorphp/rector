@@ -151,7 +151,7 @@ CODE_SAMPLE
             return \false;
         }
         $carbonObjectType = new \PHPStan\Type\ObjectType('Carbon\\Carbon');
-        $callerType = $this->nodeTypeResolver->resolve($expr->class);
+        $callerType = $this->nodeTypeResolver->getType($expr->class);
         if (!$carbonObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;
         }

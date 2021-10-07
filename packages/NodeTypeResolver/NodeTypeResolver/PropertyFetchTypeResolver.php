@@ -83,7 +83,7 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
         if ($propertyName === null) {
             return new \PHPStan\Type\MixedType();
         }
-        $varType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+        $varType = $this->nodeTypeResolver->getType($propertyFetch->var);
         if (!$varType instanceof \PHPStan\Type\ObjectType) {
             return new \PHPStan\Type\MixedType();
         }

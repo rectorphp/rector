@@ -128,7 +128,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $classType = $this->nodeTypeResolver->resolve($node);
+        $classType = $this->nodeTypeResolver->getType($node);
         $translatableObjectType = new \PHPStan\Type\ObjectType('Gedmo\\Translatable\\Translatable');
         if (!$translatableObjectType->isSuperTypeOf($classType)->yes()) {
             return null;

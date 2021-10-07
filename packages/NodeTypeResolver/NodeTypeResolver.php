@@ -150,6 +150,9 @@ final class NodeTypeResolver
      */
     public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
+        $errorMessage = \sprintf('Method "%s" is deprecated. Use "getType()" instead', __METHOD__);
+        \trigger_error($errorMessage, \E_USER_WARNING);
+        \sleep(3);
         return $this->getType($node);
     }
     public function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
@@ -232,6 +235,9 @@ final class NodeTypeResolver
      */
     public function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
+        $errorMessage = \sprintf('Method "%s" is deprecated. Use "getType()" instead', __METHOD__);
+        \trigger_error($errorMessage, \E_USER_WARNING);
+        \sleep(3);
         if ($node instanceof \PhpParser\Node\Param || $node instanceof \PhpParser\Node\Expr\New_ || $node instanceof \PhpParser\Node\Stmt\Return_) {
             return $this->getType($node);
         }

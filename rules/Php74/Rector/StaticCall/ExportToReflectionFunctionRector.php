@@ -62,7 +62,7 @@ CODE_SAMPLE
         if (!$node->class instanceof \PhpParser\Node\Name) {
             return null;
         }
-        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        $callerType = $this->nodeTypeResolver->getType($node->class);
         if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('ReflectionFunction'))->yes()) {
             return null;
         }

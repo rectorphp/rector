@@ -78,7 +78,7 @@ CODE_SAMPLE
         if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var, \true)) {
             return null;
         }
-        $exprType = $this->nodeTypeResolver->resolve($node->expr);
+        $exprType = $this->nodeTypeResolver->getType($node->expr);
         if (!$exprType instanceof \PHPStan\Type\VoidType) {
             return null;
         }

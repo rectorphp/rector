@@ -72,7 +72,7 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
             return null;
         }
         $valueNode = $node->args[0];
-        $valueNodeType = $this->nodeTypeResolver->resolve($valueNode->value);
+        $valueNodeType = $this->nodeTypeResolver->getType($valueNode->value);
         if (!$this->isScalarType($valueNodeType)) {
             return null;
         }

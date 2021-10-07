@@ -40,7 +40,7 @@ final class ArrayCallableToMethodCallFactory
         if (!$firstItem->value instanceof \PhpParser\Node\Expr\PropertyFetch && !$firstItem->value instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-        $firstItemType = $this->nodeTypeResolver->resolve($firstItem->value);
+        $firstItemType = $this->nodeTypeResolver->getType($firstItem->value);
         if (!$firstItemType instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }

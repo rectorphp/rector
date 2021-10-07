@@ -107,7 +107,7 @@ CODE_SAMPLE
         /** @var PropertyFetch|StaticPropertyFetch $expr */
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
         if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
-            $propertyType = $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch ? $this->nodeTypeResolver->resolve($expr->class) : $this->nodeTypeResolver->resolve($expr->var);
+            $propertyType = $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch ? $this->nodeTypeResolver->getType($expr->class) : $this->nodeTypeResolver->getType($expr->var);
             // need to UnionType check due rectify with RecastingRemovalRector + CountOnNullRector
             // cause add (array) cast on $node->args
             // on union $node types FuncCall|MethodCall|StaticCall

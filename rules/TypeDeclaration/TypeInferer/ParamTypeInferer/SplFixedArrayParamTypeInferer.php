@@ -32,7 +32,7 @@ final class SplFixedArrayParamTypeInferer implements \Rector\TypeDeclaration\Con
         if ($param->type === null) {
             return new \PHPStan\Type\MixedType();
         }
-        $paramType = $this->nodeTypeResolver->resolve($param->type);
+        $paramType = $this->nodeTypeResolver->getType($param->type);
         return $this->splArrayFixedTypeNarrower->narrow($paramType);
     }
 }

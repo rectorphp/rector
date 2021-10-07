@@ -44,6 +44,6 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
             // anonymous class
             return new \PHPStan\Type\ObjectWithoutClassType();
         }
-        return $this->nodeTypeResolver->resolve($classLike);
+        return $this->nodeTypeResolver->getType($classLike);
     }
 }

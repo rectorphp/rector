@@ -103,7 +103,7 @@ CODE_SAMPLE
             if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return \false;
             }
-            $callerType = $this->nodeTypeResolver->resolve($node->class);
+            $callerType = $this->nodeTypeResolver->getType($node->class);
             if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('Illuminate\\Support\\Facades\\Artisan'))->yes()) {
                 return \false;
             }

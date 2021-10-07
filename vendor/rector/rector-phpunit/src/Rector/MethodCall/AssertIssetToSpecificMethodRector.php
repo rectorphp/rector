@@ -86,7 +86,7 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
     }
     private function hasMagicIsset(\PhpParser\Node $node) : bool
     {
-        $resolved = $this->nodeTypeResolver->resolve($node);
+        $resolved = $this->nodeTypeResolver->getType($node);
         if (!$resolved instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }

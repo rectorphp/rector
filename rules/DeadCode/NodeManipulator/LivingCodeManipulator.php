@@ -76,7 +76,7 @@ final class LivingCodeManipulator
             return \array_merge($this->keepLivingCodeFromExpr($expr->var), $this->keepLivingCodeFromExpr($expr->name));
         }
         if ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            $type = $this->nodeTypeResolver->resolve($expr->var);
+            $type = $this->nodeTypeResolver->getType($expr->var);
             if ($type instanceof \PHPStan\Type\ObjectType) {
                 $objectType = new \PHPStan\Type\ObjectType('ArrayAccess');
                 if ($objectType->isSuperTypeOf($type)->yes()) {

@@ -51,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $callerType = $this->nodeTypeResolver->resolve($node->class);
+        $callerType = $this->nodeTypeResolver->getType($node->class);
         if (!$callerType->isSuperTypeOf(new \PHPStan\Type\ObjectType('PHPExcel_Cell_DataType'))->yes()) {
             return null;
         }

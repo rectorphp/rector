@@ -97,7 +97,7 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
             if (!$this->isName($propertyFetch, $oldProperty)) {
                 continue;
             }
-            $nodeVarType = $this->nodeTypeResolver->resolve($propertyFetch->var);
+            $nodeVarType = $this->nodeTypeResolver->getType($propertyFetch->var);
             if ($nodeVarType instanceof \PHPStan\Type\ThisType && $class instanceof \PhpParser\Node\Stmt\ClassLike) {
                 $this->renameProperty($class, $renamedProperty);
             }

@@ -49,7 +49,7 @@ final class LocalMethodCallFinder
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         $matchingMethodCalls = [];
         foreach ($methodCalls as $methodCall) {
-            $callerType = $this->nodeTypeResolver->resolve($methodCall->var);
+            $callerType = $this->nodeTypeResolver->getType($methodCall->var);
             if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }
