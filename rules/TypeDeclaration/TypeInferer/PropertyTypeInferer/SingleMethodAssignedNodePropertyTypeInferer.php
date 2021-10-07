@@ -61,7 +61,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements \Rector\TypeD
         if (!$assignedNode instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        return $this->nodeTypeResolver->getStaticType($assignedNode);
+        return $this->nodeTypeResolver->getType($assignedNode);
     }
     public function getPriority() : int
     {

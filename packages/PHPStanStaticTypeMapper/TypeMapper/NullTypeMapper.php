@@ -40,6 +40,9 @@ final class NullTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
         if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY())) {
             return null;
         }
+        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM())) {
+            return null;
+        }
         // return type cannot be only null
         if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN())) {
             return null;

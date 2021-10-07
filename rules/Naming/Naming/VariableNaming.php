@@ -98,7 +98,7 @@ final class VariableNaming
     }
     public function resolveFromNode(\PhpParser\Node $node) : ?string
     {
-        $nodeType = $this->nodeTypeResolver->getStaticType($node);
+        $nodeType = $this->nodeTypeResolver->getType($node);
         return $this->resolveFromNodeAndType($node, $nodeType);
     }
     private function resolveBareFromNode(\PhpParser\Node $node) : ?string

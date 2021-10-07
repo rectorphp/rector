@@ -131,7 +131,7 @@ final class LocalPropertyAnalyzer
         $parentNode = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // possible get type
         if ($parentNode instanceof \PhpParser\Node\Expr\Assign) {
-            return $this->nodeTypeResolver->getStaticType($parentNode->expr);
+            return $this->nodeTypeResolver->getType($parentNode->expr);
         }
         if ($parentNode instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return $this->arrayDimFetchTypeResolver->resolve($parentNode);

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
@@ -69,11 +70,15 @@ CODE_SAMPLE
             return null;
         }
         // is argument string?
-        $needleArgNode = $node->args[1]->value;
-        if ($this->nodeTypeAnalyzer->isStringTypeExpr($needleArgNode)) {
+        $needleArgValue = $node->args[1]->value;
+        $needleType = $this->getType($needleArgValue);
+        if ($needleType instanceof \PHPStan\Type\StringType) {
             return null;
         }
-        if ($needleArgNode instanceof \PhpParser\Node\Expr\Cast\String_) {
+        if ($this->nodeTypeAnalyzer->isStringyType($needleType)) {
+            return null;
+        }
+        if ($needleArgValue instanceof \PhpParser\Node\Expr\Cast\String_) {
             return null;
         }
         $node->args[1]->value = new \PhpParser\Node\Expr\Cast\String_($node->args[1]->value);

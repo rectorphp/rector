@@ -26,7 +26,7 @@ final class DefaultValuePropertyTypeInferer
         if ($propertyProperty->default === null) {
             return new \PHPStan\Type\MixedType();
         }
-        return $this->nodeTypeResolver->getStaticType($propertyProperty->default);
+        return $this->nodeTypeResolver->getType($propertyProperty->default);
     }
     public function getPriority() : int
     {

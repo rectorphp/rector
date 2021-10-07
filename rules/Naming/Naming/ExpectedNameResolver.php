@@ -113,7 +113,7 @@ final class ExpectedNameResolver
         if ($name === null) {
             return null;
         }
-        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+        $returnedType = $this->nodeTypeResolver->getType($expr);
         if ($returnedType instanceof \PHPStan\Type\ArrayType) {
             return null;
         }
@@ -146,7 +146,7 @@ final class ExpectedNameResolver
         if ($name === null) {
             return null;
         }
-        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+        $returnedType = $this->nodeTypeResolver->getType($expr);
         if ($returnedType->isIterable()->no()) {
             return null;
         }

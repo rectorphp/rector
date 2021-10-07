@@ -19,7 +19,7 @@ final class StringTypeAnalyzer
     }
     public function isStringOrUnionStringOnlyType(\PhpParser\Node $node) : bool
     {
-        $nodeType = $this->nodeTypeResolver->getStaticType($node);
+        $nodeType = $this->nodeTypeResolver->getType($node);
         if ($nodeType instanceof \PHPStan\Type\StringType) {
             return \true;
         }

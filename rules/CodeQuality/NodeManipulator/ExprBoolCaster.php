@@ -47,7 +47,7 @@ final class ExprBoolCaster
             }
             return new \PhpParser\Node\Expr\Cast\Bool_($expr);
         }
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($expr);
+        $exprStaticType = $this->nodeTypeResolver->getType($expr);
         // if we remove null type, still has to be trueable
         if ($exprStaticType instanceof \PHPStan\Type\UnionType) {
             $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);

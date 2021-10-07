@@ -94,7 +94,7 @@ final class ValueResolver
         if ($expr instanceof \PhpParser\Node\Expr\ConstFetch) {
             return $this->nodeNameResolver->getName($expr);
         }
-        $nodeStaticType = $this->nodeTypeResolver->getStaticType($expr);
+        $nodeStaticType = $this->nodeTypeResolver->getType($expr);
         if ($nodeStaticType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return $this->extractConstantArrayTypeValue($nodeStaticType);
         }

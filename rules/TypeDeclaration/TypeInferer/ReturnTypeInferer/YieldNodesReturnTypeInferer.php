@@ -55,7 +55,7 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
             if (!$value instanceof \PhpParser\Node\Expr) {
                 continue;
             }
-            $resolvedType = $this->nodeTypeResolver->getStaticType($value);
+            $resolvedType = $this->nodeTypeResolver->getType($value);
             if ($resolvedType instanceof \PHPStan\Type\MixedType) {
                 continue;
             }

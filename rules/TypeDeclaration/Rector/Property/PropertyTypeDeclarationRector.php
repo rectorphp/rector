@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -78,12 +79,8 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        // is already set
-        foreach (['@var', '@phpstan-var', '@psalm-var'] as $tagName) {
-            $varType = $phpDocInfo->getVarType($tagName);
-            if (!$varType instanceof \PHPStan\Type\MixedType) {
-                return null;
-            }
+        if ($this->isVarDocAlreadySet($phpDocInfo)) {
+            return null;
         }
         $type = $this->propertyTypeInferer->inferProperty($node);
         if ($type instanceof \PHPStan\Type\MixedType) {
@@ -94,5 +91,15 @@ CODE_SAMPLE
         }
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         return $node;
+    }
+    private function isVarDocAlreadySet(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    {
+        foreach (['@var', '@phpstan-var', '@psalm-var'] as $tagName) {
+            $varType = $phpDocInfo->getVarType($tagName);
+            if (!$varType instanceof \PHPStan\Type\MixedType) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }

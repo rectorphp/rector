@@ -11,12 +11,14 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ObjectTypeSpecifier
 {
@@ -55,7 +57,7 @@ final class ObjectTypeSpecifier
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
         // invalid type
-        return new \PHPStan\Type\MixedType();
+        return new \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType($className);
     }
     private function matchAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
     {
@@ -98,7 +100,10 @@ final class ObjectTypeSpecifier
         }
         return null;
     }
-    private function matchShortenedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : ?\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
+    /**
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
+     */
+    private function matchShortenedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
     {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
@@ -116,6 +121,10 @@ final class ObjectTypeSpecifier
                 }
                 $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $useUse);
                 if ($partialNamespaceObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+                    // keep Generic items
+                    if ($objectType instanceof \PHPStan\Type\Generic\GenericObjectType) {
+                        return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType($objectType->getClassName(), $objectType->getTypes(), $partialNamespaceObjectType->getClassName());
+                    }
                     return $partialNamespaceObjectType->getShortNameType();
                 }
                 if ($partialNamespaceObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {

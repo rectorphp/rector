@@ -159,7 +159,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
             if (!$this->nodeNameResolver->isName($node, $propertyName)) {
                 return null;
             }
-            $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
+            $paramStaticType = $this->nodeTypeResolver->getType($node);
             return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $paramStaticType;
@@ -170,7 +170,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
             return \true;
         }
         if ($param->default !== null) {
-            $defaultValueStaticType = $this->nodeTypeResolver->getStaticType($param->default);
+            $defaultValueStaticType = $this->nodeTypeResolver->getType($param->default);
             if ($defaultValueStaticType instanceof \PHPStan\Type\NullType) {
                 return \true;
             }

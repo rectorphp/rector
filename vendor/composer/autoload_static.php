@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78
+class ComposerStaticInitb370113e68d2f689ade55d3318a17c83
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3315,8 +3315,10 @@ class ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\AliasedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/AliasedObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedGenericObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedObjectType.php',
+        'Rector\\StaticTypeMapper\\ValueObject\\Type\\NonExistingObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/NonExistingObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ParentStaticType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ParentStaticType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\SelfObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/SelfObjectType.php',
+        'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedGenericObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedGenericObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
         'Rector\\Strict\\NodeFactory\\ExactCompareFactory' => __DIR__ . '/../..' . '/rules/Strict/NodeFactory/ExactCompareFactory.php',
         'Rector\\Strict\\Rector\\AbstractFalsyScalarRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php',
@@ -3891,9 +3893,9 @@ class ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3dce88f69e2175ec99fe8e0ec6003c78::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb370113e68d2f689ade55d3318a17c83::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb370113e68d2f689ade55d3318a17c83::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb370113e68d2f689ade55d3318a17c83::$classMap;
 
         }, null, ClassLoader::class);
     }

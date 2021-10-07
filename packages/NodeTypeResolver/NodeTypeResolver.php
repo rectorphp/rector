@@ -171,6 +171,10 @@ final class NodeTypeResolver
         if ($type !== null) {
             $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
             $type = $this->genericClassStringTypeCorrector->correct($type);
+            if ($type instanceof \PHPStan\Type\ObjectType) {
+                // we want to keep aliased object types
+                $type = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $type);
+            }
             return $this->hasOffsetTypeCorrector->correct($type);
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -222,6 +226,10 @@ final class NodeTypeResolver
         }
         return $scope->getNativeType($expr);
     }
+    /**
+     * @deprecated
+     * @see Use NodeTypeResolver::getType() instead
+     */
     public function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         if ($node instanceof \PhpParser\Node\Param || $node instanceof \PhpParser\Node\Expr\New_ || $node instanceof \PhpParser\Node\Stmt\Return_) {

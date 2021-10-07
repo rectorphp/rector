@@ -84,7 +84,7 @@ final class AssignToPropertyTypeInferer
     }
     private function resolveExprStaticTypeIncludingDimFetch(\PhpParser\Node\Expr\Assign $assign) : \PHPStan\Type\Type
     {
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
+        $exprStaticType = $this->nodeTypeResolver->getType($assign->expr);
         if ($assign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), $exprStaticType);
         }

@@ -94,7 +94,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
             return $this->resolveNoLocalReturnNodes($classLike, $functionLike);
         }
         foreach ($localReturnNodes as $localReturnNode) {
-            $returnedExprType = $this->nodeTypeResolver->getStaticType($localReturnNode);
+            $returnedExprType = $this->nodeTypeResolver->getType($localReturnNode);
             $returnedExprType = $this->correctWithNestedType($returnedExprType, $localReturnNode, $functionLike);
             $types[] = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
         }

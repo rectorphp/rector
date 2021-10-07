@@ -85,7 +85,7 @@ final class TokenManipulator
             if (!$this->isArrayDimFetchWithDimIntegerValue($node, 1)) {
                 return null;
             }
-            $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->var);
+            $tokenStaticType = $this->nodeTypeResolver->getType($node->var);
             if (!$tokenStaticType instanceof \PHPStan\Type\ArrayType) {
                 return null;
             }
@@ -105,7 +105,7 @@ final class TokenManipulator
             if (!$this->nodeComparator->areNodesEqual($node->expr, $singleTokenExpr)) {
                 return null;
             }
-            $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
+            $tokenStaticType = $this->nodeTypeResolver->getType($node->expr);
             if ($tokenStaticType instanceof \PHPStan\Type\ArrayType) {
                 return null;
             }
@@ -116,7 +116,7 @@ final class TokenManipulator
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
-            $tokenStaticType = $this->nodeTypeResolver->getStaticType($node->expr);
+            $tokenStaticType = $this->nodeTypeResolver->getType($node->expr);
             if ($tokenStaticType instanceof \PHPStan\Type\ArrayType) {
                 return null;
             }
@@ -215,7 +215,7 @@ final class TokenManipulator
             if (!$possibleTokenArray instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
                 return null;
             }
-            $tokenStaticType = $this->nodeTypeResolver->getStaticType($possibleTokenArray->var);
+            $tokenStaticType = $this->nodeTypeResolver->getType($possibleTokenArray->var);
             if (!$tokenStaticType instanceof \PHPStan\Type\ArrayType) {
                 return null;
             }

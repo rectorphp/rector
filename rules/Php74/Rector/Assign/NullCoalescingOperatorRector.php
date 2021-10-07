@@ -40,7 +40,7 @@ CODE_SAMPLE
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\AssignOp\Coalesce
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
             return null;
