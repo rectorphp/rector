@@ -20,7 +20,7 @@ final class ExprStringTypeResolver
 
     public function resolve(Expr $expr): ?string
     {
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($expr);
+        $exprStaticType = $this->nodeTypeResolver->getType($expr);
         $exprStaticType = $this->typeUnwrapper->unwrapNullableType($exprStaticType);
 
         if (! $exprStaticType instanceof TypeWithClassName) {

@@ -12,12 +12,14 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class ObjectTypeSpecifier
@@ -62,7 +64,7 @@ final class ObjectTypeSpecifier
         }
 
         // invalid type
-        return new MixedType();
+        return new NonExistingObjectType($className);
     }
 
     private function matchAliasedObjectType(Node $node, ObjectType $objectType): ?AliasedObjectType
@@ -128,8 +130,10 @@ final class ObjectTypeSpecifier
         return null;
     }
 
-    private function matchShortenedObjectType(Node $node, ObjectType $objectType): ?ShortenedObjectType
-    {
+    private function matchShortenedObjectType(
+        Node $node,
+        ObjectType $objectType
+    ): ShortenedObjectType|ShortenedGenericObjectType|null {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);
         if ($uses === null) {
@@ -149,6 +153,15 @@ final class ObjectTypeSpecifier
 
                 $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($objectType, $useUse);
                 if ($partialNamespaceObjectType instanceof FullyQualifiedObjectType) {
+                    // keep Generic items
+                    if ($objectType instanceof GenericObjectType) {
+                        return new ShortenedGenericObjectType(
+                            $objectType->getClassName(),
+                            $objectType->getTypes(),
+                            $partialNamespaceObjectType->getClassName()
+                        );
+                    }
+
                     return $partialNamespaceObjectType->getShortNameType();
                 }
 

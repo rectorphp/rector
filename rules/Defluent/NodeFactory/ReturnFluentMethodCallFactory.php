@@ -40,7 +40,7 @@ final class ReturnFluentMethodCallFactory
         } else {
             // we need a variable to assign the stuff into
             // the method call, does not belong to the
-            $staticType = $this->nodeTypeResolver->getStaticType($rootMethodCall);
+            $staticType = $this->nodeTypeResolver->getType($rootMethodCall);
             if (! $staticType instanceof ObjectType) {
                 return null;
             }

@@ -107,7 +107,7 @@ final class VariableNaming
 
     public function resolveFromNode(Node $node): ?string
     {
-        $nodeType = $this->nodeTypeResolver->getStaticType($node);
+        $nodeType = $this->nodeTypeResolver->getType($node);
         return $this->resolveFromNodeAndType($node, $nodeType);
     }
 

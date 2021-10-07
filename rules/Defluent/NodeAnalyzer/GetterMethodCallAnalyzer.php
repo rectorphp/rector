@@ -20,8 +20,8 @@ final class GetterMethodCallAnalyzer
             return false;
         }
 
-        $methodCallStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
-        $methodCallVarStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
+        $methodCallStaticType = $this->nodeTypeResolver->getType($methodCall);
+        $methodCallVarStaticType = $this->nodeTypeResolver->getType($methodCall->var);
 
         // getter short call type
         return ! $methodCallStaticType->equals($methodCallVarStaticType);

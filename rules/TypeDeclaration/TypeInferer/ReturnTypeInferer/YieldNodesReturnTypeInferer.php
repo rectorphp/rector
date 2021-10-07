@@ -49,7 +49,7 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
                 continue;
             }
 
-            $resolvedType = $this->nodeTypeResolver->getStaticType($value);
+            $resolvedType = $this->nodeTypeResolver->getType($value);
             if ($resolvedType instanceof MixedType) {
                 continue;
             }

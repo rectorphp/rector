@@ -155,6 +155,11 @@ final class NodeTypeResolver
 
             $type = $this->genericClassStringTypeCorrector->correct($type);
 
+            if ($type instanceof ObjectType) {
+                // we want to keep aliased object types
+                $type = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $type);
+            }
+
             return $this->hasOffsetTypeCorrector->correct($type);
         }
 
@@ -186,9 +191,7 @@ final class NodeTypeResolver
         }
 
         $type = $scope->getType($node);
-
         $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
-
         $type = $this->genericClassStringTypeCorrector->correct($type);
 
         // hot fix for phpstan not resolving chain method calls
@@ -222,6 +225,10 @@ final class NodeTypeResolver
         return $scope->getNativeType($expr);
     }
 
+    /**
+     * @deprecated
+     * @see Use NodeTypeResolver::getType() instead
+     */
     public function getStaticType(Node $node): Type
     {
         if ($node instanceof Param || $node instanceof New_ || $node instanceof Return_) {

@@ -36,7 +36,7 @@ final class ExprBoolCaster
             return new Bool_($expr);
         }
 
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($expr);
+        $exprStaticType = $this->nodeTypeResolver->getType($expr);
         // if we remove null type, still has to be trueable
         if ($exprStaticType instanceof UnionType) {
             $unionTypeWithoutNullType = $this->typeUnwrapper->removeNullTypeFromUnionType($exprStaticType);

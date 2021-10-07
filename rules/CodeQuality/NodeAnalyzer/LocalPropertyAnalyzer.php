@@ -115,7 +115,7 @@ final class LocalPropertyAnalyzer
 
         // possible get type
         if ($parentNode instanceof Assign) {
-            return $this->nodeTypeResolver->getStaticType($parentNode->expr);
+            return $this->nodeTypeResolver->getType($parentNode->expr);
         }
 
         if ($parentNode instanceof ArrayDimFetch) {

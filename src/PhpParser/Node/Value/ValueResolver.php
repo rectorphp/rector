@@ -83,7 +83,7 @@ final class ValueResolver
             return $this->nodeNameResolver->getName($expr);
         }
 
-        $nodeStaticType = $this->nodeTypeResolver->getStaticType($expr);
+        $nodeStaticType = $this->nodeTypeResolver->getType($expr);
 
         if ($nodeStaticType instanceof ConstantArrayType) {
             return $this->extractConstantArrayTypeValue($nodeStaticType);

@@ -30,7 +30,7 @@ final class ArrayDimFetchTypeResolver
     private function resolveDimType(ArrayDimFetch $arrayDimFetch): Type
     {
         if ($arrayDimFetch->dim !== null) {
-            return $this->nodeTypeResolver->getStaticType($arrayDimFetch->dim);
+            return $this->nodeTypeResolver->getType($arrayDimFetch->dim);
         }
 
         return new MixedType();
@@ -40,7 +40,7 @@ final class ArrayDimFetchTypeResolver
     {
         $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentParent instanceof Assign) {
-            return $this->nodeTypeResolver->getStaticType($parentParent->expr);
+            return $this->nodeTypeResolver->getType($parentParent->expr);
         }
 
         return new MixedType();

@@ -19,8 +19,8 @@ final class NewFluentChainMethodCallNodeAnalyzer
 
     public function isNewMethodCallReturningSelf(MethodCall $methodCall): bool
     {
-        $newStaticType = $this->nodeTypeResolver->getStaticType($methodCall->var);
-        $methodCallStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        $newStaticType = $this->nodeTypeResolver->getType($methodCall->var);
+        $methodCallStaticType = $this->nodeTypeResolver->getType($methodCall);
 
         return $methodCallStaticType->equals($newStaticType);
     }

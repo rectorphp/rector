@@ -48,7 +48,7 @@ final class NullTypeAssignDetector
             }
 
             // not in doctrine property
-            $staticType = $this->nodeTypeResolver->getStaticType($expr);
+            $staticType = $this->nodeTypeResolver->getType($expr);
             if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($staticType)) {
                 $needsNullType = false;
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;

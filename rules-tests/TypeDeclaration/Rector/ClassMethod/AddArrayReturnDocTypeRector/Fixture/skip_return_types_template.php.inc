@@ -2,6 +2,7 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Fixture;
 
+use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\NodeFinder;
 

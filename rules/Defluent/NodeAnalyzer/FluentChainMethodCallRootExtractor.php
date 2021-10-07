@@ -99,7 +99,7 @@ final class FluentChainMethodCallRootExtractor
         $isFirstCallFactory = $this->isFirstMethodCallFactory($methodCall);
 
         // the method call, does not belong to the
-        $staticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        $staticType = $this->nodeTypeResolver->getType($methodCall);
         $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
 
         // no assign

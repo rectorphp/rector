@@ -71,7 +71,7 @@ final class AssignToPropertyTypeInferer
 
     private function resolveExprStaticTypeIncludingDimFetch(Assign $assign): Type
     {
-        $exprStaticType = $this->nodeTypeResolver->getStaticType($assign->expr);
+        $exprStaticType = $this->nodeTypeResolver->getType($assign->expr);
         if ($assign->var instanceof ArrayDimFetch) {
             return new ArrayType(new MixedType(), $exprStaticType);
         }

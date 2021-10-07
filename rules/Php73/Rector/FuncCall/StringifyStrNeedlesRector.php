@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
@@ -90,12 +91,18 @@ CODE_SAMPLE
         }
 
         // is argument string?
-        $needleArgNode = $node->args[1]->value;
-        if ($this->nodeTypeAnalyzer->isStringTypeExpr($needleArgNode)) {
+        $needleArgValue = $node->args[1]->value;
+
+        $needleType = $this->getType($needleArgValue);
+        if ($needleType instanceof StringType) {
             return null;
         }
 
-        if ($needleArgNode instanceof String_) {
+        if ($this->nodeTypeAnalyzer->isStringyType($needleType)) {
+            return null;
+        }
+
+        if ($needleArgValue instanceof String_) {
             return null;
         }
 

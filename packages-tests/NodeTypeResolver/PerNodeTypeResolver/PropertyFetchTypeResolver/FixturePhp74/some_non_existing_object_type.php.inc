@@ -6,7 +6,7 @@ namespace Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeRes
 
 use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\Source\ClassWithTypedPropertyTypes;
 
-final class NonExistingObjectType
+final class SomeNonExistingObjectType
 {
     public function run(ClassWithTypedPropertyTypes $props): void
     {

@@ -5,7 +5,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 /**
  * @template T of object
  */
-final class GenericObjectType
+final class SomeGenericObjectType
 {
     /**
      * @var T
@@ -29,7 +29,7 @@ namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
 /**
  * @template T of object
  */
-final class GenericObjectType
+final class SomeGenericObjectType
 {
     /**
      * @var T

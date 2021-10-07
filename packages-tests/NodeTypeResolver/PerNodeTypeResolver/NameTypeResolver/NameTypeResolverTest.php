@@ -8,6 +8,7 @@ use Iterator;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\Tests\NodeTypeResolver\Source\AnotherClass;
 
@@ -23,7 +24,7 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
     {
         $nameNodes = $this->getNodesForFileOfType($file, Name::class);
 
-        $resolvedType = $this->nodeTypeResolver->resolve($nameNodes[$nodePosition]);
+        $resolvedType = $this->nodeTypeResolver->getType($nameNodes[$nodePosition]);
         $this->assertEquals($expectedType, $resolvedType);
     }
 
@@ -32,9 +33,9 @@ final class NameTypeResolverTest extends AbstractNodeTypeResolverTest
      */
     public function provideData(): Iterator
     {
-        $expectedObjectType = new ObjectType(AnotherClass::class);
+        $expectedFullyQualifiedObjectType = new FullyQualifiedObjectType(AnotherClass::class);
 
         # test new
-        yield [__DIR__ . '/Source/ParentCall.php', 2, $expectedObjectType];
+        yield [__DIR__ . '/Source/ParentCall.php', 2, $expectedFullyQualifiedObjectType];
     }
 }

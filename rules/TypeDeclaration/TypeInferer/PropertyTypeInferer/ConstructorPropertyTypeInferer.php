@@ -146,7 +146,7 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
                     return null;
                 }
 
-                $paramStaticType = $this->nodeTypeResolver->getStaticType($node);
+                $paramStaticType = $this->nodeTypeResolver->getType($node);
 
                 return NodeTraverser::STOP_TRAVERSAL;
             }
@@ -162,7 +162,7 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
         }
 
         if ($param->default !== null) {
-            $defaultValueStaticType = $this->nodeTypeResolver->getStaticType($param->default);
+            $defaultValueStaticType = $this->nodeTypeResolver->getType($param->default);
             if ($defaultValueStaticType instanceof NullType) {
                 return true;
             }

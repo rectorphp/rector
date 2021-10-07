@@ -48,7 +48,7 @@ CODE_SAMPLE
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): ?AssignCoalesce
     {
         if (! $node->expr instanceof Coalesce) {
             return null;

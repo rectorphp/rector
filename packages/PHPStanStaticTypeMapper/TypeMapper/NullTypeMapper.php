@@ -43,6 +43,10 @@ final class NullTypeMapper implements TypeMapperInterface
             return null;
         }
 
+        if ($typeKind->equals(TypeKind::PARAM())) {
+            return null;
+        }
+
         // return type cannot be only null
         if ($typeKind->equals(TypeKind::RETURN())) {
             return null;

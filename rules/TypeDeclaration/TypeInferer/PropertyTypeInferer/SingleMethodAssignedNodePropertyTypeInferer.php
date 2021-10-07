@@ -48,7 +48,7 @@ final class SingleMethodAssignedNodePropertyTypeInferer implements PropertyTypeI
             return null;
         }
 
-        return $this->nodeTypeResolver->getStaticType($assignedNode);
+        return $this->nodeTypeResolver->getType($assignedNode);
     }
 
     public function getPriority(): int

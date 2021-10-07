@@ -114,7 +114,7 @@ final class ExpectedNameResolver
             return null;
         }
 
-        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+        $returnedType = $this->nodeTypeResolver->getType($expr);
 
         if ($returnedType instanceof ArrayType) {
             return null;
@@ -154,7 +154,7 @@ final class ExpectedNameResolver
             return null;
         }
 
-        $returnedType = $this->nodeTypeResolver->getStaticType($expr);
+        $returnedType = $this->nodeTypeResolver->getType($expr);
         if ($returnedType->isIterable()->no()) {
             return null;
         }
