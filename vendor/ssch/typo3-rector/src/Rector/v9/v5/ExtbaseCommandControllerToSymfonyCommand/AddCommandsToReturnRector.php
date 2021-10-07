@@ -62,7 +62,7 @@ CODE_SAMPLE
             return null;
         }
         $existingCommands = $this->valueResolver->getValue($node->expr) ?? [];
-        $commands = \array_filter($this->commands, function (string $command) use($existingCommands, $carry, $existingCommand) {
+        $commands = \array_filter($this->commands, function (string $command) use($existingCommands) {
             return \array_reduce($existingCommands, function ($carry, $existingCommand) use($command) {
                 return $existingCommand['class'] !== $command && $carry;
             }, \true);

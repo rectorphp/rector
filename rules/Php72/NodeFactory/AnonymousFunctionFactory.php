@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
@@ -167,7 +168,7 @@ final class AnonymousFunctionFactory
         foreach ($paramNodes as $paramNode) {
             $paramNames[] = $this->nodeNameResolver->getName($paramNode);
         }
-        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Expr\Variable::class);
+        $variableNodes = $this->resolveVariableNodes($nodes);
         /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
         $alreadyAssignedVariables = [];
@@ -193,6 +194,23 @@ final class AnonymousFunctionFactory
             $filteredVariables[$variableName] = $variableNode;
         }
         return $filteredVariables;
+    }
+    /**
+     * @param Node[] $nodes
+     * @return Variable[]
+     */
+    private function resolveVariableNodes(array $nodes) : array
+    {
+        return $this->betterNodeFinder->find($nodes, function (\PhpParser\Node $subNode) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Variable) {
+                return \false;
+            }
+            $parentArrowFunction = $this->betterNodeFinder->findParentType($subNode, \PhpParser\Node\Expr\ArrowFunction::class);
+            if ($parentArrowFunction instanceof \PhpParser\Node\Expr\ArrowFunction) {
+                return !(bool) $this->betterNodeFinder->findParentType($parentArrowFunction, \PhpParser\Node\Expr\ArrowFunction::class);
+            }
+            return \true;
+        });
     }
     /**
      * @param ParameterReflection[] $parameterReflections
