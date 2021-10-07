@@ -89,23 +89,30 @@ final class ExactCompareFactory
         $nullConstFetch = $this->nodeFactory->createNull();
         $toNullNotIdentical = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $nullConstFetch);
         if ($unionType instanceof \PHPStan\Type\UnionType) {
-            $compareExprs = [];
-            foreach ($unionType->getTypes() as $unionedType) {
-                $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
-            }
-            /** @var Expr $truthyExpr */
-            $truthyExpr = \array_shift($compareExprs);
-            foreach ($compareExprs as $compareExpr) {
-                /** @var Expr $compareExpr */
-                $truthyExpr = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($truthyExpr, $compareExpr);
-            }
-            return $truthyExpr;
+            return $this->resolveFromCleanedNullUnionType($unionType, $expr, $treatAsNotEmpty);
         }
         $compareExpr = $this->createNotIdenticalFalsyCompare($unionType, $expr, $treatAsNotEmpty);
         if (!$compareExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
         return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($toNullNotIdentical, $compareExpr);
+    }
+    private function resolveFromCleanedNullUnionType(\PHPStan\Type\UnionType $unionType, \PhpParser\Node\Expr $expr, bool $treatAsNotEmpty) : ?\PhpParser\Node\Expr
+    {
+        $compareExprs = [];
+        foreach ($unionType->getTypes() as $unionedType) {
+            $compareExprs[] = $this->createNotIdenticalFalsyCompare($unionedType, $expr, $treatAsNotEmpty);
+        }
+        /** @var Expr $truthyExpr */
+        $truthyExpr = \array_shift($compareExprs);
+        foreach ($compareExprs as $compareExpr) {
+            if (!$compareExpr instanceof \PhpParser\Node\Expr) {
+                return null;
+            }
+            /** @var Expr $compareExpr */
+            $truthyExpr = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($truthyExpr, $compareExpr);
+        }
+        return $truthyExpr;
     }
     /**
      * @return \PhpParser\Node\Expr|null
