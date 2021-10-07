@@ -98,11 +98,25 @@ final class TypeFactory
                 if ($flattenType instanceof ConstantArrayType) {
                     $unwrappedTypes = array_merge($unwrappedTypes, $this->unwrapConstantArrayTypes($flattenType));
                 } else {
-                    $unwrappedTypes[] = $flattenType;
+                    $unwrappedTypes = $this->resolveNonConstantArrayType($flattenType, $unwrappedTypes);
                 }
             }
         }
 
+        return $unwrappedTypes;
+    }
+
+    /**
+     * @param Type[] $unwrappedTypes
+     * @return Type[]
+     */
+    private function resolveNonConstantArrayType(Type $type, array $unwrappedTypes): array
+    {
+        if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === 'Rector\Core\Stubs\DummyTraitClass') {
+            return $unwrappedTypes;
+        }
+
+        $unwrappedTypes[] = $type;
         return $unwrappedTypes;
     }
 
