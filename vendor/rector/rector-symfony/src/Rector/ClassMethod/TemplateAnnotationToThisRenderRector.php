@@ -182,7 +182,7 @@ CODE_SAMPLE
             return \false;
         }
         $responseObjectType = new \PHPStan\Type\ObjectType(self::RESPONSE_CLASS);
-        $returnType = $this->getStaticType($lastReturn->expr);
+        $returnType = $this->getType($lastReturn->expr);
         return $responseObjectType->isSuperTypeOf($returnType)->yes();
     }
     private function refactorReturn(\PhpParser\Node\Stmt\Return_ $return, \PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse) : void
@@ -205,7 +205,7 @@ CODE_SAMPLE
     {
         /** @var Expr $lastReturnExpr */
         $lastReturnExpr = $return->expr;
-        $returnStaticType = $this->getStaticType($lastReturnExpr);
+        $returnStaticType = $this->getType($lastReturnExpr);
         if (!$return->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             if (!$hasThisRenderOrReturnsResponse || $returnStaticType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
                 $return->expr = $thisRenderMethodCall;

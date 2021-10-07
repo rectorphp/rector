@@ -55,7 +55,7 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
         if ($this->nodeNameResolver->isName($node, 'this')) {
             return [];
         }
-        $formType = $this->nodeTypeResolver->getStaticType($node);
+        $formType = $this->nodeTypeResolver->getType($node);
         if (!$formType instanceof \PHPStan\Type\TypeWithClassName) {
             return [];
         }

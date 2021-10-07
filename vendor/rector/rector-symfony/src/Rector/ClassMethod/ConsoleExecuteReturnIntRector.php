@@ -123,8 +123,8 @@ CODE_SAMPLE
         }
         /** @var Expr $else */
         $else = $ternary->else;
-        $ifType = $this->getStaticType($if);
-        $elseType = $this->getStaticType($else);
+        $ifType = $this->getType($if);
+        $elseType = $this->getType($else);
         return $ifType instanceof \PHPStan\Type\IntegerType && $elseType instanceof \PHPStan\Type\IntegerType;
     }
     private function processReturn0ToMethod(bool $hasReturn, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
@@ -164,7 +164,7 @@ CODE_SAMPLE
                 return;
             }
         }
-        $staticType = $this->getStaticType($return->expr);
+        $staticType = $this->getType($return->expr);
         if (!$staticType instanceof \PHPStan\Type\IntegerType) {
             $return->expr = new \PhpParser\Node\Expr\Cast\Int_($return->expr);
         }

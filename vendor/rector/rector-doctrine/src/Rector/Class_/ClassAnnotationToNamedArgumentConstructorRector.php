@@ -164,7 +164,7 @@ CODE_SAMPLE
         if (!$onlyParam->type) {
             return \false;
         }
-        $paramType = $this->nodeTypeResolver->getStaticType($onlyParam);
+        $paramType = $this->nodeTypeResolver->getType($onlyParam);
         // we have a match
         return $paramType instanceof \PHPStan\Type\ArrayType;
     }

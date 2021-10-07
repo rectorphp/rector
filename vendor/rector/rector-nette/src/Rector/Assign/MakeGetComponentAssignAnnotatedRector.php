@@ -156,7 +156,7 @@ CODE_SAMPLE
         if (!$expr->dim instanceof \PhpParser\Node\Scalar\String_) {
             return \false;
         }
-        $varStaticType = $this->getStaticType($expr->var);
+        $varStaticType = $this->getType($expr->var);
         if (!$varStaticType instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }

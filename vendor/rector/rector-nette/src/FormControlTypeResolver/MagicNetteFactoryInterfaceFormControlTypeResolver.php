@@ -72,7 +72,7 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return [];
         }
-        $returnedType = $this->nodeTypeResolver->getStaticType($node);
+        $returnedType = $this->nodeTypeResolver->getType($node);
         if (!$returnedType instanceof \PHPStan\Type\TypeWithClassName) {
             return [];
         }

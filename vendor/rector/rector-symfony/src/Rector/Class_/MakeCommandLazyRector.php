@@ -123,7 +123,7 @@ CODE_SAMPLE
                 return null;
             }
             $commandName = $node->args[0]->value;
-            $commandNameStaticType = $this->getStaticType($commandName);
+            $commandNameStaticType = $this->getType($commandName);
             if (!$commandNameStaticType instanceof \PHPStan\Type\StringType) {
                 return null;
             }
@@ -176,7 +176,7 @@ CODE_SAMPLE
         if (\count($staticCall->args) < 1) {
             return null;
         }
-        $staticType = $this->getStaticType($staticCall->args[0]->value);
+        $staticType = $this->getType($staticCall->args[0]->value);
         if (!$staticType instanceof \PHPStan\Type\StringType) {
             return null;
         }

@@ -168,7 +168,7 @@ CODE_SAMPLE
             if (!$this->isName($propertyFetch->var, 'template')) {
                 continue;
             }
-            $staticType = $this->getStaticType($stmt->expr->expr);
+            $staticType = $this->getType($stmt->expr->expr);
             $varTypes[] = new \Rector\Nette\ValueObject\LatteVariableType((string) $this->getName($propertyFetch->name), $staticType->describe(\PHPStan\Type\VerbosityLevel::typeOnly()));
         }
         return $varTypes;

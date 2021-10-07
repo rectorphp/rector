@@ -140,7 +140,7 @@ CODE_SAMPLE
         if (!$firstArg instanceof \PhpParser\Node\Arg) {
             return \false;
         }
-        $eventStaticType = $this->getStaticType($firstArg->value);
+        $eventStaticType = $this->getType($firstArg->value);
         if (!$eventStaticType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }

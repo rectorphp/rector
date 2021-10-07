@@ -44,7 +44,7 @@ final class AssignDimFetchFormTypeResolver implements \Rector\Nette\Contract\For
         if (!$node->dim instanceof \PhpParser\Node\Scalar\String_) {
             return [];
         }
-        $exprType = $this->nodeTypeResolver->getStaticType($formVariableAssign->expr);
+        $exprType = $this->nodeTypeResolver->getType($formVariableAssign->expr);
         if (!$exprType instanceof \PHPStan\Type\TypeWithClassName) {
             return [];
         }

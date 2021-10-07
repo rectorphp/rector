@@ -113,7 +113,7 @@ final class ThisRenderFactory
     }
     private function resolveMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr
     {
-        $returnStaticType = $this->nodeTypeResolver->getStaticType($methodCall);
+        $returnStaticType = $this->nodeTypeResolver->getType($methodCall);
         if ($returnStaticType instanceof \PHPStan\Type\ArrayType) {
             return $methodCall;
         }
