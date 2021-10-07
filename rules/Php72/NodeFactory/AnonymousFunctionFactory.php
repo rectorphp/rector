@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
@@ -177,7 +178,7 @@ final class AnonymousFunctionFactory
             $paramNames[] = $this->nodeNameResolver->getName($paramNode);
         }
 
-        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
+        $variableNodes = $this->resolveVariableNodes($nodes);
 
         /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
@@ -210,6 +211,26 @@ final class AnonymousFunctionFactory
         }
 
         return $filteredVariables;
+    }
+
+    /**
+     * @param Node[] $nodes
+     * @return Variable[]
+     */
+    private function resolveVariableNodes(array $nodes): array
+    {
+        return $this->betterNodeFinder->find($nodes, function (Node $subNode): bool {
+            if (! $subNode instanceof Variable) {
+                return false;
+            }
+
+            $parentArrowFunction = $this->betterNodeFinder->findParentType($subNode, ArrowFunction::class);
+            if ($parentArrowFunction instanceof ArrowFunction) {
+                return ! (bool) $this->betterNodeFinder->findParentType($parentArrowFunction, ArrowFunction::class);
+            }
+
+            return true;
+        });
     }
 
     /**
