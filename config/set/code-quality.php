@@ -63,6 +63,7 @@ use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
 use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
+use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\CodeQuality\Rector\Switch_\SingularSwitchToIfRector;
 use Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector;
@@ -181,4 +182,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CallUserFuncWithArrowFunctionToInlineRector::class);
     $services->set(CountArrayToEmptyArrayComparisonRector::class);
     $services->set(FlipTypeControlToUseExclusiveTypeRector::class);
+    $services->set(ExplicitMethodCallOverMagicGetSetRector::class);
 };

@@ -15,7 +15,7 @@ jobs:
                 actions:
                     -
                         name: 'Rector List'
-                        run: bin/rector list
+                        run: bin/rector list --ansi
 
                     -
                         name: 'Show command'

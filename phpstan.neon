@@ -511,3 +511,6 @@ parameters:
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php
+
+        # internal tag
+        - '#Unknown PHPDoc tag\: @phpstan\-rule#'
