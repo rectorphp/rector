@@ -79,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $ifType = $this->getStaticType($node->if);
+        $ifType = $this->getType($node->if);
         if (! $ifType instanceof BooleanType) {
             return null;
         }

@@ -105,13 +105,14 @@ CODE_SAMPLE
             $node->name = new Identifier(MethodName::CONSTRUCT);
         }
 
-        if ($node->stmts === null) {
+        $stmts = $node->stmts;
+        if ($stmts === null) {
             return null;
         }
 
-        if (count($node->stmts) === 1) {
+        if (count($stmts) === 1) {
             /** @var Expression|Expr $stmt */
-            $stmt = $node->stmts[0];
+            $stmt = $stmts[0];
             if (! $stmt instanceof Expression) {
                 return null;
             }

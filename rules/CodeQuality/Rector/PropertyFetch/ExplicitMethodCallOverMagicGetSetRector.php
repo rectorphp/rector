@@ -110,7 +110,7 @@ CODE_SAMPLE
 
     private function refactorPropertyFetch(PropertyFetch $propertyFetch): MethodCall|null
     {
-        $callerType = $this->getObjectType($propertyFetch->var);
+        $callerType = $this->getType($propertyFetch->var);
         if (! $callerType instanceof TypeWithClassName) {
             return null;
         }
@@ -143,7 +143,7 @@ CODE_SAMPLE
 
     private function refactorMagicSet(Expr $expr, PropertyFetch $propertyFetch): MethodCall|null
     {
-        $propertyCallerType = $this->getObjectType($propertyFetch->var);
+        $propertyCallerType = $this->getType($propertyFetch->var);
         if (! $propertyCallerType instanceof ObjectType) {
             return null;
         }

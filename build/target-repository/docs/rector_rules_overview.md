@@ -10,7 +10,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (68)
+- [CodeQuality](#codequality) (69)
 
 - [CodingStyle](#codingstyle) (39)
 
@@ -90,7 +90,7 @@
 
 - [Renaming](#renaming) (11)
 
-- [Restoration](#restoration) (6)
+- [Restoration](#restoration) (5)
 
 - [Strict](#strict) (5)
 
@@ -839,6 +839,38 @@ Make if conditions more explicit
 +        if (count($items) === 0) {
              return 'no items';
          }
+     }
+ }
+```
+
+<br>
+
+### ExplicitMethodCallOverMagicGetSetRector
+
+Replace magic property fetch using `__get()` and `__set()` with existing method get*()/set*() calls
+
+- class: [`Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector`](../rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php)
+
+```diff
+ class MagicCallsObject
+ {
+     // adds magic __get() and __set() methods
+     use \Nette\SmartObject;
+
+     private $name;
+
+     public function getName()
+     {
+         return $this->name;
+     }
+ }
+
+ class SomeClass
+ {
+     public function run(MagicObject $magicObject)
+     {
+-        return $magicObject->name;
++        return $magicObject->getName();
      }
  }
 ```
@@ -9646,53 +9678,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
       * @ORM\Id
       */
      public $id;
- }
-```
-
-<br>
-
-### InferParamFromClassMethodReturnRector
-
-Change `@param` doc based on another method return type
-
-:wrench: **configure it!**
-
-- class: [`Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector`](../rules/Restoration/Rector/ClassMethod/InferParamFromClassMethodReturnRector.php)
-
-```php
-use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
-use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(InferParamFromClassMethodReturnRector::class)
-        ->call('configure', [[
-            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => ValueObjectInliner::inline([
-                new InferParamFromClassMethodReturn('SomeClass', 'process', 'getNodeTypes'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function getNodeTypes(): array
-     {
-         return [String_::class];
-     }
-
-+    /**
-+     * @param String_ $node
-+     */
-     public function process(Node $node)
-     {
-     }
  }
 ```
 

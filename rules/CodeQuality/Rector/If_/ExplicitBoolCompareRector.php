@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $conditionStaticType = $this->getStaticType($conditionNode);
+        $conditionStaticType = $this->getType($conditionNode);
         if ($conditionStaticType instanceof BooleanType || $conditionStaticType instanceof ConstantIntegerType) {
             return null;
         }
@@ -152,11 +152,12 @@ CODE_SAMPLE
             return $this->resolveString($isNegated, $expr);
         }
 
-        if ($this->nodeTypeResolver->isStaticType($expr, IntegerType::class)) {
+        $exprType = $this->getType($expr);
+        if ($exprType instanceof IntegerType) {
             return $this->resolveInteger($isNegated, $expr);
         }
 
-        if ($this->nodeTypeResolver->isStaticType($expr, FloatType::class)) {
+        if ($exprType instanceof FloatType) {
             return $this->resolveFloat($isNegated, $expr);
         }
 

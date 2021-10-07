@@ -110,7 +110,7 @@ CODE_SAMPLE
 
     private function processVariableNum(Continue_ $continue, Variable $numVariable): Continue_ | Break_
     {
-        $staticType = $this->getStaticType($numVariable);
+        $staticType = $this->getType($numVariable);
         if (! $staticType instanceof ConstantType) {
             return $continue;
         }

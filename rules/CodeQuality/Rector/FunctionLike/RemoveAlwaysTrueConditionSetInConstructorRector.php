@@ -189,7 +189,7 @@ CODE_SAMPLE
 
         $defaultValue = $property->props[0]->default;
         if ($defaultValue !== null) {
-            $resolvedTypes[] = $this->getStaticType($defaultValue);
+            $resolvedTypes[] = $this->getType($defaultValue);
         }
 
         $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($classLike->stmts, $propertyName);
@@ -240,7 +240,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $resolvedTypes[] = $this->getStaticType($node->expr);
+            $resolvedTypes[] = $this->getType($node->expr);
             return null;
         });
 

@@ -135,7 +135,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $stmtType = $this->getStaticType($stmt);
+            $stmtType = $this->getType($stmt);
             if ($stmtType instanceof NeverType) {
                 $hasNeverType = true;
             }

@@ -84,7 +84,7 @@ CODE_SAMPLE
 
     private function isNullableNonScalarType(Node $node): bool
     {
-        $staticType = $this->getStaticType($node);
+        $staticType = $this->getType($node);
         if ($staticType instanceof MixedType) {
             return false;
         }

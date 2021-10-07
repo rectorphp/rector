@@ -9,12 +9,9 @@ use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
 use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Restoration\Rector\ClassMethod\InferParamFromClassMethodReturnRector;
-use Rector\Restoration\ValueObject\InferParamFromClassMethodReturn;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
@@ -38,15 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
     $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
-    $configuration = ValueObjectInliner::inline([
-        new InferParamFromClassMethodReturn(AbstractRector::class, 'refactor', 'getNodeTypes'),
-    ]);
-
     $services = $containerConfigurator->services();
-    $services->set(InferParamFromClassMethodReturnRector::class)
-        ->call('configure', [[
-            InferParamFromClassMethodReturnRector::INFER_PARAMS_FROM_CLASS_METHOD_RETURNS => $configuration,
-        ]]);
 
     // phpunit
     $services->set(PreferThisOrSelfMethodCallRector::class)

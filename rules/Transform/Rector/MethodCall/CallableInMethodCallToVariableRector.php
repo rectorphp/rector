@@ -105,7 +105,7 @@ CODE_SAMPLE
             }
 
             $arg = $node->args[$position];
-            $argValueType = $this->getStaticType($arg->value);
+            $argValueType = $this->getType($arg->value);
             if (! $argValueType instanceof ClosureType) {
                 continue;
             }

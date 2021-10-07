@@ -131,7 +131,7 @@ CODE_SAMPLE
         $paramName = $this->getName($param->var);
         $variable = new Variable($paramName);
 
-        $paramType = $this->getStaticType($param);
+        $paramType = $this->getType($param);
         $recastedVariable = $this->recastVariabletIfScalarType($variable, $paramType);
         if (! $recastedVariable instanceof Cast) {
             return null;

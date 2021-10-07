@@ -149,7 +149,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (count($classMethod->stmts) !== 1) {
+        if (count((array) $classMethod->stmts) !== 1) {
             return null;
         }
 

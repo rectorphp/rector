@@ -117,7 +117,7 @@ CODE_SAMPLE
         }
 
         $value = null;
-        $exprStaticType = $this->getStaticType($expr);
+        $exprStaticType = $this->getType($expr);
 
         if ($expr instanceof String_) {
             $value = $expr->value;

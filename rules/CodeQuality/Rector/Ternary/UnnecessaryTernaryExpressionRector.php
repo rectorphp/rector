@@ -110,7 +110,8 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
 
     private function processTrueIfExpressionWithFalseElseExpression(Expr $expr): Expr
     {
-        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+        $exprType = $this->getType($expr);
+        if ($exprType instanceof BooleanType) {
             return $expr;
         }
 
@@ -120,14 +121,16 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     private function processFalseIfExpressionWithTrueElseExpression(Expr $expr): Expr
     {
         if ($expr instanceof BooleanNot) {
-            if ($this->nodeTypeResolver->isStaticType($expr->expr, BooleanType::class)) {
+            $negatedExprType = $this->getType($expr->expr);
+            if ($negatedExprType instanceof BooleanType) {
                 return $expr->expr;
             }
 
             return new Bool_($expr->expr);
         }
 
-        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+        $exprType = $this->getType($expr);
+        if ($exprType instanceof BooleanType) {
             return new BooleanNot($expr);
         }
 

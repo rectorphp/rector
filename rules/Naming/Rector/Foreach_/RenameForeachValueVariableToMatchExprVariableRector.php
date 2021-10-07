@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function isNotThisTypePropertyFetch(Expr $expr): bool
     {
         if ($expr instanceof PropertyFetch) {
-            $variableType = $this->getStaticType($expr->var);
+            $variableType = $this->getType($expr->var);
             return ! $variableType instanceof ThisType;
         }
 

@@ -159,7 +159,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $foreachValueStaticType = $this->getStaticType($foreach->expr);
+        $foreachValueStaticType = $this->getType($foreach->expr);
         if ($foreachValueStaticType instanceof ObjectType) {
             return true;
         }

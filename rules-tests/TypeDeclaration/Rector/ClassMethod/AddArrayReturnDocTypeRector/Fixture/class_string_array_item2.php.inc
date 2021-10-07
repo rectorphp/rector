@@ -40,7 +40,7 @@ class DFactory {}
 class ClassStringArrayItem2
 {
     /**
-     * @return array<int, class-string>
+     * @return class-string[]
      */
     public function getData()
     {

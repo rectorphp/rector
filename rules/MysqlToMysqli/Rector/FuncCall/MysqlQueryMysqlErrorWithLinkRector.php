@@ -160,7 +160,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $staticType = $this->getStaticType($expr);
+        $staticType = $this->getType($expr);
         $resourceType = new ResourceType();
 
         if ($staticType->equals($resourceType)) {

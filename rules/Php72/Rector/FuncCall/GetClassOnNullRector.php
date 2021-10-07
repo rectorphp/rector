@@ -103,10 +103,8 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->nodeTypeResolver->isNullableType($firstArgValue) && ! $this->nodeTypeResolver->isStaticType(
-            $firstArgValue,
-            NullType::class
-        )) {
+        $firstArgType = $this->getType($firstArgValue);
+        if (! $this->nodeTypeResolver->isNullableType($firstArgValue) && ! $firstArgType instanceof NullType) {
             return null;
         }
 

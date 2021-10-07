@@ -235,7 +235,7 @@ CODE_SAMPLE
 
         $this->mirrorComments($classConst, $variable);
 
-        $constantType = $this->getStaticType($classConst->consts[0]->value);
+        $constantType = $this->getType($classConst->consts[0]->value);
         $this->varAnnotationManipulator->decorateNodeWithType($classConst, $constantType);
 
         return $classConst;

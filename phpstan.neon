@@ -314,7 +314,7 @@ parameters:
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator\:\:mergeNestedDoctrineAnnotations\(\)" is \d+, keep it under 9#'
 
         - '#Cognitive complexity for "Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter\:\:printDocChildNode\(\)" is \d+, keep it under 9#'
-        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:resolve\(\)" is \d+, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\NodeTypeResolver\:\:getType\(\)" is \d+, keep it under 9#'
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'

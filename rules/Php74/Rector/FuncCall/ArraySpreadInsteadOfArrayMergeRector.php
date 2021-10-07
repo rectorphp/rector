@@ -133,7 +133,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $arrayStaticType = $this->getStaticType($expr);
+        $arrayStaticType = $this->getType($expr);
         if ($this->isConstantArrayTypeWithStringKeyType($arrayStaticType)) {
             return true;
         }

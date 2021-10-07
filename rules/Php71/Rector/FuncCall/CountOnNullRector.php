@@ -95,7 +95,7 @@ CODE_SAMPLE
         }
 
         // this can lead to false positive by phpstan, but that's best we can do
-        $onlyValueType = $this->getStaticType($countedNode);
+        $onlyValueType = $this->getType($countedNode);
         if ($onlyValueType instanceof ArrayType) {
             if (! $this->countableAnalyzer->isCastableArrayType($countedNode)) {
                 return null;
@@ -108,10 +108,9 @@ CODE_SAMPLE
             return $this->castToArray($countedNode, $node);
         }
 
-        if ($this->nodeTypeResolver->isNullableType($countedNode) || $this->nodeTypeResolver->isStaticType(
-            $countedNode,
-            NullType::class
-        )) {
+        $countedType = $this->getType($countedNode);
+
+        if ($this->nodeTypeResolver->isNullableType($countedNode) || $countedType instanceof NullType) {
             $identical = new Identical($countedNode, $this->nodeFactory->createNull());
             $ternary = new Ternary($identical, new LNumber(0), $node);
             // prevent infinity loop re-resolution

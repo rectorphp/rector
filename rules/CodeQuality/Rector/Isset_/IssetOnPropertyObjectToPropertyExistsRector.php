@@ -95,7 +95,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $propertyFetchVarType = $this->getObjectType($issetVar->var);
+            $propertyFetchVarType = $this->getType($issetVar->var);
 
             if ($propertyFetchVarType instanceof TypeWithClassName) {
                 if (! $this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {

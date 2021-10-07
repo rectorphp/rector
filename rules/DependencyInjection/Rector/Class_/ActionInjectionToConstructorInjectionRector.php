@@ -99,7 +99,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $paramType = $this->getObjectType($paramNode);
+            $paramType = $this->getType($paramNode);
 
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
@@ -124,7 +124,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $paramStaticType = $this->getObjectType($param);
+        $paramStaticType = $this->getType($param);
         if (! $paramStaticType instanceof ObjectType) {
             return false;
         }

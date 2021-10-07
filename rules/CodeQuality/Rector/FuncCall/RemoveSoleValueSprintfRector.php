@@ -96,7 +96,9 @@ CODE_SAMPLE
         /** @var Arg $secondArg */
         $secondArg = $node->args[1];
         $valueArgument = $secondArg->value;
-        if (! $this->nodeTypeResolver->isStaticType($valueArgument, StringType::class)) {
+
+        $valueType = $this->getType($valueArgument);
+        if (! $valueType instanceof StringType) {
             return null;
         }
 

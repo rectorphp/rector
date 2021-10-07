@@ -64,14 +64,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->nodeTypeResolver->isStaticType(
-            $node->left,
-            BooleanType::class
-        ) && ! $this->valueResolver->isTrueOrFalse($node->left)) {
+        $leftType = $this->getType($node->left);
+        if ($leftType instanceof BooleanType && ! $this->valueResolver->isTrueOrFalse($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
 
-        if (! $this->nodeTypeResolver->isStaticType($node->right, BooleanType::class)) {
+        $rightType = $this->getType($node->right);
+        if (! $rightType instanceof BooleanType) {
             return null;
         }
 

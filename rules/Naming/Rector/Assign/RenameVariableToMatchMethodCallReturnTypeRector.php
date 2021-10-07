@@ -206,7 +206,7 @@ CODE_SAMPLE
 
     private function isClassTypeWithChildren(StaticCall | MethodCall | FuncCall $expr): bool
     {
-        $callStaticType = $this->getStaticType($expr);
+        $callStaticType = $this->getType($expr);
         $callStaticType = $this->typeUnwrapper->unwrapNullableType($callStaticType);
 
         if (! $callStaticType instanceof ObjectType) {

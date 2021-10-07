@@ -108,7 +108,7 @@ CODE_SAMPLE
 
     private function processVariableNum(Break_ | Continue_ $stmt, Variable $numVariable): ?Node
     {
-        $staticType = $this->getStaticType($numVariable);
+        $staticType = $this->getType($numVariable);
 
         if ($staticType instanceof ConstantType) {
             if ($staticType instanceof ConstantIntegerType) {

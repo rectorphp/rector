@@ -127,7 +127,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return ! $this->getStaticType($methodCall->args[0]->value) instanceof StringType;
+        return ! $this->getType($methodCall->args[0]->value) instanceof StringType;
     }
 
     private function updateNode(MethodCall $methodCall): MethodCall

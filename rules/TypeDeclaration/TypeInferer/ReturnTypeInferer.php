@@ -64,8 +64,7 @@ final class ReturnTypeInferer
         );
 
         $isAutoImport = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
-        $isAutoImportFullyQuafiedReturn = $this->isAutoImportWithFullyQualifiedReturn($isAutoImport, $functionLike);
-        if ($isAutoImportFullyQuafiedReturn) {
+        if ($this->isAutoImportWithFullyQualifiedReturn($isAutoImport, $functionLike)) {
             return new MixedType();
         }
 
@@ -93,6 +92,7 @@ final class ReturnTypeInferer
 
             // normalize ConstStringType to ClassStringType
             $resolvedType = $this->genericClassStringTypeNormalizer->normalize($type);
+
             return $this->resolveTypeWithVoidHandling($functionLike, $resolvedType);
         }
 

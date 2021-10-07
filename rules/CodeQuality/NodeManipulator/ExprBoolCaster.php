@@ -60,7 +60,8 @@ final class ExprBoolCaster
             return false;
         }
 
-        if ($this->nodeTypeResolver->isStaticType($expr, BooleanType::class)) {
+        $exprType = $this->nodeTypeResolver->getType($expr);
+        if ($exprType instanceof BooleanType) {
             return false;
         }
 

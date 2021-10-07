@@ -42,7 +42,7 @@ class DFactory {}
 class ClassStringArrayItem
 {
     /**
-     * @return array<string, mixed>
+     * @return array<string, mixed[]>
      */
     public function getData()
     {

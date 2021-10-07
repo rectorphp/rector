@@ -71,7 +71,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $conditionStaticType = $this->getStaticType($node->cond);
+        $conditionStaticType = $this->getType($node->cond);
         if (! $conditionStaticType instanceof ConstantBooleanType) {
             return null;
         }

@@ -93,7 +93,7 @@ CODE_SAMPLE
         $firstArg = $node->args[0];
 
         $firstValue = $firstArg->value;
-        $firstValueStaticType = $this->getStaticType($firstValue);
+        $firstValueStaticType = $this->getType($firstValue);
         if (! $firstValueStaticType instanceof ConstantArrayType) {
             return null;
         }
