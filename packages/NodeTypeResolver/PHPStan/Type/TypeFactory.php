@@ -94,10 +94,22 @@ final class TypeFactory
                 if ($flattenType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
                     $unwrappedTypes = \array_merge($unwrappedTypes, $this->unwrapConstantArrayTypes($flattenType));
                 } else {
-                    $unwrappedTypes[] = $flattenType;
+                    $unwrappedTypes = $this->resolveNonConstantArrayType($flattenType, $unwrappedTypes);
                 }
             }
         }
+        return $unwrappedTypes;
+    }
+    /**
+     * @param Type[] $unwrappedTypes
+     * @return Type[]
+     */
+    private function resolveNonConstantArrayType(\PHPStan\Type\Type $type, array $unwrappedTypes) : array
+    {
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $type->getClassName() === 'Rector\\Core\\Stubs\\DummyTraitClass') {
+            return $unwrappedTypes;
+        }
+        $unwrappedTypes[] = $type;
         return $unwrappedTypes;
     }
     /**
