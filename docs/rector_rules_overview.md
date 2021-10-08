@@ -1281,7 +1281,7 @@ Simplify array_search to in_array
 
 ### SimplifyBoolIdenticalTrueRector
 
-Symplify bool value compare to true or false
+Simplify bool value compare to true or false
 
 - class: [`Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector`](../rules/CodeQuality/Rector/Identical/SimplifyBoolIdenticalTrueRector.php)
 
@@ -4265,7 +4265,7 @@ Remove anonymous class
 
 ### DowngradeDefineArrayConstantRector
 
-Change array contant definition via define to const
+Change array constant definition via define to const
 
 - class: [`Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector`](../rules/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php)
 
