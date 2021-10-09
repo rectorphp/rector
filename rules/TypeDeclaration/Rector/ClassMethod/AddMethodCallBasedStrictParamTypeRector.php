@@ -12,6 +12,7 @@ use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211009\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symplify/phpstan-rules/blob/master/docs/rules_overview.md#checktypehintcallertyperule
  *
@@ -122,6 +123,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->shouldTrustDocBlocks = $configuration[self::TRUST_DOC_BLOCKS] ?? \false;
+        $shouldTrustDocBlocks = $configuration[self::TRUST_DOC_BLOCKS] ?? \false;
+        \RectorPrefix20211009\Webmozart\Assert\Assert::boolean($shouldTrustDocBlocks);
+        $this->shouldTrustDocBlocks = $shouldTrustDocBlocks;
     }
 }
