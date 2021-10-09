@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211007;
+namespace RectorPrefix20211009;
 
 use Rector\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector;
 use Rector\Php74\Rector\Assign\NullCoalescingOperatorRector;

@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20211007\TYPO3\CMS\Extbase\Http;
+namespace RectorPrefix20211009\TYPO3\CMS\Extbase\Http;
 
-use RectorPrefix20211007\Psr\Http\Message\ResponseInterface;
+use RectorPrefix20211009\Psr\Http\Message\ResponseInterface;
 if (\class_exists('TYPO3\\CMS\\Extbase\\Http\\ForwardResponse')) {
     return;
 }
-class ForwardResponse implements \RectorPrefix20211007\Psr\Http\Message\ResponseInterface
+class ForwardResponse implements \RectorPrefix20211009\Psr\Http\Message\ResponseInterface
 {
     /**
      * @var string

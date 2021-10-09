@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211007;
+namespace RectorPrefix20211009;
 
 if (\class_exists('t3lib_cache_frontend_VariableFrontend')) {
     return;

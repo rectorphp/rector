@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211007\Symfony\Component\HttpKernel\Controller;
+namespace RectorPrefix20211009\Symfony\Component\HttpKernel\Controller;
 
-use RectorPrefix20211007\Psr\Log\LoggerInterface;
-use RectorPrefix20211007\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211009\Psr\Log\LoggerInterface;
+use RectorPrefix20211009\Symfony\Component\HttpFoundation\Request;
 /**
  * This implementation uses the '_controller' request attribute to determine
  * the controller to execute.
@@ -19,10 +19,10 @@ use RectorPrefix20211007\Symfony\Component\HttpFoundation\Request;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class ControllerResolver implements \RectorPrefix20211007\Symfony\Component\HttpKernel\Controller\ControllerResolverInterface
+class ControllerResolver implements \RectorPrefix20211009\Symfony\Component\HttpKernel\Controller\ControllerResolverInterface
 {
     private $logger;
-    public function __construct(\RectorPrefix20211007\Psr\Log\LoggerInterface $logger = null)
+    public function __construct(\RectorPrefix20211009\Psr\Log\LoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }

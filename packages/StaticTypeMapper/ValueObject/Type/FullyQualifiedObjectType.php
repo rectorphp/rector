@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
-use RectorPrefix20211007\Nette\Utils\Strings;
+use RectorPrefix20211009\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -27,7 +27,7 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
         if (\strpos($this->getClassName(), '\\') === \false) {
             return $this->getClassName();
         }
-        return (string) \RectorPrefix20211007\Nette\Utils\Strings::after($this->getClassName(), '\\', -1);
+        return (string) \RectorPrefix20211009\Nette\Utils\Strings::after($this->getClassName(), '\\', -1);
     }
     public function getShortNameNode() : \PhpParser\Node\Name
     {

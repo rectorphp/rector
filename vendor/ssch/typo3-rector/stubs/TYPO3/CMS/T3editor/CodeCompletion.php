@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211007\TYPO3\CMS\T3editor;
+namespace RectorPrefix20211009\TYPO3\CMS\T3editor;
 
 if (\class_exists('TYPO3\\CMS\\T3editor\\CodeCompletion')) {
     return;

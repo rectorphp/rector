@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211007;
+namespace RectorPrefix20211009;
 
 use Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector;
 use Rector\PHPUnit\Rector\MethodCall\DelegateExceptionArgumentsRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211007;
+namespace RectorPrefix20211009;
 
 if (\interface_exists('Tx_Extbase_MVC_ResponseInterface')) {
     return;

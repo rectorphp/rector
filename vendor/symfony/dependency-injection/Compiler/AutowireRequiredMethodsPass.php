@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211007\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20211009\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20211007\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211007\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211009\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211009\Symfony\Contracts\Service\Attribute\Required;
 /**
  * Looks for definitions with autowiring enabled and registers their corresponding "@required" methods as setters.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class AutowireRequiredMethodsPass extends \RectorPrefix20211007\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class AutowireRequiredMethodsPass extends \RectorPrefix20211009\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * {@inheritdoc}
@@ -26,7 +26,7 @@ class AutowireRequiredMethodsPass extends \RectorPrefix20211007\Symfony\Componen
     protected function processValue($value, $isRoot = \false)
     {
         $value = parent::processValue($value, $isRoot);
-        if (!$value instanceof \RectorPrefix20211007\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
+        if (!$value instanceof \RectorPrefix20211009\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
             return $value;
         }
         if (!($reflectionClass = $this->container->getReflectionClass($value->getClass(), \false))) {
@@ -43,7 +43,7 @@ class AutowireRequiredMethodsPass extends \RectorPrefix20211007\Symfony\Componen
                 continue;
             }
             while (\true) {
-                if (\PHP_VERSION_ID >= 80000 && $r->getAttributes(\RectorPrefix20211007\Symfony\Contracts\Service\Attribute\Required::class)) {
+                if (\PHP_VERSION_ID >= 80000 && $r->getAttributes(\RectorPrefix20211009\Symfony\Contracts\Service\Attribute\Required::class)) {
                     if ($this->isWither($r, $r->getDocComment() ?: '')) {
                         $withers[] = [$r->name, [], \true];
                     } else {

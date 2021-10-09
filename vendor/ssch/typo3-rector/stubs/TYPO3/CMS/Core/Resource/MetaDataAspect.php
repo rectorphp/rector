@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211007\TYPO3\CMS\Core\Resource;
+namespace RectorPrefix20211009\TYPO3\CMS\Core\Resource;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\MetaDataAspect')) {
     return;

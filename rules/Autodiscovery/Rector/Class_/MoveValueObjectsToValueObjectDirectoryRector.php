@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Autodiscovery\Rector\Class_;
 
-use RectorPrefix20211007\Controller;
+use RectorPrefix20211009\Controller;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
