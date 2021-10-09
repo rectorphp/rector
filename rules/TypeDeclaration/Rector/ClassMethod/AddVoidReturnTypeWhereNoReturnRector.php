@@ -8,18 +8,30 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211009\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
-final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
+    /**
+     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code beeing processed.
+     */
+    public const USE_PHPDOC = 'use_phpdoc';
+    /**
+     * @var bool
+     */
+    private $usePhpdoc = \false;
     /**
      * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
@@ -28,14 +40,19 @@ final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\Abs
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver
      */
     private $classMethodReturnVendorLockResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver)
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\SilentVoidResolver $silentVoidResolver, \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add return type void to function like without any return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add return type void to function like without any return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getValues()
@@ -55,7 +72,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+, [self::USE_PHPDOC => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -78,6 +95,11 @@ CODE_SAMPLE
         if (!$this->silentVoidResolver->hasExclusiveVoid($node)) {
             return null;
         }
+        if ($this->usePhpdoc) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\VoidType());
+            return $node;
+        }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
         }
@@ -87,5 +109,14 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE;
+    }
+    /**
+     * @param array<string, mixed> $configuration
+     */
+    public function configure(array $configuration) : void
+    {
+        $usePhpdoc = $configuration[self::USE_PHPDOC] ?? \false;
+        \RectorPrefix20211009\Webmozart\Assert\Assert::boolean($usePhpdoc);
+        $this->usePhpdoc = $usePhpdoc;
     }
 }
