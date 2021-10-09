@@ -266,6 +266,7 @@ parameters:
                 - packages/NodeNameResolver/NodeNameResolver.php
                 - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
+                - src/Validation/Collector/EmptyConfigurableRectorCollector.php
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'

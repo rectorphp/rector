@@ -17,6 +17,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
@@ -48,6 +49,7 @@ final class ProcessCommand extends Command
         private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
         private ConfigurationFactory $configurationFactory,
         private MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
+        private EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
         private array $rectors
     ) {
         parent::__construct();
@@ -128,18 +130,21 @@ final class ProcessCommand extends Command
         // 1. inform user about non-runnable rules
         $this->missedRectorDueVersionChecker->check($this->rectors);
 
-        // 2. collect all files from files+dirs provided paths
+        // 2. inform user about registering configurable rule without configuration
+        $this->emptyConfigurableRectorChecker->check($this->rectors);
+
+        // 3. collect all files from files+dirs provided paths
         $files = $this->fileFactory->createFromPaths($paths, $configuration);
 
-        // 3. PHPStan has to know about all files too
+        // 4. PHPStan has to know about all files too
         $this->configurePHPStanNodeScopeResolver($files);
 
         // MAIN PHASE
-        // 4. run Rector
+        // 5. run Rector
         $this->applicationFileProcessor->run($files, $configuration);
 
         // REPORTING PHASE
-        // 5. reporting phase
+        // 6. reporting phase
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
