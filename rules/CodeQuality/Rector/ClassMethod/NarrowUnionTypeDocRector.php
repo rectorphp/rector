@@ -117,12 +117,18 @@ CODE_SAMPLE
 
         $resultType = rtrim($resultType, '|');
         $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
-        $paramTagValueNodes[$key]->type = new IdentifierTypeNode($resultType);
+
+        if (isset($paramTagValueNodes[$key])) {
+            $paramTagValueNodes[$key]->type = new IdentifierTypeNode($resultType);
+        }
     }
 
     private function changeDocObjectScalar(int $key, PhpDocInfo $phpDocInfo): void
     {
         $paramTagValueNodes = $phpDocInfo->getParamTagValueNodes();
-        $paramTagValueNodes[$key]->type = new IdentifierTypeNode('scalar');
+
+        if (isset($paramTagValueNodes[$key])) {
+            $paramTagValueNodes[$key]->type = new IdentifierTypeNode('scalar');
+        }
     }
 }
