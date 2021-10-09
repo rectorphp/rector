@@ -2935,6 +2935,7 @@ return array(
     'Rector\\Restoration\\ValueObject\\CompleteImportForPartialAnnotation' => $baseDir . '/rules/Restoration/ValueObject/CompleteImportForPartialAnnotation.php',
     'Rector\\Set\\Contract\\SetListInterface' => $baseDir . '/packages/Set/Contract/SetListInterface.php',
     'Rector\\Set\\ValueObject\\DowngradeSetList' => $baseDir . '/packages/Set/ValueObject/DowngradeSetList.php',
+    'Rector\\Set\\ValueObject\\LevelSetList' => $baseDir . '/packages/Set/ValueObject/LevelSetList.php',
     'Rector\\Set\\ValueObject\\SetList' => $baseDir . '/packages/Set/ValueObject/SetList.php',
     'Rector\\StaticTypeMapper\\Contract\\PhpDocParser\\PhpDocTypeMapperInterface' => $baseDir . '/packages/StaticTypeMapper/Contract/PhpDocParser/PhpDocTypeMapperInterface.php',
     'Rector\\StaticTypeMapper\\Contract\\PhpParser\\PhpParserNodeMapperInterface' => $baseDir . '/packages/StaticTypeMapper/Contract/PhpParser/PhpParserNodeMapperInterface.php',
