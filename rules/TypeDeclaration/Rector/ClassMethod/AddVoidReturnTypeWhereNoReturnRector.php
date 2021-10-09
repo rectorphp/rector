@@ -9,29 +9,41 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
-final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface
+final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface, ConfigurableRectorInterface
 {
+    /**
+     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code beeing processed.
+     */
+    public const USE_PHPDOC = 'use_phpdoc';
+
+    private bool $usePhpdoc = false;
+
     public function __construct(
         private SilentVoidResolver $silentVoidResolver,
-        private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver
+        private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
+        private PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add return type void to function like without any return', [
-            new CodeSample(
+            new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
 final class SomeClass
 {
@@ -54,6 +66,10 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
+                ,
+                [
+                    self::USE_PHPDOC => false,
+                ]
             ),
         ]);
     }
@@ -83,6 +99,13 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->usePhpdoc) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
+
+            return $node;
+        }
+
         if ($node instanceof ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
         }
@@ -94,5 +117,15 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::VOID_TYPE;
+    }
+
+    /**
+     * @param array<string, mixed> $configuration
+     */
+    public function configure(array $configuration): void
+    {
+        $usePhpdoc = $configuration[self::USE_PHPDOC] ?? false;
+        Assert::boolean($usePhpdoc);
+        $this->usePhpdoc = $usePhpdoc;
     }
 }
