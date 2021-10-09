@@ -41,7 +41,7 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
     /**
      * @var string
      */
-    public const ANNOTATION_TO_ATTRIBUTE = 'annotation_to_attribute';
+    public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
     /**
      * List of annotations that should not be unwrapped
      * @var string[]

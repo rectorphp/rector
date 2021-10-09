@@ -16,6 +16,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
@@ -79,13 +80,17 @@ final class ProcessCommand extends \RectorPrefix20211009\Symfony\Component\Conso
      */
     private $missedRectorDueVersionChecker;
     /**
+     * @var \Rector\Core\Validation\EmptyConfigurableRectorChecker
+     */
+    private $emptyConfigurableRectorChecker;
+    /**
      * @var \Rector\Core\Contract\Rector\RectorInterface[]
      */
     private $rectors;
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Configuration\ConfigurationFactory $configurationFactory, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, array $rectors)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\Core\Configuration\ConfigurationFactory $configurationFactory, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, array $rectors)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -99,6 +104,7 @@ final class ProcessCommand extends \RectorPrefix20211009\Symfony\Component\Conso
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->configurationFactory = $configurationFactory;
         $this->missedRectorDueVersionChecker = $missedRectorDueVersionChecker;
+        $this->emptyConfigurableRectorChecker = $emptyConfigurableRectorChecker;
         $this->rectors = $rectors;
         parent::__construct();
     }
@@ -135,15 +141,17 @@ final class ProcessCommand extends \RectorPrefix20211009\Symfony\Component\Conso
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
         // 1. inform user about non-runnable rules
         $this->missedRectorDueVersionChecker->check($this->rectors);
-        // 2. collect all files from files+dirs provided paths
+        // 2. inform user about registering configurable rule without configuration
+        $this->emptyConfigurableRectorChecker->check($this->rectors);
+        // 3. collect all files from files+dirs provided paths
         $files = $this->fileFactory->createFromPaths($paths, $configuration);
-        // 3. PHPStan has to know about all files too
+        // 4. PHPStan has to know about all files too
         $this->configurePHPStanNodeScopeResolver($files);
         // MAIN PHASE
-        // 4. run Rector
+        // 5. run Rector
         $this->applicationFileProcessor->run($files, $configuration);
         // REPORTING PHASE
-        // 5. reporting phase
+        // 6. reporting phase
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);

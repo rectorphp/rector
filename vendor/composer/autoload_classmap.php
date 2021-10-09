@@ -1932,6 +1932,8 @@ return array(
     'Rector\\Core\\Template\\DefaultResolver' => $baseDir . '/src/Template/DefaultResolver.php',
     'Rector\\Core\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',
     'Rector\\Core\\Util\\StaticRectorStrings' => $baseDir . '/src/Util/StaticRectorStrings.php',
+    'Rector\\Core\\Validation\\Collector\\EmptyConfigurableRectorCollector' => $baseDir . '/src/Validation/Collector/EmptyConfigurableRectorCollector.php',
+    'Rector\\Core\\Validation\\EmptyConfigurableRectorChecker' => $baseDir . '/src/Validation/EmptyConfigurableRectorChecker.php',
     'Rector\\Core\\Validation\\InfiniteLoopValidator' => $baseDir . '/src/Validation/InfiniteLoopValidator.php',
     'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => $baseDir . '/src/ValueObjectFactory/Application/FileFactory.php',
     'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => $baseDir . '/src/ValueObjectFactory/ProcessResultFactory.php',
