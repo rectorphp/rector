@@ -25,7 +25,7 @@ final class YamlFileFormatter implements FileFormatterInterface
 
     public function format(File $file, EditorConfigConfiguration $editorConfigConfiguration): void
     {
-        $yaml = Yaml::parse($file->getFileContent());
+        $yaml = Yaml::parse($file->getFileContent(), Yaml::PARSE_CUSTOM_TAGS);
 
         $newFileContent = Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
 
