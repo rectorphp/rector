@@ -28,7 +28,7 @@ final class YamlFileFormatter implements \Rector\FileFormatter\Contract\Formatte
      */
     public function format($file, $editorConfigConfiguration) : void
     {
-        $yaml = \RectorPrefix20211009\Symfony\Component\Yaml\Yaml::parse($file->getFileContent());
+        $yaml = \RectorPrefix20211009\Symfony\Component\Yaml\Yaml::parse($file->getFileContent(), \RectorPrefix20211009\Symfony\Component\Yaml\Yaml::PARSE_CUSTOM_TAGS);
         $newFileContent = \RectorPrefix20211009\Symfony\Component\Yaml\Yaml::dump($yaml, 99, $editorConfigConfiguration->getIndentSize());
         $file->changeFileContent($newFileContent);
     }
