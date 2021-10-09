@@ -12,11 +12,15 @@ use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    // include the latest PHP version + all bellow in one config!
+    $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
+
     // include sets
     $containerConfigurator->import(SetList::CODING_STYLE);
     $containerConfigurator->import(SetList::CODING_STYLE_ADVANCED);
@@ -25,11 +29,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::PRIVATIZATION);
     $containerConfigurator->import(SetList::NAMING);
     $containerConfigurator->import(SetList::TYPE_DECLARATION);
-    $containerConfigurator->import(SetList::PHP_71);
-    $containerConfigurator->import(SetList::PHP_72);
-    $containerConfigurator->import(SetList::PHP_73);
-    $containerConfigurator->import(SetList::PHP_74);
-    $containerConfigurator->import(SetList::PHP_80);
     $containerConfigurator->import(SetList::EARLY_RETURN);
     $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
     $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);

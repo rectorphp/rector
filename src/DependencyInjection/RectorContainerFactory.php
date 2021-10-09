@@ -30,7 +30,7 @@ final class RectorContainerFactory
         // mt_rand is needed to invalidate container cache in case of class changes to be registered as services
         $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
         if (! $isPHPUnitRun) {
-            $environment .= mt_rand(0, 10000);
+            $environment .= random_int(0, 10000);
         }
 
         $phpStanStubLoader = new PHPStanStubLoader();

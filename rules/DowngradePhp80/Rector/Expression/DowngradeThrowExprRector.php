@@ -135,9 +135,7 @@ CODE_SAMPLE
             return $if;
         }
 
-        $assign->expr = $ternary->if === null
-            ? $ternary->cond
-            : $ternary->if;
+        $assign->expr = $ternary->if ?? $ternary->cond;
 
         $this->nodesToAddCollector->addNodeAfterNode(new Expression($assign), $if);
         return $if;
