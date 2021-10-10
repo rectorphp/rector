@@ -11627,7 +11627,25 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Add return type void to function like without any return
 
+:wrench: **configure it!**
+
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php)
+
+```php
+use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddVoidReturnTypeWhereNoReturnRector::class)
+        ->call('configure', [[
+            AddVoidReturnTypeWhereNoReturnRector::USE_PHPDOC => false,
+        ]]);
+};
+```
+
+↓
 
 ```diff
  final class SomeClass
