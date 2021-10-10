@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211009\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use RectorPrefix20211009\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211009\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix20211009\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use RectorPrefix20211010\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use RectorPrefix20211010\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
 /**
  * Yields a non-variadic argument's value from the request attributes.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class RequestAttributeValueResolver implements \RectorPrefix20211009\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class RequestAttributeValueResolver implements \RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
 {
     /**
      * {@inheritdoc}

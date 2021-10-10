@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211009\TYPO3\CMS\Extbase\Persistence\Generic;
+namespace RectorPrefix20211010\TYPO3\CMS\Extbase\Persistence\Generic;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings')) {
     return;

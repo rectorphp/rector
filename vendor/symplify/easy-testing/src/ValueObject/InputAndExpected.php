@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211009\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20211010\Symplify\EasyTesting\ValueObject;
 
 final class InputAndExpected
 {

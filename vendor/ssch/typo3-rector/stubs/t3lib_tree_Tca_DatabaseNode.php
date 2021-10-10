@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211009;
+namespace RectorPrefix20211010;
 
 if (\class_exists('t3lib_tree_Tca_DatabaseNode')) {
     return;

@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211009\Symfony\Component\VarDumper\Caster;
+namespace RectorPrefix20211010\Symfony\Component\VarDumper\Caster;
 
-use RectorPrefix20211009\Symfony\Component\VarDumper\Cloner\Stub;
+use RectorPrefix20211010\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Represents a PHP class identifier.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ClassStub extends \RectorPrefix20211009\Symfony\Component\VarDumper\Caster\ConstStub
+class ClassStub extends \RectorPrefix20211010\Symfony\Component\VarDumper\Caster\ConstStub
 {
     /**
      * @param string   $identifier A PHP identifier, e.g. a class, method, interface, etc. name
@@ -56,8 +56,8 @@ class ClassStub extends \RectorPrefix20211009\Symfony\Component\VarDumper\Caster
                 }, $identifier);
             }
             if (null !== $callable && $r instanceof \ReflectionFunctionAbstract) {
-                $s = \RectorPrefix20211009\Symfony\Component\VarDumper\Caster\ReflectionCaster::castFunctionAbstract($r, [], new \RectorPrefix20211009\Symfony\Component\VarDumper\Cloner\Stub(), \true, \RectorPrefix20211009\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE);
-                $s = \RectorPrefix20211009\Symfony\Component\VarDumper\Caster\ReflectionCaster::getSignature($s);
+                $s = \RectorPrefix20211010\Symfony\Component\VarDumper\Caster\ReflectionCaster::castFunctionAbstract($r, [], new \RectorPrefix20211010\Symfony\Component\VarDumper\Cloner\Stub(), \true, \RectorPrefix20211010\Symfony\Component\VarDumper\Caster\Caster::EXCLUDE_VERBOSE);
+                $s = \RectorPrefix20211010\Symfony\Component\VarDumper\Caster\ReflectionCaster::getSignature($s);
                 if (\str_ends_with($identifier, '()')) {
                     $this->value = \substr_replace($identifier, $s, -2);
                 } else {

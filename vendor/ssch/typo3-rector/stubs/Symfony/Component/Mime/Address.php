@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211009\Symfony\Component\Mime;
+namespace RectorPrefix20211010\Symfony\Component\Mime;
 
 if (\class_exists('Symfony\\Component\\Mime\\Address')) {
     return;

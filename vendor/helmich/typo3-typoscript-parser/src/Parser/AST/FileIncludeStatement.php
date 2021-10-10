@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211009\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * Include statements that includes a single TypoScript file.
@@ -9,7 +9,7 @@ namespace RectorPrefix20211009\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class FileIncludeStatement extends \RectorPrefix20211009\Helmich\TypoScriptParser\Parser\AST\IncludeStatement
+class FileIncludeStatement extends \RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\IncludeStatement
 {
     /**
      * The name of the file to include.

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211009;
+namespace RectorPrefix20211010;
 
 if (\interface_exists('Tx_Extbase_Object_ObjectManagerInterface')) {
     return;

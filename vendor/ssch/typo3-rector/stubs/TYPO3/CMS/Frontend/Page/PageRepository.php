@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20211009\TYPO3\CMS\Frontend\Page;
+namespace RectorPrefix20211010\TYPO3\CMS\Frontend\Page;
 
-use RectorPrefix20211009\TYPO3\CMS\Core\Cache\CacheManager;
-use RectorPrefix20211009\TYPO3\CMS\Core\Utility\GeneralUtility;
+use RectorPrefix20211010\TYPO3\CMS\Core\Cache\CacheManager;
+use RectorPrefix20211010\TYPO3\CMS\Core\Utility\GeneralUtility;
 if (\class_exists('TYPO3\\CMS\\Frontend\\Page\\PageRepository')) {
     return;
 }
@@ -70,6 +70,6 @@ class PageRepository
      */
     public static function getHash($hash)
     {
-        \RectorPrefix20211009\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('cache_hash')->get($hash) !== null ? \RectorPrefix20211009\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('cache_hash')->get($hash) : null;
+        \RectorPrefix20211010\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('cache_hash')->get($hash) !== null ? \RectorPrefix20211010\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Cache\\CacheManager')->getCache('cache_hash')->get($hash) : null;
     }
 }
