@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211010\TYPO3\CMS\Backend\Controller;
+namespace RectorPrefix20211011\TYPO3\CMS\Backend\Controller;
 
-use RectorPrefix20211010\TYPO3\CMS\Core\Page\PageRenderer;
+use RectorPrefix20211011\TYPO3\CMS\Core\Page\PageRenderer;
 if (\class_exists('TYPO3\\CMS\\Backend\\Controller\\BackendController')) {
     return;
 }
@@ -13,6 +13,6 @@ class BackendController
      */
     public function getPageRenderer()
     {
-        return new \RectorPrefix20211010\TYPO3\CMS\Core\Page\PageRenderer();
+        return new \RectorPrefix20211011\TYPO3\CMS\Core\Page\PageRenderer();
     }
 }

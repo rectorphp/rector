@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211010;
+namespace RectorPrefix20211011;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Be_Buttons_CshViewHelper')) {
     return;

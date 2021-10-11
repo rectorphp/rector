@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211010\TYPO3\CMS\Extbase\Utility;
+namespace RectorPrefix20211011\TYPO3\CMS\Extbase\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Utility\\TypeHandlingUtility')) {
     return;

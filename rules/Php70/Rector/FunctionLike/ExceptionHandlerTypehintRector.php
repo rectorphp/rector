@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php70\Rector\FunctionLike;
 
-use RectorPrefix20211010\Nette\Utils\Strings;
+use RectorPrefix20211011\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
         // is probably handling exceptions
-        if (!\RectorPrefix20211010\Nette\Utils\Strings::match((string) $node->name, self::HANDLE_INSENSITIVE_REGEX)) {
+        if (!\RectorPrefix20211011\Nette\Utils\Strings::match((string) $node->name, self::HANDLE_INSENSITIVE_REGEX)) {
             return null;
         }
         if (!$paramNode->type instanceof \PhpParser\Node\NullableType) {

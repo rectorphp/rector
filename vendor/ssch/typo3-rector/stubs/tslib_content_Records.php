@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211010;
+namespace RectorPrefix20211011;
 
 if (\class_exists('tslib_content_Records')) {
     return;

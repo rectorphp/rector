@@ -8,22 +8,22 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
+namespace RectorPrefix20211011\Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 
-use RectorPrefix20211010\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
-use RectorPrefix20211010\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
-use RectorPrefix20211010\Symfony\Component\Stopwatch\Stopwatch;
+use RectorPrefix20211011\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211011\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
+use RectorPrefix20211011\Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
+use RectorPrefix20211011\Symfony\Component\Stopwatch\Stopwatch;
 /**
  * Provides timing information via the stopwatch.
  *
  * @author Iltar van der Berg <kjarli@gmail.com>
  */
-final class TraceableValueResolver implements \RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
+final class TraceableValueResolver implements \RectorPrefix20211011\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface
 {
     private $inner;
     private $stopwatch;
-    public function __construct(\RectorPrefix20211010\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface $inner, \RectorPrefix20211010\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
+    public function __construct(\RectorPrefix20211011\Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface $inner, \RectorPrefix20211011\Symfony\Component\Stopwatch\Stopwatch $stopwatch)
     {
         $this->inner = $inner;
         $this->stopwatch = $stopwatch;

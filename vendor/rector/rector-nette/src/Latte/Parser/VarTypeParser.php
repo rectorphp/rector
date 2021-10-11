@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Latte\Parser;
 
-use RectorPrefix20211010\Nette\Utils\Strings;
+use RectorPrefix20211011\Nette\Utils\Strings;
 use Rector\Nette\ValueObject\LatteVariableType;
 final class VarTypeParser
 {
@@ -17,7 +17,7 @@ final class VarTypeParser
      */
     public function parse(string $content) : array
     {
-        $matches = \RectorPrefix20211010\Nette\Utils\Strings::matchAll($content, self::VAR_TYPE_REGEX);
+        $matches = \RectorPrefix20211011\Nette\Utils\Strings::matchAll($content, self::VAR_TYPE_REGEX);
         $variableTypes = [];
         foreach ($matches as $match) {
             $variableTypes[] = new \Rector\Nette\ValueObject\LatteVariableType($match['variable'], $match['type']);

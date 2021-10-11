@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211010\Symplify\Astral\Contract;
+namespace RectorPrefix20211011\Symplify\Astral\Contract;
 
 use PhpParser\Node;
 interface NodeNameResolverInterface

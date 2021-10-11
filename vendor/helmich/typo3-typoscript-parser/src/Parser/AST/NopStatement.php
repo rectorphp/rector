@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20211011\Helmich\TypoScriptParser\Parser\AST;
 
 final class NopStatement extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20211011\Helmich\TypoScriptParser\Parser\AST\Operator;
 
-use RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
+use RectorPrefix20211011\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
 /**
  * A modification statement.
  *
@@ -15,7 +15,7 @@ use RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\ObjectPath;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class Modification extends \RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryOperator
+class Modification extends \RectorPrefix20211011\Helmich\TypoScriptParser\Parser\AST\Operator\BinaryOperator
 {
     /**
      * The modification call.
@@ -30,7 +30,7 @@ class Modification extends \RectorPrefix20211010\Helmich\TypoScriptParser\Parser
      * @param ModificationCall $call       The modification call.
      * @param int              $sourceLine The original source line.
      */
-    public function __construct(\RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20211010\Helmich\TypoScriptParser\Parser\AST\Operator\ModificationCall $call, int $sourceLine)
+    public function __construct(\RectorPrefix20211011\Helmich\TypoScriptParser\Parser\AST\ObjectPath $object, \RectorPrefix20211011\Helmich\TypoScriptParser\Parser\AST\Operator\ModificationCall $call, int $sourceLine)
     {
         parent::__construct($sourceLine);
         $this->object = $object;

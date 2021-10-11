@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211010\TYPO3\CMS\Extbase\Security\Exception;
+namespace RectorPrefix20211011\TYPO3\CMS\Extbase\Security\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Security\\Exception\\InvalidArgumentForRequestHashGenerationException')) {
     return;
