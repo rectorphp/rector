@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use PhpParser\Node\Expr\BinaryOp\Equal;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,7 +33,7 @@ final class StrlenZeroToIdenticalEmptyStringRector extends \Rector\Core\Rector\A
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes strlen comparison to 0 to direct empty string compare', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run($value)
+    public function run(string $value)
     {
         $empty = strlen($value) === 0;
     }
@@ -40,7 +42,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run($value)
+    public function run(string $value)
     {
         $empty = $value === '';
     }
@@ -61,19 +63,19 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->left instanceof \PhpParser\Node\Expr\FuncCall) {
-            return $this->processLeftIdentical($node, $node->left);
+            return $this->processIdentical($node->right, $node->left);
         }
         if ($node->right instanceof \PhpParser\Node\Expr\FuncCall) {
-            return $this->processRightIdentical($node, $node->right);
+            return $this->processIdentical($node->left, $node->right);
         }
         return null;
     }
-    private function processLeftIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Identical
+    private function processIdentical(\PhpParser\Node\Expr $value, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Identical
     {
         if (!$this->isName($funcCall, 'strlen')) {
             return null;
         }
-        if (!$this->valueResolver->isValue($identical->right, 0)) {
+        if (!$this->valueResolver->isValue($value, 0)) {
             return null;
         }
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
@@ -83,23 +85,12 @@ CODE_SAMPLE
         $firstArg = $funcCall->args[0];
         /** @var Expr $variable */
         $variable = $firstArg->value;
-        return new \PhpParser\Node\Expr\BinaryOp\Identical($variable, new \PhpParser\Node\Scalar\String_(''));
-    }
-    private function processRightIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Identical
-    {
-        if (!$this->isName($funcCall, 'strlen')) {
-            return null;
+        // Needs string cast if variable type is not string
+        // see https://github.com/rectorphp/rector/issues/6700
+        $isStringType = $this->nodeTypeResolver->getNativeType($variable) instanceof \PHPStan\Type\StringType;
+        if (!$isStringType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical(new \PhpParser\Node\Expr\Cast\String_($variable), new \PhpParser\Node\Scalar\String_(''));
         }
-        if (!$this->valueResolver->isValue($identical->left, 0)) {
-            return null;
-        }
-        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
-            return null;
-        }
-        /** @var Arg $firstArg */
-        $firstArg = $funcCall->args[0];
-        /** @var Expr $variable */
-        $variable = $firstArg->value;
         return new \PhpParser\Node\Expr\BinaryOp\Identical($variable, new \PhpParser\Node\Scalar\String_(''));
     }
 }
