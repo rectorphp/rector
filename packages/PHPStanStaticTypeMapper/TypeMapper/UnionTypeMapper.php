@@ -196,7 +196,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     }
 
     /**
-     * @return Name|FullyQualified|PhpParserUnionType|null
+     * @return Name|FullyQualified|PhpParserUnionType|NullableType|null
      */
     private function matchTypeForUnionedObjectTypes(UnionType $unionType, TypeKind $typeKind): ?Node
     {
@@ -222,8 +222,20 @@ final class UnionTypeMapper implements TypeMapperInterface
             return new Name('bool');
         }
 
+        return $this->processResolveCompatibleObjectCandidates($unionType);
+    }
+
+    private function processResolveCompatibleObjectCandidates(UnionType $unionType): ?Node
+    {
         // the type should be compatible with all other types, e.g. A extends B, B
         $compatibleObjectType = $this->resolveCompatibleObjectCandidate($unionType);
+        if ($compatibleObjectType instanceof UnionType) {
+            $type = $this->matchTypeForNullableUnionType($compatibleObjectType);
+            if ($type instanceof ObjectType) {
+                return new NullableType(new FullyQualified($type->getClassName()));
+            }
+        }
+
         if (! $compatibleObjectType instanceof ObjectType) {
             return null;
         }
@@ -258,10 +270,24 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new PhpParserUnionType($phpParserUnionedTypes);
     }
 
-    private function resolveCompatibleObjectCandidate(UnionType $unionType): ?TypeWithClassName
+    private function isNullable(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $type) {
+            if ($type instanceof NullType) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function resolveCompatibleObjectCandidate(UnionType $unionType): UnionType|TypeWithClassName|null
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
-            return new ObjectType('Doctrine\Common\Collections\Collection');
+            $objectType = new ObjectType('Doctrine\Common\Collections\Collection');
+            return $this->isNullable($unionType)
+                ? new UnionType([new NullType(), $objectType])
+                : $objectType;
         }
 
         if (! $this->unionTypeAnalyzer->hasTypeClassNameOnly($unionType)) {
