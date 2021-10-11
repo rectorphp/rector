@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector\Fixture;
 
-class Fixture
+class DefinitelyString
 {
-    public function run($value)
+    public function run(string $value)
     {
         $empty = strlen($value) === 0;
 
@@ -18,9 +18,9 @@ class Fixture
 
 namespace Rector\Tests\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector\Fixture;
 
-class Fixture
+class DefinitelyString
 {
-    public function run($value)
+    public function run(string $value)
     {
         $empty = $value === '';
 
