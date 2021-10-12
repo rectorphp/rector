@@ -6,6 +6,9 @@ namespace RectorPrefix20211012\Symplify\PackageBuilder\Neon;
 use RectorPrefix20211012\Nette\Neon\Encoder;
 use RectorPrefix20211012\Nette\Neon\Neon;
 use RectorPrefix20211012\Nette\Utils\Strings;
+/**
+ * @api
+ */
 final class NeonPrinter
 {
     /**

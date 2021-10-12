@@ -7,6 +7,7 @@ use RectorPrefix20211012\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix20211012\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20211012\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 /**
+ * @api
  * @see \Symplify\PackageBuilder\Tests\Parameter\ParameterProviderTest
  */
 final class ParameterProvider

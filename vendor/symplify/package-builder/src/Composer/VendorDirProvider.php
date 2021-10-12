@@ -6,6 +6,7 @@ namespace RectorPrefix20211012\Symplify\PackageBuilder\Composer;
 use RectorPrefix20211012\Composer\Autoload\ClassLoader;
 use ReflectionClass;
 /**
+ * @api
  * @see \Symplify\PackageBuilder\Tests\Composer\VendorDirProviderTest
  */
 final class VendorDirProvider

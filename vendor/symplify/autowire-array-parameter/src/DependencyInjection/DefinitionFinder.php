@@ -1,14 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211012\Symplify\PackageBuilder\DependencyInjection;
+namespace RectorPrefix20211012\Symplify\AutowireArrayParameter\DependencyInjection;
 
 use RectorPrefix20211012\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20211012\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211012\Symplify\PackageBuilder\Exception\DependencyInjection\DefinitionForTypeNotFoundException;
+use RectorPrefix20211012\Symplify\AutowireArrayParameter\Exception\DependencyInjection\DefinitionForTypeNotFoundException;
 use Throwable;
 /**
- * @see \Symplify\PackageBuilder\Tests\DependencyInjection\DefinitionFinderTest
+ * @api
+ * @see \Symplify\AutowireArrayParameter\Tests\DependencyInjection\DefinitionFinderTest
  */
 final class DefinitionFinder
 {
@@ -36,7 +37,7 @@ final class DefinitionFinder
         if ($definition !== null) {
             return $definition;
         }
-        throw new \RectorPrefix20211012\Symplify\PackageBuilder\Exception\DependencyInjection\DefinitionForTypeNotFoundException(\sprintf('Definition for type "%s" was not found.', $type));
+        throw new \RectorPrefix20211012\Symplify\AutowireArrayParameter\Exception\DependencyInjection\DefinitionForTypeNotFoundException(\sprintf('Definition for type "%s" was not found.', $type));
     }
     private function getByTypeIfExists(\RectorPrefix20211012\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, string $type) : ?\RectorPrefix20211012\Symfony\Component\DependencyInjection\Definition
     {

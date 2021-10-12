@@ -1,18 +1,20 @@
 {
     "name": "symplify\/astral",
+    "type": "phpstan-extension",
     "description": "Toolking for smart daily work with AST",
     "license": "MIT",
     "require": {
         "php": ">=8.0",
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.3|^6.0",
-        "symplify\/autowire-array-parameter": "^9.4.70",
+        "symplify\/autowire-array-parameter": "^9.5",
+        "symplify\/smart-file-system": "^9.5",
         "symfony\/http-kernel": "^5.3|^6.0",
         "nikic\/php-parser": "^4.13",
-        "symplify\/package-builder": "^9.4.70"
+        "symplify\/package-builder": "^9.5"
     },
     "require-dev": {
-        "symplify\/easy-testing": "^9.4.70",
+        "symplify\/easy-testing": "^9.5",
         "phpunit\/phpunit": "^9.5"
     },
     "autoload": {
@@ -28,6 +30,11 @@
     "extra": {
         "branch-alias": {
             "dev-main": "9.5-dev"
+        },
+        "phpstan": {
+            "includes": [
+                "config\/services.neon"
+            ]
         }
     },
     "conflict": {
@@ -49,7 +56,6 @@
         "symplify\/vendor-patches": "<9.4.70",
         "symplify\/skipper": "<9.4.70",
         "symplify\/smart-file-system": "<9.4.70",
-        "symplify\/easy-hydrator": "<9.4.70",
         "symplify\/symfony-static-dumper": "<9.4.70",
         "symplify\/git-wrapper": "<9.4.70",
         "symplify\/symplify-kernel": "<9.4.70",

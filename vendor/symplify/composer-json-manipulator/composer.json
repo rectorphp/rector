@@ -10,8 +10,8 @@
         "symfony\/dependency-injection": "^5.3|^6.0",
         "symfony\/filesystem": "^5.3|^6.0",
         "symfony\/http-kernel": "^5.3|^6.0",
-        "symplify\/package-builder": "^9.4.70",
-        "symplify\/smart-file-system": "^9.4.70"
+        "symplify\/package-builder": "^9.5",
+        "symplify\/smart-file-system": "^9.5"
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5"
@@ -50,7 +50,6 @@
         "symplify\/console-package-builder": "<9.4.70",
         "symplify\/vendor-patches": "<9.4.70",
         "symplify\/skipper": "<9.4.70",
-        "symplify\/easy-hydrator": "<9.4.70",
         "symplify\/symfony-static-dumper": "<9.4.70",
         "symplify\/git-wrapper": "<9.4.70",
         "symplify\/symplify-kernel": "<9.4.70",

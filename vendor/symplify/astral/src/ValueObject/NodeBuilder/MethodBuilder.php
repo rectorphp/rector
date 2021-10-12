@@ -5,6 +5,7 @@ namespace RectorPrefix20211012\Symplify\Astral\ValueObject\NodeBuilder;
 
 use PhpParser\Builder\Method;
 /**
+ * @api
  * Fixed duplicated naming in php-parser and prevents confusion
  */
 final class MethodBuilder extends \PhpParser\Builder\Method

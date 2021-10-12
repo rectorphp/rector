@@ -8,6 +8,8 @@ use RectorPrefix20211012\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorI
 use RectorPrefix20211012\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException;
 use RectorPrefix20211012\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 /**
+ * @api
+ *
  * Mimics
  * https://github.com/nikic/PHP-Parser/blob/4abdcde5f16269959a834e4e58ea0ba0938ab133/lib/PhpParser/NodeTraverser.php
  *

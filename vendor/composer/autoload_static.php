@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
+class ComposerStaticInit0a64b28f1180a94c06b3d8b454150657
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1687,6 +1687,7 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
         'RectorPrefix20211012\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
         'RectorPrefix20211012\\Symplify\\Astral\\HttpKernel\\AstralKernel' => __DIR__ . '/..' . '/symplify/astral/src/HttpKernel/AstralKernel.php',
         'RectorPrefix20211012\\Symplify\\Astral\\Naming\\SimpleNameResolver' => __DIR__ . '/..' . '/symplify/astral/src/Naming/SimpleNameResolver.php',
+        'RectorPrefix20211012\\Symplify\\Astral\\NodeAnalyzer\\NetteTypeAnalyzer' => __DIR__ . '/..' . '/symplify/astral/src/NodeAnalyzer/NetteTypeAnalyzer.php',
         'RectorPrefix20211012\\Symplify\\Astral\\NodeFinder\\SimpleNodeFinder' => __DIR__ . '/..' . '/symplify/astral/src/NodeFinder/SimpleNodeFinder.php',
         'RectorPrefix20211012\\Symplify\\Astral\\NodeNameResolver\\ArgNodeNameResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeNameResolver/ArgNodeNameResolver.php',
         'RectorPrefix20211012\\Symplify\\Astral\\NodeNameResolver\\AttributeNodeNameResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeNameResolver/AttributeNodeNameResolver.php',
@@ -1708,6 +1709,7 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
         'RectorPrefix20211012\\Symplify\\Astral\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/NodeVisitor/CallableNodeVisitor.php',
         'RectorPrefix20211012\\Symplify\\Astral\\StaticFactory\\NodeValueResolverStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/StaticFactory/NodeValueResolverStaticFactory.php',
         'RectorPrefix20211012\\Symplify\\Astral\\StaticFactory\\SimpleNameResolverStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/StaticFactory/SimpleNameResolverStaticFactory.php',
+        'RectorPrefix20211012\\Symplify\\Astral\\TypeAnalyzer\\ContainsTypeAnalyser' => __DIR__ . '/..' . '/symplify/astral/src/TypeAnalyzer/ContainsTypeAnalyser.php',
         'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\AttributeKey' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/AttributeKey.php',
         'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\NodeBuilder\\ClassBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/ClassBuilder.php',
         'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\NodeBuilder\\MethodBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/MethodBuilder.php',
@@ -1716,9 +1718,10 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
         'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\NodeBuilder\\PropertyBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/PropertyBuilder.php',
         'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\NodeBuilder\\TraitUseBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/TraitUseBuilder.php',
         'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\NodeBuilder\\UseBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/UseBuilder.php',
-        'RectorPrefix20211012\\Symplify\\Astral\\ValueObject\\NodeFinder\\ScopeTypes' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeFinder/ScopeTypes.php',
         'RectorPrefix20211012\\Symplify\\AutowireArrayParameter\\DependencyInjection\\CompilerPass\\AutowireArrayParameterCompilerPass' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DependencyInjection/CompilerPass/AutowireArrayParameterCompilerPass.php',
+        'RectorPrefix20211012\\Symplify\\AutowireArrayParameter\\DependencyInjection\\DefinitionFinder' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DependencyInjection/DefinitionFinder.php',
         'RectorPrefix20211012\\Symplify\\AutowireArrayParameter\\DocBlock\\ParamTypeDocBlockResolver' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DocBlock/ParamTypeDocBlockResolver.php',
+        'RectorPrefix20211012\\Symplify\\AutowireArrayParameter\\Exception\\DependencyInjection\\DefinitionForTypeNotFoundException' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/Exception/DependencyInjection/DefinitionForTypeNotFoundException.php',
         'RectorPrefix20211012\\Symplify\\AutowireArrayParameter\\Skipper\\ParameterSkipper' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/Skipper/ParameterSkipper.php',
         'RectorPrefix20211012\\Symplify\\AutowireArrayParameter\\TypeResolver\\ParameterTypeResolver' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/TypeResolver/ParameterTypeResolver.php',
         'RectorPrefix20211012\\Symplify\\ComposerJsonManipulator\\Bundle\\ComposerJsonManipulatorBundle' => __DIR__ . '/..' . '/symplify/composer-json-manipulator/src/Bundle/ComposerJsonManipulatorBundle.php',
@@ -1731,7 +1734,6 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
         'RectorPrefix20211012\\Symplify\\ComposerJsonManipulator\\Sorter\\ComposerPackageSorter' => __DIR__ . '/..' . '/symplify/composer-json-manipulator/src/Sorter/ComposerPackageSorter.php',
         'RectorPrefix20211012\\Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson' => __DIR__ . '/..' . '/symplify/composer-json-manipulator/src/ValueObject/ComposerJson.php',
         'RectorPrefix20211012\\Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJsonSection' => __DIR__ . '/..' . '/symplify/composer-json-manipulator/src/ValueObject/ComposerJsonSection.php',
-        'RectorPrefix20211012\\Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerValues' => __DIR__ . '/..' . '/symplify/composer-json-manipulator/src/ValueObject/ComposerValues.php',
         'RectorPrefix20211012\\Symplify\\ComposerJsonManipulator\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/composer-json-manipulator/src/ValueObject/Option.php',
         'RectorPrefix20211012\\Symplify\\ConsoleColorDiff\\Bundle\\ConsoleColorDiffBundle' => __DIR__ . '/..' . '/symplify/console-color-diff/src/Bundle/ConsoleColorDiffBundle.php',
         'RectorPrefix20211012\\Symplify\\ConsoleColorDiff\\Console\\Formatter\\ColorConsoleDiffFormatter' => __DIR__ . '/..' . '/symplify/console-color-diff/src/Console/Formatter/ColorConsoleDiffFormatter.php',
@@ -1764,18 +1766,11 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Console\\Command\\AbstractSymplifyCommand' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Command/AbstractSymplifyCommand.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Console\\Command\\CommandNaming' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Command/CommandNaming.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Console\\Input\\StaticInputDetector' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Input/StaticInputDetector.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\Console\\ShellCode' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/ShellCode.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Style/SymfonyStyleFactory.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Contract\\HttpKernel\\ExtraConfigAwareKernelInterface' => __DIR__ . '/..' . '/symplify/package-builder/src/Contract/HttpKernel/ExtraConfigAwareKernelInterface.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\DependencyInjection\\CompilerPass\\AutowireInterfacesCompilerPass' => __DIR__ . '/..' . '/symplify/package-builder/src/DependencyInjection/CompilerPass/AutowireInterfacesCompilerPass.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\DependencyInjection\\DefinitionFinder' => __DIR__ . '/..' . '/symplify/package-builder/src/DependencyInjection/DefinitionFinder.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\DependencyInjection\\FileLoader\\ParameterMergingPhpFileLoader' => __DIR__ . '/..' . '/symplify/package-builder/src/DependencyInjection/FileLoader/ParameterMergingPhpFileLoader.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\Exception\\Configuration\\LevelNotFoundException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/Configuration/LevelNotFoundException.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\Exception\\DependencyInjection\\DefinitionForTypeNotFoundException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/DependencyInjection/DefinitionForTypeNotFoundException.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\Exception\\FilePathNotAbsoluteException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/FilePathNotAbsoluteException.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Exception\\HttpKernel\\MissingInterfaceException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/HttpKernel/MissingInterfaceException.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\Exception\\NotImplementedYetException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/NotImplementedYetException.php',
-        'RectorPrefix20211012\\Symplify\\PackageBuilder\\Exception\\Yaml\\InvalidParametersValueException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/Yaml/InvalidParametersValueException.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Matcher\\ArrayStringAndFnMatcher' => __DIR__ . '/..' . '/symplify/package-builder/src/Matcher/ArrayStringAndFnMatcher.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Neon\\NeonPrinter' => __DIR__ . '/..' . '/symplify/package-builder/src/Neon/NeonPrinter.php',
         'RectorPrefix20211012\\Symplify\\PackageBuilder\\Parameter\\ParameterProvider' => __DIR__ . '/..' . '/symplify/package-builder/src/Parameter/ParameterProvider.php',
@@ -1804,7 +1799,7 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
         'RectorPrefix20211012\\Symplify\\Skipper\\Bundle\\SkipperBundle' => __DIR__ . '/..' . '/symplify/skipper/src/Bundle/SkipperBundle.php',
         'RectorPrefix20211012\\Symplify\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/..' . '/symplify/skipper/src/Contract/SkipVoterInterface.php',
         'RectorPrefix20211012\\Symplify\\Skipper\\DependencyInjection\\Extension\\SkipperExtension' => __DIR__ . '/..' . '/symplify/skipper/src/DependencyInjection/Extension/SkipperExtension.php',
-        'RectorPrefix20211012\\Symplify\\Skipper\\FileSystem\\PathNormalizer' => __DIR__ . '/..' . '/symplify/skipper/src/FileSystem/PathNormalizer.php',
+        'RectorPrefix20211012\\Symplify\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/..' . '/symplify/skipper/src/FileSystem/FnMatchPathNormalizer.php',
         'RectorPrefix20211012\\Symplify\\Skipper\\HttpKernel\\SkipperKernel' => __DIR__ . '/..' . '/symplify/skipper/src/HttpKernel/SkipperKernel.php',
         'RectorPrefix20211012\\Symplify\\Skipper\\Matcher\\FileInfoMatcher' => __DIR__ . '/..' . '/symplify/skipper/src/Matcher/FileInfoMatcher.php',
         'RectorPrefix20211012\\Symplify\\Skipper\\SkipCriteriaResolver\\SkippedClassAndCodesResolver' => __DIR__ . '/..' . '/symplify/skipper/src/SkipCriteriaResolver/SkippedClassAndCodesResolver.php',
@@ -3896,9 +3891,9 @@ class ComposerStaticInita46e8cc2109d5de2ea95cadf20678283
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita46e8cc2109d5de2ea95cadf20678283::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita46e8cc2109d5de2ea95cadf20678283::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita46e8cc2109d5de2ea95cadf20678283::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0a64b28f1180a94c06b3d8b454150657::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0a64b28f1180a94c06b3d8b454150657::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0a64b28f1180a94c06b3d8b454150657::$classMap;
 
         }, null, ClassLoader::class);
     }

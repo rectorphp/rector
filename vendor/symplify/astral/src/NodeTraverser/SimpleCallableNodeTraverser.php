@@ -6,6 +6,9 @@ namespace RectorPrefix20211012\Symplify\Astral\NodeTraverser;
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use RectorPrefix20211012\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
+/**
+ * @api
+ */
 final class SimpleCallableNodeTraverser
 {
     /**

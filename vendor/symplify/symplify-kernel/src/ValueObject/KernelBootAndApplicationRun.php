@@ -12,6 +12,9 @@ use RectorPrefix20211012\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfig
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211012\Symplify\SymplifyKernel\Exception\BootException;
 use Throwable;
+/**
+ * @api
+ */
 final class KernelBootAndApplicationRun
 {
     /**
@@ -82,9 +85,10 @@ final class KernelBootAndApplicationRun
      */
     private function validateKernelClass(string $kernelClass) : void
     {
-        if (!\is_a($kernelClass, \RectorPrefix20211012\Symfony\Component\HttpKernel\KernelInterface::class, \true)) {
-            $message = \sprintf('Class "%s" must by type of "%s"', $kernelClass, \RectorPrefix20211012\Symfony\Component\HttpKernel\KernelInterface::class);
-            throw new \RectorPrefix20211012\Symplify\SymplifyKernel\Exception\BootException($message);
+        if (\is_a($kernelClass, \RectorPrefix20211012\Symfony\Component\HttpKernel\KernelInterface::class, \true)) {
+            return;
         }
+        $errorMessage = \sprintf('Class "%s" must by type of "%s"', $kernelClass, \RectorPrefix20211012\Symfony\Component\HttpKernel\KernelInterface::class);
+        throw new \RectorPrefix20211012\Symplify\SymplifyKernel\Exception\BootException($errorMessage);
     }
 }

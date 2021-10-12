@@ -6,6 +6,7 @@ namespace RectorPrefix20211012\Symplify\PackageBuilder\Console\Command;
 use RectorPrefix20211012\Nette\Utils\Strings;
 use RectorPrefix20211012\Symfony\Component\Console\Command\Command;
 /**
+ * @api
  * @see \Symplify\PackageBuilder\Tests\Console\Command\CommandNamingTest
  */
 final class CommandNaming

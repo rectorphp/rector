@@ -8,6 +8,9 @@ use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use RectorPrefix20211012\Symplify\SimplePhpDocParser\SimplePhpDocParser;
+/**
+ * @api
+ */
 final class SimplePhpDocParserStaticFactory
 {
     public static function create() : \RectorPrefix20211012\Symplify\SimplePhpDocParser\SimplePhpDocParser

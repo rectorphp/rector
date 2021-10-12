@@ -64,6 +64,9 @@ class ConstExprParser
                     if ($lastType !== \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD && $tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD)) {
                         $classConstantName .= '*';
                         $lastType = \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_WILDCARD;
+                        if ($tokens->getSkippedHorizontalWhiteSpaceIfAny() !== '') {
+                            break;
+                        }
                         continue;
                     }
                     if ($lastType === null) {

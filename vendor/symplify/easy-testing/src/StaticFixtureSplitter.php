@@ -10,6 +10,9 @@ use RectorPrefix20211012\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpect
 use RectorPrefix20211012\Symplify\EasyTesting\ValueObject\SplitLine;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211012\Symplify\SmartFileSystem\SmartFileSystem;
+/**
+ * @api
+ */
 final class StaticFixtureSplitter
 {
     /**

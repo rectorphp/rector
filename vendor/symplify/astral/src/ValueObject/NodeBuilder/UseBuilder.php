@@ -6,6 +6,7 @@ namespace RectorPrefix20211012\Symplify\Astral\ValueObject\NodeBuilder;
 use PhpParser\Builder\Use_;
 use PhpParser\Node\Stmt\Use_ as UseStmt;
 /**
+ * @api
  * Fixed duplicated naming in php-parser and prevents confusion
  */
 final class UseBuilder extends \PhpParser\Builder\Use_

@@ -5,6 +5,9 @@ namespace RectorPrefix20211012\Symplify\EasyTesting\DataProvider;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211012\Symplify\SmartFileSystem\SmartFileSystem;
+/**
+ * @api
+ */
 final class StaticFixtureUpdater
 {
     /**

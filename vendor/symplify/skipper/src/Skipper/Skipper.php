@@ -6,6 +6,7 @@ namespace RectorPrefix20211012\Symplify\Skipper\Skipper;
 use RectorPrefix20211012\Symplify\Skipper\Contract\SkipVoterInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
+ * @api
  * @see \Symplify\Skipper\Tests\Skipper\Skipper\SkipperTest
  */
 final class Skipper

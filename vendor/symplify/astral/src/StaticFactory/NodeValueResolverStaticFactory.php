@@ -7,6 +7,9 @@ use PhpParser\NodeFinder;
 use RectorPrefix20211012\Symplify\Astral\NodeFinder\SimpleNodeFinder;
 use RectorPrefix20211012\Symplify\Astral\NodeValue\NodeValueResolver;
 use RectorPrefix20211012\Symplify\PackageBuilder\Php\TypeChecker;
+/**
+ * @api
+ */
 final class NodeValueResolverStaticFactory
 {
     public static function create() : \RectorPrefix20211012\Symplify\Astral\NodeValue\NodeValueResolver

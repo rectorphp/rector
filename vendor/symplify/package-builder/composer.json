@@ -10,8 +10,8 @@
         "symfony\/dependency-injection": "^5.3|^6.0",
         "symfony\/finder": "^5.3|^6.0",
         "symfony\/http-kernel": "^5.3|^6.0",
-        "symplify\/symplify-kernel": "^9.4.70",
-        "symplify\/easy-testing": "^9.4.70",
+        "symplify\/symplify-kernel": "^9.5",
+        "symplify\/easy-testing": "^9.5",
         "nette\/neon": "^3.2"
     },
     "require-dev": {
@@ -52,7 +52,6 @@
         "symplify\/vendor-patches": "<9.4.70",
         "symplify\/skipper": "<9.4.70",
         "symplify\/smart-file-system": "<9.4.70",
-        "symplify\/easy-hydrator": "<9.4.70",
         "symplify\/symfony-static-dumper": "<9.4.70",
         "symplify\/git-wrapper": "<9.4.70",
         "symplify\/monorepo-builder": "<9.4.70",

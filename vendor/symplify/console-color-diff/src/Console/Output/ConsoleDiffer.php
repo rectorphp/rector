@@ -5,6 +5,9 @@ namespace RectorPrefix20211012\Symplify\ConsoleColorDiff\Console\Output;
 
 use RectorPrefix20211012\SebastianBergmann\Diff\Differ;
 use RectorPrefix20211012\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
+/**
+ * @api
+ */
 final class ConsoleDiffer
 {
     /**

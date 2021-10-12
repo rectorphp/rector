@@ -38,7 +38,6 @@
         "symplify\/vendor-patches": "<9.4.70",
         "symplify\/skipper": "<9.4.70",
         "symplify\/smart-file-system": "<9.4.70",
-        "symplify\/easy-hydrator": "<9.4.70",
         "symplify\/symfony-static-dumper": "<9.4.70",
         "symplify\/git-wrapper": "<9.4.70",
         "symplify\/symplify-kernel": "<9.4.70",

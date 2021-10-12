@@ -3,6 +3,9 @@
 declare (strict_types=1);
 namespace RectorPrefix20211012\Symplify\PackageBuilder\Php;
 
+/**
+ * @api
+ */
 final class TypeChecker
 {
     /**

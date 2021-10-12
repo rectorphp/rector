@@ -11,6 +11,7 @@ use RectorPrefix20211012\Symplify\SmartFileSystem\Exception\FileNotFoundExceptio
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211012\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
+ * @api
  * @see \Symplify\EasyTesting\Tests\DataProvider\StaticFixtureFinder\StaticFixtureFinderTest
  */
 final class StaticFixtureFinder

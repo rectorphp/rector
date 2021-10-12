@@ -8,6 +8,8 @@ use RectorPrefix20211012\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20211012\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use RectorPrefix20211012\Symplify\PackageBuilder\Yaml\ParametersMerger;
 /**
+ * @api
+ *
  * The need:
  * - https://github.com/symfony/symfony/issues/26713
  * - https://github.com/symfony/symfony/pull/21313#issuecomment-372037445

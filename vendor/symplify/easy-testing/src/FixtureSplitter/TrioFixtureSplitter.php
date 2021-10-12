@@ -8,6 +8,9 @@ use RectorPrefix20211012\Symplify\EasyTesting\ValueObject\FixtureSplit\TrioConte
 use RectorPrefix20211012\Symplify\EasyTesting\ValueObject\SplitLine;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211012\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+/**
+ * @api
+ */
 final class TrioFixtureSplitter
 {
     public function splitFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : \RectorPrefix20211012\Symplify\EasyTesting\ValueObject\FixtureSplit\TrioContent

@@ -57,4 +57,10 @@ final class AttributeKey
      * @var string
      */
     public const REFERENCED_METHOD_CALLS = 'referenced_method_calls';
+    /**
+     * Used in PHPStan for printed node content. Useful for printing error messages without need to reprint it again.
+     *
+     * @var string
+     */
+    public const PHPSTAN_CACHE_PRINTER = 'phpstan_cache_printer';
 }

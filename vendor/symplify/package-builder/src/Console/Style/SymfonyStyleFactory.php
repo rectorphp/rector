@@ -10,6 +10,9 @@ use RectorPrefix20211012\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20211012\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20211012\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20211012\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+/**
+ * @api
+ */
 final class SymfonyStyleFactory
 {
     /**

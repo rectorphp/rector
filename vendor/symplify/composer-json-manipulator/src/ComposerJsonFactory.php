@@ -9,6 +9,7 @@ use RectorPrefix20211012\Symplify\ComposerJsonManipulator\ValueObject\ComposerJs
 use RectorPrefix20211012\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
+ * @api
  * @see \Symplify\ComposerJsonManipulator\Tests\ComposerJsonFactory\ComposerJsonFactoryTest
  */
 final class ComposerJsonFactory

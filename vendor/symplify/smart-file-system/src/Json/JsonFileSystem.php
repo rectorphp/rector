@@ -8,6 +8,7 @@ use RectorPrefix20211012\Nette\Utils\Json;
 use RectorPrefix20211012\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20211012\Symplify\SmartFileSystem\SmartFileSystem;
 /**
+ * @api
  * @see \Symplify\SmartFileSystem\Tests\Json\JsonFileSystem\JsonFileSystemTest
  */
 final class JsonFileSystem

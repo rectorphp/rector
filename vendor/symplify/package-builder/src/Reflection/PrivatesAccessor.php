@@ -6,6 +6,7 @@ namespace RectorPrefix20211012\Symplify\PackageBuilder\Reflection;
 use ReflectionProperty;
 use RectorPrefix20211012\Symplify\PHPStanRules\Exception\ShouldNotHappenException;
 /**
+ * @api
  * @see \Symplify\PackageBuilder\Tests\Reflection\PrivatesAccessorTest
  */
 final class PrivatesAccessor

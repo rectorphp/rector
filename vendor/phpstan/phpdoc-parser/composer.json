@@ -8,8 +8,8 @@
     "require-dev": {
         "php-parallel-lint\/php-parallel-lint": "^1.2",
         "phpstan\/extension-installer": "^1.0",
-        "phpstan\/phpstan": "^0.12.87",
-        "phpstan\/phpstan-strict-rules": "^0.12.5",
+        "phpstan\/phpstan": "^1.0",
+        "phpstan\/phpstan-strict-rules": "^1.0",
         "phpunit\/phpunit": "^9.5",
         "symfony\/process": "^5.2"
     },
@@ -21,7 +21,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.5-dev"
+            "dev-master": "1.0-dev"
         }
     },
     "autoload": {
