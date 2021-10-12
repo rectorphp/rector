@@ -101,4 +101,17 @@ final class UnionTypeAnalyzer
         }
         return \true;
     }
+    public function isNullable(\PHPStan\Type\UnionType $unionType, bool $checkTwoTypes = \false) : bool
+    {
+        $types = $unionType->getTypes();
+        if ($checkTwoTypes && \count($types) > 2) {
+            return \false;
+        }
+        foreach ($types as $type) {
+            if ($type instanceof \PHPStan\Type\NullType) {
+                return \true;
+            }
+        }
+        return \false;
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211011\TYPO3\CMS\Core\Service;
+namespace RectorPrefix20211012\TYPO3\CMS\Core\Service;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Service\\MarkerBasedTemplateService')) {
     return;

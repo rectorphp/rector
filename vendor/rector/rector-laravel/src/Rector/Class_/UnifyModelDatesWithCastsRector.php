@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20211011\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20211012\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -104,7 +104,7 @@ CODE_SAMPLE
     }
     private function createCastsProperty() : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211011\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
+        $propertyBuilder = new \RectorPrefix20211012\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
         $propertyBuilder->makeProtected();
         $propertyBuilder->setDefault([]);
         $property = $propertyBuilder->getNode();

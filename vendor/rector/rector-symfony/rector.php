@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211011;
+namespace RectorPrefix20211012;
 
 use Rector\Core\Configuration\Option;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;

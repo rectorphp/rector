@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211011;
+namespace RectorPrefix20211012;
 
 if (\class_exists('Tx_Extbase_Persistence_Exception_UnsupportedRelation')) {
     return;

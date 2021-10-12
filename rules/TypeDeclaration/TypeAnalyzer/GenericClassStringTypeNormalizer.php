@@ -11,12 +11,12 @@ use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 final class GenericClassStringTypeNormalizer
 {
@@ -28,10 +28,15 @@ final class GenericClassStringTypeNormalizer
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer
      */
     private $detailedTypeAnalyzer;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer)
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
+     */
+    private $unionTypeAnalyzer;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer $detailedTypeAnalyzer, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
+        $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
     /**
      * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType|\PHPStan\Type\Type
@@ -52,7 +57,7 @@ final class GenericClassStringTypeNormalizer
             }
             return $this->resolveStringType($value);
         });
-        if ($type instanceof \PHPStan\Type\UnionType && !$this->isNullableType($type)) {
+        if ($type instanceof \PHPStan\Type\UnionType && !$this->unionTypeAnalyzer->isNullable($type, \true)) {
             return $this->resolveClassStringInUnionType($type);
         }
         if ($type instanceof \PHPStan\Type\ArrayType && $type->getKeyType() instanceof \PHPStan\Type\UnionType) {
@@ -69,19 +74,6 @@ final class GenericClassStringTypeNormalizer
             }
         }
         return \true;
-    }
-    private function isNullableType(\PHPStan\Type\UnionType $unionType) : bool
-    {
-        $types = $unionType->getTypes();
-        if (\count($types) > 2) {
-            return \false;
-        }
-        foreach ($types as $type) {
-            if ($type instanceof \PHPStan\Type\NullType) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function resolveArrayTypeWithUnionKeyType(\PHPStan\Type\ArrayType $arrayType) : \PHPStan\Type\ArrayType
     {

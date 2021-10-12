@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211011\TYPO3\CMS\Core\Core;
+namespace RectorPrefix20211012\TYPO3\CMS\Core\Core;
 
-use RectorPrefix20211011\TYPO3\CMS\Core\Utility\GeneralUtility;
+use RectorPrefix20211012\TYPO3\CMS\Core\Utility\GeneralUtility;
 if (\class_exists('TYPO3\\CMS\\Core\\Core\\Bootstrap')) {
     return;
 }

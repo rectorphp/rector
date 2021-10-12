@@ -33,7 +33,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use RectorPrefix20211011\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211012\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<UnionType>
  */
@@ -253,15 +253,6 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         $phpParserUnionedTypes = \array_unique($phpParserUnionedTypes);
         return new \PhpParser\Node\UnionType($phpParserUnionedTypes);
     }
-    private function isNullable(\PHPStan\Type\UnionType $unionType) : bool
-    {
-        foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof \PHPStan\Type\NullType) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     /**
      * @return \PHPStan\Type\UnionType|\PHPStan\Type\TypeWithClassName|null
      */
@@ -269,7 +260,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
             $objectType = new \PHPStan\Type\ObjectType('Doctrine\\Common\\Collections\\Collection');
-            return $this->isNullable($unionType) ? new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), $objectType]) : $objectType;
+            return $this->unionTypeAnalyzer->isNullable($unionType) ? new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), $objectType]) : $objectType;
         }
         if (!$this->unionTypeAnalyzer->hasTypeClassNameOnly($unionType)) {
             return null;

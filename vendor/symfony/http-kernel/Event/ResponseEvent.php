@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211011\Symfony\Component\HttpKernel\Event;
+namespace RectorPrefix20211012\Symfony\Component\HttpKernel\Event;
 
-use RectorPrefix20211011\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211011\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20211011\Symfony\Component\HttpKernel\HttpKernelInterface;
+use RectorPrefix20211012\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211012\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211012\Symfony\Component\HttpKernel\HttpKernelInterface;
 /**
  * Allows to filter a Response object.
  *
@@ -22,15 +22,15 @@ use RectorPrefix20211011\Symfony\Component\HttpKernel\HttpKernelInterface;
  *
  * @author Bernhard Schussek <bschussek@gmail.com>
  */
-final class ResponseEvent extends \RectorPrefix20211011\Symfony\Component\HttpKernel\Event\KernelEvent
+final class ResponseEvent extends \RectorPrefix20211012\Symfony\Component\HttpKernel\Event\KernelEvent
 {
     private $response;
-    public function __construct(\RectorPrefix20211011\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20211011\Symfony\Component\HttpFoundation\Request $request, int $requestType, \RectorPrefix20211011\Symfony\Component\HttpFoundation\Response $response)
+    public function __construct(\RectorPrefix20211012\Symfony\Component\HttpKernel\HttpKernelInterface $kernel, \RectorPrefix20211012\Symfony\Component\HttpFoundation\Request $request, int $requestType, \RectorPrefix20211012\Symfony\Component\HttpFoundation\Response $response)
     {
         parent::__construct($kernel, $request, $requestType);
         $this->setResponse($response);
     }
-    public function getResponse() : \RectorPrefix20211011\Symfony\Component\HttpFoundation\Response
+    public function getResponse() : \RectorPrefix20211012\Symfony\Component\HttpFoundation\Response
     {
         return $this->response;
     }

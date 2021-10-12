@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211011\Symfony\Component\Console\Attribute;
+namespace RectorPrefix20211012\Symfony\Component\Console\Attribute;
 
 /**
  * Service tag to autoconfigure commands.

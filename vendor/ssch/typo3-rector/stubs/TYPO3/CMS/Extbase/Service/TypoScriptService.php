@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211011\TYPO3\CMS\Extbase\Service;
+namespace RectorPrefix20211012\TYPO3\CMS\Extbase\Service;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService')) {
     return;
