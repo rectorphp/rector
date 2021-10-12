@@ -9,9 +9,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use PhpParser\Node\Expr\BinaryOp\Equal;
 use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -70,12 +69,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processIdentical(\PhpParser\Node\Expr $value, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Identical
+    private function processIdentical(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Identical
     {
         if (!$this->isName($funcCall, 'strlen')) {
             return null;
         }
-        if (!$this->valueResolver->isValue($value, 0)) {
+        if (!$this->valueResolver->isValue($expr, 0)) {
             return null;
         }
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
