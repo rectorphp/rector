@@ -42,8 +42,10 @@ final class UndefinedVariableResolver
     {
         $undefinedVariables = [];
 
+        $variableNamesFromParams = $this->collectVariableNamesFromParams($node);
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (
-            &$undefinedVariables
+            &$undefinedVariables,
+            $variableNamesFromParams
         ): ?int {
             // entering new scope - break!
             if ($node instanceof FunctionLike && ! $node instanceof ArrowFunction) {
@@ -73,12 +75,31 @@ final class UndefinedVariableResolver
                 return null;
             }
 
+            if (in_array($variableName, $variableNamesFromParams, true)) {
+                return null;
+            }
+
             $undefinedVariables[] = $variableName;
 
             return null;
         });
 
         return array_unique($undefinedVariables);
+    }
+
+    /**
+     * @return string[]
+     */
+    private function collectVariableNamesFromParams(ClassMethod | Function_ | Closure $node): array
+    {
+        $variableNames = [];
+        foreach ($node->getParams() as $param) {
+            if ($param->var instanceof Variable) {
+                $variableNames[] = (string) $this->nodeNameResolver->getName($param->var);
+            }
+        }
+
+        return $variableNames;
     }
 
     private function shouldSkipVariable(Variable $variable): bool
