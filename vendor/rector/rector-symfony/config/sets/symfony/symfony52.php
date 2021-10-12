@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20211012;
 
 use PHPStan\Type\ObjectType;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
@@ -19,19 +17,15 @@ use Rector\Symfony\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRect
 use Rector\Symfony\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector;
 use Rector\Symfony\Rector\New_\PropertyPathMapperToDataMapperRector;
 use Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector;
+use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $containerConfigurator->import(__DIR__ . '/symfony52-validator-attributes.php');
+    $containerConfigurator->import(\Rector\Symfony\Set\SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES);
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class)->call('configure', [[\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-        // @see https://symfony.com/blog/new-in-symfony-5-2-php-8-attributes
-        new \Rector\Php80\ValueObject\AnnotationToAttribute('required', 'Symfony\\Contracts\\Service\\Attribute\\Required'),
-        new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Component\\Routing\\Annotation\\Route'),
-    ])]]);
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
     $services->set(\Rector\Symfony\Rector\New_\PropertyPathMapperToDataMapperRector::class);
     # https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#httpfoundation

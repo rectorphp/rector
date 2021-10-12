@@ -78,4 +78,8 @@ final class SymfonySetList implements \Rector\Set\Contract\SetListInterface
      * @var string
      */
     public const SYMFONY_CONSTRUCTOR_INJECTION = __DIR__ . '/../../config/sets/symfony/symfony-constructor-injection.php';
+    /**
+     * @var string
+     */
+    public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/annotations-to-attributes.php';
 }

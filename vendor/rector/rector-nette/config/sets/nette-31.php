@@ -10,6 +10,7 @@ use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
+use Rector\Nette\Set\NetteSetList;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
@@ -32,12 +33,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     // forms 3.1
     $services->set(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class)->call('configure', [[\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Nette\\Application\\UI\\Form', 'values', 'getValues')])]]);
     // some attributes were added in nette 3.0, but only in one of latest patch versions; it's is safer to add them in 3.1
-    $services->set(\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::class)->call('configure', [[\Rector\Php80\Rector\Class_\AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
-        // nette 3.0+, see https://github.com/nette/application/commit/d2471134ed909210de8a3e8559931902b1bee67b#diff-457507a8bdc046dd4f3a4aa1ca51794543fbb1e06f03825ab69ee864549a570c
-        new \Rector\Php80\ValueObject\AnnotationToAttribute('inject', 'Nette\\DI\\Attributes\\Inject'),
-        new \Rector\Php80\ValueObject\AnnotationToAttribute('persistent', 'Nette\\Application\\Attributes\\Persistent'),
-        new \Rector\Php80\ValueObject\AnnotationToAttribute('crossOrigin', 'Nette\\Application\\Attributes\\CrossOrigin'),
-    ])]]);
+    $containerConfigurator->import(\Rector\Nette\Set\NetteSetList::ANNOTATIONS_TO_ATTRIBUTES);
     $services->set(\Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector::class)->call('configure', [[
         // see https://github.com/nette/caching/commit/5ffe263752af5ccf3866a28305e7b2669ab4da82
         \Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1)]),

@@ -49,7 +49,7 @@ final class DoctrineSetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
-    public const ENTITY_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/doctrine-annotations-to-attributes.php';
+    public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/doctrine-annotations-to-attributes.php';
     /**
      * @var string
      */
