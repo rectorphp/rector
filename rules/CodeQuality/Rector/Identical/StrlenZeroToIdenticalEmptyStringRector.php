@@ -10,9 +10,8 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use PhpParser\Node\Expr\BinaryOp\Equal;
 use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -81,13 +80,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function processIdentical(Expr $value, FuncCall $funcCall): ?Identical
+    private function processIdentical(Expr $expr, FuncCall $funcCall): ?Identical
     {
         if (! $this->isName($funcCall, 'strlen')) {
             return null;
         }
 
-        if (! $this->valueResolver->isValue($value, 0)) {
+        if (! $this->valueResolver->isValue($expr, 0)) {
             return null;
         }
 
@@ -103,7 +102,7 @@ CODE_SAMPLE
         // Needs string cast if variable type is not string
         // see https://github.com/rectorphp/rector/issues/6700
         $isStringType = $this->nodeTypeResolver->getNativeType($variable) instanceof StringType;
-        if (!$isStringType) {
+        if (! $isStringType) {
             return new Identical(new Expr\Cast\String_($variable), new String_(''));
         }
 
