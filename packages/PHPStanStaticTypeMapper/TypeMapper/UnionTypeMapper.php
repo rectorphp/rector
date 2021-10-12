@@ -270,22 +270,11 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new PhpParserUnionType($phpParserUnionedTypes);
     }
 
-    private function isNullable(UnionType $unionType): bool
-    {
-        foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof NullType) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     private function resolveCompatibleObjectCandidate(UnionType $unionType): UnionType|TypeWithClassName|null
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
             $objectType = new ObjectType('Doctrine\Common\Collections\Collection');
-            return $this->isNullable($unionType)
+            return $this->unionTypeAnalyzer->isNullable($unionType)
                 ? new UnionType([new NullType(), $objectType])
                 : $objectType;
         }

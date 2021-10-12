@@ -16,9 +16,15 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 
 final class StaticTypeAnalyzer
 {
+    public function __construct(
+        private UnionTypeAnalyzer $unionTypeAnalyzer
+    ) {
+    }
+
     public function isAlwaysTruableType(Type $type): bool
     {
         if ($type instanceof MixedType) {
@@ -33,7 +39,7 @@ final class StaticTypeAnalyzer
             return $this->isAlwaysTruableArrayType($type);
         }
 
-        if ($this->isNullable($type)) {
+        if ($type instanceof UnionType && $this->unionTypeAnalyzer->isNullable($type)) {
             return false;
         }
 
@@ -51,21 +57,6 @@ final class StaticTypeAnalyzer
         }
 
         return $this->isAlwaysTruableUnionType($type);
-    }
-
-    private function isNullable(Type $type): bool
-    {
-        if (! $type instanceof UnionType) {
-            return false;
-        }
-
-        foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType instanceof NullType) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function isScalarType(Type $type): bool
