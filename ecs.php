@@ -20,8 +20,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
             'annotations' => [
+                'throw',
                 'throws',
                 'author',
+                'authors',
                 'package',
                 'group',
                 'required',

@@ -28,7 +28,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRectorTestCase extends AbstractTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;
-
     use MultipleFilesChangedTrait;
 
     protected ParameterProvider $parameterProvider;
