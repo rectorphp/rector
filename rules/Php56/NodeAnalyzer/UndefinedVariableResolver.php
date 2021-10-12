@@ -47,7 +47,8 @@ final class UndefinedVariableResolver
     public function resolve($node) : array
     {
         $undefinedVariables = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables) : ?int {
+        $variableNamesFromParams = $this->collectVariableNamesFromParams($node);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables, $variableNamesFromParams) : ?int {
             // entering new scope - break!
             if ($node instanceof \PhpParser\Node\FunctionLike && !$node instanceof \PhpParser\Node\Expr\ArrowFunction) {
                 return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
@@ -70,10 +71,27 @@ final class UndefinedVariableResolver
             if ($scope->hasVariableType($variableName)->yes()) {
                 return null;
             }
+            if (\in_array($variableName, $variableNamesFromParams, \true)) {
+                return null;
+            }
             $undefinedVariables[] = $variableName;
             return null;
         });
         return \array_unique($undefinedVariables);
+    }
+    /**
+     * @return string[]
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function collectVariableNamesFromParams($node) : array
+    {
+        $variableNames = [];
+        foreach ($node->getParams() as $param) {
+            if ($param->var instanceof \PhpParser\Node\Expr\Variable) {
+                $variableNames[] = (string) $this->nodeNameResolver->getName($param->var);
+            }
+        }
+        return $variableNames;
     }
     private function shouldSkipVariable(\PhpParser\Node\Expr\Variable $variable) : bool
     {
