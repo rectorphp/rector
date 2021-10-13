@@ -1515,6 +1515,7 @@ return array(
     'Rector\\Autodiscovery\\Rector\\Class_\\MoveServicesBySuffixToDirectoryRector' => $baseDir . '/rules/Autodiscovery/Rector/Class_/MoveServicesBySuffixToDirectoryRector.php',
     'Rector\\Autodiscovery\\Rector\\Class_\\MoveValueObjectsToValueObjectDirectoryRector' => $baseDir . '/rules/Autodiscovery/Rector/Class_/MoveValueObjectsToValueObjectDirectoryRector.php',
     'Rector\\Autodiscovery\\Rector\\Interface_\\MoveInterfacesToContractNamespaceDirectoryRector' => $baseDir . '/rules/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector.php',
+    'Rector\\BetterPhpDocParser\\AnnotationAnalyzer\\DoctrineAnnotationTagValueNodeAnalyzer' => $baseDir . '/packages/BetterPhpDocParser/AnnotationAnalyzer/DoctrineAnnotationTagValueNodeAnalyzer.php',
     'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => $baseDir . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
     'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => $baseDir . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
     'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => $baseDir . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
