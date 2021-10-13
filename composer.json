@@ -57,7 +57,7 @@
         "phpstan/phpstan-nette": "^0.12.21",
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.4.5",
-        "rector/rector-generator": "^0.4",
+        "rector/rector-generator": "^0.4.1",
         "spatie/enum": "^3.9",
         "symplify/coding-standard": "^9.5",
         "symplify/easy-ci": "^9.5",
