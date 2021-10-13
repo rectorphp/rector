@@ -18,6 +18,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -192,7 +193,26 @@ CODE_SAMPLE
                 if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
-                $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineAnnotationTagValueNode, $annotationToAttribute);
+                if ($this->isNested($doctrineAnnotationTagValueNode)) {
+                    $newDoctrineTagValueNode = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode);
+                    $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($newDoctrineTagValueNode, $annotationToAttribute);
+                    /** @var DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode */
+                    $values = $doctrineAnnotationTagValueNode->getValues();
+                    foreach ($values as $value) {
+                        $originalValues = $value->getOriginalValues();
+                        foreach ($originalValues as $originalValue) {
+                            $annotationsToAttributesInNested = $this->annotationsToAttributes;
+                            foreach ($annotationsToAttributesInNested as $annotationToAttributeInNested) {
+                                $tag = $annotationToAttributeInNested->getTag();
+                                if ($originalValue->hasClassName($tag)) {
+                                    $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($originalValue, $annotationToAttributeInNested);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineAnnotationTagValueNode, $annotationToAttribute);
+                }
                 $phpDocInfo->markAsChanged();
                 // remove the original doctrine annotation, it becomes an attribute
                 return \RectorPrefix20211013\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
@@ -200,5 +220,29 @@ CODE_SAMPLE
             return null;
         });
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
+    }
+    private function isNested(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
+    {
+        $values = $doctrineAnnotationTagValueNode->getValues();
+        foreach ($values as $value) {
+            // early mark as not nested to avoid false positive
+            if (!$value instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+                return \false;
+            }
+            $originalValues = $value->getOriginalValues();
+            foreach ($originalValues as $originalValue) {
+                foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+                    // early mark as not nested to avoid false positive
+                    if (!$originalValue instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                        return \false;
+                    }
+                    if (!$originalValue->hasClassName($annotationToAttribute->getTag())) {
+                        continue;
+                    }
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
 }
