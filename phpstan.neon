@@ -519,3 +519,19 @@ parameters:
         -
             message: '#Class cognitive complexity is 31, keep it under 30#'
             path: rules/Php74/Rector/Property/TypedPropertyRector.php
+
+        -
+            message: '#Class cognitive complexity is 55, keep it under 30#'
+            path: rules/Php80/Rector/Class_/AnnotationToAttributeRector.php
+
+        -
+            message: '#Cognitive complexity for "Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector\:\:processDoctrineAnnotationClasses\(\)" is 33, keep it under 9#'
+            path: rules/Php80/Rector/Class_/AnnotationToAttributeRector.php
+
+        -   # possibly bug in phpstan rule in deep foreach
+            message: '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
+            path: rules/Php80/Rector/Class_/AnnotationToAttributeRector.php
+
+        -
+            message: '#Cognitive complexity for "Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector\:\:isNested\(\)" is 12, keep it under 9#'
+            path: rules/Php80/Rector/Class_/AnnotationToAttributeRector.php

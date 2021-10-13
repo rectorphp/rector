@@ -19,6 +19,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -244,10 +245,38 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                    $doctrineAnnotationTagValueNode,
-                    $annotationToAttribute
-                );
+                if ($this->isNested($doctrineAnnotationTagValueNode)) {
+                    $newDoctrineTagValueNode = new DoctrineAnnotationTagValueNode(
+                        $doctrineAnnotationTagValueNode->identifierTypeNode
+                    );
+                    $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
+                        $newDoctrineTagValueNode,
+                        $annotationToAttribute
+                    );
+
+                    /** @var DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode */
+                    $values = $doctrineAnnotationTagValueNode->getValues();
+                    foreach ($values as $value) {
+                        $originalValues = $value->getOriginalValues();
+                        foreach ($originalValues as $originalValue) {
+                            $annotationsToAttributesInNested = $this->annotationsToAttributes;
+                            foreach ($annotationsToAttributesInNested as $annotationToAttributeInNested) {
+                                $tag = $annotationToAttributeInNested->getTag();
+                                if ($originalValue->hasClassName($tag)) {
+                                    $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
+                                        $originalValue,
+                                        $annotationToAttributeInNested
+                                    );
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
+                        $doctrineAnnotationTagValueNode,
+                        $annotationToAttribute
+                    );
+                }
 
                 $phpDocInfo->markAsChanged();
 
@@ -259,5 +288,34 @@ CODE_SAMPLE
         });
 
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
+    }
+
+    private function isNested(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): bool
+    {
+        $values = $doctrineAnnotationTagValueNode->getValues();
+        foreach ($values as $value) {
+            // early mark as not nested to avoid false positive
+            if (! $value instanceof CurlyListNode) {
+                return false;
+            }
+
+            $originalValues = $value->getOriginalValues();
+            foreach ($originalValues as $originalValue) {
+                foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+                    // early mark as not nested to avoid false positive
+                    if (! $originalValue instanceof DoctrineAnnotationTagValueNode) {
+                        return false;
+                    }
+
+                    if (! $originalValue->hasClassName($annotationToAttribute->getTag())) {
+                        continue;
+                    }
+
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }
