@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211012\Psr\Log;
+namespace RectorPrefix20211013\Psr\Log;
 
 /**
  * Basic Implementation of LoggerAwareInterface.

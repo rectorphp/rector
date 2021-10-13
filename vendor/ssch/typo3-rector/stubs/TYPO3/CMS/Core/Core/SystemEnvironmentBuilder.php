@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211012\TYPO3\CMS\Core\Core;
+namespace RectorPrefix20211013\TYPO3\CMS\Core\Core;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Core\\SystemEnvironmentBuilder')) {
     return;

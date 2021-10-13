@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211012\Doctrine\Inflector;
+namespace RectorPrefix20211013\Doctrine\Inflector;
 
-class NoopWordInflector implements \RectorPrefix20211012\Doctrine\Inflector\WordInflector
+class NoopWordInflector implements \RectorPrefix20211013\Doctrine\Inflector\WordInflector
 {
     /**
      * @param string $word

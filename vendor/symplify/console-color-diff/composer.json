@@ -16,12 +16,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211012\\Symplify\\ConsoleColorDiff\\": "src"
+            "RectorPrefix20211013\\Symplify\\ConsoleColorDiff\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211012\\Symplify\\ConsoleColorDiff\\Tests\\": "tests"
+            "RectorPrefix20211013\\Symplify\\ConsoleColorDiff\\Tests\\": "tests"
         }
     },
     "extra": {

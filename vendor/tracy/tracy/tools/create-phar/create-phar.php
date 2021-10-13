@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211012;
+namespace RectorPrefix20211013;
 
 // creates tracy.phar
 if (!\class_exists('Phar') || \ini_get('phar.readonly')) {
@@ -44,18 +44,18 @@ foreach ($iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryItera
         $s = \php_strip_whitespace($file->getPathname());
     }
     if ($file->getExtension() === 'js') {
-        $s = \RectorPrefix20211012\compressJs($s);
+        $s = \RectorPrefix20211013\compressJs($s);
     } elseif ($file->getExtension() === 'css') {
-        $s = \RectorPrefix20211012\compressCss($s);
+        $s = \RectorPrefix20211013\compressCss($s);
     } elseif ($file->getExtension() === 'phtml') {
         $s = \preg_replace_callback('#(<(script|style).*(?<![?=])>)(.*)(</)#Uis', function ($m) : string {
             [, $begin, $type, $s, $end] = $m;
             if ($s === '' || \strpos($s, '<?') !== \false) {
                 return $m[0];
             } elseif ($type === 'script') {
-                $s = \RectorPrefix20211012\compressJs($s);
+                $s = \RectorPrefix20211013\compressJs($s);
             } elseif ($type === 'style') {
-                $s = \RectorPrefix20211012\compressCss($s);
+                $s = \RectorPrefix20211013\compressCss($s);
             }
             return $begin . $s . $end;
         }, $s);

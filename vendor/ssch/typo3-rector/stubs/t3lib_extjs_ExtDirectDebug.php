@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211012;
+namespace RectorPrefix20211013;
 
 if (\class_exists('t3lib_extjs_ExtDirectDebug')) {
     return;
