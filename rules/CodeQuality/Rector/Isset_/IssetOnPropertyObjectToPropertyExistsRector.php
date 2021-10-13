@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -82,6 +83,11 @@ CODE_SAMPLE
 
         foreach ($node->vars as $issetVar) {
             if (! $issetVar instanceof PropertyFetch) {
+                continue;
+            }
+
+            // Ignore dynamically accessed properties ($o->$p)
+            if ($issetVar->name instanceof Variable) {
                 continue;
             }
 

@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -103,6 +104,10 @@ final class LocalPropertyAnalyzer
         }
 
         if ($this->isPartOfClosureBind($propertyFetch)) {
+            return true;
+        }
+
+        if ($propertyFetch->name instanceof Variable) {
             return true;
         }
 
