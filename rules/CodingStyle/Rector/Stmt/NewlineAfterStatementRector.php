@@ -123,10 +123,6 @@ CODE_SAMPLE
         }
 
         $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (! $nextNode instanceof Node) {
-            return null;
-        }
-
         if ($this->shouldSkip($nextNode)) {
             return null;
         }
@@ -182,8 +178,12 @@ CODE_SAMPLE
         return ! isset($comments[0]);
     }
 
-    private function shouldSkip(Node $nextNode): bool
+    private function shouldSkip(?Node $nextNode): bool
     {
-        return $nextNode instanceof Else_ || $nextNode instanceof ElseIf_ || $nextNode instanceof Catch_ || $nextNode instanceof Finally_;
+        if (! $nextNode instanceof Stmt) {
+            return true;
+        }
+
+        return in_array($nextNode::class, [Else_::class, ElseIf_::class, Catch_::class, Finally_::class], true);
     }
 }
