@@ -1,4 +1,4 @@
-# 482 Rules Overview
+# 483 Rules Overview
 
 <br>
 
@@ -94,7 +94,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (34)
+- [Transform](#transform) (35)
 
 - [TypeDeclaration](#typedeclaration) (20)
 
@@ -1699,7 +1699,7 @@ Changes strlen comparison to 0 to direct empty string compare
 ```diff
  class SomeClass
  {
-     public function run($value)
+     public function run(string $value)
      {
 -        $empty = strlen($value) === 0;
 +        $empty = $value === '';
@@ -10079,6 +10079,50 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +        $template = $this->viewFactory->make('template.blade');
 +        $viewFactory = $this->viewFactory;
      }
+ }
+```
+
+<br>
+
+### AttributeKeyToClassConstFetchRector
+
+Replace key value on specific attribute to class constant
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector`](../rules/Transform/Rector/Attribute/AttributeKeyToClassConstFetchRector.php)
+
+```php
+use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
+use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AttributeKeyToClassConstFetchRector::class)
+        ->call('configure', [[
+            AttributeKeyToClassConstFetchRector::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES => ValueObjectInliner::inline([
+                new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', [
+                    'STRING',
+                ]), ]
+            ),
+        ]]);
+};
+```
+
+↓
+
+```diff
+ use Doctrine\ORM\Mapping\Column;
++use Doctrine\DBAL\Types\Types;
+
+ class SomeClass
+ {
+-    #[Column(type: "string")]
++    #[Column(type: Types::STRING)]
+     public $name;
  }
 ```
 
