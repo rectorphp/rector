@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -105,13 +104,30 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->shouldSkipPropertyFetch($node)) {
+            return null;
+        }
+
         return $this->refactorPropertyFetch($node);
+    }
+
+    private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch): bool
+    {
+        $parentAssign = $this->betterNodeFinder->findParentType($propertyFetch, Assign::class);
+        if (! $parentAssign instanceof Assign) {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirst(
+            $parentAssign->var,
+            fn (Node $subNode): bool => $subNode === $propertyFetch
+        );
     }
 
     private function refactorPropertyFetch(PropertyFetch $propertyFetch): MethodCall|null
     {
         $callerType = $this->getType($propertyFetch->var);
-        if (! $callerType instanceof TypeWithClassName) {
+        if (! $callerType instanceof ObjectType) {
             return null;
         }
 

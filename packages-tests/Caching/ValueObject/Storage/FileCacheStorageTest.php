@@ -20,7 +20,7 @@ final class FileCacheStorageTest extends AbstractRectorTestCase
         $this->fileCacheStorage = new FileCacheStorage(__DIR__ . '/Source', $this->getService(SmartFileSystem::class));
     }
 
-    public function testClean()
+    public function testClean(): void
     {
         $this->fileCacheStorage->save('aaK1STfY', 'TEST', 'file cached');
         $file1 = new SmartFileInfo(__DIR__ . '/Source/0e/76/0e76658526655756207688271159624026011393.php');
