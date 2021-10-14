@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -90,7 +89,20 @@ CODE_SAMPLE
             }
             return null;
         }
+        if ($this->shouldSkipPropertyFetch($node)) {
+            return null;
+        }
         return $this->refactorPropertyFetch($node);
+    }
+    private function shouldSkipPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
+    {
+        $parentAssign = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Expr\Assign::class);
+        if (!$parentAssign instanceof \PhpParser\Node\Expr\Assign) {
+            return \false;
+        }
+        return (bool) $this->betterNodeFinder->findFirst($parentAssign->var, function (\PhpParser\Node $subNode) use($propertyFetch) : bool {
+            return $subNode === $propertyFetch;
+        });
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
@@ -98,7 +110,7 @@ CODE_SAMPLE
     private function refactorPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch)
     {
         $callerType = $this->getType($propertyFetch->var);
-        if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$callerType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
         // has magic methods?

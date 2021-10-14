@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211013\Symplify\EasyTesting\DataProvider;
+namespace RectorPrefix20211014\Symplify\EasyTesting\DataProvider;
 
 use Iterator;
-use RectorPrefix20211013\Nette\Utils\Strings;
-use RectorPrefix20211013\Symfony\Component\Finder\Finder;
-use RectorPrefix20211013\Symfony\Component\Finder\SplFileInfo;
-use RectorPrefix20211013\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix20211014\Nette\Utils\Strings;
+use RectorPrefix20211014\Symfony\Component\Finder\Finder;
+use RectorPrefix20211014\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix20211014\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211013\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20211014\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
  * @api
  * @see \Symplify\EasyTesting\Tests\DataProvider\StaticFixtureFinder\StaticFixtureFinderTest
@@ -58,7 +58,7 @@ final class StaticFixtureFinder
             try {
                 $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileInfo->getRealPath());
                 (yield [$smartFileInfo]);
-            } catch (\RectorPrefix20211013\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
+            } catch (\RectorPrefix20211014\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
             }
         }
     }
@@ -72,7 +72,7 @@ final class StaticFixtureFinder
             try {
                 $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileInfo->getRealPath());
                 (yield $fileInfo->getRelativePathname() => [$smartFileInfo]);
-            } catch (\RectorPrefix20211013\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
+            } catch (\RectorPrefix20211014\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
             }
         }
     }
@@ -81,7 +81,7 @@ final class StaticFixtureFinder
      */
     private static function findFilesInDirectory(string $directory, string $suffix) : array
     {
-        $finder = \RectorPrefix20211013\Symfony\Component\Finder\Finder::create()->in($directory)->files()->name($suffix);
+        $finder = \RectorPrefix20211014\Symfony\Component\Finder\Finder::create()->in($directory)->files()->name($suffix);
         $fileInfos = \iterator_to_array($finder);
         return \array_values($fileInfos);
     }
@@ -91,20 +91,20 @@ final class StaticFixtureFinder
     private static function findFilesInDirectoryExclusively(string $directory, string $suffix) : array
     {
         self::ensureNoOtherFileName($directory, $suffix);
-        $finder = \RectorPrefix20211013\Symfony\Component\Finder\Finder::create()->in($directory)->files()->name($suffix);
+        $finder = \RectorPrefix20211014\Symfony\Component\Finder\Finder::create()->in($directory)->files()->name($suffix);
         $fileInfos = \iterator_to_array($finder->getIterator());
         return \array_values($fileInfos);
     }
     private static function ensureNoOtherFileName(string $directory, string $suffix) : void
     {
-        $iterator = \RectorPrefix20211013\Symfony\Component\Finder\Finder::create()->in($directory)->files()->notName($suffix)->getIterator();
+        $iterator = \RectorPrefix20211014\Symfony\Component\Finder\Finder::create()->in($directory)->files()->notName($suffix)->getIterator();
         $relativeFilePaths = [];
         foreach ($iterator as $fileInfo) {
-            $relativeFilePaths[] = \RectorPrefix20211013\Nette\Utils\Strings::substring($fileInfo->getRealPath(), \strlen(\getcwd()) + 1);
+            $relativeFilePaths[] = \RectorPrefix20211014\Nette\Utils\Strings::substring($fileInfo->getRealPath(), \strlen(\getcwd()) + 1);
         }
         if ($relativeFilePaths === []) {
             return;
         }
-        throw new \RectorPrefix20211013\Symplify\SymplifyKernel\Exception\ShouldNotHappenException(\sprintf('Files "%s" have invalid suffix, use "%s" suffix instead', \implode('", ', $relativeFilePaths), $suffix));
+        throw new \RectorPrefix20211014\Symplify\SymplifyKernel\Exception\ShouldNotHappenException(\sprintf('Files "%s" have invalid suffix, use "%s" suffix instead', \implode('", ', $relativeFilePaths), $suffix));
     }
 }

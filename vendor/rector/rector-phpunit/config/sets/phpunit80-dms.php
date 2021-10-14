@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211013;
+namespace RectorPrefix20211014;
 
 use Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

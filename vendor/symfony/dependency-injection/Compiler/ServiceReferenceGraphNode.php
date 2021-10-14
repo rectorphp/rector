@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211013\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20211014\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20211013\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix20211013\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211014\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix20211014\Symfony\Component\DependencyInjection\Definition;
 /**
  * Represents a node in your service graph.
  *
@@ -55,7 +55,7 @@ class ServiceReferenceGraphNode
      */
     public function isAlias()
     {
-        return $this->value instanceof \RectorPrefix20211013\Symfony\Component\DependencyInjection\Alias;
+        return $this->value instanceof \RectorPrefix20211014\Symfony\Component\DependencyInjection\Alias;
     }
     /**
      * Checks if the value of this node is a Definition.
@@ -64,7 +64,7 @@ class ServiceReferenceGraphNode
      */
     public function isDefinition()
     {
-        return $this->value instanceof \RectorPrefix20211013\Symfony\Component\DependencyInjection\Definition;
+        return $this->value instanceof \RectorPrefix20211014\Symfony\Component\DependencyInjection\Definition;
     }
     /**
      * Returns the identifier.

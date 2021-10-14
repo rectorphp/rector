@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211013\TYPO3\CMS\Extbase\Persistence\Generic\Exception;
+namespace RectorPrefix20211014\TYPO3\CMS\Extbase\Persistence\Generic\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Exception\\MissingBackendException')) {
     return;
