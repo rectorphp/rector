@@ -91,9 +91,6 @@ CODE_SAMPLE
             return null;
         }
         $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof \PhpParser\Node) {
-            return null;
-        }
         if ($this->shouldSkip($nextNode)) {
             return null;
         }
@@ -134,8 +131,11 @@ CODE_SAMPLE
         }
         return !isset($comments[0]);
     }
-    private function shouldSkip(\PhpParser\Node $nextNode) : bool
+    private function shouldSkip(?\PhpParser\Node $nextNode) : bool
     {
-        return $nextNode instanceof \PhpParser\Node\Stmt\Else_ || $nextNode instanceof \PhpParser\Node\Stmt\ElseIf_ || $nextNode instanceof \PhpParser\Node\Stmt\Catch_ || $nextNode instanceof \PhpParser\Node\Stmt\Finally_;
+        if (!$nextNode instanceof \PhpParser\Node\Stmt) {
+            return \true;
+        }
+        return \in_array(\get_class($nextNode), [\PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Stmt\Catch_::class, \PhpParser\Node\Stmt\Finally_::class], \true);
     }
 }
