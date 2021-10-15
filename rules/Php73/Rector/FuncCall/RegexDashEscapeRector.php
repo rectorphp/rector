@@ -35,9 +35,9 @@ final class RegexDashEscapeRector extends \Rector\Core\Rector\AbstractRector imp
     private const LEFT_HAND_UNESCAPED_DASH_REGEX = '#(\\[.*?\\\\(w|s|d))-(?!\\])#i';
     /**
      * @var string
-     * @see https://regex101.com/r/TBVme9/3
+     * @see https://regex101.com/r/TBVme9/8
      */
-    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\\[)-(\\\\(w|s|d)[^\\?]*?)\\]#i';
+    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\\[)-(\\\\(w|s|d)[.*]?)\\]#i';
     /**
      * @var \Rector\Core\Php\Regex\RegexPatternArgumentManipulator
      */
