@@ -39,9 +39,9 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
 
     /**
      * @var string
-     * @see https://regex101.com/r/TBVme9/3
+     * @see https://regex101.com/r/TBVme9/8
      */
-    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d)[^\?]*?)\]#i';
+    private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\[)-(\\\\(w|s|d)[.*]?)\]#i';
 
     public function __construct(
         private RegexPatternArgumentManipulator $regexPatternArgumentManipulator
