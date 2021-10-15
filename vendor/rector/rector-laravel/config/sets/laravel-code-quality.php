@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211014;
+namespace RectorPrefix20211015;
 
 use Rector\Laravel\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

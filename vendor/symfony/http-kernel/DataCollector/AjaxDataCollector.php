@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211014\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20211015\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20211014\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211014\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211015\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211015\Symfony\Component\HttpFoundation\Response;
 /**
  * AjaxDataCollector.
  *
@@ -19,7 +19,7 @@ use RectorPrefix20211014\Symfony\Component\HttpFoundation\Response;
  *
  * @final
  */
-class AjaxDataCollector extends \RectorPrefix20211014\Symfony\Component\HttpKernel\DataCollector\DataCollector
+class AjaxDataCollector extends \RectorPrefix20211015\Symfony\Component\HttpKernel\DataCollector\DataCollector
 {
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request

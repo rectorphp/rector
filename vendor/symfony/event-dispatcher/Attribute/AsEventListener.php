@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211014\Symfony\Component\EventDispatcher\Attribute;
+namespace RectorPrefix20211015\Symfony\Component\EventDispatcher\Attribute;
 
 /**
  * Service tag to autoconfigure event listeners.

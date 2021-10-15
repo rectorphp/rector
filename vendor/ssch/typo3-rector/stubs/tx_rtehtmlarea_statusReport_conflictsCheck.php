@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211014;
+namespace RectorPrefix20211015;
 
 if (\class_exists('tx_rtehtmlarea_statusReport_conflictsCheck')) {
     return;

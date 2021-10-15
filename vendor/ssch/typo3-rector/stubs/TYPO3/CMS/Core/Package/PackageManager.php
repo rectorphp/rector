@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211014\TYPO3\CMS\Core\Package;
+namespace RectorPrefix20211015\TYPO3\CMS\Core\Package;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Package\\PackageManager')) {
     return;

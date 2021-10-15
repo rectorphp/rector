@@ -77,7 +77,7 @@ CODE_SAMPLE
             if (!$desiredArg instanceof \PhpParser\Node\Arg) {
                 continue;
             }
-            $classConstFetch = $this->classConstantFetchValueFactory->create($desiredArg->value, $replaceStringWithClassConstant->getClassWithConstants());
+            $classConstFetch = $this->classConstantFetchValueFactory->create($desiredArg->value, $replaceStringWithClassConstant->getClassWithConstants(), $replaceStringWithClassConstant->isCaseInsensitive());
             if (!$classConstFetch instanceof \PhpParser\Node\Expr\ClassConstFetch) {
                 continue;
             }

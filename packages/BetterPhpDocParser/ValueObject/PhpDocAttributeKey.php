@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-use RectorPrefix20211014\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
+use RectorPrefix20211015\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
 final class PhpDocAttributeKey
 {
     /**
@@ -18,7 +18,7 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const PARENT = \RectorPrefix20211014\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::PARENT;
+    public const PARENT = \RectorPrefix20211015\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::PARENT;
     /**
      * @var string
      */
@@ -26,5 +26,5 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const ORIG_NODE = \RectorPrefix20211014\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE;
+    public const ORIG_NODE = \RectorPrefix20211015\Symplify\SimplePhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE;
 }

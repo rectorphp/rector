@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileFormatter\Formatter;
 
-use RectorPrefix20211014\Ergebnis\Json\Printer\PrinterInterface;
+use RectorPrefix20211015\Ergebnis\Json\Printer\PrinterInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -18,7 +18,7 @@ final class JsonFileFormatter implements \Rector\FileFormatter\Contract\Formatte
      * @var \Ergebnis\Json\Printer\PrinterInterface
      */
     private $jsonPrinter;
-    public function __construct(\RectorPrefix20211014\Ergebnis\Json\Printer\PrinterInterface $jsonPrinter)
+    public function __construct(\RectorPrefix20211015\Ergebnis\Json\Printer\PrinterInterface $jsonPrinter)
     {
         $this->jsonPrinter = $jsonPrinter;
     }

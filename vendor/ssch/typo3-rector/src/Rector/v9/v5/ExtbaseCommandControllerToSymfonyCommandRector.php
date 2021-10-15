@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v5;
 
-use RectorPrefix20211014\Nette\Utils\Strings;
+use RectorPrefix20211015\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -23,7 +23,7 @@ use Ssch\TYPO3Rector\Template\TemplateFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211014\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211015\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommandRector\ExtbaseCommandControllerToSymfonyCommandRectorTest
@@ -58,7 +58,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      * @var \Ssch\TYPO3Rector\Template\TemplateFinder
      */
     private $templateFinder;
-    public function __construct(\RectorPrefix20211014\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\Parser $parser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \PhpParser\Parser $nikicParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
+    public function __construct(\RectorPrefix20211015\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\Parser $parser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \PhpParser\Parser $nikicParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->parser = $parser;
@@ -121,7 +121,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             $methodParameters = $commandMethod->params;
             $commandDescription = (string) $descriptionPhpDocNodes[0] ?? '';
             $commandTemplate = $this->templateFinder->getCommand();
-            $commandName = \RectorPrefix20211014\Nette\Utils\Strings::firstUpper($commandMethodName);
+            $commandName = \RectorPrefix20211015\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();
             $filePath = \sprintf('%s/Classes/Command/%s.php', $extensionDirectory, $commandName);
             // Do not overwrite existing file
@@ -152,7 +152,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             $nodes = $nodeTraverser->traverse($nodes);
             $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
             $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($filePath, $changedSetConfigContent));
-            $newCommandName = \sprintf('%s:%s', \RectorPrefix20211014\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20211014\Nette\Utils\Strings::lower($commandName));
+            $newCommandName = \sprintf('%s:%s', \RectorPrefix20211015\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20211015\Nette\Utils\Strings::lower($commandName));
             $newCommandsWithFullQualifiedNamespace[$newCommandName] = \sprintf('%s\\%s', $commandNamespace, $commandName);
         }
         $this->addNewCommandsToCommandsFile($commandsFilePath, $newCommandsWithFullQualifiedNamespace);

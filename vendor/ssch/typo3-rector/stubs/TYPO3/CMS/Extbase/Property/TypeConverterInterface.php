@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211014\TYPO3\CMS\Extbase\Property;
+namespace RectorPrefix20211015\TYPO3\CMS\Extbase\Property;
 
 if (\interface_exists('TYPO3\\CMS\\Extbase\\Property\\TypeConverterInterface')) {
     return;

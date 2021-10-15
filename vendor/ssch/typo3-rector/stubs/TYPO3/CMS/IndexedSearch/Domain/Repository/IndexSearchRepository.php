@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211014\TYPO3\CMS\IndexedSearch\Domain\Repository;
+namespace RectorPrefix20211015\TYPO3\CMS\IndexedSearch\Domain\Repository;
 
 if (\class_exists('TYPO3\\CMS\\IndexedSearch\\Domain\\Repository\\IndexSearchRepository')) {
     return;

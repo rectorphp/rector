@@ -15,7 +15,7 @@ use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
-use RectorPrefix20211014\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211015\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ClassStringType>
  */

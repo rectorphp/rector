@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211014\TYPO3\CMS\Extbase\Object\Container\Exception;
+namespace RectorPrefix20211015\TYPO3\CMS\Extbase\Object\Container\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\Container\\Exception\\CannotInitializeCacheException')) {
     return;

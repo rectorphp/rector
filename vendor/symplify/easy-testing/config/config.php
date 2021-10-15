@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211014;
+namespace RectorPrefix20211015;
 
-use RectorPrefix20211014\Symfony\Component\Console\Application;
+use RectorPrefix20211015\Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211014\Symplify\EasyTesting\Console\EasyTestingConsoleApplication;
-use RectorPrefix20211014\Symplify\PackageBuilder\Console\Command\CommandNaming;
+use RectorPrefix20211015\Symplify\EasyTesting\Console\EasyTestingConsoleApplication;
+use RectorPrefix20211015\Symplify\PackageBuilder\Console\Command\CommandNaming;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20211014\Symplify\\EasyTesting\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/DataProvider', __DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/ValueObject']);
+    $services->load('RectorPrefix20211015\Symplify\\EasyTesting\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/DataProvider', __DIR__ . '/../src/HttpKernel', __DIR__ . '/../src/ValueObject']);
     // console
-    $services->set(\RectorPrefix20211014\Symplify\EasyTesting\Console\EasyTestingConsoleApplication::class);
-    $services->alias(\RectorPrefix20211014\Symfony\Component\Console\Application::class, \RectorPrefix20211014\Symplify\EasyTesting\Console\EasyTestingConsoleApplication::class);
-    $services->set(\RectorPrefix20211014\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
+    $services->set(\RectorPrefix20211015\Symplify\EasyTesting\Console\EasyTestingConsoleApplication::class);
+    $services->alias(\RectorPrefix20211015\Symfony\Component\Console\Application::class, \RectorPrefix20211015\Symplify\EasyTesting\Console\EasyTestingConsoleApplication::class);
+    $services->set(\RectorPrefix20211015\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
 };

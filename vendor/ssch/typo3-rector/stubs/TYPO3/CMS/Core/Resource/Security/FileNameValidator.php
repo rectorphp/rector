@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211014\TYPO3\CMS\Core\Resource\Security;
+namespace RectorPrefix20211015\TYPO3\CMS\Core\Resource\Security;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\Security\\FileNameValidator')) {
     return;
