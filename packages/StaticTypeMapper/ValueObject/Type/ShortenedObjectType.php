@@ -23,7 +23,7 @@ final class ShortenedObjectType extends \PHPStan\Type\ObjectType
     /**
      * @param \PHPStan\Type\Type $type
      */
-    public function isSuperTypeOf($type) : \PHPStan\TrinaryLogic
+    public function isSuperTypeOf(\PHPStan\Type\Type $type) : \PHPStan\TrinaryLogic
     {
         $fullyQualifiedObjectType = new \PHPStan\Type\ObjectType($this->fullyQualifiedName);
         return $fullyQualifiedObjectType->isSuperTypeOf($type);
