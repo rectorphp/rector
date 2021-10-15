@@ -15,7 +15,8 @@ final class ReplaceStringWithClassConstant
         private string $class,
         private string $method,
         private int $argPosition,
-        private string $classWithConstants
+        private string $classWithConstants,
+        private bool $caseInsensitive = false
     ) {
     }
 
@@ -40,5 +41,10 @@ final class ReplaceStringWithClassConstant
     public function getArgPosition(): int
     {
         return $this->argPosition;
+    }
+
+    public function isCaseInsensitive(): bool
+    {
+        return $this->caseInsensitive;
     }
 }

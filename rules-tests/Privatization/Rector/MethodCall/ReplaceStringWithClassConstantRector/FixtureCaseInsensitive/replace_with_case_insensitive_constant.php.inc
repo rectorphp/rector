@@ -6,8 +6,9 @@ final class ReplaceWithConstant
 {
     public function run()
     {
-        $this->call('name');
-        $this->call('Name');
+        $this->call('asc');
+        $this->call('Asc');
+        $this->call('DESC');
     }
 
     public function call(string $value)
@@ -25,8 +26,9 @@ final class ReplaceWithConstant
 {
     public function run()
     {
-        $this->call(\Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Placeholder::NAME);
-        $this->call('Name');
+        $this->call(\Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Order::ASC);
+        $this->call(\Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Order::ASC);
+        $this->call(\Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Source\Order::DESC);
     }
 
     public function call(string $value)

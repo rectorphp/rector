@@ -22,7 +22,7 @@ final class ClassConstantFetchValueFactory
     /**
      * @param class-string $classWithConstants
      */
-    public function create(Expr $expr, string $classWithConstants): ?ClassConstFetch
+    public function create(Expr $expr, string $classWithConstants, bool $caseInsensitive): ?ClassConstFetch
     {
         $value = $this->valueResolver->getValue($expr);
         if ($value === null) {
@@ -31,6 +31,10 @@ final class ClassConstantFetchValueFactory
 
         $constantNamesToValues = $this->classConstantsResolver->getClassConstantNamesToValues($classWithConstants);
         foreach ($constantNamesToValues as $constantName => $constantValue) {
+            if ($caseInsensitive) {
+                $constantValue = strtolower($constantValue);
+                $value = strtolower($value);
+            }
             if ($constantValue !== $value) {
                 continue;
             }

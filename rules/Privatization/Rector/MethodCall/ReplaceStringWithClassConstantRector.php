@@ -95,7 +95,8 @@ CODE_SAMPLE
 
             $classConstFetch = $this->classConstantFetchValueFactory->create(
                 $desiredArg->value,
-                $replaceStringWithClassConstant->getClassWithConstants()
+                $replaceStringWithClassConstant->getClassWithConstants(),
+                $replaceStringWithClassConstant->isCaseInsensitive()
             );
 
             if (! $classConstFetch instanceof ClassConstFetch) {
