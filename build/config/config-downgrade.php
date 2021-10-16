@@ -6,6 +6,7 @@ use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\Type\Type;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -42,7 +43,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->call('configure', [[
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
+                // phsptan
+                Type::class,
                 RectorInterface::class,
+                // php-parser
                 NodeVisitorAbstract::class,
                 NodeVisitor::class,
                 ConfigurableRectorInterface::class,
