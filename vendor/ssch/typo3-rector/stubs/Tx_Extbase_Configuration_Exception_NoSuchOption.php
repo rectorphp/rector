@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211015;
+namespace RectorPrefix20211016;
 
 if (\class_exists('Tx_Extbase_Configuration_Exception_NoSuchOption')) {
     return;

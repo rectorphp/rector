@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211015\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20211016\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\WorkspaceAspect')) {
     return;

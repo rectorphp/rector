@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211015;
+namespace RectorPrefix20211016;
 
 if (\interface_exists('tx_form_System_Filter_Interface')) {
     return;

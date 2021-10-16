@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211015\Symfony\Component\HttpFoundation\RateLimiter;
+namespace RectorPrefix20211016\Symfony\Component\HttpFoundation\RateLimiter;
 
-use RectorPrefix20211015\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211015\Symfony\Component\RateLimiter\LimiterInterface;
-use RectorPrefix20211015\Symfony\Component\RateLimiter\Policy\NoLimiter;
-use RectorPrefix20211015\Symfony\Component\RateLimiter\RateLimit;
+use RectorPrefix20211016\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211016\Symfony\Component\RateLimiter\LimiterInterface;
+use RectorPrefix20211016\Symfony\Component\RateLimiter\Policy\NoLimiter;
+use RectorPrefix20211016\Symfony\Component\RateLimiter\RateLimit;
 /**
  * An implementation of RequestRateLimiterInterface that
  * fits most use-cases.
@@ -22,16 +22,16 @@ use RectorPrefix20211015\Symfony\Component\RateLimiter\RateLimit;
  *
  * @experimental in 5.3
  */
-abstract class AbstractRequestRateLimiter implements \RectorPrefix20211015\Symfony\Component\HttpFoundation\RateLimiter\RequestRateLimiterInterface
+abstract class AbstractRequestRateLimiter implements \RectorPrefix20211016\Symfony\Component\HttpFoundation\RateLimiter\RequestRateLimiterInterface
 {
     /**
      * @param \Symfony\Component\HttpFoundation\Request $request
      */
-    public function consume($request) : \RectorPrefix20211015\Symfony\Component\RateLimiter\RateLimit
+    public function consume($request) : \RectorPrefix20211016\Symfony\Component\RateLimiter\RateLimit
     {
         $limiters = $this->getLimiters($request);
         if (0 === \count($limiters)) {
-            $limiters = [new \RectorPrefix20211015\Symfony\Component\RateLimiter\Policy\NoLimiter()];
+            $limiters = [new \RectorPrefix20211016\Symfony\Component\RateLimiter\Policy\NoLimiter()];
         }
         $minimalRateLimit = null;
         foreach ($limiters as $limiter) {

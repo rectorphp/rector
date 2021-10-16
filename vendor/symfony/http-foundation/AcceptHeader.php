@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211015\Symfony\Component\HttpFoundation;
+namespace RectorPrefix20211016\Symfony\Component\HttpFoundation;
 
 // Help opcache.preload discover always-needed symbols
-\class_exists(\RectorPrefix20211015\Symfony\Component\HttpFoundation\AcceptHeaderItem::class);
+\class_exists(\RectorPrefix20211016\Symfony\Component\HttpFoundation\AcceptHeaderItem::class);
 /**
  * Represents an Accept-* header.
  *
@@ -48,11 +48,11 @@ class AcceptHeader
     public static function fromString($headerValue)
     {
         $index = 0;
-        $parts = \RectorPrefix20211015\Symfony\Component\HttpFoundation\HeaderUtils::split($headerValue ?? '', ',;=');
+        $parts = \RectorPrefix20211016\Symfony\Component\HttpFoundation\HeaderUtils::split($headerValue ?? '', ',;=');
         return new self(\array_map(function ($subParts) use(&$index) {
             $part = \array_shift($subParts);
-            $attributes = \RectorPrefix20211015\Symfony\Component\HttpFoundation\HeaderUtils::combine($subParts);
-            $item = new \RectorPrefix20211015\Symfony\Component\HttpFoundation\AcceptHeaderItem($part[0], $attributes);
+            $attributes = \RectorPrefix20211016\Symfony\Component\HttpFoundation\HeaderUtils::combine($subParts);
+            $item = new \RectorPrefix20211016\Symfony\Component\HttpFoundation\AcceptHeaderItem($part[0], $attributes);
             $item->setIndex($index++);
             return $item;
         }, $parts));
@@ -116,7 +116,7 @@ class AcceptHeader
      */
     public function filter($pattern)
     {
-        return new self(\array_filter($this->items, function (\RectorPrefix20211015\Symfony\Component\HttpFoundation\AcceptHeaderItem $item) use($pattern) {
+        return new self(\array_filter($this->items, function (\RectorPrefix20211016\Symfony\Component\HttpFoundation\AcceptHeaderItem $item) use($pattern) {
             return \preg_match($pattern, $item->getValue());
         }));
     }
@@ -136,7 +136,7 @@ class AcceptHeader
     private function sort() : void
     {
         if (!$this->sorted) {
-            \uasort($this->items, function (\RectorPrefix20211015\Symfony\Component\HttpFoundation\AcceptHeaderItem $a, \RectorPrefix20211015\Symfony\Component\HttpFoundation\AcceptHeaderItem $b) {
+            \uasort($this->items, function (\RectorPrefix20211016\Symfony\Component\HttpFoundation\AcceptHeaderItem $a, \RectorPrefix20211016\Symfony\Component\HttpFoundation\AcceptHeaderItem $b) {
                 $qA = $a->getQuality();
                 $qB = $b->getQuality();
                 if ($qA === $qB) {
