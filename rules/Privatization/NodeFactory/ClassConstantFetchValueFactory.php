@@ -35,6 +35,7 @@ final class ClassConstantFetchValueFactory
                 $constantValue = strtolower($constantValue);
                 $value = strtolower($value);
             }
+
             if ($constantValue !== $value) {
                 continue;
             }
