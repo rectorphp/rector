@@ -20,10 +20,7 @@ final class ShortenedGenericObjectType extends \PHPStan\Type\Generic\GenericObje
         $this->fullyQualifiedName = $fullyQualifiedName;
         parent::__construct($shortName, $types);
     }
-    /**
-     * @param \PHPStan\Type\Type $type
-     */
-    public function isSuperTypeOf($type) : \PHPStan\TrinaryLogic
+    public function isSuperTypeOf(\PHPStan\Type\Type $type) : \PHPStan\TrinaryLogic
     {
         $genericObjectType = new \PHPStan\Type\Generic\GenericObjectType($this->fullyQualifiedName, $this->getTypes());
         return $genericObjectType->isSuperTypeOf($type);
