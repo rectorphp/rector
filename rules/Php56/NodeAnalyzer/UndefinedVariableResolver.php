@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -102,7 +103,7 @@ final class UndefinedVariableResolver
         if ($parentNode instanceof \PhpParser\Node\Stmt\Global_) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node && ($parentNode instanceof \PhpParser\Node\Expr\Assign || $parentNode instanceof \PhpParser\Node\Expr\AssignRef || $this->isStaticVariable($parentNode))) {
+        if ($parentNode instanceof \PhpParser\Node && ($parentNode instanceof \PhpParser\Node\Expr\Assign || $parentNode instanceof \PhpParser\Node\Expr\AssignRef || $this->isStaticVariable($parentNode) || $parentNode instanceof \PhpParser\Node\Expr\Instanceof_)) {
             return \true;
         }
         if ($parentNode instanceof \PhpParser\Node\Stmt\Unset_ || $parentNode instanceof \PhpParser\Node\Expr\Cast\Unset_) {
