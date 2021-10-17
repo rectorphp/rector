@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\FixtureCaseInsensitive;
 
 final class ReplaceWithConstant
 {
@@ -20,7 +20,7 @@ final class ReplaceWithConstant
 -----
 <?php
 
-namespace Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\FixtureCaseInsensitive;
 
 final class ReplaceWithConstant
 {

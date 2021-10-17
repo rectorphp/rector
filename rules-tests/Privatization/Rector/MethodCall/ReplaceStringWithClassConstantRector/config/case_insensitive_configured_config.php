@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->call('configure', [[
             ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([
                 new ReplaceStringWithClassConstant(
-                    'Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\Fixture\ReplaceWithConstant',
+                    'Rector\Tests\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector\FixtureCaseInsensitive\ReplaceWithConstant',
                     'call',
                     0,
                     Order::class,
