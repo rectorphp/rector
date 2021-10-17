@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211016;
+namespace RectorPrefix20211017;
 
 if (\class_exists('Tx_Extbase_Domain_Model_FrontendUser')) {
     return;

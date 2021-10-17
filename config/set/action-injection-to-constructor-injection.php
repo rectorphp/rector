@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211016;
+namespace RectorPrefix20211017;
 
 use Rector\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector;
 use Rector\DependencyInjection\Rector\Variable\ReplaceVariableByPropertyFetchRector;

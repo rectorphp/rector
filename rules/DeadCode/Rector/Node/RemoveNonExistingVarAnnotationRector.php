@@ -23,7 +23,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Comments\CommentRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
-use RectorPrefix20211016\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20211017\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -49,7 +49,7 @@ final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\Abs
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;
-    public function __construct(\RectorPrefix20211016\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Comments\CommentRemover $commentRemover, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
+    public function __construct(\RectorPrefix20211017\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Comments\CommentRemover $commentRemover, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
     {
         $this->typeChecker = $typeChecker;
         $this->commentRemover = $commentRemover;

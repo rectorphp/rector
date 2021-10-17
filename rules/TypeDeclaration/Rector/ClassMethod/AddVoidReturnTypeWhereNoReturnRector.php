@@ -18,7 +18,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211016\Webmozart\Assert\Assert;
+use RectorPrefix20211017\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector\AddVoidReturnTypeWhereNoReturnRectorTest
  */
@@ -116,7 +116,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $usePhpdoc = $configuration[self::USE_PHPDOC] ?? \false;
-        \RectorPrefix20211016\Webmozart\Assert\Assert::boolean($usePhpdoc);
+        \RectorPrefix20211017\Webmozart\Assert\Assert::boolean($usePhpdoc);
         $this->usePhpdoc = $usePhpdoc;
     }
 }

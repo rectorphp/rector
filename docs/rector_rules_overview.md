@@ -8840,7 +8840,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReplaceStringWithClassConstantRector::class)
         ->call('configure', [[
             ReplaceStringWithClassConstantRector::REPLACE_STRING_WITH_CLASS_CONSTANT => ValueObjectInliner::inline([
-                new ReplaceStringWithClassConstant('SomeClass', 'call', 0, 'Placeholder'),
+                new ReplaceStringWithClassConstant('SomeClass', 'call', 0, 'Placeholder', false),
             ]),
         ]]);
 };

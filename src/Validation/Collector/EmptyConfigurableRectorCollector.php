@@ -7,7 +7,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Naming\Naming\PropertyNaming;
-use RectorPrefix20211016\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211017\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class EmptyConfigurableRectorCollector
 {
@@ -19,7 +19,7 @@ final class EmptyConfigurableRectorCollector
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\RectorPrefix20211016\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    public function __construct(\RectorPrefix20211017\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->privatesAccessor = $privatesAccessor;
         $this->propertyNaming = $propertyNaming;
