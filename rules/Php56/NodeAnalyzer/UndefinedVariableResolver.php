@@ -23,7 +23,7 @@ use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -33,7 +33,7 @@ final class UndefinedVariableResolver
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private NodeNameResolver $nodeNameResolver,
-        private BetterStandardPrinter $betterStandardPrinter
+        private NodeComparator $nodeComparator
     ) {
     }
 
@@ -138,11 +138,8 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        $printVariable = $this->betterStandardPrinter->print($variable);
         $originalNode = $variable->getAttribute(AttributeKey::ORIGINAL_NODE);
-        $printOriginalNode = $this->betterStandardPrinter->print($originalNode);
-
-        if ($printVariable !== $printOriginalNode) {
+        if (! $this->nodeComparator->areNodesEqual($variable, $originalNode)) {
             return true;
         }
 
