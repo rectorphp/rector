@@ -22,7 +22,7 @@ use PhpParser\Node\Stmt\StaticVar;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211017\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -37,14 +37,14 @@ final class UndefinedVariableResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
-    private $betterStandardPrinter;
-    public function __construct(\RectorPrefix20211017\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    private $nodeComparator;
+    public function __construct(\RectorPrefix20211017\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeComparator = $nodeComparator;
     }
     /**
      * @return string[]
@@ -122,10 +122,8 @@ final class UndefinedVariableResolver
         if (!$nodeScope instanceof \PHPStan\Analyser\Scope) {
             return \true;
         }
-        $printVariable = $this->betterStandardPrinter->print($variable);
         $originalNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-        $printOriginalNode = $this->betterStandardPrinter->print($originalNode);
-        if ($printVariable !== $printOriginalNode) {
+        if (!$this->nodeComparator->areNodesEqual($variable, $originalNode)) {
             return \true;
         }
         $variableName = $this->nodeNameResolver->getName($variable);
