@@ -3,5 +3,7 @@ version: "3.8"
 services:
   php:
     build: .
+    environment:
+        - COMPOSER_ROOT_VERSION=dev-main
     volumes:
       - .:/etc/rector
