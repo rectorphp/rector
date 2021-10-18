@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
@@ -163,7 +164,9 @@ CODE_SAMPLE
     {
         $stmts = [];
 
-        if ($node instanceof Expression) {
+        if ($matchArm->body instanceof Throw_) {
+            $stmts[] = new Expression($matchArm->body);
+        } elseif ($node instanceof Expression) {
             /** @var Assign $assign */
             $assign = $node->expr;
             $stmts[] = new Expression(new Assign($assign->var, $matchArm->body));
