@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
+use FilesystemIterator;
 use RectorPrefix20211018\Nette\Utils\Random;
 use PHPStan\File\FileWriter;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
@@ -12,6 +13,7 @@ use RectorPrefix20211018\Symplify\EasyCodingStandard\Caching\Exception\CachingEx
 use RectorPrefix20211018\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
+ * @see \Rector\Tests\Caching\ValueObject\Storage\FileCacheStorageTest
  */
 final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
 {
@@ -84,29 +86,37 @@ final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Sto
     public function clean($key) : void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
-        if (!$this->smartFileSystem->exists($cacheFilePaths->getFilePath())) {
-            return;
-        }
-        $this->smartFileSystem->remove($cacheFilePaths->getFilePath());
-        if (!$this->smartFileSystem->exists($cacheFilePaths->getSecondDirectory())) {
-            return;
-        }
-        // FilesystemIterator will initially point to the first file in the folder - if there are no files in the folder, valid() will return false
-        $secondDirectoryFileSystemIterator = new \FilesystemIterator($cacheFilePaths->getSecondDirectory());
-        if (!$secondDirectoryFileSystemIterator->valid()) {
-            $this->smartFileSystem->remove($cacheFilePaths->getSecondDirectory());
-        }
-        if (!$this->smartFileSystem->exists($cacheFilePaths->getFirstDirectory())) {
-            return;
-        }
-        $firstDirectoryFileSystemIterator = new \FilesystemIterator($cacheFilePaths->getFirstDirectory());
-        if (!$firstDirectoryFileSystemIterator->valid()) {
-            $this->smartFileSystem->remove($cacheFilePaths->getFirstDirectory());
-        }
+        $this->processRemoveCacheFilePath($cacheFilePaths);
+        $this->processRemoveEmptyDirectory($cacheFilePaths->getSecondDirectory());
+        $this->processRemoveEmptyDirectory($cacheFilePaths->getFirstDirectory());
     }
     public function clear() : void
     {
         $this->smartFileSystem->remove($this->directory);
+    }
+    private function processRemoveCacheFilePath(\Rector\Caching\ValueObject\CacheFilePaths $cacheFilePaths) : void
+    {
+        $filePath = $cacheFilePaths->getFilePath();
+        if (!$this->smartFileSystem->exists($filePath)) {
+            return;
+        }
+        $this->smartFileSystem->remove($filePath);
+    }
+    private function processRemoveEmptyDirectory(string $directory) : void
+    {
+        if (!$this->smartFileSystem->exists($directory)) {
+            return;
+        }
+        if ($this->isNotEmptyDirectory($directory)) {
+            return;
+        }
+        $this->smartFileSystem->remove($directory);
+    }
+    private function isNotEmptyDirectory(string $directory) : bool
+    {
+        // FilesystemIterator will initially point to the first file in the folder - if there are no files in the folder, valid() will return false
+        $filesystemIterator = new \FilesystemIterator($directory);
+        return $filesystemIterator->valid();
     }
     private function getCacheFilePaths(string $key) : \Rector\Caching\ValueObject\CacheFilePaths
     {
