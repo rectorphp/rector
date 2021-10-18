@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit62b05526abcf1d23b04f3fabb126553c
+class ComposerStaticInitc8292b0f4b9e46d37da0a9cb0d62b716
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2276,6 +2276,7 @@ class ComposerStaticInit62b05526abcf1d23b04f3fabb126553c
         'Rector\\Core\\Php\\Regex\\RegexPatternArgumentManipulator' => __DIR__ . '/../..' . '/src/Php/Regex/RegexPatternArgumentManipulator.php',
         'Rector\\Core\\Php\\ReservedKeywordAnalyzer' => __DIR__ . '/../..' . '/src/Php/ReservedKeywordAnalyzer.php',
         'Rector\\Core\\Php\\TypeAnalyzer' => __DIR__ . '/../..' . '/src/Php/TypeAnalyzer.php',
+        'Rector\\Core\\ProcessAnalyzer\\RectifiedAnalyzer' => __DIR__ . '/../..' . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
         'Rector\\Core\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Provider/CurrentFileProvider.php',
         'Rector\\Core\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
         'Rector\\Core\\Reflection\\ReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/ReflectionResolver.php',
@@ -2303,6 +2304,7 @@ class ComposerStaticInit62b05526abcf1d23b04f3fabb126553c
         'Rector\\Core\\ValueObject\\PhpVersion' => __DIR__ . '/../..' . '/src/ValueObject/PhpVersion.php',
         'Rector\\Core\\ValueObject\\PhpVersionFeature' => __DIR__ . '/../..' . '/src/ValueObject/PhpVersionFeature.php',
         'Rector\\Core\\ValueObject\\ProcessResult' => __DIR__ . '/../..' . '/src/ValueObject/ProcessResult.php',
+        'Rector\\Core\\ValueObject\\RectifiedNode' => __DIR__ . '/../..' . '/src/ValueObject/RectifiedNode.php',
         'Rector\\Core\\ValueObject\\Reporting\\FileDiff' => __DIR__ . '/../..' . '/src/ValueObject/Reporting/FileDiff.php',
         'Rector\\Core\\ValueObject\\SprintfStringAndArgs' => __DIR__ . '/../..' . '/src/ValueObject/SprintfStringAndArgs.php',
         'Rector\\Core\\ValueObject\\StaticNonPhpFileSuffixes' => __DIR__ . '/../..' . '/src/ValueObject/StaticNonPhpFileSuffixes.php',
@@ -3894,9 +3896,9 @@ class ComposerStaticInit62b05526abcf1d23b04f3fabb126553c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit62b05526abcf1d23b04f3fabb126553c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit62b05526abcf1d23b04f3fabb126553c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit62b05526abcf1d23b04f3fabb126553c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc8292b0f4b9e46d37da0a9cb0d62b716::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc8292b0f4b9e46d37da0a9cb0d62b716::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc8292b0f4b9e46d37da0a9cb0d62b716::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
@@ -66,9 +65,6 @@ CODE_SAMPLE
         if ($this->doesLastStatementBreakFlow($node)) {
             return null;
         }
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
         if ($node->elseifs !== []) {
             $originalNode = clone $node;
             $if = new \PhpParser\Node\Stmt\If_($node->cond);
@@ -96,12 +92,6 @@ CODE_SAMPLE
             return $node;
         }
         return null;
-    }
-    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
-    {
-        // to avoid repetitive flipped elseif above return when used along with ChangeAndIfReturnToEarlyReturnRector
-        // @see https://github.com/rectorphp/rector-src/pull/654
-        return $if->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd && \count($if->elseifs) > 1;
     }
     /**
      * @return ElseIf_[]
