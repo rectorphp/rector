@@ -154,6 +154,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if (str_contains($uppercasedConstantName, '\\')) {
+            return null;
+        }
+
         $node->name = new FullyQualified($uppercasedConstantName);
 
         return $node;
