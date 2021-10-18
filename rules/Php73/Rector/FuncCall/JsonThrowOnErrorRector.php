@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
@@ -80,6 +81,13 @@ CODE_SAMPLE
     {
         if (! $this->isNames($funcCall, ['json_encode', 'json_decode'])) {
             return true;
+        }
+
+        $args = $funcCall->getArgs();
+        foreach ($args as $arg) {
+            if ($arg->name instanceof Identifier) {
+                return true;
+            }
         }
 
         return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (Node $node): bool {
