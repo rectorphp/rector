@@ -13,7 +13,7 @@ use Rector\Nette\Kdyby\Naming\EventClassNaming;
 use Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod;
 use Rector\Nette\Kdyby\ValueObject\NetteEventToContributeEventClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20211017\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211018\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ListeningMethodsCollector
 {
     /**
@@ -40,7 +40,7 @@ final class ListeningMethodsCollector
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\RectorPrefix20211017\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(\RectorPrefix20211018\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->eventClassNaming = $eventClassNaming;

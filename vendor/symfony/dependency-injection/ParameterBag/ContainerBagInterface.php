@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211017\Symfony\Component\DependencyInjection\ParameterBag;
+namespace RectorPrefix20211018\Symfony\Component\DependencyInjection\ParameterBag;
 
-use RectorPrefix20211017\Psr\Container\ContainerInterface;
-use RectorPrefix20211017\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix20211018\Psr\Container\ContainerInterface;
+use RectorPrefix20211018\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 /**
  * ContainerBagInterface is the interface implemented by objects that manage service container parameters.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface ContainerBagInterface extends \RectorPrefix20211017\Psr\Container\ContainerInterface
+interface ContainerBagInterface extends \RectorPrefix20211018\Psr\Container\ContainerInterface
 {
     /**
      * Gets the service container parameters.

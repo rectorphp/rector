@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\MatchArm;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
@@ -143,7 +144,9 @@ CODE_SAMPLE
     private function createSwitchStmts($node, \PhpParser\Node\MatchArm $matchArm) : array
     {
         $stmts = [];
-        if ($node instanceof \PhpParser\Node\Stmt\Expression) {
+        if ($matchArm->body instanceof \PhpParser\Node\Expr\Throw_) {
+            $stmts[] = new \PhpParser\Node\Stmt\Expression($matchArm->body);
+        } elseif ($node instanceof \PhpParser\Node\Stmt\Expression) {
             /** @var Assign $assign */
             $assign = $node->expr;
             $stmts[] = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($assign->var, $matchArm->body));

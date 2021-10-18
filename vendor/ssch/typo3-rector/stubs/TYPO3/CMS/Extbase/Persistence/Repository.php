@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211017\TYPO3\CMS\Extbase\Persistence;
+namespace RectorPrefix20211018\TYPO3\CMS\Extbase\Persistence;
 
-use RectorPrefix20211017\TYPO3\CMS\Extbase\Persistence\Generic\Query;
+use RectorPrefix20211018\TYPO3\CMS\Extbase\Persistence\Generic\Query;
 if (\class_exists('TYPO3\\CMS\\Extbase\\Persistence\\Repository')) {
     return;
 }
 class Repository
 {
-    public function createQuery() : \RectorPrefix20211017\TYPO3\CMS\Extbase\Persistence\Generic\Query
+    public function createQuery() : \RectorPrefix20211018\TYPO3\CMS\Extbase\Persistence\Generic\Query
     {
-        return new \RectorPrefix20211017\TYPO3\CMS\Extbase\Persistence\Generic\Query();
+        return new \RectorPrefix20211018\TYPO3\CMS\Extbase\Persistence\Generic\Query();
     }
 }

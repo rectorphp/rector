@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211017\TYPO3\CMS\Extbase\Mvc\Controller;
+namespace RectorPrefix20211018\TYPO3\CMS\Extbase\Mvc\Controller;
 
-use RectorPrefix20211017\TYPO3\CMS\Extbase\Mvc\Request;
+use RectorPrefix20211018\TYPO3\CMS\Extbase\Mvc\Request;
 if (\class_exists('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\AbstractController')) {
     return;
 }
@@ -17,6 +17,6 @@ abstract class AbstractController
      */
     public function __construct()
     {
-        $this->request = new \RectorPrefix20211017\TYPO3\CMS\Extbase\Mvc\Request();
+        $this->request = new \RectorPrefix20211018\TYPO3\CMS\Extbase\Mvc\Request();
     }
 }

@@ -82,6 +82,9 @@ CODE_SAMPLE
         if ($constantName === $uppercasedConstantName) {
             return null;
         }
+        if (\strpos($uppercasedConstantName, '\\') !== \false) {
+            return null;
+        }
         $node->name = new \PhpParser\Node\Name\FullyQualified($uppercasedConstantName);
         return $node;
     }

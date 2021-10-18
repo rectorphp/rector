@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211017;
+namespace RectorPrefix20211018;
 
 if (\class_exists('SC_mod_web_perm_ajax')) {
     return;

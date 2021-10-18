@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211017\TYPO3\CMS\Extbase\DomainObject;
+namespace RectorPrefix20211018\TYPO3\CMS\Extbase\DomainObject;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\DomainObject\\AbstractDomainObject')) {
     return;

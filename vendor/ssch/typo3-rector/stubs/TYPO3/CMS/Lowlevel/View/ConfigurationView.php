@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211017\TYPO3\CMS\Lowlevel\View;
+namespace RectorPrefix20211018\TYPO3\CMS\Lowlevel\View;
 
 if (\class_exists('TYPO3\\CMS\\Lowlevel\\View\\ConfigurationView')) {
     return;

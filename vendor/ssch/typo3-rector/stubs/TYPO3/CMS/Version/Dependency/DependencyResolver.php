@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211017\TYPO3\CMS\Version\Dependency;
+namespace RectorPrefix20211018\TYPO3\CMS\Version\Dependency;
 
 if (\class_exists('TYPO3\\CMS\\Version\\Dependency\\DependencyResolver')) {
     return;
