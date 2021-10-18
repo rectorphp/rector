@@ -34,9 +34,11 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Validation\InfiniteLoopValidator;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\RectifiedNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -135,6 +137,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private InfiniteLoopValidator $infiniteLoopValidator;
 
+    private RectifiedAnalyzer $rectifiedAnalyzer;
+
     #[Required]
     public function autowireAbstractRector(
         NodesToRemoveCollector $nodesToRemoveCollector,
@@ -162,7 +166,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         NodeComparator $nodeComparator,
         CurrentFileProvider $currentFileProvider,
         ChangedNodeAnalyzer $changedNodeAnalyzer,
-        InfiniteLoopValidator $infiniteLoopValidator
+        InfiniteLoopValidator $infiniteLoopValidator,
+        RectifiedAnalyzer $rectifiedAnalyzer
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -190,6 +195,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->currentFileProvider = $currentFileProvider;
         $this->changedNodeAnalyzer = $changedNodeAnalyzer;
         $this->infiniteLoopValidator = $infiniteLoopValidator;
+        $this->rectifiedAnalyzer = $rectifiedAnalyzer;
     }
 
     /**
@@ -494,7 +500,12 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
 
         $smartFileInfo = $this->file->getSmartFileInfo();
-        return $this->skipper->shouldSkipElementAndFileInfo($this, $smartFileInfo);
+        if ($this->skipper->shouldSkipElementAndFileInfo($this, $smartFileInfo)) {
+            return true;
+        }
+
+        $rectifiedNode = $this->rectifiedAnalyzer->verify($this, $node, $this->file);
+        return $rectifiedNode instanceof RectifiedNode;
     }
 
     private function printDebugApplying(): void
