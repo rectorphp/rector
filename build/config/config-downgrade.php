@@ -13,6 +13,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\Set\ValueObject\DowngradeLevelSetList;
 use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\StyleInterface;
@@ -34,10 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::SKIP, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
 
-    $containerConfigurator->import(DowngradeSetList::PHP_80);
-    $containerConfigurator->import(DowngradeSetList::PHP_74);
-    $containerConfigurator->import(DowngradeSetList::PHP_73);
-    $containerConfigurator->import(DowngradeSetList::PHP_72);
+    $containerConfigurator->import(DowngradeLevelSetList::DOWN_TO_PHP_71);
 
     $services = $containerConfigurator->services();
     $services->set(DowngradeParameterTypeWideningRector::class)
