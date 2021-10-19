@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211018\Symfony\Contracts\HttpClient\Exception;
+namespace RectorPrefix20211019\Symfony\Contracts\HttpClient\Exception;
 
 /**
  * When a 5xx response is returned.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface ServerExceptionInterface extends \RectorPrefix20211018\Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
+interface ServerExceptionInterface extends \RectorPrefix20211019\Symfony\Contracts\HttpClient\Exception\HttpExceptionInterface
 {
 }

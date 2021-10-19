@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211018;
+namespace RectorPrefix20211019;
 
 if (\class_exists('Tx_Fluid_Core_Widget_Exception_WidgetRequestNotFoundException')) {
     return;

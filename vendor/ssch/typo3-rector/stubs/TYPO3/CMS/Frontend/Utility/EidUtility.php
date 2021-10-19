@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211018\TYPO3\CMS\Frontend\Utility;
+namespace RectorPrefix20211019\TYPO3\CMS\Frontend\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Frontend\\Utility\\EidUtility')) {
     return;

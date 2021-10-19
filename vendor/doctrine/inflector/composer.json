@@ -50,12 +50,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211018\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
+            "RectorPrefix20211019\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211018\\Doctrine\\Tests\\Inflector\\": "tests\/Doctrine\/Tests\/Inflector"
+            "RectorPrefix20211019\\Doctrine\\Tests\\Inflector\\": "tests\/Doctrine\/Tests\/Inflector"
         }
     },
     "extra": {

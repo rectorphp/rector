@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211018\Symfony\Component\VarDumper\Caster;
+namespace RectorPrefix20211019\Symfony\Component\VarDumper\Caster;
 
-use RectorPrefix20211018\Symfony\Component\VarDumper\Cloner\Stub;
+use RectorPrefix20211019\Symfony\Component\VarDumper\Cloner\Stub;
 /**
  * Represents a backtrace as returned by debug_backtrace() or Exception->getTrace().
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class TraceStub extends \RectorPrefix20211018\Symfony\Component\VarDumper\Cloner\Stub
+class TraceStub extends \RectorPrefix20211019\Symfony\Component\VarDumper\Cloner\Stub
 {
     public $keepArgs;
     public $sliceOffset;

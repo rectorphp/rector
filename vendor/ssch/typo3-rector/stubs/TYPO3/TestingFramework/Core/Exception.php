@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211018\TYPO3\TestingFramework\Core;
+namespace RectorPrefix20211019\TYPO3\TestingFramework\Core;
 
 if (\class_exists('TYPO3\\TestingFramework\\Core\\Exception')) {
     return;

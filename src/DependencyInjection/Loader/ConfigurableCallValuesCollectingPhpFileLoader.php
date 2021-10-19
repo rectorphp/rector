@@ -5,16 +5,16 @@ namespace Rector\Core\DependencyInjection\Loader;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
-use RectorPrefix20211018\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix20211018\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211018\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix20211018\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+use RectorPrefix20211019\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix20211019\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211019\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix20211019\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
-    public function __construct(\RectorPrefix20211018\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20211018\Symfony\Component\Config\FileLocatorInterface $fileLocator, \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector $configureCallValuesCollector)
+    public function __construct(\RectorPrefix20211019\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20211019\Symfony\Component\Config\FileLocatorInterface $fileLocator, \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector $configureCallValuesCollector)
     {
         $this->configureCallValuesCollector = $configureCallValuesCollector;
         parent::__construct($containerBuilder, $fileLocator);

@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211018\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20211019\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20211018\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211018\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20211018\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20211019\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211019\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211019\Symfony\Contracts\Service\ResetInterface;
 /**
  * DataCollectorInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-interface DataCollectorInterface extends \RectorPrefix20211018\Symfony\Contracts\Service\ResetInterface
+interface DataCollectorInterface extends \RectorPrefix20211019\Symfony\Contracts\Service\ResetInterface
 {
     /**
      * Collects data for the given Request and Response.
