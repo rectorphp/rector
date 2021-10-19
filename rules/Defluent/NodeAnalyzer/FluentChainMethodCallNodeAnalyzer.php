@@ -25,6 +25,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 /**
@@ -178,6 +179,16 @@ final class FluentChainMethodCallNodeAnalyzer
     public function isTypeAndChainCalls(Node $node, Type $type, array $methods): bool
     {
         if (! $node instanceof MethodCall) {
+            return false;
+        }
+
+        $rootMethodCall = $this->resolveRootMethodCall($node);
+        if (! $rootMethodCall instanceof MethodCall) {
+            return false;
+        }
+
+        $rootMethodCallVarType = $this->nodeTypeResolver->getType($rootMethodCall->var);
+        if (! $rootMethodCallVarType instanceof FullyQualifiedObjectType) {
             return false;
         }
 
