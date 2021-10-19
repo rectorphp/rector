@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
 
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 /**
@@ -91,6 +92,9 @@ final class ArrayParser
         $array = [];
         foreach ($values as $value) {
             [$key, $val] = $value;
+            if ($key instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode) {
+                $key = $key->value;
+            }
             if ($key !== null) {
                 $array[$key] = $val;
             } else {
