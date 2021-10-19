@@ -24,6 +24,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 /**
  * Utils for chain of MethodCall Node:
@@ -180,6 +181,14 @@ final class FluentChainMethodCallNodeAnalyzer
     public function isTypeAndChainCalls(\PhpParser\Node $node, \PHPStan\Type\Type $type, array $methods) : bool
     {
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
+        }
+        $rootMethodCall = $this->resolveRootMethodCall($node);
+        if (!$rootMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
+        }
+        $rootMethodCallVarType = $this->nodeTypeResolver->getType($rootMethodCall->var);
+        if (!$rootMethodCallVarType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             return \false;
         }
         // node chaining is in reverse order than code
