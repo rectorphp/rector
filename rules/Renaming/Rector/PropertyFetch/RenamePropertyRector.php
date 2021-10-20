@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -72,7 +73,10 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
         $classLikeName = $this->nodeNameResolver->getName($classLike);
         $renamePropertyObjectType = $renameProperty->getObjectType();
         $className = $renamePropertyObjectType->getClassName();
-        if ($classLikeName !== $className) {
+        $classLikeNameObjectType = new \PHPStan\Type\ObjectType((string) $classLikeName);
+        $classNameObjectType = new \PHPStan\Type\ObjectType($className);
+        $isSuperType = $classNameObjectType->isSuperTypeOf($classLikeNameObjectType)->yes();
+        if ($classLikeName !== $className && !$isSuperType) {
             return;
         }
         $property = $classLike->getProperty($renameProperty->getOldProperty());
