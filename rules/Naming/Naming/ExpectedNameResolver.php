@@ -159,29 +159,37 @@ final class ExpectedNameResolver
             return null;
         }
 
+        $innerReturnedType = null;
         if ($returnedType instanceof ArrayType) {
-            $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
-            if (! $returnedType instanceof Type) {
+            $innerReturnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
+            if (! $innerReturnedType instanceof Type) {
                 return null;
             }
         }
 
-        $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($returnedType);
+        $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($innerReturnedType ?? $returnedType);
 
-        if ($expectedNameFromType !== null) {
-            return $expectedNameFromType->getSingularized();
+        if ($this->isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull($returnedType, $expectedNameFromType)) {
+            return $expectedNameFromType?->getSingularized();
         }
 
         $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
         if (! $expectedNameFromMethodName instanceof ExpectedName) {
-            return null;
+            return $expectedNameFromType?->getSingularized();
         }
 
         if ($expectedNameFromMethodName->isSingular()) {
-            return null;
+            return $expectedNameFromType?->getSingularized();
         }
 
         return $expectedNameFromMethodName->getSingularized();
+    }
+
+    private function isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull(
+        Type $returnedType,
+        ?ExpectedName $expectedName
+    ): bool {
+        return ($returnedType instanceof ArrayType) && $expectedName !== null;
     }
 
     private function isDynamicNameCall(MethodCall | StaticCall | FuncCall $expr): bool
