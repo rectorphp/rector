@@ -32,6 +32,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'oldProperty',
                     'newProperty'
                 ),
+                new RenameProperty(
+                    'Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\Source\ParentClassWithOldProperty',
+                    'oldProperty',
+                    'newProperty'
+                ),
             ]),
         ]]);
 };

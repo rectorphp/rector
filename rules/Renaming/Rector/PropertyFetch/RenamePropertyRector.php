@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -94,7 +95,12 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
         $renamePropertyObjectType = $renameProperty->getObjectType();
         $className = $renamePropertyObjectType->getClassName();
 
-        if ($classLikeName !== $className) {
+        $classLikeNameObjectType = new ObjectType((string) $classLikeName);
+        $classNameObjectType = new ObjectType($className);
+
+        $isSuperType = $classNameObjectType->isSuperTypeOf($classLikeNameObjectType)
+            ->yes();
+        if ($classLikeName !== $className && ! $isSuperType) {
             return;
         }
 
