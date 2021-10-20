@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php80\Tests\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
+namespace Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\Fixture;
 
 final class SkipWhenSwitchDoesNotAssignValue
 {

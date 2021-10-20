@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 class LostCommentBeforeElseif2
 {
@@ -22,7 +22,7 @@ class LostCommentBeforeElseif2
 -----
 <?php
 
-namespace Rector\EarlyReturn\Tests\Rector\If_\RemoveAlwaysElseRector\Fixture;
+namespace Rector\Tests\EarlyReturn\Rector\If_\RemoveAlwaysElseRector\Fixture;
 
 class LostCommentBeforeElseif2
 {

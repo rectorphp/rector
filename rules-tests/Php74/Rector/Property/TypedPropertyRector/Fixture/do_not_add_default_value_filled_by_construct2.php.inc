@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DoNotAddDefaultValueFilledByConstruct2
 {
@@ -19,7 +19,7 @@ final class DoNotAddDefaultValueFilledByConstruct2
 -----
 <?php
 
-namespace Rector\Php74\Tests\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 final class DoNotAddDefaultValueFilledByConstruct2
 {
