@@ -150,24 +150,29 @@ final class ExpectedNameResolver
         if ($returnedType->isIterable()->no()) {
             return null;
         }
+        $innerReturnedType = null;
         if ($returnedType instanceof \PHPStan\Type\ArrayType) {
-            $returnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
-            if (!$returnedType instanceof \PHPStan\Type\Type) {
+            $innerReturnedType = $this->resolveReturnTypeFromArrayType($expr, $returnedType);
+            if (!$innerReturnedType instanceof \PHPStan\Type\Type) {
                 return null;
             }
         }
-        $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($returnedType);
-        if ($expectedNameFromType !== null) {
-            return $expectedNameFromType->getSingularized();
+        $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($innerReturnedType ?? $returnedType);
+        if ($this->isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull($returnedType, $expectedNameFromType)) {
+            return ($expectedNameFromType2 = $expectedNameFromType) ? $expectedNameFromType2->getSingularized() : null;
         }
         $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
         if (!$expectedNameFromMethodName instanceof \Rector\Naming\ValueObject\ExpectedName) {
-            return null;
+            return ($expectedNameFromType2 = $expectedNameFromType) ? $expectedNameFromType2->getSingularized() : null;
         }
         if ($expectedNameFromMethodName->isSingular()) {
-            return null;
+            return ($expectedNameFromType2 = $expectedNameFromType) ? $expectedNameFromType2->getSingularized() : null;
         }
         return $expectedNameFromMethodName->getSingularized();
+    }
+    private function isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull(\PHPStan\Type\Type $returnedType, ?\Rector\Naming\ValueObject\ExpectedName $expectedName) : bool
+    {
+        return $returnedType instanceof \PHPStan\Type\ArrayType && $expectedName !== null;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr

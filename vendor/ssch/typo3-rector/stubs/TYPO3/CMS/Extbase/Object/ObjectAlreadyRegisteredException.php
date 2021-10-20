@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211019\TYPO3\CMS\Extbase\Object;
+namespace RectorPrefix20211020\TYPO3\CMS\Extbase\Object;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Object\\ObjectAlreadyRegisteredException')) {
     return;

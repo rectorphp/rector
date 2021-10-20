@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211019\Nette\Neon;
+namespace RectorPrefix20211020\Nette\Neon;
 
 /**
  * Converts value to NEON format.
@@ -17,61 +17,47 @@ final class Encoder
     /**
      * Returns the NEON representation of a value.
      */
-    public function encode($var, int $flags = 0) : string
+    public function encode($val, int $flags = 0) : string
     {
-        if ($var instanceof \DateTimeInterface) {
-            return $var->format('Y-m-d H:i:s O');
-        } elseif ($var instanceof \RectorPrefix20211019\Nette\Neon\Entity) {
-            if ($var->value === \RectorPrefix20211019\Nette\Neon\Neon::CHAIN) {
-                return \implode('', \array_map([$this, 'encode'], $var->attributes));
+        $node = $this->valueToNode($val, (bool) ($flags & self::BLOCK));
+        return $node->toString();
+    }
+    public function valueToNode($val, bool $blockMode = \false) : \RectorPrefix20211020\Nette\Neon\Node
+    {
+        if ($val instanceof \DateTimeInterface) {
+            return new \RectorPrefix20211020\Nette\Neon\Node\LiteralNode($val);
+        } elseif ($val instanceof \RectorPrefix20211020\Nette\Neon\Entity && $val->value === \RectorPrefix20211020\Nette\Neon\Neon::CHAIN) {
+            $node = new \RectorPrefix20211020\Nette\Neon\Node\EntityChainNode();
+            foreach ($val->attributes as $entity) {
+                $node->chain[] = $this->valueToNode($entity, $blockMode);
             }
-            return $this->encode($var->value) . '(' . (\is_array($var->attributes) ? \substr($this->encode($var->attributes), 1, -1) : '') . ')';
-        }
-        if (\is_object($var)) {
-            $obj = $var;
-            $var = [];
-            foreach ($obj as $k => $v) {
-                $var[$k] = $v;
-            }
-        }
-        if (\is_array($var)) {
-            $isList = !$var || \array_keys($var) === \range(0, \count($var) - 1);
-            $s = '';
-            if ($flags & self::BLOCK) {
-                if (\count($var) === 0) {
-                    return '[]';
-                }
-                foreach ($var as $k => $v) {
-                    $v = $this->encode($v, self::BLOCK);
-                    $s .= ($isList ? '-' : $this->encode($k) . ':') . (\strpos($v, "\n") === \false ? ' ' . $v . "\n" : "\n" . \preg_replace('#^(?=.)#m', "\t", $v) . (\substr($v, -2, 1) === "\n" ? '' : "\n"));
-                }
-                return $s;
-            } else {
-                foreach ($var as $k => $v) {
-                    $s .= ($isList ? '' : $this->encode($k) . ': ') . $this->encode($v) . ', ';
-                }
-                return ($isList ? '[' : '{') . \substr($s, 0, -2) . ($isList ? ']' : '}');
-            }
-        } elseif (\is_string($var)) {
-            if (!\preg_match('~[\\x00-\\x1F]|^[+-.]?\\d|^(true|false|yes|no|on|off|null)$~Di', $var) && \preg_match('~^' . \RectorPrefix20211019\Nette\Neon\Decoder::PATTERNS[1] . '$~Dx', $var)) {
-                return $var;
-            }
-            $res = \json_encode($var, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
-            if ($res === \false) {
-                throw new \RectorPrefix20211019\Nette\Neon\Exception('Invalid UTF-8 sequence: ' . $var);
-            }
-            if (\strpos($var, "\n") !== \false) {
-                $res = \preg_replace_callback('#[^\\\\]|\\\\(.)#s', function ($m) {
-                    return ['n' => "\n\t", 't' => "\t", '"' => '"'][$m[1] ?? ''] ?? $m[0];
-                }, $res);
-                $res = '"""' . "\n\t" . \substr($res, 1, -1) . "\n" . '"""';
-            }
-            return $res;
-        } elseif (\is_float($var)) {
-            $var = \json_encode($var);
-            return \strpos($var, '.') === \false ? $var . '.0' : $var;
+            return $node;
+        } elseif ($val instanceof \RectorPrefix20211020\Nette\Neon\Entity) {
+            return new \RectorPrefix20211020\Nette\Neon\Node\EntityNode($this->valueToNode($val->value), $this->arrayToNodes((array) $val->attributes));
+        } elseif (\is_object($val) || \is_array($val)) {
+            $node = new \RectorPrefix20211020\Nette\Neon\Node\ArrayNode($blockMode ? '' : null);
+            $node->items = $this->arrayToNodes($val, $blockMode);
+            return $node;
+        } elseif (\is_string($val) && \RectorPrefix20211020\Nette\Neon\Lexer::requiresDelimiters($val)) {
+            return new \RectorPrefix20211020\Nette\Neon\Node\StringNode($val);
         } else {
-            return \json_encode($var);
+            return new \RectorPrefix20211020\Nette\Neon\Node\LiteralNode($val);
         }
+    }
+    private function arrayToNodes($val, bool $blockMode = \false) : array
+    {
+        $res = [];
+        $counter = 0;
+        $hide = \true;
+        foreach ($val as $k => $v) {
+            $res[] = $item = new \RectorPrefix20211020\Nette\Neon\Node\ArrayItemNode();
+            $item->key = $hide && $k === $counter ? null : self::valueToNode($k);
+            $item->value = self::valueToNode($v, $blockMode);
+            if ($hide && \is_int($k)) {
+                $hide = $k === $counter;
+                $counter = \max($k + 1, $counter);
+            }
+        }
+        return $res;
     }
 }

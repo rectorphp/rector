@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211019\Symfony\Component\HttpKernel\Profiler;
+namespace RectorPrefix20211020\Symfony\Component\HttpKernel\Profiler;
 
-use RectorPrefix20211019\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
+use RectorPrefix20211020\Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 /**
  * Profile.
  *

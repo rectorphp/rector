@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211019\TYPO3\CMS\Core\Site;
+namespace RectorPrefix20211020\TYPO3\CMS\Core\Site;
 
-use RectorPrefix20211019\TYPO3\CMS\Core\Site\Entity\Site;
+use RectorPrefix20211020\TYPO3\CMS\Core\Site\Entity\Site;
 if (\class_exists('TYPO3\\CMS\\Core\\Site\\SiteFinder')) {
     return;
 }
@@ -18,6 +18,6 @@ class SiteFinder
     {
         $pageId = (int) $pageId;
         $mountPointParameter = (string) $mountPointParameter;
-        return new \RectorPrefix20211019\TYPO3\CMS\Core\Site\Entity\Site();
+        return new \RectorPrefix20211020\TYPO3\CMS\Core\Site\Entity\Site();
     }
 }

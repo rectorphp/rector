@@ -13,7 +13,7 @@ Introduction
 
 NEON is a human-readable structured data format. In Nette, it is used for configuration files. It is also used for structured data such as settings, language translations, etc. [Try it on the sandbox](https://ne-on.org).
 
-NEON stands for *Nette Object Notation*. It is less complex and ungainly than XML or JSON, but provides similar capabilities. It is very similar to YAML. The main advantage is that NEON has so-called [entities](#entities), thanks to which the configuration of DI services is so sexy. And allowes tabs for indentation.
+NEON stands for *Nette Object Notation*. It is less complex and ungainly than XML or JSON, but provides similar capabilities. It is very similar to YAML. The main advantage is that NEON has so-called [entities](#entities), thanks to which the configuration of DI services is so sexy. And allows tabs for indentation.
 
 NEON is built from the ground up to be simple to use.
 
@@ -37,7 +37,7 @@ Install via Composer:
 composer require nette/neon
 ```
 
-It requires PHP version 7.1 and supports PHP up to 8.0. Documentation can be found on the [website](https://doc.nette.org/neon).
+It requires PHP version 7.1 and supports PHP up to 8.1. Documentation can be found on the [website](https://doc.nette.org/neon).
 
 `Neon::encode()` returns `$value` converted to NEON. As the second parameter you can use `Neon::BLOCK`, which will create multiline output.
 
@@ -243,7 +243,7 @@ If the string contains characters that can be confused with NEON syntax (hyphens
 Double quotes allow you to use escape sequences to write special characters using backslashes `\`. All escape sequences as in the JSON format are supported, plus `\_`, which is an non-breaking space, ie `\u00A0`.
 
 ```neon
-- "\t \n \r \f \b \" \' \\ \/ \_"
+- "\t \n \r \f \b \" \\ \/ \_"
 - "\u00A9"
 ```
 

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211019\Symfony\Component\HttpKernel\Fragment;
+namespace RectorPrefix20211020\Symfony\Component\HttpKernel\Fragment;
 
-use RectorPrefix20211019\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211019\Symfony\Component\HttpFoundation\Response;
-use RectorPrefix20211019\Symfony\Component\HttpKernel\Controller\ControllerReference;
+use RectorPrefix20211020\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211020\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211020\Symfony\Component\HttpKernel\Controller\ControllerReference;
 /**
  * Interface implemented by all rendering strategies.
  *
