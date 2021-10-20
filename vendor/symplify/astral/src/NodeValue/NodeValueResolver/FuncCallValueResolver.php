@@ -36,8 +36,8 @@ final class FuncCallValueResolver implements \RectorPrefix20211020\Symplify\Astr
     }
     /**
      * @param \PhpParser\Node\Expr $expr
-     * @param string $currentFilePath
      * @return mixed
+     * @param string $currentFilePath
      */
     public function resolve($expr, $currentFilePath)
     {
