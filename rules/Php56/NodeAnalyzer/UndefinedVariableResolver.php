@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -24,6 +25,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -33,7 +35,8 @@ final class UndefinedVariableResolver
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private NodeNameResolver $nodeNameResolver,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -104,6 +107,20 @@ final class UndefinedVariableResolver
         return $variableNames;
     }
 
+    private function issetOrUnsetParent(Node $parentNode): bool
+    {
+        return in_array($parentNode::class, [Unset_::class, UnsetCast::class, Isset_::class], true);
+    }
+
+    private function isAssignOrStaticVariableParent(Node $parentNode): bool
+    {
+        if (in_array($parentNode::class, [Assign::class, AssignRef::class], true)) {
+            return true;
+        }
+
+        return $this->isStaticVariable($parentNode);
+    }
+
     private function shouldSkipVariable(Variable $variable): bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
@@ -115,16 +132,11 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        if ($parentNode instanceof Node &&
-            (
-                $parentNode instanceof Assign || $parentNode instanceof AssignRef || $this->isStaticVariable(
-                    $parentNode
-                )
-            )) {
+        if ($this->isAssignOrStaticVariableParent($parentNode)) {
             return true;
         }
 
-        if ($parentNode instanceof Unset_ || $parentNode instanceof UnsetCast) {
+        if ($this->issetOrUnsetParent($parentNode)) {
             return true;
         }
 
@@ -150,7 +162,31 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        return $variableName === null;
+        if ($variableName === null) {
+            return true;
+        }
+
+        return $this->hasPreviousCheckedWithIsset($variable);
+    }
+
+    private function hasPreviousCheckedWithIsset(Variable $variable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $subNode) use (
+            $variable
+        ): bool {
+            if (! $subNode instanceof Isset_) {
+                return false;
+            }
+
+            $vars = $subNode->vars;
+            foreach ($vars as $var) {
+                if ($this->nodeComparator->areNodesEqual($variable, $var)) {
+                    return true;
+                }
+            }
+
+            return false;
+        });
     }
 
     private function isStaticVariable(Node $parentNode): bool
