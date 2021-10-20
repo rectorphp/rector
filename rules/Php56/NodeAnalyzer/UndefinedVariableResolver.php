@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -23,6 +24,7 @@ use PhpParser\Node\Stmt\Unset_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211020\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -40,11 +42,16 @@ final class UndefinedVariableResolver
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\RectorPrefix20211020\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\RectorPrefix20211020\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return string[]
@@ -99,6 +106,17 @@ final class UndefinedVariableResolver
         }
         return $variableNames;
     }
+    private function issetOrUnsetParent(\PhpParser\Node $parentNode) : bool
+    {
+        return \in_array(\get_class($parentNode), [\PhpParser\Node\Stmt\Unset_::class, \PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\Isset_::class], \true);
+    }
+    private function isAssignOrStaticVariableParent(\PhpParser\Node $parentNode) : bool
+    {
+        if (\in_array(\get_class($parentNode), [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\AssignRef::class], \true)) {
+            return \true;
+        }
+        return $this->isStaticVariable($parentNode);
+    }
     private function shouldSkipVariable(\PhpParser\Node\Expr\Variable $variable) : bool
     {
         $parentNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
@@ -108,10 +126,10 @@ final class UndefinedVariableResolver
         if ($parentNode instanceof \PhpParser\Node\Stmt\Global_) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node && ($parentNode instanceof \PhpParser\Node\Expr\Assign || $parentNode instanceof \PhpParser\Node\Expr\AssignRef || $this->isStaticVariable($parentNode))) {
+        if ($this->isAssignOrStaticVariableParent($parentNode)) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Unset_ || $parentNode instanceof \PhpParser\Node\Expr\Cast\Unset_) {
+        if ($this->issetOrUnsetParent($parentNode)) {
             return \true;
         }
         // list() = | [$values] = defines variables as null
@@ -131,7 +149,25 @@ final class UndefinedVariableResolver
         if ($variableName === 'this') {
             return \true;
         }
-        return $variableName === null;
+        if ($variableName === null) {
+            return \true;
+        }
+        return $this->hasPreviousCheckedWithIsset($variable);
+    }
+    private function hasPreviousCheckedWithIsset(\PhpParser\Node\Expr\Variable $variable) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Isset_) {
+                return \false;
+            }
+            $vars = $subNode->vars;
+            foreach ($vars as $var) {
+                if ($this->nodeComparator->areNodesEqual($variable, $var)) {
+                    return \true;
+                }
+            }
+            return \false;
+        });
     }
     private function isStaticVariable(\PhpParser\Node $parentNode) : bool
     {
