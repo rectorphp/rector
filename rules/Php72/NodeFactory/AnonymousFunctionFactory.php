@@ -70,12 +70,17 @@ final class AnonymousFunctionFactory
     public function create(
         array $params,
         array $stmts,
-        Identifier | Name | NullableType | UnionType | ComplexType | null $returnTypeNode
+        Identifier | Name | NullableType | UnionType | ComplexType | null $returnTypeNode,
+        bool $static = false
     ): Closure {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
 
         $anonymousFunctionNode = new Closure();
         $anonymousFunctionNode->params = $params;
+
+        if ($static) {
+            $anonymousFunctionNode->static = $static;
+        }
 
         foreach ($useVariables as $useVariable) {
             $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);

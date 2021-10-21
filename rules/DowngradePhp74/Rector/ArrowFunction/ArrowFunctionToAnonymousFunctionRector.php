@@ -71,6 +71,6 @@ CODE_SAMPLE
     {
         $stmts = [new Return_($node->expr)];
 
-        return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType);
+        return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
     }
 }
