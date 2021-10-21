@@ -188,7 +188,7 @@ final class AnonymousFunctionFactory
                 continue;
             }
             $parentNode = $variableNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof \PhpParser\Node\Expr\Assign) {
+            if ($parentNode instanceof \PhpParser\Node\Expr\Assign || $parentNode instanceof \PhpParser\Node\Stmt\Foreach_ || $parentNode instanceof \PhpParser\Node\Param) {
                 $alreadyAssignedVariables[] = $variableName;
             }
             if ($this->nodeNameResolver->isNames($variableNode, $alreadyAssignedVariables)) {
