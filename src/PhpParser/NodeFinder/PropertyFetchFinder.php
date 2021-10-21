@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -113,11 +114,11 @@ final class PropertyFetchFinder
 
         foreach ($propertyFetches as $key => $propertyFetch) {
             $currentClassLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
-            
-            if (! $currentClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+
+            if (! $currentClassLike instanceof ClassLike) {
                 continue;
             }
-            
+
             if ($this->classAnalyzer->isAnonymousClass($currentClassLike)) {
                 unset($propertyFetches[$key]);
             }
