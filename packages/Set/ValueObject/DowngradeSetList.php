@@ -13,6 +13,10 @@ final class DowngradeSetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const PHP_54 = __DIR__ . '/../../../config/set/downgrade-php54.php';
+    /**
+     * @var string
+     */
     public const PHP_70 = __DIR__ . '/../../../config/set/downgrade-php70.php';
     /**
      * @var string
