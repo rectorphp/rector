@@ -88,11 +88,14 @@ final class AnonymousFunctionFactory
      * @param Stmt[] $stmts
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|null $returnTypeNode
      */
-    public function create(array $params, array $stmts, $returnTypeNode) : \PhpParser\Node\Expr\Closure
+    public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false) : \PhpParser\Node\Expr\Closure
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
         $anonymousFunctionNode = new \PhpParser\Node\Expr\Closure();
         $anonymousFunctionNode->params = $params;
+        if ($static) {
+            $anonymousFunctionNode->static = $static;
+        }
         foreach ($useVariables as $useVariable) {
             $anonymousFunctionNode->uses[] = new \PhpParser\Node\Expr\ClosureUse($useVariable);
         }

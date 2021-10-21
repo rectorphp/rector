@@ -65,6 +65,6 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Closure
     {
         $stmts = [new \PhpParser\Node\Stmt\Return_($node->expr)];
-        return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType);
+        return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
     }
 }
