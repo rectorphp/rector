@@ -107,6 +107,9 @@ final class PropertyFetchFinder
         $propertyFetches = $this->findPropertyFetchesInClassLike($nodes, $propertyName);
         foreach ($propertyFetches as $key => $propertyFetch) {
             $currentClassLike = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            if (!$currentClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+                continue;
+            }
             if ($this->classAnalyzer->isAnonymousClass($currentClassLike)) {
                 unset($propertyFetches[$key]);
             }

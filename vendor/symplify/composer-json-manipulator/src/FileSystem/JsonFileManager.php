@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211020\Symplify\ComposerJsonManipulator\FileSystem;
+namespace RectorPrefix20211021\Symplify\ComposerJsonManipulator\FileSystem;
 
-use RectorPrefix20211020\Nette\Utils\Json;
-use RectorPrefix20211020\Symplify\ComposerJsonManipulator\Json\JsonCleaner;
-use RectorPrefix20211020\Symplify\ComposerJsonManipulator\Json\JsonInliner;
-use RectorPrefix20211020\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
-use RectorPrefix20211020\Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
+use RectorPrefix20211021\Nette\Utils\Json;
+use RectorPrefix20211021\Symplify\ComposerJsonManipulator\Json\JsonCleaner;
+use RectorPrefix20211021\Symplify\ComposerJsonManipulator\Json\JsonInliner;
+use RectorPrefix20211021\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20211021\Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211020\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211021\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Symplify\MonorepoBuilder\Tests\FileSystem\JsonFileManager\JsonFileManagerTest
  */
@@ -31,7 +31,7 @@ final class JsonFileManager
      * @var \Symplify\ComposerJsonManipulator\Json\JsonInliner
      */
     private $jsonInliner;
-    public function __construct(\RectorPrefix20211020\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20211020\Symplify\ComposerJsonManipulator\Json\JsonCleaner $jsonCleaner, \RectorPrefix20211020\Symplify\ComposerJsonManipulator\Json\JsonInliner $jsonInliner)
+    public function __construct(\RectorPrefix20211021\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20211021\Symplify\ComposerJsonManipulator\Json\JsonCleaner $jsonCleaner, \RectorPrefix20211021\Symplify\ComposerJsonManipulator\Json\JsonInliner $jsonInliner)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->jsonCleaner = $jsonCleaner;
@@ -44,7 +44,7 @@ final class JsonFileManager
     {
         $realPath = $smartFileInfo->getRealPath();
         if (!isset($this->cachedJSONFiles[$realPath])) {
-            $this->cachedJSONFiles[$realPath] = \RectorPrefix20211020\Nette\Utils\Json::decode($smartFileInfo->getContents(), \RectorPrefix20211020\Nette\Utils\Json::FORCE_ARRAY);
+            $this->cachedJSONFiles[$realPath] = \RectorPrefix20211021\Nette\Utils\Json::decode($smartFileInfo->getContents(), \RectorPrefix20211021\Nette\Utils\Json::FORCE_ARRAY);
         }
         return $this->cachedJSONFiles[$realPath];
     }
@@ -54,7 +54,7 @@ final class JsonFileManager
     public function loadFromFilePath(string $filePath) : array
     {
         $fileContent = $this->smartFileSystem->readFile($filePath);
-        return \RectorPrefix20211020\Nette\Utils\Json::decode($fileContent, \RectorPrefix20211020\Nette\Utils\Json::FORCE_ARRAY);
+        return \RectorPrefix20211021\Nette\Utils\Json::decode($fileContent, \RectorPrefix20211021\Nette\Utils\Json::FORCE_ARRAY);
     }
     /**
      * @param mixed[] $json
@@ -67,7 +67,7 @@ final class JsonFileManager
         unset($this->cachedJSONFiles[$realPath]);
         return $jsonString;
     }
-    public function printComposerJsonToFilePath(\RectorPrefix20211020\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson, string $filePath) : string
+    public function printComposerJsonToFilePath(\RectorPrefix20211021\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson, string $filePath) : string
     {
         $jsonString = $this->encodeJsonToFileContent($composerJson->getJsonArray());
         $this->smartFileSystem->dumpFile($filePath, $jsonString);
@@ -80,7 +80,7 @@ final class JsonFileManager
     {
         // Empty arrays may lead to bad encoding since we can't be sure whether they need to be arrays or objects.
         $json = $this->jsonCleaner->removeEmptyKeysFromJsonArray($json);
-        $jsonContent = \RectorPrefix20211020\Nette\Utils\Json::encode($json, \RectorPrefix20211020\Nette\Utils\Json::PRETTY) . \RectorPrefix20211020\Symplify\PackageBuilder\Configuration\StaticEolConfiguration::getEolChar();
+        $jsonContent = \RectorPrefix20211021\Nette\Utils\Json::encode($json, \RectorPrefix20211021\Nette\Utils\Json::PRETTY) . \RectorPrefix20211021\Symplify\PackageBuilder\Configuration\StaticEolConfiguration::getEolChar();
         return $this->jsonInliner->inlineSections($jsonContent);
     }
 }

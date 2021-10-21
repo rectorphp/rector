@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use RectorPrefix20211020\Nette\Utils\Strings;
+use RectorPrefix20211021\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -26,7 +26,7 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20211020\Stringy\Stringy;
+use RectorPrefix20211021\Stringy\Stringy;
 final class VariableNaming
 {
     /**
@@ -58,7 +58,7 @@ final class VariableNaming
             $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
             $variableName = \lcfirst($shortClassName);
         }
-        $stringy = new \RectorPrefix20211020\Stringy\Stringy($variableName);
+        $stringy = new \RectorPrefix20211021\Stringy\Stringy($variableName);
         return (string) $stringy->camelize();
     }
     public function resolveFromNodeWithScopeCountAndFallbackName(\PhpParser\Node\Expr $expr, ?\PHPStan\Analyser\Scope $scope, string $fallbackName) : string
@@ -68,7 +68,7 @@ final class VariableNaming
             $name = $fallbackName;
         }
         if (\strpos($name, '\\') !== \false) {
-            $name = (string) \RectorPrefix20211020\Nette\Utils\Strings::after($name, '\\', -1);
+            $name = (string) \RectorPrefix20211021\Nette\Utils\Strings::after($name, '\\', -1);
         }
         $countedValueName = $this->createCountedValueName($name, $scope);
         return \lcfirst($countedValueName);
@@ -137,7 +137,7 @@ final class VariableNaming
             if ($arrayDimFetch->dim instanceof \PhpParser\Node\Scalar) {
                 $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
                 $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
-                $stringy = new \RectorPrefix20211020\Stringy\Stringy($dimName);
+                $stringy = new \RectorPrefix20211021\Stringy\Stringy($dimName);
                 $dimName = (string) $stringy->upperCamelize();
                 return $valueName . $dimName;
             }

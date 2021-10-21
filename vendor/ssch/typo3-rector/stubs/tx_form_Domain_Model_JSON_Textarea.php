@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211020;
+namespace RectorPrefix20211021;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Textarea')) {
     return;

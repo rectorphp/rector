@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
-use RectorPrefix20211020\Nette\Utils\Strings;
+use RectorPrefix20211021\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
@@ -13,7 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20211020\Stringy\Stringy;
+use RectorPrefix20211021\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -71,9 +71,9 @@ CODE_SAMPLE
         }
         $shortClassName = $this->nodeNameResolver->getShortName($className);
         if (\substr_compare($shortClassName, 'Type', -\strlen('Type')) === 0) {
-            $shortClassName = (string) \RectorPrefix20211020\Nette\Utils\Strings::before($shortClassName, 'Type');
+            $shortClassName = (string) \RectorPrefix20211021\Nette\Utils\Strings::before($shortClassName, 'Type');
         }
-        $stringy = new \RectorPrefix20211020\Stringy\Stringy($shortClassName);
+        $stringy = new \RectorPrefix20211021\Stringy\Stringy($shortClassName);
         $underscoredClassShortName = (string) $stringy->underscored();
         if ($underscoredClassShortName !== $returnedValue) {
             return null;

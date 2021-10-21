@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211020\TYPO3\CMS\Core\Localization;
+namespace RectorPrefix20211021\TYPO3\CMS\Core\Localization;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Localization\\LanguageService')) {
     return;

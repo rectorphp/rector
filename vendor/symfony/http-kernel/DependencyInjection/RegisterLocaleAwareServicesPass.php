@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211020\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20211021\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20211020\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix20211020\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20211020\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211020\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20211021\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20211021\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20211021\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211021\Symfony\Component\DependencyInjection\Reference;
 /**
  * Register all services that have the "kernel.locale_aware" tag into the listener.
  *
  * @author Pierre Bobiet <pierrebobiet@gmail.com>
  */
-class RegisterLocaleAwareServicesPass implements \RectorPrefix20211020\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class RegisterLocaleAwareServicesPass implements \RectorPrefix20211021\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     private $listenerServiceId;
     private $localeAwareTag;
@@ -41,12 +41,12 @@ class RegisterLocaleAwareServicesPass implements \RectorPrefix20211020\Symfony\C
         }
         $services = [];
         foreach ($container->findTaggedServiceIds($this->localeAwareTag) as $id => $tags) {
-            $services[] = new \RectorPrefix20211020\Symfony\Component\DependencyInjection\Reference($id);
+            $services[] = new \RectorPrefix20211021\Symfony\Component\DependencyInjection\Reference($id);
         }
         if (!$services) {
             $container->removeDefinition($this->listenerServiceId);
             return;
         }
-        $container->getDefinition($this->listenerServiceId)->setArgument(0, new \RectorPrefix20211020\Symfony\Component\DependencyInjection\Argument\IteratorArgument($services));
+        $container->getDefinition($this->listenerServiceId)->setArgument(0, new \RectorPrefix20211021\Symfony\Component\DependencyInjection\Argument\IteratorArgument($services));
     }
 }

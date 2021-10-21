@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211020\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211021\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20211020\Idiosyncratic\EditorConfig\Exception\InvalidValue;
-use RectorPrefix20211020\PHPUnit\Framework\TestCase;
+use RectorPrefix20211021\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20211021\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class IndentSizeTest extends \RectorPrefix20211020\PHPUnit\Framework\TestCase
+class IndentSizeTest extends \RectorPrefix20211021\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        $declaration = new \RectorPrefix20211020\Idiosyncratic\EditorConfig\Declaration\IndentSize('tab');
+        $declaration = new \RectorPrefix20211021\Idiosyncratic\EditorConfig\Declaration\IndentSize('tab');
         $this->assertEquals('indent_size=tab', (string) $declaration);
-        $declaration = new \RectorPrefix20211020\Idiosyncratic\EditorConfig\Declaration\IndentSize('4');
+        $declaration = new \RectorPrefix20211021\Idiosyncratic\EditorConfig\Declaration\IndentSize('4');
         $this->assertEquals('indent_size=4', (string) $declaration);
         $this->assertSame(4, $declaration->getValue());
     }
     public function testInvalidValueType()
     {
-        $this->expectException(\RectorPrefix20211020\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211020\Idiosyncratic\EditorConfig\Declaration\IndentSize('true');
+        $this->expectException(\RectorPrefix20211021\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211021\Idiosyncratic\EditorConfig\Declaration\IndentSize('true');
     }
     public function testInvalidValueValue()
     {
-        $this->expectException(\RectorPrefix20211020\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211020\Idiosyncratic\EditorConfig\Declaration\IndentSize('four');
+        $this->expectException(\RectorPrefix20211021\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211021\Idiosyncratic\EditorConfig\Declaration\IndentSize('four');
     }
     public function testInvalidNegativeIntegerValue()
     {
-        $this->expectException(\RectorPrefix20211020\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211020\Idiosyncratic\EditorConfig\Declaration\IndentSize('-1');
+        $this->expectException(\RectorPrefix20211021\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211021\Idiosyncratic\EditorConfig\Declaration\IndentSize('-1');
     }
 }

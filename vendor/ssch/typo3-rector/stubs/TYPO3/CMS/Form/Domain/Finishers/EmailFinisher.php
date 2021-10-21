@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20211020\TYPO3\CMS\Form\Domain\Finishers;
+namespace RectorPrefix20211021\TYPO3\CMS\Form\Domain\Finishers;
 
-use RectorPrefix20211020\TYPO3\CMS\Core\Utility\GeneralUtility;
-use RectorPrefix20211020\TYPO3\CMS\Frontend\Page\PageRepository;
+use RectorPrefix20211021\TYPO3\CMS\Core\Utility\GeneralUtility;
+use RectorPrefix20211021\TYPO3\CMS\Frontend\Page\PageRepository;
 if (\class_exists('TYPO3\\CMS\\Form\\Domain\\Finishers\\EmailFinisher')) {
     return;
 }

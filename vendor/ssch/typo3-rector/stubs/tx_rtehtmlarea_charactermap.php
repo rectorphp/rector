@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211020;
+namespace RectorPrefix20211021;
 
 if (\class_exists('tx_rtehtmlarea_charactermap')) {
     return;

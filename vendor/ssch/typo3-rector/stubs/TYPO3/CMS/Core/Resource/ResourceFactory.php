@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211020\TYPO3\CMS\Core\Resource;
+namespace RectorPrefix20211021\TYPO3\CMS\Core\Resource;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\ResourceFactory')) {
     return;

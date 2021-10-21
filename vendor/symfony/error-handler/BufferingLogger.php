@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211020\Symfony\Component\ErrorHandler;
+namespace RectorPrefix20211021\Symfony\Component\ErrorHandler;
 
-use RectorPrefix20211020\Psr\Log\AbstractLogger;
+use RectorPrefix20211021\Psr\Log\AbstractLogger;
 /**
  * A buffering logger that stacks logs for later.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class BufferingLogger extends \RectorPrefix20211020\Psr\Log\AbstractLogger
+class BufferingLogger extends \RectorPrefix20211021\Psr\Log\AbstractLogger
 {
     private $logs = [];
     /**
