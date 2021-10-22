@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211021\TYPO3\CMS\Backend\Controller\Page;
+namespace RectorPrefix20211022\TYPO3\CMS\Backend\Controller\Page;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Controller\\Page\\LocalizationController')) {
     return;

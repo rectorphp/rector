@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Rector\MethodCall;
 
-use RectorPrefix20211021\Nette\Utils\Strings;
+use RectorPrefix20211022\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -87,7 +87,7 @@ CODE_SAMPLE
     private function resolveRepositoryName(\PhpParser\Node\Expr $expr) : string
     {
         $entityReferenceName = $this->valueResolver->getValue($expr);
-        $lastNamePart = (string) \RectorPrefix20211021\Nette\Utils\Strings::after($entityReferenceName, '\\', -1);
+        $lastNamePart = (string) \RectorPrefix20211022\Nette\Utils\Strings::after($entityReferenceName, '\\', -1);
         return \lcfirst($lastNamePart) . 'Repository';
     }
     private function guessRepositoryType(\PhpParser\Node\Expr $expr) : string
@@ -97,8 +97,8 @@ CODE_SAMPLE
             if ($entityClass === null) {
                 return 'Unknown_Repository_Class';
             }
-            $entityClassNamespace = (string) \RectorPrefix20211021\Nette\Utils\Strings::before($entityClass, '\\', -2);
-            $lastNamePart = (string) \RectorPrefix20211021\Nette\Utils\Strings::after($entityClass, '\\', -1);
+            $entityClassNamespace = (string) \RectorPrefix20211022\Nette\Utils\Strings::before($entityClass, '\\', -2);
+            $lastNamePart = (string) \RectorPrefix20211022\Nette\Utils\Strings::after($entityClass, '\\', -1);
             return $entityClassNamespace . '\\Repository\\' . $lastNamePart . 'Repository';
         }
         return 'Unknown_Repository_Class';

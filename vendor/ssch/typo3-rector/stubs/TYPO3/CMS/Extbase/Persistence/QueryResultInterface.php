@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211021\TYPO3\CMS\Extbase\Persistence;
+namespace RectorPrefix20211022\TYPO3\CMS\Extbase\Persistence;
 
 if (\interface_exists('TYPO3\\CMS\\Extbase\\Persistence\\QueryResultInterface')) {
     return;

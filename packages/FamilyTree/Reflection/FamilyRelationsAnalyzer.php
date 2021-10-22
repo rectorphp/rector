@@ -29,8 +29,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211021\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20211021\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211022\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211022\Symplify\SmartFileSystem\SmartFileSystem;
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -65,7 +65,7 @@ final class FamilyRelationsAnalyzer
      * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211021\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211021\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver, \PhpParser\Parser $parser)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211022\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211022\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver, \PhpParser\Parser $parser)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;

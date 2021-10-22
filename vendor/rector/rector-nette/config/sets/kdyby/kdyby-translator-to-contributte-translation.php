@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211021;
+namespace RectorPrefix20211022;
 
 use Rector\Nette\Kdyby\Rector\MethodCall\WrapTransParameterNameRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

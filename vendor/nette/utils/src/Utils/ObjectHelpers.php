@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211021\Nette\Utils;
+namespace RectorPrefix20211022\Nette\Utils;
 
-use RectorPrefix20211021\Nette;
-use RectorPrefix20211021\Nette\MemberAccessException;
+use RectorPrefix20211022\Nette;
+use RectorPrefix20211022\Nette\MemberAccessException;
 /**
  * Nette\SmartObject helpers.
  */
@@ -24,7 +24,7 @@ final class ObjectHelpers
         $hint = self::getSuggestion(\array_merge(\array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($p) {
             return !$p->isStatic();
         }), self::parseFullDoc($rc, '~^[ \\t*]*@property(?:-read)?[ \\t]+(?:\\S+[ \\t]+)??\\$(\\w+)~m')), $name);
-        throw new \RectorPrefix20211021\Nette\MemberAccessException("Cannot read an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
+        throw new \RectorPrefix20211022\Nette\MemberAccessException("Cannot read an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
     }
     /** @throws MemberAccessException
      * @param string $class
@@ -35,7 +35,7 @@ final class ObjectHelpers
         $hint = self::getSuggestion(\array_merge(\array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($p) {
             return !$p->isStatic();
         }), self::parseFullDoc($rc, '~^[ \\t*]*@property(?:-write)?[ \\t]+(?:\\S+[ \\t]+)??\\$(\\w+)~m')), $name);
-        throw new \RectorPrefix20211021\Nette\MemberAccessException("Cannot write to an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
+        throw new \RectorPrefix20211022\Nette\MemberAccessException("Cannot write to an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
     }
     /** @throws MemberAccessException
      * @param string $class
@@ -54,10 +54,10 @@ final class ObjectHelpers
             // insufficient visibility
             $rm = new \ReflectionMethod($class, $method);
             $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
-            throw new \RectorPrefix20211021\Nette\MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
+            throw new \RectorPrefix20211022\Nette\MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
         } else {
             $hint = self::getSuggestion(\array_merge(\get_class_methods($class), self::parseFullDoc(new \ReflectionClass($class), '~^[ \\t*]*@method[ \\t]+(?:\\S+[ \\t]+)??(\\w+)\\(~m'), $additionalMethods), $method);
-            throw new \RectorPrefix20211021\Nette\MemberAccessException("Call to undefined method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
+            throw new \RectorPrefix20211022\Nette\MemberAccessException("Call to undefined method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
         }
     }
     /** @throws MemberAccessException
@@ -76,12 +76,12 @@ final class ObjectHelpers
             // insufficient visibility
             $rm = new \ReflectionMethod($class, $method);
             $visibility = $rm->isPrivate() ? 'private ' : ($rm->isProtected() ? 'protected ' : '');
-            throw new \RectorPrefix20211021\Nette\MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
+            throw new \RectorPrefix20211022\Nette\MemberAccessException("Call to {$visibility}method {$class}::{$method}() from " . ($context ? "scope {$context}." : 'global scope.'));
         } else {
             $hint = self::getSuggestion(\array_filter((new \ReflectionClass($class))->getMethods(\ReflectionMethod::IS_PUBLIC), function ($m) {
                 return $m->isStatic();
             }), $method);
-            throw new \RectorPrefix20211021\Nette\MemberAccessException("Call to undefined static method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
+            throw new \RectorPrefix20211022\Nette\MemberAccessException("Call to undefined static method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
         }
     }
     /**

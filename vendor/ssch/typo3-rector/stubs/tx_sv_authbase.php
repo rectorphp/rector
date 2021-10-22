@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211021;
+namespace RectorPrefix20211022;
 
 if (\class_exists('tx_sv_authbase')) {
     return;

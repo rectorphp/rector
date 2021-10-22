@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211021\Symfony\Component\HttpKernel\DataCollector;
+namespace RectorPrefix20211022\Symfony\Component\HttpKernel\DataCollector;
 
-use RectorPrefix20211021\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211021\Symfony\Component\HttpFoundation\Response;
+use RectorPrefix20211022\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211022\Symfony\Component\HttpFoundation\Response;
 /**
  * MemoryDataCollector.
  *
@@ -19,7 +19,7 @@ use RectorPrefix20211021\Symfony\Component\HttpFoundation\Response;
  *
  * @final
  */
-class MemoryDataCollector extends \RectorPrefix20211021\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20211021\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
+class MemoryDataCollector extends \RectorPrefix20211022\Symfony\Component\HttpKernel\DataCollector\DataCollector implements \RectorPrefix20211022\Symfony\Component\HttpKernel\DataCollector\LateDataCollectorInterface
 {
     public function __construct()
     {

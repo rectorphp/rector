@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211021\Nette\Neon;
+namespace RectorPrefix20211022\Nette\Neon;
 
 /** @internal */
 final class Token

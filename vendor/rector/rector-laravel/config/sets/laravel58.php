@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211021;
+namespace RectorPrefix20211022;
 
 use PHPStan\Type\BooleanType;
 use Rector\Laravel\Rector\Class_\PropertyDeferToDeferrableProviderToRector;

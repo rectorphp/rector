@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20211021\TYPO3\CMS\Frontend\ContentObject;
+namespace RectorPrefix20211022\TYPO3\CMS\Frontend\ContentObject;
 
-use RectorPrefix20211021\TYPO3\CMS\Core\Utility\GeneralUtility;
-use RectorPrefix20211021\TYPO3\CMS\Frontend\Page\PageRepository;
+use RectorPrefix20211022\TYPO3\CMS\Core\Utility\GeneralUtility;
+use RectorPrefix20211022\TYPO3\CMS\Frontend\Page\PageRepository;
 if (\class_exists('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer')) {
     return;
 }

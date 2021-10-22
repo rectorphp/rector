@@ -109,6 +109,14 @@ final class File
         if ($this->oldStmts !== []) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('Double stmts override');
         }
+        /*
+         * If newStmts is equal to $oldStmts,
+         * it is necessary to fill oldTokens only to avoid content of the file removed or spacing changed
+         */
+        if ($newStmts === $oldStmts) {
+            $this->oldTokens = $oldTokens;
+            return;
+        }
         $this->oldStmts = $oldStmts;
         $this->newStmts = $newStmts;
         $this->oldTokens = $oldTokens;

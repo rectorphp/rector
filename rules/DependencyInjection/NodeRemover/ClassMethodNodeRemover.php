@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
-use RectorPrefix20211021\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211022\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodNodeRemover
 {
     /**
@@ -29,7 +29,7 @@ final class ClassMethodNodeRemover
      * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
-    public function __construct(\RectorPrefix20211021\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector)
+    public function __construct(\RectorPrefix20211022\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
