@@ -290,6 +290,10 @@ final class PhpDocInfo
             $typeToRemove
         ): ?int {
             if ($node instanceof PhpDocTagNode && is_a($node->value, $typeToRemove, true)) {
+                if ($typeToRemove === VarTagValueNode::class && $node->name !== '@var') {
+                    return null;
+                }
+
                 $this->markAsChanged();
                 return PhpDocNodeTraverser::NODE_REMOVE;
             }
