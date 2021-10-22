@@ -277,6 +277,9 @@ final class PhpDocInfo
         $phpDocNodeTraverser = new \RectorPrefix20211022\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($this->phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($typeToRemove) : ?int {
             if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && \is_a($node->value, $typeToRemove, \true)) {
+                if ($typeToRemove === \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class && $node->name !== '@var') {
+                    return null;
+                }
                 $this->markAsChanged();
                 return \RectorPrefix20211022\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
             }
