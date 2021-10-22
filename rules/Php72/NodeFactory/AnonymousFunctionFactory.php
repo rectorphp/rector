@@ -27,6 +27,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use PhpParser\Parser;
@@ -206,7 +207,7 @@ final class AnonymousFunctionFactory
             $parentNode = $variableNode->getAttribute(AttributeKey::PARENT_NODE);
             if (
                 $parentNode instanceof Assign
-                || $parentNode instanceof Stmt\Foreach_
+                || $parentNode instanceof Foreach_
                 || $parentNode instanceof Param
             ) {
                 $alreadyAssignedVariables[] = $variableName;
