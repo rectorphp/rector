@@ -19,7 +19,7 @@ jobs:
             matrix:
                 php_version: ['8.0']
                 directory:
-                    - 'e2e/enums'
+                    - 'e2e/template-extends'
 
         name: End to end test - ${{ matrix.directory }}
 
