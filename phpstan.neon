@@ -522,3 +522,13 @@ parameters:
         -
             message: '#Class cognitive complexity is 31, keep it under 30#'
             path: rules/Php74/Rector/Property/TypedPropertyRector.php
+
+        # on purpose as ReflectionProvider hang on check class with `@template-extends`
+        -
+            message: '#Function "class_exists\(\)" cannot be used/left in the code#'
+            path: packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php #159
+
+        # on purpose as ReflectionProvider hang on check class with `@template-extends`
+        -
+            message: '#Instead of "new ClassReflection\(\)" use ReflectionProvider service or "\(new PHPStan\\Reflection\\ClassReflection\(<desired_type\>\)\)" for static reflection to work#'
+            path: packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php #164

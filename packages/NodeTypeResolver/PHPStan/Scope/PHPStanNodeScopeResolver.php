@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
+use PhpParser\Parser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
-use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection;
 use PHPStan\BetterReflection\Reflector\ClassReflector;
@@ -26,15 +26,19 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
+use Rector\Core\Application\FileProcessor;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
+use ReflectionClass;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileSystem;
 use Throwable;
 
 /**
@@ -65,7 +69,14 @@ final class PHPStanNodeScopeResolver
         private PrivatesAccessor $privatesAccessor,
         private RenamedClassesSourceLocator $renamedClassesSourceLocator,
         private ParentAttributeSourceLocator $parentAttributeSourceLocator,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        /**
+         * use \PhpParser\Parser on purpose instead of extended \Rector\Core\PhpParser\Parser\Parser
+         * as detecting `@template-extends` too early on dependent files
+         */
+        private Parser $parser,
+        private BetterStandardPrinter $betterStandardPrinter,
+        private SmartFileSystem $smartFileSystem
     ) {
     }
 
@@ -115,7 +126,60 @@ final class PHPStanNodeScopeResolver
 
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
 
+        // it needs to be checked early before `@mixin` check as
+        // ReflectionProvider already hang when check class with `@template-extends`
+        if ($this->isTemplateExtendsInSource($nodes, $smartFileInfo->getFilename())) {
+            return $nodes;
+        }
+
         return $this->processNodesWithMixinHandling($smartFileInfo, $nodes, $scope, $nodeCallback);
+    }
+
+    /**
+     * @param Node[] $nodes
+     */
+    private function isTemplateExtendsInSource(array $nodes, string $currentFileName): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($currentFileName): bool {
+            if (! $node instanceof FullyQualified) {
+                return false;
+            }
+
+            $className = $node->toString();
+
+            // fix error in parallel test
+            // use function_exists on purpose as using reflectionProvider broke the test in parallel
+            if (function_exists($className)) {
+                return false;
+            }
+
+            // use class_exists as PHPStan ReflectionProvider hang on check className with `@template-extends`
+            if (! class_exists($className)) {
+                return false;
+            }
+
+            // use native ReflectionClass as PHPStan ReflectionProvider hang on check className with `@template-extends`
+            $reflectionClass = new ReflectionClass($className);
+            if ($reflectionClass->isInternal()) {
+                return false;
+            }
+
+            $fileName = (string) $reflectionClass->getFileName();
+            if (! $this->smartFileSystem->exists($fileName)) {
+                return false;
+            }
+
+            // already checked in FileProcessor::parseFileInfoToLocalCache()
+            if ($fileName === $currentFileName) {
+                return false;
+            }
+
+            $content = $this->smartFileSystem->readFile($fileName);
+            $fileNodes = $this->parser->parse($content);
+
+            $print = $this->betterStandardPrinter->print($fileNodes);
+            return (bool) Strings::match($print, FileProcessor::TEMPLATE_EXTENDS_REGEX);
+        });
     }
 
     /**
@@ -219,7 +283,7 @@ final class PHPStanNodeScopeResolver
     private function resolveClassOrInterfaceScope(
         Class_ | Interface_ $classLike,
         MutatingScope $mutatingScope
-    ): Scope {
+    ): MutatingScope {
         $className = $this->resolveClassName($classLike);
 
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91

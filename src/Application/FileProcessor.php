@@ -20,7 +20,7 @@ final class FileProcessor
      * @var string
      * @see https://regex101.com/r/ozPuC9/1
      */
-    private const TEMPLATE_EXTENDS_REGEX = '#(\*|\/\/)\s+\@template-extends\s+\\\\?\w+#';
+    public const TEMPLATE_EXTENDS_REGEX = '#(\*|\/\/)\s+\@template-extends\s+\\\\?\w+#';
 
     public function __construct(
         private AffectedFilesCollector $affectedFilesCollector,

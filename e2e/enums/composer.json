@@ -1,0 +1,16 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Whatever\\Foo\\Bar\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "myclabs/php-enum": "^1.8"
+    },
+    "require-dev": {
+        "rector/rector-src": "dev-handle-template-extends-in-dependends-file"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
