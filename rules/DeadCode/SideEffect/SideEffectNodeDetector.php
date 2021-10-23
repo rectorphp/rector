@@ -129,7 +129,7 @@ final class SideEffectNodeDetector
             ->yes();
     }
 
-    private function resolveVariable(Expr $expr): ?Variable
+    private function resolveVariable(ArrayDimFetch|Variable $expr): ?Variable
     {
         while ($expr instanceof ArrayDimFetch) {
             $expr = $expr->var;

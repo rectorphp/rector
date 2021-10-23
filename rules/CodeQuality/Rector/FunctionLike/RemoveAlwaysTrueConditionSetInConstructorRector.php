@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodeQuality\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -134,7 +135,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isAlwaysTruableNode(Node $node): bool
+    private function isAlwaysTruableNode(Expr|Stmt $node): bool
     {
         if (! $node instanceof If_) {
             return false;

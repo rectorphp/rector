@@ -106,7 +106,7 @@ final class ClassInsertManipulator
         return $nodes;
     }
 
-    private function isSuccessToInsertBeforeFirstMethod(Class_ $class, Stmt $stmt): bool
+    private function isSuccessToInsertBeforeFirstMethod(Class_ $class, ClassConst|ClassMethod|Property $stmt): bool
     {
         foreach ($class->stmts as $key => $classStmt) {
             if (! $classStmt instanceof ClassMethod) {
@@ -121,7 +121,7 @@ final class ClassInsertManipulator
         return false;
     }
 
-    private function isSuccessToInsertAfterLastProperty(Class_ $class, Stmt $stmt): bool
+    private function isSuccessToInsertAfterLastProperty(Class_ $class, ClassConst|ClassMethod|Property $stmt): bool
     {
         $previousElement = null;
         foreach ($class->stmts as $key => $classStmt) {

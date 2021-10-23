@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Rector\AbstractRector;
@@ -132,7 +131,7 @@ CODE_SAMPLE
     /**
      * @return array<int, string>
      */
-    private function getLocalPrivateMethodCallOrder(ClassLike $classLike): array
+    private function getLocalPrivateMethodCallOrder(Class_|Trait_ $classLike): array
     {
         $localPrivateMethodCallInOrder = [];
 
@@ -175,7 +174,7 @@ CODE_SAMPLE
     /**
      * @return array<int, string>
      */
-    private function resolvePrivateClassMethods(ClassLike $classLike): array
+    private function resolvePrivateClassMethods(Class_|Trait_ $classLike): array
     {
         $privateClassMethods = [];
 

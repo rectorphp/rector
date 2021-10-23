@@ -150,7 +150,7 @@ CODE_SAMPLE
         return $foreach;
     }
 
-    private function shouldSkip(Return_ $return, Foreach_ $foreach, Expr $assignVariable, ?Expr $expr = null): bool
+    private function shouldSkip(Return_ $return, Foreach_ $foreach, Expr $assignVariable, Expr $expr = null): bool
     {
         if (! $expr instanceof Expr) {
             return true;

@@ -17,7 +17,6 @@ use PHPStan\Type\UnionType;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\TypeDeclaration\Enum\TypeStrictness;
 
 final class CallTypesResolver
 {
@@ -33,24 +32,6 @@ final class CallTypesResolver
      */
     public function resolveStrictTypesFromCalls(array $calls): array
     {
-        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_TYPE_DECLARATION());
-    }
-
-    /**
-     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
-     * @return Type[]
-     */
-    public function resolveWeakTypesFromCalls(array $calls): array
-    {
-        return $this->resolveTypesFromCalls($calls, TypeStrictness::STRICTNESS_DOCBLOCK());
-    }
-
-    /**
-     * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
-     * @return Type[]
-     */
-    private function resolveTypesFromCalls(array $calls, TypeStrictness $typeStrictness): array
-    {
         $staticTypesByArgumentPosition = [];
 
         foreach ($calls as $call) {
@@ -63,7 +44,7 @@ final class CallTypesResolver
                     continue;
                 }
 
-                $argValueType = $this->resolveArgValueType($typeStrictness, $arg);
+                $argValueType = $this->resolveStrictArgValueType($arg);
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
@@ -72,13 +53,9 @@ final class CallTypesResolver
         return $this->unionToSingleType($staticTypesByArgumentPosition);
     }
 
-    private function resolveArgValueType(TypeStrictness $typeStrictness, Arg $arg): Type
+    private function resolveStrictArgValueType(Arg $arg): Type
     {
-        if ($typeStrictness->equals(TypeStrictness::STRICTNESS_TYPE_DECLARATION())) {
-            $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
-        } else {
-            $argValueType = $this->nodeTypeResolver->getType($arg->value);
-        }
+        $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
 
         // "self" in another object is not correct, this make it independent
         return $this->correctSelfType($argValueType);

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -98,7 +101,7 @@ final class PhpDocFromTypeDeclarationDecorator
         return true;
     }
 
-    private function isTypeMatch(Node $typeNode, Type $requireType): bool
+    private function isTypeMatch(ComplexType|Identifier|Name $typeNode, Type $requireType): bool
     {
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
 

@@ -18,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\PackageBuilder\Reflection\PrivatesCaller;
 
 /**
@@ -64,11 +65,12 @@ final class BetterPhpDocParser extends PhpDocParser
         return $phpDocNode;
     }
 
-    /**
-     * @param BetterTokenIterator $tokenIterator
-     */
     public function parseTag(TokenIterator $tokenIterator): PhpDocTagNode
     {
+        if (! $tokenIterator instanceof BetterTokenIterator) {
+            throw new ShouldNotHappenException();
+        }
+
         $tag = $this->resolveTag($tokenIterator);
 
         $phpDocTagValueNode = $this->parseTagValue($tokenIterator, $tag);

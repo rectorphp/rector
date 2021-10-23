@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Naming;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\New_;
@@ -160,7 +159,7 @@ final class NameRenamer
         $param->type = new Name($lastName);
     }
 
-    private function renameUnionType(string $lastName, UnionType $unionType, Node $usedNameNode): void
+    private function renameUnionType(string $lastName, UnionType $unionType, Identifier|Name $usedNameNode): void
     {
         foreach ($unionType->types as $key => $unionedType) {
             if (! $this->nodeNameResolver->areNamesEqual($unionedType, $usedNameNode)) {

@@ -213,7 +213,7 @@ CODE_SAMPLE
     }
 
     private function resolveTypePossibleUnionNullableType(
-        Name | NullableType | PhpParserUnionType $node,
+        Name|NullableType|\PhpParser\Node\UnionType $node,
         Type $possibleUnionType
     ): Type {
         if (! $node instanceof NullableType) {
@@ -234,7 +234,7 @@ CODE_SAMPLE
         return $possibleUnionType;
     }
 
-    private function shouldSkipNonClassLikeType(Name | NullableType | PhpParserUnionType $node, Type $type): bool
+    private function shouldSkipNonClassLikeType(Name|NullableType|PhpParserUnionType $node, Type $type): bool
     {
         // unwrap nullable type
         if ($node instanceof NullableType) {

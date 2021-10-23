@@ -146,7 +146,7 @@ CODE_SAMPLE
         );
     }
 
-    private function isIfStmtReturnIncorrect(Expr $expr, Expr $variable, Return_ $return): bool
+    private function isIfStmtReturnIncorrect(BooleanNot|Instanceof_ $expr, Expr $variable, Return_ $return): bool
     {
         if (! $return->expr instanceof Expr) {
             return true;
@@ -159,7 +159,7 @@ CODE_SAMPLE
         return $expr instanceof Instanceof_ && ! $this->nodeComparator->areNodesEqual($variable, $return->expr);
     }
 
-    private function isNextReturnIncorrect(Expr $expr, Expr $variable, Return_ $return): bool
+    private function isNextReturnIncorrect(BooleanNot|Instanceof_ $expr, Expr $variable, Return_ $return): bool
     {
         if (! $return->expr instanceof Expr) {
             return true;

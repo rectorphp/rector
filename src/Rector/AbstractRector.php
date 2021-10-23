@@ -542,15 +542,10 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         }
     }
 
-    /**
-     * @param Node|Node[] $node
-     */
-    private function connectParentNodes(Node | array $node): void
+    private function connectParentNodes(Node $node): void
     {
-        $nodes = is_array($node) ? $node : [$node];
-
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentConnectingVisitor());
-        $nodeTraverser->traverse($nodes);
+        $nodeTraverser->traverse([$node]);
     }
 }

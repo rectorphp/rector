@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
@@ -114,8 +113,10 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         return $returns;
     }
 
-    private function resolveNoLocalReturnNodes(ClassLike $classLike, FunctionLike $functionLike): VoidType | MixedType
-    {
+    private function resolveNoLocalReturnNodes(
+        Class_|Interface_|Trait_ $classLike,
+        FunctionLike $functionLike
+    ): VoidType | MixedType {
         // void type
         if (! $this->isAbstractMethod($classLike, $functionLike)) {
             return new VoidType();
@@ -124,7 +125,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         return new MixedType();
     }
 
-    private function isAbstractMethod(ClassLike $classLike, FunctionLike $functionLike): bool
+    private function isAbstractMethod(Class_|Interface_|Trait_ $classLike, FunctionLike $functionLike): bool
     {
         if ($functionLike instanceof ClassMethod && $functionLike->isAbstract()) {
             return true;

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -109,7 +108,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function isNullableParam(Param $param, FunctionLike $functionLike): bool
+    private function isNullableParam(Param $param, ClassMethod|Function_ $functionLike): bool
     {
         if ($param->variadic) {
             return false;
@@ -133,7 +132,7 @@ CODE_SAMPLE
         return $this->getDifferentParamTypeFromAncestorClass($param, $functionLike) !== null;
     }
 
-    private function getDifferentParamTypeFromAncestorClass(Param $param, FunctionLike $functionLike): ?string
+    private function getDifferentParamTypeFromAncestorClass(Param $param, ClassMethod|Function_ $functionLike): ?string
     {
         $scope = $functionLike->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {

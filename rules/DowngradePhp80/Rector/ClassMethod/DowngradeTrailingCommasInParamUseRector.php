@@ -111,7 +111,6 @@ CODE_SAMPLE
             $this->processUses($node);
         }
 
-        /** @var ClassMethod|Function_ $node */
         return $this->processParams($node);
     }
 
@@ -134,7 +133,7 @@ CODE_SAMPLE
         $this->cleanTrailingComma($node, $node->uses);
     }
 
-    private function processParams(ClassMethod | Function_ | Closure $node): ?Node
+    private function processParams(ClassMethod|Function_|Closure $node): ?Node
     {
         if ($node->params === []) {
             return null;
@@ -146,8 +145,10 @@ CODE_SAMPLE
     /**
      * @param ClosureUse[]|Param[]|Arg[] $array
      */
-    private function cleanTrailingComma(Node $node, array $array): ?Node
-    {
+    private function cleanTrailingComma(
+        FuncCall|MethodCall|New_|StaticCall|Closure|ClassMethod|Function_ $node,
+        array $array
+    ): ?Node {
         $lastPosition = array_key_last($array);
 
         $last = $array[$lastPosition];

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class WeakDocBlockTest extends AbstractRectorTestCase
+final class TypedPropertyFromStrictGetterMethodReturnTypeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -23,11 +23,11 @@ final class WeakDocBlockTest extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureWeakDocBlock');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/weak_doc_block.php';
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

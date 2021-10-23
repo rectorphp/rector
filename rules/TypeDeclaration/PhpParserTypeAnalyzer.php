@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration;
 
-use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -45,8 +44,10 @@ final class PhpParserTypeAnalyzer
             ->yes();
     }
 
-    private function isUnionType(Node $possibleSubtype, Node $possibleParentType): bool
-    {
+    private function isUnionType(
+        Identifier|Name|NullableType|UnionType $possibleSubtype,
+        ComplexType|Identifier|Name $possibleParentType
+    ): bool {
         if ($possibleSubtype instanceof UnionType) {
             return true;
         }

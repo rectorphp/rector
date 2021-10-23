@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Naming\Naming;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -205,7 +204,7 @@ final class ExpectedNameResolver
         return $expr->name instanceof FuncCall;
     }
 
-    private function resolveReturnTypeFromArrayType(Expr $expr, ArrayType $arrayType): ?Type
+    private function resolveReturnTypeFromArrayType(FuncCall|MethodCall|StaticCall $expr, ArrayType $arrayType): ?Type
     {
         $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof Foreach_) {

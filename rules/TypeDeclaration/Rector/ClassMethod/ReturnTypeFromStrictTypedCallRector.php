@@ -210,7 +210,7 @@ CODE_SAMPLE
 
     private function refactorSingleReturnType(
         Return_ $return,
-        Identifier | Name | NullableType | PhpParserUnionType $returnedStrictTypeNode,
+        Identifier|Name|NullableType $returnedStrictTypeNode,
         ClassMethod | Function_ | Closure $functionLike
     ): Closure | ClassMethod | Function_ {
         $resolvedType = $this->nodeTypeResolver->getType($return);

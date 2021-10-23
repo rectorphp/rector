@@ -6,29 +6,20 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://github.com/symplify/phpstan-rules/blob/master/docs/rules_overview.md#checktypehintcallertyperule
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\AddMethodCallBasedStrictParamTypeRectorTest
  */
-final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector implements ConfigurableRectorInterface
+final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 {
-    /**
-     * @var string
-     */
-    public const TRUST_DOC_BLOCKS = 'trust_doc_blocks';
-
-    private bool $shouldTrustDocBlocks = false;
-
     public function __construct(
         private CallTypesResolver $callTypesResolver,
         private ClassMethodParamTypeCompleter $classMethodParamTypeCompleter,
@@ -39,7 +30,7 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector imple
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Change param type to strict type of passed expression', [
-            new ConfiguredCodeSample(
+            new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -83,10 +74,6 @@ class CallerClass
     }
 }
 CODE_SAMPLE
-                ,
-                [
-                    self::TRUST_DOC_BLOCKS => false,
-                ]
             ),
         ]);
     }
@@ -113,23 +100,8 @@ CODE_SAMPLE
         }
 
         $methodCalls = $this->localMethodCallFinder->match($node);
-
-        if ($this->shouldTrustDocBlocks) {
-            $classMethodParameterTypes = $this->callTypesResolver->resolveWeakTypesFromCalls($methodCalls);
-        } else {
-            $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
-        }
+        $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
 
         return $this->classMethodParamTypeCompleter->complete($node, $classMethodParameterTypes);
-    }
-
-    /**
-     * @param array<string, mixed> $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        $shouldTrustDocBlocks = $configuration[self::TRUST_DOC_BLOCKS] ?? false;
-        Assert::boolean($shouldTrustDocBlocks);
-        $this->shouldTrustDocBlocks = $shouldTrustDocBlocks;
     }
 }

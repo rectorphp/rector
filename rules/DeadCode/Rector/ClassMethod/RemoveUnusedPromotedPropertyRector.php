@@ -81,6 +81,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $hasRemovedProperty = false;
+
         if (! $this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
@@ -116,9 +118,14 @@ CODE_SAMPLE
 
             // remove param
             $this->removeNode($param);
+            $hasRemovedProperty = true;
         }
 
-        return $node;
+        if ($hasRemovedProperty) {
+            return $node;
+        }
+
+        return null;
     }
 
     public function provideMinPhpVersion(): int

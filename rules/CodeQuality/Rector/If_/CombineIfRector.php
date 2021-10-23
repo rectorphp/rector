@@ -7,7 +7,9 @@ namespace Rector\CodeQuality\Rector\If_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -74,6 +76,11 @@ CODE_SAMPLE
 
         /** @var If_ $subIf */
         $subIf = $node->stmts[0];
+
+        if ($this->hasVarTag($subIf)) {
+            return null;
+        }
+
         $node->cond = new BooleanAnd($node->cond, $subIf->cond);
         $node->stmts = $subIf->stmts;
 
@@ -105,5 +112,15 @@ CODE_SAMPLE
         }
 
         return (bool) $if->stmts[0]->elseifs;
+    }
+
+    private function hasVarTag(If_ $if): bool
+    {
+        $subIfPhpDocInfo = $this->phpDocInfoFactory->createFromNode($if);
+        if (! $subIfPhpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return $subIfPhpDocInfo->getVarTagValueNode() instanceof VarTagValueNode;
     }
 }

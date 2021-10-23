@@ -6,7 +6,6 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -177,7 +176,7 @@ CODE_SAMPLE
         return ! $ifCondition instanceof Equal;
     }
 
-    private function matchNodes(BinaryOp $binaryOp, Expr $expr): ?TwoNodeMatch
+    private function matchNodes(Equal|Identical $binaryOp, Expr $expr): ?TwoNodeMatch
     {
         return $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $binaryOp,

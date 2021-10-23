@@ -11,12 +11,17 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
@@ -159,11 +164,16 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
         return $arguments;
     }
 
-    private function getReplacementsFor(Expr $expr, Scope $scope, Node $scopeNode): VariableAssignPair
-    {
-        /** @var Assign|AssignOp|AssignRef $expr */
-        if ($this->isAssign($expr) && $this->isVariableLikeNode($expr->var)) {
-            return new VariableAssignPair($expr->var, $expr);
+    private function getReplacementsFor(
+        Expr $expr,
+        Scope $scope,
+        Closure|Class_|ClassMethod|Function_|Namespace_ $scopeNode
+    ): VariableAssignPair {
+        if ($this->isAssign($expr)) {
+            /** @var Assign|AssignRef|AssignOp $expr */
+            if ($this->isVariableLikeNode($expr->var)) {
+                return new VariableAssignPair($expr->var, $expr);
+            }
         }
 
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $scope, 'tmp');
@@ -179,12 +189,12 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
         return new VariableAssignPair($variable, new Assign($variable, $expr));
     }
 
-    private function isVariableLikeNode(Node $node): bool
+    private function isVariableLikeNode(Expr $expr): bool
     {
-        return $node instanceof Variable
-            || $node instanceof ArrayDimFetch
-            || $node instanceof PropertyFetch
-            || $node instanceof StaticPropertyFetch;
+        return $expr instanceof Variable
+            || $expr instanceof ArrayDimFetch
+            || $expr instanceof PropertyFetch
+            || $expr instanceof StaticPropertyFetch;
     }
 
     private function isAssign(Expr $expr): bool

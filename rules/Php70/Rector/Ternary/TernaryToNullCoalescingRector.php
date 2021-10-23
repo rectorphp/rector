@@ -111,7 +111,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         return null;
     }
 
-    private function isNullMatch(Expr $possibleNullExpr, Node $firstNode, Node $secondNode): bool
+    private function isNullMatch(Expr $possibleNullExpr, Expr $firstNode, Expr $secondNode): bool
     {
         if (! $this->valueResolver->isNull($possibleNullExpr)) {
             return false;

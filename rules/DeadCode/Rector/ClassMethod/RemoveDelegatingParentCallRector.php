@@ -119,7 +119,7 @@ CODE_SAMPLE
         return $this->isName($classMethod->returnType, $type);
     }
 
-    private function matchStaticCall(Node $node): ?StaticCall
+    private function matchStaticCall(Expr|Stmt $node): ?StaticCall
     {
         // must be static call
         if ($node instanceof Return_) {

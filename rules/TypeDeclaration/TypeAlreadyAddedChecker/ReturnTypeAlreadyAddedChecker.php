@@ -93,7 +93,7 @@ final class ReturnTypeAlreadyAddedChecker
     }
 
     private function isArrayIterableIteratorCoType(
-        Identifier | Name | NullableType | PhpParserUnionType | ComplexType $returnTypeNode,
+        ComplexType|Identifier|Name $returnTypeNode,
         Type $returnType
     ): bool {
         if (! $this->nodeNameResolver->isNames($returnTypeNode, self::FOREACHABLE_TYPES)) {
@@ -103,10 +103,8 @@ final class ReturnTypeAlreadyAddedChecker
         return $this->isStaticTypeIterable($returnType);
     }
 
-    private function isUnionCoType(
-        Identifier | Name | NullableType | PhpParserUnionType | ComplexType $returnTypeNode,
-        Type $type
-    ): bool {
+    private function isUnionCoType(ComplexType|Identifier|Name $returnTypeNode, Type $type): bool
+    {
         if (! $type instanceof UnionType) {
             return false;
         }

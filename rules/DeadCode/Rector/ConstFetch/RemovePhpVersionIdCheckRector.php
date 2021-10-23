@@ -133,7 +133,7 @@ CODE_SAMPLE
         return null;
     }
 
-    private function shouldSkip(ConstFetch $constFetch, ?If_ $if, ?Node $node): bool
+    private function shouldSkip(ConstFetch $constFetch, If_ $if, ?Node $node): bool
     {
         $if = $this->betterNodeFinder->findParentType($constFetch, If_::class);
         if (! $if instanceof If_) {

@@ -142,9 +142,9 @@ CODE_SAMPLE
         return new BooleanAnd($propertyExistsFuncCall, $this->createNotIdenticalToNull($propertyFetch));
     }
 
-    private function createNotIdenticalToNull(Expr $expr): NotIdentical
+    private function createNotIdenticalToNull(PropertyFetch $propertyFetch): NotIdentical
     {
-        return new NotIdentical($expr, $this->nodeFactory->createNull());
+        return new NotIdentical($propertyFetch, $this->nodeFactory->createNull());
     }
 
     private function hasPropertyTypeDeclaration(PropertyFetch $propertyFetch): bool

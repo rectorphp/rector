@@ -82,6 +82,10 @@ CODE_SAMPLE
         }
 
         $unusedParameters = $this->unusedParameterResolver->resolve($node);
+        if ($unusedParameters === []) {
+            return null;
+        }
+
         $this->removeNodes($unusedParameters);
 
         $this->clearPhpDocInfo($node, $unusedParameters);

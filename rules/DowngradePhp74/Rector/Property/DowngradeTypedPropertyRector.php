@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -73,7 +76,7 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function decoratePropertyWithDocBlock(Property $property, Node $typeNode): void
+    private function decoratePropertyWithDocBlock(Property $property, ComplexType|Identifier|Name $typeNode): void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->getVarTagValueNode() !== null) {

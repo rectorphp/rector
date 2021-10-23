@@ -191,7 +191,7 @@ CODE_SAMPLE
         return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
 
-    private function isUnaryMinusStrlenFuncCallArgValue(Node $substrOffset, Node $needle): bool
+    private function isUnaryMinusStrlenFuncCallArgValue(Expr $substrOffset, Expr $needle): bool
     {
         if (! $substrOffset instanceof UnaryMinus) {
             return false;
@@ -218,7 +218,7 @@ CODE_SAMPLE
         return $this->nodeComparator->areNodesEqual($funcCall->args[0]->value, $needle);
     }
 
-    private function isHardCodedLNumberAndString(Node $substrOffset, Node $needle): bool
+    private function isHardCodedLNumberAndString(Expr $substrOffset, Expr $needle): bool
     {
         if (! $substrOffset instanceof UnaryMinus) {
             return false;
@@ -237,7 +237,7 @@ CODE_SAMPLE
         return $lNumber->value === strlen($needle->value);
     }
 
-    private function buildReturnNode(?Expr $haystack, ?Expr $needle, bool $isPositive): FuncCall | BooleanNot
+    private function buildReturnNode(Expr $haystack, Expr $needle, bool $isPositive): FuncCall | BooleanNot
     {
         $funcCall = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
 

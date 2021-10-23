@@ -6,7 +6,6 @@ namespace Rector\Php70\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Greater;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -173,7 +172,7 @@ CODE_SAMPLE
         }
     }
 
-    private function areVariablesEqual(BinaryOp $binaryOp, Expr $firstValue, Expr $secondValue): bool
+    private function areVariablesEqual(Equal|Identical $binaryOp, Expr $firstValue, Expr $secondValue): bool
     {
         if ($this->nodeComparator->areNodesEqual($binaryOp->left, $firstValue) && $this->nodeComparator->areNodesEqual(
             $binaryOp->right,

@@ -109,7 +109,7 @@ CODE_SAMPLE
             return $this->processMayDeadInstanceOf($node, $node->cond);
         }
 
-        return $node;
+        return null;
     }
 
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof): ?If_

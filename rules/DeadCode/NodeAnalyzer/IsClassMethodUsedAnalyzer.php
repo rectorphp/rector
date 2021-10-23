@@ -147,12 +147,8 @@ final class IsClassMethodUsedAnalyzer
         return ! $this->nodeNameResolver->isName($class, $arrayCallable->getClass());
     }
 
-    private function doesMethodExistInTrait(ClassMethod $classMethod, ?string $classMethodName): bool
+    private function doesMethodExistInTrait(ClassMethod $classMethod, string $classMethodName): bool
     {
-        if ($classMethodName === null) {
-            return false;
-        }
-
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;

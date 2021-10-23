@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromCallersRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ParamTypeByParentCallTypeRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
@@ -21,7 +20,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddClosureReturnTypeRector::class);
     $services->set(AddArrayParamDocTypeRector::class);
     $services->set(AddArrayReturnDocTypeRector::class);
-    // $services->set(AddParamTypeFromCallersRector::class);
     $services->set(ParamTypeByParentCallTypeRector::class);
     $services->set(ParamTypeByMethodCallTypeRector::class);
 };

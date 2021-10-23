@@ -249,7 +249,7 @@ CODE_SAMPLE
 
     private function matchNextExprAssignConcatToSameVariable(
         Expr $expr,
-        Assign | ConcatAssign | Expression | Node $currentNode
+        Node $currentNode
     ): ?NodeToRemoveAndConcatItem {
         $nextExpression = $this->getNextExpression($currentNode);
         if (! $nextExpression instanceof Expression) {

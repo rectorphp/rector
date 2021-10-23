@@ -85,16 +85,16 @@ final class CountManipulator
         return $this->isCountWithExpression($smallerOrEqual->right, $expr);
     }
 
-    private function isNumber(Node $node, int $value): bool
+    private function isNumber(Expr $expr, int $value): bool
     {
-        if (! $node instanceof LNumber) {
+        if (! $expr instanceof LNumber) {
             return false;
         }
 
-        return $node->value === $value;
+        return $expr->value === $value;
     }
 
-    private function isCountWithExpression(Node $node, Expr $expr): bool
+    private function isCountWithExpression(Expr $node, Expr $expr): bool
     {
         if (! $node instanceof FuncCall) {
             return false;

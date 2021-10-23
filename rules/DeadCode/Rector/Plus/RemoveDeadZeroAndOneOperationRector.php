@@ -92,27 +92,27 @@ CODE_SAMPLE
         return $this->processBinaryOp($node);
     }
 
-    private function processAssignOp(Node $node): ?Expr
+    private function processAssignOp(AssignOp $assignOp): ?Expr
     {
         // +=, -=
-        if ($node instanceof AssignPlus || $node instanceof AssignMinus) {
-            if (! $this->valueResolver->isValue($node->expr, 0)) {
+        if ($assignOp instanceof AssignPlus || $assignOp instanceof AssignMinus) {
+            if (! $this->valueResolver->isValue($assignOp->expr, 0)) {
                 return null;
             }
 
-            if ($this->nodeTypeResolver->isNumberType($node->var)) {
-                return $node->var;
+            if ($this->nodeTypeResolver->isNumberType($assignOp->var)) {
+                return $assignOp->var;
             }
         }
 
         // *, /
-        if ($node instanceof AssignMul || $node instanceof AssignDiv) {
-            if (! $this->valueResolver->isValue($node->expr, 1)) {
+        if ($assignOp instanceof AssignMul || $assignOp instanceof AssignDiv) {
+            if (! $this->valueResolver->isValue($assignOp->expr, 1)) {
                 return null;
             }
 
-            if ($this->nodeTypeResolver->isNumberType($node->var)) {
-                return $node->var;
+            if ($this->nodeTypeResolver->isNumberType($assignOp->var)) {
+                return $assignOp->var;
             }
         }
 
