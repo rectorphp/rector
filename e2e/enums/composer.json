@@ -9,7 +9,7 @@
         "myclabs/php-enum": "^1.8"
     },
     "require-dev": {
-        "rector/rector-src": "dev-handle-template-extends-in-dependends-file"
+        "rector/rector-src": "dev-main"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

@@ -7,11 +7,9 @@ on:
     pull_request:
         branches:
             - main
-# need to be enabled when the patch https://github.com/rectorphp/rector-src/pull/1044 merged
-# so we do not need to wait for next PR to verify that last patch doesn't break existing e2e tests
-#    push:
-#        branches:
-#            - main
+    push:
+        branches:
+            - main
 
 jobs:
     end_to_end:
