@@ -8,10 +8,15 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class CountableAnalyzer
@@ -63,7 +68,30 @@ final class CountableAnalyzer
             return false;
         }
 
+        $phpPropertyReflection = $this->resolveProperty($expr, $classReflection, $propertyName);
+        if (! $phpPropertyReflection instanceof PhpPropertyReflection) {
+            return false;
+        }
+
+        $nativeType = $phpPropertyReflection->getNativeType();
+        if ($nativeType->isIterable()->yes()) {
+            return false;
+        }
+
         $propertyDefaultValue = $propertiesDefaults[$propertyName];
         return $propertyDefaultValue === null;
+    }
+
+    private function resolveProperty(
+        PropertyFetch $propertyFetch,
+        ClassReflection $classReflection,
+        string $propertyName
+    ): ?PropertyReflection {
+        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
+        return $classReflection->getProperty($propertyName, $scope);
     }
 }
