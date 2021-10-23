@@ -20,7 +20,7 @@
         "nette/utils": "^3.2",
         "nikic/php-parser": "4.13.0",
         "phpstan/phpdoc-parser": "^1.2",
-        "phpstan/phpstan": "0.12.99",
+        "phpstan/phpstan": "1.0.x-dev as 0.12.99",
         "phpstan/phpstan-phpunit": "^0.12.22",
         "rector/extension-installer": "^0.11.1",
         "rector/rector-cakephp": "^0.11.5",

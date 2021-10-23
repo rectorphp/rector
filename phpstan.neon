@@ -13,7 +13,7 @@ includes:
     - vendor/symplify/phpstan-rules/config/test-rules.neon
 
 parameters:
-    level: max
+    level: 8
 
     parallel:
         # to prevent full thread lagging pc
