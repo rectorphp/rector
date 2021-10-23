@@ -7,10 +7,15 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CountableAnalyzer
 {
@@ -61,7 +66,23 @@ final class CountableAnalyzer
         if (!\array_key_exists($propertyName, $propertiesDefaults)) {
             return \false;
         }
+        $phpPropertyReflection = $this->resolveProperty($expr, $classReflection, $propertyName);
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            return \false;
+        }
+        $nativeType = $phpPropertyReflection->getNativeType();
+        if ($nativeType->isIterable()->yes()) {
+            return \false;
+        }
         $propertyDefaultValue = $propertiesDefaults[$propertyName];
         return $propertyDefaultValue === null;
+    }
+    private function resolveProperty(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, \PHPStan\Reflection\ClassReflection $classReflection, string $propertyName) : ?\PHPStan\Reflection\PropertyReflection
+    {
+        $scope = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
+        return $classReflection->getProperty($propertyName, $scope);
     }
 }
