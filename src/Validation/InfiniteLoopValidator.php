@@ -10,6 +10,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\NodeTraverser\InfiniteLoopTraversingException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeVisitor\CreatedByRuleNodeVisitor;
+use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -26,6 +27,10 @@ final class InfiniteLoopValidator
     public function process(Node $node, Node $originalNode, string $rectorClass): void
     {
         if ($rectorClass === DowngradeNullsafeToTernaryOperatorRector::class) {
+            return;
+        }
+
+        if ($rectorClass === ArrowFunctionToAnonymousFunctionRector::class) {
             return;
         }
 

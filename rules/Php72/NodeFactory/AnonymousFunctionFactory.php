@@ -38,6 +38,7 @@ use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -60,7 +61,8 @@ final class AnonymousFunctionFactory
         private NodeFactory $nodeFactory,
         private StaticTypeMapper $staticTypeMapper,
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private Parser $parser
+        private Parser $parser,
+        private NodeComparator $nodeComparator
     ) {
     }
 
@@ -84,6 +86,7 @@ final class AnonymousFunctionFactory
         }
 
         foreach ($useVariables as $useVariable) {
+            $anonymousFunctionNode = $this->applyNestedUses($anonymousFunctionNode, $useVariable);
             $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
         }
 
@@ -170,6 +173,65 @@ final class AnonymousFunctionFactory
         $anonymousFunction->params[] = new Param(new Variable('matches'));
 
         return $anonymousFunction;
+    }
+
+    /**
+     * @param ClosureUse[] $uses
+     * @return ClosureUse[]
+     */
+    private function cleanClosureUses(array $uses): array
+    {
+        $variableNames = array_map(
+            fn ($use): string => (string) $this->nodeNameResolver->getName($use->var),
+            $uses,
+            []
+        );
+        $variableNames = array_unique($variableNames);
+
+        return array_map(
+            fn ($variableName): ClosureUse => new ClosureUse(new Variable($variableName)),
+            $variableNames,
+            []
+        );
+    }
+
+    private function applyNestedUses(Closure $anonymousFunctionNode, Variable $useVariable): Closure
+    {
+        $anonymousFunctionNode = clone $anonymousFunctionNode;
+        $parent = $this->betterNodeFinder->findParentType($useVariable, Closure::class);
+
+        while ($parent instanceof Closure) {
+            $parentOfParent = $this->betterNodeFinder->findParentType($parent, Closure::class);
+
+            $uses = [];
+            while ($parentOfParent instanceof Closure) {
+                $uses = $this->collectUsesEqual($parentOfParent, $uses, $useVariable);
+                $parentOfParent = $this->betterNodeFinder->findParentType($parentOfParent, Closure::class);
+            }
+
+            $uses = array_merge($parent->uses, $uses);
+            $uses = $this->cleanClosureUses($uses);
+            $parent->uses = $uses;
+
+            $parent = $this->betterNodeFinder->findParentType($parent, Closure::class);
+        }
+
+        return $anonymousFunctionNode;
+    }
+
+    /**
+     * @param ClosureUse[] $uses
+     * @return ClosureUse[]
+     */
+    private function collectUsesEqual(Closure $closure, array $uses, Variable $useVariable): array
+    {
+        foreach ($closure->params as $param) {
+            if ($this->nodeComparator->areNodesEqual($param->var, $useVariable)) {
+                $uses[] = new ClosureUse($param->var);
+            }
+        }
+
+        return $uses;
     }
 
     /**
