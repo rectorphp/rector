@@ -118,9 +118,9 @@ CODE_SAMPLE
         $propertyExistsFuncCall = $this->nodeFactory->createFuncCall('property_exists', $args);
         return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($propertyExistsFuncCall, $this->createNotIdenticalToNull($propertyFetch));
     }
-    private function createNotIdenticalToNull(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\BinaryOp\NotIdentical
+    private function createNotIdenticalToNull(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PhpParser\Node\Expr\BinaryOp\NotIdentical
     {
-        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $this->nodeFactory->createNull());
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($propertyFetch, $this->nodeFactory->createNull());
     }
     private function hasPropertyTypeDeclaration(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {

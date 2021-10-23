@@ -80,6 +80,9 @@ CODE_SAMPLE
             return null;
         }
         $unusedParameters = $this->unusedParameterResolver->resolve($node);
+        if ($unusedParameters === []) {
+            return null;
+        }
         $this->removeNodes($unusedParameters);
         $this->clearPhpDocInfo($node, $unusedParameters);
         return $node;

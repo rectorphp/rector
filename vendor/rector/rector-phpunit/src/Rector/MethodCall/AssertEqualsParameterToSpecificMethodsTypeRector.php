@@ -95,9 +95,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processAssertEqualsIgnoringCase(\PhpParser\Node $node) : void
+    private function processAssertEqualsIgnoringCase($node) : void
     {
         if (isset($node->args[6])) {
             if ($this->valueResolver->isTrue($node->args[6]->value)) {
@@ -111,9 +111,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processAssertEqualsCanonicalizing(\PhpParser\Node $node) : void
+    private function processAssertEqualsCanonicalizing($node) : void
     {
         if (isset($node->args[5])) {
             // add new node only in case of non-default value
@@ -128,9 +128,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processAssertEqualsWithDelta(\PhpParser\Node $node) : void
+    private function processAssertEqualsWithDelta($node) : void
     {
         if (isset($node->args[3])) {
             // add new node only in case of non-default value

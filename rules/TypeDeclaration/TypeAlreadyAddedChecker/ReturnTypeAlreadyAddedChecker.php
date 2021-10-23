@@ -92,7 +92,7 @@ final class ReturnTypeAlreadyAddedChecker
         return $nodeContentWithoutPreslash === $className;
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|\PhpParser\Node\ComplexType $returnTypeNode
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $returnTypeNode
      */
     private function isArrayIterableIteratorCoType($returnTypeNode, \PHPStan\Type\Type $returnType) : bool
     {
@@ -102,7 +102,7 @@ final class ReturnTypeAlreadyAddedChecker
         return $this->isStaticTypeIterable($returnType);
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|\PhpParser\Node\ComplexType $returnTypeNode
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $returnTypeNode
      */
     private function isUnionCoType($returnTypeNode, \PHPStan\Type\Type $type) : bool
     {

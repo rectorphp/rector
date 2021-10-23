@@ -10,12 +10,17 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
@@ -141,11 +146,16 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
         }
         return $arguments;
     }
-    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, \PhpParser\Node $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_ $scopeNode
+     */
+    private function getReplacementsFor(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, $scopeNode) : \Rector\Php70\ValueObject\VariableAssignPair
     {
-        /** @var Assign|AssignOp|AssignRef $expr */
-        if ($this->isAssign($expr) && $this->isVariableLikeNode($expr->var)) {
-            return new \Rector\Php70\ValueObject\VariableAssignPair($expr->var, $expr);
+        if ($this->isAssign($expr)) {
+            /** @var Assign|AssignRef|AssignOp $expr */
+            if ($this->isVariableLikeNode($expr->var)) {
+                return new \Rector\Php70\ValueObject\VariableAssignPair($expr->var, $expr);
+            }
         }
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($expr, $scope, 'tmp');
         $variable = new \PhpParser\Node\Expr\Variable($variableName);
@@ -156,9 +166,9 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
         }
         return new \Rector\Php70\ValueObject\VariableAssignPair($variable, new \PhpParser\Node\Expr\Assign($variable, $expr));
     }
-    private function isVariableLikeNode(\PhpParser\Node $node) : bool
+    private function isVariableLikeNode(\PhpParser\Node\Expr $expr) : bool
     {
-        return $node instanceof \PhpParser\Node\Expr\Variable || $node instanceof \PhpParser\Node\Expr\ArrayDimFetch || $node instanceof \PhpParser\Node\Expr\PropertyFetch || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
+        return $expr instanceof \PhpParser\Node\Expr\Variable || $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch || $expr instanceof \PhpParser\Node\Expr\PropertyFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
     }
     private function isAssign(\PhpParser\Node\Expr $expr) : bool
     {

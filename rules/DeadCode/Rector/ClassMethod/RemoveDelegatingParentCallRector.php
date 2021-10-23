@@ -99,7 +99,10 @@ CODE_SAMPLE
         }
         return $this->isName($classMethod->returnType, $type);
     }
-    private function matchStaticCall(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\StaticCall
+    /**
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
+     */
+    private function matchStaticCall($node) : ?\PhpParser\Node\Expr\StaticCall
     {
         // must be static call
         if ($node instanceof \PhpParser\Node\Stmt\Return_) {

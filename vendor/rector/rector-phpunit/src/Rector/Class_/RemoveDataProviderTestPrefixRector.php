@@ -103,7 +103,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $oldMethodName = $dataProviderTagValueNode->value->value;
-                if (!\RectorPrefix20211023\Nette\Utils\Strings::startsWith($oldMethodName, 'test')) {
+                if (\strncmp($oldMethodName, 'test', \strlen('test')) !== 0) {
                     continue;
                 }
                 $newMethodName = $this->createNewMethodName($oldMethodName);

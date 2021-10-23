@@ -196,7 +196,7 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $node
      */
     private function resolveTypePossibleUnionNullableType($node, \PHPStan\Type\Type $possibleUnionType) : \PHPStan\Type\Type
     {

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp74\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -105,7 +104,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isNullableParam(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function isNullableParam(\PhpParser\Node\Param $param, $functionLike) : bool
     {
         if ($param->variadic) {
             return \false;
@@ -124,7 +126,10 @@ CODE_SAMPLE
         // Check if the type is different from the one declared in some ancestor
         return $this->getDifferentParamTypeFromAncestorClass($param, $functionLike) !== null;
     }
-    private function getDifferentParamTypeFromAncestorClass(\PhpParser\Node\Param $param, \PhpParser\Node\FunctionLike $functionLike) : ?string
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function getDifferentParamTypeFromAncestorClass(\PhpParser\Node\Param $param, $functionLike) : ?string
     {
         $scope = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

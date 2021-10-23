@@ -65,6 +65,10 @@ final class SymfonySetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const SYMFONY_51 = __DIR__ . '/../../config/sets/symfony/symfony51.php';
+    /**
+     * @var string
+     */
     public const SYMFONY_52 = __DIR__ . '/../../config/sets/symfony/symfony52.php';
     /**
      * @var string

@@ -163,7 +163,7 @@ CODE_SAMPLE
         }
         return \in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, \true) && \in_array($expr->else->value, self::REGEX_FUNCTION_NAMES, \true);
     }
-    private function cleanBitWiseOrFlags(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, ?\PhpParser\Node\Expr $expr = null) : void
+    private function cleanBitWiseOrFlags(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, \PhpParser\Node\Expr $expr = null) : void
     {
         if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
             /** @var BitwiseOr $leftLeft */

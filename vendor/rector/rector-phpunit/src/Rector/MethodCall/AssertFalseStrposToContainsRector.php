@@ -68,10 +68,10 @@ final class AssertFalseStrposToContainsRector extends \Rector\Core\Rector\Abstra
         return $this->changeArgumentsOrder($node);
     }
     /**
-     * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall|null
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function changeArgumentsOrder(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function changeArgumentsOrder($node) : ?\PhpParser\Node
     {
         $oldArguments = $node->args;
         $strposFuncCallNode = $oldArguments[0]->value;

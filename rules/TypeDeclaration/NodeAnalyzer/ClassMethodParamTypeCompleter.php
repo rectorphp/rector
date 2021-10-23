@@ -65,12 +65,19 @@ final class ClassMethodParamTypeCompleter
         if ($parameter->type === null) {
             return \false;
         }
-        $parameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
-        if ($this->isClosureAndCallableType($parameterStaticType, $argumentStaticType)) {
+        $currentParameterStaticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parameter->type);
+        if ($this->isClosureAndCallableType($currentParameterStaticType, $argumentStaticType)) {
+            return \true;
+        }
+        // avoid overriding more precise type
+        if ($argumentStaticType->isSuperTypeOf($currentParameterStaticType)->yes()) {
+            return \true;
+        }
+        if ($currentParameterStaticType->equals($argumentStaticType)) {
             return \true;
         }
         // already completed → skip
-        return $parameterStaticType->equals($argumentStaticType);
+        return $currentParameterStaticType->equals($argumentStaticType);
     }
     private function isClosureAndCallableType(\PHPStan\Type\Type $parameterStaticType, \PHPStan\Type\Type $argumentStaticType) : bool
     {

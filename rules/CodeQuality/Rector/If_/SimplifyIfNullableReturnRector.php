@@ -128,7 +128,10 @@ CODE_SAMPLE
         $types = $variableType->getTypes();
         return $this->processSimplifyNullableReturn($variableType, $types, $className, $next, $previous, $previousAssign->expr);
     }
-    private function isIfStmtReturnIncorrect(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr $variable, \PhpParser\Node\Stmt\Return_ $return) : bool
+    /**
+     * @param \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_ $expr
+     */
+    private function isIfStmtReturnIncorrect($expr, \PhpParser\Node\Expr $variable, \PhpParser\Node\Stmt\Return_ $return) : bool
     {
         if (!$return->expr instanceof \PhpParser\Node\Expr) {
             return \true;
@@ -138,7 +141,10 @@ CODE_SAMPLE
         }
         return $expr instanceof \PhpParser\Node\Expr\Instanceof_ && !$this->nodeComparator->areNodesEqual($variable, $return->expr);
     }
-    private function isNextReturnIncorrect(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr $variable, \PhpParser\Node\Stmt\Return_ $return) : bool
+    /**
+     * @param \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_ $expr
+     */
+    private function isNextReturnIncorrect($expr, \PhpParser\Node\Expr $variable, \PhpParser\Node\Stmt\Return_ $return) : bool
     {
         if (!$return->expr instanceof \PhpParser\Node\Expr) {
             return \true;

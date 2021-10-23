@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\BooleanAnd;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -55,17 +56,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isTrueOrBooleanAndTrues(\PhpParser\Node $node) : bool
+    private function isTrueOrBooleanAndTrues(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($this->valueResolver->isTrue($node)) {
+        if ($this->valueResolver->isTrue($expr)) {
             return \true;
         }
-        if (!$node instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
+        if (!$expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return \false;
         }
-        if (!$this->isTrueOrBooleanAndTrues($node->left)) {
+        if (!$this->isTrueOrBooleanAndTrues($expr->left)) {
             return \false;
         }
-        return $this->isTrueOrBooleanAndTrues($node->right);
+        return $this->isTrueOrBooleanAndTrues($expr->right);
     }
 }

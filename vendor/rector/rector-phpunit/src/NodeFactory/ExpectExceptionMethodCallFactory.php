@@ -8,11 +8,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ExpectExceptionMethodCallFactory
 {
     /**
@@ -23,20 +21,10 @@ final class ExpectExceptionMethodCallFactory
      * @var \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper
      */
     private $phpDocValueToNodeMapper;
-    /**
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    /**
-     * @var \Rector\Core\Configuration\CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper $phpDocValueToNodeMapper, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper $phpDocValueToNodeMapper)
     {
         $this->nodeFactory = $nodeFactory;
         $this->phpDocValueToNodeMapper = $phpDocValueToNodeMapper;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->currentNodeProvider = $currentNodeProvider;
     }
     /**
      * @param PhpDocTagNode[] $phpDocTagNodes

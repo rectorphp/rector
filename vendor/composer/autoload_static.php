@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit066bb8265764030eb558a4dd92f39ae4
+class ComposerStaticInited76fdc6b3b8f470ec58759b73b10cb7
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3026,6 +3026,7 @@ class ComposerStaticInit066bb8265764030eb558a4dd92f39ae4
         'Rector\\PHPUnit\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/UseSpecificWillMethodRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\WithConsecutiveArgToArrayRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/WithConsecutiveArgToArrayRector.php',
         'Rector\\PHPUnit\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/StaticCall/GetMockRector.php',
+        'Rector\\PHPUnit\\Set\\PHPUnitLevelSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitLevelSetList.php',
         'Rector\\PHPUnit\\Set\\PHPUnitSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',
         'Rector\\PHPUnit\\ValueObject\\ArrayArgumentToDataProvider' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ArrayArgumentToDataProvider.php',
         'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
@@ -3424,9 +3425,11 @@ class ComposerStaticInit066bb8265764030eb558a4dd92f39ae4
         'Rector\\Symfony\\Rector\\StaticCall\\ProcessBuilderInstanceRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticCall/ProcessBuilderInstanceRector.php',
         'Rector\\Symfony\\Set\\JMSSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/JMSSetList.php',
         'Rector\\Symfony\\Set\\SwiftmailerSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SwiftmailerSetList.php',
+        'Rector\\Symfony\\Set\\SymfonyLevelSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonyLevelSetList.php',
         'Rector\\Symfony\\Set\\SymfonySetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonySetList.php',
         'Rector\\Symfony\\Set\\TwigSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigSetList.php',
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
+        'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
         'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
         'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
@@ -3568,6 +3571,7 @@ class ComposerStaticInit066bb8265764030eb558a4dd92f39ae4
         'Rector\\TypeDeclaration\\Rector\\Property\\CompleteVarDocTypePropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\PropertyTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/PropertyTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Sorter\\TypeInfererSorter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Sorter/TypeInfererSorter.php',
         'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
@@ -3910,9 +3914,9 @@ class ComposerStaticInit066bb8265764030eb558a4dd92f39ae4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit066bb8265764030eb558a4dd92f39ae4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit066bb8265764030eb558a4dd92f39ae4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit066bb8265764030eb558a4dd92f39ae4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInited76fdc6b3b8f470ec58759b73b10cb7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInited76fdc6b3b8f470ec58759b73b10cb7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInited76fdc6b3b8f470ec58759b73b10cb7::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -291,33 +291,10 @@ Turns old default value to parameter in `ContainerBuilder->build()` method in DI
 
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
-:wrench: **configure it!**
-
 - class: [`Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector`](../src/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php)
 
-```php
-use Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ContainerGetToConstructorInjectionRector::class)
-        ->call('configure', [[
-            ContainerGetToConstructorInjectionRector::CONTAINER_AWARE_PARENT_TYPES => [
-                'ContainerAwareParentClassName',
-                'ContainerAwareParentCommandClassName',
-                'ThisClassCallsMethodInConstructorClassName',
-            ],
-        ]]);
-};
-```
-
-↓
-
 ```diff
--final class SomeCommand extends ContainerAwareCommand
-+final class SomeCommand extends Command
+ final class SomeCommand extends ContainerAwareCommand
  {
 +    public function __construct(SomeService $someService)
 +    {
@@ -545,28 +522,7 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
 
-:wrench: **configure it!**
-
 - class: [`Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector`](../src/Rector/MethodCall/GetToConstructorInjectionRector.php)
-
-```php
-use Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(GetToConstructorInjectionRector::class)
-        ->call('configure', [[
-            GetToConstructorInjectionRector::GET_METHOD_AWARE_TYPES => [
-                'SymfonyControllerClassName',
-                'GetTraitClassName',
-            ],
-        ]]);
-};
-```
-
-↓
 
 ```diff
 -class MyCommand extends ContainerAwareCommand

@@ -199,12 +199,15 @@ final class NodeNameResolver
         $name = $this->getName($node);
         return $renameMap[$name] ?? null;
     }
-    private function isCallOrIdentifier(\PhpParser\Node $node) : bool
+    /**
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
+     */
+    private function isCallOrIdentifier($node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr) {
-            return $node instanceof \PhpParser\Node\Identifier;
+        if ($node instanceof \PhpParser\Node\Expr) {
+            return $this->callAnalyzer->isObjectCall($node);
         }
-        return $this->callAnalyzer->isObjectCall($node);
+        return \true;
     }
     private function isSingleName(\PhpParser\Node $node, string $name) : bool
     {

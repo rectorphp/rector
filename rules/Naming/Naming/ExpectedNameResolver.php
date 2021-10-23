@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -187,7 +186,10 @@ final class ExpectedNameResolver
         }
         return $expr->name instanceof \PhpParser\Node\Expr\FuncCall;
     }
-    private function resolveReturnTypeFromArrayType(\PhpParser\Node\Expr $expr, \PHPStan\Type\ArrayType $arrayType) : ?\PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
+     */
+    private function resolveReturnTypeFromArrayType($expr, \PHPStan\Type\ArrayType $arrayType) : ?\PHPStan\Type\Type
     {
         $parentNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof \PhpParser\Node\Stmt\Foreach_) {

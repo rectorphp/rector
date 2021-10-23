@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
@@ -127,9 +126,10 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         return $returns;
     }
     /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
      * @return \PHPStan\Type\VoidType|\PHPStan\Type\MixedType
      */
-    private function resolveNoLocalReturnNodes(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\FunctionLike $functionLike)
+    private function resolveNoLocalReturnNodes($classLike, \PhpParser\Node\FunctionLike $functionLike)
     {
         // void type
         if (!$this->isAbstractMethod($classLike, $functionLike)) {
@@ -137,7 +137,10 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         }
         return new \PHPStan\Type\MixedType();
     }
-    private function isAbstractMethod(\PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\FunctionLike $functionLike) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
+     */
+    private function isAbstractMethod($classLike, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $functionLike->isAbstract()) {
             return \true;

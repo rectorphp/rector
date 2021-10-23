@@ -88,7 +88,7 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
         }
         return null;
     }
-    private function isNullMatch(\PhpParser\Node\Expr $possibleNullExpr, \PhpParser\Node $firstNode, \PhpParser\Node $secondNode) : bool
+    private function isNullMatch(\PhpParser\Node\Expr $possibleNullExpr, \PhpParser\Node\Expr $firstNode, \PhpParser\Node\Expr $secondNode) : bool
     {
         if (!$this->valueResolver->isNull($possibleNullExpr)) {
             return \false;

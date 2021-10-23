@@ -96,14 +96,14 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function createMultipleIfs(\PhpParser\Node\Expr $expr, \PhpParser\Node\Stmt\Return_ $return, array $ifs) : array
+    private function createMultipleIfs(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, \PhpParser\Node\Stmt\Return_ $return, array $ifs) : array
     {
-        while ($expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
-            $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
-            $ifs[] = $this->createIf($expr->right, $return);
-            $expr = $expr->right;
+        while ($booleanOr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
+            $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($booleanOr, $return, $ifs));
+            $ifs[] = $this->createIf($booleanOr->right, $return);
+            $booleanOr = $booleanOr->right;
         }
-        return $ifs + [$this->createIf($expr, $return)];
+        return $ifs + [$this->createIf($booleanOr, $return)];
     }
     /**
      * @param If_[] $ifs

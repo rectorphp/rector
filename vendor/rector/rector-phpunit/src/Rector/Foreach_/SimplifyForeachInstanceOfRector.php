@@ -68,9 +68,9 @@ CODE_SAMPLE
         return new $callClass($this->resolveVar($matchedNode), new \PhpParser\Node\Name('assertContainsOnlyInstancesOf'), [$matchedNode->args[0], new \PhpParser\Node\Arg($node->expr)]);
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function resolveVar(\PhpParser\Node $node) : \PhpParser\Node
+    private function resolveVar($node) : \PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $node->var;

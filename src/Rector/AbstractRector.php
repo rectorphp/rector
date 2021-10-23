@@ -500,14 +500,10 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
             $newNode->setAttribute($attributeName, $oldAttributeValue);
         }
     }
-    /**
-     * @param Node|Node[] $node
-     */
-    private function connectParentNodes($node) : void
+    private function connectParentNodes(\PhpParser\Node $node) : void
     {
-        $nodes = \is_array($node) ? $node : [$node];
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $nodeTraverser->addVisitor(new \PhpParser\NodeVisitor\ParentConnectingVisitor());
-        $nodeTraverser->traverse($nodes);
+        $nodeTraverser->traverse([$node]);
     }
 }

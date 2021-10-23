@@ -89,7 +89,6 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Expr\Closure) {
             $this->processUses($node);
         }
-        /** @var ClassMethod|Function_ $node */
         return $this->processParams($node);
     }
     /**
@@ -122,8 +121,9 @@ CODE_SAMPLE
     }
     /**
      * @param ClosureUse[]|Param[]|Arg[] $array
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function cleanTrailingComma(\PhpParser\Node $node, array $array) : ?\PhpParser\Node
+    private function cleanTrailingComma($node, array $array) : ?\PhpParser\Node
     {
         \end($array);
         $lastPosition = \key($array);

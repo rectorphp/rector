@@ -90,9 +90,9 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function replaceExceptionWith(\PhpParser\Node $node, string $exceptionClass, string $explicitMethod) : ?\PhpParser\Node
+    private function replaceExceptionWith($node, string $exceptionClass, string $explicitMethod) : ?\PhpParser\Node
     {
         if (!isset($node->args[0])) {
             return null;

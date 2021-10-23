@@ -73,9 +73,9 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends \Rector\Co
         return $this->moveFunctionArgumentsUp($node);
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function moveFunctionArgumentsUp(\PhpParser\Node $node) : \PhpParser\Node
+    private function moveFunctionArgumentsUp($node) : \PhpParser\Node
     {
         /** @var FuncCall $isFunctionNode */
         $isFunctionNode = $node->args[0]->value;

@@ -204,10 +204,7 @@ CODE_SAMPLE
         $this->nodesToAddCollector->addNodeBeforeNode($jsonDataAssign, $assign);
         return $this->createJsonEncodeAssign($assign->var, $jsonArray);
     }
-    /**
-     * @param \PhpParser\Node\Expr\Assign|ConcatAssign|\PhpParser\Node\Stmt\Expression|\PhpParser\Node $currentNode
-     */
-    private function matchNextExprAssignConcatToSameVariable(\PhpParser\Node\Expr $expr, $currentNode) : ?\Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem
+    private function matchNextExprAssignConcatToSameVariable(\PhpParser\Node\Expr $expr, \PhpParser\Node $currentNode) : ?\Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem
     {
         $nextExpression = $this->getNextExpression($currentNode);
         if (!$nextExpression instanceof \PhpParser\Node\Stmt\Expression) {

@@ -108,7 +108,10 @@ final class SideEffectNodeDetector
         $type = new \PHPStan\Type\ObjectType($class->toString());
         return $throwableType->isSuperTypeOf($type)->yes();
     }
-    private function resolveVariable(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\Variable
+    /**
+     * @param \PhpParser\Node\Expr\ArrayDimFetch|\PhpParser\Node\Expr\Variable $expr
+     */
+    private function resolveVariable($expr) : ?\PhpParser\Node\Expr\Variable
     {
         while ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             $expr = $expr->var;

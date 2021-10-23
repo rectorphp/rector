@@ -97,9 +97,9 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
         return $reflection->hasMethod('__isset');
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function refactorPropertyFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
+    private function refactorPropertyFetchNode($node, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
         $name = $this->getName($propertyFetch);
         if ($name === null) {
@@ -113,9 +113,9 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function refactorArrayDimFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node
+    private function refactorArrayDimFetchNode($node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node
     {
         $this->identifierManipulator->renameNodeWithMap($node, [self::ASSERT_TRUE => 'assertArrayHasKey', self::ASSERT_FALSE => 'assertArrayNotHasKey']);
         $oldArgs = $node->args;

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\VendorLocker\NodeVendorLocker;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -64,9 +63,9 @@ final class PropertyVisibilityVendorLockResolver
         }
         return \false;
     }
-    private function resolveClassReflection(\PhpParser\Node $node) : ?\PHPStan\Reflection\ClassReflection
+    private function resolveClassReflection(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Reflection\ClassReflection
     {
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return null;
         }

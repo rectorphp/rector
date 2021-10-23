@@ -171,7 +171,7 @@ CODE_SAMPLE
         $isPositive = $binaryOp instanceof \PhpParser\Node\Expr\BinaryOp\Identical;
         return $this->buildReturnNode($haystack, $needle, $isPositive);
     }
-    private function isUnaryMinusStrlenFuncCallArgValue(\PhpParser\Node $substrOffset, \PhpParser\Node $needle) : bool
+    private function isUnaryMinusStrlenFuncCallArgValue(\PhpParser\Node\Expr $substrOffset, \PhpParser\Node\Expr $needle) : bool
     {
         if (!$substrOffset instanceof \PhpParser\Node\Expr\UnaryMinus) {
             return \false;
@@ -191,7 +191,7 @@ CODE_SAMPLE
         }
         return $this->nodeComparator->areNodesEqual($funcCall->args[0]->value, $needle);
     }
-    private function isHardCodedLNumberAndString(\PhpParser\Node $substrOffset, \PhpParser\Node $needle) : bool
+    private function isHardCodedLNumberAndString(\PhpParser\Node\Expr $substrOffset, \PhpParser\Node\Expr $needle) : bool
     {
         if (!$substrOffset instanceof \PhpParser\Node\Expr\UnaryMinus) {
             return \false;
@@ -208,7 +208,7 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot
      */
-    private function buildReturnNode(?\PhpParser\Node\Expr $haystack, ?\PhpParser\Node\Expr $needle, bool $isPositive)
+    private function buildReturnNode(\PhpParser\Node\Expr $haystack, \PhpParser\Node\Expr $needle, bool $isPositive)
     {
         $funcCall = $this->nodeFactory->createFuncCall('str_ends_with', [$haystack, $needle]);
         if (!$isPositive) {

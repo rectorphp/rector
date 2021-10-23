@@ -92,6 +92,9 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211023\Symplif
         if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return null;
         }
+        if ($this->currentPhpParserNode === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         return $this->processFqnNameImport($this->currentPhpParserNode, $node, $staticType, $file);
     }
     public function setCurrentNode(\PhpParser\Node $phpParserNode) : void
@@ -162,8 +165,12 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211023\Symplif
     }
     private function processDoctrineAnnotationTagValueNode(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
+        $currentPhpParserNode = $this->currentPhpParserNode;
+        if (!$currentPhpParserNode instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $this->currentPhpParserNode);
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $currentPhpParserNode);
         if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             if (!$staticType instanceof \PHPStan\Type\ObjectType) {
                 return;
@@ -174,7 +181,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211023\Symplif
         if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return;
         }
-        $shortentedIdentifierTypeNode = $this->processFqnNameImport($this->currentPhpParserNode, $identifierTypeNode, $staticType, $file);
+        $shortentedIdentifierTypeNode = $this->processFqnNameImport($currentPhpParserNode, $identifierTypeNode, $staticType, $file);
         if (!$shortentedIdentifierTypeNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return;
         }
@@ -195,7 +202,11 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211023\Symplif
         }
         $attributeClass = \ltrim($spacelessPhpDocTagNode->name, '@\\');
         $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($attributeClass);
-        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($attributeClass), $this->currentPhpParserNode);
+        $currentPhpParserNode = $this->currentPhpParserNode;
+        if (!$currentPhpParserNode instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($attributeClass), $currentPhpParserNode);
         if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             if (!$staticType instanceof \PHPStan\Type\ObjectType) {
                 return null;
@@ -206,7 +217,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211023\Symplif
         if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return null;
         }
-        $importedName = $this->processFqnNameImport($this->currentPhpParserNode, $identifierTypeNode, $staticType, $file);
+        $importedName = $this->processFqnNameImport($currentPhpParserNode, $identifierTypeNode, $staticType, $file);
         if ($importedName !== null) {
             $spacelessPhpDocTagNode->name = '@' . $importedName->name;
             return $spacelessPhpDocTagNode;

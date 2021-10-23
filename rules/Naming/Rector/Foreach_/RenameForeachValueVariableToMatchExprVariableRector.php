@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Naming\Rector\Foreach_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
@@ -101,7 +100,10 @@ CODE_SAMPLE
         }
         return $this->processRename($node, $valueVarName, $singularValueVarName);
     }
-    private function isNotThisTypePropertyFetch(\PhpParser\Node\Expr $expr) : bool
+    /**
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable $expr
+     */
+    private function isNotThisTypePropertyFetch($expr) : bool
     {
         if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $variableType = $this->getType($expr->var);

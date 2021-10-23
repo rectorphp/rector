@@ -97,7 +97,10 @@ final class ClassInsertManipulator
         \array_splice($nodes, $key, 0, [$stmt]);
         return $nodes;
     }
-    private function isSuccessToInsertBeforeFirstMethod(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt $stmt) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt
+     */
+    private function isSuccessToInsertBeforeFirstMethod(\PhpParser\Node\Stmt\Class_ $class, $stmt) : bool
     {
         foreach ($class->stmts as $key => $classStmt) {
             if (!$classStmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -108,7 +111,10 @@ final class ClassInsertManipulator
         }
         return \false;
     }
-    private function isSuccessToInsertAfterLastProperty(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt $stmt) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt
+     */
+    private function isSuccessToInsertAfterLastProperty(\PhpParser\Node\Stmt\Class_ $class, $stmt) : bool
     {
         $previousElement = null;
         foreach ($class->stmts as $key => $classStmt) {

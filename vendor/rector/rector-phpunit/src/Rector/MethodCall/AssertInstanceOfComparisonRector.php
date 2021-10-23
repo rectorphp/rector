@@ -65,9 +65,9 @@ final class AssertInstanceOfComparisonRector extends \Rector\Core\Rector\Abstrac
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function changeArgumentsOrder(\PhpParser\Node $node) : void
+    private function changeArgumentsOrder($node) : void
     {
         $oldArguments = $node->args;
         /** @var Instanceof_ $comparison */

@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Rector\AbstractRector;
@@ -111,8 +110,9 @@ CODE_SAMPLE
     }
     /**
      * @return array<int, string>
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
-    private function getLocalPrivateMethodCallOrder(\PhpParser\Node\Stmt\ClassLike $classLike) : array
+    private function getLocalPrivateMethodCallOrder($classLike) : array
     {
         $localPrivateMethodCallInOrder = [];
         $this->traverseNodesWithCallable($classLike->getMethods(), function (\PhpParser\Node $node) use(&$localPrivateMethodCallInOrder, $classLike) {
@@ -142,8 +142,9 @@ CODE_SAMPLE
     }
     /**
      * @return array<int, string>
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $classLike
      */
-    private function resolvePrivateClassMethods(\PhpParser\Node\Stmt\ClassLike $classLike) : array
+    private function resolvePrivateClassMethods($classLike) : array
     {
         $privateClassMethods = [];
         foreach ($classLike->stmts as $key => $classStmt) {

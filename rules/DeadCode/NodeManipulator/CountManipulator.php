@@ -77,14 +77,14 @@ final class CountManipulator
         }
         return $this->isCountWithExpression($smallerOrEqual->right, $expr);
     }
-    private function isNumber(\PhpParser\Node $node, int $value) : bool
+    private function isNumber(\PhpParser\Node\Expr $expr, int $value) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Scalar\LNumber) {
+        if (!$expr instanceof \PhpParser\Node\Scalar\LNumber) {
             return \false;
         }
-        return $node->value === $value;
+        return $expr->value === $value;
     }
-    private function isCountWithExpression(\PhpParser\Node $node, \PhpParser\Node\Expr $expr) : bool
+    private function isCountWithExpression(\PhpParser\Node\Expr $node, \PhpParser\Node\Expr $expr) : bool
     {
         if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;

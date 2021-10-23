@@ -69,24 +69,24 @@ CODE_SAMPLE
         // -, +
         return $this->processBinaryOp($node);
     }
-    private function processAssignOp(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
+    private function processAssignOp(\PhpParser\Node\Expr\AssignOp $assignOp) : ?\PhpParser\Node\Expr
     {
         // +=, -=
-        if ($node instanceof \PhpParser\Node\Expr\AssignOp\Plus || $node instanceof \PhpParser\Node\Expr\AssignOp\Minus) {
-            if (!$this->valueResolver->isValue($node->expr, 0)) {
+        if ($assignOp instanceof \PhpParser\Node\Expr\AssignOp\Plus || $assignOp instanceof \PhpParser\Node\Expr\AssignOp\Minus) {
+            if (!$this->valueResolver->isValue($assignOp->expr, 0)) {
                 return null;
             }
-            if ($this->nodeTypeResolver->isNumberType($node->var)) {
-                return $node->var;
+            if ($this->nodeTypeResolver->isNumberType($assignOp->var)) {
+                return $assignOp->var;
             }
         }
         // *, /
-        if ($node instanceof \PhpParser\Node\Expr\AssignOp\Mul || $node instanceof \PhpParser\Node\Expr\AssignOp\Div) {
-            if (!$this->valueResolver->isValue($node->expr, 1)) {
+        if ($assignOp instanceof \PhpParser\Node\Expr\AssignOp\Mul || $assignOp instanceof \PhpParser\Node\Expr\AssignOp\Div) {
+            if (!$this->valueResolver->isValue($assignOp->expr, 1)) {
                 return null;
             }
-            if ($this->nodeTypeResolver->isNumberType($node->var)) {
-                return $node->var;
+            if ($this->nodeTypeResolver->isNumberType($assignOp->var)) {
+                return $assignOp->var;
             }
         }
         return null;

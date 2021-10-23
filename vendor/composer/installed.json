@@ -1474,17 +1474,17 @@
         },
         {
             "name": "rector\/rector-phpunit",
-            "version": "0.11.11",
-            "version_normalized": "0.11.11.0",
+            "version": "0.11.13",
+            "version_normalized": "0.11.13.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "ca1df3a632190f5f8ff474a12607609da6943c79"
+                "reference": "389a67966a2cf556e6c4719a89b9a31e2f6b6734"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/ca1df3a632190f5f8ff474a12607609da6943c79",
-                "reference": "ca1df3a632190f5f8ff474a12607609da6943c79",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/389a67966a2cf556e6c4719a89b9a31e2f6b6734",
+                "reference": "389a67966a2cf556e6c4719a89b9a31e2f6b6734",
                 "shasum": ""
             },
             "require": {
@@ -1503,7 +1503,7 @@
                 "symplify\/phpstan-rules": "^9.2",
                 "symplify\/rule-doc-generator": "^9.4"
             },
-            "time": "2021-10-07T19:02:42+00:00",
+            "time": "2021-10-23T14:01:15+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1528,23 +1528,23 @@
             "description": "Rector upgrades rules for PHPUnit",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpunit\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.11.11"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.11.13"
             },
             "install-path": "..\/rector\/rector-phpunit"
         },
         {
             "name": "rector\/rector-symfony",
-            "version": "0.11.26",
-            "version_normalized": "0.11.26.0",
+            "version": "0.11.28",
+            "version_normalized": "0.11.28.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "13b6c55346c891fbcb401cd771826349b1684ba0"
+                "reference": "d16fa5bf8496f3999591fa875a57dd7a05f542cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/13b6c55346c891fbcb401cd771826349b1684ba0",
-                "reference": "13b6c55346c891fbcb401cd771826349b1684ba0",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d16fa5bf8496f3999591fa875a57dd7a05f542cd",
+                "reference": "d16fa5bf8496f3999591fa875a57dd7a05f542cd",
                 "shasum": ""
             },
             "require": {
@@ -1567,7 +1567,7 @@
                 "symplify\/phpstan-rules": "^9.4",
                 "symplify\/rule-doc-generator": "^9.4"
             },
-            "time": "2021-10-12T20:03:35+00:00",
+            "time": "2021-10-23T13:06:12+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1592,7 +1592,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.26"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.28"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

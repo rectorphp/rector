@@ -89,10 +89,10 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processWithCall(\PhpParser\Node $node) : \PhpParser\Node
+    private function processWithCall($node) : \PhpParser\Node
     {
         foreach ($node->args as $i => $argNode) {
             if (!$argNode->value instanceof \PhpParser\Node\Expr\MethodCall) {
@@ -107,10 +107,10 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall|null
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processWillCall(\PhpParser\Node $node) : ?\PhpParser\Node
+    private function processWillCall($node) : ?\PhpParser\Node
     {
         if (!$node->args[0]->value instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;

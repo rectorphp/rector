@@ -76,10 +76,10 @@ final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\Abst
         return null;
     }
     /**
-     * @param MethodCall|StaticCall $node
      * @return MethodCall|StaticCall|null
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processFuncCallArgumentValue(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : ?\PhpParser\Node
+    private function processFuncCallArgumentValue($node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : ?\PhpParser\Node
     {
         foreach ($this->functionNamesWithAssertMethods as $functionNameWithAssertMethod) {
             if (!$this->isName($funcCall, $functionNameWithAssertMethod->getFunctionName())) {
@@ -92,9 +92,9 @@ final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\Abst
         return null;
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function renameMethod(\PhpParser\Node $node, \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
+    private function renameMethod($node, \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
     {
         if ($this->isNames($node->name, ['assertSame', 'assertEquals'])) {
             $node->name = new \PhpParser\Node\Identifier($functionNameWithAssertMethods->getAssetMethodName());
@@ -104,10 +104,9 @@ final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\Abst
     }
     /**
      * Handles custom error messages to not be overwrite by function with multiple args.
-     *
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function moveFunctionArgumentsUp(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : void
+    private function moveFunctionArgumentsUp($node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : void
     {
         $node->args[1] = $funcCall->args[0];
         $node->args[0] = $requiredArg;

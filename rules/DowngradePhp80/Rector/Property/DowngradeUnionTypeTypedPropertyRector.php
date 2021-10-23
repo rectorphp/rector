@@ -4,6 +4,9 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -64,7 +67,10 @@ CODE_SAMPLE
         $node->type = null;
         return $node;
     }
-    private function decoratePropertyWithDocBlock(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node $typeNode) : void
+    /**
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
+     */
+    private function decoratePropertyWithDocBlock(\PhpParser\Node\Stmt\Property $property, $typeNode) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($phpDocInfo->getVarTagValueNode() !== null) {

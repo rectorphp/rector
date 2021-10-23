@@ -114,7 +114,7 @@ CODE_SAMPLE
         if ($node->cond instanceof \PhpParser\Node\Expr\Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond);
         }
-        return $node;
+        return null;
     }
     private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof) : ?\PhpParser\Node\Stmt\If_
     {

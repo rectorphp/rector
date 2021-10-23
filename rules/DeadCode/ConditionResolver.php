@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DeadCode;
 
-use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
@@ -70,12 +69,12 @@ final class ConditionResolver
         }
         return null;
     }
-    private function isVersionCompareFuncCall(\PhpParser\Node $node) : bool
+    private function isVersionCompareFuncCall(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($node, 'version_compare');
+        return $this->nodeNameResolver->isName($expr, 'version_compare');
     }
     private function resolveVersionCompareConditionForFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\Rector\DeadCode\ValueObject\VersionCompareCondition
     {

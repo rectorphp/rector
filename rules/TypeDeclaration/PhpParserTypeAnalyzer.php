@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration;
 
-use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -42,7 +41,11 @@ final class PhpParserTypeAnalyzer
         $parentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($possibleSubtype);
         return $parentType->isSuperTypeOf($subtypeType)->yes();
     }
-    private function isUnionType(\PhpParser\Node $possibleSubtype, \PhpParser\Node $possibleParentType) : bool
+    /**
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleSubtype
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $possibleParentType
+     */
+    private function isUnionType($possibleSubtype, $possibleParentType) : bool
     {
         if ($possibleSubtype instanceof \PhpParser\Node\UnionType) {
             return \true;

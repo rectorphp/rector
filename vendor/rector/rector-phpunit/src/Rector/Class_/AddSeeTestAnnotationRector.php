@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
-use RectorPrefix20211023\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -167,10 +166,10 @@ CODE_SAMPLE
     }
     private function isSeeTestCaseClass(string $possibleClassName) : bool
     {
-        if (!\RectorPrefix20211023\Nette\Utils\Strings::startsWith($possibleClassName, '\\')) {
+        if (\strncmp($possibleClassName, '\\', \strlen('\\')) !== 0) {
             return \false;
         }
-        return \RectorPrefix20211023\Nette\Utils\Strings::endsWith($possibleClassName, 'Test');
+        return \substr_compare($possibleClassName, 'Test', -\strlen('Test')) === 0;
     }
     /**
      * @param string[] $classNames

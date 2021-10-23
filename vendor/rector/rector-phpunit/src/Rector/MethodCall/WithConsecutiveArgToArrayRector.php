@@ -147,9 +147,6 @@ CODE_SAMPLE
     private function inferMockedClassName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
         $variable = $this->findRootVariableOfChainCall($methodCall);
-        if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
-            return null;
-        }
         // look for "$this->createMock(X)"
         $assignToVariable = $this->methodCallManipulator->findAssignToVariable($variable);
         if (!$assignToVariable instanceof \PhpParser\Node\Expr\Assign) {

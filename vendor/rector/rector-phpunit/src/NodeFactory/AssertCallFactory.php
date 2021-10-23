@@ -3,17 +3,19 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\NodeFactory;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 final class AssertCallFactory
 {
     /**
-     * @param StaticCall|MethodCall $node
-     * @return StaticCall|MethodCall
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
-    public function createCallWithName(\PhpParser\Node $node, string $name) : \PhpParser\Node
+    public function createCallWithName($node, string $name)
     {
-        return $node instanceof \PhpParser\Node\Expr\MethodCall ? new \PhpParser\Node\Expr\MethodCall($node->var, $name) : new \PhpParser\Node\Expr\StaticCall($node->class, $name);
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return new \PhpParser\Node\Expr\MethodCall($node->var, $name);
+        }
+        return new \PhpParser\Node\Expr\StaticCall($node->class, $name);
     }
 }

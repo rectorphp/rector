@@ -146,11 +146,8 @@ final class IsClassMethodUsedAnalyzer
         // is current class method?
         return !$this->nodeNameResolver->isName($class, $arrayCallable->getClass());
     }
-    private function doesMethodExistInTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, ?string $classMethodName) : bool
+    private function doesMethodExistInTrait(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $classMethodName) : bool
     {
-        if ($classMethodName === null) {
-            return \false;
-        }
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;

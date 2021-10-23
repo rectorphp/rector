@@ -7,7 +7,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -105,7 +104,10 @@ final class TypeProvidingExprFromClassResolver
         }
         return null;
     }
-    private function resolveConstructorParamProvidingType(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\Variable
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function resolveConstructorParamProvidingType($functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\Variable
     {
         if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;

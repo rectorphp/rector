@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\ConstFetch $constFetch, ?\PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node $node) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\ConstFetch $constFetch, \PhpParser\Node\Stmt\If_ $if, ?\PhpParser\Node $node) : bool
     {
         $if = $this->betterNodeFinder->findParentType($constFetch, \PhpParser\Node\Stmt\If_::class);
         if (!$if instanceof \PhpParser\Node\Stmt\If_) {

@@ -10,9 +10,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\TypeWithClassName;
+use RectorPrefix20211023\PHPUnit\Framework\MockObject\MockBuilder;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,7 +31,6 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
     private const MAX_LOOKING_FOR_ASSERT_METHOD_CALL_NESTING_LEVEL = 3;
     /**
      * This should prevent segfaults while going too deep into to parsed code. Without it, it might end-up with segfault
-     *
      * @var int
      */
     private $classMethodNestingLevel = 0;
@@ -143,6 +144,10 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
             if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+                $type = $this->nodeTypeResolver->getType($node->var);
+                if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $type->getClassName() === \RectorPrefix20211023\PHPUnit\Framework\MockObject\MockBuilder::class) {
+                    return \true;
+                }
                 return $this->isNames($node->name, [
                     // phpunit
                     '*assert',
