@@ -42,25 +42,21 @@
         "php": "^7.2 || ^8.0"
     },
     "require-dev": {
-        "doctrine\/coding-standard": "^7.0",
-        "phpstan\/phpstan": "^0.11",
-        "phpstan\/phpstan-phpunit": "^0.11",
-        "phpstan\/phpstan-strict-rules": "^0.11",
-        "phpunit\/phpunit": "^7.0 || ^8.0 || ^9.0"
+        "doctrine\/coding-standard": "^8.2",
+        "phpstan\/phpstan": "^0.12",
+        "phpstan\/phpstan-phpunit": "^0.12",
+        "phpstan\/phpstan-strict-rules": "^0.12",
+        "phpunit\/phpunit": "^7.0 || ^8.0 || ^9.0",
+        "vimeo\/psalm": "^4.10"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211022\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
+            "RectorPrefix20211023\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211022\\Doctrine\\Tests\\Inflector\\": "tests\/Doctrine\/Tests\/Inflector"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "RectorPrefix20211023\\Doctrine\\Tests\\Inflector\\": "tests\/Doctrine\/Tests\/Inflector"
         }
     }
 }

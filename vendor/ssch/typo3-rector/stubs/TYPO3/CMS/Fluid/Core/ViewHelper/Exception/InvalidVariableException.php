@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211022\TYPO3\CMS\Fluid\Core\ViewHelper\Exception;
+namespace RectorPrefix20211023\TYPO3\CMS\Fluid\Core\ViewHelper\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\Exception\\InvalidVariableException')) {
     return;

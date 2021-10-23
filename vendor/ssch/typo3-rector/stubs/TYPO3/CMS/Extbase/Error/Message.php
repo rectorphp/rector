@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211022\TYPO3\CMS\Extbase\Error;
+namespace RectorPrefix20211023\TYPO3\CMS\Extbase\Error;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Error\\Message')) {
     return;

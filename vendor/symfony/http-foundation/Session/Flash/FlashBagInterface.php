@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211022\Symfony\Component\HttpFoundation\Session\Flash;
+namespace RectorPrefix20211023\Symfony\Component\HttpFoundation\Session\Flash;
 
-use RectorPrefix20211022\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
+use RectorPrefix20211023\Symfony\Component\HttpFoundation\Session\SessionBagInterface;
 /**
  * FlashBagInterface.
  *
  * @author Drak <drak@zikula.org>
  */
-interface FlashBagInterface extends \RectorPrefix20211022\Symfony\Component\HttpFoundation\Session\SessionBagInterface
+interface FlashBagInterface extends \RectorPrefix20211023\Symfony\Component\HttpFoundation\Session\SessionBagInterface
 {
     /**
      * Adds a flash message for the given type.

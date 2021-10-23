@@ -2,7 +2,7 @@
     <thead class="trace-head">
         <tr>
             <th class="sf-toggle" data-toggle-selector="#trace-text-<?php 
-namespace RectorPrefix20211022;
+namespace RectorPrefix20211023;
 
 echo $index;
 ?>" data-toggle-initial="<?php 

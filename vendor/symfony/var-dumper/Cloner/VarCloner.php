@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211022\Symfony\Component\VarDumper\Cloner;
+namespace RectorPrefix20211023\Symfony\Component\VarDumper\Cloner;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\AbstractCloner
+class VarCloner extends \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\AbstractCloner
 {
     private static $gid;
     private static $arrayCache = [];
@@ -60,8 +60,8 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
             $gid = self::$gid = \md5(\random_bytes(6));
             // Unique string used to detect the special $GLOBALS variable
         }
-        $arrayStub = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
-        $arrayStub->type = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY;
+        $arrayStub = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
+        $arrayStub->type = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY;
         $fromObjCast = \false;
         for ($i = 0; $i < $len; ++$i) {
             // Detect when we move on to the next tree depth
@@ -86,19 +86,19 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                     // Break hard references to make $queue completely
                     unset($stub);
                     // independent from the original structure
-                    if (\PHP_VERSION_ID >= 70400 ? null !== ($vals[$k] = $hardRefs[$zvalRef] ?? null) : $v instanceof \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub && isset($hardRefs[\spl_object_id($v)])) {
+                    if (\PHP_VERSION_ID >= 70400 ? null !== ($vals[$k] = $hardRefs[$zvalRef] ?? null) : $v instanceof \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub && isset($hardRefs[\spl_object_id($v)])) {
                         if (\PHP_VERSION_ID >= 70400) {
                             $v = $vals[$k];
                         } else {
                             $refs[$k] = $vals[$k] = $v;
                         }
-                        if ($v->value instanceof \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub && (\RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT === $v->value->type || \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE === $v->value->type)) {
+                        if ($v->value instanceof \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub && (\RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT === $v->value->type || \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE === $v->value->type)) {
                             ++$v->value->refCount;
                         }
                         ++$v->refCount;
                         continue;
                     }
-                    $vals[$k] = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
+                    $vals[$k] = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
                     $vals[$k]->value = $v;
                     $vals[$k]->handle = ++$refsCounter;
                     if (\PHP_VERSION_ID >= 70400) {
@@ -123,9 +123,9 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                             continue 2;
                         }
                         if (!\preg_match('//u', $v)) {
-                            $stub = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING;
-                            $stub->class = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::STRING_BINARY;
+                            $stub = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
+                            $stub->type = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING;
+                            $stub->class = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::STRING_BINARY;
                             if (0 <= $maxString && 0 < ($cut = \strlen($v) - $maxString)) {
                                 $stub->cut = $cut;
                                 $stub->value = \substr($v, 0, -$cut);
@@ -133,9 +133,9 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                                 $stub->value = $v;
                             }
                         } elseif (0 <= $maxString && isset($v[1 + ($maxString >> 2)]) && 0 < ($cut = \mb_strlen($v, 'UTF-8') - $maxString)) {
-                            $stub = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING;
-                            $stub->class = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::STRING_UTF8;
+                            $stub = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
+                            $stub->type = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_STRING;
+                            $stub->class = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::STRING_UTF8;
                             $stub->cut = $cut;
                             $stub->value = \mb_substr($v, 0, $maxString, 'UTF-8');
                         } else {
@@ -148,16 +148,16 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                             continue 2;
                         }
                         $stub = $arrayStub;
-                        $stub->class = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::ARRAY_INDEXED;
+                        $stub->class = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::ARRAY_INDEXED;
                         $j = -1;
                         foreach ($v as $gk => $gv) {
                             if ($gk !== ++$j) {
-                                $stub->class = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::ARRAY_ASSOC;
+                                $stub->class = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::ARRAY_ASSOC;
                                 break;
                             }
                         }
                         $a = $v;
-                        if (\RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::ARRAY_ASSOC === $stub->class) {
+                        if (\RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::ARRAY_ASSOC === $stub->class) {
                             // Copies of $GLOBALS have very strange behavior,
                             // let's detect them with some black magic
                             if (\PHP_VERSION_ID < 80100 && ($a[$gid] = \true) && isset($v[$gid])) {
@@ -166,8 +166,8 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                                 foreach ($v as $gk => &$gv) {
                                     if ($v === $gv && (\PHP_VERSION_ID < 70400 || !isset($hardRefs[\ReflectionReference::fromArrayElement($v, $gk)->getId()]))) {
                                         unset($v);
-                                        $v = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
-                                        $v->value = [$v->cut = \count($gv), \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY => 0];
+                                        $v = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
+                                        $v->value = [$v->cut = \count($gv), \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_ARRAY => 0];
                                         $v->handle = -1;
                                         if (\PHP_VERSION_ID >= 70400) {
                                             $gv =& $a[$gk];
@@ -187,14 +187,14 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                         break;
                     case \is_object($v):
                         if (empty($objRefs[$h = \spl_object_id($v)])) {
-                            $stub = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT;
+                            $stub = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
+                            $stub->type = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT;
                             $stub->class = \get_class($v);
                             $stub->value = $v;
                             $stub->handle = $h;
                             $a = $this->castObject($stub, 0 < $i);
                             if ($v !== $stub->value) {
-                                if (\RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT !== $stub->type || null === $stub->value) {
+                                if (\RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_OBJECT !== $stub->type || null === $stub->value) {
                                     break;
                                 }
                                 $stub->handle = $h = \spl_object_id($stub->value);
@@ -217,8 +217,8 @@ class VarCloner extends \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner
                     default:
                         // resource
                         if (empty($resRefs[$h = (int) $v])) {
-                            $stub = new \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub();
-                            $stub->type = \RectorPrefix20211022\Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE;
+                            $stub = new \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub();
+                            $stub->type = \RectorPrefix20211023\Symfony\Component\VarDumper\Cloner\Stub::TYPE_RESOURCE;
                             if ('Unknown' === ($stub->class = @\get_resource_type($v))) {
                                 $stub->class = 'Closed';
                             }

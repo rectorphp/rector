@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Application;
 
-use RectorPrefix20211022\Nette\Utils\Strings;
+use RectorPrefix20211023\Nette\Utils\Strings;
 use PhpParser\Lexer;
 use PhpParser\Node;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
@@ -87,6 +87,6 @@ final class FileProcessor
     private function isTemplateExtendsInSource(array $nodes) : bool
     {
         $print = $this->betterStandardPrinter->print($nodes);
-        return (bool) \RectorPrefix20211022\Nette\Utils\Strings::match($print, self::TEMPLATE_EXTENDS_REGEX);
+        return (bool) \RectorPrefix20211023\Nette\Utils\Strings::match($print, self::TEMPLATE_EXTENDS_REGEX);
     }
 }

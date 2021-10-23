@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211022;
+namespace RectorPrefix20211023;
 
 if (\class_exists('t3lib_install_Sql')) {
     return;

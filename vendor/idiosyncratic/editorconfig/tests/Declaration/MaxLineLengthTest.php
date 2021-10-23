@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211022\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211023\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20211022\Idiosyncratic\EditorConfig\Exception\InvalidValue;
-use RectorPrefix20211022\PHPUnit\Framework\TestCase;
-class MaxLineLengthTest extends \RectorPrefix20211022\PHPUnit\Framework\TestCase
+use RectorPrefix20211023\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20211023\PHPUnit\Framework\TestCase;
+class MaxLineLengthTest extends \RectorPrefix20211023\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        $declaration = new \RectorPrefix20211022\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('off');
+        $declaration = new \RectorPrefix20211023\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('off');
         $this->assertEquals('max_line_length=off', (string) $declaration);
-        $declaration = new \RectorPrefix20211022\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('4');
+        $declaration = new \RectorPrefix20211023\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('4');
         $this->assertEquals('max_line_length=4', (string) $declaration);
         $this->assertSame(4, $declaration->getValue());
     }
     public function testInvalidValues()
     {
-        $this->expectException(\RectorPrefix20211022\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211022\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('true');
-        $this->expectException(\RectorPrefix20211022\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211022\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('four');
-        $this->expectException(\RectorPrefix20211022\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211022\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('-1');
+        $this->expectException(\RectorPrefix20211023\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211023\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('true');
+        $this->expectException(\RectorPrefix20211023\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211023\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('four');
+        $this->expectException(\RectorPrefix20211023\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211023\Idiosyncratic\EditorConfig\Declaration\MaxLineLength('-1');
     }
 }

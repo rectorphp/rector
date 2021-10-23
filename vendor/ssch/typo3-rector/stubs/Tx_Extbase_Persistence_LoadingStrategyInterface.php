@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211022;
+namespace RectorPrefix20211023;
 
 if (\interface_exists('Tx_Extbase_Persistence_LoadingStrategyInterface')) {
     return;

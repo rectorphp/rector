@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix20211022\Nette\Utils\Strings;
+use RectorPrefix20211023\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
@@ -37,13 +37,14 @@ use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211022\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211023\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionFactory
 {
     /**
@@ -75,7 +76,11 @@ final class AnonymousFunctionFactory
      * @var \PhpParser\Parser
      */
     private $parser;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211022\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser)
+    /**
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211023\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -83,6 +88,7 @@ final class AnonymousFunctionFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->parser = $parser;
+        $this->nodeComparator = $nodeComparator;
     }
     /**
      * @param Param[] $params
@@ -98,6 +104,7 @@ final class AnonymousFunctionFactory
             $anonymousFunctionNode->static = $static;
         }
         foreach ($useVariables as $useVariable) {
+            $anonymousFunctionNode = $this->applyNestedUses($anonymousFunctionNode, $useVariable);
             $anonymousFunctionNode->uses[] = new \PhpParser\Node\Expr\ClosureUse($useVariable);
         }
         if ($returnTypeNode instanceof \PhpParser\Node) {
@@ -150,7 +157,7 @@ final class AnonymousFunctionFactory
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-            $match = \RectorPrefix20211022\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            $match = \RectorPrefix20211023\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
             if (!$match) {
                 return $node;
             }
@@ -160,6 +167,51 @@ final class AnonymousFunctionFactory
         $anonymousFunction->stmts[] = new \PhpParser\Node\Stmt\Return_($stmt);
         $anonymousFunction->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable('matches'));
         return $anonymousFunction;
+    }
+    /**
+     * @param ClosureUse[] $uses
+     * @return ClosureUse[]
+     */
+    private function cleanClosureUses(array $uses) : array
+    {
+        $variableNames = \array_map(function ($use) : string {
+            return (string) $this->nodeNameResolver->getName($use->var);
+        }, $uses, []);
+        $variableNames = \array_unique($variableNames);
+        return \array_map(function ($variableName) : ClosureUse {
+            return new \PhpParser\Node\Expr\ClosureUse(new \PhpParser\Node\Expr\Variable($variableName));
+        }, $variableNames, []);
+    }
+    private function applyNestedUses(\PhpParser\Node\Expr\Closure $anonymousFunctionNode, \PhpParser\Node\Expr\Variable $useVariable) : \PhpParser\Node\Expr\Closure
+    {
+        $anonymousFunctionNode = clone $anonymousFunctionNode;
+        $parent = $this->betterNodeFinder->findParentType($useVariable, \PhpParser\Node\Expr\Closure::class);
+        while ($parent instanceof \PhpParser\Node\Expr\Closure) {
+            $parentOfParent = $this->betterNodeFinder->findParentType($parent, \PhpParser\Node\Expr\Closure::class);
+            $uses = [];
+            while ($parentOfParent instanceof \PhpParser\Node\Expr\Closure) {
+                $uses = $this->collectUsesEqual($parentOfParent, $uses, $useVariable);
+                $parentOfParent = $this->betterNodeFinder->findParentType($parentOfParent, \PhpParser\Node\Expr\Closure::class);
+            }
+            $uses = \array_merge($parent->uses, $uses);
+            $uses = $this->cleanClosureUses($uses);
+            $parent->uses = $uses;
+            $parent = $this->betterNodeFinder->findParentType($parent, \PhpParser\Node\Expr\Closure::class);
+        }
+        return $anonymousFunctionNode;
+    }
+    /**
+     * @param ClosureUse[] $uses
+     * @return ClosureUse[]
+     */
+    private function collectUsesEqual(\PhpParser\Node\Expr\Closure $closure, array $uses, \PhpParser\Node\Expr\Variable $useVariable) : array
+    {
+        foreach ($closure->params as $param) {
+            if ($this->nodeComparator->areNodesEqual($param->var, $useVariable)) {
+                $uses[] = new \PhpParser\Node\Expr\ClosureUse($param->var);
+            }
+        }
+        return $uses;
     }
     /**
      * @param Node[] $nodes
