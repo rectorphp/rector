@@ -137,9 +137,6 @@ final class EregToPregMatchRector extends \Rector\Core\Rector\AbstractRector imp
             return;
         }
         // 3rd argument - $limit, 0 → 1
-        if (!isset($funcCall->args[2])) {
-            return;
-        }
         if (!$funcCall->args[2]->value instanceof \PhpParser\Node\Scalar\LNumber) {
             return;
         }

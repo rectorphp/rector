@@ -206,9 +206,6 @@ final class ClassMethodAssignManipulator
     }
     private function isExplicitlyReferenced(\PhpParser\Node $node) : bool
     {
-        if (!\property_exists($node, 'byRef')) {
-            return \false;
-        }
         if ($node instanceof \PhpParser\Node\Arg || $node instanceof \PhpParser\Node\Expr\ClosureUse || $node instanceof \PhpParser\Node\Param) {
             return $node->byRef;
         }

@@ -37,7 +37,7 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->cond instanceof \PhpParser\Node\Expr\Isset_) {
-            return $this->processTernaryWithIsset($node);
+            return $this->processTernaryWithIsset($node, $node->cond);
         }
         if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $checkedNode = $node->else;
@@ -69,21 +69,19 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
     }
-    private function processTernaryWithIsset(\PhpParser\Node\Expr\Ternary $ternary) : ?\PhpParser\Node\Expr\BinaryOp\Coalesce
+    private function processTernaryWithIsset(\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr\Isset_ $isset) : ?\PhpParser\Node\Expr\BinaryOp\Coalesce
     {
         if ($ternary->if === null) {
             return null;
         }
-        /** @var Isset_ $issetNode */
-        $issetNode = $ternary->cond;
         // none or multiple isset values cannot be handled here
-        if (!isset($issetNode->vars[0])) {
+        if (!isset($isset->vars[0])) {
             return null;
         }
-        if (\count($issetNode->vars) > 1) {
+        if (\count($isset->vars) > 1) {
             return null;
         }
-        if ($this->nodeComparator->areNodesEqual($ternary->if, $issetNode->vars[0])) {
+        if ($this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
             return new \PhpParser\Node\Expr\BinaryOp\Coalesce($ternary->if, $ternary->else);
         }
         return null;

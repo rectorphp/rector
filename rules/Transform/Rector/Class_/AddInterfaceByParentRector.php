@@ -61,7 +61,7 @@ CODE_SAMPLE
             return null;
         }
         $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection) {
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         foreach ($this->interfaceByParent as $parentName => $interfaceName) {

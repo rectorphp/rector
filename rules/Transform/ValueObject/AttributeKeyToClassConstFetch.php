@@ -18,11 +18,11 @@ final class AttributeKeyToClassConstFetch
      */
     private $constantClass;
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private $valuesToConstantsMap;
     /**
-     * @param array<mixed, string> $valuesToConstantsMap
+     * @param array<string, string> $valuesToConstantsMap
      */
     public function __construct(string $attributeClass, string $attributeKey, string $constantClass, array $valuesToConstantsMap)
     {

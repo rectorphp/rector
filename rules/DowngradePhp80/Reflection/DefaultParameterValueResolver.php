@@ -15,7 +15,7 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedYetException;
+use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Exception\ShouldNotHappenException;
 final class DefaultParameterValueResolver
 {
@@ -70,13 +70,8 @@ final class DefaultParameterValueResolver
     }
     private function resolveConstantBooleanType(\PHPStan\Type\Constant\ConstantBooleanType $constantBooleanType) : \PhpParser\Node\Expr\ConstFetch
     {
-        if (!$constantBooleanType->getValue()) {
-            $name = new \PhpParser\Node\Name('false');
-        } elseif ($constantBooleanType->getValue()) {
-            $name = new \PhpParser\Node\Name('true');
-        } else {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
-        }
+        $value = $constantBooleanType->describe(\PHPStan\Type\VerbosityLevel::value());
+        $name = new \PhpParser\Node\Name($value);
         return new \PhpParser\Node\Expr\ConstFetch($name);
     }
 }

@@ -92,9 +92,6 @@ final class ReadWritePropertyAnalyzer
             return \true;
         }
         // the array dim fetch is assing here only; but the variable might be used later
-        if ($this->readExprAnalyzer->isExprRead($arrayDimFetch->var)) {
-            return \true;
-        }
-        return !$this->assignManipulator->isLeftPartOfAssign($arrayDimFetch);
+        return $this->readExprAnalyzer->isExprRead($arrayDimFetch->var);
     }
 }
