@@ -140,11 +140,7 @@ final class BinaryOpManipulator
     }
 
     /**
-<<<<<<< HEAD
      * @return class-string<BinaryOp>|null
-=======
-     * @return class-string<BinaryOp>
->>>>>>> complete binary object class
      */
     private function resolveInversedNodeClass(BinaryOp $binaryOp): ?string
     {

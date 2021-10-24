@@ -21,7 +21,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclaration
 
 class KnownStaticNullable
 {
-    public function getStringNull(): ?string
+    public function getStringNull(): string
     {
         /** @var string|null $value */
         $value = 'hi';

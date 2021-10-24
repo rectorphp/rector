@@ -44,7 +44,7 @@ final class ClassLikeAstResolver
         $fileName = $classReflection->getFileName();
 
         // probably internal class
-        if ($fileName === false) {
+        if ($fileName === null) {
             // avoid parsing falsy-file again
             $this->classLikesByName[$classReflection->getName()] = null;
             return null;

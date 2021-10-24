@@ -73,7 +73,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
 
         // test paths
-<<<<<<< HEAD
         '*/tests/**/Fixture/*',
         '*/rules-tests/**/Fixture/*',
         '*/packages-tests/**/Fixture/*',
@@ -87,23 +86,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/tests/**/Source*/*',
         '*/rules-tests/**/Source*/*',
         '*/packages-tests/**/Source*/*',
-<<<<<<< HEAD
         '*/tests/**/Expected/*',
         '*/rules-tests/**/Expected/*',
         '*/packages-tests/**/Expected/*',
         '*/tests/**/Expected*/*',
         '*/rules-tests/**/Expected*/*',
         '*/packages-tests/**/Expected*/*',
-=======
-=======
-        '*/Fixture/*',
-        '*/Fixture*/*',
-        '*/Source/*',
-        '*/tests/**/Source*/*',
->>>>>>> [rector] fix accidentaly ignored Source* directory
-        '*/Expected/*',
-        '*/Expected*/*',
->>>>>>> ignore falsy nested generic intersection types
 
         // to keep original API from PHPStan untouched
         __DIR__ . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',

@@ -12,10 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ClassReflection;
-<<<<<<< HEAD
 use PHPStan\Reflection\ReflectionProvider;
-=======
->>>>>>> ThisType now accepts object type
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -23,15 +20,8 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Configuration\Option;
-<<<<<<< HEAD
 use Rector\Core\Enum\ObjectReference;
-<<<<<<< HEAD
 use Rector\Core\Exception\ShouldNotHappenException;
-=======
-=======
-use Rector\Core\Exception\ShouldNotHappenException;
->>>>>>> ThisType now accepts object type
->>>>>>> ThisType now accepts object type
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -118,11 +108,7 @@ final class ReturnTypeInferer
     public function verifyStaticType(Type $type, bool $isSupportedStaticReturnType): ?Type
     {
         if ($this->isStaticType($type)) {
-<<<<<<< HEAD
             /** @var TypeWithClassName $type */
-=======
-            /** @var FullyQualifiedObjectType $type */
->>>>>>> ThisType
             return $this->resolveStaticType($isSupportedStaticReturnType, $type);
         }
 
@@ -130,42 +116,7 @@ final class ReturnTypeInferer
             return $this->resolveUnionStaticTypes($type, $isSupportedStaticReturnType);
         }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
         return $type;
-=======
-        $returnTypes = $type->getTypes();
-        $types = [];
-        $hasStatic = false;
-        foreach ($returnTypes as $returnType) {
-            if ($this->isStaticType($returnType)) {
-                /** @var \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $returnType */
-                $returnTypeClassReflection = $returnType->getClassReflection();
-                if (! $returnTypeClassReflection instanceof ClassReflection) {
-                    throw new ShouldNotHappenException();
-                }
-
-                $types[] = new ThisType($returnTypeClassReflection);
-                $hasStatic = true;
-                continue;
-            }
-
-            $types[] = $returnType;
-        }
-
-        if (! $hasStatic) {
-            return $type;
-        }
-
-        if (! $isSupportedStaticReturnType) {
-            return null;
-        }
-
-        return new UnionType($types);
->>>>>>> ThisType now accepts object type
-=======
-        return $this->resolveUnionStaticTypes($type, $isSupportedStaticReturnType);
->>>>>>> ThisType
     }
 
     private function resolveTypeWithVoidHandling(FunctionLike $functionLike, Type $resolvedType): Type
@@ -248,7 +199,6 @@ final class ReturnTypeInferer
         return false;
     }
 
-<<<<<<< HEAD
     private function resolveUnionStaticTypes(UnionType $unionType, bool $isSupportedStaticReturnType): UnionType|null
     {
         $resolvedTypes = [];
@@ -264,69 +214,20 @@ final class ReturnTypeInferer
                 continue;
             }
 
-<<<<<<< HEAD
             $resolvedTypes[] = $unionedType;
-=======
-            $types[] = $returnType;
-=======
-    private function resolveStaticType(bool $isSupportedStaticReturnType, FullyQualifiedObjectType $type): ?ThisType
-    {
-        if (! $isSupportedStaticReturnType) {
-            return null;
-        }
-
-        $classReflection = $type->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new ThisType($classReflection);
-    }
-
-    private function resolveUnionStaticTypes(
-        UnionType $unionType,
-        bool $isSupportedStaticReturnType
-    ): UnionType|null|Type {
-        $types = [];
-        $hasStatic = false;
-
-        foreach ($unionType->getTypes() as $returnType) {
-            if (! $this->isStaticType($returnType)) {
-                $types[] = $returnType;
-                continue;
-            }
-
-            /** @var \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $returnType */
-            $returnTypeClassReflection = $returnType->getClassReflection();
-            if (! $returnTypeClassReflection instanceof ClassReflection) {
-                throw new ShouldNotHappenException();
-            }
-
-            $types[] = new ThisType($returnTypeClassReflection);
-            $hasStatic = true;
->>>>>>> ThisType
->>>>>>> ThisType now accepts object type
         }
 
         if (! $hasStatic) {
             return $unionType;
         }
 
-<<<<<<< HEAD
         // has static, but it is not supported
-=======
-<<<<<<< HEAD
-=======
-        // has static, but it is not supported
->>>>>>> ThisType
->>>>>>> ThisType now accepts object type
         if (! $isSupportedStaticReturnType) {
             return null;
         }
 
         return new UnionType($resolvedTypes);
     }
-<<<<<<< HEAD
 
     private function resolveStaticType(
         bool $isSupportedStaticReturnType,
@@ -343,6 +244,4 @@ final class ReturnTypeInferer
 
         return new ThisType($classReflection);
     }
-=======
->>>>>>> ThisType
 }

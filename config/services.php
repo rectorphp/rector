@@ -13,12 +13,12 @@ use PhpParser\Lexer;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
 use PHPStan\File\FileHelper;
+use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
@@ -28,8 +28,6 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
-use Rector\Core\PhpParser\Parser\NikicPhpParserFactory;
-use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -88,9 +86,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(NodeFinder::class);
 
     $services->set(Parser::class)
-        ->factory([service(NikicPhpParserFactory::class), 'create']);
+        ->factory([service(PHPStanServicesFactory::class), 'createPHPStanParser']);
+
     $services->set(Lexer::class)
-        ->factory([service(PhpParserLexerFactory::class), 'create']);
+        ->factory([service(PHPStanServicesFactory::class), 'createEmulativeLexer']);
 
     // symplify/package-builder
     $services->set(PrivatesAccessor::class);

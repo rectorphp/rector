@@ -30,6 +30,7 @@ final class Namespaced
 
 namespace Rector\Core\Tests\Issues\IssueImportedReturn\Fixture;
 
+use Rector\Core\Tests\Issues\IssueImportedReturn\Source\Logging;
 use Rector\Core\Tests\Issues\IssueImportedReturn\Source;
 
 final class Namespaced
@@ -38,7 +39,7 @@ final class Namespaced
      * @var string
      */
     private const CONFIG = 'config';
-    public function run(): Source\Logging
+    public function run(): Logging
     {
         if ($this->config[self::CONFIG]) {
 

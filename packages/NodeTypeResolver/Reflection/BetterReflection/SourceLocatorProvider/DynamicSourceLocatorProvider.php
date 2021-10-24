@@ -26,43 +26,11 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
      */
     private array $filesByDirectory = [];
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> abd995e94... ThisType needs reflection
-=======
->>>>>>> 4971e22ca... correct StaticType
     private ?AggregateSourceLocator $aggregateSourceLocator = null;
-
-    public function __construct(
-        private FileNodesFetcher $fileNodesFetcher
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 4971e22ca... correct StaticType
-=======
-    /**
-     * @var SourceLocator|null
-     */
-    private $cachedSourceLocator;
-<<<<<<< HEAD
-=======
-    private SourceLocator|null $cachedSourceLocator = null;
->>>>>>> more precise types
-=======
->>>>>>> 4971e22ca... correct StaticType
 
     public function __construct(
         private FileNodesFetcher $fileNodesFetcher,
         private PhpVersion $phpVersion
->>>>>>> OptimizedDirectorySourceLocator now requires PHPVersion
-<<<<<<< HEAD
->>>>>>> abd995e94... ThisType needs reflection
-=======
->>>>>>> 4971e22ca... correct StaticType
     ) {
     }
 
@@ -84,13 +52,8 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
         // do not cache for PHPUnit, as in test every fixture is different
         $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
 
-<<<<<<< HEAD
         if ($this->aggregateSourceLocator && ! $isPHPUnitRun) {
             return $this->aggregateSourceLocator;
-=======
-        if ($this->cachedSourceLocator && ! $isPHPUnitRun) {
-            return $this->cachedSourceLocator;
->>>>>>> more precise types
         }
 
         $sourceLocators = [];

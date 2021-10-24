@@ -81,7 +81,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
         $variable = $args[2]->value;
 
         if ($flags instanceof BitwiseOr) {
-            $this->cleanBitWiseOrFlags($node, $flags);
+            $this->cleanBitwiseOrFlags($node, $flags);
             if (! $this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
                 return $this->handleEmptyStringToNullMatch($node, $variable);
             }
@@ -202,7 +202,7 @@ CODE_SAMPLE
         );
     }
 
-    private function cleanBitWiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, Expr $expr = null): void
+    private function cleanBitwiseOrFlags(FuncCall $funcCall, BitwiseOr $bitwiseOr, Expr $expr = null): void
     {
         if ($bitwiseOr->left instanceof BitwiseOr) {
             /** @var BitwiseOr $leftLeft */
@@ -218,7 +218,7 @@ CODE_SAMPLE
             }
 
             if ($bitwiseOr->left instanceof BitwiseOr) {
-                $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
+                $this->cleanBitwiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
                 return;
             }
         }
@@ -232,14 +232,14 @@ CODE_SAMPLE
 
     private function assignThirdArgsValue(FuncCall $funcCall, BitwiseOr $bitwiseOr): void
     {
-        if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName(
+        if ($bitwiseOr instanceof BitwiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName(
             $bitwiseOr->right,
             self::FLAG
         )) {
             $bitwiseOr = $bitwiseOr->left;
         }
 
-        if ($bitwiseOr instanceof BitWiseOr && $bitwiseOr->left instanceof ConstFetch && $this->isName(
+        if ($bitwiseOr instanceof BitwiseOr && $bitwiseOr->left instanceof ConstFetch && $this->isName(
             $bitwiseOr->left,
             self::FLAG
         )) {

@@ -6,22 +6,15 @@ namespace Rector\Core\PhpParser\Parser;
 
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
-use PhpParser\Parser;
+use PHPStan\Parser\Parser;
 use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class RectorParser
 {
-    /**
-     * @var array<string, Stmt[]>
-     */
-    private array $nodesByFile = [];
-
     public function __construct(
+        private Lexer $lexer,
         private Parser $parser,
-        private SmartFileSystem $smartFileSystem,
-        private Lexer $lexer
     ) {
     }
 
@@ -30,21 +23,7 @@ final class RectorParser
      */
     public function parseFile(SmartFileInfo $smartFileInfo): array
     {
-        $fileRealPath = $smartFileInfo->getRealPath();
-
-        if (isset($this->nodesByFile[$fileRealPath])) {
-            return $this->nodesByFile[$fileRealPath];
-        }
-
-        $fileContent = $this->smartFileSystem->readFile($fileRealPath);
-
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
-            $nodes = [];
-        }
-
-        $this->nodesByFile[$fileRealPath] = $nodes;
-        return $this->nodesByFile[$fileRealPath];
+        return $this->parser->parseFile($smartFileInfo->getRealPath());
     }
 
     public function parseFileToStmtsAndTokens(SmartFileInfo $smartFileInfo): StmtsAndTokens

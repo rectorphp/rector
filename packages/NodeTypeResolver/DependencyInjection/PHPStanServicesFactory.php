@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
+use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
@@ -11,6 +12,7 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\ExtensionInstaller\GeneratedConfig;
 use PHPStan\File\FileHelper;
+use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
@@ -51,6 +53,22 @@ final class PHPStanServicesFactory
     public function createReflectionProvider(): ReflectionProvider
     {
         return $this->container->getByType(ReflectionProvider::class);
+    }
+
+    /**
+     * @api
+     */
+    public function createEmulativeLexer(): Lexer
+    {
+        return $this->container->getService('currentPhpVersionLexer');
+    }
+
+    /**
+     * @api
+     */
+    public function createPHPStanParser(): Parser
+    {
+        return $this->container->getService('currentPhpVersionRichParser');
     }
 
     /**

@@ -109,11 +109,7 @@ final class AssignAndBinaryMap
     }
 
     /**
-<<<<<<< HEAD
      * @return class-string<BinaryOp>|null
-=======
-     * @return class-string<BinaryOp>
->>>>>>> complete binary object class
      */
     public function getInversed(BinaryOp $binaryOp): ?string
     {

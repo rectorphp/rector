@@ -21,7 +21,7 @@ final class AliasUsesResolver
     /**
      * @return string[]
      */
-    public function resolveForNode(Node $node): array
+    public function resolveFromNode(Node $node): array
     {
         if (! $node instanceof Namespace_) {
             $node = $this->betterNodeFinder->findParentType($node, Namespace_::class);

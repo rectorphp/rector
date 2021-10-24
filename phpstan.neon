@@ -508,22 +508,12 @@ parameters:
              message: '#Instead of "instanceof/is_a\(\)" use ReflectionProvider service or "\(new ObjectType\(<desired_type\>\)\)\-\>isSuperTypeOf\(<element_type\>\)" for static reflection to work#'
              path: packages/StaticTypeMapper/ValueObject/Type/AliasedObjectType.php
 
-<<<<<<< HEAD
         # resolve later
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 9#'
-<<<<<<< HEAD
-        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:normalizeObjectTypes\(\)" is 12, keep it under 9#'
-=======
-=======
+
         # many internal cases
         - '#Calling (.*?) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
         - '#Creating (.*?) is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
-<<<<<<< HEAD
->>>>>>> complete binary object class
-<<<<<<< HEAD
->>>>>>> complete binary object class
-=======
-=======
 
         # generated content - not reliable values
         -
@@ -532,23 +522,7 @@ parameters:
                 - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
                 - src/Bootstrap/ExtensionConfigResolver.php
 
-        # allowed for creating ThisType
-        -
-            message: '#"getClassReflection\(\)" call on "PHPStan\\Type\\ObjectType" type is not allowed#'
-            paths:
-                 - rules/TypeDeclaration/TypeInferer/ReturnTypeInferer.php
-                 - packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php
-
         -
             message: '#Method Rector\\VersionBonding\\PhpVersionedFilter\:\:filter\(\) should return array<T of Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, \(Rector\\VersionBonding\\Contract\\MinPhpVersionInterface&T of Rector\\Core\\Contract\\Rector\\RectorInterface\)\|T of Rector\\Core\\Contract\\Rector\\RectorInterface\>#'
             paths:
                 - packages/VersionBonding/PhpVersionedFilter.php
-<<<<<<< HEAD
->>>>>>> b2d9d15e9... fixup! do not call condition twice
->>>>>>> NativeFunctionReflection has new parameter
-<<<<<<< HEAD
->>>>>>> NativeFunctionReflection has new parameter
-=======
-=======
->>>>>>> ignore falsy nested generic intersection types
->>>>>>> ignore falsy nested generic intersection types
