@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211023\TYPO3\CMS\Core\Resource\Exception;
+namespace RectorPrefix20211024\TYPO3\CMS\Core\Resource\Exception;
 
 use Exception;
 if (\class_exists('TYPO3\\CMS\\Core\\Resource\\Exception\\FileDoesNotExistException')) {

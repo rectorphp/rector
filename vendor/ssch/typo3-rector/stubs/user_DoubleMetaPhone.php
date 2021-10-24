@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211023;
+namespace RectorPrefix20211024;
 
 if (\class_exists('user_DoubleMetaPhone')) {
     return;

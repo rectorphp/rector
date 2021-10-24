@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Core\Php;
 
-use RectorPrefix20211023\Nette\Utils\Strings;
+use RectorPrefix20211024\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20211023\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211024\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionProviderTest
  */
@@ -28,7 +28,7 @@ final class PhpVersionProvider
      * @var \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;
-    public function __construct(\RectorPrefix20211023\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
+    public function __construct(\RectorPrefix20211024\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
     {
         $this->parameterProvider = $parameterProvider;
         $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;
@@ -72,7 +72,7 @@ final class PhpVersionProvider
         if (!\is_int($phpVersionFeatures)) {
             $this->throwInvalidTypeException($phpVersionFeatures);
         }
-        if (\RectorPrefix20211023\Nette\Utils\Strings::match((string) $phpVersionFeatures, self::VALID_PHP_VERSION_REGEX) && $phpVersionFeatures >= \Rector\Core\ValueObject\PhpVersion::PHP_53 - 1) {
+        if (\RectorPrefix20211024\Nette\Utils\Strings::match((string) $phpVersionFeatures, self::VALID_PHP_VERSION_REGEX) && $phpVersionFeatures >= \Rector\Core\ValueObject\PhpVersion::PHP_53 - 1) {
             return;
         }
         $this->throwInvalidTypeException($phpVersionFeatures);

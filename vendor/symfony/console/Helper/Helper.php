@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211023\Symfony\Component\Console\Helper;
+namespace RectorPrefix20211024\Symfony\Component\Console\Helper;
 
-use RectorPrefix20211023\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix20211023\Symfony\Component\String\UnicodeString;
+use RectorPrefix20211024\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211024\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \RectorPrefix20211023\Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements \RectorPrefix20211024\Symfony\Component\Console\Helper\HelperInterface
 {
     protected $helperSet = null;
     /**
@@ -57,7 +57,7 @@ abstract class Helper implements \RectorPrefix20211023\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20211023\Symfony\Component\String\UnicodeString($string))->width(\false);
+            return (new \RectorPrefix20211024\Symfony\Component\String\UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -73,7 +73,7 @@ abstract class Helper implements \RectorPrefix20211023\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20211023\Symfony\Component\String\UnicodeString($string))->length();
+            return (new \RectorPrefix20211024\Symfony\Component\String\UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);

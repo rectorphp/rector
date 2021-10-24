@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211023\TYPO3\CMS\Extbase\Service;
+namespace RectorPrefix20211024\TYPO3\CMS\Extbase\Service;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Service\\FlexFormService')) {
     return;

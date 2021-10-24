@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
-use RectorPrefix20211023\Nette\Utils\Strings;
+use RectorPrefix20211024\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
@@ -35,9 +35,9 @@ use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use ReflectionClass;
-use RectorPrefix20211023\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211024\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211023\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211024\Symplify\SmartFileSystem\SmartFileSystem;
 use Throwable;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -107,7 +107,7 @@ final class PHPStanNodeScopeResolver
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211023\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PhpParser\Parser $parser, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20211023\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211024\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PhpParser\Parser $parser, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20211024\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -205,7 +205,7 @@ final class PHPStanNodeScopeResolver
             $content = $this->smartFileSystem->readFile($fileName);
             $fileNodes = $this->parser->parse($content);
             $print = $this->betterStandardPrinter->print($fileNodes);
-            return (bool) \RectorPrefix20211023\Nette\Utils\Strings::match($print, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
+            return (bool) \RectorPrefix20211024\Nette\Utils\Strings::match($print, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
         });
     }
     /**
@@ -223,7 +223,7 @@ final class PHPStanNodeScopeResolver
             if (!$throwable instanceof \PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection) {
                 throw $throwable;
             }
-            if (!\RectorPrefix20211023\Nette\Utils\Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
+            if (!\RectorPrefix20211024\Nette\Utils\Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
                 throw $throwable;
             }
         }
@@ -291,7 +291,7 @@ final class PHPStanNodeScopeResolver
     {
         $className = $this->resolveClassName($classLike);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20211023\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20211024\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
             $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
         } elseif (!$this->reflectionProvider->hasClass($className)) {
             return $mutatingScope;

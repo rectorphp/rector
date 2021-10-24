@@ -1,4 +1,4 @@
-# 483 Rules Overview
+# 485 Rules Overview
 
 <br>
 
@@ -23,6 +23,8 @@
 - [DependencyInjection](#dependencyinjection) (3)
 
 - [DowngradePhp53](#downgradephp53) (1)
+
+- [DowngradePhp54](#downgradephp54) (1)
 
 - [DowngradePhp70](#downgradephp70) (11)
 
@@ -96,7 +98,7 @@
 
 - [Transform](#transform) (35)
 
-- [TypeDeclaration](#typedeclaration) (20)
+- [TypeDeclaration](#typedeclaration) (21)
 
 - [Visibility](#visibility) (2)
 
@@ -4258,6 +4260,29 @@ Refactor __DIR__ to dirname(__FILE__)
      {
 -        return __DIR__;
 +        return dirname(__FILE__);
+     }
+ }
+```
+
+<br>
+
+## DowngradePhp54
+
+### DowngradeStaticClosureRector
+
+Remove static from closure
+
+- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector`](../rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        return static function () {
++        return function () {
+             return true;
+         };
      }
  }
 ```
@@ -11537,25 +11562,7 @@ Add known return type to functions
 
 Change param type to strict type of passed expression
 
-:wrench: **configure it!**
-
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php)
-
-```php
-use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(AddMethodCallBasedStrictParamTypeRector::class)
-        ->call('configure', [[
-            AddMethodCallBasedStrictParamTypeRector::TRUST_DOC_BLOCKS => false,
-        ]]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -12011,6 +12018,27 @@ Add typed properties based only on strict constructor types
      public function __construct(string $name)
      {
          $this->name = $name;
+     }
+ }
+```
+
+<br>
+
+### TypedPropertyFromStrictGetterMethodReturnTypeRector
+
+Complete property type based on getter strict types
+
+- class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public $name;
++    public ?string $name;
+
+     public function getName(): string|null
+     {
+         return $this->name;
      }
  }
 ```

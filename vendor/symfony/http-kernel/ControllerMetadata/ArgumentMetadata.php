@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211023\Symfony\Component\HttpKernel\ControllerMetadata;
+namespace RectorPrefix20211024\Symfony\Component\HttpKernel\ControllerMetadata;
 
-use RectorPrefix20211023\Symfony\Component\HttpKernel\Attribute\ArgumentInterface;
+use RectorPrefix20211024\Symfony\Component\HttpKernel\Attribute\ArgumentInterface;
 /**
  * Responsible for storing metadata of an argument.
  *
@@ -37,7 +37,7 @@ class ArgumentMetadata
         $this->hasDefaultValue = $hasDefaultValue;
         $this->defaultValue = $defaultValue;
         $this->isNullable = $isNullable || null === $type || $hasDefaultValue && null === $defaultValue;
-        if (null === $attributes || $attributes instanceof \RectorPrefix20211023\Symfony\Component\HttpKernel\Attribute\ArgumentInterface) {
+        if (null === $attributes || $attributes instanceof \RectorPrefix20211024\Symfony\Component\HttpKernel\Attribute\ArgumentInterface) {
             trigger_deprecation('symfony/http-kernel', '5.3', 'The "%s" constructor expects an array of PHP attributes as last argument, %s given.', __CLASS__, \get_debug_type($attributes));
             $attributes = $attributes ? [$attributes] : [];
         }
@@ -109,13 +109,13 @@ class ArgumentMetadata
     /**
      * Returns the attribute (if any) that was set on the argument.
      */
-    public function getAttribute() : ?\RectorPrefix20211023\Symfony\Component\HttpKernel\Attribute\ArgumentInterface
+    public function getAttribute() : ?\RectorPrefix20211024\Symfony\Component\HttpKernel\Attribute\ArgumentInterface
     {
         trigger_deprecation('symfony/http-kernel', '5.3', 'Method "%s()" is deprecated, use "getAttributes()" instead.', __METHOD__);
         if (!$this->attributes) {
             return null;
         }
-        return $this->attributes[0] instanceof \RectorPrefix20211023\Symfony\Component\HttpKernel\Attribute\ArgumentInterface ? $this->attributes[0] : null;
+        return $this->attributes[0] instanceof \RectorPrefix20211024\Symfony\Component\HttpKernel\Attribute\ArgumentInterface ? $this->attributes[0] : null;
     }
     /**
      * @return object[]
