@@ -42,35 +42,34 @@ final class ParentAttributeSourceLocator implements SourceLocator
 
     public function locateIdentifier(Reflector $reflector, Identifier $identifier): ?Reflection
     {
-        if ($identifier->getName() === 'Symfony\Component\DependencyInjection\Attribute\Autoconfigure') {
-            if ($this->reflectionProvider->hasClass($identifier->getName())) {
-                $classReflection = $this->reflectionProvider->getClass($identifier->getName());
+        if ($identifier->getName() === 'Symfony\Component\DependencyInjection\Attribute\Autoconfigure' && $this->reflectionProvider->hasClass(
+            $identifier->getName()
+        )) {
+            $classReflection = $this->reflectionProvider->getClass($identifier->getName());
 
-                $class = $this->astResolver->resolveClassFromClassReflection(
-                    $classReflection,
-                    $identifier->getName()
-                );
-                if ($class === null) {
-                    return null;
-                }
-
-                $class->namespacedName = new FullyQualified($identifier->getName());
-
-                $fakeLocatedSource = new LocatedSource('virtual', null);
-
-                $classReflector = new ClassReflector($this);
-                return ReflectionClass::createFromNode(
-                    $classReflector,
-                    $class,
-                    $fakeLocatedSource,
-                    new Namespace_(new Name('Symfony\Component\DependencyInjection\Attribute'))
-                );
+            $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $identifier->getName());
+            if ($class === null) {
+                return null;
             }
+
+            $class->namespacedName = new FullyQualified($identifier->getName());
+            $fakeLocatedSource = new LocatedSource('virtual', null);
+            $classReflector = new ClassReflector($this);
+
+            return ReflectionClass::createFromNode(
+                $classReflector,
+                $class,
+                $fakeLocatedSource,
+                new Namespace_(new Name('Symfony\Component\DependencyInjection\Attribute'))
+            );
         }
 
         return null;
     }
 
+    /**
+     * @return Reflection[]
+     */
     public function locateIdentifiersByType(Reflector $reflector, IdentifierType $identifierType): array
     {
         return [];

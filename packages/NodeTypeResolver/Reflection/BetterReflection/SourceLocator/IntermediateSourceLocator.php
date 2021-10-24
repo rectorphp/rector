@@ -14,16 +14,11 @@ use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 final class IntermediateSourceLocator implements SourceLocator
 {
     /**
-     * @var SourceLocatorProviderInterface[]
-     */
-    private $sourceLocatorProviders = [];
-
-    /**
      * @param SourceLocatorProviderInterface[] $sourceLocatorProviders
      */
-    public function __construct(array $sourceLocatorProviders)
-    {
-        $this->sourceLocatorProviders = $sourceLocatorProviders;
+    public function __construct(
+        private array $sourceLocatorProviders
+    ) {
     }
 
     public function locateIdentifier(Reflector $reflector, Identifier $identifier): ?Reflection

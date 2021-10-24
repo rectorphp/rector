@@ -73,10 +73,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         SplitStringClassConstantToClassConstFetchRector::class,
 
         // test paths
-        '*/Fixture/*',
-        '*/Fixture*/*',
-        '*/Source/*',
-        '*/Source*/*',
+        '*/tests/**/Fixture/*',
+        '*/rules-tests/**/Fixture/*',
+        '*/packages-tests/**/Fixture/*',
+        '*/tests/**/Fixture*/*',
+        '*/rules-tests/**/Fixture*/*',
+        '*/packages-tests/**/Fixture*/*',
+        // source
+        '*/tests/**/Source/*',
+        '*/rules-tests/**/Source/*',
+        '*/packages-tests/**/Source/*',
+        '*/tests/**/Source*/*',
+        '*/rules-tests/**/Source*/*',
+        '*/packages-tests/**/Source*/*',
         '*/Expected/*',
         '*/Expected*/*',
 
