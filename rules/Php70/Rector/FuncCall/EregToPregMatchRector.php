@@ -171,10 +171,6 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         }
 
         // 3rd argument - $limit, 0 → 1
-        if (! isset($funcCall->args[2])) {
-            return;
-        }
-
         if (! $funcCall->args[2]->value instanceof LNumber) {
             return;
         }

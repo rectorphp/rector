@@ -7,7 +7,7 @@ namespace Rector\Transform\ValueObject;
 final class AttributeKeyToClassConstFetch
 {
     /**
-     * @param array<mixed, string> $valuesToConstantsMap
+     * @param array<string, string> $valuesToConstantsMap
      */
     public function __construct(
         private string $attributeClass,

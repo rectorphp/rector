@@ -79,7 +79,7 @@ CODE_SAMPLE
         }
 
         $parentClassReflection = $classReflection->getParentClass();
-        if (! $parentClassReflection) {
+        if (! $parentClassReflection instanceof ClassReflection) {
             return null;
         }
 

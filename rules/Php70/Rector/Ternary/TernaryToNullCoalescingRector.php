@@ -47,7 +47,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
     public function refactor(Node $node): ?Node
     {
         if ($node->cond instanceof Isset_) {
-            return $this->processTernaryWithIsset($node);
+            return $this->processTernaryWithIsset($node, $node->cond);
         }
 
         if ($node->cond instanceof Identical) {
@@ -87,24 +87,22 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         return PhpVersionFeature::NULL_COALESCE;
     }
 
-    private function processTernaryWithIsset(Ternary $ternary): ?Coalesce
+    private function processTernaryWithIsset(Ternary $ternary, Isset_ $isset): ?Coalesce
     {
         if ($ternary->if === null) {
             return null;
         }
 
-        /** @var Isset_ $issetNode */
-        $issetNode = $ternary->cond;
         // none or multiple isset values cannot be handled here
-        if (! isset($issetNode->vars[0])) {
+        if (! isset($isset->vars[0])) {
             return null;
         }
 
-        if (count($issetNode->vars) > 1) {
+        if (count($isset->vars) > 1) {
             return null;
         }
 
-        if ($this->nodeComparator->areNodesEqual($ternary->if, $issetNode->vars[0])) {
+        if ($this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
             return new Coalesce($ternary->if, $ternary->else);
         }
 
