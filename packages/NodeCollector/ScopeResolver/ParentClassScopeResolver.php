@@ -27,8 +27,13 @@ final class ParentClassScopeResolver
         }
 
         $parentClassReflection = $classReflection->getParentClass();
+<<<<<<< HEAD
         if ($parentClassReflection instanceof ClassReflection) {
             return $parentClassReflection;
+=======
+        if ($parentClassReflection === null) {
+            return null;
+>>>>>>> PHPStan\Reflection\ClassReflection::getParentClass now returns null|class reflection
         }
 
         return null;

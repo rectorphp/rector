@@ -17,6 +17,10 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
+<<<<<<< HEAD
+=======
+use Rector\Core\Exception\NotImplementedYetException;
+>>>>>>> \PHPStan\Type\Constant\ConstantBooleanType::getValue() now returns bool
 use Rector\Core\Exception\ShouldNotHappenException;
 
 final class DefaultParameterValueResolver

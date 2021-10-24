@@ -76,9 +76,21 @@ final class TypeProvidingExprFromClassResolver
         ClassReflection $classReflection,
         ObjectType $objectType
     ): ?MethodCall {
+<<<<<<< HEAD
         $methodReflections = $this->getClassMethodReflections($classReflection);
 
         foreach ($methodReflections as $methodReflection) {
+=======
+<<<<<<< HEAD
+        foreach ($classReflection->getNativeMethods() as $methodReflection) {
+=======
+        $nativeClassReflections = $classReflection->getNativeReflection();
+
+        foreach ($nativeClassReflections->getMethods() as $nativeMethodReflection) {
+            $methodReflection = $classReflection->getNativeMethod($nativeMethodReflection->getName());
+
+>>>>>>> 2fd45482d... ThisType
+>>>>>>> ThisType now accepts object type
             $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
             $returnType = $functionVariant->getReturnType();
 
