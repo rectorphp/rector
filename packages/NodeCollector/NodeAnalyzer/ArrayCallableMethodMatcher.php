@@ -70,7 +70,7 @@ final class ArrayCallableMethodMatcher
         $className = $calleeType->getClassName();
         $secondItemValue = $items[1]->value;
 
-        if ($values === []) {
+        if ($values === null) {
             return new ArrayCallableDynamicMethod($firstItemValue, $className, $secondItemValue);
         }
 
