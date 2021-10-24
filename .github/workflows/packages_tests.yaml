@@ -52,6 +52,14 @@ jobs:
                 run: composer require rector/rector-src dev-main#${{github.event.pull_request.head.sha}} --no-update
                 if: ${{ github.event_name == 'pull_request' }}
 
+<<<<<<< HEAD
+=======
+            # use PHPStan 1.0
+            -
+                run: composer require phpstan/phpstan "1.0.x-dev as 0.12.99" --no-update
+                if: ${{ github.event_name == 'pull_request' }}
+
+>>>>>>> abd995e94... ThisType needs reflection
             -   run: composer install --ansi
 
             -   run: vendor/bin/phpunit

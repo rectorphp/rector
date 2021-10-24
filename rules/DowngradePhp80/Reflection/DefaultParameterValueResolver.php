@@ -18,9 +18,12 @@ use PHPStan\Type\ConstantType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 use Rector\Core\Exception\NotImplementedYetException;
 >>>>>>> \PHPStan\Type\Constant\ConstantBooleanType::getValue() now returns bool
+=======
+>>>>>>> StaticType requires ClassReflection on constructor
 use Rector\Core\Exception\ShouldNotHappenException;
 
 final class DefaultParameterValueResolver

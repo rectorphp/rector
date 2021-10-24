@@ -286,8 +286,7 @@ final class ReturnTypeInferer
     private function resolveUnionStaticTypes(
         UnionType $unionType,
         bool $isSupportedStaticReturnType
-    ): UnionType|null|Type
-    {
+    ): UnionType|null|Type {
         $types = [];
         $hasStatic = false;
 

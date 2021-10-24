@@ -27,7 +27,8 @@ final class ClosureTypeToCallReflectionResolver implements TypeToCallReflectionR
             '{closure}',
             $type->getCallableParametersAcceptors($scope),
             null,
-            TrinaryLogic::createMaybe()
+            TrinaryLogic::createMaybe(),
+            false
         );
     }
 }

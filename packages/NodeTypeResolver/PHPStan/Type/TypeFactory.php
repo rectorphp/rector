@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+use PHPStan\Reflection\ReflectionProvider;
+=======
+use PHPStan\Reflection\ClassReflection;
+>>>>>>> StaticType requires ClassReflection on constructor
+>>>>>>> NativeFunctionReflection has new parameter
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -21,6 +29,20 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+use Rector\Core\Enum\ObjectReference;
+<<<<<<< HEAD
+use Rector\Core\Exception\ShouldNotHappenException;
+=======
+=======
+use Rector\Core\Exception\ShouldNotHappenException;
+>>>>>>> correct StaticType
+>>>>>>> StaticType requires ClassReflection on constructor
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
+>>>>>>> NativeFunctionReflection has new parameter
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -189,6 +211,7 @@ final class TypeFactory
             )) {
                 /** @var ObjectType $traversedType */
 <<<<<<< HEAD
+<<<<<<< HEAD
                 $className = $traversedType->getClassName();
                 if (! $this->reflectionProvider->hasClass($className)) {
                     throw new ShouldNotHappenException();
@@ -197,13 +220,29 @@ final class TypeFactory
                 $classReflection = $this->reflectionProvider->getClass($className);
                 return new ThisType($classReflection);
 =======
+=======
+>>>>>>> StaticType requires ClassReflection on constructor
 <<<<<<< HEAD
                 return new ThisType($traversedType->getClassName());
 =======
                 return $this->normalizeStaticType($traversedType);
 >>>>>>> bd713da77... getFileName() now returns null
+<<<<<<< HEAD
 >>>>>>> PHPStan\Reflection\ClassReflection::getFileName() now returns null|string
+<<<<<<< HEAD
 >>>>>>> PHPStan\Reflection\ClassReflection::getFileName() now returns null|string
+=======
+=======
+=======
+                $classReflection = $traversedType->getClassReflection();
+                if (! $classReflection instanceof ClassReflection) {
+                    throw new ShouldNotHappenException();
+                }
+
+                return new ThisType($classReflection);
+>>>>>>> 4971e22ca... correct StaticType
+>>>>>>> StaticType requires ClassReflection on constructor
+>>>>>>> NativeFunctionReflection has new parameter
             }
 
             if ($currentType instanceof ObjectType && ! $currentType instanceof GenericObjectType && ! $currentType instanceof AliasedObjectType && $currentType->getClassName() !== 'Iterator') {
@@ -234,10 +273,9 @@ final class TypeFactory
         return $type->getClassName() === ObjectReference::SELF()->getValue();
     }
 
-    private function normalizeStaticType(ObjectType $traversedType): ThisType
+    private function normalizeStaticType(ObjectType $objectType): ThisType
     {
-        /** @var ObjectType $traversedType */
-        $classReflection = $traversedType->getClassReflection();
+        $classReflection = $objectType->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException();
         }

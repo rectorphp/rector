@@ -356,6 +356,13 @@ final class AstResolver
             return $classMethod;
         }
 
+<<<<<<< HEAD
+=======
+        if ($classMethod instanceof ClassMethod) {
+            return $classMethod;
+        }
+
+>>>>>>> StaticType requires ClassReflection on constructor
         return null;
     }
 

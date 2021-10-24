@@ -518,5 +518,37 @@ parameters:
         # many internal cases
         - '#Calling (.*?) is not covered by backward compatibility promise\. The method might change in a minor PHPStan version#'
         - '#Creating (.*?) is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
+<<<<<<< HEAD
 >>>>>>> complete binary object class
+<<<<<<< HEAD
 >>>>>>> complete binary object class
+=======
+=======
+
+        # generated content - not reliable values
+        -
+            message: '#Offset (.*?) on array(.*?) on left side of \?\? always exists and is not nullable#'
+            paths:
+                - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
+                - src/Bootstrap/ExtensionConfigResolver.php
+
+        # allowed for creating ThisType
+        -
+            message: '#"getClassReflection\(\)" call on "PHPStan\\Type\\ObjectType" type is not allowed#'
+            paths:
+                 - rules/TypeDeclaration/TypeInferer/ReturnTypeInferer.php
+                 - packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php
+
+        -
+            message: '#Method Rector\\VersionBonding\\PhpVersionedFilter\:\:filter\(\) should return array<T of Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, \(Rector\\VersionBonding\\Contract\\MinPhpVersionInterface&T of Rector\\Core\\Contract\\Rector\\RectorInterface\)\|T of Rector\\Core\\Contract\\Rector\\RectorInterface\>#'
+            paths:
+                - packages/VersionBonding/PhpVersionedFilter.php
+<<<<<<< HEAD
+>>>>>>> b2d9d15e9... fixup! do not call condition twice
+>>>>>>> NativeFunctionReflection has new parameter
+<<<<<<< HEAD
+>>>>>>> NativeFunctionReflection has new parameter
+=======
+=======
+>>>>>>> ignore falsy nested generic intersection types
+>>>>>>> ignore falsy nested generic intersection types
