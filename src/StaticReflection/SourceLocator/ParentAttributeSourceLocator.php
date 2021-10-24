@@ -46,21 +46,22 @@ final class ParentAttributeSourceLocator implements \PHPStan\BetterReflection\So
     }
     public function locateIdentifier(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\Identifier $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
     {
-        if ($identifier->getName() === 'Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure') {
-            if ($this->reflectionProvider->hasClass($identifier->getName())) {
-                $classReflection = $this->reflectionProvider->getClass($identifier->getName());
-                $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $identifier->getName());
-                if ($class === null) {
-                    return null;
-                }
-                $class->namespacedName = new \PhpParser\Node\Name\FullyQualified($identifier->getName());
-                $fakeLocatedSource = new \PHPStan\BetterReflection\SourceLocator\Located\LocatedSource('virtual', null);
-                $classReflector = new \PHPStan\BetterReflection\Reflector\ClassReflector($this);
-                return \PHPStan\BetterReflection\Reflection\ReflectionClass::createFromNode($classReflector, $class, $fakeLocatedSource, new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name('Symfony\\Component\\DependencyInjection\\Attribute')));
+        if ($identifier->getName() === 'Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure' && $this->reflectionProvider->hasClass($identifier->getName())) {
+            $classReflection = $this->reflectionProvider->getClass($identifier->getName());
+            $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $identifier->getName());
+            if ($class === null) {
+                return null;
             }
+            $class->namespacedName = new \PhpParser\Node\Name\FullyQualified($identifier->getName());
+            $fakeLocatedSource = new \PHPStan\BetterReflection\SourceLocator\Located\LocatedSource('virtual', null);
+            $classReflector = new \PHPStan\BetterReflection\Reflector\ClassReflector($this);
+            return \PHPStan\BetterReflection\Reflection\ReflectionClass::createFromNode($classReflector, $class, $fakeLocatedSource, new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name('Symfony\\Component\\DependencyInjection\\Attribute')));
         }
         return null;
     }
+    /**
+     * @return Reflection[]
+     */
     public function locateIdentifiersByType(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType) : array
     {
         return [];
