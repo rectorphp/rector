@@ -99,7 +99,7 @@ final class AstResolver
         $fileName = $classReflection->getFileName();
 
         // probably native PHP method → un-parseable
-        if ($fileName === false) {
+        if ($fileName === null) {
             return null;
         }
 
@@ -146,7 +146,7 @@ final class AstResolver
         }
 
         $fileName = $phpFunctionReflection->getFileName();
-        if ($fileName === false) {
+        if ($fileName === null) {
             return null;
         }
 
@@ -229,7 +229,49 @@ final class AstResolver
         ClassReflection $classReflection,
         string $className
     ): Trait_ | Class_ | Interface_ | null {
+<<<<<<< HEAD
         return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $className);
+=======
+        if ($classReflection->isBuiltin()) {
+            return null;
+        }
+
+        if (isset($this->classLikesByName[$classReflection->getName()])) {
+            return $this->classLikesByName[$classReflection->getName()];
+        }
+
+        $fileName = $classReflection->getFileName();
+
+        // probably internal class
+        if ($fileName === null) {
+            // avoid parsing falsy-file again
+            $this->classLikesByName[$classReflection->getName()] = null;
+            return null;
+        }
+
+        $stmts = $this->smartPhpParser->parseFile($fileName);
+        if ($stmts === []) {
+            // avoid parsing falsy-file again
+            $this->classLikesByName[$classReflection->getName()] = null;
+            return null;
+        }
+
+        /** @var array<Class_|Trait_|Interface_> $classLikes */
+        $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, ClassLike::class);
+
+        $reflectionClassName = $classReflection->getName();
+        foreach ($classLikes as $classLike) {
+            if ($reflectionClassName !== $className) {
+                continue;
+            }
+
+            $this->classLikesByName[$classReflection->getName()] = $classLike;
+            return $classLike;
+        }
+
+        $this->classLikesByName[$classReflection->getName()] = null;
+        return null;
+>>>>>>> PHPStan\Reflection\ClassReflection::getFileName() now returns null|string
     }
 
     /**

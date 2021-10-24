@@ -129,7 +129,7 @@ final class ClassMethodParamVendorLockResolver
             // is file in vendor?
             $fileName = $ancestorClassReflection->getFileName();
             // probably internal class
-            if ($fileName === false) {
+            if ($fileName === null) {
                 continue;
             }
 

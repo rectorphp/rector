@@ -23,7 +23,7 @@ final class VendorLocationDetector
         $fileName = $this->resolveReflectionFileName($reflection);
 
         // probably internal
-        if ($fileName === false) {
+        if ($fileName === null) {
             return false;
         }
 
@@ -33,7 +33,7 @@ final class VendorLocationDetector
 
     private function resolveReflectionFileName(
         MethodReflection | ReflectionWithFilename | FunctionReflection $reflection
-    ): string | false {
+    ): string | null {
         if ($reflection instanceof ReflectionWithFilename) {
             return $reflection->getFileName();
         }
@@ -47,6 +47,6 @@ final class VendorLocationDetector
             return $declaringClassReflection->getFileName();
         }
 
-        return false;
+        return null;
     }
 }

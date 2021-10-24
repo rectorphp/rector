@@ -178,9 +178,32 @@ final class TypeFactory
 
     private function normalizeObjectTypes(Type $type): Type
     {
+<<<<<<< HEAD
         return TypeTraverser::map($type, function (Type $currentType, callable $traverseCallback): Type {
             if ($currentType instanceof ShortenedObjectType) {
                 return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
+=======
+        return TypeTraverser::map($type, function (Type $traversedType, callable $traverseCallback): Type {
+            if ($this->isStatic($traversedType) && $this->phpVersionProvider->isAtLeastPhpVersion(
+                PhpVersionFeature::STATIC_RETURN_TYPE
+            )) {
+                /** @var ObjectType $traversedType */
+<<<<<<< HEAD
+                $className = $traversedType->getClassName();
+                if (! $this->reflectionProvider->hasClass($className)) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $classReflection = $this->reflectionProvider->getClass($className);
+                return new ThisType($classReflection);
+=======
+<<<<<<< HEAD
+                return new ThisType($traversedType->getClassName());
+=======
+                return $this->normalizeStaticType($traversedType);
+>>>>>>> bd713da77... getFileName() now returns null
+>>>>>>> PHPStan\Reflection\ClassReflection::getFileName() now returns null|string
+>>>>>>> PHPStan\Reflection\ClassReflection::getFileName() now returns null|string
             }
 
             if ($currentType instanceof ObjectType && ! $currentType instanceof GenericObjectType && ! $currentType instanceof AliasedObjectType && $currentType->getClassName() !== 'Iterator') {
@@ -190,4 +213,36 @@ final class TypeFactory
             return $traverseCallback($currentType);
         });
     }
+<<<<<<< HEAD
+=======
+
+    private function isStatic(Type $type): bool
+    {
+        if (! $type instanceof ObjectType) {
+            return false;
+        }
+
+        return $type->getClassName() === ObjectReference::STATIC()->getValue();
+    }
+
+    private function isSelf(Type $type): bool
+    {
+        if (! $type instanceof ObjectType) {
+            return false;
+        }
+
+        return $type->getClassName() === ObjectReference::SELF()->getValue();
+    }
+
+    private function normalizeStaticType(ObjectType $traversedType): ThisType
+    {
+        /** @var ObjectType $traversedType */
+        $classReflection = $traversedType->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            throw new ShouldNotHappenException();
+        }
+
+        return new ThisType($classReflection);
+    }
+>>>>>>> PHPStan\Reflection\ClassReflection::getFileName() now returns null|string
 }

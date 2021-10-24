@@ -189,23 +189,42 @@ CODE_SAMPLE
      */
     private function createArrayMerge(Array_ $array, array $items): FuncCall
     {
+<<<<<<< HEAD
         /** @var Scope $scope */
         $scope = $array->getAttribute(AttributeKey::SCOPE);
 
         $args = array_map(function (ArrayItem|null $arrayItem) use ($scope): Arg {
             if ($arrayItem === null) {
+=======
+        /** @var Scope $nodeScope */
+        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
+
+        $args = array_map(function (ArrayItem|null $arrayItem) use ($nodeScope): Arg {
+            if (! $arrayItem instanceof ArrayItem) {
+>>>>>>> fix array traverse
                 throw new ShouldNotHappenException();
             }
 
             if ($arrayItem->unpack) {
                 // Do not unpack anymore
                 $arrayItem->unpack = false;
+<<<<<<< HEAD
                 return $this->createArgFromSpreadArrayItem($scope, $arrayItem);
+=======
+                return $this->createArgFromSpreadArrayItem($nodeScope, $arrayItem);
+>>>>>>> fix array traverse
             }
 
             return new Arg($arrayItem);
         }, $items);
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> fix array traverse
+>>>>>>> getFileName() now returns null
         return new FuncCall(new Name('array_merge'), $args);
     }
 

@@ -39,7 +39,7 @@ final class ParentClassMethodTypeOverrideGuard
         $fileName = $classReflection->getFileName();
 
         // probably internal
-        if ($fileName === false) {
+        if ($fileName === null) {
             return false;
         }
 
