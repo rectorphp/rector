@@ -3805,18 +3805,19 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "aa673b56f26f49c86f21da8111ff49160cce1fa5"
+                "reference": "ff2d218a54eaff63e22aae94e2b1bdd4cbaab9a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/aa673b56f26f49c86f21da8111ff49160cce1fa5",
-                "reference": "aa673b56f26f49c86f21da8111ff49160cce1fa5",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/ff2d218a54eaff63e22aae94e2b1bdd4cbaab9a2",
+                "reference": "ff2d218a54eaff63e22aae94e2b1bdd4cbaab9a2",
                 "shasum": ""
             },
             "require": {
                 "nette\/utils": "^3.2",
                 "nikic\/php-parser": "^4.13",
                 "php": ">=8.0",
+                "phpstan\/phpstan": "^0.12.99",
                 "symfony\/dependency-injection": "^5.3|^6.0",
                 "symfony\/http-kernel": "^5.3|^6.0",
                 "symplify\/autowire-array-parameter": "^9.5",
@@ -3857,7 +3858,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^9.5"
             },
-            "time": "2021-10-14T12:38:48+00:00",
+            "time": "2021-10-24T12:37:15+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {

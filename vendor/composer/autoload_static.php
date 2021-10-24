@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd23475db766a7f16588f948e16d11fd3
+class ComposerStaticInit011b72b8b7474461a0cd4f061bc59571
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1719,6 +1719,9 @@ class ComposerStaticInitd23475db766a7f16588f948e16d11fd3
         'RectorPrefix20211024\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\MagicConstValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/NodeValueResolver/MagicConstValueResolver.php',
         'RectorPrefix20211024\\Symplify\\Astral\\NodeValue\\UnionTypeValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/UnionTypeValueResolver.php',
         'RectorPrefix20211024\\Symplify\\Astral\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/NodeVisitor/CallableNodeVisitor.php',
+        'RectorPrefix20211024\\Symplify\\Astral\\PhpParser\\SmartPhpParser' => __DIR__ . '/..' . '/symplify/astral/src/PhpParser/SmartPhpParser.php',
+        'RectorPrefix20211024\\Symplify\\Astral\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/..' . '/symplify/astral/src/PhpParser/SmartPhpParserFactory.php',
+        'RectorPrefix20211024\\Symplify\\Astral\\Reflection\\ReflectionParser' => __DIR__ . '/..' . '/symplify/astral/src/Reflection/ReflectionParser.php',
         'RectorPrefix20211024\\Symplify\\Astral\\StaticFactory\\NodeValueResolverStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/StaticFactory/NodeValueResolverStaticFactory.php',
         'RectorPrefix20211024\\Symplify\\Astral\\StaticFactory\\SimpleNameResolverStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/StaticFactory/SimpleNameResolverStaticFactory.php',
         'RectorPrefix20211024\\Symplify\\Astral\\TypeAnalyzer\\ContainsTypeAnalyser' => __DIR__ . '/..' . '/symplify/astral/src/TypeAnalyzer/ContainsTypeAnalyser.php',
@@ -3914,9 +3917,9 @@ class ComposerStaticInitd23475db766a7f16588f948e16d11fd3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd23475db766a7f16588f948e16d11fd3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd23475db766a7f16588f948e16d11fd3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd23475db766a7f16588f948e16d11fd3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit011b72b8b7474461a0cd4f061bc59571::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit011b72b8b7474461a0cd4f061bc59571::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit011b72b8b7474461a0cd4f061bc59571::$classMap;
 
         }, null, ClassLoader::class);
     }

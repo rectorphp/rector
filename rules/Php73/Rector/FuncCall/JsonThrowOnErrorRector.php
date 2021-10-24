@@ -72,6 +72,13 @@ CODE_SAMPLE
                 return \true;
             }
         }
+        $value = $this->valueResolver->getValue($args[0]->value);
+        if (\is_string($value)) {
+            return \true;
+        }
+        if (\is_array($value)) {
+            return \true;
+        }
         return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (\PhpParser\Node $node) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
                 return \false;

@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar\MagicConst\File;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -182,7 +183,7 @@ final class ValueResolver
     /**
      * @return mixed[]
      */
-    private function extractConstantArrayTypeValue(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : array
+    private function extractConstantArrayTypeValue(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?array
     {
         $keys = [];
         foreach ($constantArrayType->getKeyTypes() as $i => $keyType) {
@@ -195,9 +196,10 @@ final class ValueResolver
                 $value = $this->extractConstantArrayTypeValue($valueType);
             } elseif ($valueType instanceof \PHPStan\Type\ConstantScalarType) {
                 $value = $valueType->getValue();
-            } else {
-                // not sure about value
+            } elseif ($valueType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
+            } else {
+                return null;
             }
             $values[$keys[$i]] = $value;
         }
