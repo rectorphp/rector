@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\Arguments\ValueObject\ArgumentAdder;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ArgumentAddingScope
@@ -44,7 +45,7 @@ final class ArgumentAddingScope
                 return false;
             }
 
-            if ($this->nodeNameResolver->isName($expr->class, 'parent')) {
+            if ($this->nodeNameResolver->isName($expr->class, ObjectReference::PARENT()->getValue())) {
                 return $scope === self::SCOPE_PARENT_CALL;
             }
 

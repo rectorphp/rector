@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -132,7 +133,7 @@ CODE_SAMPLE
 
     private function createParentStaticCall(string $method): Expression
     {
-        $staticCall = $this->nodeFactory->createStaticCall('parent', $method);
+        $staticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT(), $method);
         return new Expression($staticCall);
     }
 
@@ -148,7 +149,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if (! $this->isName($node->class, 'parent')) {
+            if (! $this->isName($node->class, ObjectReference::PARENT()->getValue())) {
                 return false;
             }
 

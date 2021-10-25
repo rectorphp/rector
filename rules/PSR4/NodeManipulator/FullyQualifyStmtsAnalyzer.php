@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt;
 use PHPStan\Reflection\Constant\RuntimeConstantReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -43,8 +44,8 @@ final class FullyQualifyStmtsAnalyzer
                 return null;
             }
 
-            $fullyQualifiedName = $this->nodeNameResolver->getName($node);
-            if (in_array($fullyQualifiedName, ['self', 'parent', 'static'], true)) {
+            $name = $this->nodeNameResolver->getName($node);
+            if (ObjectReference::isValid($name)) {
                 return null;
             }
 
@@ -52,7 +53,7 @@ final class FullyQualifyStmtsAnalyzer
                 return null;
             }
 
-            return new FullyQualified($fullyQualifiedName);
+            return new FullyQualified($name);
         });
     }
 

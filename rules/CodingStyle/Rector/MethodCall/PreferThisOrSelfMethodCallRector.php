@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -27,11 +28,6 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @var string
      */
     public const TYPE_TO_PREFERENCE = 'type_to_preference';
-
-    /**
-     * @var string
-     */
-    private const SELF = 'self';
 
     /**
      * @var array<PreferenceSelfThis>
@@ -118,7 +114,10 @@ CODE_SAMPLE
 
     private function processToSelf(MethodCall | StaticCall $node): ?StaticCall
     {
-        if ($node instanceof StaticCall && ! $this->isNames($node->class, [self::SELF, 'static'])) {
+        if ($node instanceof StaticCall && ! $this->isNames(
+            $node->class,
+            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()]
+        )) {
             return null;
         }
 
@@ -136,7 +135,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->nodeFactory->createStaticCall(self::SELF, $name, $node->args);
+        return $this->nodeFactory->createStaticCall(ObjectReference::SELF(), $name, $node->args);
     }
 
     private function processToThis(MethodCall | StaticCall $node): ?MethodCall
@@ -145,7 +144,10 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $this->isNames($node->class, [self::SELF, 'static'])) {
+        if (! $this->isNames(
+            $node->class,
+            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()]
+        )) {
             return null;
         }
 

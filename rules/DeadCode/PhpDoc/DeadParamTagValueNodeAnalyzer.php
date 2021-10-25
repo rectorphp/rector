@@ -13,6 +13,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -73,12 +74,12 @@ final class DeadParamTagValueNodeAnalyzer
             return false;
         }
 
-        $parent = $paramTagValueNode->getAttribute('parent');
+        $parent = $paramTagValueNode->getAttribute(PhpDocAttributeKey::PARENT);
         if (! $parent instanceof PhpDocTagNode) {
             return true;
         }
 
-        $parent = $parent->getAttribute('parent');
+        $parent = $parent->getAttribute(PhpDocAttributeKey::PARENT);
         if (! $parent instanceof PhpDocNode) {
             return true;
         }

@@ -13,6 +13,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator;
@@ -53,7 +54,7 @@ final class CurrentAndParentClassMethodComparator
             return false;
         }
 
-        return $this->nodeNameResolver->isName($staticCall->class, 'parent');
+        return $this->nodeNameResolver->isName($staticCall->class, ObjectReference::PARENT()->getValue());
     }
 
     /**

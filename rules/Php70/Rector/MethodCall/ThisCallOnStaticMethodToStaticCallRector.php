@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -116,30 +117,30 @@ CODE_SAMPLE
             return null;
         }
 
-        $classReference = $this->resolveClassSelf($node);
-        return $this->nodeFactory->createStaticCall($classReference, $methodName, $node->args);
+        $objectReference = $this->resolveClassSelf($node);
+        return $this->nodeFactory->createStaticCall($objectReference, $methodName, $node->args);
     }
 
-    private function resolveClassSelf(MethodCall $methodCall): string
+    private function resolveClassSelf(MethodCall $methodCall): ObjectReference
     {
         $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
         if (! $classLike instanceof Class_) {
-            return 'static';
+            return ObjectReference::STATIC();
         }
 
         if ($classLike->isFinal()) {
-            return 'self';
+            return ObjectReference::SELF();
         }
 
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (! $methodReflection instanceof PhpMethodReflection) {
-            return 'static';
+            return ObjectReference::STATIC();
         }
 
         if (! $methodReflection->isPrivate()) {
-            return 'static';
+            return ObjectReference::STATIC();
         }
 
-        return 'self';
+        return ObjectReference::SELF();
     }
 }

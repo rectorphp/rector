@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -146,7 +147,12 @@ CODE_SAMPLE
             return true;
         }
 
-        if ($this->isNames($staticCall->class, ['self', 'parent', 'static', 'class'])) {
+        $className = $this->getName($staticCall->class);
+        if (ObjectReference::isValid($className)) {
+            return true;
+        }
+
+        if ($className === 'class') {
             return true;
         }
 

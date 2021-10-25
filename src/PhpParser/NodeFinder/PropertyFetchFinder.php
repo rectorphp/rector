@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -88,7 +89,7 @@ final class PropertyFetchFinder
 
             if ($propertyFetch instanceof StaticPropertyFetch && ! $this->nodeNameResolver->isName(
                 $propertyFetch->class,
-                'self'
+                ObjectReference::SELF()->getValue()
             )) {
                 continue;
             }
@@ -144,7 +145,12 @@ final class PropertyFetchFinder
                 return false;
             }
 
-            if (! $this->nodeNameResolver->isNames($node->class, ['self', self::THIS, 'static'])) {
+            $class = $this->nodeNameResolver->getName($node->class);
+            if (! in_array(
+                $class,
+                [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), self::THIS],
+                true
+            )) {
                 return false;
             }
 

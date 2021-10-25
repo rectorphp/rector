@@ -13,6 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -39,7 +40,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
      */
     public function resolve(Node $node): Type
     {
-        if ($node->toString() === 'parent') {
+        if ($node->toString() === ObjectReference::PARENT()->getValue()) {
             return $this->resolveParent($node);
         }
 
@@ -84,7 +85,11 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     private function resolveFullyQualifiedName(Name $name): string
     {
         $nameValue = $name->toString();
-        if (in_array($nameValue, ['self', 'static', 'this'], true)) {
+        if (in_array(
+            $nameValue,
+            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), 'this'],
+            true
+        )) {
             /** @var string|null $class */
             $class = $name->getAttribute(AttributeKey::CLASS_NAME);
             if ($class === null) {

@@ -13,6 +13,7 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\VariadicAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -106,7 +107,7 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
                 return true;
             }
 
-            if ($this->isName($call->class, 'parent')) {
+            if ($this->isName($call->class, ObjectReference::PARENT()->getValue())) {
                 return true;
             }
         }

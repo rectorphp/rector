@@ -13,6 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -44,7 +45,11 @@ final class NewTypeResolver implements NodeTypeResolverInterface
     {
         if ($node->class instanceof Name) {
             $className = $this->nodeNameResolver->getName($node->class);
-            if (! in_array($className, ['self', 'parent'], true)) {
+            if (! in_array(
+                $className,
+                [ObjectReference::SELF()->getValue(), ObjectReference::PARENT()->getValue()],
+                true
+            )) {
                 return new ObjectType($className);
             }
         }

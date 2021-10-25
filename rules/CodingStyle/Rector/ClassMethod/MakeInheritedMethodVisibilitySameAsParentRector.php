@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -224,7 +225,10 @@ CODE_SAMPLE
                 return false;
             }
 
-            return $this->isNames($node->expr->class, ['self', 'static']);
+            return $this->isNames(
+                $node->expr->class,
+                [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()]
+            );
         });
     }
 }

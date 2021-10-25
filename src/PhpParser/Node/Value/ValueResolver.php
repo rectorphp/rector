@@ -17,6 +17,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -60,7 +61,7 @@ final class ValueResolver
         if ($expr instanceof ClassConstFetch && $resolvedClassReference) {
             $class = $this->nodeNameResolver->getName($expr->class);
 
-            if (in_array($class, ['self', 'static'], true)) {
+            if (in_array($class, [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()], true)) {
                 return $expr->getAttribute(AttributeKey::CLASS_NAME);
             }
 
@@ -257,7 +258,7 @@ final class ValueResolver
             throw new ShouldNotHappenException();
         }
 
-        if ($class === 'self') {
+        if ($class === ObjectReference::SELF()->getValue()) {
             $class = (string) $classConstFetch->class->getAttribute(AttributeKey::CLASS_NAME);
         }
 

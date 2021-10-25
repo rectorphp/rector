@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\NodeManipulator\Dependency\DependencyClassMethodDecorator;
 use Rector\Core\Php\PhpVersionProvider;
@@ -196,7 +197,7 @@ final class ClassDependencyManipulator
 
     private function createParentClassMethodCall(string $methodName): Expression
     {
-        $staticCall = new StaticCall(new Name('parent'), $methodName);
+        $staticCall = new StaticCall(new Name(ObjectReference::PARENT()->getValue()), $methodName);
 
         return new Expression($staticCall);
     }

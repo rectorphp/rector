@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -162,10 +163,10 @@ CODE_SAMPLE
 
         // rename ParentClass
         if ($this->isName($staticCall->class, $parentClassName)) {
-            $staticCall->class = new Name('parent');
+            $staticCall->class = new Name(ObjectReference::PARENT()->getValue());
         }
 
-        if (! $this->isName($staticCall->class, 'parent')) {
+        if (! $this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
             return;
         }
 
