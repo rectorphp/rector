@@ -11,8 +11,8 @@ use PhpParser\ParserFactory;
 final class NikicPhpParserFactory
 {
     public function __construct(
+        private ParserFactory $parserFactory,
         private Lexer $lexer,
-        private ParserFactory $parserFactory
     ) {
     }
 

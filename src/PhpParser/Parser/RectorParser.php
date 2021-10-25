@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\Parser;
 
+use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
-use PhpParser\Parser as NikicParser;
+use PhpParser\Parser;
+use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
-final class Parser
+final class RectorParser
 {
     /**
      * @var array<string, Stmt[]>
@@ -17,15 +19,16 @@ final class Parser
     private array $nodesByFile = [];
 
     public function __construct(
-        private NikicParser $nikicParser,
-        private SmartFileSystem $smartFileSystem
+        private Parser $parser,
+        private SmartFileSystem $smartFileSystem,
+        private Lexer $lexer
     ) {
     }
 
     /**
      * @return Stmt[]
      */
-    public function parseFileInfo(SmartFileInfo $smartFileInfo): array
+    public function parseFile(SmartFileInfo $smartFileInfo): array
     {
         $fileRealPath = $smartFileInfo->getRealPath();
 
@@ -35,12 +38,20 @@ final class Parser
 
         $fileContent = $this->smartFileSystem->readFile($fileRealPath);
 
-        $nodes = $this->nikicParser->parse($fileContent);
+        $nodes = $this->parser->parse($fileContent);
         if ($nodes === null) {
             $nodes = [];
         }
 
         $this->nodesByFile[$fileRealPath] = $nodes;
         return $this->nodesByFile[$fileRealPath];
+    }
+
+    public function parseFileToStmtsAndTokens(SmartFileInfo $smartFileInfo): StmtsAndTokens
+    {
+        $stmts = $this->parseFile($smartFileInfo);
+        $tokens = $this->lexer->getTokens();
+
+        return new StmtsAndTokens($stmts, $tokens);
     }
 }

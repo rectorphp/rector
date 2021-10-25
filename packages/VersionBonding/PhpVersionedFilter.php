@@ -31,7 +31,7 @@ final class PhpVersionedFilter
                 continue;
             }
 
-            // does satify version? → include
+            // does satisfy version? → include
             if ($rector->provideMinPhpVersion() <= $minProjectPhpVersion) {
                 $activeRectors[] = $rector;
             }

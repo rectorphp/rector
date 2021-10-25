@@ -7,7 +7,7 @@ namespace Rector\Testing\TestingParser;
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -17,7 +17,7 @@ final class TestingParser
 {
     public function __construct(
         private ParameterProvider $parameterProvider,
-        private Parser $parser,
+        private RectorParser $rectorParser,
         private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         private BetterNodeFinder $betterNodeFinder
     ) {
@@ -34,7 +34,7 @@ final class TestingParser
         $smartFileInfo = new SmartFileInfo($file);
         $this->parameterProvider->changeParameter(Option::SOURCE, [$file]);
 
-        $nodes = $this->parser->parseFileInfo($smartFileInfo);
+        $nodes = $this->rectorParser->parseFile($smartFileInfo);
 
         $file = new File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
