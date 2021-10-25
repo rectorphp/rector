@@ -42,7 +42,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -50,6 +49,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeDecorator\PropertyTypeDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
@@ -59,9 +59,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
-use RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
  */
@@ -119,7 +119,11 @@ final class NodeFactory
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $reflectionAstResolver;
-    public function __construct(\PhpParser\BuilderFactory $builderFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\Core\PhpParser\AstResolver $reflectionAstResolver)
+    /**
+     * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
+     */
+    private $propertyTypeDecorator;
+    public function __construct(\PhpParser\BuilderFactory $builderFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\Core\PhpParser\AstResolver $reflectionAstResolver, \Rector\Core\NodeDecorator\PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->builderFactory = $builderFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -129,6 +133,7 @@ final class NodeFactory
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->reflectionAstResolver = $reflectionAstResolver;
+        $this->propertyTypeDecorator = $propertyTypeDecorator;
     }
     /**
      * Creates "SomeClass::CONSTANT"
@@ -205,13 +210,13 @@ final class NodeFactory
     }
     public function createPublicMethod(string $name) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
+        $methodBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
         $methodBuilder->makePublic();
         return $methodBuilder->getNode();
     }
     public function createParamFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Param
     {
-        $paramBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($name);
+        $paramBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($name);
         if ($type !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
             if ($typeNode !== null) {
@@ -222,10 +227,10 @@ final class NodeFactory
     }
     public function createPublicInjectPropertyFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
-        $this->addPropertyType($property, $type);
+        $this->propertyTypeDecorator->decorate($property, $type);
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@inject', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
@@ -233,10 +238,10 @@ final class NodeFactory
     }
     public function createPrivatePropertyFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePrivate();
         $property = $propertyBuilder->getNode();
-        $this->addPropertyType($property, $type);
+        $this->propertyTypeDecorator->decorate($property, $type);
         return $property;
     }
     /**
@@ -286,7 +291,7 @@ final class NodeFactory
     }
     public function createStaticProtectedPropertyWithDefault(string $name, \PhpParser\Node $node) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makeProtected();
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);
@@ -294,14 +299,14 @@ final class NodeFactory
     }
     public function createProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;
     }
     public function createPrivateProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePrivate();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
@@ -309,7 +314,7 @@ final class NodeFactory
     }
     public function createPublicProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
@@ -317,7 +322,7 @@ final class NodeFactory
     }
     public function createGetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('get' . \ucfirst($propertyName));
+        $methodBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('get' . \ucfirst($propertyName));
         $methodBuilder->makePublic();
         $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable(self::THIS), $propertyName);
         $return = new \PhpParser\Node\Stmt\Return_($propertyFetch);
@@ -330,7 +335,7 @@ final class NodeFactory
     }
     public function createSetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('set' . \ucfirst($propertyName));
+        $methodBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('set' . \ucfirst($propertyName));
         $methodBuilder->makePublic();
         $variable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = $this->createParamWithType($variable, $type);
@@ -423,7 +428,7 @@ final class NodeFactory
     }
     public function createPromotedPropertyParam(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : \PhpParser\Node\Param
     {
-        $paramBuilder = new \RectorPrefix20211024\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyMetadata->getName());
+        $paramBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyMetadata->getName());
         $propertyType = $propertyMetadata->getType();
         if ($propertyType !== null) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
@@ -537,24 +542,6 @@ final class NodeFactory
             return $value->var;
         }
         return $value;
-    }
-    private function addPropertyType(\PhpParser\Node\Stmt\Property $property, ?\PHPStan\Type\Type $type) : void
-    {
-        if ($type === null) {
-            return;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
-            if ($phpParserType !== null) {
-                $property->type = $phpParserType;
-                if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
-                    $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-                }
-                return;
-            }
-        }
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
     }
     /**
      * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified

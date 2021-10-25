@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211024\Symplify\Astral\NodeValue\NodeValueResolver;
+namespace RectorPrefix20211025\Symplify\Astral\NodeValue\NodeValueResolver;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar\MagicConst;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
-use RectorPrefix20211024\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
+use RectorPrefix20211025\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
 /**
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
  *
  * @implements NodeValueResolverInterface<MagicConst>
  */
-final class MagicConstValueResolver implements \RectorPrefix20211024\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
+final class MagicConstValueResolver implements \RectorPrefix20211025\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
 {
     public function getType() : string
     {

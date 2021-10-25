@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211024;
+namespace RectorPrefix20211025;
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
 use Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector;

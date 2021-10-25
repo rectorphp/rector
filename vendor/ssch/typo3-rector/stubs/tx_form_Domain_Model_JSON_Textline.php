@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211024;
+namespace RectorPrefix20211025;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Textline')) {
     return;

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\Validation;
 
-use RectorPrefix20211024\Nette\Utils\Strings;
+use RectorPrefix20211025\Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
-use RectorPrefix20211024\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211025\Symfony\Component\Console\Style\SymfonyStyle;
 final class EmptyConfigurableRectorChecker
 {
     /**
@@ -21,7 +21,7 @@ final class EmptyConfigurableRectorChecker
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector, \RectorPrefix20211024\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector, \RectorPrefix20211025\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->emptyConfigurableRectorCollector = $emptyConfigurableRectorCollector;
         $this->symfonyStyle = $symfonyStyle;
@@ -60,7 +60,7 @@ final class EmptyConfigurableRectorChecker
             return;
         }
         foreach ($emptyConfigurableRectors as $emptyConfigurableRector) {
-            $shortRectorClass = \RectorPrefix20211024\Nette\Utils\Strings::after(\get_class($emptyConfigurableRector), '\\', -1);
+            $shortRectorClass = \RectorPrefix20211025\Nette\Utils\Strings::after(\get_class($emptyConfigurableRector), '\\', -1);
             $rectorMessage = ' * ' . $shortRectorClass;
             $this->symfonyStyle->writeln($rectorMessage);
         }

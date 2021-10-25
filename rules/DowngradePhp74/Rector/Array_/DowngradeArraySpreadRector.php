@@ -168,16 +168,20 @@ CODE_SAMPLE
      */
     private function createArrayMerge(\PhpParser\Node\Expr\Array_ $array, array $items) : \PhpParser\Node\Expr\FuncCall
     {
-        /** @var Scope $nodeScope */
-        $nodeScope = $array->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_merge'), \array_map(function (\PhpParser\Node\Expr\ArrayItem $item) use($nodeScope) : Arg {
-            if ($item !== null && $item->unpack) {
-                // Do not unpack anymore
-                $item->unpack = \false;
-                return $this->createArgFromSpreadArrayItem($nodeScope, $item);
+        /** @var Scope $scope */
+        $scope = $array->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $args = \array_map(function ($arrayItem) use($scope) : Arg {
+            if ($arrayItem === null) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            return new \PhpParser\Node\Arg($item);
-        }, $items));
+            if ($arrayItem->unpack) {
+                // Do not unpack anymore
+                $arrayItem->unpack = \false;
+                return $this->createArgFromSpreadArrayItem($scope, $arrayItem);
+            }
+            return new \PhpParser\Node\Arg($arrayItem);
+        }, $items);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_merge'), $args);
     }
     /**
      * If it is a variable, we add it directly

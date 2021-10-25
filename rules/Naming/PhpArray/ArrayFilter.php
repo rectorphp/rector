@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\PhpArray;
 
+use Rector\Core\Exception\ShouldNotHappenException;
 final class ArrayFilter
 {
     /**
@@ -19,7 +20,9 @@ final class ArrayFilter
             if ($count < 2) {
                 continue;
             }
-            /** @var string $value */
+            if (!\is_string($value)) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
             $duplicatedValues[] = $value;
         }
         return $duplicatedValues;
