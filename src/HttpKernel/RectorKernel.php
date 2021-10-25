@@ -19,6 +19,7 @@ use RectorPrefix20211025\Symfony\Component\DependencyInjection\ContainerInterfac
 use RectorPrefix20211025\Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use RectorPrefix20211025\Symfony\Component\HttpKernel\Config\FileLocator;
 use RectorPrefix20211025\Symfony\Component\HttpKernel\Kernel;
+use RectorPrefix20211025\Symplify\Astral\Bundle\AstralBundle;
 use RectorPrefix20211025\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use RectorPrefix20211025\Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle;
 use RectorPrefix20211025\Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle;
@@ -77,7 +78,7 @@ final class RectorKernel extends \RectorPrefix20211025\Symfony\Component\HttpKer
      */
     public function registerBundles() : iterable
     {
-        return [new \RectorPrefix20211025\Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle(), new \RectorPrefix20211025\Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle(), new \RectorPrefix20211025\Symplify\Skipper\Bundle\SkipperBundle(), new \RectorPrefix20211025\Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle()];
+        return [new \RectorPrefix20211025\Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle(), new \RectorPrefix20211025\Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle(), new \RectorPrefix20211025\Symplify\Skipper\Bundle\SkipperBundle(), new \RectorPrefix20211025\Symplify\SimplePhpDocParser\Bundle\SimplePhpDocParserBundle(), new \RectorPrefix20211025\Symplify\Astral\Bundle\AstralBundle()];
     }
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder

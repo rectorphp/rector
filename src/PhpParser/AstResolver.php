@@ -18,7 +18,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeFinder;
-use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -33,6 +32,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionProperty;
+use RectorPrefix20211025\Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211025\Symplify\SmartFileSystem\SmartFileSystem;
 /**
@@ -63,9 +63,9 @@ final class AstResolver
      */
     private $classLikesByName = [];
     /**
-     * @var \PhpParser\Parser
+     * @var \Symplify\Astral\PhpParser\SmartPhpParser
      */
-    private $parser;
+    private $smartPhpParser;
     /**
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
@@ -98,9 +98,9 @@ final class AstResolver
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20211025\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\RectorPrefix20211025\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \RectorPrefix20211025\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
-        $this->parser = $parser;
+        $this->smartPhpParser = $smartPhpParser;
         $this->smartFileSystem = $smartFileSystem;
         $this->nodeFinder = $nodeFinder;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
@@ -259,15 +259,14 @@ final class AstResolver
             $this->classLikesByName[$classReflection->getName()] = null;
             return null;
         }
-        $fileContent = $this->smartFileSystem->readFile($fileName);
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
+        $stmts = $this->smartPhpParser->parseFile($fileName);
+        if ($stmts === []) {
             // avoid parsing falsy-file again
             $this->classLikesByName[$classReflection->getName()] = null;
             return null;
         }
         /** @var array<Class_|Trait_|Interface_> $classLikes */
-        $classLikes = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\ClassLike::class);
+        $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Stmt\ClassLike::class);
         $reflectionClassName = $classReflection->getName();
         foreach ($classLikes as $classLike) {
             if ($reflectionClassName !== $className) {
@@ -347,14 +346,13 @@ final class AstResolver
      */
     private function parseFileNameToDecoratedNodes(string $fileName) : ?array
     {
-        $fileContent = $this->smartFileSystem->readFile($fileName);
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
+        $stmts = $this->smartPhpParser->parseFile($fileName);
+        if ($stmts === []) {
             return null;
         }
         $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($fileName);
         $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
     }
     /**
      * @param Stmt[] $nodes

@@ -78,9 +78,6 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
             return null;
         }
         // none or multiple isset values cannot be handled here
-        if (!isset($isset->vars[0])) {
-            return null;
-        }
         if (\count($isset->vars) > 1) {
             return null;
         }
