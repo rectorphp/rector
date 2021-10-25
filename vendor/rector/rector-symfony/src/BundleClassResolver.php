@@ -9,7 +9,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class BundleClassResolver
@@ -23,18 +23,18 @@ final class BundleClassResolver
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\Core\PhpParser\Parser\Parser
+     * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
-    private $parser;
+    private $rectorParser;
     /**
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Parser\Parser $parser, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->parser = $parser;
+        $this->rectorParser = $rectorParser;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function resolveShortBundleClassFromControllerClass(string $class) : ?string
@@ -67,7 +67,7 @@ final class BundleClassResolver
     private function resolveClassNameFromFilePath(string $filePath) : ?string
     {
         $fileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
-        $nodes = $this->parser->parseFileInfo($fileInfo);
+        $nodes = $this->rectorParser->parseFile($fileInfo);
         $this->addFullyQualifiedNamesToNodes($nodes);
         $classLike = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {

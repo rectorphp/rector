@@ -498,7 +498,7 @@ Turns fetching of parameters via `getParameter()` in ContainerAware to construct
 
 ## GetRequestRector
 
-Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
+Turns fetching of Request via `$this->getRequest()` to action injection
 
 - class: [`Rector\Symfony\Rector\ClassMethod\GetRequestRector`](../src/Rector/ClassMethod/GetRequestRector.php)
 
@@ -520,13 +520,14 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 
 ## GetToConstructorInjectionRector
 
-Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller in Symfony
+Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller
 
 - class: [`Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector`](../src/Rector/MethodCall/GetToConstructorInjectionRector.php)
 
 ```diff
--class MyCommand extends ContainerAwareCommand
-+class MyCommand extends Command
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+ final class SomeController extend Controller
  {
 +    public function __construct(SomeService $someService)
 +    {

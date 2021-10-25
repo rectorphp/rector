@@ -11,11 +11,13 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -78,7 +80,7 @@ CODE_SAMPLE
         if (!$commandName instanceof \PhpParser\Node) {
             return null;
         }
-        $defaultNameProperty = $this->nodeFactory->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
+        $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
         $node->stmts = \array_merge([$defaultNameProperty], $node->stmts);
         return $node;
     }
@@ -181,5 +183,13 @@ CODE_SAMPLE
             return null;
         }
         return $staticCall->args[0]->value;
+    }
+    private function createStaticProtectedPropertyWithDefault(string $name, \PhpParser\Node $node) : \PhpParser\Node\Stmt\Property
+    {
+        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder->makeProtected();
+        $propertyBuilder->makeStatic();
+        $propertyBuilder->setDefault($node);
+        return $propertyBuilder->getNode();
     }
 }

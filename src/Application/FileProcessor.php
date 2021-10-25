@@ -4,11 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\Application;
 
 use RectorPrefix20211025\Nette\Utils\Strings;
-use PhpParser\Lexer;
 use PhpParser\Node;
 use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -24,17 +23,13 @@ final class FileProcessor
      */
     private $affectedFilesCollector;
     /**
-     * @var \PhpParser\Lexer
-     */
-    private $lexer;
-    /**
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
     /**
-     * @var \Rector\Core\PhpParser\Parser\Parser
+     * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
-    private $parser;
+    private $rectorParser;
     /**
      * @var \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser
      */
@@ -43,12 +38,11 @@ final class FileProcessor
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \PhpParser\Lexer $lexer, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\Parser $parser, \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser $rectorNodeTraverser, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(\Rector\ChangesReporting\Collector\AffectedFilesCollector $affectedFilesCollector, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser $rectorNodeTraverser, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter)
     {
         $this->affectedFilesCollector = $affectedFilesCollector;
-        $this->lexer = $lexer;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->parser = $parser;
+        $this->rectorParser = $rectorParser;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
@@ -56,8 +50,9 @@ final class FileProcessor
     {
         // store tokens by absolute path, so we don't have to print them right now
         $smartFileInfo = $file->getSmartFileInfo();
-        $oldStmts = $this->parser->parseFileInfo($smartFileInfo);
-        $oldTokens = $this->lexer->getTokens();
+        $stmtsAndTokens = $this->rectorParser->parseFileToStmtsAndTokens($smartFileInfo);
+        $oldStmts = $stmtsAndTokens->getStmts();
+        $oldTokens = $stmtsAndTokens->getTokens();
         /**
          * Tweak PHPStan internal issue for has @template-extends that cause endless loop in the process
          *

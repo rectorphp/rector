@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita8e49054e176f822a71899338441e02a
+class ComposerStaticInit3291f773eb3ce171bc125911e9a66821
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2281,13 +2281,14 @@ class ComposerStaticInita8e49054e176f822a71899338441e02a
         'Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/ValueResolver.php',
         'Rector\\Core\\PhpParser\\Parser\\InlineCodeParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/InlineCodeParser.php',
         'Rector\\Core\\PhpParser\\Parser\\NikicPhpParserFactory' => __DIR__ . '/../..' . '/src/PhpParser/Parser/NikicPhpParserFactory.php',
-        'Rector\\Core\\PhpParser\\Parser\\Parser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/Parser.php',
         'Rector\\Core\\PhpParser\\Parser\\PhpParserLexerFactory' => __DIR__ . '/../..' . '/src/PhpParser/Parser/PhpParserLexerFactory.php',
+        'Rector\\Core\\PhpParser\\Parser\\RectorParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/RectorParser.php',
         'Rector\\Core\\PhpParser\\Parser\\SimplePhpParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/SimplePhpParser.php',
         'Rector\\Core\\PhpParser\\Printer\\BetterStandardPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/BetterStandardPrinter.php',
         'Rector\\Core\\PhpParser\\Printer\\FormatPerservingPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/FormatPerservingPrinter.php',
         'Rector\\Core\\PhpParser\\Printer\\NodesWithFileDestinationPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/NodesWithFileDestinationPrinter.php',
         'Rector\\Core\\PhpParser\\Printer\\Whitespace\\IndentCharacterDetector' => __DIR__ . '/../..' . '/src/PhpParser/Printer/Whitespace/IndentCharacterDetector.php',
+        'Rector\\Core\\PhpParser\\ValueObject\\StmtsAndTokens' => __DIR__ . '/../..' . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
         'Rector\\Core\\Php\\PhpVersionProvider' => __DIR__ . '/../..' . '/src/Php/PhpVersionProvider.php',
         'Rector\\Core\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => __DIR__ . '/../..' . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',
         'Rector\\Core\\Php\\Regex\\RegexPatternArgumentManipulator' => __DIR__ . '/../..' . '/src/Php/Regex/RegexPatternArgumentManipulator.php',
@@ -3919,9 +3920,9 @@ class ComposerStaticInita8e49054e176f822a71899338441e02a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita8e49054e176f822a71899338441e02a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita8e49054e176f822a71899338441e02a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita8e49054e176f822a71899338441e02a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3291f773eb3ce171bc125911e9a66821::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3291f773eb3ce171bc125911e9a66821::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3291f773eb3ce171bc125911e9a66821::$classMap;
 
         }, null, ClassLoader::class);
     }

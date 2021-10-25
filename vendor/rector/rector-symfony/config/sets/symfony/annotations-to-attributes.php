@@ -5,6 +5,7 @@ namespace RectorPrefix20211025;
 
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Symfony\Set\SymfonySetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 // @see https://symfony.com/blog/new-in-symfony-5-2-constraints-as-php-attributes

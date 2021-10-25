@@ -6,7 +6,7 @@ namespace Rector\Testing\TestingParser;
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use RectorPrefix20211025\Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -18,9 +18,9 @@ final class TestingParser
      */
     private $parameterProvider;
     /**
-     * @var \Rector\Core\PhpParser\Parser\Parser
+     * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
-    private $parser;
+    private $rectorParser;
     /**
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
@@ -29,10 +29,10 @@ final class TestingParser
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20211025\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\Parser $parser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20211025\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->parameterProvider = $parameterProvider;
-        $this->parser = $parser;
+        $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->betterNodeFinder = $betterNodeFinder;
     }
@@ -45,7 +45,7 @@ final class TestingParser
         require_once $file;
         $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($file);
         $this->parameterProvider->changeParameter(\Rector\Core\Configuration\Option::SOURCE, [$file]);
-        $nodes = $this->parser->parseFileInfo($smartFileInfo);
+        $nodes = $this->rectorParser->parseFile($smartFileInfo);
         $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
