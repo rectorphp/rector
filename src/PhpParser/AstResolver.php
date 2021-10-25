@@ -19,7 +19,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeFinder;
-use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -34,6 +33,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use ReflectionProperty;
+use Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -68,7 +68,7 @@ final class AstResolver
     private array $classLikesByName = [];
 
     public function __construct(
-        private Parser $parser,
+        private SmartPhpParser $smartPhpParser,
         private SmartFileSystem $smartFileSystem,
         private NodeFinder $nodeFinder,
         private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
@@ -254,17 +254,15 @@ final class AstResolver
             return null;
         }
 
-        $fileContent = $this->smartFileSystem->readFile($fileName);
-
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
+        $stmts = $this->smartPhpParser->parseFile($fileName);
+        if ($stmts === []) {
             // avoid parsing falsy-file again
             $this->classLikesByName[$classReflection->getName()] = null;
             return null;
         }
 
         /** @var array<Class_|Trait_|Interface_> $classLikes */
-        $classLikes = $this->betterNodeFinder->findInstanceOf($nodes, ClassLike::class);
+        $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, ClassLike::class);
 
         $reflectionClassName = $classReflection->getName();
         foreach ($classLikes as $classLike) {
@@ -366,16 +364,15 @@ final class AstResolver
      */
     private function parseFileNameToDecoratedNodes(string $fileName): ?array
     {
-        $fileContent = $this->smartFileSystem->readFile($fileName);
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
+        $stmts = $this->smartPhpParser->parseFile($fileName);
+        if ($stmts === []) {
             return null;
         }
 
         $smartFileInfo = new SmartFileInfo($fileName);
         $file = new File($smartFileInfo, $smartFileInfo->getContents());
 
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
+        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
     }
 
     /**

@@ -98,10 +98,6 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         }
 
         // none or multiple isset values cannot be handled here
-        if (! isset($isset->vars[0])) {
-            return null;
-        }
-
         if (count($isset->vars) > 1) {
             return null;
         }

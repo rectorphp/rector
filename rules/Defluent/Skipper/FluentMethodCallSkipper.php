@@ -19,7 +19,7 @@ final class FluentMethodCallSkipper
      * Skip query and builder
      * @see https://ocramius.github.io/blog/fluent-interfaces-are-evil/ "When does a fluent interface make sense?
      *
-     * @var class-string[]
+     * @var string[]
      */
     private const ALLOWED_FLUENT_TYPES = [
         // symfony

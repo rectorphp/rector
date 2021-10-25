@@ -20,6 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\Config\FileLocator;
 use Symfony\Component\HttpKernel\Kernel;
+use Symplify\Astral\Bundle\AstralBundle;
 use Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Symplify\ComposerJsonManipulator\Bundle\ComposerJsonManipulatorBundle;
 use Symplify\ConsoleColorDiff\Bundle\ConsoleColorDiffBundle;
@@ -83,6 +84,7 @@ final class RectorKernel extends Kernel
             new ComposerJsonManipulatorBundle(),
             new SkipperBundle(),
             new SimplePhpDocParserBundle(),
+            new AstralBundle(),
         ];
     }
 
