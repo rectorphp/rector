@@ -63,7 +63,7 @@ final class AssignAndBinaryMap
     ];
 
     /**
-     * @var array<class-string<AssignOp>, class-string<AssignOp>>
+     * @var array<class-string<AssignOp>, class-string<BinaryOp>>
      */
     private const ASSIGN_OP_TO_BINARY_OP_CLASSES = [
         AssignBitwiseOr::class => BitwiseOr::class,
@@ -90,6 +90,9 @@ final class AssignAndBinaryMap
         $this->binaryOpToAssignClasses = array_flip(self::ASSIGN_OP_TO_BINARY_OP_CLASSES);
     }
 
+    /**
+     * @return class-string<BinaryOp>|null
+     */
     public function getAlternative(Node $node): ?string
     {
         $nodeClass = $node::class;
@@ -105,6 +108,9 @@ final class AssignAndBinaryMap
         return null;
     }
 
+    /**
+     * @return class-string<BinaryOp>|null
+     */
     public function getInversed(BinaryOp $binaryOp): ?string
     {
         $nodeClass = $binaryOp::class;

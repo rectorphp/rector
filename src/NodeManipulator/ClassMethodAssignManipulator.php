@@ -17,6 +17,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\NodeFinder;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
@@ -26,7 +27,6 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ClassMethodAssignManipulator
 {
@@ -37,12 +37,12 @@ final class ClassMethodAssignManipulator
 
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private NodeFactory $nodeFactory,
         private NodeNameResolver $nodeNameResolver,
         private VariableManipulator $variableManipulator,
         private NodeComparator $nodeComparator,
         private ReflectionResolver $reflectionResolver,
+        private NodeFinder $nodeFinder,
         private ArrayDestructVariableFilter $arrayDestructVariableFilter
     ) {
     }
@@ -162,46 +162,50 @@ final class ClassMethodAssignManipulator
     {
         $referencedVariables = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use (
-            &$referencedVariables
-        ) {
-            if (! $node instanceof Variable) {
-                return null;
+        /** @var Variable[] $variables */
+        $variables = $this->nodeFinder->findInstanceOf($classMethod, Variable::class);
+
+        foreach ($variables as $variable) {
+            if ($this->nodeNameResolver->isName($variable, 'this')) {
+                continue;
             }
 
-            if ($this->nodeNameResolver->isName($node, 'this')) {
-                return null;
-            }
+            $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent !== null && $this->isExplicitlyReferenced($parent)) {
+                $variableName = $this->nodeNameResolver->getName($variable);
+                if ($variableName === null) {
+                    continue;
+                }
 
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
-                /** @var string $variableName */
-                $variableName = $this->nodeNameResolver->getName($node);
                 $referencedVariables[] = $variableName;
-                return null;
+                continue;
             }
 
             $argumentPosition = null;
-            if ($parentNode instanceof Arg) {
-                $argumentPosition = $parentNode->getAttribute(AttributeKey::ARGUMENT_POSITION);
-                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent instanceof Arg) {
+                $argumentPosition = $parent->getAttribute(AttributeKey::ARGUMENT_POSITION);
+                $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
             }
 
-            if (! $parentNode instanceof Node) {
-                return null;
+            if (! $parent instanceof Node) {
+                continue;
             }
 
             if ($argumentPosition === null) {
-                return null;
+                continue;
             }
 
-            /** @var string $variableName */
-            $variableName = $this->nodeNameResolver->getName($node);
-
-            if ($this->isCallOrConstructorWithReference($parentNode, $node, $argumentPosition)) {
-                $referencedVariables[] = $variableName;
+            $variableName = $this->nodeNameResolver->getName($variable);
+            if ($variableName === null) {
+                continue;
             }
-        });
+
+            if (! $this->isCallOrConstructorWithReference($parent, $variable, $argumentPosition)) {
+                continue;
+            }
+
+            $referencedVariables[] = $variableName;
+        }
 
         return $referencedVariables;
     }

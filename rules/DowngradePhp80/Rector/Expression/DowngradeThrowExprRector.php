@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BooleanNot;
@@ -126,9 +125,6 @@ CODE_SAMPLE
         }
 
         $inversedTernaryCond = $this->binaryOpManipulator->inverseNode($ternary->cond);
-        if (! $inversedTernaryCond instanceof Expr) {
-            return null;
-        }
 
         $if = $this->ifManipulator->createIfExpr($inversedTernaryCond, new Expression($ternary->else));
         if (! $assign instanceof Assign) {

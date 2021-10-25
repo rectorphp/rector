@@ -19,7 +19,7 @@ final class ObjectMagicMethods
         '__debugInfo',
         MethodName::DESCTRUCT,
         '__get',
-        '__invoke',
+        MethodName::INVOKE,
         '__isset',
         '__serialize',
         '__set',

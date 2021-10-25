@@ -205,6 +205,7 @@ CODE_SAMPLE
 
             return new Arg($arrayItem);
         }, $items);
+
         return new FuncCall(new Name('array_merge'), $args);
     }
 

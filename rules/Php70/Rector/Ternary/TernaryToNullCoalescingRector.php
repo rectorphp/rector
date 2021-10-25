@@ -93,6 +93,10 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
             return null;
         }
 
+        if ($isset->vars === null) {
+            return null;
+        }
+
         // none or multiple isset values cannot be handled here
         if (! isset($isset->vars[0])) {
             return null;
@@ -102,11 +106,11 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
             return null;
         }
 
-        if ($this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
-            return new Coalesce($ternary->if, $ternary->else);
+        if (! $this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
+            return null;
         }
 
-        return null;
+        return new Coalesce($ternary->if, $ternary->else);
     }
 
     private function isNullMatch(Expr $possibleNullExpr, Expr $firstNode, Expr $secondNode): bool

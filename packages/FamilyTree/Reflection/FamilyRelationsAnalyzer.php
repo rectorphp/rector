@@ -84,25 +84,28 @@ final class FamilyRelationsAnalyzer
 
         /** @var ClassReflection $classReflection */
         $classReflection = $scope->getClassReflection();
-        $ancestors = $classReflection->getAncestors();
+
+        $ancestorClassReflections = $classReflection->getAncestors();
+
         $propertyName = $this->nodeNameResolver->getName($property);
         $kindPropertyFetch = $this->getKindPropertyFetch($property);
 
         $className = $property->getAttribute(AttributeKey::CLASS_NAME);
-        foreach ($ancestors as $ancestor) {
-            $ancestorName = $ancestor->getName();
-            if ($ancestorName === $className) {
+
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
+            $ancestorClassName = $ancestorClassReflection->getName();
+            if ($ancestorClassName === $className) {
                 continue;
             }
 
-            $fileName = $ancestor->getFileName();
+            $fileName = $ancestorClassReflection->getFileName();
             if ($fileName === false) {
                 continue;
             }
 
             $fileContent = $this->smartFileSystem->readFile($fileName);
             $nodes = $this->parser->parse($fileContent);
-            if ($ancestor->isSubclassOf('PHPUnit\Framework\TestCase')) {
+            if ($ancestorClassReflection->isSubclassOf('PHPUnit\Framework\TestCase')) {
                 continue;
             }
 

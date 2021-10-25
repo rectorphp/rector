@@ -350,7 +350,6 @@ final class NodeFactory
     }
 
     /**
-     * @todo decouple to StackNodeFactory
      * @param Expr[] $exprs
      */
     public function createConcat(array $exprs): ?Concat
@@ -579,7 +578,7 @@ final class NodeFactory
         }
 
         if ($arrayItem !== null) {
-            $this->decoreateArrayItemWithKey($key, $arrayItem);
+            $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
         }
 
@@ -604,7 +603,7 @@ final class NodeFactory
         return $value;
     }
 
-    private function decoreateArrayItemWithKey(int | string | null $key, ArrayItem $arrayItem): void
+    private function decorateArrayItemWithKey(int | string | null $key, ArrayItem $arrayItem): void
     {
         if ($key !== null) {
             $arrayItem->key = BuilderHelpers::normalizeValue($key);
