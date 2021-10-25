@@ -189,17 +189,23 @@ CODE_SAMPLE
      */
     private function createArrayMerge(Array_ $array, array $items): FuncCall
     {
-        /** @var Scope $nodeScope */
-        $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
-        return new FuncCall(new Name('array_merge'), array_map(function (ArrayItem $item) use ($nodeScope): Arg {
-            if ($item !== null && $item->unpack) {
-                // Do not unpack anymore
-                $item->unpack = false;
-                return $this->createArgFromSpreadArrayItem($nodeScope, $item);
+        /** @var Scope $scope */
+        $scope = $array->getAttribute(AttributeKey::SCOPE);
+
+        $args = array_map(function (ArrayItem|null $arrayItem) use ($scope): Arg {
+            if ($arrayItem === null) {
+                throw new ShouldNotHappenException();
             }
 
-            return new Arg($item);
-        }, $items));
+            if ($arrayItem->unpack) {
+                // Do not unpack anymore
+                $arrayItem->unpack = false;
+                return $this->createArgFromSpreadArrayItem($scope, $arrayItem);
+            }
+
+            return new Arg($arrayItem);
+        }, $items);
+        return new FuncCall(new Name('array_merge'), $args);
     }
 
     /**

@@ -43,7 +43,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -51,6 +50,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeDecorator\PropertyTypeDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
@@ -103,6 +103,7 @@ final class NodeFactory
         private PhpDocTypeChanger $phpDocTypeChanger,
         private CurrentNodeProvider $currentNodeProvider,
         private AstResolver $reflectionAstResolver,
+        private PropertyTypeDecorator $propertyTypeDecorator
     ) {
     }
 
@@ -223,7 +224,7 @@ final class NodeFactory
 
         $property = $propertyBuilder->getNode();
 
-        $this->addPropertyType($property, $type);
+        $this->propertyTypeDecorator->decorate($property, $type);
 
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
@@ -238,7 +239,7 @@ final class NodeFactory
         $propertyBuilder->makePrivate();
 
         $property = $propertyBuilder->getNode();
-        $this->addPropertyType($property, $type);
+        $this->propertyTypeDecorator->decorate($property, $type);
 
         return $property;
     }
@@ -628,31 +629,6 @@ final class NodeFactory
         }
 
         return $value;
-    }
-
-    private function addPropertyType(Property $property, ?Type $type): void
-    {
-        if ($type === null) {
-            return;
-        }
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY());
-
-            if ($phpParserType !== null) {
-                $property->type = $phpParserType;
-
-                if ($type instanceof GenericObjectType) {
-                    $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-                }
-
-                return;
-            }
-        }
-
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
     }
 
     private function createClassPart(string $class): Name | FullyQualified

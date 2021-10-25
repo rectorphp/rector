@@ -11,6 +11,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -204,8 +205,11 @@ final class PropertyNaming
             return $fqn;
         }
 
-        /** @var string $lastNamePart */
         $lastNamePart = Strings::after($fqn, '\\', - 1);
+        if (! is_string($lastNamePart)) {
+            throw new ShouldNotHappenException();
+        }
+
         if (\str_ends_with($lastNamePart, self::INTERFACE)) {
             return Strings::substring($lastNamePart, 0, - strlen(self::INTERFACE));
         }
