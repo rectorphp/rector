@@ -21,6 +21,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -185,10 +186,16 @@ final class TypeFactory
     }
     private function isStatic(\PHPStan\Type\Type $type) : bool
     {
-        return $type instanceof \PHPStan\Type\ObjectType && $type->getClassName() === 'static';
+        if (!$type instanceof \PHPStan\Type\ObjectType) {
+            return \false;
+        }
+        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
     }
     private function isSelf(\PHPStan\Type\Type $type) : bool
     {
-        return $type instanceof \PHPStan\Type\ObjectType && $type->getClassName() === 'self';
+        if (!$type instanceof \PHPStan\Type\ObjectType) {
+            return \false;
+        }
+        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::SELF()->getValue();
     }
 }

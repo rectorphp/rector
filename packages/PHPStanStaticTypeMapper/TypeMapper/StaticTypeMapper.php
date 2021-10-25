@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -53,9 +54,9 @@ final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
         if ($type instanceof \PHPStan\Type\ThisType) {
             // @todo wait for PHPStan to differentiate between self/static
             if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
-                return new \PhpParser\Node\Name('static');
+                return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::STATIC()->getValue());
             }
-            return new \PhpParser\Node\Name('self');
+            return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         }
         return null;
     }

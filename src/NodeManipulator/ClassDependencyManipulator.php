@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\NodeManipulator\Dependency\DependencyClassMethodDecorator;
 use Rector\Core\Php\PhpVersionProvider;
@@ -178,7 +179,7 @@ final class ClassDependencyManipulator
     }
     private function createParentClassMethodCall(string $methodName) : \PhpParser\Node\Stmt\Expression
     {
-        $staticCall = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name('parent'), $methodName);
+        $staticCall = new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue()), $methodName);
         return new \PhpParser\Node\Stmt\Expression($staticCall);
     }
     private function isParamInConstructor(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool

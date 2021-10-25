@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -135,9 +136,9 @@ CODE_SAMPLE
         }
         // rename ParentClass
         if ($this->isName($staticCall->class, $parentClassName)) {
-            $staticCall->class = new \PhpParser\Node\Name('parent');
+            $staticCall->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
         }
-        if (!$this->isName($staticCall->class, 'parent')) {
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
             return;
         }
         // it's not a parent PHP 4 constructor call

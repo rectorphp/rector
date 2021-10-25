@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -52,7 +53,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
     {
         if ($node->class instanceof \PhpParser\Node\Name) {
             $className = $this->nodeNameResolver->getName($node->class);
-            if (!\in_array($className, ['self', 'parent'], \true)) {
+            if (!\in_array($className, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::PARENT()->getValue()], \true)) {
                 return new \PHPStan\Type\ObjectType($className);
             }
         }

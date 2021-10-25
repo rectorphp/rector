@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -88,7 +89,7 @@ final class PropertyFetchFinder
             if ($propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
                 continue;
             }
-            if ($propertyFetch instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->class, 'self')) {
+            if ($propertyFetch instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($propertyFetch->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue())) {
                 continue;
             }
             if (!$this->nodeNameResolver->isName($propertyFetch->name, $paramName)) {
@@ -132,7 +133,8 @@ final class PropertyFetchFinder
             if (!$node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
                 return \false;
             }
-            if (!$this->nodeNameResolver->isNames($node->class, ['self', self::THIS, 'static'])) {
+            $class = $this->nodeNameResolver->getName($node->class);
+            if (!\in_array($class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue(), self::THIS], \true)) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node, $propertyName);

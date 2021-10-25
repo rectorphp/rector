@@ -9,6 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
@@ -117,7 +118,7 @@ CODE_SAMPLE
         /** @var StaticCall[] $staticCalls */
         $staticCalls = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\StaticCall::class);
         foreach ($staticCalls as $staticCall) {
-            if (!$this->isName($staticCall->class, 'parent')) {
+            if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
                 continue;
             }
             if (!$this->isName($staticCall->name, $classMethodName)) {

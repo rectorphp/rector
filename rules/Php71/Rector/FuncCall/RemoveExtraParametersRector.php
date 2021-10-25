@@ -12,6 +12,7 @@ use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\Type\UnionTypeMethodReflection;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\VariadicAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -99,7 +100,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
             if (!$call->class instanceof \PhpParser\Node\Name) {
                 return \true;
             }
-            if ($this->isName($call->class, 'parent')) {
+            if ($this->isName($call->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
                 return \true;
             }
         }

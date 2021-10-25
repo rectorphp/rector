@@ -2,6 +2,7 @@ services:
     # mostly used shared services
     - Symplify\PackageBuilder\Reflection\PrivatesAccessor
     - PhpParser\NodeFinder
+    - Symplify\SmartFileSystem\Finder\FinderSanitizer
 
     - Symplify\Astral\Reflection\ReflectionParser
 

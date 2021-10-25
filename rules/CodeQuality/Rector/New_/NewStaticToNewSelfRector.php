@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -59,10 +60,10 @@ CODE_SAMPLE
         if (!$class->isFinal()) {
             return null;
         }
-        if (!$this->isName($node->class, 'static')) {
+        if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::STATIC()->getValue())) {
             return null;
         }
-        $node->class = new \PhpParser\Node\Name('self');
+        $node->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         return $node;
     }
 }

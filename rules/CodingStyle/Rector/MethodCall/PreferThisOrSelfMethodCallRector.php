@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -25,10 +26,6 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
      * @var string
      */
     public const TYPE_TO_PREFERENCE = 'type_to_preference';
-    /**
-     * @var string
-     */
-    private const SELF = 'self';
     /**
      * @var array<PreferenceSelfThis>
      */
@@ -101,7 +98,7 @@ CODE_SAMPLE
      */
     private function processToSelf($node) : ?\PhpParser\Node\Expr\StaticCall
     {
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall && !$this->isNames($node->class, [self::SELF, 'static'])) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall && !$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()])) {
             return null;
         }
         if ($node instanceof \PhpParser\Node\Expr\MethodCall && !$this->isName($node->var, 'this')) {
@@ -115,7 +112,7 @@ CODE_SAMPLE
         if ($name === null) {
             return null;
         }
-        return $this->nodeFactory->createStaticCall(self::SELF, $name, $node->args);
+        return $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::SELF(), $name, $node->args);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
@@ -125,7 +122,7 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
-        if (!$this->isNames($node->class, [self::SELF, 'static'])) {
+        if (!$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()])) {
             return null;
         }
         $name = $this->getName($node->name);

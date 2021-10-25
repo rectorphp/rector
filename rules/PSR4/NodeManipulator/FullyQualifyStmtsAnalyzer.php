@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt;
 use PHPStan\Reflection\Constant\RuntimeConstantReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211025\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -54,14 +55,14 @@ final class FullyQualifyStmtsAnalyzer
             if (!$node instanceof \PhpParser\Node\Name) {
                 return null;
             }
-            $fullyQualifiedName = $this->nodeNameResolver->getName($node);
-            if (\in_array($fullyQualifiedName, ['self', 'parent', 'static'], \true)) {
+            $name = $this->nodeNameResolver->getName($node);
+            if (\Rector\Core\Enum\ObjectReference::isValid($name)) {
                 return null;
             }
             if ($this->isNativeConstant($node)) {
                 return null;
             }
-            return new \PhpParser\Node\Name\FullyQualified($fullyQualifiedName);
+            return new \PhpParser\Node\Name\FullyQualified($name);
         });
     }
     private function isNativeConstant(\PhpParser\Node\Name $name) : bool

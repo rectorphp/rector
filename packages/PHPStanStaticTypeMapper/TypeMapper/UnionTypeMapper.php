@@ -20,6 +20,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
@@ -190,7 +191,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     private function hasObjectAndStaticType(\PhpParser\Node\UnionType $phpParserUnionType) : bool
     {
         $typeNames = $this->nodeNameResolver->getNames($phpParserUnionType->types);
-        $diff = \array_diff(['object', 'static'], $typeNames);
+        $diff = \array_diff(['object', \Rector\Core\Enum\ObjectReference::STATIC()->getValue()], $typeNames);
         return $diff === [];
     }
     /**

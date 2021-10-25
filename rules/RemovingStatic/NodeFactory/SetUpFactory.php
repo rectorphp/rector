@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\RemovingStatic\NodeFactory;
 
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 final class SetUpFactory
@@ -18,7 +19,7 @@ final class SetUpFactory
     }
     public function createParentStaticCall() : \PhpParser\Node\Stmt\Expression
     {
-        $parentSetupStaticCall = $this->nodeFactory->createStaticCall('parent', \Rector\Core\ValueObject\MethodName::SET_UP);
+        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT(), \Rector\Core\ValueObject\MethodName::SET_UP);
         return new \PhpParser\Node\Stmt\Expression($parentSetupStaticCall);
     }
 }

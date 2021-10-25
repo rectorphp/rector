@@ -13,6 +13,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
@@ -65,13 +66,13 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         if ($loweredName === 'class-string') {
             return new \PHPStan\Type\ClassStringType();
         }
-        if ($loweredName === 'self') {
+        if ($loweredName === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
             return $this->mapSelf($node);
         }
-        if ($loweredName === 'parent') {
+        if ($loweredName === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
             return $this->mapParent($node);
         }
-        if ($loweredName === 'static') {
+        if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
             return $this->mapStatic($node);
         }
         if ($loweredName === 'iterable') {

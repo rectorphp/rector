@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "composer\/semver",
-            "version": "3.2.5",
-            "version_normalized": "3.2.5.0",
+            "version": "3.2.6",
+            "version_normalized": "3.2.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/semver.git",
-                "reference": "31f3ea725711245195f62e54ffa402d8ef2fdba9"
+                "reference": "83e511e247de329283478496f7a1e114c9517506"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/semver\/zipball\/31f3ea725711245195f62e54ffa402d8ef2fdba9",
-                "reference": "31f3ea725711245195f62e54ffa402d8ef2fdba9",
+                "url": "https:\/\/api.github.com\/repos\/composer\/semver\/zipball\/83e511e247de329283478496f7a1e114c9517506",
+                "reference": "83e511e247de329283478496f7a1e114c9517506",
                 "shasum": ""
             },
             "require": {
@@ -22,7 +22,7 @@
                 "phpstan\/phpstan": "^0.12.54",
                 "symfony\/phpunit-bridge": "^4.2 || ^5"
             },
-            "time": "2021-05-24T12:41:47+00:00",
+            "time": "2021-10-25T11:34:17+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -66,7 +66,7 @@
             "support": {
                 "irc": "irc:\/\/irc.freenode.org\/composer",
                 "issues": "https:\/\/github.com\/composer\/semver\/issues",
-                "source": "https:\/\/github.com\/composer\/semver\/tree\/3.2.5"
+                "source": "https:\/\/github.com\/composer\/semver\/tree\/3.2.6"
             },
             "funding": [
                 {
@@ -3805,12 +3805,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "ff2d218a54eaff63e22aae94e2b1bdd4cbaab9a2"
+                "reference": "810a0c74edc7fb1a73d8f3eac3ea714199460f7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/ff2d218a54eaff63e22aae94e2b1bdd4cbaab9a2",
-                "reference": "ff2d218a54eaff63e22aae94e2b1bdd4cbaab9a2",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/810a0c74edc7fb1a73d8f3eac3ea714199460f7b",
+                "reference": "810a0c74edc7fb1a73d8f3eac3ea714199460f7b",
                 "shasum": ""
             },
             "require": {
@@ -3858,7 +3858,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^9.5"
             },
-            "time": "2021-10-24T12:37:15+00:00",
+            "time": "2021-10-25T12:12:10+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {

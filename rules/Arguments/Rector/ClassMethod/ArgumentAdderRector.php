@@ -19,6 +19,7 @@ use Rector\Arguments\NodeAnalyzer\ArgumentAddingScope;
 use Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector;
 use Rector\Arguments\ValueObject\ArgumentAdder;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -224,7 +225,7 @@ CODE_SAMPLE
         if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return;
         }
-        if (!$this->isName($staticCall->class, 'parent')) {
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
             return;
         }
         $staticCall->args[$position] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable($argumentName));

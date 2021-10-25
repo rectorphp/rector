@@ -15,6 +15,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
@@ -131,7 +132,7 @@ final class ArrayCallableMethodMatcher
     private function resolveClassConstFetchType(\PhpParser\Node\Expr\ClassConstFetch $classConstFetch)
     {
         $classConstantReference = $this->valueResolver->getValue($classConstFetch);
-        if ($classConstantReference === 'static') {
+        if (\Rector\Core\Enum\ObjectReference::STATIC()->getValue() === $classConstantReference) {
             $classConstantReference = $classConstFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         }
         // non-class value

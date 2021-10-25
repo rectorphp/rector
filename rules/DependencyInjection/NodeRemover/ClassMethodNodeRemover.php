@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
@@ -77,7 +78,13 @@ final class ClassMethodNodeRemover
     }
     private function isParentConstructStaticCall(\PhpParser\Node $node) : bool
     {
-        return $this->isStaticCallNamed($node, 'parent', \Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($node->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($node->name, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
     }
     private function removeParamFromArgs(\PhpParser\Node\Expr\StaticCall $staticCall, string $paramName) : void
     {
@@ -108,15 +115,5 @@ final class ClassMethodNodeRemover
             }
             unset($classMethod->stmts[$key]);
         }
-    }
-    private function isStaticCallNamed(\PhpParser\Node $node, string $class, string $method) : bool
-    {
-        if (!$node instanceof \PhpParser\Node\Expr\StaticCall) {
-            return \false;
-        }
-        if (!$this->nodeNameResolver->isName($node->class, $class)) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($node->name, $method);
     }
 }

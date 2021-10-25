@@ -47,6 +47,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeDecorator\PropertyTypeDecorator;
@@ -71,22 +72,6 @@ final class NodeFactory
      * @var string
      */
     private const THIS = 'this';
-    /**
-     * @var string
-     */
-    private const REFERENCE_PARENT = 'parent';
-    /**
-     * @var string
-     */
-    private const REFERENCE_SELF = 'self';
-    /**
-     * @var string
-     */
-    private const REFERENCE_STATIC = 'static';
-    /**
-     * @var string[]
-     */
-    private const REFERENCES = [self::REFERENCE_STATIC, self::REFERENCE_PARENT, self::REFERENCE_SELF];
     /**
      * @var \PhpParser\BuilderFactory
      */
@@ -145,16 +130,18 @@ final class NodeFactory
     }
     /**
      * Creates "\SomeClass::CONSTANT"
+     * @param string|\Rector\Core\Enum\ObjectReference $className
      */
-    public function createClassConstFetch(string $className, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
+    public function createClassConstFetch($className, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
-        $classNameNode = \in_array($className, self::REFERENCES, \true) ? new \PhpParser\Node\Name($className) : new \PhpParser\Node\Name\FullyQualified($className);
-        return $this->createClassConstFetchFromName($classNameNode, $constantName);
+        $name = $this->createName($className);
+        return $this->createClassConstFetchFromName($name, $constantName);
     }
     /**
      * Creates "\SomeClass::class"
+     * @param string|\Rector\Core\Enum\ObjectReference $className
      */
-    public function createClassConstReference(string $className) : \PhpParser\Node\Expr\ClassConstFetch
+    public function createClassConstReference($className) : \PhpParser\Node\Expr\ClassConstFetch
     {
         return $this->createClassConstFetch($className, 'class');
     }
@@ -287,15 +274,7 @@ final class NodeFactory
      */
     public function createParentConstructWithParams(array $params) : \PhpParser\Node\Expr\StaticCall
     {
-        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(self::REFERENCE_PARENT), new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::CONSTRUCT), $this->createArgsFromParams($params));
-    }
-    public function createStaticProtectedPropertyWithDefault(string $name, \PhpParser\Node $node) : \PhpParser\Node\Stmt\Property
-    {
-        $propertyBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($node);
-        return $propertyBuilder->getNode();
+        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue()), new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::CONSTRUCT), $this->createArgsFromParams($params));
     }
     public function createProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
@@ -388,13 +367,13 @@ final class NodeFactory
     }
     /**
      * @param Node[] $args
+     * @param string|\Rector\Core\Enum\ObjectReference $class
      */
-    public function createStaticCall(string $class, string $method, array $args = []) : \PhpParser\Node\Expr\StaticCall
+    public function createStaticCall($class, string $method, array $args = []) : \PhpParser\Node\Expr\StaticCall
     {
-        $class = $this->createClassPart($class);
-        $staticCall = new \PhpParser\Node\Expr\StaticCall($class, $method);
-        $staticCall->args = $this->createArgs($args);
-        return $staticCall;
+        $name = $this->createName($class);
+        $args = $this->createArgs($args);
+        return new \PhpParser\Node\Expr\StaticCall($name, $method, $args);
     }
     /**
      * @param mixed[] $arguments
@@ -406,7 +385,7 @@ final class NodeFactory
     }
     public function createSelfFetchConstant(string $constantName, \PhpParser\Node $node) : \PhpParser\Node\Expr\ClassConstFetch
     {
-        $name = new \PhpParser\Node\Name('self');
+        $name = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME));
         return new \PhpParser\Node\Expr\ClassConstFetch($name, $constantName);
     }
@@ -461,7 +440,7 @@ final class NodeFactory
     {
         $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
         $classNameString = $className->toString();
-        if (\in_array($classNameString, ['self', 'static'], \true)) {
+        if (\in_array($classNameString, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()], \true)) {
             $currentNode = $this->currentNodeProvider->getNode();
             if ($currentNode !== null) {
                 $className = $currentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
@@ -544,16 +523,6 @@ final class NodeFactory
         return $value;
     }
     /**
-     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
-     */
-    private function createClassPart(string $class)
-    {
-        if (\in_array($class, self::REFERENCES, \true)) {
-            return new \PhpParser\Node\Name($class);
-        }
-        return new \PhpParser\Node\Name\FullyQualified($class);
-    }
-    /**
      * @param int|string|null $key
      */
     private function decoreateArrayItemWithKey($key, \PhpParser\Node\Expr\ArrayItem $arrayItem) : void
@@ -581,5 +550,19 @@ final class NodeFactory
         $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
         $param->type = $phpParserTypeNode;
         return $param;
+    }
+    /**
+     * @param string|\Rector\Core\Enum\ObjectReference $className
+     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     */
+    private function createName($className)
+    {
+        if ($className instanceof \Rector\Core\Enum\ObjectReference) {
+            return new \PhpParser\Node\Name($className->getValue());
+        }
+        if (\Rector\Core\Enum\ObjectReference::isValid($className)) {
+            return new \PhpParser\Node\Name($className);
+        }
+        return new \PhpParser\Node\Name\FullyQualified($className);
     }
 }

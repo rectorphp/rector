@@ -1840,6 +1840,7 @@ return array(
     'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => $baseDir . '/src/DependencyInjection/RectorContainerFactory.php',
     'Rector\\Core\\Differ\\DefaultDiffer' => $baseDir . '/src/Differ/DefaultDiffer.php',
     'Rector\\Core\\Enum\\ApplicationPhase' => $baseDir . '/src/Enum/ApplicationPhase.php',
+    'Rector\\Core\\Enum\\ObjectReference' => $baseDir . '/src/Enum/ObjectReference.php',
     'Rector\\Core\\Error\\ExceptionCorrector' => $baseDir . '/src/Error/ExceptionCorrector.php',
     'Rector\\Core\\Exception\\Application\\FileProcessingException' => $baseDir . '/src/Exception/Application/FileProcessingException.php',
     'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => $baseDir . '/src/Exception/Configuration/InvalidConfigurationException.php',

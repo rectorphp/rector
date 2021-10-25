@@ -16,6 +16,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -76,7 +77,7 @@ final class ValueResolver
         }
         if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch && $resolvedClassReference) {
             $class = $this->nodeNameResolver->getName($expr->class);
-            if (\in_array($class, ['self', 'static'], \true)) {
+            if (\in_array($class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()], \true)) {
                 return $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
             }
             if ($this->nodeNameResolver->isName($expr->name, 'class')) {
@@ -230,7 +231,7 @@ final class ValueResolver
         if ($constant === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if ($class === 'self') {
+        if ($class === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
             $class = (string) $classConstFetch->class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         }
         if ($constant === 'class') {

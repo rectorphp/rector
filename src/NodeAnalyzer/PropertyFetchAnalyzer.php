@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
@@ -48,7 +49,7 @@ final class PropertyFetchAnalyzer
             return $this->nodeNameResolver->isName($node->var, 'this');
         }
         if ($node instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
-            return $this->nodeNameResolver->isName($node->class, 'self');
+            return $this->nodeNameResolver->isName($node->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue());
         }
         return \false;
     }
@@ -77,7 +78,7 @@ final class PropertyFetchAnalyzer
         if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch && !$this->nodeNameResolver->isName($expr->var, 'this')) {
             return \false;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, 'self')) {
+        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue())) {
             return \false;
         }
         $classLike = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);

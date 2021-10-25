@@ -16,6 +16,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -175,7 +176,10 @@ final class ReturnTypeInferer
     }
     private function isStaticType(\PHPStan\Type\Type $type) : bool
     {
-        return $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $type->getClassName() === 'static';
+        if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            return \false;
+        }
+        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers

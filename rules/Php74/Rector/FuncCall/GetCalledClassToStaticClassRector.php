@@ -5,6 +5,7 @@ namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -54,7 +55,7 @@ CODE_SAMPLE
         if (!$this->isName($node, 'get_called_class')) {
             return null;
         }
-        return $this->nodeFactory->createClassConstFetch('static', 'class');
+        return $this->nodeFactory->createClassConstFetch(\Rector\Core\Enum\ObjectReference::STATIC(), 'class');
     }
     public function provideMinPhpVersion() : int
     {

@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
+use Rector\Core\Enum\ObjectReference;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
@@ -29,7 +30,7 @@ final class ParentStaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('parent');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
     }
     /**
      * @param \PHPStan\Type\Type $type
@@ -37,6 +38,6 @@ final class ParentStaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
-        return new \PhpParser\Node\Name('parent');
+        return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
     }
 }

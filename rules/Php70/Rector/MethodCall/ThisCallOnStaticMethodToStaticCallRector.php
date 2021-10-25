@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -105,25 +106,25 @@ CODE_SAMPLE
         if (!$isStaticMethod) {
             return null;
         }
-        $classReference = $this->resolveClassSelf($node);
-        return $this->nodeFactory->createStaticCall($classReference, $methodName, $node->args);
+        $objectReference = $this->resolveClassSelf($node);
+        return $this->nodeFactory->createStaticCall($objectReference, $methodName, $node->args);
     }
-    private function resolveClassSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : string
+    private function resolveClassSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : \Rector\Core\Enum\ObjectReference
     {
         $classLike = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
-            return 'static';
+            return \Rector\Core\Enum\ObjectReference::STATIC();
         }
         if ($classLike->isFinal()) {
-            return 'self';
+            return \Rector\Core\Enum\ObjectReference::SELF();
         }
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (!$methodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
-            return 'static';
+            return \Rector\Core\Enum\ObjectReference::STATIC();
         }
         if (!$methodReflection->isPrivate()) {
-            return 'static';
+            return \Rector\Core\Enum\ObjectReference::STATIC();
         }
-        return 'self';
+        return \Rector\Core\Enum\ObjectReference::SELF();
     }
 }

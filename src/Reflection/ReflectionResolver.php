@@ -23,7 +23,6 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionMethod;
 final class ReflectionResolver
 {
     /**
@@ -67,18 +66,6 @@ final class ReflectionResolver
             return $classReflection->getNativeMethod($methodName);
         }
         return null;
-    }
-    /**
-     * @param class-string $className
-     */
-    public function resolveNativeClassMethodReflection(string $className, string $methodName) : ?\ReflectionMethod
-    {
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $reflectionClass = $classReflection->getNativeReflection();
-        return $reflectionClass->hasMethod($methodName) ? $reflectionClass->getMethod($methodName) : null;
     }
     public function resolveMethodReflectionFromStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PHPStan\Reflection\MethodReflection
     {

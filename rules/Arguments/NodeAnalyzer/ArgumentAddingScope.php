@@ -7,6 +7,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use Rector\Arguments\ValueObject\ArgumentAdder;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ArgumentAddingScope
 {
@@ -43,7 +44,7 @@ final class ArgumentAddingScope
             if (!$expr->class instanceof \PhpParser\Node\Name) {
                 return \false;
             }
-            if ($this->nodeNameResolver->isName($expr->class, 'parent')) {
+            if ($this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
                 return $scope === self::SCOPE_PARENT_CALL;
             }
             return $scope === self::SCOPE_METHOD_CALL;
