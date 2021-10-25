@@ -110,6 +110,9 @@ CODE_SAMPLE
                 continue;
             }
             /** @var If_ $stmt */
+            if ($stmt->stmts === null) {
+                continue;
+            }
             if (\count($stmt->stmts) === 1) {
                 $node->stmts[$key] = $stmt->stmts[0];
                 continue;

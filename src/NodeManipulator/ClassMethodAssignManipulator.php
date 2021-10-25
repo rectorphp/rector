@@ -16,6 +16,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\NodeFinder;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
@@ -25,7 +26,6 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20211025\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodAssignManipulator
 {
     /**
@@ -36,10 +36,6 @@ final class ClassMethodAssignManipulator
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    /**
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
     /**
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
@@ -61,18 +57,22 @@ final class ClassMethodAssignManipulator
      */
     private $reflectionResolver;
     /**
+     * @var \PhpParser\NodeFinder
+     */
+    private $nodeFinder;
+    /**
      * @var \Rector\Core\NodeManipulator\ArrayDestructVariableFilter
      */
     private $arrayDestructVariableFilter;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211025\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->variableManipulator = $variableManipulator;
         $this->nodeComparator = $nodeComparator;
         $this->reflectionResolver = $reflectionResolver;
+        $this->nodeFinder = $nodeFinder;
         $this->arrayDestructVariableFilter = $arrayDestructVariableFilter;
     }
     /**
@@ -162,37 +162,41 @@ final class ClassMethodAssignManipulator
     private function collectReferenceVariableNames(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $referencedVariables = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use(&$referencedVariables) {
-            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
-                return null;
+        /** @var Variable[] $variables */
+        $variables = $this->nodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\Variable::class);
+        foreach ($variables as $variable) {
+            if ($this->nodeNameResolver->isName($variable, 'this')) {
+                continue;
             }
-            if ($this->nodeNameResolver->isName($node, 'this')) {
-                return null;
-            }
-            $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
-                /** @var string $variableName */
-                $variableName = $this->nodeNameResolver->getName($node);
+            $parent = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parent !== null && $this->isExplicitlyReferenced($parent)) {
+                $variableName = $this->nodeNameResolver->getName($variable);
+                if ($variableName === null) {
+                    continue;
+                }
                 $referencedVariables[] = $variableName;
-                return null;
+                continue;
             }
             $argumentPosition = null;
-            if ($parentNode instanceof \PhpParser\Node\Arg) {
-                $argumentPosition = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION);
-                $parentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parent instanceof \PhpParser\Node\Arg) {
+                $argumentPosition = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION);
+                $parent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             }
-            if (!$parentNode instanceof \PhpParser\Node) {
-                return null;
+            if (!$parent instanceof \PhpParser\Node) {
+                continue;
             }
             if ($argumentPosition === null) {
-                return null;
+                continue;
             }
-            /** @var string $variableName */
-            $variableName = $this->nodeNameResolver->getName($node);
-            if ($this->isCallOrConstructorWithReference($parentNode, $node, $argumentPosition)) {
-                $referencedVariables[] = $variableName;
+            $variableName = $this->nodeNameResolver->getName($variable);
+            if ($variableName === null) {
+                continue;
             }
-        });
+            if (!$this->isCallOrConstructorWithReference($parent, $variable, $argumentPosition)) {
+                continue;
+            }
+            $referencedVariables[] = $variableName;
+        }
         return $referencedVariables;
     }
     private function findParentForeach(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Stmt\Foreach_

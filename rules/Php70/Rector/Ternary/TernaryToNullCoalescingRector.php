@@ -74,6 +74,9 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
         if ($ternary->if === null) {
             return null;
         }
+        if ($isset->vars === null) {
+            return null;
+        }
         // none or multiple isset values cannot be handled here
         if (!isset($isset->vars[0])) {
             return null;
@@ -81,10 +84,10 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
         if (\count($isset->vars) > 1) {
             return null;
         }
-        if ($this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
-            return new \PhpParser\Node\Expr\BinaryOp\Coalesce($ternary->if, $ternary->else);
+        if (!$this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
+            return null;
         }
-        return null;
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($ternary->if, $ternary->else);
     }
     private function isNullMatch(\PhpParser\Node\Expr $possibleNullExpr, \PhpParser\Node\Expr $firstNode, \PhpParser\Node\Expr $secondNode) : bool
     {

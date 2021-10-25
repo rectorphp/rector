@@ -78,11 +78,14 @@ final class BinaryOpManipulator
         }
         return new $inversedNodeClass($binaryOp->left, $binaryOp->right);
     }
-    public function inverseNode(\PhpParser\Node\Expr $expr) : \PhpParser\Node
+    /**
+     * @return \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr|\PhpParser\Node\Expr\BooleanNot
+     */
+    public function inverseNode(\PhpParser\Node\Expr $expr)
     {
         if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
-            if ($inversedBinaryOp) {
+            if ($inversedBinaryOp !== null) {
                 return new $inversedBinaryOp($expr->left, $expr->right);
             }
         }
@@ -116,6 +119,9 @@ final class BinaryOpManipulator
             return \is_a($node, $condition, \true);
         };
     }
+    /**
+     * @return class-string<BinaryOp>|null
+     */
     private function resolveInversedNodeClass(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?string
     {
         $inversedNodeClass = $this->assignAndBinaryMap->getInversed($binaryOp);

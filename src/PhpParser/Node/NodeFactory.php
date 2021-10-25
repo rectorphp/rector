@@ -328,7 +328,6 @@ final class NodeFactory
         return $methodBuilder->getNode();
     }
     /**
-     * @todo decouple to StackNodeFactory
      * @param Expr[] $exprs
      */
     public function createConcat(array $exprs) : ?\PhpParser\Node\Expr\BinaryOp\Concat
@@ -505,7 +504,7 @@ final class NodeFactory
             $arrayItem = new \PhpParser\Node\Expr\ArrayItem($item->value);
         }
         if ($arrayItem !== null) {
-            $this->decoreateArrayItemWithKey($key, $arrayItem);
+            $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
         }
         $nodeClass = \is_object($item) ? \get_class($item) : $item;
@@ -525,7 +524,7 @@ final class NodeFactory
     /**
      * @param int|string|null $key
      */
-    private function decoreateArrayItemWithKey($key, \PhpParser\Node\Expr\ArrayItem $arrayItem) : void
+    private function decorateArrayItemWithKey($key, \PhpParser\Node\Expr\ArrayItem $arrayItem) : void
     {
         if ($key !== null) {
             $arrayItem->key = \PhpParser\BuilderHelpers::normalizeValue($key);

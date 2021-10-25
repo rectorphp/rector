@@ -7,7 +7,6 @@
         "php": ">=8.0",
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.3|^6.0",
-        "symplify\/autowire-array-parameter": "^9.5",
         "symplify\/smart-file-system": "^9.5",
         "phpstan\/phpstan": "^0.12.99",
         "symfony\/http-kernel": "^5.3|^6.0",
