@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -79,7 +80,8 @@ final class TypeProvidingExprFromClassResolver
     }
     private function resolveMethodCallProvidingType(\PHPStan\Reflection\ClassReflection $classReflection, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\MethodCall
     {
-        foreach ($classReflection->getNativeMethods() as $methodReflection) {
+        $methodReflections = $this->getClassMethodReflections($classReflection);
+        foreach ($methodReflections as $methodReflection) {
             $functionVariant = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
             $returnType = $functionVariant->getReturnType();
             if (!$this->isMatchingType($returnType, $objectType)) {
@@ -128,5 +130,17 @@ final class TypeProvidingExprFromClassResolver
             return \false;
         }
         return $readableType->equals($objectType);
+    }
+    /**
+     * @return MethodReflection[]
+     */
+    private function getClassMethodReflections(\PHPStan\Reflection\ClassReflection $classReflection) : array
+    {
+        $nativeClassReflection = $classReflection->getNativeReflection();
+        $methodReflections = [];
+        foreach ($nativeClassReflection->getMethods() as $reflectionMethod) {
+            $methodReflections[] = $classReflection->getNativeMethod($reflectionMethod->getName());
+        }
+        return $methodReflections;
     }
 }
