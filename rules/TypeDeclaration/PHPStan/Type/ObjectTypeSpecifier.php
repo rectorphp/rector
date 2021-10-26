@@ -29,9 +29,6 @@ final class ObjectTypeSpecifier
     ) {
     }
 
-    /**
-     * @return AliasedObjectType|FullyQualifiedObjectType|ObjectType|MixedType
-     */
     public function narrowToFullyQualifiedOrAliasedObjectType(
         Node $node,
         ObjectType $objectType

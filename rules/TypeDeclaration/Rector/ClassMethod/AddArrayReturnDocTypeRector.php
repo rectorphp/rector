@@ -132,13 +132,13 @@ CODE_SAMPLE
 
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
 
-        if ($phpDocInfo->hasChanged()) {
-            $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
-            $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-            return $node;
+        if (! $phpDocInfo->hasChanged()) {
+            return null;
         }
 
-        return null;
+        $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
+        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+        return $node;
     }
 
     private function shouldSkip(ClassMethod $classMethod, PhpDocInfo $phpDocInfo): bool
@@ -163,11 +163,6 @@ CODE_SAMPLE
         return $currentPhpDocReturnType instanceof IterableType;
     }
 
-    /**
-     * @deprecated
-     * @todo merge to
-     * @see \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
-     */
     private function shouldSkipType(
         Type $newType,
         Type $currentType,

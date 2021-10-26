@@ -2,11 +2,14 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureForPhp80;
 
-final class Static_
+final class StaticDocBlock
 {
-    public function getStatic()
+    /**
+     * @return static
+     */
+    public function getSelf()
     {
-        return new static();
+        return $this;
     }
 }
 
@@ -16,11 +19,14 @@ final class Static_
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\FixtureForPhp80;
 
-final class Static_
+final class StaticDocBlock
 {
-    public function getStatic(): static
+    /**
+     * @return static
+     */
+    public function getSelf(): static
     {
-        return new static();
+        return $this;
     }
 }
 

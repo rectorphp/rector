@@ -92,16 +92,16 @@ final class NodeScopeAndMetadataDecorator
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function decorateNodesFromString(array $nodes): array
+    public function decorateStmtsFromString(array $stmts): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
         $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->statementNodeVisitor);
 
-        return $nodeTraverser->traverse($nodes);
+        return $nodeTraverser->traverse($stmts);
     }
 }

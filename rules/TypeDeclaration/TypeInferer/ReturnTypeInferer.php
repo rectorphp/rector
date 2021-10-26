@@ -197,30 +197,30 @@ final class ReturnTypeInferer
 
     private function resolveUnionStaticTypes(UnionType $unionType, bool $isSupportedStaticReturnType): UnionType|null
     {
-        $returnTypes = $unionType->getTypes();
-        $types = [];
+        $resolvedTypes = [];
         $hasStatic = false;
 
-        foreach ($returnTypes as $returnType) {
-            if ($this->isStaticType($returnType)) {
-                /** @var FullyQualifiedObjectType $returnType */
-                $types[] = new ThisType($returnType->getClassName());
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($this->isStaticType($unionedType)) {
+                /** @var FullyQualifiedObjectType $unionedType */
+                $resolvedTypes[] = new ThisType($unionedType->getClassName());
                 $hasStatic = true;
                 continue;
             }
 
-            $types[] = $returnType;
+            $resolvedTypes[] = $unionedType;
         }
 
         if (! $hasStatic) {
             return $unionType;
         }
 
+        // has static, but it is not supported
         if (! $isSupportedStaticReturnType) {
             return null;
         }
 
-        return new UnionType($types);
+        return new UnionType($resolvedTypes);
     }
 
     private function resolveStaticType(

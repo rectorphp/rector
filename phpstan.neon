@@ -40,7 +40,7 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     checkGenericClassInNonGenericObjectType: false
 
-    excludes_analyse:
+    excludePaths:
         # temporary stinrgable migration from template type provider
         - src/Console/Command/InitCommand.php
 

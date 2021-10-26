@@ -48,7 +48,7 @@ final class InlineCodeParser
     public function __construct(
         private BetterStandardPrinter $betterStandardPrinter,
         private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private Parser $parser,
+        private SimplePhpParser $simplePhpParser,
         private SmartFileSystem $smartFileSystem
     ) {
     }
@@ -67,8 +67,8 @@ final class InlineCodeParser
         $content = Strings::match($content, self::OPEN_PHP_TAG_REGEX) ? $content : '<?php ' . $content;
         $content = Strings::match($content, self::ENDING_SEMI_COLON_REGEX) ? $content : $content . ';';
 
-        $nodes = (array) $this->parser->parse($content);
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromString($nodes);
+        $stmts = $this->simplePhpParser->parseString($content);
+        return $this->nodeScopeAndMetadataDecorator->decorateStmtsFromString($stmts);
     }
 
     public function stringify(Expr $expr): string
