@@ -88,15 +88,19 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         return '' === $str ? [] : [\ord($str)];
     }
     /**
+     * @return mixed
      * @param string ...$suffix
      */
-    public function append(...$suffix) : parent
+    public function append(...$suffix)
     {
         $str = clone $this;
         $str->string .= 1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix);
         return $str;
     }
-    public function camel() : parent
+    /**
+     * @return mixed
+     */
+    public function camel()
     {
         $str = clone $this;
         $str->string = \lcfirst(\str_replace(' ', '', \ucwords(\preg_replace('/[^a-zA-Z0-9\\x7f-\\xff]++/', ' ', $this->string))));
@@ -146,7 +150,10 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         }
         return $string === $this->string;
     }
-    public function folded() : parent
+    /**
+     * @return mixed
+     */
+    public function folded()
     {
         $str = clone $this;
         $str->string = \strtolower($str->string);
@@ -193,10 +200,11 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         return '' === $this->string || \preg_match('//u', $this->string);
     }
     /**
+     * @return mixed
      * @param mixed[] $strings
      * @param string|null $lastGlue
      */
-    public function join($strings, $lastGlue = null) : parent
+    public function join($strings, $lastGlue = null)
     {
         $str = clone $this;
         $tail = null !== $lastGlue && 1 < \count($strings) ? $lastGlue . \array_pop($strings) : '';
@@ -207,7 +215,10 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
     {
         return \strlen($this->string);
     }
-    public function lower() : parent
+    /**
+     * @return mixed
+     */
+    public function lower()
     {
         $str = clone $this;
         $str->string = \strtolower($str->string);
@@ -248,49 +259,54 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         return $matches;
     }
     /**
+     * @return mixed
      * @param int $length
      * @param string $padStr
      */
-    public function padBoth($length, $padStr = ' ') : parent
+    public function padBoth($length, $padStr = ' ')
     {
         $str = clone $this;
         $str->string = \str_pad($this->string, $length, $padStr, \STR_PAD_BOTH);
         return $str;
     }
     /**
+     * @return mixed
      * @param int $length
      * @param string $padStr
      */
-    public function padEnd($length, $padStr = ' ') : parent
+    public function padEnd($length, $padStr = ' ')
     {
         $str = clone $this;
         $str->string = \str_pad($this->string, $length, $padStr, \STR_PAD_RIGHT);
         return $str;
     }
     /**
+     * @return mixed
      * @param int $length
      * @param string $padStr
      */
-    public function padStart($length, $padStr = ' ') : parent
+    public function padStart($length, $padStr = ' ')
     {
         $str = clone $this;
         $str->string = \str_pad($this->string, $length, $padStr, \STR_PAD_LEFT);
         return $str;
     }
     /**
+     * @return mixed
      * @param string ...$prefix
      */
-    public function prepend(...$prefix) : parent
+    public function prepend(...$prefix)
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $str->string;
         return $str;
     }
     /**
+     * @return mixed
      * @param string $from
      * @param string $to
      */
-    public function replace($from, $to) : parent
+    public function replace($from, $to)
     {
         $str = clone $this;
         if ('' !== $from) {
@@ -299,9 +315,10 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         return $str;
     }
     /**
+     * @return mixed
      * @param string $fromRegexp
      */
-    public function replaceMatches($fromRegexp, $to) : parent
+    public function replaceMatches($fromRegexp, $to)
     {
         if ($this->ignoreCase) {
             $fromRegexp .= 'i';
@@ -334,34 +351,42 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         $str->string = $string;
         return $str;
     }
-    public function reverse() : parent
+    /**
+     * @return mixed
+     */
+    public function reverse()
     {
         $str = clone $this;
         $str->string = \strrev($str->string);
         return $str;
     }
     /**
+     * @return mixed
      * @param int $start
      * @param int|null $length
      */
-    public function slice($start = 0, $length = null) : parent
+    public function slice($start = 0, $length = null)
     {
         $str = clone $this;
         $str->string = (string) \substr($this->string, $start, $length ?? \PHP_INT_MAX);
         return $str;
     }
-    public function snake() : parent
+    /**
+     * @return mixed
+     */
+    public function snake()
     {
         $str = $this->camel()->title();
         $str->string = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20211026\\1_\\2', $str->string));
         return $str;
     }
     /**
+     * @return mixed
      * @param string $replacement
      * @param int $start
      * @param int|null $length
      */
-    public function splice($replacement, $start = 0, $length = null) : parent
+    public function splice($replacement, $start = 0, $length = null)
     {
         $str = clone $this;
         $str->string = \substr_replace($this->string, $replacement, $start, $length ?? \PHP_INT_MAX);
@@ -401,9 +426,10 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         return '' !== $prefix && 0 === ($this->ignoreCase ? \strncasecmp($this->string, $prefix, \strlen($prefix)) : \strncmp($this->string, $prefix, \strlen($prefix)));
     }
     /**
+     * @return mixed
      * @param bool $allWords
      */
-    public function title($allWords = \false) : parent
+    public function title($allWords = \false)
     {
         $str = clone $this;
         $str->string = $allWords ? \ucwords($str->string) : \ucfirst($str->string);
@@ -449,33 +475,39 @@ class ByteString extends \RectorPrefix20211026\Symfony\Component\String\Abstract
         return $u;
     }
     /**
+     * @return mixed
      * @param string $chars
      */
-    public function trim($chars = " \t\n\r\0\v\f") : parent
+    public function trim($chars = " \t\n\r\0\v\f")
     {
         $str = clone $this;
         $str->string = \trim($str->string, $chars);
         return $str;
     }
     /**
+     * @return mixed
      * @param string $chars
      */
-    public function trimEnd($chars = " \t\n\r\0\v\f") : parent
+    public function trimEnd($chars = " \t\n\r\0\v\f")
     {
         $str = clone $this;
         $str->string = \rtrim($str->string, $chars);
         return $str;
     }
     /**
+     * @return mixed
      * @param string $chars
      */
-    public function trimStart($chars = " \t\n\r\0\v\f") : parent
+    public function trimStart($chars = " \t\n\r\0\v\f")
     {
         $str = clone $this;
         $str->string = \ltrim($str->string, $chars);
         return $str;
     }
-    public function upper() : parent
+    /**
+     * @return mixed
+     */
+    public function upper()
     {
         $str = clone $this;
         $str->string = \strtoupper($str->string);

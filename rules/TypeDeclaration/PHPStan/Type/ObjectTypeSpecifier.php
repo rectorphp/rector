@@ -10,14 +10,19 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StaticType;
+use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ObjectTypeSpecifier
@@ -31,9 +36,10 @@ final class ObjectTypeSpecifier
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @return \PHPStan\Type\ObjectType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\PHPStan\Type\MixedType
+     * @param \PHPStan\Analyser\Scope|null $scope
+     * @return \PHPStan\Type\ObjectType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\PHPStan\Type\StaticType|\PHPStan\Type\MixedType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
+    public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
@@ -53,6 +59,12 @@ final class ObjectTypeSpecifier
             return $sameNamespacedObjectType;
         }
         $className = \ltrim($objectType->getClassName(), '\\');
+        if (\Rector\Core\Enum\ObjectReference::isValid($className)) {
+            if (!$scope instanceof \PHPStan\Analyser\Scope) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            return $this->resolveObjectReferenceType($scope, $className);
+        }
         if ($this->reflectionProvider->hasClass($className)) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
@@ -181,5 +193,29 @@ final class ObjectTypeSpecifier
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($objectType->getClassName());
         }
         return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType($objectType->getClassName(), $useUse->name->toString());
+    }
+    /**
+     * @return \PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
+     */
+    private function resolveObjectReferenceType(\PHPStan\Analyser\Scope $scope, string $classReferenceValue)
+    {
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        if (\Rector\Core\Enum\ObjectReference::STATIC()->getValue() === $classReferenceValue) {
+            return new \PHPStan\Type\StaticType($classReflection);
+        }
+        if (\Rector\Core\Enum\ObjectReference::SELF()->getValue() === $classReferenceValue) {
+            return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($classReferenceValue, null, $classReflection);
+        }
+        if (\Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
+            $parentClassReflection = $classReflection->getParentClass();
+            if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($parentClassReflection->getName(), null, $parentClassReflection);
+        }
+        throw new \Rector\Core\Exception\ShouldNotHappenException();
     }
 }

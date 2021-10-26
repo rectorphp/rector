@@ -1904,6 +1904,7 @@ return array(
     'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ObjectTypeToCallReflectionResolver' => $baseDir . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ObjectTypeToCallReflectionResolver.php',
     'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverRegistry' => $baseDir . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverRegistry.php',
     'Rector\\Core\\PhpParser\\AstResolver' => $baseDir . '/src/PhpParser/AstResolver.php',
+    'Rector\\Core\\PhpParser\\ClassLikeAstResolver' => $baseDir . '/src/PhpParser/ClassLikeAstResolver.php',
     'Rector\\Core\\PhpParser\\Comparing\\ConditionSearcher' => $baseDir . '/src/PhpParser/Comparing/ConditionSearcher.php',
     'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => $baseDir . '/src/PhpParser/Comparing/NodeComparator.php',
     'Rector\\Core\\PhpParser\\NodeFinder\\FullyQualifiedFromUseFinder' => $baseDir . '/src/PhpParser/NodeFinder/FullyQualifiedFromUseFinder.php',

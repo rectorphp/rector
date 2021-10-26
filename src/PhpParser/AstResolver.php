@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
@@ -56,13 +55,6 @@ final class AstResolver
      */
     private $functionsByName = [];
     /**
-     * Parsing files is very heavy performance, so this will help to leverage it
-     * The value can be also null, as the method might not exist in the class.
-     *
-     * @var array<class-string, Class_|Trait_|Interface_|null>
-     */
-    private $classLikesByName = [];
-    /**
      * @var \Symplify\Astral\PhpParser\SmartPhpParser
      */
     private $smartPhpParser;
@@ -98,7 +90,11 @@ final class AstResolver
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\RectorPrefix20211026\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var \Rector\Core\PhpParser\ClassLikeAstResolver
+     */
+    private $classLikeAstResolver;
+    public function __construct(\RectorPrefix20211026\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->smartFileSystem = $smartFileSystem;
@@ -109,6 +105,7 @@ final class AstResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->reflectionResolver = $reflectionResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->classLikeAstResolver = $classLikeAstResolver;
     }
     /**
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|null
@@ -246,37 +243,7 @@ final class AstResolver
      */
     public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {
-        if ($classReflection->isBuiltin()) {
-            return null;
-        }
-        if (isset($this->classLikesByName[$classReflection->getName()])) {
-            return $this->classLikesByName[$classReflection->getName()];
-        }
-        $fileName = $classReflection->getFileName();
-        // probably internal class
-        if ($fileName === \false) {
-            // avoid parsing falsy-file again
-            $this->classLikesByName[$classReflection->getName()] = null;
-            return null;
-        }
-        $stmts = $this->smartPhpParser->parseFile($fileName);
-        if ($stmts === []) {
-            // avoid parsing falsy-file again
-            $this->classLikesByName[$classReflection->getName()] = null;
-            return null;
-        }
-        /** @var array<Class_|Trait_|Interface_> $classLikes */
-        $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Stmt\ClassLike::class);
-        $reflectionClassName = $classReflection->getName();
-        foreach ($classLikes as $classLike) {
-            if ($reflectionClassName !== $className) {
-                continue;
-            }
-            $this->classLikesByName[$classReflection->getName()] = $classLike;
-            return $classLike;
-        }
-        $this->classLikesByName[$classReflection->getName()] = null;
-        return null;
+        return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $className);
     }
     /**
      * @return Trait_[]
@@ -339,7 +306,10 @@ final class AstResolver
             return $node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->nodeNameResolver->isName($node, $methodName);
         });
         $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodName] = $classMethod;
-        return $classMethod;
+        if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return $classMethod;
+        }
+        return null;
     }
     /**
      * @return Stmt[]|null

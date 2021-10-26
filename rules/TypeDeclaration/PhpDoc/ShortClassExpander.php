@@ -45,7 +45,7 @@ final class ShortClassExpander
         if ($this->reflectionProvider->hasClass($namespacedTargetEntity)) {
             return $namespacedTargetEntity;
         }
-        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, new \PHPStan\Type\ObjectType($targetEntity));
+        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, new \PHPStan\Type\ObjectType($targetEntity), $scope);
         if ($resolvedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
             return $resolvedType->getFullyQualifiedName();
         }

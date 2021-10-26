@@ -335,12 +335,13 @@ final class NodeFactory
         if (\count($exprs) < 2) {
             return null;
         }
-        /** @var Expr $previousConcat */
         $previousConcat = \array_shift($exprs);
         foreach ($exprs as $expr) {
             $previousConcat = new \PhpParser\Node\Expr\BinaryOp\Concat($previousConcat, $expr);
         }
-        /** @var Concat $previousConcat */
+        if (!$previousConcat instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         return $previousConcat;
     }
     public function createClosureFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Expr\Closure
