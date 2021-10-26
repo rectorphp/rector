@@ -6,7 +6,6 @@ namespace Rector\Defluent\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Reflection\MethodReflection;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface;
 final class SameClassMethodCallAnalyzer
 {
     /**
@@ -35,19 +34,5 @@ final class SameClassMethodCallAnalyzer
         }
         $uniqueClasses = \array_unique($classOfClassMethod);
         return \count($uniqueClasses) < 2;
-    }
-    /**
-     * @param string[] $calleeUniqueTypes
-     */
-    public function isCorrectTypeCount(array $calleeUniqueTypes, \Rector\Defluent\Contract\ValueObject\FirstCallFactoryAwareInterface $firstCallFactoryAware) : bool
-    {
-        if ($calleeUniqueTypes === []) {
-            return \false;
-        }
-        // in case of factory method, 2 methods are allowed
-        if ($firstCallFactoryAware->isFirstCallFactory()) {
-            return \count($calleeUniqueTypes) === 2;
-        }
-        return \count($calleeUniqueTypes) === 1;
     }
 }

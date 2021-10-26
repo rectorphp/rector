@@ -1,14 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Defluent\ConflictGuard;
+namespace Rector\VendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\Type;
-use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,10 +20,6 @@ final class ParentClassMethodTypeOverrideGuard
      */
     private $nodeNameResolver;
     /**
-     * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
-     */
-    private $vendorLocationDetector;
-    /**
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
@@ -36,37 +31,12 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\CodingStyle\Reflection\VendorLocationDetector $vendorLocationDetector, \RectorPrefix20211026\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211026\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->vendorLocationDetector = $vendorLocationDetector;
         $this->pathNormalizer = $pathNormalizer;
         $this->astResolver = $astResolver;
         $this->paramTypeInferer = $paramTypeInferer;
-    }
-    public function hasParentMethodOutsideVendor(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
-    {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return \false;
-        }
-        $methodName = $classMethod->name->toString();
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            if ($classReflection === $ancestorClassReflection) {
-                continue;
-            }
-            if (!$ancestorClassReflection->hasMethod($methodName)) {
-                continue;
-            }
-            if ($this->vendorLocationDetector->detectFunctionLikeReflection($ancestorClassReflection)) {
-                return \true;
-            }
-        }
-        return \false;
     }
     public function isReturnTypeChangeAllowed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

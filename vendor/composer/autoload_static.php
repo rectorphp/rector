@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d
+class ComposerStaticInit6a7575deb01aef0c687b19caf698a667
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2411,42 +2411,8 @@ class ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
         'Rector\\DeadCode\\ValueObject\\VariableNodeUse' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableNodeUse.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
-        'Rector\\Defluent\\ConflictGuard\\ParentClassMethodTypeOverrideGuard' => __DIR__ . '/../..' . '/rules/Defluent/ConflictGuard/ParentClassMethodTypeOverrideGuard.php',
-        'Rector\\Defluent\\Contract\\ValueObject\\FirstCallFactoryAwareInterface' => __DIR__ . '/../..' . '/rules/Defluent/Contract/ValueObject/FirstCallFactoryAwareInterface.php',
-        'Rector\\Defluent\\Contract\\ValueObject\\RootExprAwareInterface' => __DIR__ . '/../..' . '/rules/Defluent/Contract/ValueObject/RootExprAwareInterface.php',
-        'Rector\\Defluent\\Matcher\\AssignAndRootExprAndNodesToAddMatcher' => __DIR__ . '/../..' . '/rules/Defluent/Matcher/AssignAndRootExprAndNodesToAddMatcher.php',
-        'Rector\\Defluent\\NodeAnalyzer\\ExprStringTypeResolver' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/ExprStringTypeResolver.php',
-        'Rector\\Defluent\\NodeAnalyzer\\FluentCallStaticTypeResolver' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/FluentCallStaticTypeResolver.php',
-        'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
-        'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallRootExtractor' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/FluentChainMethodCallRootExtractor.php',
-        'Rector\\Defluent\\NodeAnalyzer\\GetterMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/GetterMethodCallAnalyzer.php',
-        'Rector\\Defluent\\NodeAnalyzer\\MethodCallSkipAnalyzer' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/MethodCallSkipAnalyzer.php',
-        'Rector\\Defluent\\NodeAnalyzer\\NewFluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/NewFluentChainMethodCallNodeAnalyzer.php',
-        'Rector\\Defluent\\NodeAnalyzer\\SameClassMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Defluent/NodeAnalyzer/SameClassMethodCallAnalyzer.php',
-        'Rector\\Defluent\\NodeFactory\\FluentMethodCallAsArgFactory' => __DIR__ . '/../..' . '/rules/Defluent/NodeFactory/FluentMethodCallAsArgFactory.php',
-        'Rector\\Defluent\\NodeFactory\\NonFluentChainMethodCallFactory' => __DIR__ . '/../..' . '/rules/Defluent/NodeFactory/NonFluentChainMethodCallFactory.php',
-        'Rector\\Defluent\\NodeFactory\\ReturnFluentMethodCallFactory' => __DIR__ . '/../..' . '/rules/Defluent/NodeFactory/ReturnFluentMethodCallFactory.php',
-        'Rector\\Defluent\\NodeFactory\\SeparateReturnMethodCallFactory' => __DIR__ . '/../..' . '/rules/Defluent/NodeFactory/SeparateReturnMethodCallFactory.php',
-        'Rector\\Defluent\\NodeFactory\\VariableFromNewFactory' => __DIR__ . '/../..' . '/rules/Defluent/NodeFactory/VariableFromNewFactory.php',
-        'Rector\\Defluent\\NodeResolver\\FirstMethodCallVarResolver' => __DIR__ . '/../..' . '/rules/Defluent/NodeResolver/FirstMethodCallVarResolver.php',
-        'Rector\\Defluent\\Rector\\ClassMethod\\NormalToFluentRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/ClassMethod/NormalToFluentRector.php',
-        'Rector\\Defluent\\Rector\\ClassMethod\\ReturnThisRemoveRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/ClassMethod/ReturnThisRemoveRector.php',
-        'Rector\\Defluent\\Rector\\MethodCall\\FluentChainMethodCallToNormalMethodCallRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector.php',
-        'Rector\\Defluent\\Rector\\MethodCall\\InArgFluentChainMethodCallToStandaloneMethodCallRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/MethodCall/InArgFluentChainMethodCallToStandaloneMethodCallRector.php',
-        'Rector\\Defluent\\Rector\\MethodCall\\MethodCallOnSetterMethodCallToStandaloneAssignRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector.php',
-        'Rector\\Defluent\\Rector\\MethodCall\\NewFluentChainMethodCallToNonFluentRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/MethodCall/NewFluentChainMethodCallToNonFluentRector.php',
-        'Rector\\Defluent\\Rector\\Return_\\DefluentReturnMethodCallRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/Return_/DefluentReturnMethodCallRector.php',
-        'Rector\\Defluent\\Rector\\Return_\\ReturnFluentChainMethodCallToNormalMethodCallRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/Return_/ReturnFluentChainMethodCallToNormalMethodCallRector.php',
-        'Rector\\Defluent\\Rector\\Return_\\ReturnNewFluentChainMethodCallToNonFluentRector' => __DIR__ . '/../..' . '/rules/Defluent/Rector/Return_/ReturnNewFluentChainMethodCallToNonFluentRector.php',
-        'Rector\\Defluent\\Skipper\\FluentMethodCallSkipper' => __DIR__ . '/../..' . '/rules/Defluent/Skipper/FluentMethodCallSkipper.php',
-        'Rector\\Defluent\\ValueObjectFactory\\FluentMethodCallsFactory' => __DIR__ . '/../..' . '/rules/Defluent/ValueObjectFactory/FluentMethodCallsFactory.php',
-        'Rector\\Defluent\\ValueObject\\AbstractRootExpr' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/AbstractRootExpr.php',
-        'Rector\\Defluent\\ValueObject\\AssignAndRootExpr' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/AssignAndRootExpr.php',
-        'Rector\\Defluent\\ValueObject\\AssignAndRootExprAndNodesToAdd' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/AssignAndRootExprAndNodesToAdd.php',
-        'Rector\\Defluent\\ValueObject\\FirstAssignFluentCall' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/FirstAssignFluentCall.php',
-        'Rector\\Defluent\\ValueObject\\FluentCallsKind' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/FluentCallsKind.php',
-        'Rector\\Defluent\\ValueObject\\FluentMethodCalls' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/FluentMethodCalls.php',
-        'Rector\\Defluent\\ValueObject\\NormalToFluent' => __DIR__ . '/../..' . '/rules/Defluent/ValueObject/NormalToFluent.php',
+        'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
+        'Rector\\Defluent\\NodeAnalyzer\\SameClassMethodCallAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/SameClassMethodCallAnalyzer.php',
         'Rector\\DependencyInjection\\Collector\\VariablesToPropertyFetchCollection' => __DIR__ . '/../..' . '/rules/DependencyInjection/Collector/VariablesToPropertyFetchCollection.php',
         'Rector\\DependencyInjection\\NodeAnalyzer\\ControllerClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/DependencyInjection/NodeAnalyzer/ControllerClassMethodAnalyzer.php',
         'Rector\\DependencyInjection\\NodeFactory\\InjectMethodFactory' => __DIR__ . '/../..' . '/rules/DependencyInjection/NodeFactory/InjectMethodFactory.php',
@@ -3620,6 +3586,7 @@ class ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyTypeVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyTypeVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyVisibilityVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyVisibilityVendorLockResolver.php',
+        'Rector\\VendorLocker\\ParentClassMethodTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/ParentClassMethodTypeOverrideGuard.php',
         'Rector\\VendorLocker\\VendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/VendorLockResolver.php',
         'Rector\\VersionBonding\\Application\\MissedRectorDueVersionChecker' => __DIR__ . '/../..' . '/packages/VersionBonding/Application/MissedRectorDueVersionChecker.php',
         'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => __DIR__ . '/../..' . '/packages/VersionBonding/Contract/MinPhpVersionInterface.php',
@@ -3920,9 +3887,9 @@ class ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit488fd7d62ff2b00d1ff34fbfa999653d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6a7575deb01aef0c687b19caf698a667::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6a7575deb01aef0c687b19caf698a667::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6a7575deb01aef0c687b19caf698a667::$classMap;
 
         }, null, ClassLoader::class);
     }
