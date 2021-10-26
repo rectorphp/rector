@@ -92,6 +92,6 @@ final class TypeHasher
             }
         );
 
-        return $normalizedUnionType->describe(VerbosityLevel::cache());
+        return $normalizedUnionType->describe(VerbosityLevel::precise());
     }
 }

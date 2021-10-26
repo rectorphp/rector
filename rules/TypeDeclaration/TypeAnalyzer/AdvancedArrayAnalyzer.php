@@ -12,6 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -57,14 +58,12 @@ final class AdvancedArrayAnalyzer
         }
 
         $currentReturnType = $phpDocInfo->getReturnType();
-        return $currentReturnType instanceof ArrayType;
+        $arrayTypes = TypeUtils::getArrays($currentReturnType);
+        return $arrayTypes !== [];
     }
 
-    public function isMoreSpecificArrayTypeOverride(
-        Type $newType,
-        ClassMethod $classMethod,
-        PhpDocInfo $phpDocInfo
-    ): bool {
+    public function isMoreSpecificArrayTypeOverride(Type $newType, PhpDocInfo $phpDocInfo): bool
+    {
         if (! $newType instanceof ConstantArrayType) {
             return false;
         }

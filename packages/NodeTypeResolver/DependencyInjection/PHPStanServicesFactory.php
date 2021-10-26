@@ -6,11 +6,9 @@ namespace Rector\NodeTypeResolver\DependencyInjection;
 
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
-use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Dependency\DependencyResolver;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
-use PHPStan\DependencyInjection\Type\OperatorTypeSpecifyingExtensionRegistryProvider;
 use PHPStan\ExtensionInstaller\GeneratedConfig;
 use PHPStan\File\FileHelper;
 use PHPStan\PhpDoc\TypeNodeResolver;
@@ -66,14 +64,6 @@ final class PHPStanServicesFactory
     /**
      * @api
      */
-    public function createTypeSpecifier(): TypeSpecifier
-    {
-        return $this->container->getByType(TypeSpecifier::class);
-    }
-
-    /**
-     * @api
-     */
     public function createScopeFactory(): ScopeFactory
     {
         return $this->container->getByType(ScopeFactory::class);
@@ -93,14 +83,6 @@ final class PHPStanServicesFactory
     public function createFileHelper(): FileHelper
     {
         return $this->container->getByType(FileHelper::class);
-    }
-
-    /**
-     * @api
-     */
-    public function createOperatorTypeSpecifyingExtensionRegistryProvider(): OperatorTypeSpecifyingExtensionRegistryProvider
-    {
-        return $this->container->getByType(OperatorTypeSpecifyingExtensionRegistryProvider::class);
     }
 
     /**
