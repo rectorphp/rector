@@ -13,12 +13,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -32,7 +32,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class Php4ConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer
+        private Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer,
+        private ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
 
@@ -150,10 +151,11 @@ CODE_SAMPLE
 
     private function processParentPhp4ConstructCall(StaticCall $staticCall): void
     {
-        $parentClassName = $this->resolveParentClassName($staticCall);
+        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
+        $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
 
         // no parent class
-        if ($parentClassName === null) {
+        if (! $parentClassReflection instanceof ClassReflection) {
             return;
         }
 
@@ -162,7 +164,7 @@ CODE_SAMPLE
         }
 
         // rename ParentClass
-        if ($this->isName($staticCall->class, $parentClassName)) {
+        if ($this->isName($staticCall->class, $parentClassReflection->getName())) {
             $staticCall->class = new Name(ObjectReference::PARENT()->getValue());
         }
 
@@ -171,32 +173,11 @@ CODE_SAMPLE
         }
 
         // it's not a parent PHP 4 constructor call
-        if (! $this->isName($staticCall->name, $parentClassName)) {
+        if (! $this->isName($staticCall->name, $parentClassReflection->getName())) {
             return;
         }
 
         $staticCall->name = new Identifier(MethodName::CONSTRUCT);
-    }
-
-    private function resolveParentClassName(StaticCall $staticCall): ?string
-    {
-        $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
-        if (! $scope instanceof Scope) {
-            return null;
-        }
-
-        $classReflection = $scope->getClassReflection();
-
-        if (! $classReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        $parentClassReflection = $classReflection->getParentClass();
-        if (! $parentClassReflection instanceof ClassReflection) {
-            return null;
-        }
-
-        return $parentClassReflection->getName();
     }
 
     private function isLocalMethodCallNamed(Expr $expr, string $name): bool

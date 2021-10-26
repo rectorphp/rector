@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-class ThisClass
+final class ThisClass
 {
     /**
      * @return $this
@@ -19,7 +19,7 @@ class ThisClass
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\Fixture;
 
-class ThisClass
+final class ThisClass
 {
     /**
      * @return $this

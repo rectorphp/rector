@@ -70,7 +70,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         if ($loweredName === ObjectReference::PARENT()->getValue()) {
-            return $this->mapParent($node, $scope);
+            return $this->mapParent($scope);
         }
 
         if ($loweredName === ObjectReference::STATIC()->getValue()) {
@@ -99,19 +99,14 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new SelfObjectType($className);
     }
 
-    private function mapParent(Node $node, Scope $scope): ParentStaticType | MixedType
+    private function mapParent(Scope $scope): ParentStaticType | MixedType
     {
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
-        if ($parentClassName === null) {
+        $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
+        if (! $parentClassReflection instanceof ClassReflection) {
             return new MixedType();
         }
 
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
-        }
-
-        return new ParentStaticType($classReflection);
+        return new ParentStaticType($parentClassReflection);
     }
 
     private function mapStatic(Node $node, Scope $scope): MixedType | StaticType

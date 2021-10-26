@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
@@ -86,8 +87,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
-        if ($parentClassName === null) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
+        if (! $parentClassReflection instanceof ClassReflection) {
             $this->removeNode($node);
             return null;
         }

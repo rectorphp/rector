@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-class ThisClass
+final class ThisClass
 {
     /**
      * @param $this $param
@@ -20,7 +20,7 @@ class ThisClass
 
 namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\Fixture;
 
-class ThisClass
+final class ThisClass
 {
     /**
      * @param $this $param

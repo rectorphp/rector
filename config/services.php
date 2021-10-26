@@ -33,7 +33,7 @@ use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Symfony\Component\Console\Application as SymfonyApplication;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -76,7 +76,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/../src/PhpParser/NodeVisitor/CreatedByRuleNodeVisitor.php',
         ]);
 
-    $services->alias(SymfonyApplication::class, ConsoleApplication::class);
+    $services->alias(Application::class, ConsoleApplication::class);
 
     $services->set(FileSystemGuard::class);
 

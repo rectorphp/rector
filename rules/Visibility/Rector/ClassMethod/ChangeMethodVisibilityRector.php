@@ -10,6 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -96,7 +97,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+
+        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($scope);
         if ($parentClassName === null) {
             return null;
         }
