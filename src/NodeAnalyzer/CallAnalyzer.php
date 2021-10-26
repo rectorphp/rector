@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Symfony\Contracts\Service\Attribute\Required;
 
 final class CallAnalyzer
 {
@@ -25,9 +26,17 @@ final class CallAnalyzer
      */
     private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
 
+    private BetterNodeFinder $betterNodeFinder;
+
     public function __construct(
         private NodeComparator $nodeComparator
     ) {
+    }
+
+    #[Required]
+    public function autowireCallAnalyzer(BetterNodeFinder $betterNodeFinder): void
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function isObjectCall(Expr $expr): bool
@@ -66,16 +75,13 @@ final class CallAnalyzer
         return false;
     }
 
-    /**
-     * Inject BetterNodeFinder due Circular reference
-     */
-    public function isNewInstance(BetterNodeFinder $betterNodeFinder, Expr $expr): bool
+    public function isNewInstance(Expr $expr): bool
     {
         if ($expr instanceof Clone_ || $expr instanceof New_) {
             return true;
         }
 
-        return (bool) $betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $node) use ($expr): bool {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (Node $node) use ($expr): bool {
             if (! $node instanceof Assign) {
                 return false;
             }

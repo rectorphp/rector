@@ -13,6 +13,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
@@ -28,7 +29,8 @@ final class SimplifyUselessVariableRector extends AbstractRector
 {
     public function __construct(
         private AssignAndBinaryMap $assignAndBinaryMap,
-        private VariableAnalyzer $variableAnalyzer
+        private VariableAnalyzer $variableAnalyzer,
+        private CallAnalyzer $callAnalyzer
     ) {
     }
 
@@ -69,13 +71,10 @@ CODE_SAMPLE
             return null;
         }
 
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (! $previousNode instanceof Expression) {
-            return null;
-        }
-
-        /** @var AssignOp|Assign $previousNode */
-        $previousNode = $previousNode->expr;
+        /** @var Expression $previousExpression */
+        $previousExpression = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+        /** @var Assign|AssignOp $previousNode */
+        $previousNode = $previousExpression->expr;
         $previousVariableNode = $previousNode->var;
 
         if ($this->hasSomeComment($previousVariableNode)) {
@@ -131,10 +130,6 @@ CODE_SAMPLE
         $variableNode = $return->expr;
 
         $previousExpression = $return->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (! $previousExpression instanceof Node) {
-            return true;
-        }
-
         if (! $previousExpression instanceof Expression) {
             return true;
         }
@@ -154,7 +149,11 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->variableAnalyzer->isStaticOrGlobal($variableNode);
+        if ($this->variableAnalyzer->isStaticOrGlobal($variableNode)) {
+            return true;
+        }
+
+        return $this->callAnalyzer->isNewInstance($previousNode->var);
     }
 
     private function hasSomeComment(Expr $expr): bool
