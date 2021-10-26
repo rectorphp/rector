@@ -76,20 +76,17 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
             return new MixedType();
         }
 
+        $classReflection = $this->reflectionProvider->getClass($className);
+
         if ($reference === ObjectReference::STATIC()->getValue()) {
-            return new StaticType($className);
+            return new StaticType($classReflection);
         }
 
         if ($reference === ObjectReference::PARENT()->getValue()) {
-            return new ParentStaticType($className);
+            return new ParentStaticType($classReflection);
         }
 
-        if ($this->reflectionProvider->hasClass($className)) {
-            $classReflection = $this->reflectionProvider->getClass($className);
-            return new ThisType($classReflection);
-        }
-
-        return new ThisType($className);
+        return new ThisType($classReflection);
     }
 
     private function createScalarType(

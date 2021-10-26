@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $staticType = new StaticType($classReflection->getName());
+        $staticType = new StaticType($classReflection);
 
         foreach ($node->getParams() as $param) {
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $staticType);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -23,6 +24,7 @@ use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -35,7 +37,8 @@ final class TypeFactory
 {
     public function __construct(
         private UnionTypeFactory $unionTypeFactory,
-        private PhpVersionProvider $phpVersionProvider
+        private PhpVersionProvider $phpVersionProvider,
+        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -189,7 +192,13 @@ final class TypeFactory
                 PhpVersionFeature::STATIC_RETURN_TYPE
             )) {
                 /** @var ObjectType $traversedType */
-                return new ThisType($traversedType->getClassName());
+                $className = $traversedType->getClassName();
+                if (! $this->reflectionProvider->hasClass($className)) {
+                    throw new ShouldNotHappenException();
+                }
+
+                $classReflection = $this->reflectionProvider->getClass($className);
+                return new ThisType($classReflection);
             }
 
             if ($this->isStatic($traversedType)) {

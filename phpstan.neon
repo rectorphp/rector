@@ -510,3 +510,4 @@ parameters:
 
         # resolve later
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 9#'
+        - '#Cognitive complexity for "Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory\:\:normalizeObjectTypes\(\)" is 12, keep it under 9#'

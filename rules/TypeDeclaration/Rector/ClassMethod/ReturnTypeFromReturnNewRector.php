@@ -11,9 +11,17 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StaticType;
+use PHPStan\Type\ThisType;
+use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -26,7 +34,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromReturnNewRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private TypeFactory $typeFactory
+        private TypeFactory $typeFactory,
+        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -96,8 +105,7 @@ CODE_SAMPLE
                 return null;
             }
 
-            $className = $this->getName($new->class);
-            $newTypes[] = new ObjectType($className);
+            $newTypes[] = $this->createObjectTypeFromNew($new);
         }
 
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
@@ -110,5 +118,34 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SCALAR_TYPES;
+    }
+
+    private function createObjectTypeFromNew(New_ $new): ObjectType|StaticType
+    {
+        $className = $this->getName($new->class);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        if ($className === ObjectReference::STATIC()->getValue() || $className === ObjectReference::SELF()->getValue()) {
+            $scope = $new->getAttribute(AttributeKey::SCOPE);
+            if (! $scope instanceof Scope) {
+                throw new ShouldNotHappenException();
+            }
+
+            $classReflection = $scope->getClassReflection();
+            if (! $classReflection instanceof ClassReflection) {
+                throw new ShouldNotHappenException();
+            }
+
+            if ($className === ObjectReference::SELF()->getValue()) {
+                return new ThisType($classReflection);
+            }
+
+            return new StaticType($classReflection);
+        }
+
+        $classReflection = $this->reflectionProvider->getClass($className);
+        return new ObjectType($className, null, $classReflection);
     }
 }
