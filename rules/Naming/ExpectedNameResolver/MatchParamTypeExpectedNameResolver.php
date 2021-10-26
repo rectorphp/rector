@@ -11,20 +11,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class MatchParamTypeExpectedNameResolver
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var StaticTypeMapper
-     */
-    private $staticTypeMapper;
-
-    public function __construct(StaticTypeMapper $staticTypeMapper, PropertyNaming $propertyNaming)
-    {
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->propertyNaming = $propertyNaming;
+    public function __construct(
+        private StaticTypeMapper $staticTypeMapper,
+        private PropertyNaming $propertyNaming
+    ) {
     }
 
     public function resolve(Param $param): ?string

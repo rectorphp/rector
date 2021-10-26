@@ -30,7 +30,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
     /**
      * @var ReplaceFuncCallArgumentDefaultValue[]
      */
-    private mixed $replacedArguments = [];
+    private array $replacedArguments = [];
 
     public function __construct(
         private ArgumentDefaultValueReplacer $argumentDefaultValueReplacer

@@ -86,8 +86,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/tests/**/Source*/*',
         '*/rules-tests/**/Source*/*',
         '*/packages-tests/**/Source*/*',
-        '*/Expected/*',
-        '*/Expected*/*',
+        '*/tests/**/Expected/*',
+        '*/rules-tests/**/Expected/*',
+        '*/packages-tests/**/Expected/*',
+        '*/tests/**/Expected*/*',
+        '*/rules-tests/**/Expected*/*',
+        '*/packages-tests/**/Expected*/*',
 
         // to keep original API from PHPStan untouched
         __DIR__ . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',

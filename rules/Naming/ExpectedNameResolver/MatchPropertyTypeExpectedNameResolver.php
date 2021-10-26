@@ -12,29 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class MatchPropertyTypeExpectedNameResolver
 {
-    /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-
-    /**
-     * @var PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-
-    /**
-     * @var NodeNameResolver
-     */
-    private $nodeNameResolver;
-
     public function __construct(
-        PropertyNaming $propertyNaming,
-        PhpDocInfoFactory $phpDocInfoFactory,
-        NodeNameResolver $nodeNameResolver
+        private PropertyNaming $propertyNaming,
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private NodeNameResolver $nodeNameResolver
     ) {
-        $this->propertyNaming = $propertyNaming;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
 
     public function resolve(Property $property): ?string
