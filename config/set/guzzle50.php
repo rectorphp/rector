@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Transform\Rector\FuncCall\FuncCallToMethodCallRector;
@@ -14,9 +13,6 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
-    # both uses "%classes_to_defluent%
-    $services->set(FluentChainMethodCallToNormalMethodCallRector::class);
 
     $configuration = [
         new FuncCallToMethodCall('GuzzleHttp\json_decode', 'GuzzleHttp\Utils', 'jsonDecode'),

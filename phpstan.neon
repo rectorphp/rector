@@ -74,9 +74,6 @@ parameters:
         # PHP 7.4 1_000 support
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\) does not accept string#'
 
-        # mixed
-        - '#Offset int\|string\|null does not exist on array<PhpParser\\Node\\Stmt>\|null#'
-
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 9#'
@@ -99,8 +96,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator\:\:keepLivingCodeFromExpr\(\)" is \d+, keep it under 9#'
         - '#Cognitive complexity for "Rector\\Transform\\Rector\\Class_\\AddInterfaceByParentRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
-
-        - '#Parameter \#1 \$objectType of method Rector\\Naming\\Naming\\PropertyNaming\:\:fqnToVariableName\(\) expects PHPStan\\Type\\ObjectType\|string, PHPStan\\Type\\Type given#'
         # known value
         - '#Property PhpParser\\Node\\Stmt\\Foreach_\:\:\$valueVar \(PhpParser\\Node\\Expr\) does not accept PhpParser\\Node\\Expr\|null#'
 
@@ -203,11 +198,6 @@ parameters:
 
         - '#PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable given#'
 
-        -
-            message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
-            paths:
-                - rules/Defluent/ValueObject/*
-
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
 
         - '#Instanceof between PhpParser\\Node\\Stmt and Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace will always evaluate to false#'
@@ -263,7 +253,6 @@ parameters:
             message: '#Function "property_exists\(\)" cannot be used/left in the code#'
             paths:
                 # on PhpParser Nodes
-                - src/NodeManipulator/ClassMethodAssignManipulator.php
                 - packages/NodeTypeResolver/NodeVisitor/FunctionMethodAndClassNodeVisitor.php
                 - packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php
                 - packages/NodeNameResolver/NodeNameResolver.php
@@ -275,11 +264,6 @@ parameters:
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
         - '#Parameter \#1 \$stmts of method Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector\:\:collectIfs\(\) expects array<PhpParser\\Node\\Stmt\\If_\>, array<PhpParser\\Node\\Stmt\> given#'
         - '#Access to an undefined property PhpParser\\Node\\FunctionLike\|PhpParser\\Node\\Stmt\\If_\:\:\$stmts#'
-
-        -
-            message: '#Parameter \#1 \$types of method Rector\\Defluent\\NodeAnalyzer\\FluentCallStaticTypeResolver\:\:filterOutAlreadyPresentParentClasses\(\) expects array<class\-string\>, array<int, string\> given#'
-            paths:
-                - rules/Defluent/NodeAnalyzer/FluentCallStaticTypeResolver.php
 
         - '#Cognitive complexity for "Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector\:\:refactor\(\)" is \d+, keep it under 9#'
 
@@ -417,11 +401,6 @@ parameters:
         - '#Method "decorateReturnWithSpecificType\(\)" returns bool type, so the name should start with is/has/was#'
         - '#Method "resolveObjectType\(\)" returns bool type, so the name should start with is/has/was#'
 
-        -
-            message: '#Use dependency injection instead of dependency juggling#'
-            paths:
-                - packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider
-
         # native filesystem calls, required for performance reasons
         -
             message: '#"@\\unlink\(\$tmpPath\)" is forbidden to use#'
@@ -459,7 +438,6 @@ parameters:
             paths:
                 - packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php
                 - packages/PostRector/Rector/AbstractPostRector.php
-                - rules/Defluent/ValueObject/AbstractRootExpr.php
                 - rules/PhpSpecToPHPUnit/Rector/AbstractPhpSpecToPHPUnitRector.php
                 - src/Rector/AbstractRector.php
 
