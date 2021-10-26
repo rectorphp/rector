@@ -132,12 +132,12 @@ CODE_SAMPLE
             return null;
         }
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
-        if ($phpDocInfo->hasChanged()) {
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
-            $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-            return $node;
+        if (!$phpDocInfo->hasChanged()) {
+            return null;
         }
-        return null;
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
+        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+        return $node;
     }
     private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
@@ -156,11 +156,6 @@ CODE_SAMPLE
         }
         return $currentPhpDocReturnType instanceof \PHPStan\Type\IterableType;
     }
-    /**
-     * @deprecated
-     * @todo merge to
-     * @see \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
-     */
     private function shouldSkipType(\PHPStan\Type\Type $newType, \PHPStan\Type\Type $currentType, \PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
         if ($newType instanceof \PHPStan\Type\ArrayType && $this->shouldSkipArrayType($newType, $classMethod, $phpDocInfo)) {

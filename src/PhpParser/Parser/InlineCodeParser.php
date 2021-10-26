@@ -48,18 +48,18 @@ final class InlineCodeParser
      */
     private $nodeScopeAndMetadataDecorator;
     /**
-     * @var \PhpParser\Parser
+     * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
-    private $parser;
+    private $simplePhpParser;
     /**
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \PhpParser\Parser $parser, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->parser = $parser;
+        $this->simplePhpParser = $simplePhpParser;
         $this->smartFileSystem = $smartFileSystem;
     }
     /**
@@ -74,8 +74,8 @@ final class InlineCodeParser
         // wrap code so php-parser can interpret it
         $content = \RectorPrefix20211026\Nette\Utils\Strings::match($content, self::OPEN_PHP_TAG_REGEX) ? $content : '<?php ' . $content;
         $content = \RectorPrefix20211026\Nette\Utils\Strings::match($content, self::ENDING_SEMI_COLON_REGEX) ? $content : $content . ';';
-        $nodes = (array) $this->parser->parse($content);
-        return $this->nodeScopeAndMetadataDecorator->decorateNodesFromString($nodes);
+        $stmts = $this->simplePhpParser->parseString($content);
+        return $this->nodeScopeAndMetadataDecorator->decorateStmtsFromString($stmts);
     }
     public function stringify(\PhpParser\Node\Expr $expr) : string
     {

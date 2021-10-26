@@ -29,7 +29,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
-use PhpParser\Parser;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -40,6 +39,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
@@ -73,21 +73,21 @@ final class AnonymousFunctionFactory
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var \PhpParser\Parser
+     * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
-    private $parser;
+    private $simplePhpParser;
     /**
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211026\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \PhpParser\Parser $parser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211026\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->parser = $parser;
+        $this->simplePhpParser = $simplePhpParser;
         $this->nodeComparator = $nodeComparator;
     }
     /**
@@ -146,9 +146,9 @@ final class AnonymousFunctionFactory
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $phpCode = '<?php ' . $expr->value . ';';
-        $contentNodes = (array) $this->parser->parse($phpCode);
+        $contentStmts = $this->simplePhpParser->parseString($phpCode);
         $anonymousFunction = new \PhpParser\Node\Expr\Closure();
-        $firstNode = $contentNodes[0] ?? null;
+        $firstNode = $contentStmts[0] ?? null;
         if (!$firstNode instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
