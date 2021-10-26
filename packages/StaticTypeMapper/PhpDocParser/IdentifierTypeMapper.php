@@ -74,7 +74,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
             return $this->mapSelf($node);
         }
         if ($loweredName === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
-            return $this->mapParent($node, $scope);
+            return $this->mapParent($scope);
         }
         if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
             return $this->mapStatic($node, $scope);
@@ -102,17 +102,13 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     /**
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
      */
-    private function mapParent(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope)
+    private function mapParent(\PHPStan\Analyser\Scope $scope)
     {
-        $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
-        if ($parentClassName === null) {
+        $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return new \PHPStan\Type\MixedType();
         }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
-        return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
+        return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType

@@ -34,7 +34,7 @@ use Rector\Core\PhpParser\Parser\PhpParserLexerFactory;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use RectorPrefix20211026\Symfony\Component\Console\Application as SymfonyApplication;
+use RectorPrefix20211026\Symfony\Component\Console\Application;
 use RectorPrefix20211026\Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function RectorPrefix20211026\Symfony\Component\DependencyInjection\Loader\Configurator\service;

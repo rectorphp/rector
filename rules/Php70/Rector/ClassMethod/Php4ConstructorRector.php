@@ -12,12 +12,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -33,9 +33,14 @@ final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractRector imp
      * @var \Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer
      */
     private $php4ConstructorClassMethodAnalyzer;
-    public function __construct(\Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer)
+    /**
+     * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
+     */
+    private $parentClassScopeResolver;
+    public function __construct(\Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
     {
         $this->php4ConstructorClassMethodAnalyzer = $php4ConstructorClassMethodAnalyzer;
+        $this->parentClassScopeResolver = $parentClassScopeResolver;
     }
     public function provideMinPhpVersion() : int
     {
@@ -126,42 +131,27 @@ CODE_SAMPLE
     }
     private function processParentPhp4ConstructCall(\PhpParser\Node\Expr\StaticCall $staticCall) : void
     {
-        $parentClassName = $this->resolveParentClassName($staticCall);
+        $scope = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         // no parent class
-        if ($parentClassName === null) {
+        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return;
         }
         if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return;
         }
         // rename ParentClass
-        if ($this->isName($staticCall->class, $parentClassName)) {
+        if ($this->isName($staticCall->class, $parentClassReflection->getName())) {
             $staticCall->class = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
         }
         if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
             return;
         }
         // it's not a parent PHP 4 constructor call
-        if (!$this->isName($staticCall->name, $parentClassName)) {
+        if (!$this->isName($staticCall->name, $parentClassReflection->getName())) {
             return;
         }
         $staticCall->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-    }
-    private function resolveParentClassName(\PhpParser\Node\Expr\StaticCall $staticCall) : ?string
-    {
-        $scope = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return null;
-        }
-        $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return null;
-        }
-        $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return null;
-        }
-        return $parentClassReflection->getName();
     }
     private function isLocalMethodCallNamed(\PhpParser\Node\Expr $expr, string $name) : bool
     {
