@@ -9,7 +9,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersionFeature::SCALAR_TYPES);
+    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersionFeature::STATIC_RETURN_TYPE - 1);
+    $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/../../../../../../phpstan-for-rector.neon');
 
     $services = $containerConfigurator->services();
     $services->set(ReturnTypeDeclarationRector::class);

@@ -16,7 +16,7 @@ final class SimplePhpParser
     private Parser $phpParser;
 
     public function __construct(
-        private SmartFileSystem $smartFileSystem
+        private SmartFileSystem $smartFileSystem,
     ) {
         $parserFactory = new ParserFactory();
         $this->phpParser = $parserFactory->create(ParserFactory::PREFER_PHP7);

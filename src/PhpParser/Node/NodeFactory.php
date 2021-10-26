@@ -358,13 +358,15 @@ final class NodeFactory
             return null;
         }
 
-        /** @var Expr $previousConcat */
         $previousConcat = array_shift($exprs);
         foreach ($exprs as $expr) {
             $previousConcat = new Concat($previousConcat, $expr);
         }
 
-        /** @var Concat $previousConcat */
+        if (! $previousConcat instanceof Concat) {
+            throw new ShouldNotHappenException();
+        }
+
         return $previousConcat;
     }
 

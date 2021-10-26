@@ -46,7 +46,8 @@ final class ShortClassExpander
 
         $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType(
             $node,
-            new ObjectType($targetEntity)
+            new ObjectType($targetEntity),
+            $scope
         );
         if ($resolvedType instanceof ShortenedObjectType) {
             return $resolvedType->getFullyQualifiedName();

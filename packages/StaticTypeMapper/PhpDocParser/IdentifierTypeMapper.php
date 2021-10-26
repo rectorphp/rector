@@ -78,7 +78,8 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 
         $objectType = new ObjectType($typeNode->name);
 
-        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope);
     }
 
     private function mapSelf(Node $node): MixedType | SelfObjectType

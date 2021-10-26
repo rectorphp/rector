@@ -160,8 +160,8 @@ final class NodeTypeResolver
             $type = $this->genericClassStringTypeCorrector->correct($type);
 
             if ($type instanceof ObjectType) {
-                // we want to keep aliased object types
-                $type = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $type);
+                $scope = $node->getAttribute(AttributeKey::SCOPE);
+                $type = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $type, $scope);
             }
 
             return $this->hasOffsetTypeCorrector->correct($type);
@@ -266,7 +266,8 @@ final class NodeTypeResolver
         }
 
         if ($staticType instanceof ObjectType) {
-            return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType);
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $staticType, $scope);
         }
 
         return $this->accessoryNonEmptyStringTypeCorrector->correct($staticType);

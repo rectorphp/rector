@@ -28,6 +28,6 @@ final class ReturnTypeDeclarationRectorTest extends AbstractRectorTestCase
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/before_union_types.php';
+        return __DIR__ . '/config/before_static_type.php';
     }
 }
