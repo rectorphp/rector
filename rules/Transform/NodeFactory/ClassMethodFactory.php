@@ -5,12 +5,12 @@ namespace Rector\Transform\NodeFactory;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20211026\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class ClassMethodFactory
 {
     public function createClassMethodFromFunction(string $methodName, \PhpParser\Node\Stmt\Function_ $function) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20211025\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($methodName);
+        $methodBuilder = new \RectorPrefix20211026\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($methodName);
         $methodBuilder->makePublic();
         $methodBuilder->makeStatic();
         $methodBuilder->addStmts($function->stmts);

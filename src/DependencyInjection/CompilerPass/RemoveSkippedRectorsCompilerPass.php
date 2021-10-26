@@ -5,13 +5,13 @@ namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20211025\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20211025\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211026\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20211026\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * This compiler pass removed Rectors skipped in `SKIP` parameters.
  * It uses Skipper from Symplify - https://github.com/symplify/skipper
  */
-final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20211025\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20211026\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
@@ -32,7 +32,7 @@ final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20211025\Sy
     /**
      * @return string[]
      */
-    private function resolveSkippedRectorClasses(\RectorPrefix20211025\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : array
+    private function resolveSkippedRectorClasses(\RectorPrefix20211026\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : array
     {
         $skipParameters = (array) $containerBuilder->getParameter(\Rector\Core\Configuration\Option::SKIP);
         return \array_filter($skipParameters, function ($element) : bool {

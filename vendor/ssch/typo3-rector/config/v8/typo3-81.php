@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211025;
+namespace RectorPrefix20211026;
 
 use Ssch\TYPO3Rector\Rector\v8\v1\Array2XmlCsToArray2XmlRector;
 use Ssch\TYPO3Rector\Rector\v8\v1\GeneralUtilityToUpperAndLowerRector;

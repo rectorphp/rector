@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211025\Symfony\Component\VarDumper\Command\Descriptor;
+namespace RectorPrefix20211026\Symfony\Component\VarDumper\Command\Descriptor;
 
-use RectorPrefix20211025\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20211025\Symfony\Component\VarDumper\Cloner\Data;
+use RectorPrefix20211026\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211026\Symfony\Component\VarDumper\Cloner\Data;
 /**
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211025;
+namespace RectorPrefix20211026;
 
 use Ssch\TYPO3Rector\Rector\v10\v2\ExcludeServiceKeysToArrayRector;
 use Ssch\TYPO3Rector\Rector\v10\v2\InjectEnvironmentServiceIfNeededInResponseRector;

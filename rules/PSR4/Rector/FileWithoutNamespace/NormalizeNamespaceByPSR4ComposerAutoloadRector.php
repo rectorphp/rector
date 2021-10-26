@@ -80,27 +80,28 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->inlineHTMLAnalyzer->hasInlineHTML($node)) {
+        $processNode = clone $node;
+        if ($this->inlineHTMLAnalyzer->hasInlineHTML($processNode)) {
             return null;
         }
-        $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $node);
+        $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $processNode);
         if ($expectedNamespace === null) {
             return null;
         }
         // is namespace and already correctly named?
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->nodeNameResolver->isCaseSensitiveName($node, $expectedNamespace)) {
+        if ($processNode instanceof \PhpParser\Node\Stmt\Namespace_ && $this->nodeNameResolver->isCaseSensitiveName($processNode, $expectedNamespace)) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_ && $this->hasNamespaceInPreviousNamespace($node)) {
+        if ($processNode instanceof \PhpParser\Node\Stmt\Namespace_ && $this->hasNamespaceInPreviousNamespace($processNode)) {
             return null;
         }
         // to put declare_strict types on correct place
-        if ($node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
-            return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
+        if ($processNode instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
+            return $this->refactorFileWithoutNamespace($processNode, $expectedNamespace);
         }
-        $node->name = new \PhpParser\Node\Name($expectedNamespace);
-        $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
-        return $node;
+        $processNode->name = new \PhpParser\Node\Name($expectedNamespace);
+        $this->fullyQualifyStmtsAnalyzer->process($processNode->stmts);
+        return $processNode;
     }
     private function hasNamespaceInPreviousNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : bool
     {

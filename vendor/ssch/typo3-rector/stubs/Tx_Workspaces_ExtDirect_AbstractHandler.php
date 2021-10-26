@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211025;
+namespace RectorPrefix20211026;
 
 if (\class_exists('Tx_Workspaces_ExtDirect_AbstractHandler')) {
     return;
