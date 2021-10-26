@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -22,6 +23,7 @@ use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
@@ -39,10 +41,15 @@ final class TypeFactory
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->unionTypeFactory = $unionTypeFactory;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param Type[] $types
@@ -166,7 +173,12 @@ final class TypeFactory
         return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverseCallback) : Type {
             if ($this->isStatic($traversedType) && $this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
                 /** @var ObjectType $traversedType */
-                return new \PHPStan\Type\ThisType($traversedType->getClassName());
+                $className = $traversedType->getClassName();
+                if (!$this->reflectionProvider->hasClass($className)) {
+                    throw new \Rector\Core\Exception\ShouldNotHappenException();
+                }
+                $classReflection = $this->reflectionProvider->getClass($className);
+                return new \PHPStan\Type\ThisType($classReflection);
             }
             if ($this->isStatic($traversedType)) {
                 return new \PHPStan\Type\MixedType();

@@ -10,9 +10,17 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\StaticType;
+use PHPStan\Type\ThisType;
+use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -27,9 +35,14 @@ final class ReturnTypeFromReturnNewRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->typeFactory = $typeFactory;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -86,8 +99,7 @@ CODE_SAMPLE
             if (!$new->class instanceof \PhpParser\Node\Name) {
                 return null;
             }
-            $className = $this->getName($new->class);
-            $newTypes[] = new \PHPStan\Type\ObjectType($className);
+            $newTypes[] = $this->createObjectTypeFromNew($new);
         }
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
@@ -97,5 +109,31 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES;
+    }
+    /**
+     * @return \PHPStan\Type\ObjectType|\PHPStan\Type\StaticType
+     */
+    private function createObjectTypeFromNew(\PhpParser\Node\Expr\New_ $new)
+    {
+        $className = $this->getName($new->class);
+        if ($className === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        if ($className === \Rector\Core\Enum\ObjectReference::STATIC()->getValue() || $className === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
+            $scope = $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            if (!$scope instanceof \PHPStan\Analyser\Scope) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            $classReflection = $scope->getClassReflection();
+            if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            if ($className === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
+                return new \PHPStan\Type\ThisType($classReflection);
+            }
+            return new \PHPStan\Type\StaticType($classReflection);
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        return new \PHPStan\Type\ObjectType($className, null, $classReflection);
     }
 }

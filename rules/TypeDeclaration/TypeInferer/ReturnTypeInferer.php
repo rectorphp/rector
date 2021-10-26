@@ -10,6 +10,8 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -18,6 +20,7 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -54,15 +57,20 @@ final class ReturnTypeInferer
      */
     private $betterNodeFinder;
     /**
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211026\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211026\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->parameterProvider = $parameterProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->reflectionProvider = $reflectionProvider;
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
     }
     public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
@@ -183,7 +191,8 @@ final class ReturnTypeInferer
         foreach ($unionType->getTypes() as $unionedType) {
             if ($this->isStaticType($unionedType)) {
                 /** @var FullyQualifiedObjectType $unionedType */
-                $resolvedTypes[] = new \PHPStan\Type\ThisType($unionedType->getClassName());
+                $classReflection = $this->reflectionProvider->getClass($unionedType->getClassName());
+                $resolvedTypes[] = new \PHPStan\Type\ThisType($classReflection);
                 $hasStatic = \true;
                 continue;
             }
@@ -203,6 +212,10 @@ final class ReturnTypeInferer
         if (!$isSupportedStaticReturnType) {
             return null;
         }
-        return new \PHPStan\Type\ThisType($typeWithClassName->getClassName());
+        $classReflection = $typeWithClassName->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return new \PHPStan\Type\ThisType($classReflection);
     }
 }

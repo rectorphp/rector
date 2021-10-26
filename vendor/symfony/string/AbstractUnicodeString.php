@@ -134,9 +134,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         $str->string .= $s;
         return $str;
     }
-    /**
-     * @return mixed
-     */
     public function camel()
     {
         $str = clone $this;
@@ -162,7 +159,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $codePoints;
     }
     /**
-     * @return mixed
      * @param bool $compat
      */
     public function folded($compat = \true)
@@ -177,7 +173,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $str;
     }
     /**
-     * @return mixed
      * @param mixed[] $strings
      * @param string|null $lastGlue
      */
@@ -191,9 +186,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         }
         return $str;
     }
-    /**
-     * @return mixed
-     */
     public function lower()
     {
         $str = clone $this;
@@ -248,7 +240,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $str;
     }
     /**
-     * @return mixed
      * @param int $length
      * @param string $padStr
      */
@@ -262,7 +253,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $this->pad($length, $pad, \STR_PAD_BOTH);
     }
     /**
-     * @return mixed
      * @param int $length
      * @param string $padStr
      */
@@ -276,7 +266,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $this->pad($length, $pad, \STR_PAD_RIGHT);
     }
     /**
-     * @return mixed
      * @param int $length
      * @param string $padStr
      */
@@ -290,7 +279,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $this->pad($length, $pad, \STR_PAD_LEFT);
     }
     /**
-     * @return mixed
      * @param string $fromRegexp
      */
     public function replaceMatches($fromRegexp, $to)
@@ -335,18 +323,12 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         $str->string = $string;
         return $str;
     }
-    /**
-     * @return mixed
-     */
     public function reverse()
     {
         $str = clone $this;
         $str->string = \implode('', \array_reverse(\preg_split('/(\\X)/u', $str->string, -1, \PREG_SPLIT_DELIM_CAPTURE | \PREG_SPLIT_NO_EMPTY)));
         return $str;
     }
-    /**
-     * @return mixed
-     */
     public function snake()
     {
         $str = $this->camel()->title();
@@ -354,7 +336,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $str;
     }
     /**
-     * @return mixed
      * @param bool $allWords
      */
     public function title($allWords = \false)
@@ -367,7 +348,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $str;
     }
     /**
-     * @return mixed
      * @param string $chars
      */
     public function trim($chars = " \t\n\r\0\v\f ﻿")
@@ -381,7 +361,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $str;
     }
     /**
-     * @return mixed
      * @param string $chars
      */
     public function trimEnd($chars = " \t\n\r\0\v\f ﻿")
@@ -395,7 +374,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         return $str;
     }
     /**
-     * @return mixed
      * @param string $chars
      */
     public function trimStart($chars = " \t\n\r\0\v\f ﻿")
@@ -408,9 +386,6 @@ abstract class AbstractUnicodeString extends \RectorPrefix20211026\Symfony\Compo
         $str->string = \preg_replace("{^[{$chars}]++}uD", '', $str->string);
         return $str;
     }
-    /**
-     * @return mixed
-     */
     public function upper()
     {
         $str = clone $this;

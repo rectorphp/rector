@@ -78,7 +78,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-        $staticType = new \PHPStan\Type\StaticType($classReflection->getName());
+        $staticType = new \PHPStan\Type\StaticType($classReflection);
         foreach ($node->getParams() as $param) {
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $staticType);
         }

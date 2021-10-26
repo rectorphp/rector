@@ -5,8 +5,10 @@ namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ClassStringType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
@@ -14,6 +16,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
@@ -66,14 +69,15 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         if ($loweredName === 'class-string') {
             return new \PHPStan\Type\ClassStringType();
         }
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if ($loweredName === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
             return $this->mapSelf($node);
         }
         if ($loweredName === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
-            return $this->mapParent($node);
+            return $this->mapParent($node, $scope);
         }
         if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
-            return $this->mapStatic($node);
+            return $this->mapStatic($node, $scope);
         }
         if ($loweredName === 'iterable') {
             return new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
@@ -98,24 +102,32 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     /**
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
      */
-    private function mapParent(\PhpParser\Node $node)
+    private function mapParent(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope)
     {
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($node);
-        if ($parentClassName !== null) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassName);
+        if ($parentClassName === null) {
+            return new \PHPStan\Type\MixedType();
         }
-        return new \PHPStan\Type\MixedType();
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
      */
-    private function mapStatic(\PhpParser\Node $node)
+    private function mapStatic(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope)
     {
         /** @var string|null $className */
         $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         if ($className === null) {
             return new \PHPStan\Type\MixedType();
         }
-        return new \PHPStan\Type\StaticType($className);
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return new \PHPStan\Type\StaticType($classReflection);
     }
 }

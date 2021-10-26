@@ -76,17 +76,14 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         if ($className === null) {
             return new \PHPStan\Type\MixedType();
         }
+        $classReflection = $this->reflectionProvider->getClass($className);
         if ($reference === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
-            return new \PHPStan\Type\StaticType($className);
+            return new \PHPStan\Type\StaticType($classReflection);
         }
         if ($reference === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($className);
+            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
         }
-        if ($this->reflectionProvider->hasClass($className)) {
-            $classReflection = $this->reflectionProvider->getClass($className);
-            return new \PHPStan\Type\ThisType($classReflection);
-        }
-        return new \PHPStan\Type\ThisType($className);
+        return new \PHPStan\Type\ThisType($classReflection);
     }
     /**
      * @return \PHPStan\Type\ArrayType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\StringType|\PHPStan\Type\Constant\ConstantBooleanType|\PHPStan\Type\BooleanType|\PHPStan\Type\MixedType
