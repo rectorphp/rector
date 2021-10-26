@@ -135,10 +135,17 @@ final class PhpDocTypeChanger
         $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $phpDocInfo);
         $functionLike = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $paramVarName = $this->nodeNameResolver->getName($param->var);
-        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $varTag->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode && \is_string($paramVarName)) {
-            $phpDocInfo = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
-            $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTag, $property);
-            $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
+        if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return;
         }
+        if (!$varTag->type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
+            return;
+        }
+        if (!\is_string($paramVarName)) {
+            return;
+        }
+        $phpDocInfo = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
+        $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTag, $property);
+        $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
     }
 }

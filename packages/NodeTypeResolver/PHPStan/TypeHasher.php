@@ -71,6 +71,6 @@ final class TypeHasher
             }
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($type->getFullyQualifiedClass());
         });
-        return $normalizedUnionType->describe(\PHPStan\Type\VerbosityLevel::cache());
+        return $normalizedUnionType->describe(\PHPStan\Type\VerbosityLevel::precise());
     }
 }

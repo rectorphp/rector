@@ -170,7 +170,7 @@ CODE_SAMPLE
         if ($newType instanceof \PHPStan\Type\VoidType) {
             return \true;
         }
-        if ($this->advancedArrayAnalyzer->isMoreSpecificArrayTypeOverride($newType, $classMethod, $phpDocInfo)) {
+        if ($this->advancedArrayAnalyzer->isMoreSpecificArrayTypeOverride($newType, $phpDocInfo)) {
             return \true;
         }
         if ($this->isGenericTypeToMixedTypeOverride($newType, $currentType)) {

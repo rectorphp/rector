@@ -13,6 +13,7 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Configuration\Option;
@@ -104,34 +105,13 @@ final class ReturnTypeInferer
     public function verifyStaticType(\PHPStan\Type\Type $type, bool $isSupportedStaticReturnType) : ?\PHPStan\Type\Type
     {
         if ($this->isStaticType($type)) {
-            if (!$isSupportedStaticReturnType) {
-                return null;
-            }
-            /** @var FullyQualifiedObjectType $type */
-            return new \PHPStan\Type\ThisType($type->getClassName());
+            /** @var TypeWithClassName $type */
+            return $this->resolveStaticType($isSupportedStaticReturnType, $type);
         }
-        if (!$type instanceof \PHPStan\Type\UnionType) {
-            return $type;
+        if ($type instanceof \PHPStan\Type\UnionType) {
+            return $this->resolveUnionStaticTypes($type, $isSupportedStaticReturnType);
         }
-        $returnTypes = $type->getTypes();
-        $types = [];
-        $hasStatic = \false;
-        foreach ($returnTypes as $returnType) {
-            if ($this->isStaticType($returnType)) {
-                /** @var FullyQualifiedObjectType $returnType */
-                $types[] = new \PHPStan\Type\ThisType($returnType->getClassName());
-                $hasStatic = \true;
-                continue;
-            }
-            $types[] = $returnType;
-        }
-        if (!$hasStatic) {
-            return $type;
-        }
-        if (!$isSupportedStaticReturnType) {
-            return null;
-        }
-        return new \PHPStan\Type\UnionType($types);
+        return $type;
     }
     private function resolveTypeWithVoidHandling(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
@@ -176,7 +156,7 @@ final class ReturnTypeInferer
     }
     private function isStaticType(\PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
         return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
@@ -192,5 +172,37 @@ final class ReturnTypeInferer
             }
         }
         return \false;
+    }
+    /**
+     * @return \PHPStan\Type\UnionType|null
+     */
+    private function resolveUnionStaticTypes(\PHPStan\Type\UnionType $unionType, bool $isSupportedStaticReturnType)
+    {
+        $returnTypes = $unionType->getTypes();
+        $types = [];
+        $hasStatic = \false;
+        foreach ($returnTypes as $returnType) {
+            if ($this->isStaticType($returnType)) {
+                /** @var FullyQualifiedObjectType $returnType */
+                $types[] = new \PHPStan\Type\ThisType($returnType->getClassName());
+                $hasStatic = \true;
+                continue;
+            }
+            $types[] = $returnType;
+        }
+        if (!$hasStatic) {
+            return $unionType;
+        }
+        if (!$isSupportedStaticReturnType) {
+            return null;
+        }
+        return new \PHPStan\Type\UnionType($types);
+    }
+    private function resolveStaticType(bool $isSupportedStaticReturnType, \PHPStan\Type\TypeWithClassName $typeWithClassName) : ?\PHPStan\Type\ThisType
+    {
+        if (!$isSupportedStaticReturnType) {
+            return null;
+        }
+        return new \PHPStan\Type\ThisType($typeWithClassName->getClassName());
     }
 }
