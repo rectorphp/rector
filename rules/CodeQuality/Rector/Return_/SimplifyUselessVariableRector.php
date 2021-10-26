@@ -12,6 +12,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Core\Rector\AbstractRector;
@@ -32,10 +33,15 @@ final class SimplifyUselessVariableRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
+     */
+    private $callAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap, \Rector\Core\NodeAnalyzer\VariableAnalyzer $variableAnalyzer, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->variableAnalyzer = $variableAnalyzer;
+        $this->callAnalyzer = $callAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -67,12 +73,10 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $previousNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof \PhpParser\Node\Stmt\Expression) {
-            return null;
-        }
-        /** @var AssignOp|Assign $previousNode */
-        $previousNode = $previousNode->expr;
+        /** @var Expression $previousExpression */
+        $previousExpression = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        /** @var Assign|AssignOp $previousNode */
+        $previousNode = $previousExpression->expr;
         $previousVariableNode = $previousNode->var;
         if ($this->hasSomeComment($previousVariableNode)) {
             return null;
@@ -114,9 +118,6 @@ CODE_SAMPLE
         /** @var Variable $variableNode */
         $variableNode = $return->expr;
         $previousExpression = $return->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
-        if (!$previousExpression instanceof \PhpParser\Node) {
-            return \true;
-        }
         if (!$previousExpression instanceof \PhpParser\Node\Stmt\Expression) {
             return \true;
         }
@@ -132,7 +133,10 @@ CODE_SAMPLE
         if ($this->isPreviousExpressionVisuallySimilar($previousExpression, $previousNode)) {
             return \true;
         }
-        return $this->variableAnalyzer->isStaticOrGlobal($variableNode);
+        if ($this->variableAnalyzer->isStaticOrGlobal($variableNode)) {
+            return \true;
+        }
+        return $this->callAnalyzer->isNewInstance($previousNode->var);
     }
     private function hasSomeComment(\PhpParser\Node\Expr $expr) : bool
     {

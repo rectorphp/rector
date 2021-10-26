@@ -177,7 +177,7 @@ CODE_SAMPLE
         if (!$return->expr instanceof \PhpParser\Node\Expr) {
             return \false;
         }
-        if (!$this->callAnalyzer->isNewInstance($this->betterNodeFinder, $return->expr)) {
+        if (!$this->callAnalyzer->isNewInstance($return->expr)) {
             return \false;
         }
         $type = $this->nodeTypeResolver->getType($return->expr);

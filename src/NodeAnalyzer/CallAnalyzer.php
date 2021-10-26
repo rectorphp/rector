@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix20211026\Symfony\Contracts\Service\Attribute\Required;
 final class CallAnalyzer
 {
     /**
@@ -23,12 +24,23 @@ final class CallAnalyzer
      */
     private const OBJECT_CALL_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
+    }
+    /**
+     * @required
+     */
+    public function autowireCallAnalyzer(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function isObjectCall(\PhpParser\Node\Expr $expr) : bool
     {
@@ -59,15 +71,12 @@ final class CallAnalyzer
         }
         return \false;
     }
-    /**
-     * Inject BetterNodeFinder due Circular reference
-     */
-    public function isNewInstance(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PhpParser\Node\Expr $expr) : bool
+    public function isNewInstance(\PhpParser\Node\Expr $expr) : bool
     {
         if ($expr instanceof \PhpParser\Node\Expr\Clone_ || $expr instanceof \PhpParser\Node\Expr\New_) {
             return \true;
         }
-        return (bool) $betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($expr, function (\PhpParser\Node $node) use($expr) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
