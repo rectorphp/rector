@@ -10,13 +10,13 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MatchParamTypeExpectedNameResolver
 {
     /**
-     * @var PropertyNaming
-     */
-    private $propertyNaming;
-    /**
-     * @var StaticTypeMapper
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
+    /**
+     * @var \Rector\Naming\Naming\PropertyNaming
+     */
+    private $propertyNaming;
     public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->staticTypeMapper = $staticTypeMapper;

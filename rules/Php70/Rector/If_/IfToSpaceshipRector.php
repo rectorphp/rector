@@ -28,17 +28,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IfToSpaceshipRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
-     * @var int|null
+     * @var int|float|string|bool|mixed[]|null
      */
-    private $onEqual;
+    private $onEqual = null;
     /**
-     * @var int|null
+     * @var int|float|string|bool|mixed[]|null
      */
-    private $onSmaller;
+    private $onSmaller = null;
     /**
-     * @var int|null
+     * @var int|float|string|bool|mixed[]|null
      */
-    private $onGreater;
+    private $onGreater = null;
     /**
      * @var \PhpParser\Node\Expr|null
      */
@@ -48,9 +48,9 @@ final class IfToSpaceshipRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $secondValue;
     /**
-     * @var Node|null
+     * @var \PhpParser\Node|null
      */
-    private $nextNode;
+    private $nextNode = null;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes if/else to spaceship <=> where useful', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'

@@ -11,15 +11,15 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class MatchPropertyTypeExpectedNameResolver
 {
     /**
-     * @var PropertyNaming
+     * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @var PhpDocInfoFactory
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var NodeNameResolver
+     * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)

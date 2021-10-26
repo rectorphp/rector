@@ -5,13 +5,11 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use RectorPrefix20211026\Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeTraverser;
-use PhpParser\Parser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
@@ -22,22 +20,18 @@ use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
-use Rector\Core\Application\FileProcessor;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard;
+use Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use ReflectionClass;
 use RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem;
 use Throwable;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -92,22 +86,14 @@ final class PHPStanNodeScopeResolver
      */
     private $parentAttributeSourceLocator;
     /**
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard
      */
-    private $betterNodeFinder;
+    private $templateExtendsGuard;
     /**
-     * @var \PhpParser\Parser
+     * @var \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard
      */
-    private $parser;
-    /**
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
-    /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PhpParser\Parser $parser, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    private $mixinGuard;
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard $templateExtendsGuard, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard $mixinGuard)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -118,14 +104,8 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->parentAttributeSourceLocator = $parentAttributeSourceLocator;
-        $this->betterNodeFinder = $betterNodeFinder;
-        /**
-         * use \PhpParser\Parser on purpose instead of extended \Rector\Core\PhpParser\Parser\Parser
-         * as detecting `@template-extends` too early on dependent files
-         */
-        $this->parser = $parser;
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->smartFileSystem = $smartFileSystem;
+        $this->templateExtendsGuard = $templateExtendsGuard;
+        $this->mixinGuard = $mixinGuard;
     }
     /**
      * @param Stmt[] $nodes
@@ -165,48 +145,10 @@ final class PHPStanNodeScopeResolver
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
         // it needs to be checked early before `@mixin` check as
         // ReflectionProvider already hang when check class with `@template-extends`
-        if ($this->isTemplateExtendsInSource($nodes, $smartFileInfo->getFilename())) {
+        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($nodes, $smartFileInfo->getFilename())) {
             return $nodes;
         }
         return $this->processNodesWithMixinHandling($smartFileInfo, $nodes, $scope, $nodeCallback);
-    }
-    /**
-     * @param Node[] $nodes
-     */
-    private function isTemplateExtendsInSource(array $nodes, string $currentFileName) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) use($currentFileName) : bool {
-            if (!$node instanceof \PhpParser\Node\Name\FullyQualified) {
-                return \false;
-            }
-            $className = $node->toString();
-            // fix error in parallel test
-            // use function_exists on purpose as using reflectionProvider broke the test in parallel
-            if (\function_exists($className)) {
-                return \false;
-            }
-            // use class_exists as PHPStan ReflectionProvider hang on check className with `@template-extends`
-            if (!\class_exists($className)) {
-                return \false;
-            }
-            // use native ReflectionClass as PHPStan ReflectionProvider hang on check className with `@template-extends`
-            $reflectionClass = new \ReflectionClass($className);
-            if ($reflectionClass->isInternal()) {
-                return \false;
-            }
-            $fileName = (string) $reflectionClass->getFileName();
-            if (!$this->smartFileSystem->exists($fileName)) {
-                return \false;
-            }
-            // already checked in FileProcessor::parseFileInfoToLocalCache()
-            if ($fileName === $currentFileName) {
-                return \false;
-            }
-            $content = $this->smartFileSystem->readFile($fileName);
-            $fileNodes = $this->parser->parse($content);
-            $print = $this->betterStandardPrinter->print($fileNodes);
-            return (bool) \RectorPrefix20211026\Nette\Utils\Strings::match($print, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
-        });
     }
     /**
      * @param Stmt[] $nodes
@@ -214,7 +156,7 @@ final class PHPStanNodeScopeResolver
      */
     private function processNodesWithMixinHandling(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $nodes, \PHPStan\Analyser\MutatingScope $mutatingScope, callable $nodeCallback) : array
     {
-        if ($this->isMixinInSource($nodes)) {
+        if ($this->mixinGuard->containsMixinPhpDoc($nodes)) {
             return $nodes;
         }
         try {
@@ -229,51 +171,6 @@ final class PHPStanNodeScopeResolver
         }
         $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
         return $nodes;
-    }
-    /**
-     * @param Node[] $nodes
-     */
-    private function isMixinInSource(array $nodes) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Name\FullyQualified && !$node instanceof \PhpParser\Node\Stmt\Class_) {
-                return \false;
-            }
-            if ($node instanceof \PhpParser\Node\Stmt\Class_ && $node->isAnonymous()) {
-                return \false;
-            }
-            $className = $node instanceof \PhpParser\Node\Name\FullyQualified ? $node->toString() : $node->namespacedName->toString();
-            return $this->isCircularMixin($className);
-        });
-    }
-    private function isCircularMixin(string $className) : bool
-    {
-        // fix error in parallel test
-        // use function_exists on purpose as using reflectionProvider broke the test in parallel
-        if (\function_exists($className)) {
-            return \false;
-        }
-        $hasClass = $this->reflectionProvider->hasClass($className);
-        if (!$hasClass) {
-            return \false;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->isBuiltIn()) {
-            return \false;
-        }
-        foreach ($classReflection->getMixinTags() as $mixinTag) {
-            $type = $mixinTag->getType();
-            if (!$type instanceof \PHPStan\Type\ObjectType) {
-                return \false;
-            }
-            if ($type->getClassName() === $className) {
-                return \true;
-            }
-            if ($this->isCircularMixin($type->getClassName())) {
-                return \true;
-            }
-        }
-        return \false;
     }
     /**
      * @param Node[] $nodes

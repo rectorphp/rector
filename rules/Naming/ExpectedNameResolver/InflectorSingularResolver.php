@@ -26,7 +26,7 @@ final class InflectorSingularResolver
      */
     private const SINGLE = 'single';
     /**
-     * @var Inflector
+     * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
     public function __construct(\RectorPrefix20211026\Doctrine\Inflector\Inflector $inflector)
@@ -42,7 +42,7 @@ final class InflectorSingularResolver
         if (\array_key_exists($currentName, self::SINGULAR_VERB)) {
             return self::SINGULAR_VERB[$currentName];
         }
-        if (\strpos($currentName, self::SINGLE) === 0) {
+        if (\strncmp($currentName, self::SINGLE, \strlen(self::SINGLE)) === 0) {
             return $currentName;
         }
         $camelCases = \RectorPrefix20211026\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
@@ -50,11 +50,14 @@ final class InflectorSingularResolver
         foreach ($camelCases as $camelCase) {
             $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
         }
-        if ($singularValueVarName === '' || $singularValueVarName === '_') {
+        if ($singularValueVarName === '') {
+            return $currentName;
+        }
+        if ($singularValueVarName === '_') {
             return $currentName;
         }
         $singularValueVarName = $singularValueVarName === $currentName ? self::SINGLE . \ucfirst($singularValueVarName) : $singularValueVarName;
-        if (\strpos($singularValueVarName, self::SINGLE) !== 0) {
+        if (\strncmp($singularValueVarName, self::SINGLE, \strlen(self::SINGLE)) !== 0) {
             return $singularValueVarName;
         }
         $length = \strlen($singularValueVarName);

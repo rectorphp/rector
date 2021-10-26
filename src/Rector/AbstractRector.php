@@ -159,7 +159,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @var string|null
      */
-    private $previousAppliedClass;
+    private $previousAppliedClass = null;
     /**
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
