@@ -14,6 +14,7 @@ use Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector;
 use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Php80\Rector\ClassMethod\SetStateToStaticRector;
 use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
+use Rector\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
 use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 use Rector\Php80\Rector\Identical\StrEndsWithRector;
@@ -108,4 +109,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'n', 'ne'),
             ]),
         ]]);
+
+    $services->set(Php8ResourceReturnToObjectRector::class);
 };

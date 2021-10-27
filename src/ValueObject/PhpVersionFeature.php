@@ -515,4 +515,10 @@ final class PhpVersionFeature
      * @var int
      */
     public const NON_CAPTURING_CATCH = PhpVersion::PHP_80;
+
+    /**
+     * @see https://www.php.net/manual/en/migration80.incompatible.php#migration80.incompatible.resource2object
+     * @var int
+     */
+    public const PHP8_RESOURCE_TO_OBJECT = PhpVersion::PHP_80;
 }
