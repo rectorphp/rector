@@ -46,14 +46,19 @@ final class UnionTypeAnalyzer
         }
         return new \Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis($isNullableType, $hasIterable, $hasArray);
     }
-    public function hasTypeClassNameOnly(\PHPStan\Type\UnionType $unionType) : bool
+    /**
+     * @return TypeWithClassName[]
+     */
+    public function matchExclusiveTypesWithClassNames(\PHPStan\Type\UnionType $unionType) : array
     {
+        $typesWithClassNames = [];
         foreach ($unionType->getTypes() as $unionedType) {
             if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
-                return \false;
+                return [];
             }
+            $typesWithClassNames[] = $unionedType;
         }
-        return \true;
+        return $typesWithClassNames;
     }
     public function hasObjectWithoutClassType(\PHPStan\Type\UnionType $unionType) : bool
     {

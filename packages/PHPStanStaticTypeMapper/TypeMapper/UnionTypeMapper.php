@@ -263,27 +263,29 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
             $objectType = new \PHPStan\Type\ObjectType('Doctrine\\Common\\Collections\\Collection');
             return $this->unionTypeAnalyzer->isNullable($unionType) ? new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), $objectType]) : $objectType;
         }
-        if (!$this->unionTypeAnalyzer->hasTypeClassNameOnly($unionType)) {
+        $typesWithClassNames = $this->unionTypeAnalyzer->matchExclusiveTypesWithClassNames($unionType);
+        if ($typesWithClassNames === []) {
             return null;
         }
-        $sharedTypeWithClassName = $this->matchTwoObjectTypes($unionType);
+        $sharedTypeWithClassName = $this->matchTwoObjectTypes($typesWithClassNames);
         if ($sharedTypeWithClassName instanceof \PHPStan\Type\TypeWithClassName) {
             return $this->correctObjectType($sharedTypeWithClassName);
         }
         // find least common denominator
         return $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($unionType);
     }
-    private function matchTwoObjectTypes(\PHPStan\Type\UnionType $unionType) : ?\PHPStan\Type\TypeWithClassName
+    /**
+     * @param TypeWithClassName[] $typesWithClassNames
+     */
+    private function matchTwoObjectTypes(array $typesWithClassNames) : ?\PHPStan\Type\TypeWithClassName
     {
-        /** @var TypeWithClassName $unionedType */
-        foreach ($unionType->getTypes() as $unionedType) {
-            /** @var TypeWithClassName $nestedUnionedType */
-            foreach ($unionType->getTypes() as $nestedUnionedType) {
-                if (!$this->areTypeWithClassNamesRelated($unionedType, $nestedUnionedType)) {
+        foreach ($typesWithClassNames as $typeWithClassName) {
+            foreach ($typesWithClassNames as $nestedTypeWithClassName) {
+                if (!$this->areTypeWithClassNamesRelated($typeWithClassName, $nestedTypeWithClassName)) {
                     continue 2;
                 }
             }
-            return $unionedType;
+            return $typeWithClassName;
         }
         return null;
     }

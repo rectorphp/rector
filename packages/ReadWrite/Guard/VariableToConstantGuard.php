@@ -82,10 +82,12 @@ final class VariableToConstantGuard
             $nativeFunctionReflection = $this->privatesAccessor->getPrivateProperty($functionReflection, 'reflection');
         }
         $referencePositions = [];
-        /** @var int $position */
         foreach ($nativeFunctionReflection->getParameters() as $position => $reflectionParameter) {
             if (!$reflectionParameter->isPassedByReference()) {
                 continue;
+            }
+            if (!\is_int($position)) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $referencePositions[] = $position;
         }
