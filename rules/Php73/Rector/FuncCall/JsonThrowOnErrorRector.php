@@ -97,13 +97,7 @@ CODE_SAMPLE
             }
         }
 
-        $firstArg = $funcCall->args[0];
-        $value = $this->valueResolver->getValue($firstArg->value);
-        if (is_string($value)) {
-            return true;
-        }
-
-        if (is_array($value)) {
+        if ($this->isFirstValueStringOrArray($funcCall)) {
             return true;
         }
 
@@ -150,5 +144,20 @@ CODE_SAMPLE
     private function createConstFetch(string $name): ConstFetch
     {
         return new ConstFetch(new Name($name));
+    }
+
+    private function isFirstValueStringOrArray(FuncCall $funcCall): bool
+    {
+        if (! isset($funcCall->args[0])) {
+            return false;
+        }
+
+        $firstArg = $funcCall->args[0];
+        $value = $this->valueResolver->getValue($firstArg->value);
+        if (is_string($value)) {
+            return true;
+        }
+
+        return is_array($value);
     }
 }
