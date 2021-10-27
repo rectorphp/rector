@@ -20,7 +20,7 @@ final class VariableWithType
      */
     private $type;
     /**
-     * @var \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
+     * @var Identifier|Name|NullableType|UnionType|null
      */
     private $phpParserTypeNode;
     /**

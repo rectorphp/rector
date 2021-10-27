@@ -12,7 +12,7 @@ use RectorPrefix20211027\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
 final class SimpleCallableNodeTraverser
 {
     /**
-     * @param Node|Node[]|null $nodes
+     * @param \PhpParser\Node|mixed[]|null $nodes
      */
     public function traverseNodesWithCallable($nodes, callable $callable) : void
     {

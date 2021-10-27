@@ -87,7 +87,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param array<class-string<T>> $types
-     * @param Node|Node[]|Stmt[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      * @return T[]
      */
     public function findInstancesOf($nodes, array $types) : array
@@ -102,7 +102,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
-     * @param Node|Node[]|Stmt[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      * @return T[]
      */
     public function findInstanceOf($nodes, string $type) : array
@@ -112,7 +112,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      */
     public function findFirstInstanceOf($nodes, string $type) : ?\PhpParser\Node
     {
@@ -121,7 +121,7 @@ final class BetterNodeFinder
     }
     /**
      * @param class-string<Node> $type
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      */
     public function hasInstanceOfName($nodes, string $type, string $name) : bool
     {
@@ -129,14 +129,14 @@ final class BetterNodeFinder
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
     }
     /**
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      */
     public function hasVariableOfName($nodes, string $name) : bool
     {
         return (bool) $this->findVariableOfName($nodes, $name);
     }
     /**
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      * @return Variable|null
      */
     public function findVariableOfName($nodes, string $name) : ?\PhpParser\Node
@@ -144,7 +144,7 @@ final class BetterNodeFinder
         return $this->findInstanceOfName($nodes, \PhpParser\Node\Expr\Variable::class, $name);
     }
     /**
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      * @param array<class-string<Node>> $types
      */
     public function hasInstancesOf($nodes, array $types) : bool
@@ -162,7 +162,7 @@ final class BetterNodeFinder
     /**
      * @template T of Node
      * @param class-string<T> $type
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      */
     public function findLastInstanceOf($nodes, string $type) : ?\PhpParser\Node
     {
@@ -176,7 +176,7 @@ final class BetterNodeFinder
         return $foundInstances[$lastItemKey];
     }
     /**
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      * @return Node[]
      */
     public function find($nodes, callable $filter) : array
@@ -186,7 +186,7 @@ final class BetterNodeFinder
     /**
      * Excludes anonymous classes!
      *
-     * @param Node[]|Node $nodes
+     * @param mixed[]|\PhpParser\Node $nodes
      * @return ClassLike[]
      */
     public function findClassLikes($nodes) : array
@@ -214,7 +214,7 @@ final class BetterNodeFinder
         });
     }
     /**
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      */
     public function findFirst($nodes, callable $filter) : ?\PhpParser\Node
     {
@@ -346,7 +346,7 @@ final class BetterNodeFinder
     }
     /**
      * @template T of Node
-     * @param Node|Node[] $nodes
+     * @param \PhpParser\Node|mixed[] $nodes
      * @param class-string<T> $type
      */
     private function findInstanceOfName($nodes, string $type, string $name) : ?\PhpParser\Node

@@ -51,7 +51,7 @@ final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver
         return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param StaticCall|MethodCall $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

@@ -11,28 +11,28 @@ use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
-use PHPStan\Type\VerbosityLevel;
+use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class TypeFactory
 {
     /**
      * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
      */
     private $unionTypeFactory;
-    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)
+    /**
+     * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
+     */
+    private $typeHasher;
+    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher)
     {
         $this->unionTypeFactory = $unionTypeFactory;
+        $this->typeHasher = $typeHasher;
     }
     /**
      * @param Type[] $types
@@ -64,8 +64,7 @@ final class TypeFactory
             if (!$keepConstant) {
                 $type = $this->removeValueFromConstantType($type);
             }
-            $type = $this->normalizeObjectTypes($type);
-            $typeHash = $type->describe(\PHPStan\Type\VerbosityLevel::cache());
+            $typeHash = $this->typeHasher->createTypeHash($type);
             $uniqueTypes[$typeHash] = $type;
         }
         // re-index
@@ -150,17 +149,5 @@ final class TypeFactory
             $unwrappedTypes[] = new \PHPStan\Type\ArrayType($nestedFlattenKeyType, $nestedFlattenItemType);
         }
         return $unwrappedTypes;
-    }
-    private function normalizeObjectTypes(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
-    {
-        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $currentType, callable $traverseCallback) : Type {
-            if ($currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
-                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getFullyQualifiedName());
-            }
-            if ($currentType instanceof \PHPStan\Type\ObjectType && !$currentType instanceof \PHPStan\Type\Generic\GenericObjectType && !$currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $currentType->getClassName() !== 'Iterator') {
-                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getClassName());
-            }
-            return $traverseCallback($currentType);
-        });
     }
 }

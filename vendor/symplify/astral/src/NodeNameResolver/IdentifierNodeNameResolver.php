@@ -20,7 +20,7 @@ final class IdentifierNodeNameResolver implements \RectorPrefix20211027\Symplify
         return $node instanceof \PhpParser\Node\Name;
     }
     /**
-     * @param Identifier|Name $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : ?string
     {

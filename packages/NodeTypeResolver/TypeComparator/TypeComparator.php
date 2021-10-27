@@ -57,6 +57,11 @@ final class TypeComparator
     }
     public function areTypesEqual(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
+        $firstTypeHash = $this->typeHasher->createTypeHash($firstType);
+        $secondTypeHash = $this->typeHasher->createTypeHash($secondType);
+        if ($firstTypeHash === $secondTypeHash) {
+            return \true;
+        }
         if ($this->scalarTypeComparator->areEqualScalar($firstType, $secondType)) {
             return \true;
         }
@@ -99,8 +104,7 @@ final class TypeComparator
     }
     private function areAliasedObjectMatchingFqnObject(\PHPStan\Type\Type $firstType, \PHPStan\Type\Type $secondType) : bool
     {
-        if ($firstType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $secondType instanceof \PHPStan\Type\ObjectType && $firstType->getFullyQualifiedClass() === $secondType->getClassName()) {
-            return \true;
+        if ($firstType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $secondType instanceof \PHPStan\Type\ObjectType && $firstType->getFullyQualifiedName() === $secondType->getClassName()) {
         }
         if (!$secondType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
             return \false;
@@ -108,7 +112,7 @@ final class TypeComparator
         if (!$firstType instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
-        return $secondType->getFullyQualifiedClass() === $firstType->getClassName();
+        return $secondType->getFullyQualifiedName() === $firstType->getClassName();
     }
     /**
      * E.g. class A extends B, class B → A[] is subtype of B[] → keep A[]

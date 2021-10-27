@@ -7,7 +7,9 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeWithClassName;
@@ -23,7 +25,7 @@ final class TypeHasher
     {
         return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
     }
-    private function createTypeHash(\PHPStan\Type\Type $type) : string
+    public function createTypeHash(\PHPStan\Type\Type $type) : string
     {
         if ($type instanceof \PHPStan\Type\MixedType) {
             return \serialize($type) . $type->isExplicitMixed();
@@ -43,6 +45,17 @@ final class TypeHasher
         if ($type instanceof \PHPStan\Type\UnionType) {
             return $this->createUnionTypeHash($type);
         }
+        $type = $this->normalizeObjectType($type);
+        // normalize iterable
+        $type = \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $currentType, callable $traverseCallback) : Type {
+            if (!$currentType instanceof \PHPStan\Type\ObjectType) {
+                return $traverseCallback($currentType);
+            }
+            if ($currentType->getClassName() === 'iterable') {
+                return new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+            }
+            return $traverseCallback($currentType);
+        });
         return $type->describe(\PHPStan\Type\VerbosityLevel::value());
     }
     private function resolveUniqueTypeWithClassNameHash(\PHPStan\Type\TypeWithClassName $typeWithClassName) : string
@@ -51,7 +64,7 @@ final class TypeHasher
             return $typeWithClassName->getFullyQualifiedName();
         }
         if ($typeWithClassName instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
-            return $typeWithClassName->getFullyQualifiedClass();
+            return $typeWithClassName->getFullyQualifiedName();
         }
         return $typeWithClassName->getClassName();
     }
@@ -66,11 +79,26 @@ final class TypeHasher
         $normalizedUnionType = clone $sortedUnionType;
         // change alias to non-alias
         $normalizedUnionType = \PHPStan\Type\TypeTraverser::map($normalizedUnionType, function (\PHPStan\Type\Type $type, callable $callable) : Type {
-            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && !$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
                 return $callable($type);
             }
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($type->getFullyQualifiedClass());
+            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($type->getFullyQualifiedName());
         });
         return $normalizedUnionType->describe(\PHPStan\Type\VerbosityLevel::precise());
+    }
+    private function normalizeObjectType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    {
+        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $currentType, callable $traverseCallback) : Type {
+            if ($currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getFullyQualifiedName());
+            }
+            if ($currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getFullyQualifiedName());
+            }
+            if ($currentType instanceof \PHPStan\Type\ObjectType && !$currentType instanceof \PHPStan\Type\Generic\GenericObjectType && !$currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $currentType->getClassName() !== 'Iterator' && $currentType->getClassName() !== 'iterable') {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getClassName());
+            }
+            return $traverseCallback($currentType);
+        });
     }
 }

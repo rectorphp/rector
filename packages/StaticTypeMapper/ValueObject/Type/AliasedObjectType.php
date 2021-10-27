@@ -21,7 +21,7 @@ final class AliasedObjectType extends \PHPStan\Type\ObjectType
         $this->fullyQualifiedClass = $fullyQualifiedClass;
         parent::__construct($alias);
     }
-    public function getFullyQualifiedClass() : string
+    public function getFullyQualifiedName() : string
     {
         return $this->fullyQualifiedClass;
     }
@@ -55,7 +55,7 @@ final class AliasedObjectType extends \PHPStan\Type\ObjectType
     {
         // compare with FQN classes
         if ($type instanceof \PHPStan\Type\TypeWithClassName) {
-            if ($type instanceof self && $this->fullyQualifiedClass === $type->getFullyQualifiedClass()) {
+            if ($type instanceof self && $this->fullyQualifiedClass === $type->getFullyQualifiedName()) {
                 return \true;
             }
             if ($this->fullyQualifiedClass === $type->getClassName()) {

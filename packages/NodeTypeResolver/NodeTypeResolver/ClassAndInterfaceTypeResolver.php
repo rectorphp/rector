@@ -27,7 +27,7 @@ final class ClassAndInterfaceTypeResolver implements \Rector\NodeTypeResolver\Co
         return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
     }
     /**
-     * @param Class_|Interface_ $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

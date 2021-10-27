@@ -43,7 +43,7 @@ final class StrposMatchAndRefactor implements \Rector\Php80\Contract\StrStartWit
         $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
-     * @param Identical|NotIdentical $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp $binaryOp
      */
     public function match($binaryOp) : ?\Rector\Php80\ValueObject\StrStartsWith
     {

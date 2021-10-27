@@ -35,7 +35,7 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
-     * @param ClassMethod|ClassConst $node
+     * @param \PhpParser\Node $node
      */
     public function resolve($node) : \PHPStan\Type\Type
     {

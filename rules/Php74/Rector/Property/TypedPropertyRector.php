@@ -237,7 +237,7 @@ CODE_SAMPLE
             return \false;
         }
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
-            $typeName = $type->getFullyQualifiedClass();
+            $typeName = $type->getFullyQualifiedName();
         }
         return !$this->reflectionProvider->hasClass($typeName);
     }

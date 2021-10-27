@@ -101,7 +101,7 @@ final class RectorKernel extends \RectorPrefix20211027\Symfony\Component\HttpKer
     }
     /**
      * This allows to use "%vendor%" variables in imports
-     * @param ContainerInterface|ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
     protected function getContainerLoader($container) : \RectorPrefix20211027\Symfony\Component\Config\Loader\DelegatingLoader
     {

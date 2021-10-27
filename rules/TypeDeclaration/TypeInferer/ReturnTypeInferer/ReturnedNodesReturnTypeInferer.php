@@ -75,7 +75,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
         $this->reflectionResolver = $reflectionResolver;
     }
     /**
-     * @param ClassMethod|Closure|Function_ $functionLike
+     * @param \PhpParser\Node\FunctionLike $functionLike
      */
     public function inferFunctionLike($functionLike) : \PHPStan\Type\Type
     {

@@ -41,7 +41,7 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
-     * @param ClassMethod|Function_|Closure $functionLike
+     * @param \PhpParser\Node\FunctionLike $functionLike
      */
     public function inferFunctionLike($functionLike) : \PHPStan\Type\Type
     {

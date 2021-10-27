@@ -14,11 +14,11 @@ use PhpParser\Node\Expr\Variable;
 final class VariableAssignPair
 {
     /**
-     * @var \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\ArrayDimFetch|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch
+     * @var Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
      */
     private $variable;
     /**
-     * @var \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp|\PhpParser\Node\Expr\AssignRef
+     * @var Assign|AssignOp|AssignRef
      */
     private $assign;
     /**

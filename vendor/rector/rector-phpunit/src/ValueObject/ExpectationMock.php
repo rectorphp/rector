@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Expression;
 final class ExpectationMock
 {
     /**
-     * @var \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch
+     * @var Variable|PropertyFetch
      */
     private $expectationVariable;
     /**
