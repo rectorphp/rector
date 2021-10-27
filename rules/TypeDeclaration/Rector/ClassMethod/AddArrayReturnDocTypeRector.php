@@ -42,7 +42,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         private PhpDocTypeChanger $phpDocTypeChanger,
         private NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
         private ReturnTagRemover $returnTagRemover,
-        private DetailedTypeAnalyzer $detailedTypeAnalyzer
+        private DetailedTypeAnalyzer $detailedTypeAnalyzer,
     ) {
     }
 
@@ -103,6 +103,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
         if ($this->shouldSkip($node, $phpDocInfo)) {
             return null;
         }

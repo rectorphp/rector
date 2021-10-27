@@ -62,9 +62,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // buggy - @todo fix on Symplify master
         DocBlockLineLengthFixer::class,
 
+        // double to Double false positive
         PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
 
-        // buggy on "Float" class
+        // assertEquals() on purpose
         PhpUnitStrictFixer::class => [
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',

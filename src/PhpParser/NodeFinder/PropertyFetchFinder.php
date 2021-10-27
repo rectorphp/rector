@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\NodeFinder;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
@@ -53,9 +52,7 @@ final class PropertyFetchFinder
 
         $className = (string) $this->nodeNameResolver->getName($classLike);
         if (! $this->reflectionProvider->hasClass($className)) {
-            /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-            $propertyFetches = $this->findPropertyFetchesInClassLike($classLike->stmts, $propertyName);
-            return $propertyFetches;
+            return $this->findPropertyFetchesInClassLike($classLike->stmts, $propertyName);
         }
 
         $classReflection = $this->reflectionProvider->getClass($className);
@@ -134,30 +131,33 @@ final class PropertyFetchFinder
      */
     private function findPropertyFetchesInClassLike(array $stmts, string $propertyName): array
     {
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($stmts, function (Node $node) use ($propertyName): bool {
-            // property + static fetch
-            if ($node instanceof PropertyFetch && $this->nodeNameResolver->isName($node->var, self::THIS)) {
-                return $this->nodeNameResolver->isName($node, $propertyName);
-            }
+        /** @var PropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, PropertyFetch::class);
 
-            if (! $node instanceof StaticPropertyFetch) {
+        /** @var PropertyFetch[] $matchingPropertyFetches */
+        $matchingPropertyFetches = array_filter($propertyFetches, function (PropertyFetch $propertyFetch) use (
+            $propertyName
+        ): bool {
+            if (! $this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
                 return false;
             }
 
-            $class = $this->nodeNameResolver->getName($node->class);
-            if (! in_array(
-                $class,
-                [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), self::THIS],
-                true
-            )) {
-                return false;
-            }
-
-            return $this->nodeNameResolver->isName($node, $propertyName);
+            return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
         });
 
-        return $propertyFetches;
+        /** @var StaticPropertyFetch[] $staticPropertyFetches */
+        $staticPropertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, StaticPropertyFetch::class);
+
+        /** @var StaticPropertyFetch[] $matchingStaticPropertyFetches */
+        $matchingStaticPropertyFetches = array_filter(
+            $staticPropertyFetches,
+            fn (StaticPropertyFetch $staticPropertyFetch): bool => $this->isLocalStaticPropertyByFetchName(
+                $staticPropertyFetch,
+                $propertyName
+            )
+        );
+
+        return array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
     }
 
     private function resolvePropertyName(Property | Param $propertyOrPromotedParam): ?string
@@ -167,5 +167,21 @@ final class PropertyFetchFinder
         }
 
         return $this->nodeNameResolver->getName($propertyOrPromotedParam->var);
+    }
+
+    private function isLocalStaticPropertyByFetchName(
+        StaticPropertyFetch $staticPropertyFetch,
+        string $propertyName
+    ): bool {
+        $class = $this->nodeNameResolver->getName($staticPropertyFetch->class);
+        if (! in_array(
+            $class,
+            [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), self::THIS],
+            true
+        )) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($staticPropertyFetch->name, $propertyName);
     }
 }

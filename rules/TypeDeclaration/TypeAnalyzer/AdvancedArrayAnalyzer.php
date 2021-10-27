@@ -58,6 +58,7 @@ final class AdvancedArrayAnalyzer
         }
 
         $currentReturnType = $phpDocInfo->getReturnType();
+
         $arrayTypes = TypeUtils::getArrays($currentReturnType);
         return $arrayTypes !== [];
     }

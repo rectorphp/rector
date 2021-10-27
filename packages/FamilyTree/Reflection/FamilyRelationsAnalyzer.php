@@ -41,7 +41,7 @@ final class FamilyRelationsAnalyzer
         private BetterNodeFinder $betterNodeFinder,
         private StaticTypeMapper $staticTypeMapper,
         private AstResolver $astResolver,
-        private SimplePhpParser $simplePhpParser
+        private SimplePhpParser $simplePhpParser,
     ) {
     }
 

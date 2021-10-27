@@ -242,13 +242,9 @@ CODE_SAMPLE
         Expr $expr
     ): BooleanAnd | BooleanOr {
         $string = new String_('0');
-        $zeroIdentical = $isNegated
-            ? new Identical($expr, $string)
-            : new NotIdentical($expr, $string);
 
-        return $isNegated
-            ? new BooleanOr($identical, $zeroIdentical)
-            : new BooleanAnd($identical, $zeroIdentical);
+        $zeroIdentical = $isNegated ? new Identical($expr, $string) : new NotIdentical($expr, $string);
+        return $isNegated ? new BooleanOr($identical, $zeroIdentical) : new BooleanAnd($identical, $zeroIdentical);
     }
 
     private function resolveInteger(bool $isNegated, Expr $expr): Identical | NotIdentical

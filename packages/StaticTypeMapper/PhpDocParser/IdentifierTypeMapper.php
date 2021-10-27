@@ -31,7 +31,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
     public function __construct(
         private ObjectTypeSpecifier $objectTypeSpecifier,
         private ScalarStringToTypeMapper $scalarStringToTypeMapper,
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private ParentClassScopeResolver $parentClassScopeResolver,
     ) {
     }
 

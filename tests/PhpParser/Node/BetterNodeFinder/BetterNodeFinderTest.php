@@ -28,7 +28,6 @@ final class BetterNodeFinderTest extends AbstractTestCase
 
         $this->betterNodeFinder = $this->getService(BetterNodeFinder::class);
 
-        /** @var SimplePhpParser $simplePhpParser */
         $simplePhpParser = $this->getService(SimplePhpParser::class);
         $this->nodes = $simplePhpParser->parseFile(__DIR__ . '/Source/SomeFile.php.inc');
     }
