@@ -66,13 +66,19 @@ CODE_SAMPLE
         if (!$this->isNames($funcCall, ['json_encode', 'json_decode'])) {
             return \true;
         }
-        $args = $funcCall->getArgs();
-        foreach ($args as $arg) {
+        if ($funcCall->args === null) {
+            return \true;
+        }
+        foreach ($funcCall->args as $arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             if ($arg->name instanceof \PhpParser\Node\Identifier) {
                 return \true;
             }
         }
-        $value = $this->valueResolver->getValue($args[0]->value);
+        $firstArg = $funcCall->args[0];
+        $value = $this->valueResolver->getValue($firstArg->value);
         if (\is_string($value)) {
             return \true;
         }

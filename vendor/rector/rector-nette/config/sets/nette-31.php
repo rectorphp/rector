@@ -11,8 +11,6 @@ use Rector\Composer\Rector\RemovePackageComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Nette\Rector\MethodCall\ContextGetByTypeToConstructorInjectionRector;
 use Rector\Nette\Set\NetteSetList;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
