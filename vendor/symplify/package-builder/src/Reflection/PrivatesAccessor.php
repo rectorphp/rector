@@ -22,6 +22,7 @@ final class PrivatesAccessor
         return $propertyReflection->getValue($object);
     }
     /**
+     * @param mixed $value
      * @param object $object
      */
     public function setPrivateProperty($object, string $propertyName, $value) : void

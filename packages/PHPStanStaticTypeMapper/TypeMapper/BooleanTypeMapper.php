@@ -13,7 +13,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<BooleanType>
  */
@@ -36,7 +36,7 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -47,7 +47,7 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {

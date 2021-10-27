@@ -828,17 +828,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "0.12.99",
-            "version_normalized": "0.12.99.0",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "b4d40f1d759942f523be267a1bab6884f46ca3f7"
+                "reference": "57f294a4fbd63ae01b3426741b6c4cfd9538bf48"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/b4d40f1d759942f523be267a1bab6884f46ca3f7",
-                "reference": "b4d40f1d759942f523be267a1bab6884f46ca3f7",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/57f294a4fbd63ae01b3426741b6c4cfd9538bf48",
+                "reference": "57f294a4fbd63ae01b3426741b6c4cfd9538bf48",
                 "shasum": ""
             },
             "require": {
@@ -847,7 +847,8 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-09-12T20:09:55+00:00",
+            "time": "2021-10-27T16:36:44+00:00",
+            "default-branch": true,
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -855,7 +856,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.12-dev"
+                    "dev-master": "1.0-dev"
                 }
             },
             "installation-source": "dist",
@@ -871,7 +872,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/0.12.99"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/master"
             },
             "funding": [
                 {
@@ -895,36 +896,38 @@
         },
         {
             "name": "phpstan\/phpstan-phpunit",
-            "version": "0.12.22",
-            "version_normalized": "0.12.22.0",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan-phpunit.git",
-                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc"
+                "reference": "9eb88c9f689003a8a2a5ae9e010338ee94dc39b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
-                "reference": "7c01ef93bf128b4ac8bdad38c54b2a4fd6b0b3cc",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/9eb88c9f689003a8a2a5ae9e010338ee94dc39b3",
+                "reference": "9eb88c9f689003a8a2a5ae9e010338ee94dc39b3",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.1 || ^8.0",
-                "phpstan\/phpstan": "^0.12.92"
+                "phpstan\/phpstan": "^1.0"
             },
             "conflict": {
                 "phpunit\/phpunit": "<7.0"
             },
             "require-dev": {
+                "nikic\/php-parser": "^4.13.0",
                 "php-parallel-lint\/php-parallel-lint": "^1.2",
-                "phpstan\/phpstan-strict-rules": "^0.12.6",
+                "phpstan\/phpstan-strict-rules": "^1.0",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-08-12T10:53:43+00:00",
+            "time": "2021-10-14T08:03:54+00:00",
+            "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.12-dev"
+                    "dev-master": "1.0-dev"
                 },
                 "phpstan": {
                     "includes": [
@@ -946,7 +949,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/0.12.22"
+                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/master"
             },
             "install-path": "..\/phpstan\/phpstan-phpunit"
         },
@@ -3806,19 +3809,19 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "e583ee48dbb665d42f93921b496b660758c593a9"
+                "reference": "aba9535e02a5e6a6df96e303665cda29ed3dfbf3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/e583ee48dbb665d42f93921b496b660758c593a9",
-                "reference": "e583ee48dbb665d42f93921b496b660758c593a9",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/aba9535e02a5e6a6df96e303665cda29ed3dfbf3",
+                "reference": "aba9535e02a5e6a6df96e303665cda29ed3dfbf3",
                 "shasum": ""
             },
             "require": {
                 "nette\/utils": "^3.2",
                 "nikic\/php-parser": "^4.13",
                 "php": ">=8.0",
-                "phpstan\/phpstan": "^0.12.99",
+                "phpstan\/phpstan": "1.0.x-dev as 0.12.99",
                 "symfony\/dependency-injection": "^5.3|^6.0",
                 "symfony\/http-kernel": "^5.3|^6.0",
                 "symplify\/package-builder": "^9.5",
@@ -3858,7 +3861,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^9.5"
             },
-            "time": "2021-10-25T13:49:49+00:00",
+            "time": "2021-10-27T18:06:39+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -4258,12 +4261,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-testing.git",
-                "reference": "4c7c51286fcfaad5e62f9b9fc4de24c12411e78c"
+                "reference": "a340e9c3e85dbdb70919568d2af5629b1dadfa9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/4c7c51286fcfaad5e62f9b9fc4de24c12411e78c",
-                "reference": "4c7c51286fcfaad5e62f9b9fc4de24c12411e78c",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/a340e9c3e85dbdb70919568d2af5629b1dadfa9d",
+                "reference": "a340e9c3e85dbdb70919568d2af5629b1dadfa9d",
                 "shasum": ""
             },
             "require": {
@@ -4309,7 +4312,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-10-11T15:00:27+00:00",
+            "time": "2021-10-27T18:06:40+00:00",
             "default-branch": true,
             "bin": [
                 "bin\/easy-testing"
@@ -4353,12 +4356,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "796fd1587641361ff3774c4d95926d5041202c39"
+                "reference": "a18fc02505ebd83face63b083130acb6aaa63582"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/796fd1587641361ff3774c4d95926d5041202c39",
-                "reference": "796fd1587641361ff3774c4d95926d5041202c39",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/a18fc02505ebd83face63b083130acb6aaa63582",
+                "reference": "a18fc02505ebd83face63b083130acb6aaa63582",
                 "shasum": ""
             },
             "require": {
@@ -4406,7 +4409,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-10-14T12:38:55+00:00",
+            "time": "2021-10-27T18:06:49+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {

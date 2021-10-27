@@ -22,7 +22,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
@@ -139,7 +139,7 @@ CODE_SAMPLE
         if ($varType instanceof \PHPStan\Type\UnionType) {
             $types = $varType->getTypes();
             if (\count($types) === 2 && $types[0] instanceof \PHPStan\Type\Generic\TemplateType) {
-                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($types[0]->getBound(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($types[0]->getBound(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
                 return $node;
             }
         }
@@ -147,7 +147,7 @@ CODE_SAMPLE
         if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {
             return null;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
         if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node, $varType)) {
             return null;
         }
@@ -174,7 +174,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $node
      */
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type) : bool
     {
@@ -215,7 +215,7 @@ CODE_SAMPLE
         return $possibleUnionType;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $node
      */
     private function shouldSkipNonClassLikeType($node, \PHPStan\Type\Type $type) : bool
     {

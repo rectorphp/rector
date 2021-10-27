@@ -102,7 +102,7 @@ class PhpDumper extends \RectorPrefix20211027\Symfony\Component\DependencyInject
     }
     /**
      * Sets the dumper to be used when dumping proxies in the generated container.
-     * @param ProxyDumper $proxyDumper
+     * @param \Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface $proxyDumper
      */
     public function setProxyDumper($proxyDumper)
     {

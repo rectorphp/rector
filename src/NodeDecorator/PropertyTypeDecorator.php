@@ -10,7 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PropertyTypeDecorator
 {
@@ -44,7 +44,7 @@ final class PropertyTypeDecorator
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
-            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+            $phpParserType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
             if ($phpParserType !== null) {
                 $property->type = $phpParserType;
                 if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace RectorPrefix20211027;
 
-use Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector;
 use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;
@@ -12,6 +11,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php53\Rector\Ternary\TernaryToElvisRector::class);
     $services->set(\Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector::class);
-    $services->set(\Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector::class);
     $services->set(\Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector::class);
 };

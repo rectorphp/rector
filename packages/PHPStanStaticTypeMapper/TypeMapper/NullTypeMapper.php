@@ -10,7 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<NullType>
  */
@@ -25,7 +25,7 @@ final class NullTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -33,18 +33,18 @@ final class NullTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY())) {
+        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY())) {
             return null;
         }
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM())) {
+        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM())) {
             return null;
         }
         // return type cannot be only null
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN())) {
+        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN())) {
             return null;
         }
         return new \PhpParser\Node\Name('null');

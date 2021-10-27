@@ -26,7 +26,7 @@ final class AliasUsesResolver
     /**
      * @return string[]
      */
-    public function resolveForNode(\PhpParser\Node $node) : array
+    public function resolveFromNode(\PhpParser\Node $node) : array
     {
         if (!$node instanceof \PhpParser\Node\Stmt\Namespace_) {
             $node = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);

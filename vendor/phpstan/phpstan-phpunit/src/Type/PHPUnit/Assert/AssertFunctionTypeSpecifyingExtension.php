@@ -21,11 +21,11 @@ class AssertFunctionTypeSpecifyingExtension implements \PHPStan\Type\FunctionTyp
     }
     public function isFunctionSupported(\PHPStan\Reflection\FunctionReflection $functionReflection, \PhpParser\Node\Expr\FuncCall $node, \PHPStan\Analyser\TypeSpecifierContext $context) : bool
     {
-        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::isSupported($this->trimName($functionReflection->getName()), $node->args);
+        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::isSupported($this->trimName($functionReflection->getName()), $node->getArgs());
     }
     public function specifyTypes(\PHPStan\Reflection\FunctionReflection $functionReflection, \PhpParser\Node\Expr\FuncCall $node, \PHPStan\Analyser\Scope $scope, \PHPStan\Analyser\TypeSpecifierContext $context) : \PHPStan\Analyser\SpecifiedTypes
     {
-        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::specifyTypes($this->typeSpecifier, $scope, $this->trimName($functionReflection->getName()), $node->args);
+        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::specifyTypes($this->typeSpecifier, $scope, $this->trimName($functionReflection->getName()), $node->getArgs());
     }
     private function trimName(string $functionName) : string
     {

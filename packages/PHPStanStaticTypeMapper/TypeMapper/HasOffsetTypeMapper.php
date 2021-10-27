@@ -11,7 +11,7 @@ use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
  * @implements TypeMapperInterface<HasOffsetType>
  */
@@ -26,7 +26,7 @@ final class HasOffsetTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contr
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -34,7 +34,7 @@ final class HasOffsetTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contr
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {

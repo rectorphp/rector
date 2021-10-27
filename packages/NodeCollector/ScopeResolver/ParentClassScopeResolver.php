@@ -21,10 +21,6 @@ final class ParentClassScopeResolver
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-        $parentClassReflection = $classReflection->getParentClass();
-        if ($parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return $parentClassReflection;
-        }
-        return null;
+        return $classReflection->getParentClass();
     }
 }

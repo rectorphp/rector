@@ -14,8 +14,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -40,7 +40,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -57,7 +57,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
@@ -94,7 +94,7 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
-    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
         $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($name);

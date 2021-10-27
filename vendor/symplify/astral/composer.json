@@ -8,7 +8,7 @@
         "nette\/utils": "^3.2",
         "symfony\/dependency-injection": "^5.3|^6.0",
         "symplify\/smart-file-system": "^9.5",
-        "phpstan\/phpstan": "^0.12.99",
+        "phpstan\/phpstan": "1.0.x-dev as 0.12.99",
         "symfony\/http-kernel": "^5.3|^6.0",
         "nikic\/php-parser": "^4.13",
         "symplify\/package-builder": "^9.5"

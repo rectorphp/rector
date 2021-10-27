@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvi
 
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
+use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
@@ -29,9 +30,14 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
      * @var \PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher
      */
     private $fileNodesFetcher;
-    public function __construct(\PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher $fileNodesFetcher)
+    /**
+     * @var \PHPStan\Php\PhpVersion
+     */
+    private $phpVersion;
+    public function __construct(\PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher $fileNodesFetcher, \PHPStan\Php\PhpVersion $phpVersion)
     {
         $this->fileNodesFetcher = $fileNodesFetcher;
+        $this->phpVersion = $phpVersion;
     }
     /**
      * @param \Symplify\SmartFileSystem\SmartFileInfo $fileInfo
@@ -59,7 +65,7 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
             $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator($this->fileNodesFetcher, $file);
         }
         foreach ($this->filesByDirectory as $files) {
-            $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator($this->fileNodesFetcher, $files);
+            $sourceLocators[] = new \PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator($this->fileNodesFetcher, $this->phpVersion, $files);
         }
         $this->aggregateSourceLocator = new \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator($sourceLocators);
         return $this->aggregateSourceLocator;

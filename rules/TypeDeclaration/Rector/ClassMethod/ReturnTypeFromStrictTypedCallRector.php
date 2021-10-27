@@ -21,7 +21,7 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -139,7 +139,7 @@ CODE_SAMPLE
         if ($resolvedType instanceof \PHPStan\Type\VoidType) {
             return null;
         }
-        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
         if (!$returnType instanceof \PhpParser\Node) {
             return null;
         }

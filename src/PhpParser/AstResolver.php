@@ -133,7 +133,7 @@ final class AstResolver
         }
         $fileName = $classReflection->getFileName();
         // probably native PHP method → un-parseable
-        if ($fileName === \false) {
+        if ($fileName === null) {
             return null;
         }
         $fileContent = $this->smartFileSystem->readFile($fileName);
@@ -173,7 +173,7 @@ final class AstResolver
             return $this->functionsByName[$phpFunctionReflection->getName()];
         }
         $fileName = $phpFunctionReflection->getFileName();
-        if ($fileName === \false) {
+        if ($fileName === null) {
             return null;
         }
         $fileContent = $this->smartFileSystem->readFile($fileName);

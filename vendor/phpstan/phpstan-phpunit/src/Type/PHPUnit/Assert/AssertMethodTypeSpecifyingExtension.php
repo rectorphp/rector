@@ -21,14 +21,14 @@ class AssertMethodTypeSpecifyingExtension implements \PHPStan\Type\MethodTypeSpe
     }
     public function getClass() : string
     {
-        return 'RectorPrefix20211027\\PHPUnit\\Framework\\TestCase';
+        return 'RectorPrefix20211027\\PHPUnit\\Framework\\Assert';
     }
     public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $node, \PHPStan\Analyser\TypeSpecifierContext $context) : bool
     {
-        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::isSupported($methodReflection->getName(), $node->args);
+        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::isSupported($methodReflection->getName(), $node->getArgs());
     }
     public function specifyTypes(\PHPStan\Reflection\MethodReflection $functionReflection, \PhpParser\Node\Expr\MethodCall $node, \PHPStan\Analyser\Scope $scope, \PHPStan\Analyser\TypeSpecifierContext $context) : \PHPStan\Analyser\SpecifiedTypes
     {
-        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::specifyTypes($this->typeSpecifier, $scope, $functionReflection->getName(), $node->args);
+        return \PHPStan\Type\PHPUnit\Assert\AssertTypeSpecifyingExtensionHelper::specifyTypes($this->typeSpecifier, $scope, $functionReflection->getName(), $node->getArgs());
     }
 }

@@ -28,11 +28,11 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
 use RectorPrefix20211027\Symfony\Contracts\Service\Attribute\Required;
 /**
@@ -93,7 +93,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -110,7 +110,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
@@ -197,7 +197,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @return Name|FullyQualified|PhpParserUnionType|NullableType|null
      */
-    private function matchTypeForUnionedObjectTypes(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
+    private function matchTypeForUnionedObjectTypes(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
         $phpParserUnionType = $this->matchPhpParserUnionType($unionType, $typeKind);
         if ($phpParserUnionType !== null) {
@@ -233,7 +233,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         }
         return new \PhpParser\Node\Name\FullyQualified($compatibleObjectType->getClassName());
     }
-    private function matchPhpParserUnionType(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node\UnionType
+    private function matchPhpParserUnionType(\PHPStan\Type\UnionType $unionType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node\UnionType
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
             return null;

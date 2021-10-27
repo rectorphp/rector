@@ -141,8 +141,10 @@ final class ArgumentDefaultValueReplacer
     private function resolveArgumentValuesToBeforeRecipe(array $argumentNodes, \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : array
     {
         $argumentValues = [];
-        /** @var mixed[] $valueBefore */
         $valueBefore = $replaceArgumentDefaultValue->getValueBefore();
+        if (!\is_array($valueBefore)) {
+            return [];
+        }
         $beforeArgumentCount = \count($valueBefore);
         for ($i = 0; $i < $beforeArgumentCount; ++$i) {
             if (!isset($argumentNodes[$replaceArgumentDefaultValue->getPosition() + $i])) {

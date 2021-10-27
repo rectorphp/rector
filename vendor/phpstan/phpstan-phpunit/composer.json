@@ -7,14 +7,15 @@
     ],
     "require": {
         "php": "^7.1 || ^8.0",
-        "phpstan\/phpstan": "^0.12.92"
+        "phpstan\/phpstan": "^1.0"
     },
     "conflict": {
         "phpunit\/phpunit": "<7.0"
     },
     "require-dev": {
+        "nikic\/php-parser": "^4.13.0",
         "php-parallel-lint\/php-parallel-lint": "^1.2",
-        "phpstan\/phpstan-strict-rules": "^0.12.6",
+        "phpstan\/phpstan-strict-rules": "^1.0",
         "phpunit\/phpunit": "^9.5"
     },
     "config": {
@@ -25,7 +26,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.12-dev"
+            "dev-master": "1.0-dev"
         },
         "phpstan": {
             "includes": [

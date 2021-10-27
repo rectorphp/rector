@@ -21,7 +21,7 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\PhpSpecToPHPUnit\LetManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory;
 /**
  * @see \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
@@ -97,7 +97,7 @@ final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Re
     private function createLetClassMethod(string $propertyName, \PHPStan\Type\ObjectType $testedObjectType) : \PhpParser\Node\Stmt\ClassMethod
     {
         $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
-        $testedObjectType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($testedObjectType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        $testedObjectType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($testedObjectType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
         if (!$testedObjectType instanceof \PhpParser\Node\Name) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }

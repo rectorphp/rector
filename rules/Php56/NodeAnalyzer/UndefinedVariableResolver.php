@@ -76,8 +76,10 @@ final class UndefinedVariableResolver
             if ($this->shouldSkipVariable($node)) {
                 return null;
             }
-            /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($node);
+            if (!\is_string($variableName)) {
+                return null;
+            }
             // defined 100 %
             /** @var Scope $scope */
             $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);

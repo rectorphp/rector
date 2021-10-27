@@ -57,7 +57,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20211027\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
@@ -205,7 +205,7 @@ final class NodeFactory
     {
         $paramBuilder = new \RectorPrefix20211027\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($name);
         if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
             }
@@ -306,7 +306,7 @@ final class NodeFactory
         $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable(self::THIS), $propertyName);
         $return = new \PhpParser\Node\Stmt\Return_($propertyFetch);
         $methodBuilder->addStmt($return);
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
         if ($typeNode !== null) {
             $methodBuilder->setReturnType($typeNode);
         }
@@ -410,7 +410,7 @@ final class NodeFactory
         $paramBuilder = new \RectorPrefix20211027\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyMetadata->getName());
         $propertyType = $propertyMetadata->getType();
         if ($propertyType !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
             }
@@ -547,7 +547,7 @@ final class NodeFactory
     private function createParamWithType(\PhpParser\Node\Expr\Variable $variable, \PHPStan\Type\Type $type) : \PhpParser\Node\Param
     {
         $param = new \PhpParser\Node\Param($variable);
-        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
+        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
         $param->type = $phpParserTypeNode;
         return $param;
     }

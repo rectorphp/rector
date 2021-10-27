@@ -17,7 +17,7 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
@@ -133,7 +133,7 @@ CODE_SAMPLE
      */
     private function processType($node, \PHPStan\Type\Type $inferedType) : ?\PhpParser\Node
     {
-        $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        $inferredReturnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
         // nothing to change in PHP code
         if (!$inferredReturnNode instanceof \PhpParser\Node) {
             return null;

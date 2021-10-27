@@ -12,8 +12,8 @@ use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use RectorPrefix20211027\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<CallableType>
@@ -40,7 +40,7 @@ final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     }
     /**
      * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
@@ -49,11 +49,11 @@ final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     }
     /**
      * @param CallableType|ClosureType $type
-     * @param \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind
+     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
-        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY())) {
+        if ($typeKind->equals(\Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY())) {
             return null;
         }
         return new \PhpParser\Node\Name('callable');

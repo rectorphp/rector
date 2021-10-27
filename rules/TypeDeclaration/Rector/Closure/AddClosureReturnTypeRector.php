@@ -9,7 +9,7 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
         if ($returnTypeNode === null) {
             return null;
         }

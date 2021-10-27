@@ -5,50 +5,30 @@ namespace Rector\Core\PhpParser\Parser;
 
 use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
-use PhpParser\Parser;
+use PHPStan\Parser\Parser;
 use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem;
 final class RectorParser
 {
-    /**
-     * @var array<string, Stmt[]>
-     */
-    private $nodesByFile = [];
-    /**
-     * @var \PhpParser\Parser
-     */
-    private $parser;
-    /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
     /**
      * @var \PhpParser\Lexer
      */
     private $lexer;
-    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\Lexer $lexer)
+    /**
+     * @var \PHPStan\Parser\Parser
+     */
+    private $parser;
+    public function __construct(\PhpParser\Lexer $lexer, \PHPStan\Parser\Parser $parser)
     {
-        $this->parser = $parser;
-        $this->smartFileSystem = $smartFileSystem;
         $this->lexer = $lexer;
+        $this->parser = $parser;
     }
     /**
      * @return Stmt[]
      */
     public function parseFile(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
     {
-        $fileRealPath = $smartFileInfo->getRealPath();
-        if (isset($this->nodesByFile[$fileRealPath])) {
-            return $this->nodesByFile[$fileRealPath];
-        }
-        $fileContent = $this->smartFileSystem->readFile($fileRealPath);
-        $nodes = $this->parser->parse($fileContent);
-        if ($nodes === null) {
-            $nodes = [];
-        }
-        $this->nodesByFile[$fileRealPath] = $nodes;
-        return $this->nodesByFile[$fileRealPath];
+        return $this->parser->parseFile($smartFileInfo->getRealPath());
     }
     public function parseFileToStmtsAndTokens(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : \Rector\Core\PhpParser\ValueObject\StmtsAndTokens
     {

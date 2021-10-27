@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2b781a5eed2336297eb6a436061150c3
+class ComposerStaticInitb38166aea24885a8c522e6004a52f5ef
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2282,7 +2282,6 @@ class ComposerStaticInit2b781a5eed2336297eb6a436061150c3
         'Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/ValueResolver.php',
         'Rector\\Core\\PhpParser\\Parser\\InlineCodeParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/InlineCodeParser.php',
         'Rector\\Core\\PhpParser\\Parser\\NikicPhpParserFactory' => __DIR__ . '/../..' . '/src/PhpParser/Parser/NikicPhpParserFactory.php',
-        'Rector\\Core\\PhpParser\\Parser\\PhpParserLexerFactory' => __DIR__ . '/../..' . '/src/PhpParser/Parser/PhpParserLexerFactory.php',
         'Rector\\Core\\PhpParser\\Parser\\RectorParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/RectorParser.php',
         'Rector\\Core\\PhpParser\\Parser\\SimplePhpParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/SimplePhpParser.php',
         'Rector\\Core\\PhpParser\\Printer\\BetterStandardPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/BetterStandardPrinter.php',
@@ -2910,6 +2909,7 @@ class ComposerStaticInit2b781a5eed2336297eb6a436061150c3
         'Rector\\PHPOffice\\ValueObject\\PHPExcelMethodDefaultValues' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/ValueObject/PHPExcelMethodDefaultValues.php',
         'Rector\\PHPStanStaticTypeMapper\\Contract\\TypeMapperInterface' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Contract/TypeMapperInterface.php',
         'Rector\\PHPStanStaticTypeMapper\\DoctrineTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/DoctrineTypeAnalyzer.php',
+        'Rector\\PHPStanStaticTypeMapper\\Enum\\TypeKind' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Enum/TypeKind.php',
         'Rector\\PHPStanStaticTypeMapper\\PHPStanStaticTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/PHPStanStaticTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\BoolUnionTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/BoolUnionTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
@@ -2942,7 +2942,6 @@ class ComposerStaticInit2b781a5eed2336297eb6a436061150c3
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\UnionTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
-        'Rector\\PHPStanStaticTypeMapper\\ValueObject\\TypeKind' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/TypeKind.php',
         'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
         'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\ExpectationAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ExpectationAnalyzer.php',
@@ -3022,7 +3021,6 @@ class ComposerStaticInit2b781a5eed2336297eb6a436061150c3
         'Rector\\PSR4\\Rector\\Namespace_\\MultipleClassFileToPsr4ClassesRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php',
         'Rector\\Php52\\Rector\\Property\\VarToPublicPropertyRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Property/VarToPublicPropertyRector.php',
         'Rector\\Php52\\Rector\\Switch_\\ContinueToBreakInSwitchRector' => __DIR__ . '/../..' . '/rules/Php52/Rector/Switch_/ContinueToBreakInSwitchRector.php',
-        'Rector\\Php53\\Rector\\AssignRef\\ClearReturnNewByReferenceRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/AssignRef/ClearReturnNewByReferenceRector.php',
         'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',
         'Rector\\Php53\\Rector\\Ternary\\TernaryToElvisRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/Ternary/TernaryToElvisRector.php',
         'Rector\\Php53\\Rector\\Variable\\ReplaceHttpServerVarsByServerRector' => __DIR__ . '/../..' . '/rules/Php53/Rector/Variable/ReplaceHttpServerVarsByServerRector.php',
@@ -3893,9 +3891,9 @@ class ComposerStaticInit2b781a5eed2336297eb6a436061150c3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2b781a5eed2336297eb6a436061150c3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2b781a5eed2336297eb6a436061150c3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2b781a5eed2336297eb6a436061150c3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb38166aea24885a8c522e6004a52f5ef::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb38166aea24885a8c522e6004a52f5ef::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb38166aea24885a8c522e6004a52f5ef::$classMap;
 
         }, null, ClassLoader::class);
     }

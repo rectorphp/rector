@@ -106,20 +106,20 @@ CODE_SAMPLE
             if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 $stmt = $stmt->expr;
             }
-            if (!$this->isAlwaysTruableNode($stmt)) {
+            $ifStmt = $this->matchTruableIf($stmt);
+            if (!$ifStmt instanceof \PhpParser\Node\Stmt\If_) {
                 continue;
             }
-            /** @var If_ $stmt */
-            if ($stmt->stmts === null) {
+            if ($ifStmt->stmts === null) {
                 continue;
             }
-            if (\count($stmt->stmts) === 1) {
-                $node->stmts[$key] = $stmt->stmts[0];
+            if (\count($ifStmt->stmts) === 1) {
+                $node->stmts[$key] = $ifStmt->stmts[0];
                 continue;
             }
             $haveNodeChanged = \true;
             // move all nodes one level up
-            \array_splice($node->stmts, $key, \count($stmt->stmts) - 1, $stmt->stmts);
+            \array_splice($node->stmts, $key, \count($ifStmt->stmts) - 1, $ifStmt->stmts);
         }
         if ($haveNodeChanged) {
             return $node;
@@ -128,26 +128,30 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
+     * @return \PhpParser\Node\Stmt\If_|null
      */
-    private function isAlwaysTruableNode($node) : bool
+    private function matchTruableIf($node)
     {
         if (!$node instanceof \PhpParser\Node\Stmt\If_) {
-            return \false;
+            return null;
         }
         // just one if
         if ($node->elseifs !== []) {
-            return \false;
+            return null;
         }
         // there is some else
         if ($node->else !== null) {
-            return \false;
+            return null;
         }
         // only property fetch, because of constructor set
         if (!$node->cond instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return \false;
+            return null;
         }
         $propertyFetchType = $this->resolvePropertyFetchType($node->cond);
-        return $this->staticTypeAnalyzer->isAlwaysTruableType($propertyFetchType);
+        if (!$this->staticTypeAnalyzer->isAlwaysTruableType($propertyFetchType)) {
+            return null;
+        }
+        return $node;
     }
     private function resolvePropertyFetchType(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : \PHPStan\Type\Type
     {

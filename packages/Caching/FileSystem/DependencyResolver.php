@@ -15,7 +15,7 @@ final class DependencyResolver
      */
     private $nodeScopeResolver;
     /**
-     * @var PHPStanDependencyResolver
+     * @var \PHPStan\Dependency\DependencyResolver
      */
     private $phpStanDependencyResolver;
     /**

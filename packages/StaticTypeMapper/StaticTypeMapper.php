@@ -20,8 +20,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
@@ -54,14 +54,14 @@ final class StaticTypeMapper
         $this->phpDocTypeMapper = $phpDocTypeMapper;
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
-    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType, $typeKind);
     }
     /**
      * @return Name|NullableType|PhpParserUnionType|null
      */
-    public function mapPHPStanTypeToPhpParserNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind $typeKind) : ?\PhpParser\Node
+    public function mapPHPStanTypeToPhpParserNode(\PHPStan\Type\Type $phpStanType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
         return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
     }

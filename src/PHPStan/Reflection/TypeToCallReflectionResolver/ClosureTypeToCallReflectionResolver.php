@@ -24,6 +24,6 @@ final class ClosureTypeToCallReflectionResolver implements \Rector\Core\Contract
      */
     public function resolve($type, $scope) : \PHPStan\Reflection\Native\NativeFunctionReflection
     {
-        return new \PHPStan\Reflection\Native\NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, \PHPStan\TrinaryLogic::createMaybe());
+        return new \PHPStan\Reflection\Native\NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, \PHPStan\TrinaryLogic::createMaybe(), \false);
     }
 }

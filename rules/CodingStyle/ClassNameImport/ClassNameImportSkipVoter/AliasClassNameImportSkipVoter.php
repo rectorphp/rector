@@ -34,7 +34,7 @@ final class AliasClassNameImportSkipVoter implements \Rector\CodingStyle\Contrac
      */
     public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
     {
-        $aliasedUses = $this->aliasUsesResolver->resolveForNode($node);
+        $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node);
         foreach ($aliasedUses as $aliasedUse) {
             $aliasedUseLowered = \strtolower($aliasedUse);
             // its aliased, we cannot just rename it

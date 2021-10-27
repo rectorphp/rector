@@ -75,7 +75,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         /** @var Variable $variable */
         $variable = $args[2]->value;
         if ($flags instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-            $this->cleanBitWiseOrFlags($node, $flags);
+            $this->cleanBitwiseOrFlags($node, $flags);
             if (!$this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
                 return $this->handleEmptyStringToNullMatch($node, $variable);
             }
@@ -163,7 +163,7 @@ CODE_SAMPLE
         }
         return \in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, \true) && \in_array($expr->else->value, self::REGEX_FUNCTION_NAMES, \true);
     }
-    private function cleanBitWiseOrFlags(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, \PhpParser\Node\Expr $expr = null) : void
+    private function cleanBitwiseOrFlags(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, \PhpParser\Node\Expr $expr = null) : void
     {
         if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
             /** @var BitwiseOr $leftLeft */
@@ -177,7 +177,7 @@ CODE_SAMPLE
                 $bitwiseOr = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($leftRight->left, $bitwiseOr->right);
             }
             if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-                $this->cleanBitWiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
+                $this->cleanBitwiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
                 return;
             }
         }

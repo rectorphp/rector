@@ -42,7 +42,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionFactory
@@ -125,7 +125,7 @@ final class AnonymousFunctionFactory
             return null;
         }
         if (!$functionVariantWithPhpDoc->getReturnType() instanceof \PHPStan\Type\MixedType) {
-            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
             $anonymousFunction->returnType = $returnType;
         }
         // does method return something?
@@ -278,7 +278,7 @@ final class AnonymousFunctionFactory
         foreach ($parameterReflections as $parameterReflection) {
             $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($parameterReflection->getName()));
             if (!$parameterReflection->getType() instanceof \PHPStan\Type\MixedType) {
-                $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
+                $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
             }
             $params[] = $param;
         }

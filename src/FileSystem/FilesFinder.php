@@ -105,10 +105,9 @@ final class FilesFinder
             return;
         }
         $finder->filter(function (\RectorPrefix20211027\Symfony\Component\Finder\SplFileInfo $splFileInfo) use($excludePaths) : bool {
-            /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
-            if (!$realPath) {
-                //dead symlink
+            if ($realPath === '') {
+                // dead symlink
                 return \false;
             }
             // make the path work accross different OSes

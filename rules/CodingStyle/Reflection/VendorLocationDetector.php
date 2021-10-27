@@ -25,7 +25,7 @@ final class VendorLocationDetector
     {
         $fileName = $this->resolveReflectionFileName($reflection);
         // probably internal
-        if ($fileName === \false) {
+        if ($fileName === null) {
             return \false;
         }
         $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
@@ -33,7 +33,7 @@ final class VendorLocationDetector
     }
     /**
      * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\FunctionReflection $reflection
-     * @return string|bool
+     * @return string|null
      */
     private function resolveReflectionFileName($reflection)
     {
@@ -47,6 +47,6 @@ final class VendorLocationDetector
             $declaringClassReflection = $reflection->getDeclaringClass();
             return $declaringClassReflection->getFileName();
         }
-        return \false;
+        return null;
     }
 }

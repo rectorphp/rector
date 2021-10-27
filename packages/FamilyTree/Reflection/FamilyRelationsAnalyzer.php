@@ -27,7 +27,7 @@ use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20211027\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
@@ -87,7 +87,7 @@ final class FamilyRelationsAnalyzer
         return $childrenClassReflections;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $propertyTypeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $propertyTypeNode
      */
     public function getPossibleUnionPropertyType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $varType, ?\PHPStan\Analyser\Scope $scope, $propertyTypeNode) : \Rector\FamilyTree\ValueObject\PropertyType
     {
@@ -112,7 +112,7 @@ final class FamilyRelationsAnalyzer
                 continue;
             }
             $fileName = $ancestorClassReflection->getFileName();
-            if ($fileName === \false) {
+            if ($fileName === null) {
                 continue;
             }
             $stmts = $this->simplePhpParser->parseFile($fileName);
@@ -123,7 +123,7 @@ final class FamilyRelationsAnalyzer
                 continue;
             }
             $varType = new \PHPStan\Type\UnionType([$varType, new \PHPStan\Type\NullType()]);
-            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
             return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
         return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
+use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
@@ -10,6 +11,7 @@ use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
 use PHPStan\ExtensionInstaller\GeneratedConfig;
 use PHPStan\File\FileHelper;
+use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
@@ -34,6 +36,7 @@ final class PHPStanServicesFactory
         $additionalConfigFiles[] = $parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::PHPSTAN_FOR_RECTOR_PATH);
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
+        $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/parser.neon';
         $extensionConfigFiles = $this->resolveExtensionConfigs();
         $additionalConfigFiles = \array_merge($additionalConfigFiles, $extensionConfigFiles);
         $existingAdditionalConfigFiles = \array_filter($additionalConfigFiles, 'file_exists');
@@ -45,6 +48,20 @@ final class PHPStanServicesFactory
     public function createReflectionProvider() : \PHPStan\Reflection\ReflectionProvider
     {
         return $this->container->getByType(\PHPStan\Reflection\ReflectionProvider::class);
+    }
+    /**
+     * @api
+     */
+    public function createEmulativeLexer() : \PhpParser\Lexer
+    {
+        return $this->container->getService('currentPhpVersionLexer');
+    }
+    /**
+     * @api
+     */
+    public function createPHPStanParser() : \PHPStan\Parser\Parser
+    {
+        return $this->container->getService('currentPhpVersionRichParser');
     }
     /**
      * @api

@@ -22,13 +22,13 @@ class AssertSameBooleanExpectedRule implements \PHPStan\Rules\Rule
         }
         /** @var \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node */
         $node = $node;
-        if (\count($node->args) < 2) {
+        if (\count($node->getArgs()) < 2) {
             return [];
         }
         if (!$node->name instanceof \PhpParser\Node\Identifier || \strtolower($node->name->name) !== 'assertsame') {
             return [];
         }
-        $leftType = $scope->getType($node->args[0]->value);
+        $leftType = $scope->getType($node->getArgs()[0]->value);
         if (!$leftType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return [];
         }

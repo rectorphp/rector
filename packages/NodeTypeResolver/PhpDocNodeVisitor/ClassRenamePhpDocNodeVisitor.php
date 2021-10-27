@@ -11,7 +11,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use RectorPrefix20211027\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
@@ -58,7 +58,7 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20211027\Symplify\
             if (!$staticType->equals($oldToNewType->getOldType())) {
                 continue;
             }
-            $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType(), \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::ANY());
+            $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::ANY());
             $parentType = $node->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT);
             if ($parentType instanceof \PHPStan\PhpDocParser\Ast\Type\TypeNode) {
                 // mirror attributes

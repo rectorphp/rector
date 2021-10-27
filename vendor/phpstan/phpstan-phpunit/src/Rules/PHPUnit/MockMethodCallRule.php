@@ -27,10 +27,10 @@ class MockMethodCallRule implements \PHPStan\Rules\Rule
         if (!$node->name instanceof \PhpParser\Node\Identifier || $node->name->name !== 'method') {
             return [];
         }
-        if (\count($node->args) < 1) {
+        if (\count($node->getArgs()) < 1) {
             return [];
         }
-        $argType = $scope->getType($node->args[0]->value);
+        $argType = $scope->getType($node->getArgs()[0]->value);
         if (!$argType instanceof \PHPStan\Type\Constant\ConstantStringType) {
             return [];
         }

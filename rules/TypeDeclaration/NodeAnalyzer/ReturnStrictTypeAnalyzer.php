@@ -13,7 +13,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ReturnStrictTypeAnalyzer
 {
@@ -73,6 +73,6 @@ final class ReturnStrictTypeAnalyzer
         if ($returnType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::RETURN());
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
     }
 }
