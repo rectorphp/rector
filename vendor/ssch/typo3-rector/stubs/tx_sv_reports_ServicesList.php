@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211026;
+namespace RectorPrefix20211027;
 
 if (\class_exists('tx_sv_reports_ServicesList')) {
     return;

@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType as PhpParserUnionType;
-use PhpParser\Parser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -24,13 +23,13 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211027\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -46,10 +45,6 @@ final class FamilyRelationsAnalyzer
      */
     private $nodeNameResolver;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
-    /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -62,19 +57,18 @@ final class FamilyRelationsAnalyzer
      */
     private $astResolver;
     /**
-     * @var \PhpParser\Parser
+     * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
-    private $parser;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver, \PhpParser\Parser $parser)
+    private $simplePhpParser;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211027\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->smartFileSystem = $smartFileSystem;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->astResolver = $astResolver;
-        $this->parser = $parser;
+        $this->simplePhpParser = $simplePhpParser;
     }
     /**
      * @return ClassReflection[]
@@ -114,19 +108,18 @@ final class FamilyRelationsAnalyzer
             if ($ancestorClassName === $className) {
                 continue;
             }
+            if ($ancestorClassReflection->isSubclassOf('PHPUnit\\Framework\\TestCase')) {
+                continue;
+            }
             $fileName = $ancestorClassReflection->getFileName();
             if ($fileName === \false) {
                 continue;
             }
-            $fileContent = $this->smartFileSystem->readFile($fileName);
-            $nodes = $this->parser->parse($fileContent);
-            if ($ancestorClassReflection->isSubclassOf('PHPUnit\\Framework\\TestCase')) {
+            $stmts = $this->simplePhpParser->parseFile($fileName);
+            if ($stmts === []) {
                 continue;
             }
-            if ($nodes === null) {
-                continue;
-            }
-            if (!$this->isPropertyWritten($nodes, $propertyName, $kindPropertyFetch)) {
+            if (!$this->isPropertyWritten($stmts, $propertyName, $kindPropertyFetch)) {
                 continue;
             }
             $varType = new \PHPStan\Type\UnionType([$varType, new \PHPStan\Type\NullType()]);
@@ -173,11 +166,11 @@ final class FamilyRelationsAnalyzer
         return $property->isStatic() ? \PhpParser\Node\Expr\StaticPropertyFetch::class : \PhpParser\Node\Expr\PropertyFetch::class;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      */
-    private function isPropertyWritten(array $nodes, string $propertyName, string $kindPropertyFetch) : bool
+    private function isPropertyWritten(array $stmts, string $propertyName, string $kindPropertyFetch) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) use($propertyName, $kindPropertyFetch) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (\PhpParser\Node $node) use($propertyName, $kindPropertyFetch) : bool {
             if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return \false;
             }

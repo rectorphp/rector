@@ -10,7 +10,7 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20211026\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20211027\Symplify\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**
@@ -32,7 +32,7 @@ final class PostFileProcessor
     /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(\RectorPrefix20211026\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
+    public function __construct(\RectorPrefix20211027\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
     {
         $this->skipper = $skipper;
         $this->currentFileProvider = $currentFileProvider;
@@ -40,10 +40,10 @@ final class PostFileProcessor
         $this->postRectors = $this->sortByPriority($postRectors);
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function traverse(array $nodes) : array
+    public function traverse(array $stmts) : array
     {
         foreach ($this->postRectors as $postRector) {
             if ($this->shouldSkipPostRector($postRector)) {
@@ -52,9 +52,9 @@ final class PostFileProcessor
             $this->currentRectorProvider->changeCurrentRector($postRector);
             $nodeTraverser = new \PhpParser\NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
-            $nodes = $nodeTraverser->traverse($nodes);
+            $stmts = $nodeTraverser->traverse($stmts);
         }
-        return $nodes;
+        return $stmts;
     }
     /**
      * @param PostRectorInterface[] $postRectors

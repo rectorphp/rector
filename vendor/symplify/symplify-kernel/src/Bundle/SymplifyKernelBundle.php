@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211026\Symplify\SymplifyKernel\Bundle;
+namespace RectorPrefix20211027\Symplify\SymplifyKernel\Bundle;
 
-use RectorPrefix20211026\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211026\Symfony\Component\HttpKernel\Bundle\Bundle;
-use RectorPrefix20211026\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix20211026\Symplify\SymplifyKernel\DependencyInjection\Extension\SymplifyKernelExtension;
-final class SymplifyKernelBundle extends \RectorPrefix20211026\Symfony\Component\HttpKernel\Bundle\Bundle
+use RectorPrefix20211027\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211027\Symfony\Component\HttpKernel\Bundle\Bundle;
+use RectorPrefix20211027\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use RectorPrefix20211027\Symplify\SymplifyKernel\DependencyInjection\Extension\SymplifyKernelExtension;
+final class SymplifyKernelBundle extends \RectorPrefix20211027\Symfony\Component\HttpKernel\Bundle\Bundle
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      */
     public function build($containerBuilder) : void
     {
-        $containerBuilder->addCompilerPass(new \RectorPrefix20211026\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
+        $containerBuilder->addCompilerPass(new \RectorPrefix20211027\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass());
     }
-    protected function createContainerExtension() : ?\RectorPrefix20211026\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
+    protected function createContainerExtension() : ?\RectorPrefix20211027\Symfony\Component\DependencyInjection\Extension\ExtensionInterface
     {
-        return new \RectorPrefix20211026\Symplify\SymplifyKernel\DependencyInjection\Extension\SymplifyKernelExtension();
+        return new \RectorPrefix20211027\Symplify\SymplifyKernel\DependencyInjection\Extension\SymplifyKernelExtension();
     }
 }

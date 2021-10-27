@@ -64,10 +64,10 @@ final class NodeScopeAndMetadataDecorator
         $this->functionLikeParamArgPositionNodeVisitor = $functionLikeParamArgPositionNodeVisitor;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(\Rector\Core\ValueObject\Application\File $file, array $nodes) : array
+    public function decorateNodesFromFile(\Rector\Core\ValueObject\Application\File $file, array $stmts) : array
     {
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $nodeTraverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver(null, [
@@ -75,10 +75,10 @@ final class NodeScopeAndMetadataDecorator
             // required by PHPStan
             self::OPTION_REPLACE_NODES => \true,
         ]));
-        /** @var Stmt[] $nodes */
-        $nodes = $nodeTraverser->traverse($nodes);
+        /** @var Stmt[] $stmts */
+        $stmts = $nodeTraverser->traverse($stmts);
         $smartFileInfo = $file->getSmartFileInfo();
-        $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
+        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo);
         $nodeTraverserForPreservingName = new \PhpParser\NodeTraverser();
         $preservingNameResolver = new \PhpParser\NodeVisitor\NameResolver(null, [
             self::OPTION_PRESERVE_ORIGINAL_NAMES => \true,
@@ -86,7 +86,7 @@ final class NodeScopeAndMetadataDecorator
             self::OPTION_REPLACE_NODES => \false,
         ]);
         $nodeTraverserForPreservingName->addVisitor($preservingNameResolver);
-        $nodes = $nodeTraverserForPreservingName->traverse($nodes);
+        $stmts = $nodeTraverserForPreservingName->traverse($stmts);
         $nodeTraverserForFormatPreservePrinting = new \PhpParser\NodeTraverser();
         // needed also for format preserving printing
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->cloningVisitor);
@@ -96,11 +96,11 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
         $fileNodeVisitor = new \Rector\NodeTypeResolver\NodeVisitor\FileNodeVisitor($file);
         $nodeTraverserForFormatPreservePrinting->addVisitor($fileNodeVisitor);
-        $nodes = $nodeTraverserForFormatPreservePrinting->traverse($nodes);
+        $stmts = $nodeTraverserForFormatPreservePrinting->traverse($stmts);
         // this split is needed, so nodes have names, classes and namespaces
         $nodeTraverserForStmtNodeVisitor = new \PhpParser\NodeTraverser();
         $nodeTraverserForStmtNodeVisitor->addVisitor($this->statementNodeVisitor);
-        return $nodeTraverserForStmtNodeVisitor->traverse($nodes);
+        return $nodeTraverserForStmtNodeVisitor->traverse($stmts);
     }
     /**
      * @param Stmt[] $stmts

@@ -89,13 +89,13 @@ final class ClassInsertManipulator
         $this->addTraitUse($class, $traitUse);
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function insertBefore(array $nodes, \PhpParser\Node\Stmt $stmt, int $key) : array
+    public function insertBefore(array $stmts, \PhpParser\Node\Stmt $stmt, int $key) : array
     {
-        \array_splice($nodes, $key, 0, [$stmt]);
-        return $nodes;
+        \array_splice($stmts, $key, 0, [$stmt]);
+        return $stmts;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt

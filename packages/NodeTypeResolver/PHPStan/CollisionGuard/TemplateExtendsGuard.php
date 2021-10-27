@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\CollisionGuard;
 
-use RectorPrefix20211026\Nette\Utils\Strings;
+use RectorPrefix20211027\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use ReflectionClass;
-use RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem;
 final class TemplateExtendsGuard
 {
     /**
@@ -21,7 +21,7 @@ final class TemplateExtendsGuard
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->smartFileSystem = $smartFileSystem;
@@ -31,11 +31,11 @@ final class TemplateExtendsGuard
      * ReflectionProvider already hang when check class with `@template-extends`
      *
      * @see https://github.com/phpstan/phpstan/issues/3865 in PHPStan
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      */
-    public function containsTemplateExtendsPhpDoc(array $nodes, string $currentFileName) : bool
+    public function containsTemplateExtendsPhpDoc(array $stmts, string $currentFileName) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (\PhpParser\Node $node) use($currentFileName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (\PhpParser\Node $node) use($currentFileName) : bool {
             if (!$node instanceof \PhpParser\Node\Name\FullyQualified) {
                 return \false;
             }
@@ -63,7 +63,7 @@ final class TemplateExtendsGuard
                 return \false;
             }
             $fileContents = $this->smartFileSystem->readFile($fileName);
-            return (bool) \RectorPrefix20211026\Nette\Utils\Strings::match($fileContents, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
+            return (bool) \RectorPrefix20211027\Nette\Utils\Strings::match($fileContents, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
         });
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211026;
+namespace RectorPrefix20211027;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Radio')) {
     return;

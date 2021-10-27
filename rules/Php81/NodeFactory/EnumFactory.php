@@ -68,9 +68,7 @@ final class EnumFactory
     }
     private function createEnumCaseFromDocComment(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : \PhpParser\Node\Stmt\EnumCase
     {
-        /**
-         * @var MethodTagValueNode $nodeValue
-         */
+        /** @var MethodTagValueNode $nodeValue */
         $nodeValue = $phpDocTagNode->value;
         return new \PhpParser\Node\Stmt\EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
     }

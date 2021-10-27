@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem;
 final class RectorParser
 {
     /**
@@ -27,7 +27,7 @@ final class RectorParser
      * @var \PhpParser\Lexer
      */
     private $lexer;
-    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20211026\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\Lexer $lexer)
+    public function __construct(\PhpParser\Parser $parser, \RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\Lexer $lexer)
     {
         $this->parser = $parser;
         $this->smartFileSystem = $smartFileSystem;

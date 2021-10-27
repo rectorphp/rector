@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20211026\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20211027\JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symplify\SmartFileSystem\SmartFileInfo;

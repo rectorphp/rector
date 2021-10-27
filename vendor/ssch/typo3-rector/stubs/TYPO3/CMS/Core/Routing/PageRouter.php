@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211026\TYPO3\CMS\Core\Routing;
+namespace RectorPrefix20211027\TYPO3\CMS\Core\Routing;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Routing\\PageRouter')) {
     return;

@@ -100,13 +100,13 @@ final class PropertyFetchFinder
         return $foundPropertyFetches;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    private function findPropertyFetchesInNonAnonymousClassLike(array $nodes, string $propertyName) : array
+    private function findPropertyFetchesInNonAnonymousClassLike(array $stmts, string $propertyName) : array
     {
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->findPropertyFetchesInClassLike($nodes, $propertyName);
+        $propertyFetches = $this->findPropertyFetchesInClassLike($stmts, $propertyName);
         foreach ($propertyFetches as $key => $propertyFetch) {
             $currentClassLike = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
             if (!$currentClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
@@ -119,13 +119,13 @@ final class PropertyFetchFinder
         return $propertyFetches;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    private function findPropertyFetchesInClassLike(array $nodes, string $propertyName) : array
+    private function findPropertyFetchesInClassLike(array $stmts, string $propertyName) : array
     {
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($nodes, function (\PhpParser\Node $node) use($propertyName) : bool {
+        $propertyFetches = $this->betterNodeFinder->find($stmts, function (\PhpParser\Node $node) use($propertyName) : bool {
             // property + static fetch
             if ($node instanceof \PhpParser\Node\Expr\PropertyFetch && $this->nodeNameResolver->isName($node->var, self::THIS)) {
                 return $this->nodeNameResolver->isName($node, $propertyName);

@@ -8,7 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Parser;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -22,12 +22,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringsAssertNakedRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
-     * @var \PhpParser\Parser
+     * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
-    private $parser;
-    public function __construct(\PhpParser\Parser $parser)
+    private $simplePhpParser;
+    public function __construct(\Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
     {
-        $this->parser = $parser;
+        $this->simplePhpParser = $simplePhpParser;
     }
     public function provideMinPhpVersion() : int
     {
@@ -69,20 +69,19 @@ CODE_SAMPLE
         if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        if (!$node->args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
+        $firstArgValue = $node->args[0]->value;
+        if (!$firstArgValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
-        /** @var String_ $stringNode */
-        $stringNode = $node->args[0]->value;
-        $phpCode = '<?php ' . $stringNode->value . ';';
-        $contentNodes = $this->parser->parse($phpCode);
-        if (!isset($contentNodes[0])) {
+        $phpCode = '<?php ' . $firstArgValue->value . ';';
+        $contentStmts = $this->simplePhpParser->parseString($phpCode);
+        if (!isset($contentStmts[0])) {
             return null;
         }
-        if (!$contentNodes[0] instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$contentStmts[0] instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        $node->args[0] = new \PhpParser\Node\Arg($contentNodes[0]->expr);
+        $node->args[0] = new \PhpParser\Node\Arg($contentStmts[0]->expr);
         return $node;
     }
 }

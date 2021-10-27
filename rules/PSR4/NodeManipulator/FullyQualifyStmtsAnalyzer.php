@@ -14,8 +14,8 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20211026\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20211026\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211027\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FullyQualifyStmtsAnalyzer
 {
     /**
@@ -34,7 +34,7 @@ final class FullyQualifyStmtsAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\RectorPrefix20211026\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20211026\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\RectorPrefix20211027\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->parameterProvider = $parameterProvider;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -42,16 +42,16 @@ final class FullyQualifyStmtsAnalyzer
         $this->reflectionProvider = $reflectionProvider;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      */
-    public function process(array $nodes) : void
+    public function process(array $stmts) : void
     {
         // no need to
         if ($this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
             return;
         }
         // FQNize all class names
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (\PhpParser\Node $node) : ?FullyQualified {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) : ?FullyQualified {
             if (!$node instanceof \PhpParser\Node\Name) {
                 return null;
             }

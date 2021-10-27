@@ -218,11 +218,7 @@ CODE_SAMPLE
     {
         $string = new \PhpParser\Node\Scalar\String_('0');
         $zeroIdentical = $isNegated ? new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $string) : new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $string);
-        /**
-         * @var BooleanAnd|BooleanOr $result
-         */
-        $result = $isNegated ? new \PhpParser\Node\Expr\BinaryOp\BooleanOr($identical, $zeroIdentical) : new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($identical, $zeroIdentical);
-        return $result;
+        return $isNegated ? new \PhpParser\Node\Expr\BinaryOp\BooleanOr($identical, $zeroIdentical) : new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($identical, $zeroIdentical);
     }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical

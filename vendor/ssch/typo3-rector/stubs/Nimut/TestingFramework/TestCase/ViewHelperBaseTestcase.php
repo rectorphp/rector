@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211026\Nimut\TestingFramework\TestCase;
+namespace RectorPrefix20211027\Nimut\TestingFramework\TestCase;
 
 if (\class_exists('Nimut\\TestingFramework\\TestCase\\ViewHelperBaseTestcase')) {
     return;

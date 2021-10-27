@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
-use RectorPrefix20211026\Nette\Utils\Strings;
+use RectorPrefix20211027\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -30,7 +30,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard;
 use Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211027\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 /**
@@ -93,7 +93,7 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard
      */
     private $mixinGuard;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211026\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard $templateExtendsGuard, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard $mixinGuard)
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211027\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard $templateExtendsGuard, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard $mixinGuard)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -108,12 +108,12 @@ final class PHPStanNodeScopeResolver
         $this->mixinGuard = $mixinGuard;
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function processNodes(array $nodes, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
+    public function processNodes(array $stmts, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : array
     {
-        $this->removeDeepChainMethodCallNodes($nodes);
+        $this->removeDeepChainMethodCallNodes($stmts);
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (\PhpParser\Node $node, \PHPStan\Analyser\MutatingScope $scope) use(&$nodeCallback) : void {
@@ -145,32 +145,32 @@ final class PHPStanNodeScopeResolver
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
         // it needs to be checked early before `@mixin` check as
         // ReflectionProvider already hang when check class with `@template-extends`
-        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($nodes, $smartFileInfo->getFilename())) {
-            return $nodes;
+        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($stmts, $smartFileInfo->getFilename())) {
+            return $stmts;
         }
-        return $this->processNodesWithMixinHandling($smartFileInfo, $nodes, $scope, $nodeCallback);
+        return $this->processNodesWithMixinHandling($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function processNodesWithMixinHandling(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $nodes, \PHPStan\Analyser\MutatingScope $mutatingScope, callable $nodeCallback) : array
+    private function processNodesWithMixinHandling(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $stmts, \PHPStan\Analyser\MutatingScope $mutatingScope, callable $nodeCallback) : array
     {
-        if ($this->mixinGuard->containsMixinPhpDoc($nodes)) {
-            return $nodes;
+        if ($this->mixinGuard->containsMixinPhpDoc($stmts)) {
+            return $stmts;
         }
         try {
-            $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
+            $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         } catch (\Throwable $throwable) {
             if (!$throwable instanceof \PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection) {
                 throw $throwable;
             }
-            if (!\RectorPrefix20211026\Nette\Utils\Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
+            if (!\RectorPrefix20211027\Nette\Utils\Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
                 throw $throwable;
             }
         }
-        $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
-        return $nodes;
+        $this->resolveAndSaveDependentFiles($stmts, $mutatingScope, $smartFileInfo);
+        return $stmts;
     }
     /**
      * @param Node[] $nodes
@@ -188,7 +188,7 @@ final class PHPStanNodeScopeResolver
     {
         $className = $this->resolveClassName($classLike);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
-        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20211026\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && \RectorPrefix20211027\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_START_REGEX)) {
             $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
         } elseif (!$this->reflectionProvider->hasClass($className)) {
             return $mutatingScope;
