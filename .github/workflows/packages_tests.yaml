@@ -54,7 +54,7 @@ jobs:
 
             # use PHPStan 1.0
             -
-                run: composer require phpstan/phpstan "1.0.x-dev as 0.12.99" --no-update
+                run: composer require phpstan/phpstan "^1.0" --no-update
                 if: ${{ github.event_name == 'pull_request' }}
 
             -   run: composer install --ansi
