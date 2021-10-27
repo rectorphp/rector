@@ -32,7 +32,7 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
     /**
      * @param string ...$suffix
      */
-    public function append(...$suffix)
+    public function append(...$suffix) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         $str->string .= 1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix);
@@ -148,7 +148,7 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
     /**
      * @param string ...$prefix
      */
-    public function prepend(...$prefix)
+    public function prepend(...$prefix) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $this->string;
@@ -161,7 +161,7 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
      * @param string $from
      * @param string $to
      */
-    public function replace($from, $to)
+    public function replace($from, $to) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         if ('' === $from || !\preg_match('//u', $from)) {
@@ -181,7 +181,7 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
      * @param int $start
      * @param int|null $length
      */
-    public function slice($start = 0, $length = null)
+    public function slice($start = 0, $length = null) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         $str->string = \mb_substr($this->string, $start, $length, 'UTF-8');
@@ -192,7 +192,7 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
      * @param int $start
      * @param int|null $length
      */
-    public function splice($replacement, $start = 0, $length = null)
+    public function splice($replacement, $start = 0, $length = null) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         if (!\preg_match('//u', $replacement)) {
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');

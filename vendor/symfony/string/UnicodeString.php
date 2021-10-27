@@ -40,7 +40,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
     /**
      * @param string ...$suffix
      */
-    public function append(...$suffix)
+    public function append(...$suffix) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         $str->string = $this->string . (1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix));
@@ -166,7 +166,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
      * @param mixed[] $strings
      * @param string|null $lastGlue
      */
-    public function join($strings, $lastGlue = null)
+    public function join($strings, $lastGlue = null) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = parent::join($strings, $lastGlue);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
@@ -196,7 +196,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
     /**
      * @param string ...$prefix
      */
-    public function prepend(...$prefix)
+    public function prepend(...$prefix) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $this->string;
@@ -210,7 +210,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
      * @param string $from
      * @param string $to
      */
-    public function replace($from, $to)
+    public function replace($from, $to) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         \normalizer_is_normalized($from) ?: ($from = \normalizer_normalize($from));
@@ -234,7 +234,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
     /**
      * @param string $fromRegexp
      */
-    public function replaceMatches($fromRegexp, $to)
+    public function replaceMatches($fromRegexp, $to) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = parent::replaceMatches($fromRegexp, $to);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
@@ -244,7 +244,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
      * @param int $start
      * @param int|null $length
      */
-    public function slice($start = 0, $length = null)
+    public function slice($start = 0, $length = null) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         if (\PHP_VERSION_ID < 80000 && 0 > $start && \grapheme_strlen($this->string) < -$start) {
@@ -258,7 +258,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
      * @param int $start
      * @param int|null $length
      */
-    public function splice($replacement, $start = 0, $length = null)
+    public function splice($replacement, $start = 0, $length = null) : \RectorPrefix20211027\Symfony\Component\String\AbstractString
     {
         $str = clone $this;
         if (\PHP_VERSION_ID < 80000 && 0 > $start && \grapheme_strlen($this->string) < -$start) {
