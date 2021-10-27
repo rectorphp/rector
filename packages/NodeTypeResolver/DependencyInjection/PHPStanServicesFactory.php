@@ -38,6 +38,7 @@ final class PHPStanServicesFactory
         $additionalConfigFiles[] = $parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
+        $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/parser.neon';
 
         $extensionConfigFiles = $this->resolveExtensionConfigs();
         $additionalConfigFiles = array_merge($additionalConfigFiles, $extensionConfigFiles);
