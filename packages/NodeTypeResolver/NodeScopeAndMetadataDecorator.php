@@ -41,10 +41,10 @@ final class NodeScopeAndMetadataDecorator
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(File $file, array $nodes): array
+    public function decorateNodesFromFile(File $file, array $stmts): array
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NameResolver(null, [
@@ -53,12 +53,12 @@ final class NodeScopeAndMetadataDecorator
             self::OPTION_REPLACE_NODES => true,
         ]));
 
-        /** @var Stmt[] $nodes */
-        $nodes = $nodeTraverser->traverse($nodes);
+        /** @var Stmt[] $stmts */
+        $stmts = $nodeTraverser->traverse($stmts);
 
         $smartFileInfo = $file->getSmartFileInfo();
 
-        $nodes = $this->phpStanNodeScopeResolver->processNodes($nodes, $smartFileInfo);
+        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo);
 
         $nodeTraverserForPreservingName = new NodeTraverser();
 
@@ -69,7 +69,7 @@ final class NodeScopeAndMetadataDecorator
         ]);
 
         $nodeTraverserForPreservingName->addVisitor($preservingNameResolver);
-        $nodes = $nodeTraverserForPreservingName->traverse($nodes);
+        $stmts = $nodeTraverserForPreservingName->traverse($stmts);
 
         $nodeTraverserForFormatPreservePrinting = new NodeTraverser();
         // needed also for format preserving printing
@@ -82,13 +82,13 @@ final class NodeScopeAndMetadataDecorator
         $fileNodeVisitor = new FileNodeVisitor($file);
         $nodeTraverserForFormatPreservePrinting->addVisitor($fileNodeVisitor);
 
-        $nodes = $nodeTraverserForFormatPreservePrinting->traverse($nodes);
+        $stmts = $nodeTraverserForFormatPreservePrinting->traverse($stmts);
 
         // this split is needed, so nodes have names, classes and namespaces
         $nodeTraverserForStmtNodeVisitor = new NodeTraverser();
         $nodeTraverserForStmtNodeVisitor->addVisitor($this->statementNodeVisitor);
 
-        return $nodeTraverserForStmtNodeVisitor->traverse($nodes);
+        return $nodeTraverserForStmtNodeVisitor->traverse($stmts);
     }
 
     /**

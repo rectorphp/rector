@@ -96,14 +96,14 @@ final class ClassInsertManipulator
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function insertBefore(array $nodes, Stmt $stmt, int $key): array
+    public function insertBefore(array $stmts, Stmt $stmt, int $key): array
     {
-        array_splice($nodes, $key, 0, [$stmt]);
+        array_splice($stmts, $key, 0, [$stmt]);
 
-        return $nodes;
+        return $stmts;
     }
 
     private function isSuccessToInsertBeforeFirstMethod(Class_ $class, ClassConst|ClassMethod|Property $stmt): bool

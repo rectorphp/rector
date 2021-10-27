@@ -26,11 +26,11 @@ final class TemplateExtendsGuard
      * ReflectionProvider already hang when check class with `@template-extends`
      *
      * @see https://github.com/phpstan/phpstan/issues/3865 in PHPStan
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      */
-    public function containsTemplateExtendsPhpDoc(array $nodes, string $currentFileName): bool
+    public function containsTemplateExtendsPhpDoc(array $stmts, string $currentFileName): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($currentFileName): bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $node) use ($currentFileName): bool {
             if (! $node instanceof FullyQualified) {
                 return false;
             }

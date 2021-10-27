@@ -44,6 +44,7 @@ final class EnumFactory
 
         // constant to cases
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
+
         $docBlockMethods = $phpDocInfo?->getTagsByName('@method');
         if ($docBlockMethods !== null) {
             foreach ($docBlockMethods as $docBlockMethod) {
@@ -68,9 +69,7 @@ final class EnumFactory
 
     private function createEnumCaseFromDocComment(PhpDocTagNode $phpDocTagNode): EnumCase
     {
-        /**
-         * @var MethodTagValueNode $nodeValue
-         */
+        /** @var MethodTagValueNode $nodeValue */
         $nodeValue = $phpDocTagNode->value;
         return new EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
     }

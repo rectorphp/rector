@@ -32,7 +32,7 @@ final class ClassConstantFactory
         $const = new Const_($constantName, $defaultValue);
 
         $classConst = new ClassConst([$const]);
-        $classConst->flags = $property->flags & ~ Class_::MODIFIER_STATIC;
+        $classConst->flags = $property->flags & ~Class_::MODIFIER_STATIC;
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $phpDocInfo->markAsChanged();

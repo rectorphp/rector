@@ -69,12 +69,12 @@ final class PHPStanNodeScopeResolver
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function processNodes(array $nodes, SmartFileInfo $smartFileInfo): array
+    public function processNodes(array $stmts, SmartFileInfo $smartFileInfo): array
     {
-        $this->removeDeepChainMethodCallNodes($nodes);
+        $this->removeDeepChainMethodCallNodes($stmts);
 
         $scope = $this->scopeFactory->createFromFile($smartFileInfo);
 
@@ -116,29 +116,29 @@ final class PHPStanNodeScopeResolver
 
         // it needs to be checked early before `@mixin` check as
         // ReflectionProvider already hang when check class with `@template-extends`
-        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($nodes, $smartFileInfo->getFilename())) {
-            return $nodes;
+        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($stmts, $smartFileInfo->getFilename())) {
+            return $stmts;
         }
 
-        return $this->processNodesWithMixinHandling($smartFileInfo, $nodes, $scope, $nodeCallback);
+        return $this->processNodesWithMixinHandling($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
     private function processNodesWithMixinHandling(
         SmartFileInfo $smartFileInfo,
-        array $nodes,
+        array $stmts,
         MutatingScope $mutatingScope,
         callable $nodeCallback
     ): array {
-        if ($this->mixinGuard->containsMixinPhpDoc($nodes)) {
-            return $nodes;
+        if ($this->mixinGuard->containsMixinPhpDoc($stmts)) {
+            return $stmts;
         }
 
         try {
-            $this->nodeScopeResolver->processNodes($nodes, $mutatingScope, $nodeCallback);
+            $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         } catch (Throwable $throwable) {
             if (! $throwable instanceof NotAnInterfaceReflection) {
                 throw $throwable;
@@ -149,9 +149,9 @@ final class PHPStanNodeScopeResolver
             }
         }
 
-        $this->resolveAndSaveDependentFiles($nodes, $mutatingScope, $smartFileInfo);
+        $this->resolveAndSaveDependentFiles($stmts, $mutatingScope, $smartFileInfo);
 
-        return $nodes;
+        return $stmts;
     }
 
     /**

@@ -29,9 +29,7 @@ final class VariableAnalyzer
                 return false;
             }
 
-            /**
-             * @var StaticVar[]|Variable[] $vars
-             */
+            /** @var StaticVar[]|Variable[] $vars */
             $vars = $n->vars;
             foreach ($vars as $var) {
                 $staticVarVariable = $var instanceof StaticVar

@@ -205,13 +205,13 @@ final class PropertyNaming
             return $fqn;
         }
 
-        $lastNamePart = Strings::after($fqn, '\\', - 1);
+        $lastNamePart = Strings::after($fqn, '\\', -1);
         if (! is_string($lastNamePart)) {
             throw new ShouldNotHappenException();
         }
 
         if (\str_ends_with($lastNamePart, self::INTERFACE)) {
-            return Strings::substring($lastNamePart, 0, - strlen(self::INTERFACE));
+            return Strings::substring($lastNamePart, 0, -strlen(self::INTERFACE));
         }
 
         return $lastNamePart;

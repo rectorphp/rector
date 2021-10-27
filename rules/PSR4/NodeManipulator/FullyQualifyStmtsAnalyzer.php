@@ -29,9 +29,9 @@ final class FullyQualifyStmtsAnalyzer
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      */
-    public function process(array $nodes): void
+    public function process(array $stmts): void
     {
         // no need to
         if ($this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
@@ -39,7 +39,7 @@ final class FullyQualifyStmtsAnalyzer
         }
 
         // FQNize all class names
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node): ?FullyQualified {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node): ?FullyQualified {
             if (! $node instanceof Name) {
                 return null;
             }

@@ -42,7 +42,7 @@ final class InflectorSingularResolver
     {
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy) {
-            return Strings::substring($currentName, 0, - strlen($matchBy['by']));
+            return Strings::substring($currentName, 0, -strlen($matchBy['by']));
         }
 
         if (array_key_exists($currentName, self::SINGULAR_VERB)) {

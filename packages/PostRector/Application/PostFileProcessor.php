@@ -33,10 +33,10 @@ final class PostFileProcessor
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function traverse(array $nodes): array
+    public function traverse(array $stmts): array
     {
         foreach ($this->postRectors as $postRector) {
             if ($this->shouldSkipPostRector($postRector)) {
@@ -47,10 +47,10 @@ final class PostFileProcessor
 
             $nodeTraverser = new NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
-            $nodes = $nodeTraverser->traverse($nodes);
+            $stmts = $nodeTraverser->traverse($stmts);
         }
 
-        return $nodes;
+        return $stmts;
     }
 
     /**

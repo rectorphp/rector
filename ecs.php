@@ -2,21 +2,23 @@
 
 declare(strict_types=1);
 
-use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
-use PhpCsFixer\Fixer\Operator\UnaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer;
-use PhpCsFixer\Fixer\ReturnNotation\ReturnAssignmentFixer;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
 use Symplify\CodingStandard\Fixer\LineLength\DocBlockLineLengthFixer;
 use Symplify\EasyCodingStandard\ValueObject\Option;
 use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
+    $services->set(NoSuperfluousPhpdocTagsFixer::class)
+        ->call('configure', [[
+            'allow_mixed' => true,
+        ]]);
+
     $services->set(GeneralPhpdocAnnotationRemoveFixer::class)
         ->call('configure', [[
             'annotations' => [
@@ -30,11 +32,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'phpstan-ignore-line',
                 'phpstan-ignore-next-line',
             ],
-        ]]);
-
-    $services->set(NoSuperfluousPhpdocTagsFixer::class)
-        ->call('configure', [[
-            'allow_mixed' => true,
         ]]);
 
     $parameters = $containerConfigurator->parameters();
@@ -62,31 +59,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/Fixture/*',
         '*/Expected/*',
 
-        // fixed in master
-        ParamReturnAndVarTagMalformsFixer::class,
-
-        GeneralPhpdocAnnotationRemoveFixer::class => [
-            __DIR__ . '/src/Rector/AbstractRector.php',
-            '*TypeInferer*',
-            '*TypeResolver*',
-            '*NameResolver*',
-            '*Mapper*',
-            // allowed @required
-            __DIR__ . '/packages/StaticTypeMapper/Naming/NameScopeFactory.php',
-            __DIR__ . '/packages/NodeTypeResolver/NodeTypeResolver.php',
-            __DIR__ . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
-        ],
-
-        UnaryOperatorSpacesFixer::class,
-
         // buggy - @todo fix on Symplify master
         DocBlockLineLengthFixer::class,
-
-        // buggy on closure in interface union
-        NoUnusedImportsFixer::class => [__DIR__ . '/rules/Naming/Contract/RenameParamValueObjectInterface.php'],
-
-        // breaks on-purpose annotated variables
-        ReturnAssignmentFixer::class,
 
         PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
 
@@ -99,7 +73,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ],
     ]);
 
-    // import SetList here on purpose to avoid overridden by existing Skip Option in current config
+    // import SetList here in the end of ecs. is on purpose
+    // to avoid overridden by existing Skip Option in current config
     $containerConfigurator->import(SetList::PSR_12);
     $containerConfigurator->import(SetList::SYMPLIFY);
     $containerConfigurator->import(SetList::COMMON);

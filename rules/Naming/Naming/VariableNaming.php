@@ -66,7 +66,7 @@ final class VariableNaming
         }
 
         if (\str_contains($name, '\\')) {
-            $name = (string) Strings::after($name, '\\', - 1);
+            $name = (string) Strings::after($name, '\\', -1);
         }
 
         $countedValueName = $this->createCountedValueName($name, $scope);

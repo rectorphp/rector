@@ -246,14 +246,9 @@ CODE_SAMPLE
             ? new Identical($expr, $string)
             : new NotIdentical($expr, $string);
 
-        /**
-         * @var BooleanAnd|BooleanOr $result
-         */
-        $result = $isNegated
+        return $isNegated
             ? new BooleanOr($identical, $zeroIdentical)
             : new BooleanAnd($identical, $zeroIdentical);
-
-        return $result;
     }
 
     private function resolveInteger(bool $isNegated, Expr $expr): Identical | NotIdentical

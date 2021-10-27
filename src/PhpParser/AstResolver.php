@@ -334,11 +334,11 @@ final class AstResolver
     }
 
     /**
-     * @param Stmt[] $nodes
+     * @param Stmt[] $stmts
      */
-    private function findPromotedPropertyByName(array $nodes, string $desiredPropertyName): ?Param
+    private function findPromotedPropertyByName(array $stmts, string $desiredPropertyName): ?Param
     {
-        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, Class_::class);
         if (! $class instanceof Class_) {
             return null;
         }
