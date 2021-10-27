@@ -59,7 +59,7 @@ final class NameImporter
             return null;
         }
 
-        $this->aliasedUses = $this->aliasUsesResolver->resolveForNode($name);
+        $this->aliasedUses = $this->aliasUsesResolver->resolveFromStmts($uses);
 
         return $this->importNameAndCollectNewUseStatement($file, $name, $staticType);
     }
