@@ -20,7 +20,7 @@
         "nette/utils": "^3.2",
         "nikic/php-parser": "4.13.0",
         "phpstan/phpdoc-parser": "^1.2",
-        "phpstan/phpstan": "1.0.x-dev as 0.12.99",
+        "phpstan/phpstan": "^1.0",
         "phpstan/phpstan-phpunit": "^0.12.22",
         "rector/extension-installer": "^0.11.1",
         "rector/rector-cakephp": "^0.11.5",
@@ -56,7 +56,7 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^0.12.21",
         "phpunit/phpunit": "^9.5",
-        "rector/phpstan-rules": "^0.4.6",
+        "rector/phpstan-rules": "^0.4.7",
         "rector/rector-generator": "^0.4.1",
         "spatie/enum": "^3.9",
         "symplify/coding-standard": "^9.5",
@@ -107,6 +107,7 @@
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source"
         ],
         "files": [
+            "rules-tests/CodeQuality/Rector/Name/FixClassCaseSensitivityNameRector/Source/MissCaseTypedClass.php",
             "stubs/Doctrine/Persistence/ObjectManager.php",
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",

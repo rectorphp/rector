@@ -81,6 +81,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
+
         if (! $this->reflectionProvider->hasClass($fullyQualifiedName)) {
             return null;
         }
@@ -90,6 +91,9 @@ CODE_SAMPLE
             // skip built-in classes
             return null;
         }
+
+        dump($fullyQualifiedName);
+        die;
 
         $realClassName = $classReflection->getName();
         if (strtolower($realClassName) !== strtolower($fullyQualifiedName)) {

@@ -16,7 +16,7 @@ final class FixClassCaseSensitivityNameRectorTest extends AbstractRectorTestCase
     public function test(SmartFileInfo $fileInfo): void
     {
         // for PHPStan class reflection
-        require_once __DIR__ . '/Source/MissCaseTypedClass.php';
+        //require_once __DIR__ . '/Source/MissCaseTypedClass.php';
 
         $this->doTestFileInfo($fileInfo);
     }
