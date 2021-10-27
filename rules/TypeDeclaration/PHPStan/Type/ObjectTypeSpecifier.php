@@ -264,7 +264,7 @@ final class ObjectTypeSpecifier
             return new SelfObjectType($classReferenceValue, null, $classReflection);
         }
 
-        if (ObjectReference::PARENT()->getValue()) {
+        if (ObjectReference::PARENT()->getValue() === $classReferenceValue) {
             $parentClassReflection = $classReflection->getParentClass();
             if (! $parentClassReflection instanceof ClassReflection) {
                 throw new ShouldNotHappenException();
