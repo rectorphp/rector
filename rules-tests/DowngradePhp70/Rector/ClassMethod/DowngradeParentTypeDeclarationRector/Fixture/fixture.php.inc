@@ -2,11 +2,9 @@
 
 namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector\Fixture;
 
-class ParentClass
-{
-}
+use Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector\Source\SomeParentClass;
 
-class Fixture extends ParentClass
+final class Fixture extends SomeParentClass
 {
     public function getParent(): parent
     {
@@ -20,11 +18,9 @@ class Fixture extends ParentClass
 
 namespace Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector\Fixture;
 
-class ParentClass
-{
-}
+use Rector\Tests\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector\Source\SomeParentClass;
 
-class Fixture extends ParentClass
+final class Fixture extends SomeParentClass
 {
     /**
      * @return parent

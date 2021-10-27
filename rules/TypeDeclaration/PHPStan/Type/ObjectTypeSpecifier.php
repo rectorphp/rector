@@ -23,6 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
@@ -250,7 +251,7 @@ final class ObjectTypeSpecifier
     private function resolveObjectReferenceType(
         Scope $scope,
         string $classReferenceValue
-    ): StaticType|FullyQualifiedObjectType|SelfObjectType {
+    ): StaticType|SelfObjectType {
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException();
@@ -270,7 +271,7 @@ final class ObjectTypeSpecifier
                 throw new ShouldNotHappenException();
             }
 
-            return new FullyQualifiedObjectType($parentClassReflection->getName(), null, $parentClassReflection);
+            return new ParentStaticType($parentClassReflection);
         }
 
         throw new ShouldNotHappenException();

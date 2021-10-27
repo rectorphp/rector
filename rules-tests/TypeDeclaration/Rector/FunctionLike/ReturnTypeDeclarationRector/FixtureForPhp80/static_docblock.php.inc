@@ -24,7 +24,7 @@ final class StaticDocBlock
     /**
      * @return static
      */
-    public function getSelf(): self
+    public function getSelf(): static
     {
         return $this;
     }

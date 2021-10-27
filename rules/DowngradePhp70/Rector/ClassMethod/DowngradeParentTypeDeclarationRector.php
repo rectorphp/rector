@@ -11,6 +11,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -93,9 +94,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $parentStaticType = new ParentStaticType($classReflection);
+        $parentClassReflection = $classReflection->getParentClass();
+        if ($parentClassReflection instanceof ClassReflection) {
+            $staticType = new ParentStaticType($parentClassReflection);
+        } else {
+            $staticType = new ParentObjectWithoutClassType();
+        }
 
-        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $parentStaticType)) {
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $staticType)) {
             return null;
         }
 

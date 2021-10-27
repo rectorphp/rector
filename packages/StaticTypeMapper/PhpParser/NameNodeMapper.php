@@ -6,6 +6,7 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -13,6 +14,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
@@ -22,6 +24,7 @@ use Rector\Core\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 
 final class NameNodeMapper implements PhpParserNodeMapperInterface
@@ -69,8 +72,10 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         return in_array($name, $oldToNewClasses, true);
     }
 
-    private function createClassReferenceType(Name $name, string $reference): MixedType | StaticType | ThisType
-    {
+    private function createClassReferenceType(
+        Name $name,
+        string $reference
+    ): MixedType | StaticType | ObjectWithoutClassType {
         $className = $name->getAttribute(AttributeKey::CLASS_NAME);
         if ($className === null) {
             return new MixedType();
@@ -83,7 +88,12 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         }
 
         if ($reference === ObjectReference::PARENT()->getValue()) {
-            return new ParentStaticType($classReflection);
+            $parentClassReflection = $classReflection->getParentClass();
+            if ($parentClassReflection instanceof ClassReflection) {
+                return new ParentStaticType($parentClassReflection);
+            }
+
+            return new ParentObjectWithoutClassType();
         }
 
         return new ThisType($classReflection);

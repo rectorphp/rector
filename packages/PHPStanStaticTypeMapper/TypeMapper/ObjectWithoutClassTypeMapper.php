@@ -17,6 +17,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
@@ -44,6 +45,10 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode
     {
+        if ($type instanceof ParentObjectWithoutClassType) {
+            return new IdentifierTypeNode('parent');
+        }
+
         if ($type instanceof TemplateObjectWithoutClassType) {
             $attributeAwareIdentifierTypeNode = new IdentifierTypeNode($type->getName());
             return new EmptyGenericTypeNode($attributeAwareIdentifierTypeNode);
