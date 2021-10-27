@@ -7,9 +7,8 @@ namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationR
  * @param null|Foo[]|Bar[] $two
  * @param Foo[][] $three
  * @param Foo[]|Bar[][]|Baz[][][][] $four
- * @param Foo[]|iterable $five
  */
-function someFunction($one, $two, $three, $four, $five)
+function someFunction($one, $two, $three, $four)
 {
 }
 
@@ -24,9 +23,8 @@ namespace Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationR
  * @param null|Foo[]|Bar[] $two
  * @param Foo[][] $three
  * @param Foo[]|Bar[][]|Baz[][][][] $four
- * @param Foo[]|iterable $five
  */
-function someFunction(?array $one, ?array $two, array $three, array $four, iterable $five)
+function someFunction(?array $one, ?array $two, array $three, array $four)
 {
 }
 

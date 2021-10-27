@@ -22,6 +22,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -89,9 +90,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $variable = $this->valueResolver->isNull($node->left)
-            ? $node->right
-            : $node->left;
+        $variable = $this->valueResolver->isNull($node->left) ? $node->right : $node->left;
 
         $assign = $this->getVariableAssign($node, $variable);
         if (! $assign instanceof Assign) {
@@ -172,10 +171,7 @@ CODE_SAMPLE
      */
     private function processConvertToExclusiveType(array $types, Expr $expr, PhpDocInfo $phpDocInfo): ?BooleanNot
     {
-        $type = $types[0] instanceof NullType
-            ? $types[1]
-            : $types[0];
-
+        $type = $types[0] instanceof NullType ? $types[1] : $types[0];
         if (! $type instanceof FullyQualifiedObjectType && ! $type instanceof ObjectType) {
             return null;
         }
@@ -185,6 +181,12 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $varTagValueNode);
         }
 
-        return new BooleanNot(new Instanceof_($expr, new FullyQualified($type->getClassName())));
+        if ($type instanceof ShortenedObjectType) {
+            $fullyQualifiedType = $type->getFullyQualifiedName();
+        } else {
+            $fullyQualifiedType = $type->getClassName();
+        }
+
+        return new BooleanNot(new Instanceof_($expr, new FullyQualified($fullyQualifiedType)));
     }
 }

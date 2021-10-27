@@ -14,6 +14,11 @@ class FqcnInNamespace
             return;
         }
     }
+
+    public function getStdClass()
+    {
+        return new \stdClass();
+    }
 }
 
 ?>
@@ -32,6 +37,11 @@ class FqcnInNamespace
         if (!$stdClass instanceof \Rector\Tests\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\Source\stdClass) {
             return;
         }
+    }
+
+    public function getStdClass()
+    {
+        return new \stdClass();
     }
 }
 

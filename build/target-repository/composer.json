@@ -30,5 +30,7 @@
         "rector/rector-cakephp": "*",
         "rector/rector-laravel": "*",
         "rector/rector-phpoffice": "*"
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

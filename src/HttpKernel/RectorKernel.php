@@ -113,7 +113,6 @@ final class RectorKernel extends Kernel
 
     /**
      * This allows to use "%vendor%" variables in imports
-     * @param ContainerInterface|ContainerBuilder $container
      */
     protected function getContainerLoader(ContainerInterface $container): DelegatingLoader
     {

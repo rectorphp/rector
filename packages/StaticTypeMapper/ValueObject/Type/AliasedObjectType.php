@@ -21,7 +21,7 @@ final class AliasedObjectType extends ObjectType
         parent::__construct($alias);
     }
 
-    public function getFullyQualifiedClass(): string
+    public function getFullyQualifiedName(): string
     {
         return $this->fullyQualifiedClass;
     }
@@ -60,7 +60,7 @@ final class AliasedObjectType extends ObjectType
     {
         // compare with FQN classes
         if ($type instanceof TypeWithClassName) {
-            if ($type instanceof self && $this->fullyQualifiedClass === $type->getFullyQualifiedClass()) {
+            if ($type instanceof self && $this->fullyQualifiedClass === $type->getFullyQualifiedName()) {
                 return true;
             }
 

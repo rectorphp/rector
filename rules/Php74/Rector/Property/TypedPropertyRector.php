@@ -259,7 +259,7 @@ CODE_SAMPLE
         }
 
         if ($type instanceof AliasedObjectType) {
-            $typeName = $type->getFullyQualifiedClass();
+            $typeName = $type->getFullyQualifiedName();
         }
 
         return ! $this->reflectionProvider->hasClass($typeName);

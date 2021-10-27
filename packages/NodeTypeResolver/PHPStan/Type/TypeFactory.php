@@ -12,24 +12,20 @@ use PHPStan\Type\Constant\ConstantFloatType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
-use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
-use PHPStan\Type\VerbosityLevel;
+use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeFactory
 {
     public function __construct(
         private UnionTypeFactory $unionTypeFactory,
+        private TypeHasher $typeHasher,
     ) {
     }
 
@@ -68,9 +64,7 @@ final class TypeFactory
                 $type = $this->removeValueFromConstantType($type);
             }
 
-            $type = $this->normalizeObjectTypes($type);
-
-            $typeHash = $type->describe(VerbosityLevel::cache());
+            $typeHash = $this->typeHasher->createTypeHash($type);
             $uniqueTypes[$typeHash] = $type;
         }
 
@@ -174,20 +168,5 @@ final class TypeFactory
         }
 
         return $unwrappedTypes;
-    }
-
-    private function normalizeObjectTypes(Type $type): Type
-    {
-        return TypeTraverser::map($type, function (Type $currentType, callable $traverseCallback): Type {
-            if ($currentType instanceof ShortenedObjectType) {
-                return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
-            }
-
-            if ($currentType instanceof ObjectType && ! $currentType instanceof GenericObjectType && ! $currentType instanceof AliasedObjectType && $currentType->getClassName() !== 'Iterator') {
-                return new FullyQualifiedObjectType($currentType->getClassName());
-            }
-
-            return $traverseCallback($currentType);
-        });
     }
 }
