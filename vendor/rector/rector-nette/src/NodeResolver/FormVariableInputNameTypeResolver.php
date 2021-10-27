@@ -6,7 +6,7 @@ namespace Rector\Nette\NodeResolver;
 use PhpParser\Node\Expr;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Nette\ValueObject\NetteFormMethodNameToControlType;
+use Rector\Nette\Enum\NetteFormMethodNameToControlType;
 final class FormVariableInputNameTypeResolver
 {
     /**
@@ -25,7 +25,7 @@ final class FormVariableInputNameTypeResolver
             $message = \sprintf('Type was not found for "%s" input name', $inputName);
             throw new \Rector\Core\Exception\ShouldNotHappenException($message);
         }
-        foreach (\Rector\Nette\ValueObject\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE as $methodName => $controlType) {
+        foreach (\Rector\Nette\Enum\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE as $methodName => $controlType) {
             if ($methodName !== $formAddMethodName) {
                 continue;
             }

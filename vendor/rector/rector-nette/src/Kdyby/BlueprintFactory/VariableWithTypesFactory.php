@@ -10,7 +10,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\Nette\Kdyby\ValueObject\VariableWithType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class VariableWithTypesFactory
 {
@@ -49,7 +48,7 @@ final class VariableWithTypesFactory
             if ($staticType instanceof \PHPStan\Type\StaticType) {
                 $staticType = new \PHPStan\Type\ObjectType($staticType->getClassName());
             }
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
             $variablesWithTypes[] = new \Rector\Nette\Kdyby\ValueObject\VariableWithType($variableName, $staticType, $phpParserTypeNode);
         }
         return $variablesWithTypes;

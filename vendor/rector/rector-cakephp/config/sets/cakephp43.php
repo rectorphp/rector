@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace RectorPrefix20211027;
 
+use Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector;
+use Rector\CakePHP\ValueObject\RemoveIntermediaryMethod;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
@@ -16,5 +18,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services = $containerConfigurator->services();
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Renaming\ValueObject\MethodCallRename('Cake\\Controller\\Component', 'shutdown', 'afterFilter')])]]);
     $services->set(\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::class)->call('configure', [[\Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Socket', 'connected', 'isConnected'), new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Socket', 'encrypted', 'isEncrypted'), new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('Cake\\Network\\Socket', 'lastError', 'lastError')])]]);
+    $services->set(\Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector::class)->call('configure', [[\Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector::REMOVE_INTERMEDIARY_METHOD => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod('getTableLocator', 'get', 'fetchTable')])]]);
     $services->set(\Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector::class)->call('configure', [[\Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments('Cake\\Database\\DriverInterface', 'supportsQuoting', 'supports', ['quote']), new \Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments('Cake\\Database\\DriverInterface', 'supportsSavepoints', 'supports', ['savepoint'])])]]);
 };

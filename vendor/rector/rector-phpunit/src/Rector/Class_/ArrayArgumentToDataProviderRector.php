@@ -22,7 +22,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
 use Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
@@ -224,7 +224,7 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($paramAndArg->getVariable());
             /** @var TypeNode $staticTypeNode */
-            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
+            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
             $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
@@ -260,7 +260,7 @@ CODE_SAMPLE
         if ($staticType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
+        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
         if ($phpNodeType === null) {
             return;
         }

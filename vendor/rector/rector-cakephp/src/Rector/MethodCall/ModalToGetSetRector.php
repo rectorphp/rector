@@ -71,10 +71,14 @@ CODE_SAMPLE
         $node->name = new \PhpParser\Node\Identifier($newName);
         return $node;
     }
+    /**
+     * @param array<string, ModalToGetSet[]>  $configuration
+     */
     public function configure(array $configuration) : void
     {
         $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? [];
         \RectorPrefix20211027\Webmozart\Assert\Assert::allIsInstanceOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
+        /** @var ModalToGetSet[] $unprefixedMethodsToGetSet */
         $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\ModalToGetSet

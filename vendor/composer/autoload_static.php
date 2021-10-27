@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb38166aea24885a8c522e6004a52f5ef
+class ComposerStaticInite52013777e5c1bbfec6ab4b14094b74b
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1963,14 +1963,17 @@ class ComposerStaticInitb38166aea24885a8c522e6004a52f5ef
         'Rector\\CakePHP\\Naming\\CakePHPFullyQualifiedClassNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\ArrayToFluentCallRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ArrayToFluentCallRector.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\ModalToGetSetRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ModalToGetSetRector.php',
+        'Rector\\CakePHP\\Rector\\MethodCall\\RemoveIntermediaryMethodRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/RemoveIntermediaryMethodRector.php',
         'Rector\\CakePHP\\Rector\\MethodCall\\RenameMethodCallBasedOnParameterRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/RenameMethodCallBasedOnParameterRector.php',
         'Rector\\CakePHP\\Rector\\Namespace_\\AppUsesStaticCallToUseStatementRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/Namespace_/AppUsesStaticCallToUseStatementRector.php',
         'Rector\\CakePHP\\Rector\\Property\\ChangeSnakedFixtureNameToPascalRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/Property/ChangeSnakedFixtureNameToPascalRector.php',
+        'Rector\\CakePHP\\Set\\CakePHPLevelSetList' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Set/CakePHPLevelSetList.php',
         'Rector\\CakePHP\\Set\\CakePHPSetList' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Set/CakePHPSetList.php',
         'Rector\\CakePHP\\ValueObject\\ArrayItemsAndFluentClass' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ArrayItemsAndFluentClass.php',
         'Rector\\CakePHP\\ValueObject\\ArrayToFluentCall' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ArrayToFluentCall.php',
         'Rector\\CakePHP\\ValueObject\\FactoryMethod' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/FactoryMethod.php',
         'Rector\\CakePHP\\ValueObject\\ModalToGetSet' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ModalToGetSet.php',
+        'Rector\\CakePHP\\ValueObject\\RemoveIntermediaryMethod' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/RemoveIntermediaryMethod.php',
         'Rector\\CakePHP\\ValueObject\\RenameMethodCallBasedOnParameter' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/RenameMethodCallBasedOnParameter.php',
         'Rector\\Carbon\\Rector\\MethodCall\\ChangeCarbonSingularMethodCallToPluralRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector.php',
         'Rector\\Carbon\\Rector\\MethodCall\\ChangeDiffForHumansArgsRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/MethodCall/ChangeDiffForHumansArgsRector.php',
@@ -2683,6 +2686,7 @@ class ComposerStaticInitb38166aea24885a8c522e6004a52f5ef
         'Rector\\Nette\\Contract\\PregToNetteUtilsStringInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/PregToNetteUtilsStringInterface.php',
         'Rector\\Nette\\Contract\\Rector\\LatteRectorInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/Rector/LatteRectorInterface.php',
         'Rector\\Nette\\Contract\\Rector\\NeonRectorInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/Rector/NeonRectorInterface.php',
+        'Rector\\Nette\\Enum\\NetteFormMethodNameToControlType' => __DIR__ . '/..' . '/rector/rector-nette/src/Enum/NetteFormMethodNameToControlType.php',
         'Rector\\Nette\\FileProcessor\\LatteFileProcessor' => __DIR__ . '/..' . '/rector/rector-nette/src/FileProcessor/LatteFileProcessor.php',
         'Rector\\Nette\\FileProcessor\\NeonFileProcessor' => __DIR__ . '/..' . '/rector/rector-nette/src/FileProcessor/NeonFileProcessor.php',
         'Rector\\Nette\\FormControlTypeResolver\\ArrayDimFetchControlTypeResolver' => __DIR__ . '/..' . '/rector/rector-nette/src/FormControlTypeResolver/ArrayDimFetchControlTypeResolver.php',
@@ -2788,7 +2792,6 @@ class ComposerStaticInitb38166aea24885a8c522e6004a52f5ef
         'Rector\\Nette\\ValueObject\\FormField' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/FormField.php',
         'Rector\\Nette\\ValueObject\\FuncCallAndExpr' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/FuncCallAndExpr.php',
         'Rector\\Nette\\ValueObject\\LatteVariableType' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/LatteVariableType.php',
-        'Rector\\Nette\\ValueObject\\NetteFormMethodNameToControlType' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/NetteFormMethodNameToControlType.php',
         'Rector\\Nette\\ValueObject\\ParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ParameterAssign.php',
         'Rector\\Nette\\ValueObject\\TemplateParametersAssigns' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/TemplateParametersAssigns.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
@@ -3891,9 +3894,9 @@ class ComposerStaticInitb38166aea24885a8c522e6004a52f5ef
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb38166aea24885a8c522e6004a52f5ef::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb38166aea24885a8c522e6004a52f5ef::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb38166aea24885a8c522e6004a52f5ef::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite52013777e5c1bbfec6ab4b14094b74b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite52013777e5c1bbfec6ab4b14094b74b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite52013777e5c1bbfec6ab4b14094b74b::$classMap;
 
         }, null, ClassLoader::class);
     }

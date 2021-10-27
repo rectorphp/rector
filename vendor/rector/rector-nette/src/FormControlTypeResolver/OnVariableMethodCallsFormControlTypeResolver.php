@@ -9,7 +9,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
-use Rector\Nette\ValueObject\NetteFormMethodNameToControlType;
+use Rector\Nette\Enum\NetteFormMethodNameToControlType;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
@@ -47,7 +47,7 @@ final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nett
             if ($methodName === null) {
                 continue;
             }
-            if (!isset(\Rector\Nette\ValueObject\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE[$methodName])) {
+            if (!isset(\Rector\Nette\Enum\NetteFormMethodNameToControlType::METHOD_NAME_TO_CONTROL_TYPE[$methodName])) {
                 continue;
             }
             if (!isset($onFormMethodCall->args[0])) {

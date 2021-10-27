@@ -157,7 +157,10 @@ CODE_SAMPLE
             $assignedMethodCall = $assignToVariable->expr;
             if ($this->isName($assignedMethodCall->var, 'this') && $this->isName($assignedMethodCall->name, 'createMock')) {
                 $firstArgumentValue = $assignedMethodCall->args[0]->value;
-                return $this->valueResolver->getValue($firstArgumentValue);
+                $resolvedValue = $this->valueResolver->getValue($firstArgumentValue);
+                if (\is_string($resolvedValue)) {
+                    return $resolvedValue;
+                }
             }
         }
         return null;

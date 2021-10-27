@@ -60,7 +60,7 @@ final class CollectionTypeResolver
             return null;
         }
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
-        if ($targetEntity === null) {
+        if (!\is_string($targetEntity)) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $fullyQualifiedTargetEntity = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);

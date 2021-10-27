@@ -64,11 +64,15 @@ CODE_SAMPLE
         $node->name = new \PhpParser\Node\Identifier($callWithParamRename->getNewMethod());
         return $node;
     }
+    /**
+     * @param array<string, RenameMethodCallBasedOnParameter[]> $configuration
+     */
     public function configure(array $configuration) : void
     {
-        $callsWithParamNames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? [];
-        \RectorPrefix20211027\Webmozart\Assert\Assert::allIsInstanceOf($callsWithParamNames, \Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter::class);
-        $this->callsWithParamRenames = $callsWithParamNames;
+        $callsWithParamRenames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? [];
+        \RectorPrefix20211027\Webmozart\Assert\Assert::allIsInstanceOf($callsWithParamRenames, \Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter::class);
+        /** @var RenameMethodCallBasedOnParameter[] $callsWithParamRenames */
+        $this->callsWithParamRenames = $callsWithParamRenames;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter
     {

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix20211027;
 
 use Rector\Core\Configuration\Option;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

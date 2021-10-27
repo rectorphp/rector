@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Nette\ValueObject;
+namespace Rector\Nette\Enum;
 
-use RectorPrefix20211027\Nette\Forms\Controls\BaseControl;
 final class NetteFormMethodNameToControlType
 {
     /**
-     * @var array<string, class-string<BaseControl>>
+     * @var array<string, string>
      */
     public const METHOD_NAME_TO_CONTROL_TYPE = [
         'addText' => 'Nette\\Forms\\Controls\\TextInput',

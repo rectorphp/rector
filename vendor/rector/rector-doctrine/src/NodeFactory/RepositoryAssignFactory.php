@@ -31,7 +31,11 @@ final class RepositoryAssignFactory
     public function create(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PhpParser\Node\Expr\Assign
     {
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($repositoryClass);
-        $repositoryClassName = (string) $repositoryClass->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $repositoryClass->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        if (!\is_string($className)) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        $repositoryClassName = $className;
         if (!$entityObjectType instanceof \PHPStan\Type\TypeWithClassName) {
             throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
         }

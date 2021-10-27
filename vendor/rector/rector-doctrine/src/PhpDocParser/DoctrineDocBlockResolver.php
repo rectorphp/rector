@@ -38,6 +38,9 @@ final class DoctrineDocBlockResolver
             return null;
         }
         $targetEntity = $doctrineAnnotationTagValueNode->getValue('targetEntity');
+        if (!\is_string($targetEntity)) {
+            return null;
+        }
         return $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
     }
     public function isInDoctrineEntityClass(\PhpParser\Node $node) : bool

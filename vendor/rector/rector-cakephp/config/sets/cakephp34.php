@@ -6,8 +6,6 @@ namespace RectorPrefix20211027;
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\ValueObject\ModalToGetSet;
 use Rector\Core\ValueObject\Visibility;
-use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Defluent\ValueObject\NormalToFluent;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\Rector\PropertyFetch\RenamePropertyRector;
@@ -176,5 +174,4 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     ])]]);
     $services->set(\Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::class)->call('configure', [[\Rector\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector::METHOD_VISIBILITIES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Cake\\Mailer\\MailerAwareTrait', 'getMailer', \Rector\Core\ValueObject\Visibility::PROTECTED), new \Rector\Visibility\ValueObject\ChangeMethodVisibility('Cake\\View\\CellTrait', 'cell', \Rector\Core\ValueObject\Visibility::PROTECTED)])]]);
     $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->call('configure', [[\Rector\Renaming\Rector\Name\RenameClassRector::OLD_TO_NEW_CLASSES => ['Cake\\Database\\Schema\\Table' => 'Cake\\Database\\Schema\\TableSchema']]]);
-    $services->set(\Rector\Defluent\Rector\ClassMethod\NormalToFluentRector::class)->call('configure', [[\Rector\Defluent\Rector\ClassMethod\NormalToFluentRector::CALLS_TO_FLUENT => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Defluent\ValueObject\NormalToFluent('Cake\\Network\\Response', ['withLocation', 'withHeader', 'withDisabledCache', 'withType', 'withCharset', 'withCache', 'withModified', 'withExpires', 'withSharable', 'withMaxAge', 'withVary', 'withEtag', 'withCompression', 'withLength', 'withMustRevalidate', 'withNotModified', 'withCookie', 'withFile', 'withDownload'])])]]);
 };

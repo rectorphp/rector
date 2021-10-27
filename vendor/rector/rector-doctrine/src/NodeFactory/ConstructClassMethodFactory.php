@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20211027\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class ConstructClassMethodFactory
@@ -81,7 +81,7 @@ final class ConstructClassMethodFactory
     private function createParam(\PhpParser\Node\Stmt\Property $property, string $propertyName) : \PhpParser\Node\Param
     {
         $propertyType = $this->nodeTypeResolver->getType($property);
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PROPERTY());
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
         $paramVariable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = new \PhpParser\Node\Param($paramVariable);
         $param->type = $propertyTypeNode;

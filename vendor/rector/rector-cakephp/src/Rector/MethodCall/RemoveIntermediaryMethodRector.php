@@ -1,0 +1,107 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\CakePHP\Rector\MethodCall;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use Rector\CakePHP\ValueObject\RemoveIntermediaryMethod;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211027\Webmozart\Assert\Assert;
+/**
+ * @see https://book.cakephp.org/3.0/en/appendices/3-4-migration-guide.html#deprecated-combined-get-set-methods
+ * @see https://github.com/cakephp/cakephp/commit/326292688c5e6d08945a3cafa4b6ffb33e714eea#diff-e7c0f0d636ca50a0350e9be316d8b0f9
+ *
+ * @see \Rector\CakePHP\Tests\Rector\MethodCall\ModalToGetSetRector\ModalToGetSetRectorTest
+ */
+final class RemoveIntermediaryMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+{
+    /**
+     * @var string
+     */
+    public const REMOVE_INTERMEDIARY_METHOD = 'remove_intermediary_method';
+    /**
+     * @var RemoveIntermediaryMethod[]
+     */
+    private $removeIntermediaryMethod = [];
+    /**
+     * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
+     */
+    private $fluentChainMethodCallNodeAnalyzer;
+    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    {
+        $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
+    }
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    {
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes an intermediary method call for when a higher level API is added.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+$users = $this->getTableLocator()->get('Users');
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+$users = $this->fetchTable('Users');
+CODE_SAMPLE
+, [self::REMOVE_INTERMEDIARY_METHOD => [new \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod('getTableLocator', 'get', 'fetchTable')]])]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [\PhpParser\Node\Expr\MethodCall::class];
+    }
+    /**
+     * @param MethodCall $node
+     */
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    {
+        $replacement = $this->matchTypeAndMethodName($node);
+        if (!$replacement instanceof \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod) {
+            return null;
+        }
+        /** @var MethodCall $var */
+        $var = $node->var;
+        $target = $var->var;
+        return new \PhpParser\Node\Expr\MethodCall($target, $replacement->getFinalMethod(), $node->args);
+    }
+    public function configure(array $configuration) : void
+    {
+        /** @var RemoveIntermediaryMethod[] $replacements */
+        $replacements = $configuration[self::REMOVE_INTERMEDIARY_METHOD] ?? [];
+        \RectorPrefix20211027\Webmozart\Assert\Assert::allIsInstanceOf($replacements, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
+        $this->removeIntermediaryMethod = $replacements;
+    }
+    private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\RemoveIntermediaryMethod
+    {
+        $rootMethodCall = $this->fluentChainMethodCallNodeAnalyzer->resolveRootMethodCall($methodCall);
+        if (!$rootMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
+            return null;
+        }
+        if (!$rootMethodCall->var instanceof \PhpParser\Node\Expr\Variable) {
+            return null;
+        }
+        if (!$this->nodeNameResolver->isName($rootMethodCall->var, 'this')) {
+            return null;
+        }
+        /** @var MethodCall $var */
+        $var = $methodCall->var;
+        if (!$methodCall->name instanceof \PhpParser\Node\Identifier || !$var->name instanceof \PhpParser\Node\Identifier) {
+            return null;
+        }
+        foreach ($this->removeIntermediaryMethod as $replacement) {
+            if (!$this->isName($methodCall->name, $replacement->getSecondMethod())) {
+                continue;
+            }
+            if (!$this->isName($var->name, $replacement->getFirstMethod())) {
+                continue;
+            }
+            return $replacement;
+        }
+        return null;
+    }
+}

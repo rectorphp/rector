@@ -13,7 +13,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Doctrine\ValueObject\AssignToPropertyFetch;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ParamFactory
 {
@@ -66,7 +66,7 @@ final class ParamFactory
         $variable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = new \PhpParser\Node\Param($variable);
         $paramType = $this->nodeTypeResolver->getType($propertyFetch);
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind::PARAM());
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
         // the param is optional - make it nullable
         if (\in_array($propertyName, $optionalParamNames, \true)) {
             if (!$paramTypeNode instanceof \PhpParser\Node\UnionType && $paramTypeNode !== null && !$paramTypeNode instanceof \PhpParser\Node\NullableType) {

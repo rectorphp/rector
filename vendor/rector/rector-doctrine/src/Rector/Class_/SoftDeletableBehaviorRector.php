@@ -88,6 +88,9 @@ CODE_SAMPLE
             return null;
         }
         $fieldName = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('fieldName');
+        if (!\is_string($fieldName)) {
+            return null;
+        }
         $this->removePropertyAndClassMethods($node, $fieldName);
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\SoftDeletable\\SoftDeletableTrait');
         $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\SoftDeletableInterface');
