@@ -71,13 +71,6 @@ final class PHPStanServicesFactory
      */
     public function createPHPStanParser(): Parser
     {
-        $nameResolver = $this->container->getByType(NameResolver::class);
-
-        // override native PHPStan name resolver to keep original names
-        $privatesAccessor = new PrivatesAccessor();
-        $privatesAccessor->setPrivateProperty($nameResolver, 'preserveOriginalNames', true);
-        $privatesAccessor->setPrivateProperty($nameResolver, 'replaceNodes', false);
-
         return $this->container->getService('currentPhpVersionRichParser');
     }
 
