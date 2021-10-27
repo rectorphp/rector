@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\PHPStanStaticTypeMapper\ValueObject;
+namespace Rector\PHPStanStaticTypeMapper\Enum;
 
 use MyCLabs\Enum\Enum;
 

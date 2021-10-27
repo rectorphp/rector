@@ -14,7 +14,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\MixedType;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class ReturnStrictTypeAnalyzer
