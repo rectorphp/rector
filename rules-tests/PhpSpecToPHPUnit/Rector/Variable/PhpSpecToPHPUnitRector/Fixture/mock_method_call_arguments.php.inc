@@ -3,6 +3,8 @@
 namespace spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\DeliveryFactory;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\ShippingMethod;
 
 class DeliverySpec extends ObjectBehavior
 {
@@ -21,15 +23,17 @@ class DeliverySpec extends ObjectBehavior
 namespace Tests\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\DeliveryFactory;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\ShippingMethod;
 
 class DeliveryTest extends \PHPUnit\Framework\TestCase
 {
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Delivery $delivery;
     protected function setUp()
     {
-        /** @var DeliveryFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
+        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\DeliveryFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = $this->createMock(DeliveryFactory::class);
-        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
+        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
         $shippingMethod = $this->createMock(ShippingMethod::class);
         $factory->expects($this->atLeastOnce())
             ->method('createShippingMethodFor')->with($this->equalTo(5))

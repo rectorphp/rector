@@ -70,7 +70,7 @@ class CreateMeTest extends \PHPUnit\Framework\TestCase
 
     public function testCalled()
     {
-        /** @var Cart|\PHPUnit\Framework\MockObject\MockObject $cart */
+        /** @var spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Cart|\PHPUnit\Framework\MockObject\MockObject $cart */
         $cart = $this->createMock(Cart::class);
         $cart->expects($this->atLeastOnce())->method('price')->willReturn(5);
         $cart->expects($this->atLeastOnce())->method('shippingAddress')->with($this->isInstanceOf(Address::class));

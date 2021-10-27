@@ -3,6 +3,7 @@
 namespace spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\OrderFactory;
 
 class MockPropertiesSpec extends ObjectBehavior
 {
@@ -25,11 +26,12 @@ class MockPropertiesSpec extends ObjectBehavior
 namespace Tests\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\OrderFactory;
 
 class MockPropertiesTest extends \PHPUnit\Framework\TestCase
 {
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\MockProperties $mockProperties;
-    private \OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory;
+    private \PHPUnit\Framework\MockObject\MockObject|\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\OrderFactory $factory;
     protected function setUp()
     {
         $this->factory = $this->createMock(OrderFactory::class);

@@ -3,6 +3,7 @@
 namespace spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\AnotherMock;
 
 class MockPropertiesNonLocalSpec extends ObjectBehavior
 {
@@ -31,20 +32,21 @@ class MockPropertiesNonLocalSpec extends ObjectBehavior
 namespace Tests\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture;
 
 use PhpSpec\ObjectBehavior;
+use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\AnotherMock;
 
 class MockPropertiesNonLocalTest extends \PHPUnit\Framework\TestCase
 {
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\MockPropertiesNonLocal $mockPropertiesNonLocal;
     protected function setUp()
     {
-        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
+        /** @var spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = $this->createMock(OrderFactory::class);
         $this->mockPropertiesNonLocal = new \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\MockPropertiesNonLocal($factory);
     }
 
     public function testLetItGo()
     {
-        /** @var AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
+        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
         $anotherMock = $this->createMock(AnotherMock::class);
         $anotherMock->setName('Nummy');
         $this->mockPropertiesNonLocal->addAnotherMock($anotherMock);
@@ -52,7 +54,7 @@ class MockPropertiesNonLocalTest extends \PHPUnit\Framework\TestCase
 
     public function testLetItGoAgain()
     {
-        /** @var AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
+        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
         $anotherMock = $this->createMock(AnotherMock::class);
         $anotherMock->setName('Nummy2');
         $this->mockPropertiesNonLocal->addAnotherMock($anotherMock);
