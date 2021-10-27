@@ -45,7 +45,7 @@ jobs:
             # install only prod dependencies - do not use ramsey, it uses cache including "dev", we want to avoid it here
             -   run: composer install --no-dev --ansi
 
-            # early downgrade individual functions and files of symfony Attribute classes
+            # early downgrade individual functions
             -   run: bin/rector process src/functions -c build/config/config-downgrade.php --ansi
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
@@ -86,6 +86,9 @@ jobs:
             -   run: rm -rf remote-repository/.github remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages  remote-repository/vendor
 
             -   run: cp -a rector-prefixed-downgraded/. remote-repository
+
+            # run bare run test
+            -   run: cd remote-repository && bin/rector list --ansi && cd ..
 
             # 7. setup git
             -
