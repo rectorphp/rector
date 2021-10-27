@@ -83,14 +83,22 @@ CODE_SAMPLE
             return true;
         }
 
-        $args = $funcCall->getArgs();
-        foreach ($args as $arg) {
+        if ($funcCall->args === null) {
+            return true;
+        }
+
+        foreach ($funcCall->args as $arg) {
+            if (! $arg instanceof Arg) {
+                continue;
+            }
+
             if ($arg->name instanceof Identifier) {
                 return true;
             }
         }
 
-        $value = $this->valueResolver->getValue($args[0]->value);
+        $firstArg = $funcCall->args[0];
+        $value = $this->valueResolver->getValue($firstArg->value);
         if (is_string($value)) {
             return true;
         }
