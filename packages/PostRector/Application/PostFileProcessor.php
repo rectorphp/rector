@@ -10,6 +10,7 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use RectorPrefix20211027\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20211027\Symplify\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
@@ -30,13 +31,18 @@ final class PostFileProcessor
      */
     private $currentRectorProvider;
     /**
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
+    /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(\RectorPrefix20211027\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
+    public function __construct(\RectorPrefix20211027\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \RectorPrefix20211027\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $postRectors)
     {
         $this->skipper = $skipper;
         $this->currentFileProvider = $currentFileProvider;
         $this->currentRectorProvider = $currentRectorProvider;
+        $this->symfonyStyle = $symfonyStyle;
         $this->postRectors = $this->sortByPriority($postRectors);
     }
     /**
@@ -50,6 +56,7 @@ final class PostFileProcessor
                 continue;
             }
             $this->currentRectorProvider->changeCurrentRector($postRector);
+            $this->notifyPostRector($postRector);
             $nodeTraverser = new \PhpParser\NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
             $stmts = $nodeTraverser->traverse($stmts);
@@ -80,5 +87,13 @@ final class PostFileProcessor
         }
         $smartFileInfo = $file->getSmartFileInfo();
         return $this->skipper->shouldSkipElementAndFileInfo($postRector, $smartFileInfo);
+    }
+    private function notifyPostRector(\Rector\PostRector\Contract\Rector\PostRectorInterface $postRector) : void
+    {
+        if (!$this->symfonyStyle->isVerbose()) {
+            return;
+        }
+        $message = \sprintf('    [%s] %s', 'post rector', \get_class($postRector));
+        $this->symfonyStyle->writeln($message);
     }
 }

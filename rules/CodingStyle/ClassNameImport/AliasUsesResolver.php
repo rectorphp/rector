@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -31,17 +32,18 @@ final class AliasUsesResolver
             $node = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
         }
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
-            return $this->resolveForNamespace($node);
+            return $this->resolveFromStmts($node->stmts);
         }
         return [];
     }
     /**
+     * @param Stmt[] $stmts
      * @return string[]
      */
-    private function resolveForNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : array
+    public function resolveFromStmts(array $stmts) : array
     {
         $aliasedUses = [];
-        $this->useImportsTraverser->traverserStmts($namespace->stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$aliasedUses) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$aliasedUses) : void {
             if ($useUse->alias === null) {
                 return;
             }

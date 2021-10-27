@@ -80,7 +80,7 @@ final class NameImporter
         if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             return null;
         }
-        $this->aliasedUses = $this->aliasUsesResolver->resolveForNode($name);
+        $this->aliasedUses = $this->aliasUsesResolver->resolveFromStmts($uses);
         return $this->importNameAndCollectNewUseStatement($file, $name, $staticType);
     }
     private function shouldSkipName(\PhpParser\Node\Name $name) : bool
