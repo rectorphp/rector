@@ -53,6 +53,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 PhpDocNodeVisitorInterface::class,
                 Node::class,
                 NodeNameResolverInterface::class,
+                // symfony
+                \Symfony\Component\String\AbstractString::class,
                 // phpstan
                 SourceLocator::class,
                 \PHPStan\PhpDocParser\Ast\Node::class,

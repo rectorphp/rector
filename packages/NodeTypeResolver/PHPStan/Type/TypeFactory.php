@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -18,27 +17,19 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 
 final class TypeFactory
 {
     public function __construct(
         private UnionTypeFactory $unionTypeFactory,
-        private PhpVersionProvider $phpVersionProvider,
-        private ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -187,56 +178,16 @@ final class TypeFactory
 
     private function normalizeObjectTypes(Type $type): Type
     {
-        return TypeTraverser::map($type, function (Type $traversedType, callable $traverseCallback): Type {
-            if ($this->isStatic($traversedType) && $this->phpVersionProvider->isAtLeastPhpVersion(
-                PhpVersionFeature::STATIC_RETURN_TYPE
-            )) {
-                /** @var ObjectType $traversedType */
-                $className = $traversedType->getClassName();
-                if (! $this->reflectionProvider->hasClass($className)) {
-                    throw new ShouldNotHappenException();
-                }
-
-                $classReflection = $this->reflectionProvider->getClass($className);
-                return new ThisType($classReflection);
+        return TypeTraverser::map($type, function (Type $currentType, callable $traverseCallback): Type {
+            if ($currentType instanceof ShortenedObjectType) {
+                return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
             }
 
-            if ($this->isStatic($traversedType)) {
-                return new MixedType();
+            if ($currentType instanceof ObjectType && ! $currentType instanceof GenericObjectType && ! $currentType instanceof AliasedObjectType && $currentType->getClassName() !== 'Iterator') {
+                return new FullyQualifiedObjectType($currentType->getClassName());
             }
 
-            if ($this->isSelf($traversedType)) {
-                /** @var ObjectType $traversedType */
-                return new SelfObjectType($traversedType->getClassName());
-            }
-
-            if ($traversedType instanceof ShortenedObjectType) {
-                return new FullyQualifiedObjectType($traversedType->getFullyQualifiedName());
-            }
-
-            if ($traversedType instanceof ObjectType && ! $traversedType instanceof GenericObjectType && ! $traversedType instanceof AliasedObjectType && $traversedType->getClassName() !== 'Iterator') {
-                return new FullyQualifiedObjectType($traversedType->getClassName());
-            }
-
-            return $traverseCallback($traversedType);
+            return $traverseCallback($currentType);
         });
-    }
-
-    private function isStatic(Type $type): bool
-    {
-        if (! $type instanceof ObjectType) {
-            return false;
-        }
-
-        return $type->getClassName() === ObjectReference::STATIC()->getValue();
-    }
-
-    private function isSelf(Type $type): bool
-    {
-        if (! $type instanceof ObjectType) {
-            return false;
-        }
-
-        return $type->getClassName() === ObjectReference::SELF()->getValue();
     }
 }
