@@ -37,10 +37,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
         }
     }
-    /**
-     * @param string ...$suffix
-     */
-    public function append(...$suffix)
+    public function append(string ...$suffix)
     {
         $str = clone $this;
         $str->string = $this->string . (1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix));
@@ -50,10 +47,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return $str;
     }
-    /**
-     * @param int $length
-     */
-    public function chunk($length = 1) : array
+    public function chunk(int $length = 1) : array
     {
         if (1 > $length) {
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
@@ -110,10 +104,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return $string === $this->string;
     }
-    /**
-     * @param int $offset
-     */
-    public function indexOf($needle, $offset = 0) : ?int
+    public function indexOf($needle, int $offset = 0) : ?int
     {
         if ($needle instanceof \RectorPrefix20211027\Symfony\Component\String\AbstractString) {
             $needle = $needle->string;
@@ -134,10 +125,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return \false === $i ? null : $i;
     }
-    /**
-     * @param int $offset
-     */
-    public function indexOfLast($needle, $offset = 0) : ?int
+    public function indexOfLast($needle, int $offset = 0) : ?int
     {
         if ($needle instanceof \RectorPrefix20211027\Symfony\Component\String\AbstractString) {
             $needle = $needle->string;
@@ -162,11 +150,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         $i = $this->ignoreCase ? \grapheme_strripos($string, $needle, $offset) : \grapheme_strrpos($string, $needle, $offset);
         return \false === $i ? null : $i;
     }
-    /**
-     * @param mixed[] $strings
-     * @param string|null $lastGlue
-     */
-    public function join($strings, $lastGlue = null)
+    public function join(array $strings, string $lastGlue = null)
     {
         $str = parent::join($strings, $lastGlue);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
@@ -178,9 +162,8 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
     }
     /**
      * @return mixed
-     * @param int $form
      */
-    public function normalize($form = self::NFC)
+    public function normalize(int $form = self::NFC)
     {
         $str = clone $this;
         if (\in_array($form, [self::NFC, self::NFKC], \true)) {
@@ -193,10 +176,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return $str;
     }
-    /**
-     * @param string ...$prefix
-     */
-    public function prepend(...$prefix)
+    public function prepend(string ...$prefix)
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $this->string;
@@ -206,11 +186,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return $str;
     }
-    /**
-     * @param string $from
-     * @param string $to
-     */
-    public function replace($from, $to)
+    public function replace(string $from, string $to)
     {
         $str = clone $this;
         \normalizer_is_normalized($from) ?: ($from = \normalizer_normalize($from));
@@ -231,20 +207,13 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return $str;
     }
-    /**
-     * @param string $fromRegexp
-     */
-    public function replaceMatches($fromRegexp, $to)
+    public function replaceMatches(string $fromRegexp, $to)
     {
         $str = parent::replaceMatches($fromRegexp, $to);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
         return $str;
     }
-    /**
-     * @param int $start
-     * @param int|null $length
-     */
-    public function slice($start = 0, $length = null)
+    public function slice(int $start = 0, int $length = null)
     {
         $str = clone $this;
         if (\PHP_VERSION_ID < 80000 && 0 > $start && \grapheme_strlen($this->string) < -$start) {
@@ -253,12 +222,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         $str->string = (string) \grapheme_substr($this->string, $start, $length ?? 2147483647);
         return $str;
     }
-    /**
-     * @param string $replacement
-     * @param int $start
-     * @param int|null $length
-     */
-    public function splice($replacement, $start = 0, $length = null)
+    public function splice(string $replacement, int $start = 0, int $length = null)
     {
         $str = clone $this;
         if (\PHP_VERSION_ID < 80000 && 0 > $start && \grapheme_strlen($this->string) < -$start) {
@@ -273,12 +237,7 @@ class UnicodeString extends \RectorPrefix20211027\Symfony\Component\String\Abstr
         }
         return $str;
     }
-    /**
-     * @param string $delimiter
-     * @param int|null $limit
-     * @param int|null $flags
-     */
-    public function split($delimiter, $limit = null, $flags = null) : array
+    public function split(string $delimiter, int $limit = null, int $flags = null) : array
     {
         if (1 > ($limit = $limit ?? 2147483647)) {
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -17,19 +16,13 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VerbosityLevel;
-use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class TypeFactory
 {
@@ -37,19 +30,9 @@ final class TypeFactory
      * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
      */
     private $unionTypeFactory;
-    /**
-     * @var \Rector\Core\Php\PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)
     {
         $this->unionTypeFactory = $unionTypeFactory;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param Type[] $types
@@ -170,44 +153,14 @@ final class TypeFactory
     }
     private function normalizeObjectTypes(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverseCallback) : Type {
-            if ($this->isStatic($traversedType) && $this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
-                /** @var ObjectType $traversedType */
-                $className = $traversedType->getClassName();
-                if (!$this->reflectionProvider->hasClass($className)) {
-                    throw new \Rector\Core\Exception\ShouldNotHappenException();
-                }
-                $classReflection = $this->reflectionProvider->getClass($className);
-                return new \PHPStan\Type\ThisType($classReflection);
+        return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $currentType, callable $traverseCallback) : Type {
+            if ($currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getFullyQualifiedName());
             }
-            if ($this->isStatic($traversedType)) {
-                return new \PHPStan\Type\MixedType();
+            if ($currentType instanceof \PHPStan\Type\ObjectType && !$currentType instanceof \PHPStan\Type\Generic\GenericObjectType && !$currentType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $currentType->getClassName() !== 'Iterator') {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($currentType->getClassName());
             }
-            if ($this->isSelf($traversedType)) {
-                /** @var ObjectType $traversedType */
-                return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($traversedType->getClassName());
-            }
-            if ($traversedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
-                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($traversedType->getFullyQualifiedName());
-            }
-            if ($traversedType instanceof \PHPStan\Type\ObjectType && !$traversedType instanceof \PHPStan\Type\Generic\GenericObjectType && !$traversedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $traversedType->getClassName() !== 'Iterator') {
-                return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($traversedType->getClassName());
-            }
-            return $traverseCallback($traversedType);
+            return $traverseCallback($currentType);
         });
-    }
-    private function isStatic(\PHPStan\Type\Type $type) : bool
-    {
-        if (!$type instanceof \PHPStan\Type\ObjectType) {
-            return \false;
-        }
-        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
-    }
-    private function isSelf(\PHPStan\Type\Type $type) : bool
-    {
-        if (!$type instanceof \PHPStan\Type\ObjectType) {
-            return \false;
-        }
-        return $type->getClassName() === \Rector\Core\Enum\ObjectReference::SELF()->getValue();
     }
 }
