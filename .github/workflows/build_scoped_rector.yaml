@@ -87,9 +87,6 @@ jobs:
 
             -   run: cp -a rector-prefixed-downgraded/. remote-repository
 
-            # run bare run test
-            -   run: cd remote-repository && bin/rector list --ansi && cd ..
-
             # 7. setup git
             -
                 working-directory: remote-repository
@@ -124,3 +121,6 @@ jobs:
                     git push --quiet origin main
                     git tag ${GITHUB_REF#refs/tags/} -m "${GITHUB_REF#refs/tags/}"
                     git push --quiet origin ${GITHUB_REF#refs/tags/}
+
+            # run bare run test
+            -   run: cd remote-repository && bin/rector list --ansi && cd ..
