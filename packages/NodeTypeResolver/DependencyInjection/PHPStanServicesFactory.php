@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
 use PhpParser\Lexer;
+use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
@@ -20,6 +21,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use ReflectionClass;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
+use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * Factory so Symfony app can use services from PHPStan container
@@ -69,6 +71,13 @@ final class PHPStanServicesFactory
      */
     public function createPHPStanParser(): Parser
     {
+        $nameResolver = $this->container->getByType(NameResolver::class);
+
+        // override native PHPStan name resolver to keep original names
+        $privatesAccessor = new PrivatesAccessor();
+        $privatesAccessor->setPrivateProperty($nameResolver, 'preserveOriginalNames', true);
+        $privatesAccessor->setPrivateProperty($nameResolver, 'replaceNodes', false);
+
         return $this->container->getService('currentPhpVersionRichParser');
     }
 

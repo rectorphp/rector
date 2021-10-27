@@ -92,9 +92,6 @@ CODE_SAMPLE
             return null;
         }
 
-        dump($fullyQualifiedName);
-        die;
-
         $realClassName = $classReflection->getName();
         if (strtolower($realClassName) !== strtolower($fullyQualifiedName)) {
             // skip class alias
