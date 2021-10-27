@@ -5,6 +5,7 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -12,6 +13,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
@@ -21,6 +23,7 @@ use Rector\Core\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
@@ -68,7 +71,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         return \in_array($name, $oldToNewClasses, \true);
     }
     /**
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\PHPStan\Type\ThisType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\PHPStan\Type\ObjectWithoutClassType
      */
     private function createClassReferenceType(\PhpParser\Node\Name $name, string $reference)
     {
@@ -81,7 +84,11 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
             return new \PHPStan\Type\StaticType($classReflection);
         }
         if ($reference === \Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
+            $parentClassReflection = $classReflection->getParentClass();
+            if ($parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
+                return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
+            }
+            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType();
         }
         return new \PHPStan\Type\ThisType($classReflection);
     }

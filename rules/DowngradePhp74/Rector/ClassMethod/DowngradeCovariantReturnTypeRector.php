@@ -21,6 +21,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use RectorPrefix20211027\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -165,25 +166,7 @@ CODE_SAMPLE
         $methodName = $this->getName($classMethod);
         /** @var ClassReflection[] $parentClassesAndInterfaces */
         $parentClassesAndInterfaces = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-        foreach ($parentClassesAndInterfaces as $parentClassAndInterface) {
-            $parentClassAndInterfaceHasMethod = $parentClassAndInterface->hasMethod($methodName);
-            if (!$parentClassAndInterfaceHasMethod) {
-                continue;
-            }
-            $classMethodScope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            $parameterMethodReflection = $parentClassAndInterface->getMethod($methodName, $classMethodScope);
-            if (!$parameterMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
-                continue;
-            }
-            /** @var Type $parentReturnType */
-            $parentReturnType = $this->privatesCaller->callPrivateMethod($parameterMethodReflection, 'getReturnType', []);
-            if ($parentReturnType->equals($returnType)) {
-                continue;
-            }
-            // This is an ancestor class with a different return type
-            return $parentReturnType;
-        }
-        return new \PHPStan\Type\MixedType();
+        return $this->resolveMatchingReturnType($parentClassesAndInterfaces, $methodName, $classMethod, $returnType);
     }
     private function addDocBlockReturn(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
@@ -197,5 +180,34 @@ CODE_SAMPLE
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $classMethod);
+    }
+    /**
+     * @param ClassReflection[] $parentClassesAndInterfaces
+     */
+    private function resolveMatchingReturnType(array $parentClassesAndInterfaces, string $methodName, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $returnType) : \PHPStan\Type\Type
+    {
+        foreach ($parentClassesAndInterfaces as $parentClassAndInterface) {
+            $parentClassAndInterfaceHasMethod = $parentClassAndInterface->hasMethod($methodName);
+            if (!$parentClassAndInterfaceHasMethod) {
+                continue;
+            }
+            $classMethodScope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            $parameterMethodReflection = $parentClassAndInterface->getMethod($methodName, $classMethodScope);
+            if (!$parameterMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
+                continue;
+            }
+            /** @var Type $parentReturnType */
+            $parentReturnType = $this->privatesCaller->callPrivateMethod($parameterMethodReflection, 'getReturnType', []);
+            // skip "parent" reference if correct
+            if ($returnType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType && $parentReturnType->accepts($returnType, \true)->yes()) {
+                continue;
+            }
+            if ($parentReturnType->equals($returnType)) {
+                continue;
+            }
+            // This is an ancestor class with a different return type
+            return $parentReturnType;
+        }
+        return new \PHPStan\Type\MixedType();
     }
 }

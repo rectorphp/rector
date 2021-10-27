@@ -10,6 +10,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -87,8 +88,13 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
-        $parentStaticType = new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($classReflection);
-        if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $parentStaticType)) {
+        $parentClassReflection = $classReflection->getParentClass();
+        if ($parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            $staticType = new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
+        } else {
+            $staticType = new \Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType();
+        }
+        if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $staticType)) {
             return null;
         }
         return $node;

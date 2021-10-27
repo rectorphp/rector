@@ -29,7 +29,10 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         }
         $this->string = $string;
     }
-    public function append(string ...$suffix)
+    /**
+     * @param string ...$suffix
+     */
+    public function append(...$suffix)
     {
         $str = clone $this;
         $str->string .= 1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix);
@@ -38,7 +41,10 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         }
         return $str;
     }
-    public function chunk(int $length = 1) : array
+    /**
+     * @param int $length
+     */
+    public function chunk($length = 1) : array
     {
         if (1 > $length) {
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('The chunk length must be greater than zero.');
@@ -60,7 +66,10 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         }
         return $chunks;
     }
-    public function codePointsAt(int $offset) : array
+    /**
+     * @param int $offset
+     */
+    public function codePointsAt($offset) : array
     {
         $str = $offset ? $this->slice($offset, 1) : $this;
         return '' === $str->string ? [] : [\mb_ord($str->string, 'UTF-8')];
@@ -96,7 +105,10 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         }
         return $string === $this->string;
     }
-    public function indexOf($needle, int $offset = 0) : ?int
+    /**
+     * @param int $offset
+     */
+    public function indexOf($needle, $offset = 0) : ?int
     {
         if ($needle instanceof \RectorPrefix20211027\Symfony\Component\String\AbstractString) {
             $needle = $needle->string;
@@ -111,7 +123,10 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         $i = $this->ignoreCase ? \mb_stripos($this->string, $needle, $offset, 'UTF-8') : \mb_strpos($this->string, $needle, $offset, 'UTF-8');
         return \false === $i ? null : $i;
     }
-    public function indexOfLast($needle, int $offset = 0) : ?int
+    /**
+     * @param int $offset
+     */
+    public function indexOfLast($needle, $offset = 0) : ?int
     {
         if ($needle instanceof \RectorPrefix20211027\Symfony\Component\String\AbstractString) {
             $needle = $needle->string;
@@ -130,7 +145,10 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
     {
         return \mb_strlen($this->string, 'UTF-8');
     }
-    public function prepend(string ...$prefix)
+    /**
+     * @param string ...$prefix
+     */
+    public function prepend(...$prefix)
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $this->string;
@@ -139,7 +157,11 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         }
         return $str;
     }
-    public function replace(string $from, string $to)
+    /**
+     * @param string $from
+     * @param string $to
+     */
+    public function replace($from, $to)
     {
         $str = clone $this;
         if ('' === $from || !\preg_match('//u', $from)) {
@@ -155,13 +177,22 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         }
         return $str;
     }
-    public function slice(int $start = 0, int $length = null)
+    /**
+     * @param int $start
+     * @param int|null $length
+     */
+    public function slice($start = 0, $length = null)
     {
         $str = clone $this;
         $str->string = \mb_substr($this->string, $start, $length, 'UTF-8');
         return $str;
     }
-    public function splice(string $replacement, int $start = 0, int $length = null)
+    /**
+     * @param string $replacement
+     * @param int $start
+     * @param int|null $length
+     */
+    public function splice($replacement, $start = 0, $length = null)
     {
         if (!\preg_match('//u', $replacement)) {
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('Invalid UTF-8 string.');
@@ -172,7 +203,12 @@ class CodePointString extends \RectorPrefix20211027\Symfony\Component\String\Abs
         $str->string = \substr_replace($this->string, $replacement, $start, $length ?? \PHP_INT_MAX);
         return $str;
     }
-    public function split(string $delimiter, int $limit = null, int $flags = null) : array
+    /**
+     * @param string $delimiter
+     * @param int|null $limit
+     * @param int|null $flags
+     */
+    public function split($delimiter, $limit = null, $flags = null) : array
     {
         if (1 > ($limit = $limit ?? \PHP_INT_MAX)) {
             throw new \RectorPrefix20211027\Symfony\Component\String\Exception\InvalidArgumentException('Split limit must be a positive integer.');

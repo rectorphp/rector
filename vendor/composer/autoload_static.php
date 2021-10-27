@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c8fcfc15d5f5af95da1e294d907d63f
+class ComposerStaticInitc2e28cbcbc173538bc48d47aa01275d2
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3307,8 +3307,10 @@ class ComposerStaticInit8c8fcfc15d5f5af95da1e294d907d63f
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedGenericObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\NonExistingObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/NonExistingObjectType.php',
+        'Rector\\StaticTypeMapper\\ValueObject\\Type\\ParentObjectWithoutClassType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ParentObjectWithoutClassType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ParentStaticType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ParentStaticType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\SelfObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/SelfObjectType.php',
+        'Rector\\StaticTypeMapper\\ValueObject\\Type\\SelfStaticType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/SelfStaticType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedGenericObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedGenericObjectType.php',
         'Rector\\StaticTypeMapper\\ValueObject\\Type\\ShortenedObjectType' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/ValueObject/Type/ShortenedObjectType.php',
         'Rector\\Strict\\NodeFactory\\ExactCompareFactory' => __DIR__ . '/../..' . '/rules/Strict/NodeFactory/ExactCompareFactory.php',
@@ -3890,9 +3892,9 @@ class ComposerStaticInit8c8fcfc15d5f5af95da1e294d907d63f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8c8fcfc15d5f5af95da1e294d907d63f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8c8fcfc15d5f5af95da1e294d907d63f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8c8fcfc15d5f5af95da1e294d907d63f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc2e28cbcbc173538bc48d47aa01275d2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc2e28cbcbc173538bc48d47aa01275d2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc2e28cbcbc173538bc48d47aa01275d2::$classMap;
 
         }, null, ClassLoader::class);
     }

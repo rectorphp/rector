@@ -22,6 +22,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
@@ -195,7 +196,7 @@ final class ObjectTypeSpecifier
         return new \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType($objectType->getClassName(), $useUse->name->toString());
     }
     /**
-     * @return \PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
+     * @return \PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
      */
     private function resolveObjectReferenceType(\PHPStan\Analyser\Scope $scope, string $classReferenceValue)
     {
@@ -214,7 +215,7 @@ final class ObjectTypeSpecifier
             if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($parentClassReflection->getName(), null, $parentClassReflection);
+            return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
         }
         throw new \Rector\Core\Exception\ShouldNotHappenException();
     }

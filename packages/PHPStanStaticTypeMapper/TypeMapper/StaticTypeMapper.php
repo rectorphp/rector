@@ -8,13 +8,13 @@ use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StaticType;
-use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\ValueObject\TypeKind;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 /**
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
  *
@@ -51,7 +51,7 @@ final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
-        if ($type instanceof \PHPStan\Type\ThisType) {
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType) {
             return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         }
         if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE)) {
