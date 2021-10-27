@@ -15,6 +15,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -233,6 +234,10 @@ CODE_SAMPLE
 
             // skip "parent" reference if correct
             if ($returnType instanceof ParentStaticType && $parentReturnType->accepts($returnType, true)->yes()) {
+                continue;
+            }
+
+            if ($parentReturnType instanceof StaticType && $returnType->accepts($parentReturnType, true)->yes()) {
                 continue;
             }
 
