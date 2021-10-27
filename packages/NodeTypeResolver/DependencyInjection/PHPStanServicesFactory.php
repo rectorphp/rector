@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
 use PhpParser\Lexer;
-use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
@@ -21,7 +20,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use ReflectionClass;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 
 /**
  * Factory so Symfony app can use services from PHPStan container
