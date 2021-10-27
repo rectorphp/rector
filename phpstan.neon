@@ -526,3 +526,6 @@ parameters:
             message: '#Method Rector\\VersionBonding\\PhpVersionedFilter\:\:filter\(\) should return array<T of Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, \(Rector\\VersionBonding\\Contract\\MinPhpVersionInterface&T of Rector\\Core\\Contract\\Rector\\RectorInterface\)\|T of Rector\\Core\\Contract\\Rector\\RectorInterface\>#'
             paths:
                 - packages/VersionBonding/PhpVersionedFilter.php
+
+        # waits for enum phpstan to support PHSPtan 1.0
+        - '#Constant Rector\\(.*?)\\Enum\\(.*?)\:\:(.*?) is unused#'
