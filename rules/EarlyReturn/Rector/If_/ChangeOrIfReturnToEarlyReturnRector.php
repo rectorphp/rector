@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -82,6 +83,10 @@ CODE_SAMPLE
         if ($this->isInstanceofCondOnlyOrHasBooleanAnd($node->cond)) {
             return null;
         }
+        // maybe used along with Php8ResourceReturnToObjectRector rule
+        if ($this->isMaybeUsedAlongWithResourceToObjectRector($node->cond)) {
+            return null;
+        }
         /** @var Return_ $return */
         $return = $node->stmts[0];
         $ifs = $this->createMultipleIfs($node->cond, $return, []);
@@ -91,6 +96,22 @@ CODE_SAMPLE
         }
         $this->mirrorComments($ifs[0], $node);
         return $ifs;
+    }
+    private function isMaybeUsedAlongWithResourceToObjectRector(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr) : bool
+    {
+        if ($booleanOr->left instanceof \PhpParser\Node\Expr\FuncCall) {
+            if (!$this->nodeNameResolver->isName($booleanOr->left, 'is_resource')) {
+                return \false;
+            }
+            return $booleanOr->right instanceof \PhpParser\Node\Expr\Instanceof_;
+        }
+        if ($booleanOr->right instanceof \PhpParser\Node\Expr\FuncCall) {
+            if (!$this->nodeNameResolver->isName($booleanOr->right, 'is_resource')) {
+                return \false;
+            }
+            return $booleanOr->left instanceof \PhpParser\Node\Expr\Instanceof_;
+        }
+        return \false;
     }
     /**
      * @param If_[] $ifs
