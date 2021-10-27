@@ -15,8 +15,8 @@ use Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Symfony\Contracts\Service\Attribute\Required;
 

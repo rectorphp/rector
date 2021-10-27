@@ -12,8 +12,8 @@ use PHPStan\Type\ClosureType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**

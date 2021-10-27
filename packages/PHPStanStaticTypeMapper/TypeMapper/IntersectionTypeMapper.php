@@ -10,8 +10,8 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**

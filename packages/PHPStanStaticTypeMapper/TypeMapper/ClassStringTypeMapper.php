@@ -14,8 +14,8 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
