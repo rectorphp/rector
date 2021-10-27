@@ -209,7 +209,7 @@ final class ObjectTypeSpecifier
         if (\Rector\Core\Enum\ObjectReference::SELF()->getValue() === $classReferenceValue) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($classReferenceValue, null, $classReflection);
         }
-        if (\Rector\Core\Enum\ObjectReference::PARENT()->getValue()) {
+        if (\Rector\Core\Enum\ObjectReference::PARENT()->getValue() === $classReferenceValue) {
             $parentClassReflection = $classReflection->getParentClass();
             if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
