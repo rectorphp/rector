@@ -77,12 +77,7 @@ CODE_SAMPLE
                 return \true;
             }
         }
-        $firstArg = $funcCall->args[0];
-        $value = $this->valueResolver->getValue($firstArg->value);
-        if (\is_string($value)) {
-            return \true;
-        }
-        if (\is_array($value)) {
+        if ($this->isFirstValueStringOrArray($funcCall)) {
             return \true;
         }
         return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (\PhpParser\Node $node) : bool {
@@ -118,5 +113,17 @@ CODE_SAMPLE
     private function createConstFetch(string $name) : \PhpParser\Node\Expr\ConstFetch
     {
         return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($name));
+    }
+    private function isFirstValueStringOrArray(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    {
+        if (!isset($funcCall->args[0])) {
+            return \false;
+        }
+        $firstArg = $funcCall->args[0];
+        $value = $this->valueResolver->getValue($firstArg->value);
+        if (\is_string($value)) {
+            return \true;
+        }
+        return \is_array($value);
     }
 }
