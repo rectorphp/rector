@@ -170,8 +170,11 @@ final class ArgumentDefaultValueReplacer
     ): array {
         $argumentValues = [];
 
-        /** @var mixed[] $valueBefore */
         $valueBefore = $replaceArgumentDefaultValue->getValueBefore();
+        if (! is_array($valueBefore)) {
+            return [];
+        }
+
         $beforeArgumentCount = count($valueBefore);
 
         for ($i = 0; $i < $beforeArgumentCount; ++$i) {

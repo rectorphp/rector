@@ -70,8 +70,10 @@ final class UndefinedVariableResolver
                 return null;
             }
 
-            /** @var string $variableName */
             $variableName = $this->nodeNameResolver->getName($node);
+            if (! is_string($variableName)) {
+                return null;
+            }
 
             // defined 100 %
             /** @var Scope $scope */
