@@ -21,11 +21,17 @@ final class NestedStaticFnUses
 
     public function mixed()
     {
-        return fn($foo) => fn ($bar) => function () use ($foo, $bar) {
+        return fn ($foo) => fn ($bar) => function () use ($foo, $bar) {
             return [$foo, $bar];
         };
     }
+
+    public function sameParamName()
+    {
+        return fn($foo) => fn($foo) => fn($bar) => $foo === $bar;
+    }
 }
+
 ?>
 -----
 <?php
@@ -83,5 +89,17 @@ final class NestedStaticFnUses
             };
         };
     }
+
+    public function sameParamName()
+    {
+        return function ($foo) {
+            return function ($foo) {
+                return function ($bar) use ($foo) {
+                    return $foo === $bar;
+                };
+            };
+        };
+    }
 }
+
 ?>

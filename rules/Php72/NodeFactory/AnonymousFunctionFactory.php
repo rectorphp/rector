@@ -189,7 +189,7 @@ final class AnonymousFunctionFactory
         $variableNames = array_unique($variableNames);
 
         return array_map(
-            fn ($variableName): ClosureUse => new ClosureUse(new Variable($variableName)),
+            static fn ($variableName): ClosureUse => new ClosureUse(new Variable($variableName)),
             $variableNames,
             []
         );
@@ -197,9 +197,17 @@ final class AnonymousFunctionFactory
 
     private function applyNestedUses(Closure $anonymousFunctionNode, Variable $useVariable): Closure
     {
-        $anonymousFunctionNode = clone $anonymousFunctionNode;
         $parent = $this->betterNodeFinder->findParentType($useVariable, Closure::class);
 
+        if ($parent instanceof Closure) {
+            $paramNames = $this->nodeNameResolver->getNames($parent->params);
+
+            if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
+                return $anonymousFunctionNode;
+            }
+        }
+
+        $anonymousFunctionNode = clone $anonymousFunctionNode;
         while ($parent instanceof Closure) {
             $parentOfParent = $this->betterNodeFinder->findParentType($parent, Closure::class);
 
