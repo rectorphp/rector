@@ -14,12 +14,12 @@ use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class TypeFactory
 {
@@ -101,7 +101,7 @@ final class TypeFactory
      */
     private function resolveNonConstantArrayType(Type $type, array $unwrappedTypes): array
     {
-        if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === 'Rector\Core\Stubs\DummyTraitClass') {
+        if ($type instanceof ObjectType && $type->getClassName() === 'Rector\Core\Stubs\DummyTraitClass') {
             return $unwrappedTypes;
         }
 
