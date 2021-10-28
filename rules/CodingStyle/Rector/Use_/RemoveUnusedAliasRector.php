@@ -120,7 +120,7 @@ CODE_SAMPLE
 
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
-            if ($this->shouldSkip($node, $use->name, $lastName, $aliasName)) {
+            if ($this->shouldSkip($node, $lastName, $aliasName)) {
                 continue;
             }
 
@@ -130,7 +130,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->refactorAliasName($node, $aliasName, $lastName, $use);
+            $this->refactorAliasName($node, $use->name->toString(), $lastName, $use);
         }
 
         return $node;
@@ -166,7 +166,7 @@ CODE_SAMPLE
         return array_map('strtolower', $values);
     }
 
-    private function shouldSkip(Use_ $use, Name $name, string $lastName, string $aliasName): bool
+    private function shouldSkip(Use_ $use, string $lastName, string $aliasName): bool
     {
         // PHP is case insensitive
         $loweredLastName = strtolower($lastName);
@@ -185,7 +185,7 @@ CODE_SAMPLE
         return (bool) $this->fullyQualifiedFromUseFinder->matchAliasNamespace($use, $loweredAliasName);
     }
 
-    private function refactorAliasName(Use_ $use, string $aliasName, string $lastName, UseUse $useUse): void
+    private function refactorAliasName(Use_ $use, string $fullUseUseName, string $lastName, UseUse $useUse): void
     {
         $parentUse = $use->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentUse instanceof Node) {
@@ -205,8 +205,12 @@ CODE_SAMPLE
             return;
         }
 
-        $lowerAliasName = strtolower($aliasName);
-        $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
+        $loweredFullUseUseName = strtolower($fullUseUseName);
+        if (! isset($this->resolvedNodeNames[$loweredFullUseUseName])) {
+            return;
+        }
+
+        $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$loweredFullUseUseName], $lastName);
         $useUse->alias = null;
     }
 

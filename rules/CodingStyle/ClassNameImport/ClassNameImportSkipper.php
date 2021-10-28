@@ -72,9 +72,12 @@ final class ClassNameImportSkipper
      */
     public function isFoundInUse(Name $name, array $uses): bool
     {
+        $nameLastName = strtolower($name->getLast());
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
-                if ($useUse->name->getLast() !== $name->getLast()) {
+                $useUseLastName = strtolower($useUse->name->getLast());
+
+                if ($useUseLastName !== $nameLastName) {
                     continue;
                 }
 
