@@ -26,7 +26,7 @@ jobs:
 
                     -
                         name: 'Along PHPStan'
-                        install: composer require phpstan/phpstan:^0.12.99 --dev --ansi
+                        install: composer require phpstan/phpstan:^1.0 --dev --ansi
 
         name: "PHP ${{ matrix.php_version }}"
 
@@ -47,6 +47,9 @@ jobs:
 
             -   run: |
                     # run
+                    yes | composer init --name some/prj
+                    composer config minimum-stability dev
+                    composer config prefer-stable true
                     composer require rector/rector:dev-main --dev --ansi
                     ${{ matrix.commands.install }}
                 working-directory: standalone

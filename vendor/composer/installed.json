@@ -833,12 +833,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "57f294a4fbd63ae01b3426741b6c4cfd9538bf48"
+                "reference": "2d111cfc39d5c228c8cdfa4717f8d5f0d85dabcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/57f294a4fbd63ae01b3426741b6c4cfd9538bf48",
-                "reference": "57f294a4fbd63ae01b3426741b6c4cfd9538bf48",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/2d111cfc39d5c228c8cdfa4717f8d5f0d85dabcd",
+                "reference": "2d111cfc39d5c228c8cdfa4717f8d5f0d85dabcd",
                 "shasum": ""
             },
             "require": {
@@ -847,7 +847,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-10-27T16:36:44+00:00",
+            "time": "2021-10-28T12:24:12+00:00",
             "default-branch": true,
             "bin": [
                 "phpstan",
