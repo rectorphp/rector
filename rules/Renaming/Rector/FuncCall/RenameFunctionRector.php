@@ -12,6 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211028\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\FuncCall\RenameFunctionRector\RenameFunctionRectorTest
  */
@@ -56,11 +57,14 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
         return null;
     }
     /**
-     * @param mixed[] $configuration
+     * @param array<string, array<string, string>> $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? [];
+        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? [];
+        \RectorPrefix20211028\Webmozart\Assert\Assert::allString($oldFunctionToNewFunction);
+        \RectorPrefix20211028\Webmozart\Assert\Assert::allString(\array_values($oldFunctionToNewFunction));
+        $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
     }
     private function createName(string $newFunction) : \PhpParser\Node\Name
     {

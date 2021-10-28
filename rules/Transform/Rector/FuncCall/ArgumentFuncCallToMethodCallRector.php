@@ -130,7 +130,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param mixed[] $configuration
+     * @param array<string, array<ArgumentFuncCallToMethodCall|ArrayFuncCallToMethodCall>> $configuration
      */
     public function configure(array $configuration) : void
     {

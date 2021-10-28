@@ -108,7 +108,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param mixed[] $configuration
+     * @param array<string, ReturnArrayClassMethodToYield[]> $configuration
      */
     public function configure(array $configuration) : void
     {

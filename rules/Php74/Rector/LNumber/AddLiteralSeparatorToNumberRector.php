@@ -39,13 +39,17 @@ final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\Abstra
     /**
      * @var int
      */
-    private $limitValue = 1000000;
+    private const DEFAULT_LIMIT_VALUE = 1000000;
     /**
-     * @param mixed[] $configuration
+     * @var int
+     */
+    private $limitValue = self::DEFAULT_LIMIT_VALUE;
+    /**
+     * @param array<string, int> $configuration
      */
     public function configure(array $configuration) : void
     {
-        $limitValue = $configuration[self::LIMIT_VALUE] ?? 1000000;
+        $limitValue = $configuration[self::LIMIT_VALUE] ?? self::DEFAULT_LIMIT_VALUE;
         \RectorPrefix20211028\Webmozart\Assert\Assert::integer($limitValue);
         $this->limitValue = $limitValue;
     }
