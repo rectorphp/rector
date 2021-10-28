@@ -121,7 +121,7 @@ CODE_SAMPLE
             $lowercasedLastName = \strtolower($lastName);
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
-            if ($this->shouldSkip($node, $use->name, $lastName, $aliasName)) {
+            if ($this->shouldSkip($node, $lastName, $aliasName)) {
                 continue;
             }
             // only last name is used → no need for alias
@@ -129,7 +129,7 @@ CODE_SAMPLE
                 $use->alias = null;
                 continue;
             }
-            $this->refactorAliasName($node, $aliasName, $lastName, $use);
+            $this->refactorAliasName($node, $use->name->toString(), $lastName, $use);
         }
         return $node;
     }
@@ -158,7 +158,7 @@ CODE_SAMPLE
     {
         return \array_map('strtolower', $values);
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Use_ $use, \PhpParser\Node\Name $name, string $lastName, string $aliasName) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Use_ $use, string $lastName, string $aliasName) : bool
     {
         // PHP is case insensitive
         $loweredLastName = \strtolower($lastName);
@@ -173,7 +173,7 @@ CODE_SAMPLE
         }
         return (bool) $this->fullyQualifiedFromUseFinder->matchAliasNamespace($use, $loweredAliasName);
     }
-    private function refactorAliasName(\PhpParser\Node\Stmt\Use_ $use, string $aliasName, string $lastName, \PhpParser\Node\Stmt\UseUse $useUse) : void
+    private function refactorAliasName(\PhpParser\Node\Stmt\Use_ $use, string $fullUseUseName, string $lastName, \PhpParser\Node\Stmt\UseUse $useUse) : void
     {
         $parentUse = $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentUse instanceof \PhpParser\Node) {
@@ -189,8 +189,11 @@ CODE_SAMPLE
         if ($this->classNameImportSkipper->isShortNameInUseStatement(new \PhpParser\Node\Name($lastName), $uses)) {
             return;
         }
-        $lowerAliasName = \strtolower($aliasName);
-        $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$lowerAliasName], $lastName);
+        $loweredFullUseUseName = \strtolower($fullUseUseName);
+        if (!isset($this->resolvedNodeNames[$loweredFullUseUseName])) {
+            return;
+        }
+        $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$loweredFullUseUseName], $lastName);
         $useUse->alias = null;
     }
     private function hasUseAlias(\PhpParser\Node\Stmt\Use_ $use) : bool
