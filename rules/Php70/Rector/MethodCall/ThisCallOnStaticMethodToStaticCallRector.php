@@ -34,7 +34,7 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
 
     public function provideMinPhpVersion(): int
     {
-        return PhpVersionFeature::STATIC_CALL;
+        return PhpVersionFeature::STATIC_CALL_ON_NON_STATIC;
     }
 
     public function getRuleDefinition(): RuleDefinition

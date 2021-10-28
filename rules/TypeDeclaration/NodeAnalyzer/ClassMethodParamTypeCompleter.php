@@ -10,7 +10,11 @@ use PHPStan\Type\CallableType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 
@@ -18,19 +22,21 @@ final class ClassMethodParamTypeCompleter
 {
     public function __construct(
         private StaticTypeMapper $staticTypeMapper,
-        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver
+        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        private UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
+        private PhpVersionProvider $phpVersionProvider,
     ) {
     }
 
     /**
      * @param array<int, Type> $classParameterTypes
      */
-    public function complete(ClassMethod $classMethod, array $classParameterTypes): ?ClassMethod
+    public function complete(ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes): ?ClassMethod
     {
         $hasChanged = false;
 
         foreach ($classParameterTypes as $position => $argumentStaticType) {
-            if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position)) {
+            if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position, $maxUnionTypes)) {
                 continue;
             }
 
@@ -58,7 +64,8 @@ final class ClassMethodParamTypeCompleter
     private function shouldSkipArgumentStaticType(
         ClassMethod $classMethod,
         Type $argumentStaticType,
-        int $position
+        int $position,
+        int $maxUnionTypes
     ): bool {
         if ($argumentStaticType instanceof MixedType) {
             return true;
@@ -82,12 +89,16 @@ final class ClassMethodParamTypeCompleter
             return true;
         }
 
-        // avoid overriding more precise type
-        if ($argumentStaticType->isSuperTypeOf($currentParameterStaticType)->yes()) {
+        // narrow union type in case its not supported yet
+        $argumentStaticType = $this->narrowUnionTypeIfNotSupported($argumentStaticType);
+
+        // too many union types
+        if ($this->isTooDetailedUnionType($currentParameterStaticType, $argumentStaticType, $maxUnionTypes)) {
             return true;
         }
 
-        if ($currentParameterStaticType->equals($argumentStaticType)) {
+        // avoid overriding more precise type
+        if ($argumentStaticType->isSuperTypeOf($currentParameterStaticType)->yes()) {
             return true;
         }
 
@@ -111,5 +122,37 @@ final class ClassMethodParamTypeCompleter
         }
 
         return $type->getClassName() === 'Closure';
+    }
+
+    private function isTooDetailedUnionType(Type $currentType, Type $newType, int $maxUnionTypes): bool
+    {
+        if ($currentType instanceof MixedType) {
+            return false;
+        }
+
+        if (! $newType instanceof UnionType) {
+            return false;
+        }
+
+        return count($newType->getTypes()) > $maxUnionTypes;
+    }
+
+    private function narrowUnionTypeIfNotSupported(Type $type): Type
+    {
+        if (! $type instanceof UnionType) {
+            return $type;
+        }
+
+        // union is supported, so it's ok
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+            return $type;
+        }
+
+        $narrowedObjectType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($type);
+        if ($narrowedObjectType instanceof ObjectType) {
+            return $narrowedObjectType;
+        }
+
+        return $type;
     }
 }

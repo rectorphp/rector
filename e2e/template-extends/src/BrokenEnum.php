@@ -7,7 +7,7 @@ namespace Whatever\Foo\Bar;
 use MyCLabs\Enum\Enum;
 
 /**
- * @template-extends Enum<BrokenEnum::*>
+ * @template-extends Enum<BrokenEnum>
  * @psalm-immutable
  */
 final class BrokenEnum extends Enum
