@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\CollisionGuard;
 
-use RectorPrefix20211027\Nette\Utils\Strings;
+use RectorPrefix20211028\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use ReflectionClass;
-use RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211028\Symplify\SmartFileSystem\SmartFileSystem;
 final class TemplateExtendsGuard
 {
     /**
@@ -21,7 +21,7 @@ final class TemplateExtendsGuard
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \RectorPrefix20211028\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->smartFileSystem = $smartFileSystem;
@@ -63,7 +63,7 @@ final class TemplateExtendsGuard
                 return \false;
             }
             $fileContents = $this->smartFileSystem->readFile($fileName);
-            return (bool) \RectorPrefix20211027\Nette\Utils\Strings::match($fileContents, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
+            return (bool) \RectorPrefix20211028\Nette\Utils\Strings::match($fileContents, \Rector\Core\Application\FileProcessor::TEMPLATE_EXTENDS_REGEX);
         });
     }
 }

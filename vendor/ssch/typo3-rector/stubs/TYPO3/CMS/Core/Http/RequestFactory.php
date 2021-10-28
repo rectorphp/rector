@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211027\TYPO3\CMS\Core\Http;
+namespace RectorPrefix20211028\TYPO3\CMS\Core\Http;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Http\\RequestFactory')) {
     return;

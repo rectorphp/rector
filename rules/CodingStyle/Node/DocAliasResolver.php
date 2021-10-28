@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Node;
 
-use RectorPrefix20211027\Nette\Utils\Strings;
+use RectorPrefix20211028\Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\Type\Type;
@@ -11,7 +11,7 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211028\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class DocAliasResolver
 {
     /**
@@ -27,7 +27,7 @@ final class DocAliasResolver
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\RectorPrefix20211028\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -46,7 +46,7 @@ final class DocAliasResolver
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             $possibleDocAliases = $this->collectVarType($phpDocInfo, $possibleDocAliases);
             // e.g. "use Dotrine\ORM\Mapping as ORM" etc.
-            $matches = \RectorPrefix20211027\Nette\Utils\Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);
+            $matches = \RectorPrefix20211028\Nette\Utils\Strings::matchAll($docComment->getText(), self::DOC_ALIAS_REGEX);
             foreach ($matches as $match) {
                 $possibleDocAliases[] = $match['possible_alias'];
             }

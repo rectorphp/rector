@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211027\TYPO3\CMS\Frontend\Plugin;
+namespace RectorPrefix20211028\TYPO3\CMS\Frontend\Plugin;
 
-use RectorPrefix20211027\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use RectorPrefix20211028\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 if (\class_exists('TYPO3\\CMS\\Frontend\\Plugin\\AbstractPlugin')) {
     return;
 }

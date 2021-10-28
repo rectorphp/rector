@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix20211027\Nette\Utils\Strings;
+use RectorPrefix20211028\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
@@ -44,7 +44,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211028\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AnonymousFunctionFactory
 {
     /**
@@ -80,7 +80,7 @@ final class AnonymousFunctionFactory
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211027\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211028\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -157,7 +157,7 @@ final class AnonymousFunctionFactory
             if (!$node instanceof \PhpParser\Node\Scalar\String_) {
                 return $node;
             }
-            $match = \RectorPrefix20211027\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
+            $match = \RectorPrefix20211028\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
             if (!$match) {
                 return $node;
             }
@@ -178,14 +178,20 @@ final class AnonymousFunctionFactory
             return (string) $this->nodeNameResolver->getName($use->var);
         }, $uses, []);
         $variableNames = \array_unique($variableNames);
-        return \array_map(function ($variableName) : ClosureUse {
+        return \array_map(static function ($variableName) : ClosureUse {
             return new \PhpParser\Node\Expr\ClosureUse(new \PhpParser\Node\Expr\Variable($variableName));
         }, $variableNames, []);
     }
     private function applyNestedUses(\PhpParser\Node\Expr\Closure $anonymousFunctionNode, \PhpParser\Node\Expr\Variable $useVariable) : \PhpParser\Node\Expr\Closure
     {
-        $anonymousFunctionNode = clone $anonymousFunctionNode;
         $parent = $this->betterNodeFinder->findParentType($useVariable, \PhpParser\Node\Expr\Closure::class);
+        if ($parent instanceof \PhpParser\Node\Expr\Closure) {
+            $paramNames = $this->nodeNameResolver->getNames($parent->params);
+            if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
+                return $anonymousFunctionNode;
+            }
+        }
+        $anonymousFunctionNode = clone $anonymousFunctionNode;
         while ($parent instanceof \PhpParser\Node\Expr\Closure) {
             $parentOfParent = $this->betterNodeFinder->findParentType($parent, \PhpParser\Node\Expr\Closure::class);
             $uses = [];

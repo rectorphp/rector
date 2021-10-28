@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211027\TYPO3\CMS\Core\Localization;
+namespace RectorPrefix20211028\TYPO3\CMS\Core\Localization;
 
-use RectorPrefix20211027\TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use RectorPrefix20211028\TYPO3\CMS\Core\Site\Entity\SiteLanguage;
 if (\class_exists('TYPO3\\CMS\\Core\\Localization\\Locales')) {
     return;
 }

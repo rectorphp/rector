@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211027\TYPO3\CMS\Core\Resource;
+namespace RectorPrefix20211028\TYPO3\CMS\Core\Resource;
 
 if (\interface_exists('TYPO3\\CMS\\Core\\Resource\\FileInterface')) {
     return;

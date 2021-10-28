@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Composer;
 
-use RectorPrefix20211027\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
-use RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211028\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
+use RectorPrefix20211028\Symplify\SmartFileSystem\SmartFileSystem;
 final class ComposerNamespaceMatcher
 {
     /**
@@ -15,7 +15,7 @@ final class ComposerNamespaceMatcher
      * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
-    public function __construct(\RectorPrefix20211027\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20211027\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory)
+    public function __construct(\RectorPrefix20211028\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20211028\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->composerJsonFactory = $composerJsonFactory;

@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211027\Symfony\Component\HttpKernel\EventListener;
+namespace RectorPrefix20211028\Symfony\Component\HttpKernel\EventListener;
 
-use RectorPrefix20211027\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20211027\Symfony\Component\HttpFoundation\Request;
-use RectorPrefix20211027\Symfony\Component\HttpFoundation\RequestStack;
-use RectorPrefix20211027\Symfony\Component\HttpKernel\Event\FinishRequestEvent;
-use RectorPrefix20211027\Symfony\Component\HttpKernel\Event\KernelEvent;
-use RectorPrefix20211027\Symfony\Component\HttpKernel\Event\RequestEvent;
-use RectorPrefix20211027\Symfony\Component\HttpKernel\KernelEvents;
-use RectorPrefix20211027\Symfony\Component\Routing\RequestContextAwareInterface;
+use RectorPrefix20211028\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20211028\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211028\Symfony\Component\HttpFoundation\RequestStack;
+use RectorPrefix20211028\Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use RectorPrefix20211028\Symfony\Component\HttpKernel\Event\KernelEvent;
+use RectorPrefix20211028\Symfony\Component\HttpKernel\Event\RequestEvent;
+use RectorPrefix20211028\Symfony\Component\HttpKernel\KernelEvents;
+use RectorPrefix20211028\Symfony\Component\Routing\RequestContextAwareInterface;
 /**
  * Initializes the locale based on the current request.
  *
@@ -25,12 +25,12 @@ use RectorPrefix20211027\Symfony\Component\Routing\RequestContextAwareInterface;
  *
  * @final
  */
-class LocaleListener implements \RectorPrefix20211027\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class LocaleListener implements \RectorPrefix20211028\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $router;
     private $defaultLocale;
     private $requestStack;
-    public function __construct(\RectorPrefix20211027\Symfony\Component\HttpFoundation\RequestStack $requestStack, string $defaultLocale = 'en', \RectorPrefix20211027\Symfony\Component\Routing\RequestContextAwareInterface $router = null)
+    public function __construct(\RectorPrefix20211028\Symfony\Component\HttpFoundation\RequestStack $requestStack, string $defaultLocale = 'en', \RectorPrefix20211028\Symfony\Component\Routing\RequestContextAwareInterface $router = null)
     {
         $this->defaultLocale = $defaultLocale;
         $this->requestStack = $requestStack;
@@ -61,13 +61,13 @@ class LocaleListener implements \RectorPrefix20211027\Symfony\Component\EventDis
             $this->setRouterContext($parentRequest);
         }
     }
-    private function setLocale(\RectorPrefix20211027\Symfony\Component\HttpFoundation\Request $request)
+    private function setLocale(\RectorPrefix20211028\Symfony\Component\HttpFoundation\Request $request)
     {
         if ($locale = $request->attributes->get('_locale')) {
             $request->setLocale($locale);
         }
     }
-    private function setRouterContext(\RectorPrefix20211027\Symfony\Component\HttpFoundation\Request $request)
+    private function setRouterContext(\RectorPrefix20211028\Symfony\Component\HttpFoundation\Request $request)
     {
         if (null !== $this->router) {
             $this->router->getContext()->setParameter('_locale', $request->getLocale());
@@ -75,10 +75,10 @@ class LocaleListener implements \RectorPrefix20211027\Symfony\Component\EventDis
     }
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20211027\Symfony\Component\HttpKernel\KernelEvents::REQUEST => [
+        return [\RectorPrefix20211028\Symfony\Component\HttpKernel\KernelEvents::REQUEST => [
             ['setDefaultLocale', 100],
             // must be registered after the Router to have access to the _locale
             ['onKernelRequest', 16],
-        ], \RectorPrefix20211027\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', 0]]];
+        ], \RectorPrefix20211028\Symfony\Component\HttpKernel\KernelEvents::FINISH_REQUEST => [['onKernelFinishRequest', 0]]];
     }
 }

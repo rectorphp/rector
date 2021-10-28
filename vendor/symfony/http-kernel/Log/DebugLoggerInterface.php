@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211027\Symfony\Component\HttpKernel\Log;
+namespace RectorPrefix20211028\Symfony\Component\HttpKernel\Log;
 
-use RectorPrefix20211027\Symfony\Component\HttpFoundation\Request;
+use RectorPrefix20211028\Symfony\Component\HttpFoundation\Request;
 /**
  * DebugLoggerInterface.
  *
