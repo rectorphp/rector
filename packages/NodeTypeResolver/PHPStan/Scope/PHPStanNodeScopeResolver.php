@@ -28,7 +28,6 @@ use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard;
-use Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use RectorPrefix20211028\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -86,14 +85,10 @@ final class PHPStanNodeScopeResolver
      */
     private $parentAttributeSourceLocator;
     /**
-     * @var \Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard
-     */
-    private $templateExtendsGuard;
-    /**
      * @var \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard
      */
     private $mixinGuard;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211028\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard $templateExtendsGuard, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard $mixinGuard)
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211028\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard $mixinGuard)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -104,7 +99,6 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->parentAttributeSourceLocator = $parentAttributeSourceLocator;
-        $this->templateExtendsGuard = $templateExtendsGuard;
         $this->mixinGuard = $mixinGuard;
     }
     /**
@@ -143,11 +137,6 @@ final class PHPStanNodeScopeResolver
             }
         };
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
-        // it needs to be checked early before `@mixin` check as
-        // ReflectionProvider already hang when check class with `@template-extends`
-        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($stmts, $smartFileInfo->getFilename())) {
-            return $stmts;
-        }
         return $this->processNodesWithMixinHandling($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
     /**

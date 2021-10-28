@@ -2497,7 +2497,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeVisitor\\StatementNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/StatementNodeVisitor.php',
     'Rector\\NodeTypeResolver\\Node\\AttributeKey' => $baseDir . '/packages/NodeTypeResolver/Node/AttributeKey.php',
     'Rector\\NodeTypeResolver\\PHPStan\\CollisionGuard\\MixinGuard' => $baseDir . '/packages/NodeTypeResolver/PHPStan/CollisionGuard/MixinGuard.php',
-    'Rector\\NodeTypeResolver\\PHPStan\\CollisionGuard\\TemplateExtendsGuard' => $baseDir . '/packages/NodeTypeResolver/PHPStan/CollisionGuard/TemplateExtendsGuard.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
