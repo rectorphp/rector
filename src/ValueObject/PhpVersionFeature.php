@@ -122,9 +122,12 @@ final class PhpVersionFeature
      */
     public const NO_EMPTY_LIST = \Rector\Core\ValueObject\PhpVersion::PHP_70;
     /**
+     * @see https://php.watch/versions/8.0/non-static-static-call-fatal-error
+     * Deprecated since PHP 7.0
+     *
      * @var int
      */
-    public const STATIC_CALL = \Rector\Core\ValueObject\PhpVersion::PHP_70;
+    public const STATIC_CALL_ON_NON_STATIC = \Rector\Core\ValueObject\PhpVersion::PHP_70;
     /**
      * @var int
      */

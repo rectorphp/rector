@@ -19,6 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddMethodCallBasedStrictParamTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var int
+     */
+    private const MAX_UNION_TYPES = 3;
+    /**
      * @var \Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver
      */
     private $callTypesResolver;
@@ -38,45 +42,29 @@ final class AddMethodCallBasedStrictParamTypeRector extends \Rector\Core\Rector\
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change param type to strict type of passed expression', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change private method param type to strict type, based on passed strict types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+final class SomeClass
 {
-    public function getById($id)
+    public function run(int $value)
     {
-    }
-}
-
-class CallerClass
-{
-    public function run(SomeClass $someClass)
-    {
-        $someClass->getById($this->getId());
+        $this->resolve($value);
     }
 
-    public function getId(): int
+    private function resolve($value)
     {
-        return 1000;
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass
+final class SomeClass
 {
-    public function getById(int $id)
+    public function run(int $value)
     {
-    }
-}
-
-class CallerClass
-{
-    public function run(SomeClass $someClass)
-    {
-        $someClass->getById($this->getId());
+        $this->resolve($value);
     }
 
-    public function getId(): int
+    private function resolve(int $value)
     {
-        return 1000;
     }
 }
 CODE_SAMPLE
@@ -102,6 +90,6 @@ CODE_SAMPLE
         }
         $methodCalls = $this->localMethodCallFinder->match($node);
         $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
-        return $this->classMethodParamTypeCompleter->complete($node, $classMethodParameterTypes);
+        return $this->classMethodParamTypeCompleter->complete($node, $classMethodParameterTypes, self::MAX_UNION_TYPES);
     }
 }

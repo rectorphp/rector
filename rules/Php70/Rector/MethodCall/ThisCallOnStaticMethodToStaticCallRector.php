@@ -39,7 +39,7 @@ final class ThisCallOnStaticMethodToStaticCallRector extends \Rector\Core\Rector
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::STATIC_CALL;
+        return \Rector\Core\ValueObject\PhpVersionFeature::STATIC_CALL_ON_NON_STATIC;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

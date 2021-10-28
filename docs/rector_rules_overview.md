@@ -1,4 +1,4 @@
-# 485 Rules Overview
+# 476 Rules Overview
 
 <br>
 
@@ -17,8 +17,6 @@
 - [Composer](#composer) (6)
 
 - [DeadCode](#deadcode) (49)
-
-- [Defluent](#defluent) (9)
 
 - [DependencyInjection](#dependencyinjection) (3)
 
@@ -58,7 +56,7 @@
 
 - [Php52](#php52) (2)
 
-- [Php53](#php53) (4)
+- [Php53](#php53) (3)
 
 - [Php54](#php54) (2)
 
@@ -76,7 +74,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (16)
+- [Php80](#php80) (17)
 
 - [Php81](#php81) (5)
 
@@ -3949,202 +3947,6 @@ Remove php version checks if they are passed
 
 <br>
 
-## Defluent
-
-### DefluentReturnMethodCallRector
-
-Turns return of fluent, to standalone call line and return of value
-
-- class: [`Rector\Defluent\Rector\Return_\DefluentReturnMethodCallRector`](../rules/Defluent/Rector/Return_/DefluentReturnMethodCallRector.php)
-
-```diff
- $someClass = new SomeClass();
--return $someClass->someFunction();
-+$someClass->someFunction();
-+return $someClass;
-```
-
-<br>
-
-### FluentChainMethodCallToNormalMethodCallRector
-
-Turns fluent interface calls to classic ones.
-
-- class: [`Rector\Defluent\Rector\MethodCall\FluentChainMethodCallToNormalMethodCallRector`](../rules/Defluent/Rector/MethodCall/FluentChainMethodCallToNormalMethodCallRector.php)
-
-```diff
- $someClass = new SomeClass();
--$someClass->someFunction()
--            ->otherFunction();
-+$someClass->someFunction();
-+$someClass->otherFunction();
-```
-
-<br>
-
-### InArgFluentChainMethodCallToStandaloneMethodCallRector
-
-Turns fluent interface calls to classic ones.
-
-- class: [`Rector\Defluent\Rector\MethodCall\InArgFluentChainMethodCallToStandaloneMethodCallRector`](../rules/Defluent/Rector/MethodCall/InArgFluentChainMethodCallToStandaloneMethodCallRector.php)
-
-```diff
- class UsedAsParameter
- {
-     public function someFunction(FluentClass $someClass)
-     {
--        $this->processFluentClass($someClass->someFunction()->otherFunction());
-+        $someClass->someFunction();
-+        $someClass->otherFunction();
-+        $this->processFluentClass($someClass);
-     }
-
-     public function processFluentClass(FluentClass $someClass)
-     {
-     }
- }
-```
-
-<br>
-
-### MethodCallOnSetterMethodCallToStandaloneAssignRector
-
-Change method call on setter to standalone assign before the setter
-
-- class: [`Rector\Defluent\Rector\MethodCall\MethodCallOnSetterMethodCallToStandaloneAssignRector`](../rules/Defluent/Rector/MethodCall/MethodCallOnSetterMethodCallToStandaloneAssignRector.php)
-
-```diff
- class SomeClass
- {
-     public function some()
-     {
--        $this->anotherMethod(new AnotherClass())
--            ->someFunction();
-+        $anotherClass = new AnotherClass();
-+        $anotherClass->someFunction();
-+        $this->anotherMethod($anotherClass);
-     }
-
-     public function anotherMethod(AnotherClass $anotherClass)
-     {
-     }
- }
-```
-
-<br>
-
-### NewFluentChainMethodCallToNonFluentRector
-
-Turns fluent interface calls to classic ones.
-
-- class: [`Rector\Defluent\Rector\MethodCall\NewFluentChainMethodCallToNonFluentRector`](../rules/Defluent/Rector/MethodCall/NewFluentChainMethodCallToNonFluentRector.php)
-
-```diff
--(new SomeClass())->someFunction()
--            ->otherFunction();
-+$someClass = new SomeClass();
-+$someClass->someFunction();
-+$someClass->otherFunction();
-```
-
-<br>
-
-### NormalToFluentRector
-
-Turns fluent interface calls to classic ones.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Defluent\Rector\ClassMethod\NormalToFluentRector`](../rules/Defluent/Rector/ClassMethod/NormalToFluentRector.php)
-
-```php
-use Rector\Defluent\Rector\ClassMethod\NormalToFluentRector;
-use Rector\Defluent\ValueObject\NormalToFluent;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(NormalToFluentRector::class)
-        ->call('configure', [[
-            NormalToFluentRector::CALLS_TO_FLUENT => ValueObjectInliner::inline([
-                new NormalToFluent('SomeClass', ['someFunction', 'otherFunction']), ]
-            ),
-        ]]);
-};
-```
-
-↓
-
-```diff
- $someObject = new SomeClass();
--$someObject->someFunction();
--$someObject->otherFunction();
-+$someObject->someFunction()
-+    ->otherFunction();
-```
-
-<br>
-
-### ReturnFluentChainMethodCallToNormalMethodCallRector
-
-Turns fluent interface calls to classic ones.
-
-- class: [`Rector\Defluent\Rector\Return_\ReturnFluentChainMethodCallToNormalMethodCallRector`](../rules/Defluent/Rector/Return_/ReturnFluentChainMethodCallToNormalMethodCallRector.php)
-
-```diff
- $someClass = new SomeClass();
-+$someClass->someFunction();
-+$someClass->otherFunction();
-
--return $someClass->someFunction()
--        ->otherFunction();
-+return $someClass;
-```
-
-<br>
-
-### ReturnNewFluentChainMethodCallToNonFluentRector
-
-Turns fluent interface calls to classic ones.
-
-- class: [`Rector\Defluent\Rector\Return_\ReturnNewFluentChainMethodCallToNonFluentRector`](../rules/Defluent/Rector/Return_/ReturnNewFluentChainMethodCallToNonFluentRector.php)
-
-```diff
--return (new SomeClass())->someFunction()
--            ->otherFunction();
-+$someClass = new SomeClass();
-+$someClass->someFunction();
-+$someClass->otherFunction();
-+return $someClass;
-```
-
-<br>
-
-### ReturnThisRemoveRector
-
-Removes "return `$this;"` from *fluent interfaces* for specified classes.
-
-- class: [`Rector\Defluent\Rector\ClassMethod\ReturnThisRemoveRector`](../rules/Defluent/Rector/ClassMethod/ReturnThisRemoveRector.php)
-
-```diff
- class SomeExampleClass
- {
-     public function someFunction()
-     {
--        return $this;
-     }
-
-     public function otherFunction()
-     {
--        return $this;
-     }
- }
-```
-
-<br>
-
 ## DependencyInjection
 
 ### ActionInjectionToConstructorInjectionRector
@@ -6367,19 +6169,6 @@ Change property modifier from `var` to `public`
 
 ## Php53
 
-### ClearReturnNewByReferenceRector
-
-Remove reference from "$assign = &new Value;"
-
-- class: [`Rector\Php53\Rector\AssignRef\ClearReturnNewByReferenceRector`](../rules/Php53/Rector/AssignRef/ClearReturnNewByReferenceRector.php)
-
-```diff
--$assign = &new Value;
-+$assign = new Value;
-```
-
-<br>
-
 ### DirNameFileConstantToDirConstantRector
 
 Convert dirname(__FILE__) to __DIR__
@@ -7967,6 +7756,26 @@ Move required parameters after optional ones
 -    public function run($optional = 1, $required)
 +    public function run($required, $optional = 1)
      {
+     }
+ }
+```
+
+<br>
+
+### Php8ResourceReturnToObjectRector
+
+Change `is_resource()` to instanceof Object
+
+- class: [`Rector\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector`](../rules/Php80/Rector/FuncCall/Php8ResourceReturnToObjectRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $ch = curl_init();
+-        is_resource($ch);
++        $ch instanceof \CurlHandle;
      }
  }
 ```
@@ -11560,29 +11369,21 @@ Add known return type to functions
 
 ### AddMethodCallBasedStrictParamTypeRector
 
-Change param type to strict type of passed expression
+Change private method param type to strict type, based on passed strict types
 
 - class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php)
 
 ```diff
- class SomeClass
+ final class SomeClass
  {
--    public function getById($id)
-+    public function getById(int $id)
+     public function run(int $value)
      {
-     }
- }
-
- class CallerClass
- {
-     public function run(SomeClass $someClass)
-     {
-         $someClass->getById($this->getId());
+         $this->resolve($value);
      }
 
-     public function getId(): int
+-    private function resolve($value)
++    private function resolve(int $value)
      {
-         return 1000;
      }
  }
 ```
