@@ -178,20 +178,14 @@ final class AnonymousFunctionFactory
             return (string) $this->nodeNameResolver->getName($use->var);
         }, $uses, []);
         $variableNames = \array_unique($variableNames);
-        return \array_map(static function ($variableName) : ClosureUse {
+        return \array_map(function ($variableName) : ClosureUse {
             return new \PhpParser\Node\Expr\ClosureUse(new \PhpParser\Node\Expr\Variable($variableName));
         }, $variableNames, []);
     }
     private function applyNestedUses(\PhpParser\Node\Expr\Closure $anonymousFunctionNode, \PhpParser\Node\Expr\Variable $useVariable) : \PhpParser\Node\Expr\Closure
     {
-        $parent = $this->betterNodeFinder->findParentType($useVariable, \PhpParser\Node\Expr\Closure::class);
-        if ($parent instanceof \PhpParser\Node\Expr\Closure) {
-            $paramNames = $this->nodeNameResolver->getNames($parent->params);
-            if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
-                return $anonymousFunctionNode;
-            }
-        }
         $anonymousFunctionNode = clone $anonymousFunctionNode;
+        $parent = $this->betterNodeFinder->findParentType($useVariable, \PhpParser\Node\Expr\Closure::class);
         while ($parent instanceof \PhpParser\Node\Expr\Closure) {
             $parentOfParent = $this->betterNodeFinder->findParentType($parent, \PhpParser\Node\Expr\Closure::class);
             $uses = [];
