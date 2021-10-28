@@ -29,7 +29,6 @@ use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard;
-use Rector\NodeTypeResolver\PHPStan\CollisionGuard\TemplateExtendsGuard;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -63,7 +62,6 @@ final class PHPStanNodeScopeResolver
         private PrivatesAccessor $privatesAccessor,
         private RenamedClassesSourceLocator $renamedClassesSourceLocator,
         private ParentAttributeSourceLocator $parentAttributeSourceLocator,
-        private TemplateExtendsGuard $templateExtendsGuard,
         private MixinGuard $mixinGuard,
     ) {
     }
@@ -113,12 +111,6 @@ final class PHPStanNodeScopeResolver
         };
 
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
-
-        // it needs to be checked early before `@mixin` check as
-        // ReflectionProvider already hang when check class with `@template-extends`
-        if ($this->templateExtendsGuard->containsTemplateExtendsPhpDoc($stmts, $smartFileInfo->getFilename())) {
-            return $stmts;
-        }
 
         return $this->processNodesWithMixinHandling($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
