@@ -10,6 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://github.com/symfony/symfony/pull/35858
@@ -24,7 +25,7 @@ final class RenameStringRector extends AbstractRector implements ConfigurableRec
     public const STRING_CHANGES = 'string_changes';
 
     /**
-     * @var mixed[]
+     * @var array<string, string>
      */
     private array $stringChanges = [];
 
@@ -86,10 +87,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param mixed[] $configuration
+     * @param array<string, array<string, string>> $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->stringChanges = $configuration[self::STRING_CHANGES] ?? [];
+        $stringChanges = $configuration[self::STRING_CHANGES] ?? [];
+        Assert::allString($stringChanges);
+        Assert::allString(array_values($stringChanges));
+
+        $this->stringChanges = $stringChanges;
     }
 }

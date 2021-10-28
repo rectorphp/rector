@@ -529,3 +529,8 @@ parameters:
 
         # waits for enum phpstan to support PHSPtan 1.0
         - '#Constant Rector\\(.*?)\\Enum\\(.*?)\:\:(.*?) is unused#'
+
+        # type is known - skip asserts for some reason
+        - '#Property Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector\:\:\$arrayFunctionsToMethodCalls \(array<Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>\) does not accept array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\|Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>#'
+        - '#Property Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector\:\:\$argumentFuncCallToMethodCalls \(array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\>\) does not accept array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\|Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>#'
+
