@@ -26,6 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Index'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\JoinColumn'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\UniqueConstraint'),
+                new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
             ]),
         ]]);
 };
