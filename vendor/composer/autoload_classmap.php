@@ -1871,6 +1871,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\InlineHTMLAnalyzer' => $baseDir . '/src/NodeAnalyzer/InlineHTMLAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ParamAnalyzer' => $baseDir . '/src/NodeAnalyzer/ParamAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => $baseDir . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
+    'Rector\\Core\\NodeAnalyzer\\PropertyAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyPresenceChecker' => $baseDir . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
     'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariableAnalyzer.php',

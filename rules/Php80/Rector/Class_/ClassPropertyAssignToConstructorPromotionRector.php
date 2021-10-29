@@ -10,10 +10,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -52,13 +54,18 @@ final class ClassPropertyAssignToConstructorPromotionRector extends \Rector\Core
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
+     */
+    private $propertyAnalyzer;
+    public function __construct(\Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, \Rector\Naming\VariableRenamer $variableRenamer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
         $this->variableRenamer = $variableRenamer;
         $this->varTagRemover = $varTagRemover;
         $this->paramAnalyzer = $paramAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->propertyAnalyzer = $propertyAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -107,6 +114,9 @@ CODE_SAMPLE
             $property = $promotionCandidate->getProperty();
             $param = $promotionCandidate->getParam();
             if ($this->shouldSkipParam($param)) {
+                continue;
+            }
+            if ($this->propertyAnalyzer->hasForbiddenType($property)) {
                 continue;
             }
             $this->removeNode($property);
@@ -171,6 +181,18 @@ CODE_SAMPLE
         } else {
             $type = $param->type;
         }
-        return $type instanceof \PhpParser\Node\Identifier && $this->isName($type, 'callable');
+        if (!$type instanceof \PhpParser\Node\UnionType) {
+            return \false;
+        }
+        foreach ($type->types as $type) {
+            if (!$type instanceof \PhpParser\Node\Identifier) {
+                continue;
+            }
+            if (!$this->isName($type, 'callable')) {
+                continue;
+            }
+            return \true;
+        }
+        return \false;
     }
 }

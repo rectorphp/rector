@@ -97,9 +97,11 @@ final class StaticFixtureFinder
     }
     private static function ensureNoOtherFileName(string $directory, string $suffix) : void
     {
-        $iterator = \RectorPrefix20211029\Symfony\Component\Finder\Finder::create()->in($directory)->files()->notName($suffix)->getIterator();
+        $finder = \RectorPrefix20211029\Symfony\Component\Finder\Finder::create()->in($directory)->files()->notName($suffix);
+        /** @var SplFileInfo[] $fileInfos */
+        $fileInfos = \iterator_to_array($finder->getIterator());
         $relativeFilePaths = [];
-        foreach ($iterator as $fileInfo) {
+        foreach ($fileInfos as $fileInfo) {
             $relativeFilePaths[] = \RectorPrefix20211029\Nette\Utils\Strings::substring($fileInfo->getRealPath(), \strlen(\getcwd()) + 1);
         }
         if ($relativeFilePaths === []) {

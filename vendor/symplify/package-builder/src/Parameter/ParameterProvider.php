@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace RectorPrefix20211029\Symplify\PackageBuilder\Parameter;
 
-use RectorPrefix20211029\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix20211029\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20211029\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 /**
@@ -16,9 +15,6 @@ final class ParameterProvider
      * @var array<string, mixed>
      */
     private $parameters = [];
-    /**
-     * @param Container|ContainerInterface $container
-     */
     public function __construct(\RectorPrefix20211029\Symfony\Component\DependencyInjection\ContainerInterface $container)
     {
         $parameterBag = $container->getParameterBag();

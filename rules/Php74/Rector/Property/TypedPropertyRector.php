@@ -15,6 +15,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -88,7 +89,11 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
+     */
+    private $propertyAnalyzer;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
@@ -97,6 +102,7 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
         $this->reflectionProvider = $reflectionProvider;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
+        $this->propertyAnalyzer = $propertyAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -227,12 +233,6 @@ CODE_SAMPLE
         if ($typeName === null) {
             return \false;
         }
-        if ($typeName === 'null') {
-            return \true;
-        }
-        if ($typeName === 'callable') {
-            return \true;
-        }
         if (!$this->classLikeTypeOnly) {
             return \false;
         }
@@ -277,6 +277,12 @@ CODE_SAMPLE
         if (\count($property->props) > 1) {
             return \true;
         }
-        return $this->privatePropertyOnly && !$property->isPrivate();
+        if (!$this->privatePropertyOnly) {
+            return $this->propertyAnalyzer->hasForbiddenType($property);
+        }
+        if ($property->isPrivate()) {
+            return $this->propertyAnalyzer->hasForbiddenType($property);
+        }
+        return \true;
     }
 }
