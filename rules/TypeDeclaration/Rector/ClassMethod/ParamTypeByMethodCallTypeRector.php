@@ -189,6 +189,9 @@ CODE_SAMPLE
         if ($this->isParamConditioned($param, $classMethod)) {
             return \true;
         }
+        if ($param->variadic) {
+            return \true;
+        }
         // already has type, skip
         return $param->type !== null;
     }
