@@ -28,7 +28,7 @@ final class CallTypesResolver
 
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
-     * @return Type[]
+     * @return array<int, Type>
      */
     public function resolveStrictTypesFromCalls(array $calls): array
     {

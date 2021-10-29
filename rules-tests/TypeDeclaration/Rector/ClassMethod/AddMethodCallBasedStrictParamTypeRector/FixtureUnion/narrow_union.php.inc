@@ -17,7 +17,7 @@ final class NarrowUnion
         $this->someExpr($string);
     }
 
-    private function someExpr(Expr $expr)
+    private function someExpr($expr)
     {
     }
 }
