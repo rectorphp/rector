@@ -16,6 +16,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -71,7 +72,8 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         private VarTagRemover $varTagRemover,
         private ReflectionProvider $reflectionProvider,
         private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private PropertyAnalyzer $propertyAnalyzer
     ) {
     }
 
@@ -246,14 +248,6 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($typeName === 'null') {
-            return true;
-        }
-
-        if ($typeName === 'callable') {
-            return true;
-        }
-
         if (! $this->classLikeTypeOnly) {
             return false;
         }
@@ -311,6 +305,14 @@ CODE_SAMPLE
             return true;
         }
 
-        return $this->privatePropertyOnly && ! $property->isPrivate();
+        if (! $this->privatePropertyOnly) {
+            return $this->propertyAnalyzer->hasForbiddenType($property);
+        }
+
+        if ($property->isPrivate()) {
+            return $this->propertyAnalyzer->hasForbiddenType($property);
+        }
+
+        return true;
     }
 }

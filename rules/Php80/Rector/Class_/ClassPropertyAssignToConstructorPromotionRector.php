@@ -11,10 +11,12 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -39,7 +41,8 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         private VariableRenamer $variableRenamer,
         private VarTagRemover $varTagRemover,
         private ParamAnalyzer $paramAnalyzer,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private PhpDocTypeChanger $phpDocTypeChanger,
+        private PropertyAnalyzer $propertyAnalyzer
     ) {
     }
 
@@ -103,6 +106,10 @@ CODE_SAMPLE
             $param = $promotionCandidate->getParam();
 
             if ($this->shouldSkipParam($param)) {
+                continue;
+            }
+
+            if ($this->propertyAnalyzer->hasForbiddenType($property)) {
                 continue;
             }
 
@@ -184,6 +191,22 @@ CODE_SAMPLE
             $type = $param->type;
         }
 
-        return $type instanceof Identifier && $this->isName($type, 'callable');
+        if (! $type instanceof UnionType) {
+            return false;
+        }
+
+        foreach ($type->types as $type) {
+            if (! $type instanceof Identifier) {
+                continue;
+            }
+
+            if (! $this->isName($type, 'callable')) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
