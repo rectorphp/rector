@@ -18,6 +18,10 @@ use RectorPrefix20211029\Symplify\SmartFileSystem\SmartFileSystem;
 final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
+     * @var string
+     */
+    private const EXT_ICON_NAME = 'ext_icon';
+    /**
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
      */
     private $filesFinder;
@@ -55,15 +59,12 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     public function supports($file, $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        if (\strpos($smartFileInfo->getFilename(), 'ext_icon') === \false) {
+        if ($this->shouldSkip($smartFileInfo->getFilenameWithoutExtension())) {
             return \false;
         }
         $extEmConfSmartFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($smartFileInfo);
         if (!$extEmConfSmartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return \false;
-        }
-        if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return \true;
         }
         return !$this->smartFileSystem->exists($this->createIconPath($file));
     }
@@ -77,5 +78,12 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
         $realPath = $smartFileInfo->getRealPathDirectory();
         $relativeTargetFilePath = \sprintf('/Resources/Public/Icons/Extension.%s', $smartFileInfo->getExtension());
         return $realPath . $relativeTargetFilePath;
+    }
+    private function shouldSkip(string $filenameWithoutExtension) : bool
+    {
+        if (self::EXT_ICON_NAME === $filenameWithoutExtension) {
+            return \false;
+        }
+        return !(\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun() && \strpos($filenameWithoutExtension, self::EXT_ICON_NAME) !== \false);
     }
 }

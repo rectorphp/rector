@@ -5,7 +5,6 @@ namespace Ssch\TYPO3Rector\Rector\General;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -14,9 +13,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/master/en-us/ExtensionArchitecture/ConfigurationFiles/Index.html
- * @see \Ssch\TYPO3Rector\Tests\Rector\General\ConvertTypo3ConfVarsRector\ConvertTypo3ConfVarsRectorTest
+ * @see \Ssch\TYPO3Rector\Tests\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector\ConvertImplicitVariablesToExplicitGlobalsRectorTest
  */
-final class ConvertTypo3ConfVarsRector extends \Rector\Core\Rector\AbstractRector
+final class ConvertImplicitVariablesToExplicitGlobalsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var \Ssch\TYPO3Rector\Helper\FilesFinder
@@ -44,23 +43,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\ArrayDimFetch::class];
+        return [\PhpParser\Node\Expr\Variable::class];
     }
     /**
-     * @param ArrayDimFetch $node
+     * @param Variable $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->var instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$this->isNames($node, ['TYPO3_CONF_VARS', 'TBE_MODULES'])) {
             return null;
         }
-        if (!$this->isName($node->var, 'TYPO3_CONF_VARS')) {
+        $variableName = $this->getName($node);
+        if (null === $variableName) {
             return null;
         }
         if (!$this->filesFinder->isExtLocalConf($this->file->getSmartFileInfo()) && !$this->filesFinder->isExtTables($this->file->getSmartFileInfo())) {
             return null;
         }
-        $node->var = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_('TYPO3_CONF_VARS'));
-        return $node;
+        return new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_($variableName));
     }
 }

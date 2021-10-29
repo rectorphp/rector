@@ -58,8 +58,17 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
                 case 'BE_USER':
                     $conditions[$key][] = $this->createBackendUserCondition($property, $operator, $value);
                     break;
+                case '_GET':
+                    $conditions[$key][] = $this->refactorGet($property, $operator, $value);
+                    break;
+                case 'GPmerged':
+                    $conditions[$key][] = $this->refactorGetPost($property, $operator, $value);
+                    break;
+                case '_POST':
+                    $conditions[$key][] = $this->refactorPost($property, $operator, $value);
+                    break;
                 default:
-                    $conditions[$key][] = '';
+                    $conditions[$key][] = $condition;
                     break;
             }
         }
@@ -97,14 +106,15 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
         if ('L' === $property) {
             return \sprintf('siteLanguage("languageId") %s "%s"', self::OPERATOR_MAPPING[$operator], $value);
         }
-        if (!\is_numeric($value)) {
-            $value = \sprintf("'%s'", $value);
-        }
-        $parameters = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property);
+        $normalizedValue = $this->normalizeValue($value);
+        $parameters = $this->explodeParameters($property);
         if (1 === \count($parameters)) {
-            return \sprintf('request.getQueryParams()[\'%1$s\'] %2$s %3$s', $parameters[0], self::OPERATOR_MAPPING[$operator], $value);
+            return \sprintf('request.getQueryParams()[\'%1$s\'] %2$s %3$s', $parameters[0], self::OPERATOR_MAPPING[$operator], $normalizedValue);
         }
-        return \sprintf('traverse(request.getQueryParams(), \'%1$s\') %2$s %3$s || traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $value);
+        if ('_POST' === $property) {
+            return \sprintf('traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s) %2$s %3$s', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $normalizedValue);
+        }
+        return \sprintf('traverse(request.getQueryParams(), \'%1$s\') %2$s %3$s || traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $normalizedValue);
     }
     private function createBackendUserCondition(string $property, string $operator, string $value) : string
     {
@@ -115,5 +125,35 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
             throw new \Rector\Core\Exception\ShouldNotHappenException($message);
         }
         return \sprintf('backend.user.%s %s %s', self::USER_PROPERTY_MAPPING[$property], self::OPERATOR_MAPPING[$operator], $value);
+    }
+    private function refactorGet(string $property, string $operator, string $value) : string
+    {
+        $normalizedValue = $this->normalizeValue($value);
+        $parameters = $this->explodeParameters($property);
+        return \sprintf('traverse(request.getQueryParams(), \'%1$s\') %2$s %3$s)', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $normalizedValue);
+    }
+    private function refactorPost(string $property, string $operator, string $value) : string
+    {
+        $normalizedValue = $this->normalizeValue($value);
+        $parameters = $this->explodeParameters($property);
+        return \sprintf('traverse(request.getParsedBody(), \'%1$s\') %2$s %3$s)', \implode('/', $parameters), self::OPERATOR_MAPPING[$operator], $normalizedValue);
+    }
+    /**
+     * @param int|string $value
+     * @return int|string
+     */
+    private function normalizeValue($value)
+    {
+        if (!\is_numeric($value)) {
+            return \sprintf("'%s'", $value);
+        }
+        return $value;
+    }
+    /**
+     * @return string[]
+     */
+    private function explodeParameters(string $property) : array
+    {
+        return \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property);
     }
 }

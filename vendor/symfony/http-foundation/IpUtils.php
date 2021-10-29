@@ -34,6 +34,9 @@ class IpUtils
      */
     public static function checkIp($requestIp, $ips)
     {
+        if (null === $requestIp) {
+            return \false;
+        }
         if (!\is_array($ips)) {
             $ips = [$ips];
         }

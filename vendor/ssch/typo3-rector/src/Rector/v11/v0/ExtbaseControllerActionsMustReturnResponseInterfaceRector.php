@@ -48,7 +48,7 @@ final class ExtbaseControllerActionsMustReturnResponseInterfaceRector extends \R
         foreach ($returns as $return) {
             $returnCallExpression = $return->expr;
             if ($returnCallExpression instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($returnCallExpression->name, 'json_encode')) {
-                $return->expr = $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(self::THIS, 'responseFactory'), 'createJsonResponse', [$return->expr]);
+                $return->expr = $this->nodeFactory->createMethodCall(self::THIS, 'jsonResponse', [$return->expr]);
             } else {
                 // avoid duplication
                 if ($return->expr instanceof \PhpParser\Node\Expr\MethodCall && $this->isName($return->expr->name, self::HTML_RESPONSE)) {

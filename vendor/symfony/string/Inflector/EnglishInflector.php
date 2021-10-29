@@ -45,6 +45,8 @@ final class EnglishInflector implements \RectorPrefix20211029\Symfony\Component\
         ['seci', 4, \false, \true, ['ex', 'ix', 'ice']],
         // selfies (selfie)
         ['seifles', 7, \true, \true, 'selfie'],
+        // zombies (zombie)
+        ['seibmoz', 7, \true, \true, 'zombie'],
         // movies (movie)
         ['seivom', 6, \true, \true, 'movie'],
         // conspectuses (conspectus), prospectuses (prospectus)

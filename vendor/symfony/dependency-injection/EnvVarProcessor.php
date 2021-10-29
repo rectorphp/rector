@@ -194,10 +194,8 @@ class EnvVarProcessor implements \RectorPrefix20211029\Symfony\Component\Depende
                 throw new \RectorPrefix20211029\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Invalid URL env var "%s": schema and host expected, "%s" given.', $name, $env));
             }
             $parsedEnv += ['port' => null, 'user' => null, 'pass' => null, 'path' => null, 'query' => null, 'fragment' => null];
-            if (null !== $parsedEnv['path']) {
-                // remove the '/' separator
-                $parsedEnv['path'] = '/' === $parsedEnv['path'] ? null : \substr($parsedEnv['path'], 1);
-            }
+            // remove the '/' separator
+            $parsedEnv['path'] = '/' === ($parsedEnv['path'] ?? '/') ? '' : \substr($parsedEnv['path'], 1);
             return $parsedEnv;
         }
         if ('query_string' === $prefix) {

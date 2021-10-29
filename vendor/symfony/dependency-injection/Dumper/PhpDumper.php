@@ -626,8 +626,8 @@ EOF;
         $calls = '';
         foreach ($definition->getMethodCalls() as $k => $call) {
             $arguments = [];
-            foreach ($call[1] as $value) {
-                $arguments[] = $this->dumpValue($value);
+            foreach ($call[1] as $i => $value) {
+                $arguments[] = (\is_string($i) ? $i . ': ' : '') . $this->dumpValue($value);
             }
             $witherAssignation = '';
             if ($call[2] ?? \false) {
@@ -942,8 +942,8 @@ EOTXT
             return $return . $this->dumpValue(new \RectorPrefix20211029\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument($arguments)) . $tail;
         }
         $arguments = [];
-        foreach ($definition->getArguments() as $value) {
-            $arguments[] = $this->dumpValue($value);
+        foreach ($definition->getArguments() as $i => $value) {
+            $arguments[] = (\is_string($i) ? $i . ': ' : '') . $this->dumpValue($value);
         }
         if (null !== $definition->getFactory()) {
             $callable = $definition->getFactory();

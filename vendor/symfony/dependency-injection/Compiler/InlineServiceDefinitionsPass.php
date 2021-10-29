@@ -104,7 +104,7 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20211029\Symfony\Compone
     protected function processValue($value, $isRoot = \false)
     {
         if ($value instanceof \RectorPrefix20211029\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
-            // Reference found in ArgumentInterface::getValues() are not inlineable
+            // References found in ArgumentInterface::getValues() are not inlineable
             return $value;
         }
         if ($value instanceof \RectorPrefix20211029\Symfony\Component\DependencyInjection\Definition && $this->cloningIds) {

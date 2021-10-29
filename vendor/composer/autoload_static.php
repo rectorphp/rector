@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit737f49e2f188747d6b870006e6863b21
+class ComposerStaticInitb52e7c9f6b0d0df72d6354e9db75305e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3671,7 +3671,7 @@ class ComposerStaticInit737f49e2f188747d6b870006e6863b21
         'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v8\\SolrConnectionAddDocumentsToWriteServiceAddDocumentsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Extensions/solr/v8/SolrConnectionAddDocumentsToWriteServiceAddDocumentsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v8\\SolrSiteToSolrRepositoryRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Extensions/solr/v8/SolrSiteToSolrRepositoryRector.php',
         'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v9\\ApacheSolrDocumentToSolariumDocumentRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Extensions/solr/v9/ApacheSolrDocumentToSolariumDocumentRector.php',
-        'Ssch\\TYPO3Rector\\Rector\\General\\ConvertTypo3ConfVarsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/ConvertTypo3ConfVarsRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\General\\ConvertImplicitVariablesToExplicitGlobalsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/ConvertImplicitVariablesToExplicitGlobalsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\General\\ExtEmConfRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/ExtEmConfRector.php',
         'Ssch\\TYPO3Rector\\Rector\\Migrations\\RenameClassMapAliasRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Migrations/RenameClassMapAliasRector.php',
         'Ssch\\TYPO3Rector\\Rector\\Tca\\AbstractTcaRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Tca/AbstractTcaRector.php',
@@ -3893,9 +3893,9 @@ class ComposerStaticInit737f49e2f188747d6b870006e6863b21
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit737f49e2f188747d6b870006e6863b21::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit737f49e2f188747d6b870006e6863b21::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit737f49e2f188747d6b870006e6863b21::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb52e7c9f6b0d0df72d6354e9db75305e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb52e7c9f6b0d0df72d6354e9db75305e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb52e7c9f6b0d0df72d6354e9db75305e::$classMap;
 
         }, null, ClassLoader::class);
     }

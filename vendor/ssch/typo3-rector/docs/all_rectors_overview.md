@@ -509,11 +509,11 @@ Migrate fileResource method of class ContentObjectRenderer
 
 <br>
 
-## ConvertTypo3ConfVarsRector
+## ConvertImplicitVariablesToExplicitGlobalsRector
 
 Convert `$TYPO3_CONF_VARS` to `$GLOBALS['TYPO3_CONF_VARS']`
 
-- class: [`Ssch\TYPO3Rector\Rector\General\ConvertTypo3ConfVarsRector`](../src/Rector/General/ConvertTypo3ConfVarsRector.php)
+- class: [`Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector`](../src/Rector/General/ConvertImplicitVariablesToExplicitGlobalsRector.php)
 
 ```diff
 -$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_userauth.php']['postUserLookUp']['foo'] = 'FooBarBaz->handle';

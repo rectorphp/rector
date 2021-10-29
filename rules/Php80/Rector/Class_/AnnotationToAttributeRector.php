@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -195,7 +196,8 @@ CODE_SAMPLE
                     continue;
                 }
                 if ($this->doctrineAnnotationTagValueNodeAnalyzer->isNested($docNode, $this->annotationsToAttributes)) {
-                    $newDoctrineTagValueNode = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($docNode->identifierTypeNode);
+                    $stringValues = $this->getStringFromNestedDoctrineTagAnnotationToAttribute($docNode);
+                    $newDoctrineTagValueNode = $this->resolveNewDoctrineTagValueNode($docNode, $stringValues);
                     $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($newDoctrineTagValueNode, $annotationToAttribute);
                     /** @var DoctrineAnnotationTagValueNode $docNode */
                     $doctrineTagAndAnnotationToAttributes = $this->addNestedDoctrineTagAndAnnotationToAttribute($docNode, $doctrineTagAndAnnotationToAttributes);
@@ -211,6 +213,29 @@ CODE_SAMPLE
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
     }
     /**
+     * @param string[] $stringValues
+     */
+    private function resolveNewDoctrineTagValueNode(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $stringValues) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    {
+        if ($stringValues === []) {
+            return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode);
+        }
+        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode, \current($stringValues), $stringValues);
+    }
+    /**
+     * @return string[]
+     */
+    private function getStringFromNestedDoctrineTagAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : array
+    {
+        $values = $doctrineAnnotationTagValueNode->getValues();
+        foreach ($values as $key => $value) {
+            if (\is_string($value)) {
+                return [$key => $value];
+            }
+        }
+        return [];
+    }
+    /**
      * @param DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
      * @return DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
      */
@@ -218,6 +243,11 @@ CODE_SAMPLE
     {
         $values = $doctrineAnnotationTagValueNode->getValues();
         foreach ($values as $value) {
+            if (\is_string($value)) {
+                $originalValue = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($value));
+                $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttributes($originalValue, $doctrineTagAndAnnotationToAttributes);
+                continue;
+            }
             $originalValues = $value->getOriginalValues();
             foreach ($originalValues as $originalValue) {
                 $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttributes($originalValue, $doctrineTagAndAnnotationToAttributes);

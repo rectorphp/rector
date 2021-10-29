@@ -105,7 +105,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20211029\Symfony\
             }
         }
         if (null !== $paths) {
-            \sort($paths);
+            \natsort($paths);
             foreach ($paths as $path) {
                 if ($this->excludedPrefixes) {
                     $normalizedPath = \str_replace('\\', '/', $path);
@@ -131,7 +131,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20211029\Symfony\
                 $files = \iterator_to_array(new \RecursiveIteratorIterator(new \RecursiveCallbackFilterIterator(new \RecursiveDirectoryIterator($path, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS), function (\SplFileInfo $file, $path) {
                     return !isset($this->excludedPrefixes[\str_replace('\\', '/', $path)]) && '.' !== $file->getBasename()[0];
                 }), \RecursiveIteratorIterator::LEAVES_ONLY));
-                \uasort($files, 'strnatcmp');
+                \uksort($files, 'strnatcmp');
                 foreach ($files as $path => $info) {
                     if ($info->isFile()) {
                         (yield $path => $info);

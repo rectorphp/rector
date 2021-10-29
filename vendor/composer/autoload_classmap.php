@@ -3311,7 +3311,7 @@ return array(
     'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v8\\SolrConnectionAddDocumentsToWriteServiceAddDocumentsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Extensions/solr/v8/SolrConnectionAddDocumentsToWriteServiceAddDocumentsRector.php',
     'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v8\\SolrSiteToSolrRepositoryRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Extensions/solr/v8/SolrSiteToSolrRepositoryRector.php',
     'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v9\\ApacheSolrDocumentToSolariumDocumentRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Extensions/solr/v9/ApacheSolrDocumentToSolariumDocumentRector.php',
-    'Ssch\\TYPO3Rector\\Rector\\General\\ConvertTypo3ConfVarsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/ConvertTypo3ConfVarsRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\General\\ConvertImplicitVariablesToExplicitGlobalsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/ConvertImplicitVariablesToExplicitGlobalsRector.php',
     'Ssch\\TYPO3Rector\\Rector\\General\\ExtEmConfRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/ExtEmConfRector.php',
     'Ssch\\TYPO3Rector\\Rector\\Migrations\\RenameClassMapAliasRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Migrations/RenameClassMapAliasRector.php',
     'Ssch\\TYPO3Rector\\Rector\\Tca\\AbstractTcaRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Tca/AbstractTcaRector.php',

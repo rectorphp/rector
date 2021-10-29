@@ -107,7 +107,8 @@ CODE_SAMPLE
             $optionValues = $optionNamesValues['optionValue'];
             $optionsArray = [];
             foreach ($optionNames as $key => $optionName) {
-                $optionsArray[] = \sprintf('"%s": %s', \trim($optionName), \trim($optionValues[$key]));
+                $optionValue = \str_replace("'", '"', $optionValues[$key]);
+                $optionsArray[] = \sprintf('"%s": %s', \trim($optionName), \trim($optionValue));
             }
             $annotation = \sprintf('@Extbase\\Validate("%s", options={%s})', \trim($validator), \implode(', ', $optionsArray));
         } else {

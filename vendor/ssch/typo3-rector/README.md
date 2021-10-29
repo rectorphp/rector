@@ -1,3 +1,5 @@
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/schreiberten)
+
 ## Caution
 
 Never run this tool on production, only on development environment where code is under version control (e.g. git). Always review and test automatic changes before releasing to production.

@@ -10,7 +10,7 @@ use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://docs.typo3.org/c/typo3/cms-core/10.2/en-us/Changelog/10.0/Feature-80420-AllowMultipleRecipientsInEmailFinisher.html
+ * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Feature-80420-AllowMultipleRecipientsInEmailFinisher.html
  */
 final class EmailFinisherRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface
 {
@@ -31,6 +31,10 @@ final class EmailFinisherRector implements \Ssch\TYPO3Rector\Contract\FileProces
      */
     private const RECIPIENTS = 'recipients';
     /**
+     * @var string
+     */
+    private const VARIANTS = 'variants';
+    /**
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
@@ -43,46 +47,21 @@ final class EmailFinisherRector implements \Ssch\TYPO3Rector\Contract\FileProces
      */
     public function refactor(array $yaml) : array
     {
-        if (!\array_key_exists(self::FINISHERS, $yaml)) {
-            return $yaml;
+        $appliedForFinishers = \false;
+        $appliedForVariants = \false;
+        if (\array_key_exists(self::FINISHERS, $yaml)) {
+            $appliedForFinishers = $this->refactorFinishers($yaml[self::FINISHERS], $yaml);
         }
-        $applied = \false;
-        foreach ($yaml[self::FINISHERS] as $finisherKey => $finisher) {
-            if (!\array_key_exists('identifier', $finisher)) {
-                continue;
-            }
-            if (!\in_array($finisher['identifier'], ['EmailToSender', 'EmailToReceiver'], \true)) {
-                continue;
-            }
-            if (!\array_key_exists(self::OPTIONS, $finisher)) {
-                continue;
-            }
-            $recipients = [];
-            foreach ((array) $finisher[self::OPTIONS] as $optionKey => $optionValue) {
-                if (!\in_array($optionKey, ['replyToAddress', 'carbonCopyAddress', 'blindCarbonCopyAddress', self::RECIPIENT_ADDRESS, 'recipientName'], \true)) {
+        if (\array_key_exists(self::VARIANTS, $yaml)) {
+            foreach ($yaml[self::VARIANTS] as $variantKey => $variant) {
+                if (!\array_key_exists(self::FINISHERS, $variant)) {
                     continue;
                 }
-                if ('replyToAddress' === $optionKey) {
-                    $yaml[self::FINISHERS][$finisherKey][self::OPTIONS]['replyToRecipients'][] = $optionValue;
-                } elseif ('carbonCopyAddress' === $optionKey) {
-                    $yaml[self::FINISHERS][$finisherKey][self::OPTIONS]['carbonCopyRecipients'][] = $optionValue;
-                } elseif ('blindCarbonCopyAddress' === $optionKey) {
-                    $yaml[self::FINISHERS][$finisherKey][self::OPTIONS]['blindCarbonCopyRecipients'][] = $optionValue;
-                }
-                unset($yaml[self::FINISHERS][$finisherKey][self::OPTIONS][$optionKey]);
+                $appliedForVariants = $this->refactorFinishers($variant[self::FINISHERS], $yaml[self::VARIANTS][$variantKey]);
             }
-            if (isset($finisher[self::OPTIONS][self::RECIPIENT_ADDRESS])) {
-                $recipients[$finisher[self::OPTIONS][self::RECIPIENT_ADDRESS]] = $finisher[self::OPTIONS]['recipientName'] ?: '';
-            }
-            if (isset($finisher[self::OPTIONS][self::RECIPIENTS])) {
-                $yaml[self::FINISHERS][$finisherKey][self::OPTIONS][self::RECIPIENTS] = \array_merge($recipients, $yaml[self::FINISHERS][$finisherKey][self::OPTIONS][self::RECIPIENTS]);
-            } else {
-                $yaml[self::FINISHERS][$finisherKey][self::OPTIONS][self::RECIPIENTS] = $recipients;
-            }
-            $applied = \true;
         }
         $file = $this->currentFileProvider->getFile();
-        if ($applied && $file instanceof \Rector\Core\ValueObject\Application\File) {
+        if (($appliedForFinishers || $appliedForVariants) && $file instanceof \Rector\Core\ValueObject\Application\File) {
             // TODO: How to get the line number of the file?
             $file->addRectorClassWithLine(new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, 0));
         }
@@ -105,5 +84,48 @@ finishers:
         bar@domain.com: 'Bar'
 CODE_SAMPLE
 )]);
+    }
+    /**
+     * @param mixed[] $finishers
+     * @param mixed[] $yamlToModify
+     */
+    private function refactorFinishers(array $finishers, &$yamlToModify) : bool
+    {
+        $applied = \false;
+        foreach ($finishers as $finisherKey => $finisher) {
+            if (!\array_key_exists('identifier', $finisher)) {
+                continue;
+            }
+            if (!\in_array($finisher['identifier'], ['EmailToSender', 'EmailToReceiver'], \true)) {
+                continue;
+            }
+            if (!\array_key_exists(self::OPTIONS, $finisher)) {
+                continue;
+            }
+            $recipients = [];
+            foreach ((array) $finisher[self::OPTIONS] as $optionKey => $optionValue) {
+                if (!\in_array($optionKey, ['replyToAddress', 'carbonCopyAddress', 'blindCarbonCopyAddress', self::RECIPIENT_ADDRESS, 'recipientName'], \true)) {
+                    continue;
+                }
+                if ('replyToAddress' === $optionKey) {
+                    $yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS]['replyToRecipients'][] = $optionValue;
+                } elseif ('carbonCopyAddress' === $optionKey) {
+                    $yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS]['carbonCopyRecipients'][] = $optionValue;
+                } elseif ('blindCarbonCopyAddress' === $optionKey) {
+                    $yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS]['blindCarbonCopyRecipients'][] = $optionValue;
+                }
+                unset($yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS][$optionKey]);
+            }
+            if (isset($finisher[self::OPTIONS][self::RECIPIENT_ADDRESS])) {
+                $recipients[$finisher[self::OPTIONS][self::RECIPIENT_ADDRESS]] = $finisher[self::OPTIONS]['recipientName'] ?: '';
+            }
+            if (isset($finisher[self::OPTIONS][self::RECIPIENTS])) {
+                $yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS][self::RECIPIENTS] = \array_merge($recipients, $yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS][self::RECIPIENTS]);
+            } else {
+                $yamlToModify[self::FINISHERS][$finisherKey][self::OPTIONS][self::RECIPIENTS] = $recipients;
+            }
+            $applied = \true;
+        }
+        return $applied;
     }
 }
