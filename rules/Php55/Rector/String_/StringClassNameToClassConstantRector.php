@@ -12,13 +12,13 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\StaticRectorStrings;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use RectorPrefix20211029\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211029\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/class_name_scalars https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
@@ -106,10 +106,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        if (!isset($configuration[self::CLASSES_TO_SKIP])) {
-            return;
-        }
-        $this->classesToSkip = $configuration[self::CLASSES_TO_SKIP];
+        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? [];
+        \RectorPrefix20211029\Webmozart\Assert\Assert::allString($classesToSkip);
+        $this->classesToSkip = $classesToSkip;
     }
     public function provideMinPhpVersion() : int
     {
@@ -132,8 +131,10 @@ CODE_SAMPLE
         if (!$this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($classLikeName)) {
             return \true;
         }
-        if (\Rector\Core\Util\StaticRectorStrings::isInArrayInsensitive($classLikeName, $this->classesToSkip)) {
-            return \true;
+        foreach ($this->classesToSkip as $classToSkip) {
+            if ($this->nodeNameResolver->isStringName($classLikeName, $classToSkip)) {
+                return \true;
+            }
         }
         if ($this->isPartOfIsAFuncCall($string)) {
             return \true;

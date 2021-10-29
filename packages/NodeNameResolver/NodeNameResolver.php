@@ -199,6 +199,25 @@ final class NodeNameResolver
         $name = $this->getName($node);
         return $renameMap[$name] ?? null;
     }
+    public function isStringName(string $resolvedName, string $desiredName) : bool
+    {
+        if ($desiredName === '') {
+            return \false;
+        }
+        // is probably regex pattern
+        if ($this->regexPatternDetector->isRegexPattern($desiredName)) {
+            return (bool) \RectorPrefix20211029\Nette\Utils\Strings::match($resolvedName, $desiredName);
+        }
+        // is probably fnmatch
+        if (\strpos($desiredName, '*') !== \false) {
+            return \fnmatch($desiredName, $resolvedName, \FNM_NOESCAPE);
+        }
+        // special case
+        if ($desiredName === 'Object') {
+            return $desiredName === $resolvedName;
+        }
+        return \strtolower($resolvedName) === \strtolower($desiredName);
+    }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
      */
@@ -209,7 +228,7 @@ final class NodeNameResolver
         }
         return \true;
     }
-    private function isSingleName(\PhpParser\Node $node, string $name) : bool
+    private function isSingleName(\PhpParser\Node $node, string $desiredName) : bool
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             // method call cannot have a name, only the variable or method name
@@ -219,21 +238,6 @@ final class NodeNameResolver
         if ($resolvedName === null) {
             return \false;
         }
-        if ($name === '') {
-            return \false;
-        }
-        // is probably regex pattern
-        if ($this->regexPatternDetector->isRegexPattern($name)) {
-            return (bool) \RectorPrefix20211029\Nette\Utils\Strings::match($resolvedName, $name);
-        }
-        // is probably fnmatch
-        if (\strpos($name, '*') !== \false) {
-            return \fnmatch($name, $resolvedName, \FNM_NOESCAPE);
-        }
-        // special case
-        if ($name === 'Object') {
-            return $name === $resolvedName;
-        }
-        return \strtolower($resolvedName) === \strtolower($name);
+        return $this->isStringName($resolvedName, $desiredName);
     }
 }
