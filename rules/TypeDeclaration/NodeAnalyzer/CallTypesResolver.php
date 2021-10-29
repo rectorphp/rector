@@ -45,6 +45,7 @@ final class CallTypesResolver
                 }
 
                 $argValueType = $this->resolveStrictArgValueType($arg);
+
                 $staticTypesByArgumentPosition[$position][] = $argValueType;
             }
         }
@@ -82,6 +83,7 @@ final class CallTypesResolver
 
             // narrow parents to most child type
             $unionedType = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);
+
             $staticTypeByArgumentPosition[$position] = $unionedType;
         }
 
