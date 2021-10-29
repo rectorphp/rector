@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211029\Symplify\ConsolePackageBuilder\DependencyInjection\CompilerPass;
+namespace RectorPrefix20211029\Symplify\PackageBuilder\DependencyInjection\CompilerPass;
 
 use RectorPrefix20211029\Symfony\Component\Console\Command\Command;
 use RectorPrefix20211029\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix20211029\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20211029\Symplify\PackageBuilder\Console\Command\CommandNaming;
 /**
- * @see \Symplify\ConsolePackageBuilder\Tests\DependencyInjection\CompilerPass\NamelessConsoleCommandCompilerPassTest
+ * @see \Symplify\PackageBuilder\Tests\DependencyInjection\CompilerPass\NamelessConsoleCommandCompilerPassTest
  */
 final class NamelessConsoleCommandCompilerPass implements \RectorPrefix20211029\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {

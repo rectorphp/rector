@@ -9,11 +9,14 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use RectorPrefix20211029\PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -82,12 +85,19 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            return $this->processUnspreadOperatorClassMethodParams($node);
+            return $this->refactorClassMethod($node);
         }
-        return $this->processUnspreadOperatorMethodCallArgs($node);
+        return $this->refactorMethodCall($node);
     }
-    private function processUnspreadOperatorClassMethodParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($scope instanceof \PHPStan\Analyser\Scope && $classMethod->isPublic()) {
+            $classReflection = $scope->getClassReflection();
+            if ($classReflection->isSubclassOf(\RectorPrefix20211029\PHPUnit\Framework\TestCase::class)) {
+                return null;
+            }
+        }
         $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
         if ($spreadParams === []) {
             return null;
@@ -99,7 +109,7 @@ CODE_SAMPLE
         }
         return $classMethod;
     }
-    private function processUnspreadOperatorMethodCallArgs(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {

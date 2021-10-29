@@ -48,7 +48,6 @@
         "symplify\/amnesia": "<9.4.70",
         "symplify\/phpstan-extensions": "<9.4.70",
         "symplify\/rule-doc-generator": "<9.4.70",
-        "symplify\/console-package-builder": "<9.4.70",
         "symplify\/vendor-patches": "<9.4.70",
         "symplify\/symfony-static-dumper": "<9.4.70",
         "symplify\/git-wrapper": "<9.4.70",
