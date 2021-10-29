@@ -15,18 +15,12 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
-use RectorPrefix20211029\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectWithoutClassType>
  */
 final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
-    /**
-     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
     /**
      * @var \Rector\Core\Php\PhpVersionProvider
      */
@@ -63,20 +57,9 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
-        $subtractedType = $type->getSubtractedType();
-        if ($subtractedType !== null) {
-            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($subtractedType, $typeKind);
-        }
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::OBJECT_TYPE)) {
             return null;
         }
         return new \PhpParser\Node\Name('object');
-    }
-    /**
-     * @required
-     */
-    public function autowireObjectWithoutClassTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
-    {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
 }
