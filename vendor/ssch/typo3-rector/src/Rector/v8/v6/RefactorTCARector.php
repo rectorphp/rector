@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
-use RectorPrefix20211028\Nette\Utils\Strings;
+use RectorPrefix20211029\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -171,7 +171,7 @@ CODE_SAMPLE
                         /** @var Expr $wizardItemValueKey */
                         $wizardItemValueKey = $wizardItemValue->key;
                         $validWizard = $this->isValidWizard($wizardItemValue);
-                        if ($validWizard || \RectorPrefix20211028\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
+                        if ($validWizard || \RectorPrefix20211029\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
                             --$remainingWizards;
                         }
                         if (!$validWizard) {

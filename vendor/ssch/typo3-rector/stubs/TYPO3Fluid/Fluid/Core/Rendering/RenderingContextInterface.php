@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211028\TYPO3Fluid\Fluid\Core\Rendering;
+namespace RectorPrefix20211029\TYPO3Fluid\Fluid\Core\Rendering;
 
 if (\class_exists('TYPO3Fluid\\Fluid\\Core\\Rendering\\RenderingContextInterface')) {
     return;
