@@ -7,12 +7,15 @@ namespace Rector\Naming\ExpectedNameResolver;
 use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
 
+/**
+ * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
+ */
 final class InflectorSingularResolver
 {
     /**
      * @var array<string, string>
      */
-    private const SINGULAR_VERB = [
+    private const SINGULARIZE_MAP = [
         'news' => 'new',
     ];
 
@@ -20,7 +23,7 @@ final class InflectorSingularResolver
      * @var string
      * @see https://regex101.com/r/lbQaGC/3
      */
-    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+|_))#';
+    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z\d]+|[A-Z\d]{1,}[a-z\d]+|_))#';
 
     /**
      * @var string
@@ -45,8 +48,9 @@ final class InflectorSingularResolver
             return Strings::substring($currentName, 0, -strlen($matchBy['by']));
         }
 
-        if (array_key_exists($currentName, self::SINGULAR_VERB)) {
-            return self::SINGULAR_VERB[$currentName];
+        $resolvedValue = $this->resolveSingularizeMap($currentName);
+        if ($resolvedValue !== null) {
+            return $resolvedValue;
         }
 
         if (str_starts_with($currentName, self::SINGLE)) {
@@ -59,11 +63,7 @@ final class InflectorSingularResolver
             $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
         }
 
-        if ($singularValueVarName === '') {
-            return $currentName;
-        }
-
-        if ($singularValueVarName === '_') {
+        if (in_array($singularValueVarName, ['', '_'], true)) {
             return $currentName;
         }
 
@@ -80,5 +80,24 @@ final class InflectorSingularResolver
         }
 
         return $currentName;
+    }
+
+    private function resolveSingularizeMap(string $currentName): string|null
+    {
+        foreach (self::SINGULARIZE_MAP as $plural => $singular) {
+            if ($currentName === $plural) {
+                return $singular;
+            }
+
+            if (Strings::match($currentName, '#' . ucfirst($plural) . '#')) {
+                return Strings::replace($currentName, '#' . ucfirst($plural) . '#', ucfirst($singular));
+            }
+
+            if (Strings::match($currentName, '#' . $plural . '#')) {
+                return Strings::replace($currentName, '#' . $plural . '#', $singular);
+            }
+        }
+
+        return null;
     }
 }

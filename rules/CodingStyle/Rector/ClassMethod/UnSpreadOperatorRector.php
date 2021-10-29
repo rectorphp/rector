@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
@@ -89,12 +90,8 @@ CODE_SAMPLE
 
     private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope && $classMethod->isPublic()) {
-            $classReflection = $scope->getClassReflection();
-            if ($classReflection->isSubclassOf('PHPUnit\Framework\TestCase')) {
-                return null;
-            }
+        if ($this->isInPHPUnitTestCase($classMethod)) {
+            return null;
         }
 
         $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
@@ -217,5 +214,24 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isInPHPUnitTestCase(ClassMethod $classMethod): bool
+    {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        if (! $classMethod->isPublic()) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        return $classReflection->isSubclassOf('PHPUnit\Framework\TestCase');
     }
 }
