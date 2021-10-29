@@ -89,6 +89,10 @@ final class ClassMethodParamTypeCompleter
         if ($this->isTooDetailedUnionType($currentParameterStaticType, $argumentStaticType, $maxUnionTypes)) {
             return \true;
         }
+        // current type already accepts the one added
+        if ($currentParameterStaticType->accepts($argumentStaticType, \true)->yes()) {
+            return \true;
+        }
         // avoid overriding more precise type
         if ($argumentStaticType->isSuperTypeOf($currentParameterStaticType)->yes()) {
             return \true;
