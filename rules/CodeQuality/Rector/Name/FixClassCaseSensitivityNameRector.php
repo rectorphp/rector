@@ -10,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\UseUse;
+use PhpParser\Node\UnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -121,14 +122,21 @@ CODE_SAMPLE
     private function resolveFullyQualifiedName(Name $name): string
     {
         $parent = $name->getAttribute(AttributeKey::PARENT_NODE);
-        // for some reason, Param gets already corrected name
-        if (! $parent instanceof Param && ! $parent instanceof ClassConstFetch) {
-            return $this->getName($name);
+        if (! $parent instanceof Node) {
+            return '';
         }
 
         $originalName = $name->getAttribute(AttributeKey::ORIGINAL_NAME);
         if (! $originalName instanceof Name) {
             return $this->getName($name);
+        }
+
+        if ($this->isParamTypeNameOrClassConstFetchClassName($parent)) {
+            return $this->processParamTypeNameOrClassConstFetchClassName($name, $originalName);
+        }
+
+        if ($parent instanceof UnionType) {
+            return $this->processUnionType($parent, $name, $originalName);
         }
 
         // replace parts from the old one
@@ -139,5 +147,58 @@ CODE_SAMPLE
         $mergedParts = array_reverse($mergedReversedParts);
 
         return implode('\\', $mergedParts);
+    }
+
+    private function isParamTypeNameOrClassConstFetchClassName(Node $node): bool
+    {
+        if (! $node instanceof Param && ! $node instanceof ClassConstFetch) {
+            return false;
+        }
+
+        if ($node instanceof Param) {
+            return $node->type instanceof Name;
+        }
+
+        return $node->class instanceof Name;
+    }
+
+    private function processUnionType(UnionType $unionType, Name $name, Name $originalName): string
+    {
+        foreach ($unionType->types as $type) {
+            if (! $type instanceof Name) {
+                continue;
+            }
+
+            if ($type !== $name) {
+                continue;
+            }
+
+            return $this->processParamTypeNameOrClassConstFetchClassName($name, $originalName);
+        }
+
+        return '';
+    }
+
+    private function processParamTypeNameOrClassConstFetchClassName(Name $name, Name $originalName): string
+    {
+        $oldTokens = $this->file->getOldTokens();
+        $startTokenPos = $name->getStartTokenPos();
+
+        if (! isset($oldTokens[$startTokenPos][1])) {
+            return '';
+        }
+
+        $type = $oldTokens[$startTokenPos][1];
+        if (str_contains($type, '\\')) {
+            return '';
+        }
+
+        $last = $originalName->getLast();
+        if (strtolower($last) !== strtolower($type)) {
+            return '';
+        }
+
+        $name->parts[count($name->parts) - 1] = $type;
+        return (string) $name;
     }
 }
