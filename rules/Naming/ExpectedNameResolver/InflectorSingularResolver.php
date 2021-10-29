@@ -5,17 +5,20 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use RectorPrefix20211029\Doctrine\Inflector\Inflector;
 use RectorPrefix20211029\Nette\Utils\Strings;
+/**
+ * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
+ */
 final class InflectorSingularResolver
 {
     /**
      * @var array<string, string>
      */
-    private const SINGULAR_VERB = ['news' => 'new'];
+    private const SINGULARIZE_MAP = ['news' => 'new'];
     /**
      * @var string
      * @see https://regex101.com/r/lbQaGC/3
      */
-    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z]+|[A-Z]{1,}[a-z]+|_))#';
+    private const CAMELCASE_REGEX = '#(?<camelcase>([a-z\\d]+|[A-Z\\d]{1,}[a-z\\d]+|_))#';
     /**
      * @var string
      * @see https://regex101.com/r/2aGdkZ/2
@@ -39,8 +42,9 @@ final class InflectorSingularResolver
         if ($matchBy) {
             return \RectorPrefix20211029\Nette\Utils\Strings::substring($currentName, 0, -\strlen($matchBy['by']));
         }
-        if (\array_key_exists($currentName, self::SINGULAR_VERB)) {
-            return self::SINGULAR_VERB[$currentName];
+        $resolvedValue = $this->resolveSingularizeMap($currentName);
+        if ($resolvedValue !== null) {
+            return $resolvedValue;
         }
         if (\strncmp($currentName, self::SINGLE, \strlen(self::SINGLE)) === 0) {
             return $currentName;
@@ -50,10 +54,7 @@ final class InflectorSingularResolver
         foreach ($camelCases as $camelCase) {
             $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
         }
-        if ($singularValueVarName === '') {
-            return $currentName;
-        }
-        if ($singularValueVarName === '_') {
+        if (\in_array($singularValueVarName, ['', '_'], \true)) {
             return $currentName;
         }
         $singularValueVarName = $singularValueVarName === $currentName ? self::SINGLE . \ucfirst($singularValueVarName) : $singularValueVarName;
@@ -65,5 +66,23 @@ final class InflectorSingularResolver
             return $singularValueVarName;
         }
         return $currentName;
+    }
+    /**
+     * @return string|null
+     */
+    private function resolveSingularizeMap(string $currentName)
+    {
+        foreach (self::SINGULARIZE_MAP as $plural => $singular) {
+            if ($currentName === $plural) {
+                return $singular;
+            }
+            if (\RectorPrefix20211029\Nette\Utils\Strings::match($currentName, '#' . \ucfirst($plural) . '#')) {
+                return \RectorPrefix20211029\Nette\Utils\Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
+            }
+            if (\RectorPrefix20211029\Nette\Utils\Strings::match($currentName, '#' . $plural . '#')) {
+                return \RectorPrefix20211029\Nette\Utils\Strings::replace($currentName, '#' . $plural . '#', $singular);
+            }
+        }
+        return null;
     }
 }

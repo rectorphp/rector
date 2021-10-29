@@ -44,7 +44,7 @@ final class FuncCallValueResolver implements \RectorPrefix20211029\Symplify\Astr
         if ($this->simpleNameResolver->isName($expr, 'getcwd')) {
             return \dirname($currentFilePath);
         }
-        $args = $expr->args;
+        $args = $expr->getArgs();
         $arguments = [];
         foreach ($args as $arg) {
             $arguments[] = $this->constExprEvaluator->evaluateDirectly($arg->value);

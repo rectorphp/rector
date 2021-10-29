@@ -83,27 +83,27 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        foreach ($this->newsToMethodCalls as $newsToMethodCall) {
-            if (!$this->isObjectType($node, $newsToMethodCall->getNewObjectType())) {
+        foreach ($this->newsToMethodCalls as $newToMethodCalls) {
+            if (!$this->isObjectType($node, $newToMethodCalls->getNewObjectType())) {
                 continue;
             }
-            $serviceObjectType = $newsToMethodCall->getServiceObjectType();
+            $serviceObjectType = $newToMethodCalls->getServiceObjectType();
             $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
             /** @var Class_ $class */
             $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-            $propertyName = $this->getExistingFactoryPropertyName($class, $newsToMethodCall->getServiceObjectType());
+            $propertyName = $this->getExistingFactoryPropertyName($class, $newToMethodCalls->getServiceObjectType());
             if ($propertyName === null) {
-                $serviceObjectType = $newsToMethodCall->getServiceObjectType();
+                $serviceObjectType = $newToMethodCalls->getServiceObjectType();
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = \lcfirst($propertyName);
-                $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $newsToMethodCall->getServiceObjectType(), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+                $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $newToMethodCalls->getServiceObjectType(), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
                 $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             }
             $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
-            return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $newsToMethodCall->getServiceMethod(), $node->args);
+            return new \PhpParser\Node\Expr\MethodCall($propertyFetch, $newToMethodCalls->getServiceMethod(), $node->args);
         }
         return $node;
     }

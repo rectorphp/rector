@@ -833,12 +833,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "00dd9b25d901c63753fffd178e1303db59f0b1e0"
+                "reference": "9529499b60b1846099c588a8a46abfca6fc8e610"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/00dd9b25d901c63753fffd178e1303db59f0b1e0",
-                "reference": "00dd9b25d901c63753fffd178e1303db59f0b1e0",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/9529499b60b1846099c588a8a46abfca6fc8e610",
+                "reference": "9529499b60b1846099c588a8a46abfca6fc8e610",
                 "shasum": ""
             },
             "require": {
@@ -847,7 +847,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-10-29T14:46:33+00:00",
+            "time": "2021-10-29T22:23:14+00:00",
             "default-branch": true,
             "bin": [
                 "phpstan",
@@ -3817,12 +3817,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "ad8a2dafbf7fa6960fa384066fad9cf2ba45b0fe"
+                "reference": "b22ad66ec871f7d70859120890b9220f4898b771"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/ad8a2dafbf7fa6960fa384066fad9cf2ba45b0fe",
-                "reference": "ad8a2dafbf7fa6960fa384066fad9cf2ba45b0fe",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/b22ad66ec871f7d70859120890b9220f4898b771",
+                "reference": "b22ad66ec871f7d70859120890b9220f4898b771",
                 "shasum": ""
             },
             "require": {
@@ -3868,7 +3868,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^9.5"
             },
-            "time": "2021-10-29T18:17:30+00:00",
+            "time": "2021-10-29T22:33:26+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3914,12 +3914,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/autowire-array-parameter.git",
-                "reference": "4b02e8d4f9d231534260aaaf1309c4488b24d84b"
+                "reference": "652360ef343afcf3c354a0ff1eb59a9fed2427e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/autowire-array-parameter\/zipball\/4b02e8d4f9d231534260aaaf1309c4488b24d84b",
-                "reference": "4b02e8d4f9d231534260aaaf1309c4488b24d84b",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/autowire-array-parameter\/zipball\/652360ef343afcf3c354a0ff1eb59a9fed2427e0",
+                "reference": "652360ef343afcf3c354a0ff1eb59a9fed2427e0",
                 "shasum": ""
             },
             "require": {
@@ -3961,7 +3961,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-10-29T18:17:35+00:00",
+            "time": "2021-10-29T22:33:28+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
