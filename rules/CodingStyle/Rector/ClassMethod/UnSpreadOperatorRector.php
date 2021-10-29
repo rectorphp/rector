@@ -10,11 +10,14 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
+use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -79,14 +82,22 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         if ($node instanceof ClassMethod) {
-            return $this->processUnspreadOperatorClassMethodParams($node);
+            return $this->refactorClassMethod($node);
         }
 
-        return $this->processUnspreadOperatorMethodCallArgs($node);
+        return $this->refactorMethodCall($node);
     }
 
-    private function processUnspreadOperatorClassMethodParams(ClassMethod $classMethod): ?ClassMethod
+    private function refactorClassMethod(ClassMethod $classMethod): ?ClassMethod
     {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope && $classMethod->isPublic()) {
+            $classReflection = $scope->getClassReflection();
+            if ($classReflection->isSubclassOf(TestCase::class)) {
+                return null;
+            }
+        }
+
         $spreadParams = $this->spreadVariablesCollector->resolveFromClassMethod($classMethod);
         if ($spreadParams === []) {
             return null;
@@ -101,7 +112,7 @@ CODE_SAMPLE
         return $classMethod;
     }
 
-    private function processUnspreadOperatorMethodCallArgs(MethodCall $methodCall): ?MethodCall
+    private function refactorMethodCall(MethodCall $methodCall): ?MethodCall
     {
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (! $methodReflection instanceof MethodReflection) {
