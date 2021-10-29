@@ -12,7 +12,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
-use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
@@ -93,7 +92,7 @@ CODE_SAMPLE
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if ($scope instanceof Scope && $classMethod->isPublic()) {
             $classReflection = $scope->getClassReflection();
-            if ($classReflection->isSubclassOf(TestCase::class)) {
+            if ($classReflection->isSubclassOf('PHPUnit\Framework\TestCase')) {
                 return null;
             }
         }
