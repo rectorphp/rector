@@ -57,11 +57,7 @@ final class InflectorSingularResolver
             return $currentName;
         }
 
-        $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
-        $singularValueVarName = '';
-        foreach ($camelCases as $camelCase) {
-            $singularValueVarName .= $this->inflector->singularize($camelCase['camelcase']);
-        }
+        $singularValueVarName = $this->singularizeCamelParts($currentName);
 
         if (in_array($singularValueVarName, ['', '_'], true)) {
             return $currentName;
@@ -90,14 +86,28 @@ final class InflectorSingularResolver
             }
 
             if (Strings::match($currentName, '#' . ucfirst($plural) . '#')) {
-                return Strings::replace($currentName, '#' . ucfirst($plural) . '#', ucfirst($singular));
+                $resolvedValue = Strings::replace($currentName, '#' . ucfirst($plural) . '#', ucfirst($singular));
+                return $this->singularizeCamelParts($resolvedValue);
             }
 
             if (Strings::match($currentName, '#' . $plural . '#')) {
-                return Strings::replace($currentName, '#' . $plural . '#', $singular);
+                $resolvedValue = Strings::replace($currentName, '#' . $plural . '#', $singular);
+                return $this->singularizeCamelParts($resolvedValue);
             }
         }
 
         return null;
+    }
+
+    private function singularizeCamelParts(string $currentName): string
+    {
+        $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
+
+        $resolvedName = '';
+        foreach ($camelCases as $camelCase) {
+            $resolvedName .= $this->inflector->singularize($camelCase['camelcase']);
+        }
+
+        return $resolvedName;
     }
 }

@@ -36,5 +36,8 @@ final class InflectorSingularResolverTest extends AbstractTestCase
         yield ['nestedNews', 'nestedNew'];
         yield ['news', 'new'];
         yield ['argsOrOptions', 'argOrOption'];
+        // news and plural
+        yield ['staticCallsToNews', 'staticCallToNew'];
+        yield ['newsToMethodCalls', 'newToMethodCall'];
     }
 }

@@ -76,12 +76,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->staticCallsToNews as $staticCallsToNew) {
-            if (! $this->isName($node->class, $staticCallsToNew->getClass())) {
+        foreach ($this->staticCallsToNews as $staticCallToNew) {
+            if (! $this->isName($node->class, $staticCallToNew->getClass())) {
                 continue;
             }
 
-            if (! $this->isName($node->name, $staticCallsToNew->getMethod())) {
+            if (! $this->isName($node->name, $staticCallToNew->getMethod())) {
                 continue;
             }
 
@@ -103,6 +103,7 @@ CODE_SAMPLE
     {
         $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? [];
         Assert::allIsAOf($staticCallsToNews, StaticCallToNew::class);
+
         $this->staticCallsToNews = $staticCallsToNews;
     }
 }

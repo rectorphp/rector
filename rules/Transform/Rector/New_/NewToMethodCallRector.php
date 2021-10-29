@@ -90,12 +90,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        foreach ($this->newsToMethodCalls as $newToMethodCalls) {
-            if (! $this->isObjectType($node, $newToMethodCalls->getNewObjectType())) {
+        foreach ($this->newsToMethodCalls as $newToMethodCall) {
+            if (! $this->isObjectType($node, $newToMethodCall->getNewObjectType())) {
                 continue;
             }
 
-            $serviceObjectType = $newToMethodCalls->getServiceObjectType();
+            $serviceObjectType = $newToMethodCall->getServiceObjectType();
             $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
@@ -106,17 +106,17 @@ CODE_SAMPLE
 
             $propertyName = $this->getExistingFactoryPropertyName(
                 $class,
-                $newToMethodCalls->getServiceObjectType()
+                $newToMethodCall->getServiceObjectType()
             );
 
             if ($propertyName === null) {
-                $serviceObjectType = $newToMethodCalls->getServiceObjectType();
+                $serviceObjectType = $newToMethodCall->getServiceObjectType();
                 $propertyName = $this->classNaming->getShortName($serviceObjectType->getClassName());
                 $propertyName = lcfirst($propertyName);
 
                 $propertyMetadata = new PropertyMetadata(
                     $propertyName,
-                    $newToMethodCalls->getServiceObjectType(),
+                    $newToMethodCall->getServiceObjectType(),
                     Class_::MODIFIER_PRIVATE
                 );
                 $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
@@ -124,7 +124,7 @@ CODE_SAMPLE
 
             $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
 
-            return new MethodCall($propertyFetch, $newToMethodCalls->getServiceMethod(), $node->args);
+            return new MethodCall($propertyFetch, $newToMethodCall->getServiceMethod(), $node->args);
         }
 
         return $node;
