@@ -67,7 +67,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * @return mixed|Node|null
-     * @param string|int $key
+     * @param int|string $key
      */
     public function getValue($key)
     {
@@ -95,7 +95,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * @return mixed|null
-     * @param string|int $key
+     * @param int|string $key
      */
     public function getValueWithoutQuotes($key)
     {

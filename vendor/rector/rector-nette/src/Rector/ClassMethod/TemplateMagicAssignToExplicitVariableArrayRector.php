@@ -180,7 +180,7 @@ CODE_SAMPLE
         return $classMethod;
     }
     /**
-     * @return null|\PhpParser\Node\Expr\Assign
+     * @return \PhpParser\Node\Expr\Assign|null
      */
     private function replaceThisTemplateAssignWithVariable(\Rector\Nette\ValueObject\TemplateParametersAssigns $templateParametersAssigns, \PhpParser\Node\Expr\Assign $assign)
     {

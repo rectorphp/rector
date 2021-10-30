@@ -72,7 +72,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameClassConstFetch(string $lastName, \PhpParser\Node\Expr\ClassConstFetch $classConstFetch, $usedNameNode) : void
     {
@@ -82,7 +82,7 @@ final class NameRenamer
         $classConstFetch->class = new \PhpParser\Node\Name($lastName);
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameInInstanceOf(string $lastName, \PhpParser\Node\Expr\Instanceof_ $instanceof, $usedNameNode) : void
     {
@@ -92,7 +92,7 @@ final class NameRenamer
         $instanceof->class = new \PhpParser\Node\Name($lastName);
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameNullableType(string $lastName, \PhpParser\Node\NullableType $nullableType, $usedNameNode) : void
     {
@@ -102,7 +102,7 @@ final class NameRenamer
         $nullableType->type = new \PhpParser\Node\Name($lastName);
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameTraitUse(string $lastName, \PhpParser\Node\Stmt\TraitUse $traitUse, $usedNameNode) : void
     {
@@ -114,7 +114,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameClass(string $lastName, \PhpParser\Node\Stmt\Class_ $class, $usedNameNode) : void
     {
@@ -131,7 +131,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameParam(string $lastName, \PhpParser\Node\Param $param, $usedNameNode) : void
     {
@@ -159,7 +159,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameNew(string $lastName, \PhpParser\Node\Expr\New_ $new, $usedNameNode) : void
     {
@@ -168,7 +168,7 @@ final class NameRenamer
         }
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameClassMethod(string $lastName, \PhpParser\Node\Stmt\ClassMethod $classMethod, $usedNameNode) : void
     {
@@ -181,7 +181,7 @@ final class NameRenamer
         $classMethod->returnType = new \PhpParser\Node\Name($lastName);
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier $usedNameNode
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name $usedNameNode
      */
     private function renameInterface(string $lastName, \PhpParser\Node\Stmt\Interface_ $interface, $usedNameNode) : void
     {

@@ -28,11 +28,11 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
      */
     private $variable;
     /**
-     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
+     * @var \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
     private $functionLike;
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function __construct(string $currentName, string $expectedName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Variable $variable, $functionLike)
     {
@@ -51,7 +51,7 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
         return $this->expectedName;
     }
     /**
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
+     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
     public function getFunctionLike()
     {

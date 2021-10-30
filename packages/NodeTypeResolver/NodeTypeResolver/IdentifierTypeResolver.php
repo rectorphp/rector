@@ -12,7 +12,7 @@ use PHPStan\Type\StringType;
 final class IdentifierTypeResolver
 {
     /**
-     * @return \PHPStan\Type\StringType|\PHPStan\Type\BooleanType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\BooleanType|\PHPStan\Type\FloatType|\PHPStan\Type\IntegerType|\PHPStan\Type\MixedType|\PHPStan\Type\StringType
      */
     public function resolve(\PhpParser\Node\Identifier $identifier)
     {

@@ -69,7 +69,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $node
      */
     private function processArgumentPosition($node, int $argumentPosition) : ?\PhpParser\Node
     {
@@ -92,7 +92,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $expr
      */
     private function processStringType($expr, int $argumentPosition, \PhpParser\Node\Expr $firstArgumentExpr) : void
     {

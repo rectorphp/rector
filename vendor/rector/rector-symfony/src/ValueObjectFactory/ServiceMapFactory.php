@@ -164,7 +164,7 @@ final class ServiceMapFactory
      * @param mixed[] $value
      * @param mixed[] $data
      * @return mixed[]
-     * @param string|int $key
+     * @param int|string $key
      */
     private function convertedNestedArrayOrXml(array $value, array $data, $key) : array
     {

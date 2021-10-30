@@ -47,7 +47,7 @@ final class StaticDoctrineAnnotationParser
     }
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
-     * @return \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+     * @return mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|string
      */
     public function resolveAnnotationValue(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator)
     {
@@ -98,7 +98,7 @@ final class StaticDoctrineAnnotationParser
         return $values;
     }
     /**
-     * @return \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+     * @return mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|string
      */
     private function parseValue(\Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator $tokenIterator)
     {

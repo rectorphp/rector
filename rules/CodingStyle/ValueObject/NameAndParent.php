@@ -9,7 +9,7 @@ use PhpParser\Node\Name;
 final class NameAndParent
 {
     /**
-     * @var Name|Identifier
+     * @var Identifier|Name
      */
     private $nameNode;
     /**

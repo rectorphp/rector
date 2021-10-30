@@ -136,7 +136,7 @@ final class IsClassMethodUsedAnalyzer
         return \false;
     }
     /**
-     * @param null|\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable
+     * @param \Rector\NodeCollector\ValueObject\ArrayCallable|null $arrayCallable
      */
     private function shouldSkipArrayCallable(\PhpParser\Node\Stmt\Class_ $class, $arrayCallable) : bool
     {

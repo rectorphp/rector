@@ -20,8 +20,8 @@ final class PhpParserTypeAnalyzer
         $this->staticTypeMapper = $staticTypeMapper;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\Identifier $possibleSubtype
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType $possibleParentType
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleSubtype
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleParentType
      */
     public function isCovariantSubtypeOf($possibleSubtype, $possibleParentType) : bool
     {

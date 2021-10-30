@@ -76,7 +76,7 @@ final class StmtVisibilitySorter
         return $this->sortByRanksAndGetNames($classConstsRankeables);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $stmt
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt
      */
     private function getVisibilityLevelOrder($stmt) : int
     {

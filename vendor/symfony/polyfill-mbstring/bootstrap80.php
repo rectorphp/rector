@@ -15,7 +15,7 @@ if (!\function_exists('mb_convert_encoding')) {
     /**
      * @param mixed[]|string|null $string
      * @param mixed[]|string|null $from_encoding
-     * @return mixed[]|string|bool
+     * @return mixed[]|bool|string
      */
     function mb_convert_encoding($string, ?string $to_encoding, $from_encoding = null)
     {
@@ -54,7 +54,7 @@ if (!\function_exists('mb_convert_case')) {
 }
 if (!\function_exists('mb_internal_encoding')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_internal_encoding(?string $encoding = null)
     {
@@ -63,7 +63,7 @@ if (!\function_exists('mb_internal_encoding')) {
 }
 if (!\function_exists('mb_language')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_language(?string $language = null)
     {
@@ -94,7 +94,7 @@ if (!\function_exists('mb_check_encoding')) {
 if (!\function_exists('mb_detect_encoding')) {
     /**
      * @param mixed[]|string|null $encodings
-     * @return string|bool
+     * @return bool|string
      */
     function mb_detect_encoding(?string $string, $encodings = null, ?bool $strict = \false)
     {
@@ -126,7 +126,7 @@ if (!\function_exists('mb_strlen')) {
 }
 if (!\function_exists('mb_strpos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function mb_strpos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -147,8 +147,8 @@ if (!\function_exists('mb_strtoupper')) {
 }
 if (!\function_exists('mb_substitute_character')) {
     /**
-     * @param string|int|null $substitute_character
-     * @return string|int|bool
+     * @param int|string|null $substitute_character
+     * @return bool|int|string
      */
     function mb_substitute_character($substitute_character = null)
     {
@@ -163,7 +163,7 @@ if (!\function_exists('mb_substr')) {
 }
 if (!\function_exists('mb_stripos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function mb_stripos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -172,7 +172,7 @@ if (!\function_exists('mb_stripos')) {
 }
 if (!\function_exists('mb_stristr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_stristr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -181,7 +181,7 @@ if (!\function_exists('mb_stristr')) {
 }
 if (!\function_exists('mb_strrchr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_strrchr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -190,7 +190,7 @@ if (!\function_exists('mb_strrchr')) {
 }
 if (!\function_exists('mb_strrichr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_strrichr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -199,7 +199,7 @@ if (!\function_exists('mb_strrichr')) {
 }
 if (!\function_exists('mb_strripos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function mb_strripos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -208,7 +208,7 @@ if (!\function_exists('mb_strripos')) {
 }
 if (!\function_exists('mb_strrpos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function mb_strrpos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -217,7 +217,7 @@ if (!\function_exists('mb_strrpos')) {
 }
 if (!\function_exists('mb_strstr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_strstr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -226,7 +226,7 @@ if (!\function_exists('mb_strstr')) {
 }
 if (!\function_exists('mb_get_info')) {
     /**
-     * @return mixed[]|string|int|bool
+     * @return mixed[]|bool|int|string
      */
     function mb_get_info(?string $type = 'all')
     {
@@ -235,7 +235,7 @@ if (!\function_exists('mb_get_info')) {
 }
 if (!\function_exists('mb_http_output')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_http_output(?string $encoding = null)
     {
@@ -262,7 +262,7 @@ if (!\function_exists('mb_output_handler')) {
 }
 if (!\function_exists('mb_http_input')) {
     /**
-     * @return mixed[]|string|bool
+     * @return mixed[]|bool|string
      */
     function mb_http_input(?string $type = null)
     {
@@ -272,7 +272,7 @@ if (!\function_exists('mb_http_input')) {
 if (!\function_exists('mb_convert_variables')) {
     /**
      * @param mixed[]|string|null $from_encoding
-     * @return string|bool
+     * @return bool|string
      * @param mixed $var
      * @param mixed ...$vars
      */
@@ -283,7 +283,7 @@ if (!\function_exists('mb_convert_variables')) {
 }
 if (!\function_exists('mb_ord')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function mb_ord(?string $string, ?string $encoding = null)
     {
@@ -292,7 +292,7 @@ if (!\function_exists('mb_ord')) {
 }
 if (!\function_exists('mb_chr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function mb_chr(?int $codepoint, ?string $encoding = null)
     {

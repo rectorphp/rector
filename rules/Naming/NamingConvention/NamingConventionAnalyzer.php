@@ -24,7 +24,7 @@ final class NamingConventionAnalyzer
      * $someNameSuffix = $this->getSomeName();
      * $prefixSomeName = $this->getSomeName();
      * $someName = $this->getSomeName();
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $expr
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $expr
      */
     public function isCallMatchingVariableName($expr, string $currentName, string $expectedName) : bool
     {

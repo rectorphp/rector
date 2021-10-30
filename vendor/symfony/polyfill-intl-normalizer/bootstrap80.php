@@ -19,7 +19,7 @@ if (!\function_exists('normalizer_is_normalized')) {
 }
 if (!\function_exists('normalizer_normalize')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function normalizer_normalize(?string $string, ?int $form = \RectorPrefix20211030\Symfony\Polyfill\Intl\Normalizer\Normalizer::FORM_C)
     {

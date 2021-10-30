@@ -340,14 +340,14 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         return $this->nodeTypeResolver->getType($node);
     }
     /**
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param mixed[]|\PhpParser\Node $nodes
      */
     protected function traverseNodesWithCallable($nodes, callable $callable) : void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
     }
     /**
-     * @param \PhpParser\Node|mixed[]|null $node
+     * @param mixed[]|\PhpParser\Node|null $node
      */
     protected function print($node) : string
     {

@@ -65,7 +65,7 @@ final class NodeNameResolver
         return \false;
     }
     /**
-     * @param \PhpParser\Node|mixed[] $node
+     * @param mixed[]|\PhpParser\Node $node
      */
     public function isName($node, string $name) : bool
     {
@@ -185,7 +185,7 @@ final class NodeNameResolver
         return (bool) \RectorPrefix20211030\Nette\Utils\Strings::match($currentName, $suffixNamePattern);
     }
     /**
-     * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\Stmt\ClassLike|string $name
      */
     public function getShortName($name) : string
     {

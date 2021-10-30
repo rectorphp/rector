@@ -113,7 +113,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::LITERAL_SEPARATOR;
     }
     /**
-     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param \PhpParser\Node\Scalar\DNumber|\PhpParser\Node\Scalar\LNumber $node
      */
     private function shouldSkip($node, string $numericValueAsString) : bool
     {

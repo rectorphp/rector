@@ -95,7 +95,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Expression|null
+     * @return \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_|null
      */
     private function processAssign(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Assign $assign)
     {

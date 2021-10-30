@@ -34,7 +34,7 @@ final class ClassLikeAstResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {

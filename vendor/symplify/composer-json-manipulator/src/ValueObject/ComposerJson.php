@@ -698,7 +698,7 @@ final class ComposerJson
         return $packages;
     }
     /**
-     * @return int|string|bool
+     * @return bool|int|string
      */
     private function findPosition(string $key, array $items)
     {

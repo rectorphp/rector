@@ -214,7 +214,7 @@ final class ArrayTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         return null;
     }
     /**
-     * @return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
+     * @return \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode|\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode
      */
     private function createTypeNodeFromGenericClassStringType(\PHPStan\Type\Generic\GenericClassStringType $genericClassStringType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind)
     {

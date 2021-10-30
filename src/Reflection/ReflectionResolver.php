@@ -99,8 +99,8 @@ final class ReflectionResolver
         return $this->resolveMethodReflection($callerType->getClassName(), $methodName, $scope);
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
-     * @return \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
      */
     public function resolveFunctionLikeReflectionFromCall($call)
     {

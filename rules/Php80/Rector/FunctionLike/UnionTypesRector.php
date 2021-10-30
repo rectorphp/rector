@@ -118,7 +118,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function refactorParamTypes($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
@@ -161,7 +161,7 @@ CODE_SAMPLE
         $this->hasChanged = \true;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function refactorReturnType($functionLike, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
@@ -185,7 +185,7 @@ CODE_SAMPLE
         $this->hasChanged = \true;
     }
     /**
-     * @return \PHPStan\Type\UnionType|\PHPStan\Type\Type
+     * @return \PHPStan\Type\Type|\PHPStan\Type\UnionType
      */
     private function filterOutDuplicatedArrayTypes(\PHPStan\Type\UnionType $unionType)
     {

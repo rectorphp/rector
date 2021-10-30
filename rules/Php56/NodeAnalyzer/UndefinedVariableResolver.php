@@ -55,7 +55,7 @@ final class UndefinedVariableResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     public function resolve($node) : array
     {
@@ -96,7 +96,7 @@ final class UndefinedVariableResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function collectVariableNamesFromParams($node) : array
     {

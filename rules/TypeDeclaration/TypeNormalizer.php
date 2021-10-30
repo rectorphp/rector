@@ -14,10 +14,8 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 use RectorPrefix20211030\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20211030\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
@@ -32,18 +30,12 @@ final class TypeNormalizer
      */
     private $typeFactory;
     /**
-     * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
-     */
-    private $unionTypeFactory;
-    /**
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \RectorPrefix20211030\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \RectorPrefix20211030\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
     {
         $this->typeFactory = $typeFactory;
-        $this->unionTypeFactory = $unionTypeFactory;
-        //        private PhpDocNodeTraverser $phpDocNodeTraverser,
         $this->privatesAccessor = $privatesAccessor;
     }
     public function convertConstantArrayTypeToArrayType(\PHPStan\Type\Constant\ConstantArrayType $constantArrayType) : ?\PHPStan\Type\ArrayType
@@ -157,7 +149,7 @@ final class TypeNormalizer
     {
         $nonConstantValueTypes = \array_values($nonConstantValueTypes);
         if (\count($nonConstantValueTypes) > 1) {
-            $nonConstantValueType = $this->unionTypeFactory->createUnionObjectType($nonConstantValueTypes);
+            $nonConstantValueType = new \PHPStan\Type\UnionType($nonConstantValueTypes);
         } else {
             $nonConstantValueType = $nonConstantValueTypes[0];
         }
@@ -176,7 +168,7 @@ final class TypeNormalizer
     }
     /**
      * @param NestedArrayType[] $collectedNestedArrayTypes
-     * @return \PHPStan\Type\UnionType|\PHPStan\Type\ArrayType
+     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType
      */
     private function createUnionedTypesFromArrayTypes(array $collectedNestedArrayTypes)
     {
@@ -190,7 +182,7 @@ final class TypeNormalizer
             $unionedTypes[] = $arrayType;
         }
         if (\count($unionedTypes) > 1) {
-            return $this->unionTypeFactory->createUnionObjectType($unionedTypes);
+            return new \PHPStan\Type\UnionType($unionedTypes);
         }
         return $unionedTypes[0];
     }

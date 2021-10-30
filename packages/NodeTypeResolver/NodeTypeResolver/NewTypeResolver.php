@@ -12,12 +12,12 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
@@ -29,15 +29,10 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    /**
-     * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
-     */
-    private $unionTypeFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->classAnalyzer = $classAnalyzer;
-        $this->unionTypeFactory = $unionTypeFactory;
     }
     /**
      * @return array<class-string<Node>>
@@ -85,7 +80,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
             $types[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($parentClass);
         }
         if (\count($types) > 1) {
-            $unionType = $this->unionTypeFactory->createUnionObjectType($types);
+            $unionType = new \PHPStan\Type\UnionType($types);
             return new \PHPStan\Type\ObjectWithoutClassType($unionType);
         }
         if (\count($types) === 1) {

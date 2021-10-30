@@ -14,7 +14,7 @@ use PhpParser\Node\Expr\Variable;
 final class VariableAssignPair
 {
     /**
-     * @var Variable|ArrayDimFetch|PropertyFetch|StaticPropertyFetch
+     * @var ArrayDimFetch|PropertyFetch|StaticPropertyFetch|Variable
      */
     private $variable;
     /**

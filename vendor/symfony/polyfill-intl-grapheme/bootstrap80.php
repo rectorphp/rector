@@ -22,7 +22,7 @@ if (!\defined('GRAPHEME_EXTR_MAXCHARS')) {
 }
 if (!\function_exists('grapheme_extract')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function grapheme_extract(?string $haystack, ?int $size, ?int $type = \GRAPHEME_EXTR_COUNT, ?int $offset = 0, &$next = null)
     {
@@ -31,7 +31,7 @@ if (!\function_exists('grapheme_extract')) {
 }
 if (!\function_exists('grapheme_stripos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function grapheme_stripos(?string $haystack, ?string $needle, ?int $offset = 0)
     {
@@ -40,7 +40,7 @@ if (!\function_exists('grapheme_stripos')) {
 }
 if (!\function_exists('grapheme_stristr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function grapheme_stristr(?string $haystack, ?string $needle, ?bool $beforeNeedle = \false)
     {
@@ -49,7 +49,7 @@ if (!\function_exists('grapheme_stristr')) {
 }
 if (!\function_exists('grapheme_strlen')) {
     /**
-     * @return int|bool|null
+     * @return bool|int|null
      */
     function grapheme_strlen(?string $string)
     {
@@ -58,7 +58,7 @@ if (!\function_exists('grapheme_strlen')) {
 }
 if (!\function_exists('grapheme_strpos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function grapheme_strpos(?string $haystack, ?string $needle, ?int $offset = 0)
     {
@@ -67,7 +67,7 @@ if (!\function_exists('grapheme_strpos')) {
 }
 if (!\function_exists('grapheme_strripos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function grapheme_strripos(?string $haystack, ?string $needle, ?int $offset = 0)
     {
@@ -76,7 +76,7 @@ if (!\function_exists('grapheme_strripos')) {
 }
 if (!\function_exists('grapheme_strrpos')) {
     /**
-     * @return int|bool
+     * @return bool|int
      */
     function grapheme_strrpos(?string $haystack, ?string $needle, ?int $offset = 0)
     {
@@ -85,7 +85,7 @@ if (!\function_exists('grapheme_strrpos')) {
 }
 if (!\function_exists('grapheme_strstr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function grapheme_strstr(?string $haystack, ?string $needle, ?bool $beforeNeedle = \false)
     {
@@ -94,7 +94,7 @@ if (!\function_exists('grapheme_strstr')) {
 }
 if (!\function_exists('grapheme_substr')) {
     /**
-     * @return string|bool
+     * @return bool|string
      */
     function grapheme_substr(?string $string, ?int $offset, ?int $length = null)
     {

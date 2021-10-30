@@ -130,7 +130,7 @@ final class FamilyRelationsAnalyzer
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrName
      */
     public function getClassLikeAncestorNames($classOrName) : array
     {

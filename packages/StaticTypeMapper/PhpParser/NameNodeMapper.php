@@ -71,7 +71,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         return \in_array($name, $oldToNewClasses, \true);
     }
     /**
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\PHPStan\Type\ObjectWithoutClassType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectWithoutClassType|\PHPStan\Type\StaticType
      */
     private function createClassReferenceType(\PhpParser\Node\Name $name, string $reference)
     {
@@ -93,7 +93,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         return new \PHPStan\Type\ThisType($classReflection);
     }
     /**
-     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\IntegerType|\PHPStan\Type\FloatType|\PHPStan\Type\StringType|\PHPStan\Type\Constant\ConstantBooleanType|\PHPStan\Type\BooleanType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\BooleanType|\PHPStan\Type\Constant\ConstantBooleanType|\PHPStan\Type\FloatType|\PHPStan\Type\IntegerType|\PHPStan\Type\MixedType|\PHPStan\Type\StringType
      */
     private function createScalarType(string $name)
     {

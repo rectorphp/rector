@@ -14,7 +14,7 @@ if (!\function_exists('dn')) {
 }
 if (!\function_exists('dump_node')) {
     /**
-     * @param \PhpParser\Node|mixed[] $node
+     * @param mixed[]|\PhpParser\Node $node
      */
     function dump_node($node, int $depth = 2) : void
     {
@@ -26,7 +26,7 @@ if (!\function_exists('dump_node')) {
 }
 if (!\function_exists('print_node')) {
     /**
-     * @param \PhpParser\Node|mixed[] $node
+     * @param mixed[]|\PhpParser\Node $node
      */
     function print_node($node) : void
     {

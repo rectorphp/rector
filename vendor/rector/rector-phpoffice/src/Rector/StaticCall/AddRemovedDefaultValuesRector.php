@@ -52,7 +52,7 @@ CODE_SAMPLE
     }
     /**
      * @param StaticCall|MethodCall $node
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
     public function refactor(\PhpParser\Node $node)
     {
@@ -71,7 +71,7 @@ CODE_SAMPLE
     }
     /**
      * @param array<int, mixed> $defaultValuesByPosition
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function refactorArgs($node, array $defaultValuesByPosition) : void
     {
@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function isCallerObjectType($node, \PHPStan\Type\ObjectType $objectType) : bool
     {

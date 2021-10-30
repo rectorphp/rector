@@ -122,7 +122,7 @@ CODE_SAMPLE
         return $phpDocInfo->hasByName('required');
     }
     /**
-     * @return null|\PhpParser\Node\Stmt|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt|null
      */
     private function matchClassMethodOnlyStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod)
     {

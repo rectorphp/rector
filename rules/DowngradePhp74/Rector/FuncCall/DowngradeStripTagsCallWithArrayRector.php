@@ -147,7 +147,7 @@ CODE_SAMPLE
         return $this->valueResolver->isNull($allowableTagsParam);
     }
     /**
-     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable $expr
      */
     private function createArrayFromString($expr) : \PhpParser\Node\Expr\BinaryOp\Concat
     {
@@ -157,7 +157,7 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\BinaryOp\Concat($concat, new \PhpParser\Node\Scalar\String_('>'));
     }
     /**
-     * @param \PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\ClassConstFetch $expr
+     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable $expr
      */
     private function createIsArrayTernaryFromExpression($expr) : \PhpParser\Node\Expr\Ternary
     {

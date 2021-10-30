@@ -49,7 +49,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorA
         return null;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Nop|\PhpParser\Node
+     * @return \PhpParser\Node|\PhpParser\Node\Stmt\Nop
      */
     public function leaveNode(\PhpParser\Node $node)
     {

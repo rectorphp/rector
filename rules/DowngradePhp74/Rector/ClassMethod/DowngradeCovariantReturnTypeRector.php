@@ -146,7 +146,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\UnionType|\PhpParser\Node\NullableType|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType $returnTypeNode
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $returnTypeNode
      */
     private function resolveDifferentAncestorReturnType(\PhpParser\Node\Stmt\ClassMethod $classMethod, $returnTypeNode) : \PHPStan\Type\Type
     {

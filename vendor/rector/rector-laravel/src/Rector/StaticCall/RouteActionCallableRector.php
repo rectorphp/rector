@@ -127,7 +127,7 @@ CODE_SAMPLE
         return [$controller, $method];
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Expr $name
+     * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $name
      */
     private function getActionPosition($name) : int
     {

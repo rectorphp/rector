@@ -144,8 +144,9 @@ CODE_SAMPLE
         }
         if ($varType instanceof \PHPStan\Type\UnionType) {
             $types = $varType->getTypes();
-            if (\count($types) === 2 && $types[0] instanceof \PHPStan\Type\Generic\TemplateType) {
-                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($types[0]->getBound(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+            if (\count($types) === 2 && $types[1] instanceof \PHPStan\Type\Generic\TemplateType) {
+                $templateType = $types[1];
+                $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($templateType->getBound(), \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
                 return $node;
             }
         }

@@ -2944,7 +2944,6 @@ return array(
     'Rector\\StaticTypeMapper\\PhpParser\\StringNodeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpParser/StringNodeMapper.php',
     'Rector\\StaticTypeMapper\\PhpParser\\UnionTypeNodeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpParser/UnionTypeNodeMapper.php',
     'Rector\\StaticTypeMapper\\StaticTypeMapper' => $baseDir . '/packages/StaticTypeMapper/StaticTypeMapper.php',
-    'Rector\\StaticTypeMapper\\TypeFactory\\UnionTypeFactory' => $baseDir . '/packages/StaticTypeMapper/TypeFactory/UnionTypeFactory.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\AliasedObjectType' => $baseDir . '/packages/StaticTypeMapper/ValueObject/Type/AliasedObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedGenericObjectType' => $baseDir . '/packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedGenericObjectType.php',
     'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedObjectType' => $baseDir . '/packages/StaticTypeMapper/ValueObject/Type/FullyQualifiedObjectType.php',

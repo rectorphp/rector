@@ -32,7 +32,7 @@ final class TypeFinder
     }
     /**
      * @param class-string<Type> $desiredTypeClass
-     * @param \PHPStan\Type\UnionType|\PHPStan\Type\IntersectionType $compoundType
+     * @param \PHPStan\Type\IntersectionType|\PHPStan\Type\UnionType $compoundType
      */
     private function findInJoinedType($compoundType, string $desiredTypeClass) : \PHPStan\Type\Type
     {

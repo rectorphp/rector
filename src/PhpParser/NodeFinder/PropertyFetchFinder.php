@@ -53,7 +53,7 @@ final class PropertyFetchFinder
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
      */
     public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
     {
@@ -139,7 +139,7 @@ final class PropertyFetchFinder
         return \array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
      */
     private function resolvePropertyName($propertyOrPromotedParam) : ?string
     {

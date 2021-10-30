@@ -38,7 +38,7 @@ final class ObjectTypeSpecifier
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
-     * @return \PHPStan\Type\ObjectType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\PHPStan\Type\StaticType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
@@ -114,7 +114,7 @@ final class ObjectTypeSpecifier
         return null;
     }
     /**
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|null
      */
     private function matchShortenedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType)
     {

@@ -48,7 +48,7 @@ final class VariableRenamer
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function renameVariableInFunctionLike($functionLike, string $oldName, string $expectedName, ?\PhpParser\Node\Expr\Assign $assign = null) : void
     {

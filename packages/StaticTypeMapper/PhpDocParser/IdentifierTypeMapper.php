@@ -100,7 +100,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($className);
     }
     /**
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType
      */
     private function mapParent(\PHPStan\Analyser\Scope $scope)
     {

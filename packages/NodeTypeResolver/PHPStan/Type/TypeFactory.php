@@ -17,21 +17,16 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 final class TypeFactory
 {
-    /**
-     * @var \Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory
-     */
-    private $unionTypeFactory;
     /**
      * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
      */
     private $typeHasher;
-    public function __construct(\Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory $unionTypeFactory, \Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher)
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\TypeHasher $typeHasher)
     {
-        $this->unionTypeFactory = $unionTypeFactory;
         $this->typeHasher = $typeHasher;
     }
     /**
@@ -113,7 +108,7 @@ final class TypeFactory
         if (\count($types) === 1) {
             return $types[0];
         }
-        return $this->unionTypeFactory->createUnionObjectType($types);
+        return new \PHPStan\Type\UnionType($types);
     }
     private function removeValueFromConstantType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {

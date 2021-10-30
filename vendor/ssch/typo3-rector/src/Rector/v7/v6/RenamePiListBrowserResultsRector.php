@@ -47,7 +47,7 @@ final class RenamePiListBrowserResultsRector extends \Rector\Core\Rector\Abstrac
     }
     /**
      * @param string|string[] $newMethodNames
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ArrayDimFetch
+     * @return \PhpParser\Node\Expr\ArrayDimFetch|\PhpParser\Node\Expr\MethodCall
      */
     private function process(\PhpParser\Node\Expr\MethodCall $methodCall, $newMethodNames)
     {

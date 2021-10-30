@@ -75,7 +75,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
+     * @param \PhpParser\Node\Scalar\DNumber|\PhpParser\Node\Scalar\LNumber $node
      */
     public function shouldRefactor($node) : bool
     {

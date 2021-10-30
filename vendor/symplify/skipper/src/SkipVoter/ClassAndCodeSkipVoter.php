@@ -26,7 +26,7 @@ final class ClassAndCodeSkipVoter implements \RectorPrefix20211030\Symplify\Skip
         $this->fileInfoMatcher = $fileInfoMatcher;
     }
     /**
-     * @param string|object $element
+     * @param object|string $element
      */
     public function match($element) : bool
     {
@@ -36,7 +36,7 @@ final class ClassAndCodeSkipVoter implements \RectorPrefix20211030\Symplify\Skip
         return \substr_count($element, '.') === 1;
     }
     /**
-     * @param string|object $element
+     * @param object|string $element
      * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool

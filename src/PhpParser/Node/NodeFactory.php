@@ -130,7 +130,7 @@ final class NodeFactory
     }
     /**
      * Creates "\SomeClass::CONSTANT"
-     * @param string|\Rector\Core\Enum\ObjectReference $className
+     * @param \Rector\Core\Enum\ObjectReference|string $className
      */
     public function createClassConstFetch($className, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
@@ -139,7 +139,7 @@ final class NodeFactory
     }
     /**
      * Creates "\SomeClass::class"
-     * @param string|\Rector\Core\Enum\ObjectReference $className
+     * @param \Rector\Core\Enum\ObjectReference|string $className
      */
     public function createClassConstReference($className) : \PhpParser\Node\Expr\ClassConstFetch
     {
@@ -241,7 +241,7 @@ final class NodeFactory
     }
     /**
      * @param mixed[] $arguments
-     * @param string|\PhpParser\Node\Expr $variable
+     * @param \PhpParser\Node\Expr|string $variable
      */
     public function createMethodCall($variable, string $method, array $arguments = []) : \PhpParser\Node\Expr\MethodCall
     {
@@ -260,7 +260,7 @@ final class NodeFactory
         return $this->builderFactory->methodCall($variable, $method, $arguments);
     }
     /**
-     * @param string|\PhpParser\Node\Expr $variable
+     * @param \PhpParser\Node\Expr|string $variable
      */
     public function createPropertyFetch($variable, string $property) : \PhpParser\Node\Expr\PropertyFetch
     {
@@ -367,7 +367,7 @@ final class NodeFactory
     }
     /**
      * @param Node[] $args
-     * @param string|\Rector\Core\Enum\ObjectReference $class
+     * @param \Rector\Core\Enum\ObjectReference|string $class
      */
     public function createStaticCall($class, string $method, array $args = []) : \PhpParser\Node\Expr\StaticCall
     {
@@ -481,7 +481,7 @@ final class NodeFactory
     }
     /**
      * @param mixed $item
-     * @param string|int|null $key
+     * @param int|string|null $key
      */
     private function createArrayItem($item, $key = null) : \PhpParser\Node\Expr\ArrayItem
     {
@@ -552,8 +552,8 @@ final class NodeFactory
         return $param;
     }
     /**
-     * @param string|\Rector\Core\Enum\ObjectReference $className
-     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     * @param \Rector\Core\Enum\ObjectReference|string $className
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
      */
     private function createName($className)
     {

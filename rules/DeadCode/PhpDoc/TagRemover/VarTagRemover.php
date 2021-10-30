@@ -58,7 +58,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property $node
      */
     public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {
@@ -86,7 +86,7 @@ final class VarTagRemover
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property $node
      */
     private function isNonBasicArrayType($node, \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode) : bool
     {

@@ -151,7 +151,7 @@ CODE_SAMPLE
         return !$phpDocInfo->getVarType() instanceof \PHPStan\Type\MixedType;
     }
     /**
-     * @param \PhpParser\Node\Expr\AssignOp|\PhpParser\Node\Expr\Assign $previousNode
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $previousNode
      */
     private function isPreviousExpressionVisuallySimilar(\PhpParser\Node\Stmt\Expression $previousExpression, $previousNode) : bool
     {

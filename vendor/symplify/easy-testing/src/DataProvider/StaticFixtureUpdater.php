@@ -11,7 +11,7 @@ use RectorPrefix20211030\Symplify\SmartFileSystem\SmartFileSystem;
 final class StaticFixtureUpdater
 {
     /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
+     * @param string|\Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo
      */
     public static function updateFixtureContent($originalFileInfo, string $changedContent, \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo) : void
     {
@@ -33,7 +33,7 @@ final class StaticFixtureUpdater
         return new \RectorPrefix20211030\Symplify\SmartFileSystem\SmartFileSystem();
     }
     /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
+     * @param string|\Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo
      */
     private static function resolveNewFixtureContent($originalFileInfo, string $changedContent) : string
     {

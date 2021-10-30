@@ -39,7 +39,7 @@ final class GenericClassStringTypeNormalizer
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
     }
     /**
-     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType|\PHPStan\Type\Type
+     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\Type|\PHPStan\Type\UnionType
      */
     public function normalize(\PHPStan\Type\Type $type)
     {
@@ -92,7 +92,7 @@ final class GenericClassStringTypeNormalizer
         return $arrayType;
     }
     /**
-     * @return \PHPStan\Type\UnionType|\PHPStan\Type\ArrayType
+     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType
      */
     private function resolveClassStringInUnionType(\PHPStan\Type\UnionType $type)
     {

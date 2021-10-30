@@ -19,7 +19,7 @@ final class ClassNaming
      */
     private const INPUT_HASH_NAMING_REGEX = '#input_(.*?)_#';
     /**
-     * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier $name
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|string $name
      */
     public function getVariableName($name) : string
     {
@@ -27,7 +27,7 @@ final class ClassNaming
         return \lcfirst($shortName);
     }
     /**
-     * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\Stmt\ClassLike|string $name
      */
     public function getShortName($name) : string
     {

@@ -127,7 +127,7 @@ final class ReturnedNodesReturnTypeInferer implements \Rector\TypeDeclaration\Co
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_ $classLike
-     * @return \PHPStan\Type\VoidType|\PHPStan\Type\MixedType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\VoidType
      */
     private function resolveNoLocalReturnNodes($classLike, \PhpParser\Node\FunctionLike $functionLike)
     {

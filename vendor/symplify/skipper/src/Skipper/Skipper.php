@@ -27,7 +27,7 @@ final class Skipper
         $this->skipVoters = $skipVoters;
     }
     /**
-     * @param string|object $element
+     * @param object|string $element
      */
     public function shouldSkipElement($element) : bool
     {
@@ -39,7 +39,7 @@ final class Skipper
         return $this->shouldSkipElementAndFileInfo(self::FILE_ELEMENT, $smartFileInfo);
     }
     /**
-     * @param string|object $element
+     * @param object|string $element
      */
     public function shouldSkipElementAndFileInfo($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {

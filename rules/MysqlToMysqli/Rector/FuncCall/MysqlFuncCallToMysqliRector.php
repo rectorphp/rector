@@ -92,7 +92,7 @@ CODE_SAMPLE
         return $funcCall;
     }
     /**
-     * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\BinaryOp\Concat
+     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Scalar\String_
      */
     private function joinStringWithNode(string $string, \PhpParser\Node\Expr $expr)
     {

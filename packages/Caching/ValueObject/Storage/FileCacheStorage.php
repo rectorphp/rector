@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use FilesystemIterator;
+use RectorPrefix20211030\Nette\Utils\FileSystem;
 use RectorPrefix20211030\Nette\Utils\Random;
-use PHPStan\File\FileWriter;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
@@ -70,7 +70,7 @@ final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Sto
             throw new \RectorPrefix20211030\Symplify\EasyCodingStandard\Caching\Exception\CachingException(\sprintf('Error occurred while saving item %s (%s) to cache: %s', $key, $variableKey, $errorAfter['message']));
         }
         // for performance reasons we don't use SmartFileSystem
-        \PHPStan\File\FileWriter::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
+        \RectorPrefix20211030\Nette\Utils\FileSystem::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
         $renameSuccess = @\rename($tmpPath, $path);
         if ($renameSuccess) {
             return;

@@ -35,7 +35,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         return $this->useImportTypesInFilePath !== [] || $this->functionUseImportTypesInFilePath !== [];
     }
     /**
-     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType $objectType
+     * @param \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $objectType
      */
     public function addUseImport($objectType) : void
     {

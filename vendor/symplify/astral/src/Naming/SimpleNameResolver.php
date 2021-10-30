@@ -72,7 +72,7 @@ final class SimpleNameResolver
         return \false;
     }
     /**
-     * @param string|\PhpParser\Node $node
+     * @param \PhpParser\Node|string $node
      */
     public function isName($node, string $desiredName) : bool
     {

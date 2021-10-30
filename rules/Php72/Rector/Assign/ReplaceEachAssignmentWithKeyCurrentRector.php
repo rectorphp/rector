@@ -109,7 +109,7 @@ CODE_SAMPLE
         return $newNodes;
     }
     /**
-     * @param string|int $dimValue
+     * @param int|string $dimValue
      */
     private function createDimFetchAssignWithFuncCall(\PhpParser\Node\Expr $assignVariable, \PhpParser\Node\Expr $eachedVariable, $dimValue, string $functionName) : \PhpParser\Node\Expr\Assign
     {

@@ -29,7 +29,7 @@ final class SilentVoidResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function hasExclusiveVoid($functionLike) : bool
     {
@@ -56,7 +56,7 @@ final class SilentVoidResolver
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\ArrowFunction $functionLike
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function hasSilentVoid($functionLike) : bool
     {
@@ -125,7 +125,7 @@ final class SilentVoidResolver
     }
     /**
      * @see https://phpstan.org/writing-php-code/phpdoc-types#bottom-type
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function hasNeverType($functionLike) : bool
     {

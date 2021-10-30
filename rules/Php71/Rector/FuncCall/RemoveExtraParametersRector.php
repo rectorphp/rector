@@ -107,7 +107,7 @@ final class RemoveExtraParametersRector extends \Rector\Core\Rector\AbstractRect
         return $this->variadicAnalyzer->hasVariadicParameters($call);
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $functionLikeReflection
      */
     private function resolveMaximumAllowedParameterCount($functionLikeReflection) : int
     {

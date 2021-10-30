@@ -93,7 +93,7 @@ final class AnonymousFunctionFactory
     /**
      * @param Param[] $params
      * @param Stmt[] $stmts
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|null $returnTypeNode
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $returnTypeNode
      */
     public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false) : \PhpParser\Node\Expr\Closure
     {
@@ -313,7 +313,7 @@ final class AnonymousFunctionFactory
         return $innerMethodCall;
     }
     /**
-     * @return null|\PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Name\FullyQualified|null
      */
     private function normalizeClassConstFetchForStatic(\PhpParser\Node\Expr $expr)
     {
@@ -331,7 +331,7 @@ final class AnonymousFunctionFactory
         return new \PhpParser\Node\Name\FullyQualified($className);
     }
     /**
-     * @return \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr|null
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\New_|null
      */
     private function resolveExpr(\PhpParser\Node\Expr $expr)
     {

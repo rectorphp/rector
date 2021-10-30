@@ -113,7 +113,7 @@ CODE_SAMPLE
         $this->attributesToAnnotations = $attributesToAnnotations;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Param|\PhpParser\Node\Stmt\Function_ $node
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Property $node
      */
     private function cleanupEmptyAttrGroups($node) : void
     {

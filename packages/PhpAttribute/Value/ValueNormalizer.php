@@ -17,7 +17,7 @@ final class ValueNormalizer
 {
     /**
      * @param mixed $value
-     * @return bool|float|int|string|mixed[]|\PhpParser\Node\Expr
+     * @return mixed[]|bool|float|int|\PhpParser\Node\Expr|string
      */
     public function normalize($value)
     {

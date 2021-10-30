@@ -34,7 +34,7 @@ final class DefaultParameterValueResolver
         return $this->resolveValueFromType($defaultValue);
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection $functionLikeReflection
      */
     public function resolveFromFunctionLikeAndPosition($functionLikeReflection, int $position) : ?\PhpParser\Node\Expr
     {
@@ -49,7 +49,7 @@ final class DefaultParameterValueResolver
         return $this->resolveFromParameterReflection($parameterReflection);
     }
     /**
-     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr
+     * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\ConstFetch
      */
     private function resolveValueFromType(\PHPStan\Type\ConstantType $constantType)
     {

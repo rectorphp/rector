@@ -104,7 +104,7 @@ final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\Abst
     }
     /**
      * Handles custom error messages to not be overwrite by function with multiple args.
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function moveFunctionArgumentsUp($node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $requiredArg) : void
     {

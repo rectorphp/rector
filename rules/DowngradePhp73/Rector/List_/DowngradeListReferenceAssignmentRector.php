@@ -101,7 +101,7 @@ CODE_SAMPLE
      * since they are not needed anymore.
      * If all of them can be removed, then directly remove `list()`.
      * @return List_|Array_|null
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
      */
     public function removeStaleParams($node, int $rightSideRemovableParamsCount) : ?\PhpParser\Node
     {
@@ -119,7 +119,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
      */
     private function shouldRefactor($node) : bool
     {
@@ -246,7 +246,7 @@ CODE_SAMPLE
     /**
      * Re-build the path to the variable with all accumulated indexes
      * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
-     * @param string|int $arrayIndex
+     * @param int|string $arrayIndex
      */
     private function createAssignRefWithArrayDimFetch(\PhpParser\Node\Expr\Variable $assignVariable, \PhpParser\Node\Expr\Variable $exprVariable, array $nestedArrayIndexes, $arrayIndex) : \PhpParser\Node\Expr\AssignRef
     {

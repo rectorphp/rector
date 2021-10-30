@@ -150,7 +150,7 @@ CODE_SAMPLE
         return !$classReflection->isClass();
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType $paramType
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $paramType
      */
     private function mirrorParamType(\PhpParser\Node\Param $decoratedParam, $paramType) : void
     {

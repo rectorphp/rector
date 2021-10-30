@@ -47,7 +47,7 @@ CODE_SAMPLE
         return $this->refactorLogicalToBoolean($node);
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\LogicalOr|\PhpParser\Node\Expr\BinaryOp\LogicalAnd $node
+     * @param \PhpParser\Node\Expr\BinaryOp\LogicalAnd|\PhpParser\Node\Expr\BinaryOp\LogicalOr $node
      * @return \PhpParser\Node\Expr\BinaryOp\BooleanAnd|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
     private function refactorLogicalToBoolean($node)

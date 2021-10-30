@@ -7,11 +7,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 interface SkipVoterInterface
 {
     /**
-     * @param string|object $element
+     * @param object|string $element
      */
     public function match($element) : bool;
     /**
-     * @param string|object $element
+     * @param object|string $element
      * @param \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo
      */
     public function shouldSkip($element, $smartFileInfo) : bool;

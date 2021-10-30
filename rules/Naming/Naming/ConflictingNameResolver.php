@@ -61,7 +61,7 @@ final class ConflictingNameResolver
         return $this->arrayFilter->filterWithAtLeastTwoOccurences($expectedNames);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function hasNameIsInFunctionLike(string $variableName, $functionLike) : bool
     {
@@ -70,7 +70,7 @@ final class ConflictingNameResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function resolveConflictingVariableNamesForNew($functionLike) : array
     {
@@ -89,7 +89,7 @@ final class ConflictingNameResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function collectParamNames($functionLike) : array
     {
@@ -102,7 +102,7 @@ final class ConflictingNameResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function resolveForNewAssigns($functionLike) : array
     {
@@ -120,7 +120,7 @@ final class ConflictingNameResolver
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function resolveForNonNewAssigns($functionLike) : array
     {

@@ -84,7 +84,7 @@ final class PropertyManipulator
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
      */
     public function isPropertyUsedInReadContext($propertyOrPromotedParam) : bool
     {
@@ -114,7 +114,7 @@ final class PropertyManipulator
         });
     }
     /**
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrParam
      */
     public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
     {

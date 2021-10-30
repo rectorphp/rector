@@ -143,7 +143,7 @@ CODE_SAMPLE
         return $this->isObjectType($classLike, $objectType);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
     private function processPositionWithDefaultValues($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : void
     {
@@ -167,7 +167,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
     private function shouldSkipParameter($node, \Rector\Arguments\ValueObject\ArgumentAdder $argumentAdder) : bool
     {

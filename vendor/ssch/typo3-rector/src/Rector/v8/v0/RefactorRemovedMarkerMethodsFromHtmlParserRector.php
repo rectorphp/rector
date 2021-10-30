@@ -118,7 +118,7 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     public function removeMethods($node) : void
     {
@@ -135,7 +135,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     public function renameMethod($node) : void
     {
@@ -147,7 +147,7 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function migrateMethodsToMarkerBasedTemplateService($node) : ?\PhpParser\Node
     {
@@ -162,7 +162,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
     private function shouldSkip($node) : bool
     {

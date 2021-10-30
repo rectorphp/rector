@@ -19,7 +19,7 @@ final class VendorLocationDetector
         $this->pathNormalizer = $pathNormalizer;
     }
     /**
-     * @param \PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename $reflection
      */
     public function detectFunctionLikeReflection($reflection) : bool
     {
@@ -32,7 +32,7 @@ final class VendorLocationDetector
         return \strpos($normalizedFileName, '/vendor/') !== \false;
     }
     /**
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename|\PHPStan\Reflection\FunctionReflection $reflection
+     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename $reflection
      * @return string|null
      */
     private function resolveReflectionFileName($reflection)
