@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211029\Symfony\Component\HttpKernel\CacheWarmer;
+namespace RectorPrefix20211030\Symfony\Component\HttpKernel\CacheWarmer;
 
 /**
  * Abstract cache warmer that knows how to write a file to the cache.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class CacheWarmer implements \RectorPrefix20211029\Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface
+abstract class CacheWarmer implements \RectorPrefix20211030\Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface
 {
     /**
      * @param string $file

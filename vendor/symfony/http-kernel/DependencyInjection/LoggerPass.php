@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211029\Symfony\Component\HttpKernel\DependencyInjection;
+namespace RectorPrefix20211030\Symfony\Component\HttpKernel\DependencyInjection;
 
-use RectorPrefix20211029\Psr\Log\LoggerInterface;
-use RectorPrefix20211029\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20211029\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211029\Symfony\Component\HttpKernel\Log\Logger;
+use RectorPrefix20211030\Psr\Log\LoggerInterface;
+use RectorPrefix20211030\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20211030\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211030\Symfony\Component\HttpKernel\Log\Logger;
 /**
  * Registers the default logger if necessary.
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
  */
-class LoggerPass implements \RectorPrefix20211029\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class LoggerPass implements \RectorPrefix20211030\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * {@inheritdoc}
@@ -27,10 +27,10 @@ class LoggerPass implements \RectorPrefix20211029\Symfony\Component\DependencyIn
      */
     public function process($container)
     {
-        $container->setAlias(\RectorPrefix20211029\Psr\Log\LoggerInterface::class, 'logger')->setPublic(\false);
+        $container->setAlias(\RectorPrefix20211030\Psr\Log\LoggerInterface::class, 'logger')->setPublic(\false);
         if ($container->has('logger')) {
             return;
         }
-        $container->register('logger', \RectorPrefix20211029\Symfony\Component\HttpKernel\Log\Logger::class)->setPublic(\false);
+        $container->register('logger', \RectorPrefix20211030\Symfony\Component\HttpKernel\Log\Logger::class)->setPublic(\false);
     }
 }

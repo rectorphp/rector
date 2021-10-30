@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211029\Webmozart\Assert\Assert;
+use RectorPrefix20211030\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symfony/symfony/pull/35308
  *
@@ -62,11 +62,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        foreach ($this->staticCallsToNews as $staticCallsToNew) {
-            if (!$this->isName($node->class, $staticCallsToNew->getClass())) {
+        foreach ($this->staticCallsToNews as $staticCallToNew) {
+            if (!$this->isName($node->class, $staticCallToNew->getClass())) {
                 continue;
             }
-            if (!$this->isName($node->name, $staticCallsToNew->getMethod())) {
+            if (!$this->isName($node->name, $staticCallToNew->getMethod())) {
                 continue;
             }
             $class = $this->getName($node->class);
@@ -83,7 +83,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? [];
-        \RectorPrefix20211029\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
+        \RectorPrefix20211030\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
         $this->staticCallsToNews = $staticCallsToNews;
     }
 }

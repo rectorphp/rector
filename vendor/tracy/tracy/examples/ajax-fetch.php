@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211029;
+namespace RectorPrefix20211030;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20211029\Tracy\Debugger;
+use RectorPrefix20211030\Tracy\Debugger;
 // session is required for this functionality
 \session_start();
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20211029\Tracy\Debugger::enable(\RectorPrefix20211029\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20211030\Tracy\Debugger::enable(\RectorPrefix20211030\Tracy\Debugger::DETECT, __DIR__ . '/log');
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
     // AJAX request
-    \RectorPrefix20211029\bdump('AJAX request ' . \date('H:i:s'));
+    \RectorPrefix20211030\bdump('AJAX request ' . \date('H:i:s'));
     if (!empty($_GET['error'])) {
-        \RectorPrefix20211029\this_is_fatal_error();
+        \RectorPrefix20211030\this_is_fatal_error();
     }
     $data = [\rand(), \rand(), \rand()];
     \header('Content-Type: application/json');
@@ -22,7 +22,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
     echo \json_encode($data);
     exit;
 }
-\RectorPrefix20211029\bdump('classic request ' . \date('H:i:s'));
+\RectorPrefix20211030\bdump('classic request ' . \date('H:i:s'));
 ?>
 <!DOCTYPE html><html class=arrow><link rel="stylesheet" href="assets/style.css">
 
@@ -70,6 +70,6 @@ document.querySelectorAll('button').forEach((button) => {
 
 
 <?php 
-if (\RectorPrefix20211029\Tracy\Debugger::$productionMode) {
+if (\RectorPrefix20211030\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }

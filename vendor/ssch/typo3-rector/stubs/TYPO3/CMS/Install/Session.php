@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211029\TYPO3\CMS\Install;
+namespace RectorPrefix20211030\TYPO3\CMS\Install;
 
 if (\class_exists('TYPO3\\CMS\\Install\\Session')) {
     return;

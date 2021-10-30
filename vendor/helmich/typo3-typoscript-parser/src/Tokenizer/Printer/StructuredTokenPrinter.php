@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211029\Helmich\TypoScriptParser\Tokenizer\Printer;
+namespace RectorPrefix20211030\Helmich\TypoScriptParser\Tokenizer\Printer;
 
-use RectorPrefix20211029\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
-use RectorPrefix20211029\Symfony\Component\Yaml\Yaml;
-class StructuredTokenPrinter implements \RectorPrefix20211029\Helmich\TypoScriptParser\Tokenizer\Printer\TokenPrinterInterface
+use RectorPrefix20211030\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
+use RectorPrefix20211030\Symfony\Component\Yaml\Yaml;
+class StructuredTokenPrinter implements \RectorPrefix20211030\Helmich\TypoScriptParser\Tokenizer\Printer\TokenPrinterInterface
 {
     /** @var Yaml */
     private $yaml;
-    public function __construct(\RectorPrefix20211029\Symfony\Component\Yaml\Yaml $yaml = null)
+    public function __construct(\RectorPrefix20211030\Symfony\Component\Yaml\Yaml $yaml = null)
     {
-        $this->yaml = $yaml ?: new \RectorPrefix20211029\Symfony\Component\Yaml\Yaml();
+        $this->yaml = $yaml ?: new \RectorPrefix20211030\Symfony\Component\Yaml\Yaml();
     }
     /**
      * @param TokenInterface[] $tokens

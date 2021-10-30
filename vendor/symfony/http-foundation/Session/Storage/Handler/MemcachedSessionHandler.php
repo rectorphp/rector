@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211029\Symfony\Component\HttpFoundation\Session\Storage\Handler;
+namespace RectorPrefix20211030\Symfony\Component\HttpFoundation\Session\Storage\Handler;
 
 /**
  * Memcached based session storage handler based on the Memcached class
@@ -18,7 +18,7 @@ namespace RectorPrefix20211029\Symfony\Component\HttpFoundation\Session\Storage\
  *
  * @author Drak <drak@zikula.org>
  */
-class MemcachedSessionHandler extends \RectorPrefix20211029\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
+class MemcachedSessionHandler extends \RectorPrefix20211030\Symfony\Component\HttpFoundation\Session\Storage\Handler\AbstractSessionHandler
 {
     private $memcached;
     /**
