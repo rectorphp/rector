@@ -89,7 +89,7 @@ final class PHPStanNodeScopeResolver
 
                 $traitScope = $traitScope->enterTrait($traitReflectionClass);
 
-                $this->nodeScopeResolver->processStmtNodes($node, $node->stmts, $traitScope, $nodeCallback);
+                $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 return;
             }
 

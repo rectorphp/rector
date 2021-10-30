@@ -476,7 +476,7 @@ parameters:
         - '#Parameter "\w+" cannot have default value#'
 
         # scope & mutating scope mish-mash
-        - '#Parameter \#4 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processStmtNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
+        - '#Parameter \#3 \$nodeCallback of method PHPStan\\Analyser\\NodeScopeResolver\:\:processNodes\(\) expects callable\(PhpParser\\Node, PHPStan\\Analyser\\Scope\)\: void, Closure\(PhpParser\\Node, PHPStan\\Analyser\\MutatingScope\)\: void given#'
 
         # share configuration to avoid duplication in 5 rules
         -
