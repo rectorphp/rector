@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use FilesystemIterator;
+use Nette\Utils\FileSystem;
 use Nette\Utils\Random;
-use PHPStan\File\FileWriter;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
@@ -70,7 +70,7 @@ final class FileCacheStorage implements CacheStorageInterface
         }
 
         // for performance reasons we don't use SmartFileSystem
-        FileWriter::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
+        FileSystem::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
         $renameSuccess = @\rename($tmpPath, $path);
         if ($renameSuccess) {
             return;

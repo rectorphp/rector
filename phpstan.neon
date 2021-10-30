@@ -522,3 +522,7 @@ parameters:
         - '#Property Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector\:\:\$arrayFunctionsToMethodCalls \(array<Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>\) does not accept array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\|Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>#'
         - '#Property Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector\:\:\$argumentFuncCallToMethodCalls \(array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\>\) does not accept array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\|Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>#'
 
+        # use lighter service for performance reasons
+        -
+            path: packages/Caching/ValueObject/Storage/FileCacheStorage.php
+            message: '#Instead of "Nette\\Utils\\FileSystem" class/interface use "Symplify\\SmartFileSystem\\SmartFileSystem"#'
