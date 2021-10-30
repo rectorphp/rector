@@ -7,7 +7,6 @@ namespace Rector\TypeDeclaration\TypeAnalyzer;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClassStringType;
-use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\Generic\GenericClassStringType;
@@ -108,7 +107,7 @@ final class GenericClassStringTypeNormalizer
             $keyType = $unionType->getKeyType();
             $itemType = $unionType->getItemType();
 
-            if ($itemType instanceof ConstantArrayType) {
+            if ($itemType instanceof ArrayType) {
                 $arrayType = new ArrayType(new MixedType(), new MixedType());
                 return new ArrayType($keyType, $arrayType);
             }
