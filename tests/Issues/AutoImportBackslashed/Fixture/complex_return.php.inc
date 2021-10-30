@@ -40,7 +40,7 @@ use PhpParser\Node\Expr\BooleanNot;
 
 final class ComplexReturn
 {
-    public function run(Expr $expr, Expr $expr2): BooleanAnd|BooleanOr|BooleanNot|Identical
+    public function run(Expr $expr, Expr $expr2): BooleanAnd|BooleanOr|Identical|BooleanNot
     {
         if (true) {
             return rand(0, 1) !== 0

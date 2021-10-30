@@ -24,7 +24,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTyp
 
 class SetIfElse
 {
-    public string|int $stringOrInteger = 'hi';
+    public int|string $stringOrInteger = 'hi';
 
     public function setNumber()
     {

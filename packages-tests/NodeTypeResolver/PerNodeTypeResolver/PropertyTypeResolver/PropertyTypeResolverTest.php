@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\AbstractNodeTypeResolverTest;
 use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver\Source\ClassThatExtendsHtml;
 use Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver\Source\Html;
@@ -42,14 +42,11 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
 
     public function provideData(): Iterator
     {
-        $unionTypeFactory = new UnionTypeFactory();
-
         yield [__DIR__ . '/Source/MethodParamDocBlock.php', 0, new ObjectType(Html::class)];
-
         yield [__DIR__ . '/Source/MethodParamDocBlock.php', 1, new ObjectType(ClassThatExtendsHtml::class)];
 
         // mimics failing test from DomainDrivenDesign set
-        $unionType = $unionTypeFactory->createUnionObjectType([SomeChild::class, new NullType()]);
+        $unionType = new UnionType([new ObjectType(SomeChild::class), new NullType()]);
         yield [__DIR__ . '/Source/ActionClass.php', 0, $unionType];
     }
 

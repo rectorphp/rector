@@ -25,7 +25,7 @@ use stdClass;
 class PublicVarNullUsed
 {
     /**
-     * @var null|stdClass
+     * @var stdClass|null
      */
     public $config = null;
 

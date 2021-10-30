@@ -15,10 +15,8 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
@@ -32,8 +30,6 @@ final class TypeNormalizer
 
     public function __construct(
         private TypeFactory $typeFactory,
-        private UnionTypeFactory $unionTypeFactory,
-//        private PhpDocNodeTraverser $phpDocNodeTraverser,
         private PrivatesAccessor $privatesAccessor
     ) {
     }
@@ -175,7 +171,7 @@ final class TypeNormalizer
     {
         $nonConstantValueTypes = array_values($nonConstantValueTypes);
         if (count($nonConstantValueTypes) > 1) {
-            $nonConstantValueType = $this->unionTypeFactory->createUnionObjectType($nonConstantValueTypes);
+            $nonConstantValueType = new UnionType($nonConstantValueTypes);
         } else {
             $nonConstantValueType = $nonConstantValueTypes[0];
         }
@@ -212,7 +208,7 @@ final class TypeNormalizer
         }
 
         if (count($unionedTypes) > 1) {
-            return $this->unionTypeFactory->createUnionObjectType($unionedTypes);
+            return new UnionType($unionedTypes);
         }
 
         return $unionedTypes[0];

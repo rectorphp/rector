@@ -133,9 +133,12 @@ CODE_SAMPLE
 
         if ($varType instanceof UnionType) {
             $types = $varType->getTypes();
-            if (count($types) === 2 && $types[0] instanceof TemplateType) {
+
+            if (count($types) === 2 && $types[1] instanceof TemplateType) {
+                $templateType = $types[1];
+
                 $node->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
-                    $types[0]->getBound(),
+                    $templateType->getBound(),
                     TypeKind::PROPERTY()
                 );
 

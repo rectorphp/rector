@@ -36,7 +36,7 @@ final class RespectArrayReturnType
     private $items = [];
 
     /**
-     * @return mixed[]|array<string, mixed[]>|array<string, int>
+     * @return array<string, mixed[]>
      */
     public function process($message): array
     {

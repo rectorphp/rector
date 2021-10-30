@@ -18,13 +18,12 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
+use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 final class TypeFactory
 {
     public function __construct(
-        private UnionTypeFactory $unionTypeFactory,
         private TypeHasher $typeHasher,
     ) {
     }
@@ -122,7 +121,7 @@ final class TypeFactory
             return $types[0];
         }
 
-        return $this->unionTypeFactory->createUnionObjectType($types);
+        return new UnionType($types);
     }
 
     private function removeValueFromConstantType(Type $type): Type

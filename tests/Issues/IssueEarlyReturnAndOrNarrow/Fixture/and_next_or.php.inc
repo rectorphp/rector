@@ -27,7 +27,7 @@ namespace Rector\Core\Tests\Issues\IssueEarlyReturnAndOrNarrow\Fixture;
 class AndNextOrReturnVoid
 {
     /**
-     * @return null|void
+     * @return void|null
      */
     public function run($a, $b, $c, $d)
     {

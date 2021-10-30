@@ -24,7 +24,7 @@ final class DoNotDuplicateArrayReturn
     /**
      * @return bool|mixed[]|float|string[]
      */
-    public function go($number): bool|array|float
+    public function go($number): array|bool|float
     {
         return execute();
     }

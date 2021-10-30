@@ -27,7 +27,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeR
 final class HasOffset
 {
     /**
-     * @return mixed|mixed[]
+     * @return mixed[]|mixed
      */
     private function convertArguments($service)
     {

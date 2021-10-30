@@ -20,7 +20,7 @@ use PhpParser\Node\Name;
 
 if (! function_exists('some_helper')) {
     /**
-     * @param \PhpParser\Node\Name|mixed[] $item
+     * @param mixed[]|\PhpParser\Node\Name $item
      */
     function some_helper($item)
     {

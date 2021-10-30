@@ -8,15 +8,9 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 
 final class TypeUnwrapper
 {
-    public function __construct(
-        private UnionTypeFactory $unionTypeFactory
-    ) {
-    }
-
     /**
      * E.g. null|ClassType → ClassType
      */
@@ -54,6 +48,6 @@ final class TypeUnwrapper
             $unionedTypesWithoutNullType[] = $type;
         }
 
-        return $this->unionTypeFactory->createUnionObjectType($unionedTypesWithoutNullType);
+        return new UnionType($unionedTypesWithoutNullType);
     }
 }

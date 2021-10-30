@@ -32,7 +32,7 @@ use PhpParser\Node\Stmt\Property;
 
 final class ParamDoc
 {
-    public function addAsFirstMethod(Class_ $class, \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $stmt): void
+    public function addAsFirstMethod(Class_ $class, \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $stmt): void
     {
     }
 }

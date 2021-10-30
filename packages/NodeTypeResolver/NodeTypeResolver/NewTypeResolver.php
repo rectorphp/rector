@@ -13,12 +13,12 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\StaticTypeMapper\TypeFactory\UnionTypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
 final class NewTypeResolver implements NodeTypeResolverInterface
@@ -26,7 +26,6 @@ final class NewTypeResolver implements NodeTypeResolverInterface
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private ClassAnalyzer $classAnalyzer,
-        private UnionTypeFactory $unionTypeFactory
     ) {
     }
 
@@ -89,7 +88,7 @@ final class NewTypeResolver implements NodeTypeResolverInterface
         }
 
         if (count($types) > 1) {
-            $unionType = $this->unionTypeFactory->createUnionObjectType($types);
+            $unionType = new UnionType($types);
             return new ObjectWithoutClassType($unionType);
         }
 
