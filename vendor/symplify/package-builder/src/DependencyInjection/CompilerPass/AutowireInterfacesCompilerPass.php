@@ -23,8 +23,8 @@ final class AutowireInterfacesCompilerPass implements \RectorPrefix20211030\Symf
      */
     public function process($containerBuilder) : void
     {
-        $containerBuilderDefinitions = $containerBuilder->getDefinitions();
-        foreach ($containerBuilderDefinitions as $definition) {
+        $definitions = $containerBuilder->getDefinitions();
+        foreach ($definitions as $definition) {
             foreach ($this->typesToAutowire as $typeToAutowire) {
                 if (!\is_a((string) $definition->getClass(), $typeToAutowire, \true)) {
                     continue;

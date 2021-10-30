@@ -833,12 +833,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "9529499b60b1846099c588a8a46abfca6fc8e610"
+                "reference": "4ab973e0d2b68c401288f1fc1114b38ed7cff62c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/9529499b60b1846099c588a8a46abfca6fc8e610",
-                "reference": "9529499b60b1846099c588a8a46abfca6fc8e610",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/4ab973e0d2b68c401288f1fc1114b38ed7cff62c",
+                "reference": "4ab973e0d2b68c401288f1fc1114b38ed7cff62c",
                 "shasum": ""
             },
             "require": {
@@ -847,7 +847,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2021-10-29T22:23:14+00:00",
+            "time": "2021-10-30T12:53:01+00:00",
             "default-branch": true,
             "bin": [
                 "phpstan",
@@ -4278,12 +4278,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "2103b1c4b310a8ea997efbff775e4a1252624a9d"
+                "reference": "09fac6ba61ebe908911f7312b7b6449dcd3a57d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/2103b1c4b310a8ea997efbff775e4a1252624a9d",
-                "reference": "2103b1c4b310a8ea997efbff775e4a1252624a9d",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/09fac6ba61ebe908911f7312b7b6449dcd3a57d1",
+                "reference": "09fac6ba61ebe908911f7312b7b6449dcd3a57d1",
                 "shasum": ""
             },
             "require": {
@@ -4330,7 +4330,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-10-29T18:16:12+00:00",
+            "time": "2021-10-30T00:10:09+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -4547,12 +4547,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/skipper.git",
-                "reference": "6056b446277387d11e44e681fbd8b6c79aa838f3"
+                "reference": "e75c97e804ea1b30a3c3571c363da1300d70f6b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/skipper\/zipball\/6056b446277387d11e44e681fbd8b6c79aa838f3",
-                "reference": "6056b446277387d11e44e681fbd8b6c79aa838f3",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/skipper\/zipball\/e75c97e804ea1b30a3c3571c363da1300d70f6b8",
+                "reference": "e75c97e804ea1b30a3c3571c363da1300d70f6b8",
                 "shasum": ""
             },
             "require": {
@@ -4597,7 +4597,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-10-29T18:18:19+00:00",
+            "time": "2021-10-30T00:10:41+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {

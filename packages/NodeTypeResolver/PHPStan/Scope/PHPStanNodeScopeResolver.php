@@ -118,7 +118,7 @@ final class PHPStanNodeScopeResolver
                 $traitScope = clone $scope;
                 $this->privatesAccessor->setPrivateProperty($traitScope, 'context', $scopeContext);
                 $traitScope = $traitScope->enterTrait($traitReflectionClass);
-                $this->nodeScopeResolver->processStmtNodes($node, $node->stmts, $traitScope, $nodeCallback);
+                $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 return;
             }
             // the class reflection is resolved AFTER entering to class node

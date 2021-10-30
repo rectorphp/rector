@@ -6,14 +6,14 @@ namespace Rector\ReadWrite\Guard;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use ReflectionFunction;
-use RectorPrefix20211030\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class VariableToConstantGuard
 {
     /**
@@ -28,15 +28,10 @@ final class VariableToConstantGuard
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
-     */
-    private $privatesAccessor;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211030\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->privatesAccessor = $privatesAccessor;
     }
     public function isReadArg(\PhpParser\Node\Arg $arg) : bool
     {
@@ -55,7 +50,7 @@ final class VariableToConstantGuard
             return \true;
         }
         $functionReflection = $this->reflectionProvider->getFunction($functionName, $argScope);
-        $referenceParametersPositions = $this->resolveFunctionReferencePositions($functionReflection);
+        $referenceParametersPositions = $this->resolveFunctionReferencePositions($functionReflection, [$arg], $argScope);
         if ($referenceParametersPositions === []) {
             // no reference always only write
             return \true;
@@ -64,30 +59,20 @@ final class VariableToConstantGuard
         return !\in_array($argumentPosition, $referenceParametersPositions, \true);
     }
     /**
+     * @param Arg[] $args
      * @return int[]
      */
-    private function resolveFunctionReferencePositions(\PHPStan\Reflection\FunctionReflection $functionReflection) : array
+    private function resolveFunctionReferencePositions(\PHPStan\Reflection\FunctionReflection $functionReflection, array $args, \PHPStan\Analyser\Scope $scope) : array
     {
         if (isset($this->referencePositionsByFunctionName[$functionReflection->getName()])) {
             return $this->referencePositionsByFunctionName[$functionReflection->getName()];
         }
-        // this is needed, as native function reflection does not have access to referenced parameters
-        if ($functionReflection instanceof \PHPStan\Reflection\Native\NativeFunctionReflection) {
-            $functionName = $functionReflection->getName();
-            if (!\function_exists($functionName)) {
-                return [];
-            }
-            $nativeFunctionReflection = new \ReflectionFunction($functionName);
-        } else {
-            $nativeFunctionReflection = $this->privatesAccessor->getPrivateProperty($functionReflection, 'reflection');
-        }
         $referencePositions = [];
-        foreach ($nativeFunctionReflection->getParameters() as $position => $reflectionParameter) {
-            if (!$reflectionParameter->isPassedByReference()) {
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectFromArgs($scope, $args, $functionReflection->getVariants());
+        foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
+            /** @var ParameterReflection $parameterReflection */
+            if (!$parameterReflection->passedByReference()->yes()) {
                 continue;
-            }
-            if (!\is_int($position)) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $referencePositions[] = $position;
         }

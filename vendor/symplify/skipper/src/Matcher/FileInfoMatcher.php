@@ -16,12 +16,12 @@ final class FileInfoMatcher
         $this->fnMatchPathNormalizer = $fnMatchPathNormalizer;
     }
     /**
-     * @param string[] $filePattern
+     * @param string[] $filePatterns
      */
-    public function doesFileInfoMatchPatterns(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $filePattern) : bool
+    public function doesFileInfoMatchPatterns(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $filePatterns) : bool
     {
-        foreach ($filePattern as $onlyFile) {
-            if ($this->doesFileInfoMatchPattern($smartFileInfo, $onlyFile)) {
+        foreach ($filePatterns as $filePattern) {
+            if ($this->doesFileInfoMatchPattern($smartFileInfo, $filePattern)) {
                 return \true;
             }
         }
