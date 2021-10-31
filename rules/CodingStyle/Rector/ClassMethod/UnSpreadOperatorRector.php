@@ -116,7 +116,7 @@ CODE_SAMPLE
         }
 
         // skip those in vendor
-        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
+        if ($this->vendorLocationDetector->detectMethodReflection($methodReflection)) {
             return null;
         }
 

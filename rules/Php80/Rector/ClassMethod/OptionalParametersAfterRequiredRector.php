@@ -193,7 +193,7 @@ CODE_SAMPLE
         MethodReflection $methodReflection,
         array $argsOrParams
     ): ?array {
-        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
+        if ($this->vendorLocationDetector->detectMethodReflection($methodReflection)) {
             return null;
         }
 
