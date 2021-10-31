@@ -20,8 +20,8 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -139,13 +139,13 @@ final class AstResolver
         return $this->resolveClassMethodFromCall($call);
     }
 
-    public function resolveFunctionFromFunctionReflection(PhpFunctionReflection $phpFunctionReflection): ?Function_
+    public function resolveFunctionFromFunctionReflection(FunctionReflection $functionReflection): ?Function_
     {
-        if (isset($this->functionsByName[$phpFunctionReflection->getName()])) {
-            return $this->functionsByName[$phpFunctionReflection->getName()];
+        if (isset($this->functionsByName[$functionReflection->getName()])) {
+            return $this->functionsByName[$functionReflection->getName()];
         }
 
-        $fileName = $phpFunctionReflection->getFileName();
+        $fileName = $functionReflection->getFileName();
         if ($fileName === null) {
             return null;
         }
@@ -153,7 +153,7 @@ final class AstResolver
         $fileContent = $this->smartFileSystem->readFile($fileName);
         if (! is_string($fileContent)) {
             // to avoid parsing missing function again
-            $this->functionsByName[$phpFunctionReflection->getName()] = null;
+            $this->functionsByName[$functionReflection->getName()] = null;
             return null;
         }
 
@@ -165,18 +165,18 @@ final class AstResolver
         /** @var Function_[] $functions */
         $functions = $this->nodeFinder->findInstanceOf($nodes, Function_::class);
         foreach ($functions as $function) {
-            if (! $this->nodeNameResolver->isName($function, $phpFunctionReflection->getName())) {
+            if (! $this->nodeNameResolver->isName($function, $functionReflection->getName())) {
                 continue;
             }
 
             // to avoid parsing missing function again
-            $this->functionsByName[$phpFunctionReflection->getName()] = $function;
+            $this->functionsByName[$functionReflection->getName()] = $function;
 
             return $function;
         }
 
         // to avoid parsing missing function again
-        $this->functionsByName[$phpFunctionReflection->getName()] = null;
+        $this->functionsByName[$functionReflection->getName()] = null;
 
         return null;
     }
@@ -372,10 +372,6 @@ final class AstResolver
         }
 
         $reflectionFunction = $this->reflectionProvider->getFunction($funcCall->name, $scope);
-        if (! $reflectionFunction instanceof PhpFunctionReflection) {
-            return null;
-        }
-
         return $this->resolveFunctionFromFunctionReflection($reflectionFunction);
     }
 }

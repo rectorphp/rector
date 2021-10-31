@@ -6,7 +6,6 @@ namespace Rector\CodingStyle\Reflection;
 
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
 use PHPStan\Reflection\ReflectionWithFilename;
 use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 
@@ -33,20 +32,16 @@ final class VendorLocationDetector
 
     private function resolveReflectionFileName(
         MethodReflection | ReflectionWithFilename | FunctionReflection $reflection
-    ): string | null {
+    ): ?string {
         if ($reflection instanceof ReflectionWithFilename) {
             return $reflection->getFileName();
         }
 
-        if ($reflection instanceof PhpFunctionReflection) {
+        if ($reflection instanceof FunctionReflection) {
             return $reflection->getFileName();
         }
 
-        if ($reflection instanceof MethodReflection) {
-            $declaringClassReflection = $reflection->getDeclaringClass();
-            return $declaringClassReflection->getFileName();
-        }
-
-        return null;
+        $declaringClassReflection = $reflection->getDeclaringClass();
+        return $declaringClassReflection->getFileName();
     }
 }
