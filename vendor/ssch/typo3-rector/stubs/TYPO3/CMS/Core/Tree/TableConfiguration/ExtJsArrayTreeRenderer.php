@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211030\TYPO3\CMS\Core\Tree\TableConfiguration;
+namespace RectorPrefix20211031\TYPO3\CMS\Core\Tree\TableConfiguration;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Tree\\TableConfiguration\\ExtJsArrayTreeRenderer')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211030;
+namespace RectorPrefix20211031;
 
 if (\class_exists('Tx_IndexedSearch_Domain_Repository_IndexSearchRepository')) {
     return;

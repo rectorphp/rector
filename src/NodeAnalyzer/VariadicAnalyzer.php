@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -52,7 +51,7 @@ final class VariadicAnalyzer
         if ($this->hasVariadicVariant($functionLikeReflection)) {
             return \true;
         }
-        if ($functionLikeReflection instanceof \PHPStan\Reflection\Php\PhpFunctionReflection) {
+        if ($functionLikeReflection instanceof \PHPStan\Reflection\FunctionReflection) {
             $function = $this->astResolver->resolveFunctionFromFunctionReflection($functionLikeReflection);
             if (!$function instanceof \PhpParser\Node\Stmt\Function_) {
                 return \false;

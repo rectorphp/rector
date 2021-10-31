@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211030\TYPO3\CMS\Core\Cache\Frontend;
+namespace RectorPrefix20211031\TYPO3\CMS\Core\Cache\Frontend;
 
 if (\interface_exists('TYPO3\\CMS\\Core\\Cache\\Frontend\\FrontendInterface')) {
     return;
