@@ -3,9 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Reflection;
 
-use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ReflectionWithFilename;
 use RectorPrefix20211031\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
@@ -17,31 +15,15 @@ final class VendorLocationDetector
     {
         $this->pathNormalizer = $pathNormalizer;
     }
-    /**
-     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename $reflection
-     */
-    public function detectFunctionLikeReflection($reflection) : bool
+    public function detectMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
-        $fileName = $this->resolveReflectionFileName($reflection);
+        $declaringClassReflection = $methodReflection->getDeclaringClass();
+        $fileName = $declaringClassReflection->getFileName();
         // probably internal
         if ($fileName === null) {
             return \false;
         }
         $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
         return \strpos($normalizedFileName, '/vendor/') !== \false;
-    }
-    /**
-     * @param \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\ReflectionWithFilename $reflection
-     */
-    private function resolveReflectionFileName($reflection) : ?string
-    {
-        if ($reflection instanceof \PHPStan\Reflection\ReflectionWithFilename) {
-            return $reflection->getFileName();
-        }
-        if ($reflection instanceof \PHPStan\Reflection\FunctionReflection) {
-            return $reflection->getFileName();
-        }
-        $declaringClassReflection = $reflection->getDeclaringClass();
-        return $declaringClassReflection->getFileName();
     }
 }

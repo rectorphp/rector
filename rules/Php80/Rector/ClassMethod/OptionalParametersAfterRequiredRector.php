@@ -161,7 +161,7 @@ CODE_SAMPLE
      */
     private function resolveExpectedArgParamOrderIfDifferent(\PHPStan\Reflection\MethodReflection $methodReflection, array $argsOrParams) : ?array
     {
-        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
+        if ($this->vendorLocationDetector->detectMethodReflection($methodReflection)) {
             return null;
         }
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());

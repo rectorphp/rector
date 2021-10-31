@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
         // skip those in vendor
-        if ($this->vendorLocationDetector->detectFunctionLikeReflection($methodReflection)) {
+        if ($this->vendorLocationDetector->detectMethodReflection($methodReflection)) {
             return null;
         }
         $spreadParameterReflections = $this->spreadVariablesCollector->resolveFromMethodReflection($methodReflection);

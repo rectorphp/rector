@@ -30,10 +30,6 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211031\PHPUnit\Fram
      */
     protected static $container;
     /**
-     * @var array<string, KernelInterface>
-     */
-    private static $kernelsByHash = [];
-    /**
      * @param class-string<KernelInterface> $kernelClass
      * @param string[]|SmartFileInfo[] $configs
      */
@@ -48,25 +44,6 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211031\PHPUnit\Fram
         return $bootedKernel;
     }
     /**
-     * @param class-string<KernelInterface> $kernelClass
-     * @param string[]|SmartFileInfo[] $configs
-     */
-    protected function bootKernelWithConfigsAndStaticCache($kernelClass, $configs) : \RectorPrefix20211031\Symfony\Component\HttpKernel\KernelInterface
-    {
-        // unwrap file infos to real paths
-        $configFilePaths = $this->resolveConfigFilePaths($configs);
-        $configsHash = $this->resolveConfigsHash($configFilePaths);
-        if (isset(self::$kernelsByHash[$configsHash])) {
-            static::$kernel = self::$kernelsByHash[$configsHash];
-            self::$container = static::$kernel->getContainer();
-        } else {
-            $bootedKernel = $this->createBootedKernelFromConfigs($kernelClass, $configsHash, $configFilePaths);
-            static::$kernel = $bootedKernel;
-            self::$kernelsByHash[$configsHash] = $bootedKernel;
-        }
-        return static::$kernel;
-    }
-    /**
      * Syntax sugger to remove static from the test cases vission
      *
      * @template T of object
@@ -76,7 +53,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211031\PHPUnit\Fram
     protected function getService($type)
     {
         if (self::$container === null) {
-            throw new \RectorPrefix20211031\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('First, crewate container with booKernel(KernelClass::class)');
+            throw new \RectorPrefix20211031\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('First, create container with booKernel(KernelClass::class)');
         }
         $service = self::$container->get($type);
         if ($service === null) {
