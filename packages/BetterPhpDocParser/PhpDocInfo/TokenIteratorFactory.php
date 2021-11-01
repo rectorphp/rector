@@ -38,7 +38,7 @@ final class TokenIteratorFactory
         $betterTokenIterator = new BetterTokenIterator($tokens);
 
         // keep original position
-        $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
+        $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, self::INDEX);
         $this->privatesAccessor->setPrivateProperty($betterTokenIterator, self::INDEX, $currentIndex);
 
         return $betterTokenIterator;
