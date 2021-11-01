@@ -3848,12 +3848,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/simple-php-doc-parser.git",
-                "reference": "07640beaeb740ba7ee1549e09d25df1887c9c354"
+                "reference": "eb8225fbe0f5a516d3c2c84f6b2b48ff40700367"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/simple-php-doc-parser\/zipball\/07640beaeb740ba7ee1549e09d25df1887c9c354",
-                "reference": "07640beaeb740ba7ee1549e09d25df1887c9c354",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/simple-php-doc-parser\/zipball\/eb8225fbe0f5a516d3c2c84f6b2b48ff40700367",
+                "reference": "eb8225fbe0f5a516d3c2c84f6b2b48ff40700367",
                 "shasum": ""
             },
             "require": {
@@ -3897,7 +3897,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^9.5"
             },
-            "time": "2021-11-01T14:58:20+00:00",
+            "time": "2021-11-01T15:02:12+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
