@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211101\Symplify\SymfonyContainerBuilder;
+namespace RectorPrefix20211101\Symplify\SymplifyKernel;
 
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Contract\Config\LoaderFactoryInterface;
-use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\DependencyInjection\LoadExtensionConfigsCompilerPass;
+use RectorPrefix20211101\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
+use RectorPrefix20211101\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass;
 use RectorPrefix20211101\Webmozart\Assert\Assert;
 final class ContainerBuilderFactory
 {
     /**
-     * @var \Symplify\SymfonyContainerBuilder\Contract\Config\LoaderFactoryInterface
+     * @var \Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface
      */
     private $loaderFactory;
-    public function __construct(\RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Contract\Config\LoaderFactoryInterface $loaderFactory)
+    public function __construct(\RectorPrefix20211101\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface $loaderFactory)
     {
         $this->loaderFactory = $loaderFactory;
     }
@@ -35,7 +35,7 @@ final class ContainerBuilderFactory
         // this calls load() method in every extensions
         // ensure these extensions are implicitly loaded
         $compilerPassConfig = $containerBuilder->getCompilerPassConfig();
-        $compilerPassConfig->setMergePass(new \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\DependencyInjection\LoadExtensionConfigsCompilerPass());
+        $compilerPassConfig->setMergePass(new \RectorPrefix20211101\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass());
         return $containerBuilder;
     }
     /**

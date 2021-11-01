@@ -10,7 +10,7 @@
         "symplify\/composer-json-manipulator": "^9.5",
         "symplify\/autowire-array-parameter": "^9.5",
         "symplify\/package-builder": "^9.5",
-        "symplify\/symfony-container-builder": "^9.5",
+        "symplify\/symplify-kernel": "^9.5",
         "webmozart\/assert": "^1.10"
     },
     "require-dev": {

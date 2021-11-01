@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Contract\Config;
+namespace RectorPrefix20211101\Symplify\SymplifyKernel\Contract\Config;
 
 use RectorPrefix20211101\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerBuilder;

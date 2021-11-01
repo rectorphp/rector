@@ -39,7 +39,7 @@ final class TokenIteratorFactory
         $tokens = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'tokens');
         $betterTokenIterator = new \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator($tokens);
         // keep original position
-        $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, 'index');
+        $currentIndex = $this->privatesAccessor->getPrivateProperty($tokenIterator, self::INDEX);
         $this->privatesAccessor->setPrivateProperty($betterTokenIterator, self::INDEX, $currentIndex);
         return $betterTokenIterator;
     }

@@ -11,8 +11,8 @@ use RectorPrefix20211101\Symfony\Component\Config\Loader\GlobFileLoader;
 use RectorPrefix20211101\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix20211101\Symfony\Component\Config\Loader\LoaderResolver;
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Contract\Config\LoaderFactoryInterface;
-final class ConfigureCallMergingLoaderFactory implements \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Contract\Config\LoaderFactoryInterface
+use RectorPrefix20211101\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
+final class ConfigureCallMergingLoaderFactory implements \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface
 {
     /**
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector

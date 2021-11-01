@@ -6,8 +6,8 @@ namespace RectorPrefix20211101\Symplify\SymplifyKernel\HttpKernel;
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix20211101\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Config\Loader\ParameterMergingLoaderFactory;
-use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\ContainerBuilderFactory;
+use RectorPrefix20211101\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
+use RectorPrefix20211101\Symplify\SymplifyKernel\ContainerBuilderFactory;
 use RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface;
 use RectorPrefix20211101\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 use RectorPrefix20211101\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig;
@@ -27,7 +27,7 @@ abstract class AbstractSymplifyKernel implements \RectorPrefix20211101\Symplify\
      */
     public function create($extensions, $compilerPasses, $configFiles) : \RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerInterface
     {
-        $containerBuilderFactory = new \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\ContainerBuilderFactory(new \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Config\Loader\ParameterMergingLoaderFactory());
+        $containerBuilderFactory = new \RectorPrefix20211101\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20211101\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
         $compilerPasses[] = new \RectorPrefix20211101\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
         $configFiles[] = \RectorPrefix20211101\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig::FILE_PATH;
         $containerBuilder = $containerBuilderFactory->create($extensions, $compilerPasses, $configFiles);

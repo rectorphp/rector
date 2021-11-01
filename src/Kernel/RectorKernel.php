@@ -20,7 +20,7 @@ use RectorPrefix20211101\Symplify\ConsoleColorDiff\ValueObject\ConsoleColorDiffC
 use RectorPrefix20211101\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use RectorPrefix20211101\Symplify\SimplePhpDocParser\ValueObject\SimplePhpDocParserConfig;
 use RectorPrefix20211101\Symplify\Skipper\ValueObject\SkipperConfig;
-use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\ContainerBuilderFactory;
+use RectorPrefix20211101\Symplify\SymplifyKernel\ContainerBuilderFactory;
 use RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface;
 final class RectorKernel implements \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface
 {
@@ -45,7 +45,7 @@ final class RectorKernel implements \RectorPrefix20211101\Symplify\SymplifyKerne
         $configFiles = \array_merge($defaultConfigFiles, $configFiles);
         $compilerPasses = $this->createCompilerPasses();
         $configureCallMergingLoaderFactory = new \Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory($this->configureCallValuesCollector);
-        $containerBuilderFactory = new \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\ContainerBuilderFactory($configureCallMergingLoaderFactory);
+        $containerBuilderFactory = new \RectorPrefix20211101\Symplify\SymplifyKernel\ContainerBuilderFactory($configureCallMergingLoaderFactory);
         $containerBuilder = $containerBuilderFactory->create([], $compilerPasses, $configFiles);
         // @see https://symfony.com/blog/new-in-symfony-4-4-dependency-injection-improvements-part-1
         $containerBuilder->setParameter('container.dumper.inline_factories', \true);

@@ -23,7 +23,6 @@ return array(
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules'),
     'RectorPrefix20211101\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix20211101\\Symplify\\SymplifyKernel\\' => array($vendorDir . '/symplify/symplify-kernel/src'),
-    'RectorPrefix20211101\\Symplify\\SymfonyContainerBuilder\\' => array($vendorDir . '/symplify/symfony-container-builder/src'),
     'RectorPrefix20211101\\Symplify\\SmartFileSystem\\' => array($vendorDir . '/symplify/smart-file-system/src'),
     'RectorPrefix20211101\\Symplify\\Skipper\\' => array($vendorDir . '/symplify/skipper/src'),
     'RectorPrefix20211101\\Symplify\\SimplePhpDocParser\\' => array($vendorDir . '/symplify/simple-php-doc-parser/src'),
