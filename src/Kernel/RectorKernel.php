@@ -21,7 +21,7 @@ use Symplify\ConsoleColorDiff\ValueObject\ConsoleColorDiffConfig;
 use Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use Symplify\SimplePhpDocParser\ValueObject\SimplePhpDocParserConfig;
 use Symplify\Skipper\ValueObject\SkipperConfig;
-use Symplify\SymfonyContainerBuilder\ContainerBuilderFactory;
+use Symplify\SymplifyKernel\ContainerBuilderFactory;
 use Symplify\SymplifyKernel\Contract\LightKernelInterface;
 
 final class RectorKernel implements LightKernelInterface
