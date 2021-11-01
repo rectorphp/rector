@@ -96,10 +96,11 @@ final class DowngradeRectorConfig
         // loaded with "require-dev" so it'd throw an error
 
         // use relative paths, so files are excluded on nested directory too
-        'vendor/symfony/http-kernel/HttpKernelBrowser.php',
-        'vendor/symfony/http-foundation/Session/*',
         'vendor/symfony/string/Slugger/AsciiSlugger.php',
         'vendor/symfony/cache/*',
+        // no event-dispatcher used
+        'vendor/symfony/console/Event/*',
+        'vendor/symfony/console/EventListener/*',
         'nette/caching/src/Bridges/*',
 
         // This class has an issue for PHP 7.1:
