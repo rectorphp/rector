@@ -52,7 +52,9 @@ final class RectorConfigsResolver
             throw new FileNotFoundException($message);
         }
 
-        return realpath($configFile);
+        /** @var string $configFile */
+        $configFile = realpath($configFile);
+        return $configFile;
     }
 
     private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile): ?string
