@@ -15,7 +15,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211031\Webmozart\Assert\Assert;
+use RectorPrefix20211101\Webmozart\Assert\Assert;
 /**
  * @see \Rector\CakePHP\Tests\Rector\MethodCall\ArrayToFluentCallRector\ArrayToFluentCallRectorTest
  */
@@ -98,11 +98,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $arraysToFluentCalls = $configuration[self::ARRAYS_TO_FLUENT_CALLS] ?? [];
-        \RectorPrefix20211031\Webmozart\Assert\Assert::allIsInstanceOf($arraysToFluentCalls, \Rector\CakePHP\ValueObject\ArrayToFluentCall::class);
+        \RectorPrefix20211101\Webmozart\Assert\Assert::allIsInstanceOf($arraysToFluentCalls, \Rector\CakePHP\ValueObject\ArrayToFluentCall::class);
         /** @var ArrayToFluentCall[] $arraysToFluentCalls */
         $this->arraysToFluentCalls = $arraysToFluentCalls;
         $factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
-        \RectorPrefix20211031\Webmozart\Assert\Assert::allIsInstanceOf($factoryMethods, \Rector\CakePHP\ValueObject\FactoryMethod::class);
+        \RectorPrefix20211101\Webmozart\Assert\Assert::allIsInstanceOf($factoryMethods, \Rector\CakePHP\ValueObject\FactoryMethod::class);
         /** @var FactoryMethod[] $factoryMethods */
         $this->factoryMethods = $factoryMethods;
     }

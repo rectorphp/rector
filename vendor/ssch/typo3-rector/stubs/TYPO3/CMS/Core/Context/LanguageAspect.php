@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211031\TYPO3\CMS\Core\Context;
+namespace RectorPrefix20211101\TYPO3\CMS\Core\Context;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Context\\LanguageAspect')) {
     return;

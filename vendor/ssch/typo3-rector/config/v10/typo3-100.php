@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211031;
+namespace RectorPrefix20211101;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;

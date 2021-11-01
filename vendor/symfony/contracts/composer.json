@@ -1,0 +1,66 @@
+{
+    "name": "symfony\/contracts",
+    "type": "library",
+    "description": "A set of abstractions extracted out of the Symfony components",
+    "keywords": [
+        "abstractions",
+        "contracts",
+        "decoupling",
+        "interfaces",
+        "interoperability",
+        "standards"
+    ],
+    "homepage": "https:\/\/symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nicolas Grekas",
+            "email": "p@tchwork.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https:\/\/symfony.com\/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.5",
+        "psr\/cache": "^1.0|^2.0|^3.0",
+        "psr\/container": "^1.1",
+        "psr\/event-dispatcher": "^1.0"
+    },
+    "require-dev": {
+        "symfony\/polyfill-intl-idn": "^1.10"
+    },
+    "replace": {
+        "symfony\/cache-contracts": "self.version",
+        "symfony\/deprecation-contracts": "self.version",
+        "symfony\/event-dispatcher-contracts": "self.version",
+        "symfony\/http-client-contracts": "self.version",
+        "symfony\/service-contracts": "self.version",
+        "symfony\/translation-contracts": "self.version"
+    },
+    "suggest": {
+        "symfony\/cache-implementation": "",
+        "symfony\/event-dispatcher-implementation": "",
+        "symfony\/http-client-implementation": "",
+        "symfony\/service-implementation": "",
+        "symfony\/translation-implementation": ""
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20211101\\Symfony\\Contracts\\": ""
+        },
+        "files": [
+            "Deprecation\/function.php"
+        ],
+        "exclude-from-classmap": [
+            "**\/Tests\/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-main": "2.4-dev"
+        }
+    }
+}

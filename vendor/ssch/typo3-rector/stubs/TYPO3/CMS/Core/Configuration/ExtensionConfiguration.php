@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211031\TYPO3\CMS\Core\Configuration;
+namespace RectorPrefix20211101\TYPO3\CMS\Core\Configuration;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Configuration\\ExtensionConfiguration')) {
     return;

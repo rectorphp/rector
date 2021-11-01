@@ -1,16 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211031\Symplify\SymplifyKernel\ValueObject;
+namespace RectorPrefix20211101\Symplify\SymplifyKernel\ValueObject;
 
-use RectorPrefix20211031\Symfony\Component\Console\Application;
-use RectorPrefix20211031\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211031\Symfony\Component\HttpKernel\KernelInterface;
-use RectorPrefix20211031\Symplify\PackageBuilder\Console\Input\StaticInputDetector;
-use RectorPrefix20211031\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20211031\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211031\Symplify\SymplifyKernel\Exception\BootException;
+use RectorPrefix20211101\Symfony\Component\Console\Application;
+use RectorPrefix20211101\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211101\Symfony\Component\HttpKernel\KernelInterface;
+use RectorPrefix20211101\Symplify\PackageBuilder\Console\Input\StaticInputDetector;
+use RectorPrefix20211101\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface;
+use RectorPrefix20211101\Symplify\SymplifyKernel\Exception\BootException;
 use Throwable;
 /**
  * @api
@@ -18,16 +17,16 @@ use Throwable;
 final class KernelBootAndApplicationRun
 {
     /**
-     * @var class-string<\Symfony\Component\HttpKernel\KernelInterface>
+     * @var class-string<\Symfony\Component\HttpKernel\KernelInterface|\Symplify\SymplifyKernel\Contract\LightKernelInterface>
      */
     private $kernelClass;
     /**
-     * @var string[]|\Symplify\SmartFileSystem\SmartFileInfo[]
+     * @var string[]
      */
     private $extraConfigs = [];
     /**
-     * @param class-string<KernelInterface> $kernelClass
-     * @param string[]|SmartFileInfo[] $extraConfigs
+     * @param class-string<KernelInterface|LightKernelInterface> $kernelClass
+     * @param string[] $extraConfigs
      */
     public function __construct(string $kernelClass, array $extraConfigs = [])
     {
@@ -40,55 +39,50 @@ final class KernelBootAndApplicationRun
         try {
             $this->booKernelAndRunApplication();
         } catch (\Throwable $throwable) {
-            $symfonyStyleFactory = new \RectorPrefix20211031\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
+            $symfonyStyleFactory = new \RectorPrefix20211101\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
             $symfonyStyle = $symfonyStyleFactory->create();
             $symfonyStyle->error($throwable->getMessage());
-            exit(\RectorPrefix20211031\Symfony\Component\Console\Command\Command::FAILURE);
+            exit(\RectorPrefix20211101\Symfony\Component\Console\Command\Command::FAILURE);
         }
     }
-    private function createKernel() : \RectorPrefix20211031\Symfony\Component\HttpKernel\KernelInterface
+    /**
+     * @return \Symfony\Component\HttpKernel\KernelInterface|\Symplify\SymplifyKernel\Contract\LightKernelInterface
+     */
+    private function createKernel()
     {
         // random has is needed, so cache is invalidated and changes from config are loaded
-        $environment = 'prod' . \random_int(1, 100000);
         $kernelClass = $this->kernelClass;
-        $kernel = new $kernelClass($environment, \RectorPrefix20211031\Symplify\PackageBuilder\Console\Input\StaticInputDetector::isDebug());
-        $this->setExtraConfigs($kernel, $kernelClass);
-        return $kernel;
+        if (\is_a($kernelClass, \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
+            return new $kernelClass();
+        }
+        $environment = 'prod' . \random_int(1, 100000);
+        return new $kernelClass($environment, \RectorPrefix20211101\Symplify\PackageBuilder\Console\Input\StaticInputDetector::isDebug());
     }
     private function booKernelAndRunApplication() : void
     {
         $kernel = $this->createKernel();
-        if ($kernel instanceof \RectorPrefix20211031\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface && $this->extraConfigs !== []) {
-            $kernel->setConfigs($this->extraConfigs);
-        }
-        $kernel->boot();
-        $container = $kernel->getContainer();
-        /** @var Application $application */
-        $application = $container->get(\RectorPrefix20211031\Symfony\Component\Console\Application::class);
-        exit($application->run());
-    }
-    private function setExtraConfigs(\RectorPrefix20211031\Symfony\Component\HttpKernel\KernelInterface $kernel, string $kernelClass) : void
-    {
-        if ($this->extraConfigs === []) {
-            return;
-        }
-        if (\is_a($kernel, \RectorPrefix20211031\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface::class, \true)) {
-            /** @var ExtraConfigAwareKernelInterface $kernel */
-            $kernel->setConfigs($this->extraConfigs);
+        if ($kernel instanceof \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface) {
+            $container = $kernel->createFromConfigs($this->extraConfigs);
         } else {
-            $message = \sprintf('Extra configs are set, but the "%s" kernel class is missing "%s" interface', $kernelClass, \RectorPrefix20211031\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface::class);
-            throw new \RectorPrefix20211031\Symplify\SymplifyKernel\Exception\BootException($message);
+            $kernel->boot();
+            $container = $kernel->getContainer();
         }
+        /** @var Application $application */
+        $application = $container->get(\RectorPrefix20211101\Symfony\Component\Console\Application::class);
+        exit($application->run());
     }
     /**
      * @param class-string $kernelClass
      */
     private function validateKernelClass(string $kernelClass) : void
     {
-        if (\is_a($kernelClass, \RectorPrefix20211031\Symfony\Component\HttpKernel\KernelInterface::class, \true)) {
+        if (\is_a($kernelClass, \RectorPrefix20211101\Symfony\Component\HttpKernel\KernelInterface::class, \true)) {
             return;
         }
-        $errorMessage = \sprintf('Class "%s" must by type of "%s"', $kernelClass, \RectorPrefix20211031\Symfony\Component\HttpKernel\KernelInterface::class);
-        throw new \RectorPrefix20211031\Symplify\SymplifyKernel\Exception\BootException($errorMessage);
+        if (\is_a($kernelClass, \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
+            return;
+        }
+        $errorMessage = \sprintf('Class "%s" must by type of "%s" or "%s"', $kernelClass, \RectorPrefix20211101\Symfony\Component\HttpKernel\KernelInterface::class, \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface::class);
+        throw new \RectorPrefix20211101\Symplify\SymplifyKernel\Exception\BootException($errorMessage);
     }
 }

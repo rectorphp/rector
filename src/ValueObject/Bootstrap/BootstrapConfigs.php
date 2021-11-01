@@ -3,38 +3,37 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject\Bootstrap;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class BootstrapConfigs
 {
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo|null
+     * @var string|null
      */
-    private $mainConfigFileInfo;
+    private $mainConfigFile;
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo[]
+     * @var string[]
      */
-    private $setConfigFileInfos;
+    private $setConfigFiles;
     /**
-     * @param SmartFileInfo[] $setConfigFileInfos
+     * @param string[] $setConfigFiles
      */
-    public function __construct(?\Symplify\SmartFileSystem\SmartFileInfo $mainConfigFileInfo, array $setConfigFileInfos)
+    public function __construct(?string $mainConfigFile, array $setConfigFiles)
     {
-        $this->mainConfigFileInfo = $mainConfigFileInfo;
-        $this->setConfigFileInfos = $setConfigFileInfos;
+        $this->mainConfigFile = $mainConfigFile;
+        $this->setConfigFiles = $setConfigFiles;
     }
-    public function getMainConfigFileInfo() : ?\Symplify\SmartFileSystem\SmartFileInfo
+    public function getMainConfigFile() : ?string
     {
-        return $this->mainConfigFileInfo;
+        return $this->mainConfigFile;
     }
     /**
-     * @return SmartFileInfo[]
+     * @return string[]
      */
-    public function getConfigFileInfos() : array
+    public function getConfigFiles() : array
     {
-        $configFileInfos = [];
-        if ($this->mainConfigFileInfo !== null) {
-            $configFileInfos[] = $this->mainConfigFileInfo;
+        $configFiles = [];
+        if ($this->mainConfigFile !== null) {
+            $configFiles[] = $this->mainConfigFile;
         }
-        return \array_merge($configFileInfos, $this->setConfigFileInfos);
+        return \array_merge($configFiles, $this->setConfigFiles);
     }
 }

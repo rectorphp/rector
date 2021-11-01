@@ -13,9 +13,8 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20211031\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20211031\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
+use RectorPrefix20211101\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20211101\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
@@ -41,7 +40,7 @@ final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20211031\Symplif
         // unwrap with parent array type...
         $startAndEnd = $node->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
         if (!$startAndEnd instanceof \Rector\BetterPhpDocParser\ValueObject\StartAndEnd) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return null;
         }
         $betterTokenProvider = $this->currentTokenIteratorProvider->provide();
         $isWrappedInCurlyBrackets = $this->isWrappedInCurlyBrackets($betterTokenProvider, $startAndEnd);

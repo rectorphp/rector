@@ -4,23 +4,22 @@ declare (strict_types=1);
 namespace Rector\Core\Bootstrap;
 
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix20211031\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20211031\Symplify\SmartFileSystem\Exception\FileNotFoundException;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20211101\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 final class RectorConfigsResolver
 {
     public function provide() : \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs
     {
-        $argvInput = new \RectorPrefix20211031\Symfony\Component\Console\Input\ArgvInput();
-        $mainConfigFileInfo = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
-        $rectorRecipeConfigFileInfo = $this->resolveRectorRecipeConfig($argvInput);
-        $configFileInfos = [];
-        if ($rectorRecipeConfigFileInfo !== null) {
-            $configFileInfos[] = $rectorRecipeConfigFileInfo;
+        $argvInput = new \RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput();
+        $mainConfigFile = $this->resolveFromInputWithFallback($argvInput, 'rector.php');
+        $rectorRecipeConfigFile = $this->resolveRectorRecipeConfig($argvInput);
+        $configFiles = [];
+        if ($rectorRecipeConfigFile !== null) {
+            $configFiles[] = $rectorRecipeConfigFile;
         }
-        return new \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs($mainConfigFileInfo, $configFileInfos);
+        return new \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs($mainConfigFile, $configFiles);
     }
-    private function resolveRectorRecipeConfig(\RectorPrefix20211031\Symfony\Component\Console\Input\ArgvInput $argvInput) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function resolveRectorRecipeConfig(\RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput $argvInput) : ?string
     {
         if ($argvInput->getFirstArgument() !== 'generate') {
             return null;
@@ -30,40 +29,40 @@ final class RectorConfigsResolver
         if (!\file_exists($rectorRecipeFilePath)) {
             return null;
         }
-        return new \Symplify\SmartFileSystem\SmartFileInfo($rectorRecipeFilePath);
+        return $rectorRecipeFilePath;
     }
-    private function resolveFromInput(\RectorPrefix20211031\Symfony\Component\Console\Input\ArgvInput $argvInput) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function resolveFromInput(\RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput $argvInput) : ?string
     {
-        $configValue = $this->getOptionValue($argvInput, ['--config', '-c']);
-        if ($configValue === null) {
+        $configFile = $this->getOptionValue($argvInput, ['--config', '-c']);
+        if ($configFile === null) {
             return null;
         }
-        if (!\file_exists($configValue)) {
-            $message = \sprintf('File "%s" was not found', $configValue);
-            throw new \RectorPrefix20211031\Symplify\SmartFileSystem\Exception\FileNotFoundException($message);
+        if (!\file_exists($configFile)) {
+            $message = \sprintf('File "%s" was not found', $configFile);
+            throw new \RectorPrefix20211101\Symplify\SmartFileSystem\Exception\FileNotFoundException($message);
         }
-        return new \Symplify\SmartFileSystem\SmartFileInfo($configValue);
+        return \realpath($configFile);
     }
-    private function resolveFromInputWithFallback(\RectorPrefix20211031\Symfony\Component\Console\Input\ArgvInput $argvInput, string $fallbackFile) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function resolveFromInputWithFallback(\RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput $argvInput, string $fallbackFile) : ?string
     {
-        $configFileInfo = $this->resolveFromInput($argvInput);
-        if ($configFileInfo !== null) {
-            return $configFileInfo;
+        $configFile = $this->resolveFromInput($argvInput);
+        if ($configFile !== null) {
+            return $configFile;
         }
         return $this->createFallbackFileInfoIfFound($fallbackFile);
     }
-    private function createFallbackFileInfoIfFound(string $fallbackFile) : ?\Symplify\SmartFileSystem\SmartFileInfo
+    private function createFallbackFileInfoIfFound(string $fallbackFile) : ?string
     {
         $rootFallbackFile = \getcwd() . \DIRECTORY_SEPARATOR . $fallbackFile;
         if (!\is_file($rootFallbackFile)) {
             return null;
         }
-        return new \Symplify\SmartFileSystem\SmartFileInfo($rootFallbackFile);
+        return $rootFallbackFile;
     }
     /**
      * @param string[] $optionNames
      */
-    private function getOptionValue(\RectorPrefix20211031\Symfony\Component\Console\Input\ArgvInput $argvInput, array $optionNames) : ?string
+    private function getOptionValue(\RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput $argvInput, array $optionNames) : ?string
     {
         foreach ($optionNames as $optionName) {
             if ($argvInput->hasParameterOption($optionName, \true)) {

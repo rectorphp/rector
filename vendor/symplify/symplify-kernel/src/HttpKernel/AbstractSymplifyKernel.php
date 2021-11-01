@@ -1,60 +1,45 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211031\Symplify\SymplifyKernel\HttpKernel;
+namespace RectorPrefix20211101\Symplify\SymplifyKernel\HttpKernel;
 
-use RectorPrefix20211031\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20211031\Symfony\Component\HttpKernel\Bundle\BundleInterface;
-use RectorPrefix20211031\Symfony\Component\HttpKernel\Kernel;
-use RectorPrefix20211031\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211031\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle;
-use RectorPrefix20211031\Symplify\SymplifyKernel\Strings\KernelUniqueHasher;
-abstract class AbstractSymplifyKernel extends \RectorPrefix20211031\Symfony\Component\HttpKernel\Kernel implements \RectorPrefix20211031\Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface
+use RectorPrefix20211101\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20211101\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Config\Loader\ParameterMergingLoaderFactory;
+use RectorPrefix20211101\Symplify\SymfonyContainerBuilder\ContainerBuilderFactory;
+use RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface;
+use RectorPrefix20211101\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20211101\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig;
+/**
+ * @api
+ */
+abstract class AbstractSymplifyKernel implements \RectorPrefix20211101\Symplify\SymplifyKernel\Contract\LightKernelInterface
 {
     /**
-     * @var string[]
+     * @var \Symfony\Component\DependencyInjection\Container|null
      */
-    private $configs = [];
-    public function getCacheDir() : string
-    {
-        return \sys_get_temp_dir() . '/' . $this->getUniqueKernelHash();
-    }
-    public function getLogDir() : string
-    {
-        return \sys_get_temp_dir() . '/' . $this->getUniqueKernelHash() . '_log';
-    }
+    private $container = null;
     /**
-     * @return BundleInterface[]
+     * @param string[] $configFiles
+     * @param mixed[] $extensions
+     * @param mixed[] $compilerPasses
      */
-    public function registerBundles() : iterable
+    public function create($extensions, $compilerPasses, $configFiles) : \RectorPrefix20211101\Symfony\Component\DependencyInjection\ContainerInterface
     {
-        return [new \RectorPrefix20211031\Symplify\SymplifyKernel\Bundle\SymplifyKernelBundle()];
+        $containerBuilderFactory = new \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\ContainerBuilderFactory(new \RectorPrefix20211101\Symplify\SymfonyContainerBuilder\Config\Loader\ParameterMergingLoaderFactory());
+        $compilerPasses[] = new \RectorPrefix20211101\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
+        $configFiles[] = \RectorPrefix20211101\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig::FILE_PATH;
+        $containerBuilder = $containerBuilderFactory->create($extensions, $compilerPasses, $configFiles);
+        $containerBuilder->compile();
+        $this->container = $containerBuilder;
+        return $containerBuilder;
     }
-    /**
-     * @param string[]|SmartFileInfo[] $configs
-     */
-    public function setConfigs($configs) : void
+    public function getContainer() : \RectorPrefix20211101\Psr\Container\ContainerInterface
     {
-        foreach ($configs as $config) {
-            if ($config instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
-                $config = $config->getRealPath();
-            }
-            $this->configs[] = $config;
+        if (!$this->container instanceof \RectorPrefix20211101\Symfony\Component\DependencyInjection\Container) {
+            throw new \RectorPrefix20211101\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
-    }
-    /**
-     * @param \Symfony\Component\Config\Loader\LoaderInterface $loader
-     */
-    public function registerContainerConfiguration($loader) : void
-    {
-        foreach ($this->configs as $config) {
-            $loader->load($config);
-        }
-    }
-    private function getUniqueKernelHash() : string
-    {
-        $kernelUniqueHasher = new \RectorPrefix20211031\Symplify\SymplifyKernel\Strings\KernelUniqueHasher();
-        return $kernelUniqueHasher->hashKernelClass(static::class);
+        return $this->container;
     }
 }

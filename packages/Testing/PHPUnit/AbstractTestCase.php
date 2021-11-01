@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
+use RectorPrefix20211101\Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\HttpKernel\RectorKernel;
-use RectorPrefix20211031\Symfony\Component\DependencyInjection\ContainerInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Core\Kernel\RectorKernel;
+use RectorPrefix20211101\Webmozart\Assert\Assert;
 abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -15,27 +15,27 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     private static $kernelsByHash = [];
     /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
+     * @var \Psr\Container\ContainerInterface|null
      */
     private static $currentContainer;
     protected function boot() : void
     {
-        $this->bootFromConfigFileInfos([]);
+        $this->bootFromConfigFiles([]);
     }
     /**
-     * @param SmartFileInfo[] $configFileInfos
+     * @param string[] $configFiles
      */
-    protected function bootFromConfigFileInfos($configFileInfos) : void
+    protected function bootFromConfigFiles($configFiles) : void
     {
-        $configsHash = $this->createConfigsHash($configFileInfos);
+        $configsHash = $this->createConfigsHash($configFiles);
         if (isset(self::$kernelsByHash[$configsHash])) {
             $rectorKernel = self::$kernelsByHash[$configsHash];
             self::$currentContainer = $rectorKernel->getContainer();
         } else {
-            $rectorKernel = new \Rector\Core\HttpKernel\RectorKernel('test_' . $configsHash, \true, $configFileInfos);
-            $rectorKernel->boot();
+            $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
+            $container = $rectorKernel->createFromConfigs($configFiles);
             self::$kernelsByHash[$configsHash] = $rectorKernel;
-            self::$currentContainer = $rectorKernel->getContainer();
+            self::$currentContainer = $container;
         }
     }
     /**
@@ -58,13 +58,15 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
         return $object;
     }
     /**
-     * @param SmartFileInfo[] $configFileInfos
+     * @param string[] $configFiles
      */
-    private function createConfigsHash(array $configFileInfos) : string
+    private function createConfigsHash(array $configFiles) : string
     {
+        \RectorPrefix20211101\Webmozart\Assert\Assert::allFile($configFiles);
+        \RectorPrefix20211101\Webmozart\Assert\Assert::allString($configFiles);
         $configHash = '';
-        foreach ($configFileInfos as $configFileInfo) {
-            $configHash .= \md5_file($configFileInfo->getRealPath());
+        foreach ($configFiles as $configFile) {
+            $configHash .= \md5_file($configFile);
         }
         return $configHash;
     }

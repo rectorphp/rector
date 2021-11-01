@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211031;
+namespace RectorPrefix20211101;
 
 if (\class_exists('Tx_Extbase_MVC_View_EmptyView')) {
     return;

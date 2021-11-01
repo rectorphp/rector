@@ -9,7 +9,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211031\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
+use RectorPrefix20211101\TYPO3\CMS\Core\Imaging\GraphicalFunctions;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85978-GraphicalFunctions-init.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\RemoveInitMethodGraphicalFunctionsRector\RemoveInitMethodGraphicalFunctionsRectorTest

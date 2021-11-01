@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211031;
+namespace RectorPrefix20211101;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20211031\Tracy\Debugger;
+use RectorPrefix20211101\Tracy\Debugger;
 $arr = [10, 20, ['key1' => 'val1', 'key2' => \true]];
 // will show in FireLogger
-\RectorPrefix20211031\Tracy\Debugger::fireLog('Hello World');
-\RectorPrefix20211031\Tracy\Debugger::fireLog($arr);
+\RectorPrefix20211101\Tracy\Debugger::fireLog('Hello World');
+\RectorPrefix20211101\Tracy\Debugger::fireLog($arr);
 function first($arg1, $arg2)
 {
-    \RectorPrefix20211031\second(\true, \false);
+    \RectorPrefix20211101\second(\true, \false);
 }
 function second($arg1, $arg2)
 {
-    \RectorPrefix20211031\third([1, 2, 3]);
+    \RectorPrefix20211101\third([1, 2, 3]);
 }
 function third($arg1)
 {
     throw new \Exception('The my exception', 123);
 }
 try {
-    \RectorPrefix20211031\first(10, 'any string');
+    \RectorPrefix20211101\first(10, 'any string');
 } catch (\Exception $e) {
-    \RectorPrefix20211031\Tracy\Debugger::fireLog($e);
+    \RectorPrefix20211101\Tracy\Debugger::fireLog($e);
 }
 ?>
 <!DOCTYPE html><link rel="stylesheet" href="assets/style.css">

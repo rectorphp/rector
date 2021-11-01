@@ -7,7 +7,6 @@
         "phpstan\/phpdoc-parser": "^1.2",
         "symfony\/dependency-injection": "^5.3|^6.0",
         "symfony\/config": "^5.3|^6.0",
-        "symfony\/http-kernel": "^5.3|^6.0",
         "symplify\/package-builder": "^9.5"
     },
     "require-dev": {
@@ -16,12 +15,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211031\\Symplify\\SimplePhpDocParser\\": "src"
+            "RectorPrefix20211101\\Symplify\\SimplePhpDocParser\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211031\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
+            "RectorPrefix20211101\\Symplify\\SimplePhpDocParser\\Tests\\": "tests"
         }
     },
     "extra": {

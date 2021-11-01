@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix20211031\Nette\Utils\Strings;
+use RectorPrefix20211101\Nette\Utils\Strings;
 use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;
@@ -77,11 +77,11 @@ final class ChangedFilesDetector
     /**
      * @api
      */
-    public function setFirstResolvedConfigFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo) : void
+    public function setFirstResolvedConfigFileInfo(string $filePath) : void
     {
         // the first config is core to all → if it was changed, just invalidate it
-        $configHash = $this->fileHashComputer->compute($fileInfo);
-        $this->storeConfigurationDataHash($fileInfo, $configHash);
+        $configHash = $this->fileHashComputer->compute($filePath);
+        $this->storeConfigurationDataHash($filePath, $configHash);
     }
     private function getFileInfoCacheKey(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
     {
@@ -91,9 +91,9 @@ final class ChangedFilesDetector
     {
         return (string) \sha1_file($smartFileInfo->getRealPath());
     }
-    private function storeConfigurationDataHash(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $configurationHash) : void
+    private function storeConfigurationDataHash(string $filePath, string $configurationHash) : void
     {
-        $key = \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20211031\Nette\Utils\Strings::webalize($fileInfo->getRealPath());
+        $key = \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20211101\Nette\Utils\Strings::webalize($filePath);
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
         $this->cache->save($key, \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY, $configurationHash);
     }

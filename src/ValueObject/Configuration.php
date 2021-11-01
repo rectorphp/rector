@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20211031\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20211101\JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -96,10 +96,11 @@ final class Configuration
         if ($this->bootstrapConfigs === null) {
             return null;
         }
-        $mainConfigFileInfo = $this->bootstrapConfigs->getMainConfigFileInfo();
-        if (!$mainConfigFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
+        $mainConfigFile = $this->bootstrapConfigs->getMainConfigFile();
+        if (!\is_string($mainConfigFile)) {
             return null;
         }
+        $mainConfigFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($mainConfigFile);
         return $mainConfigFileInfo->getRelativeFilePathFromCwd();
     }
 }

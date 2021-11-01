@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211031\TYPO3\CMS\Extensionmanager\Utility;
+namespace RectorPrefix20211101\TYPO3\CMS\Extensionmanager\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Extensionmanager\\Utility\\InstallUtility')) {
     return;
