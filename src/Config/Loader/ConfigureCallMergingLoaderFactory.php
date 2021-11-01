@@ -12,7 +12,7 @@ use Symfony\Component\Config\Loader\GlobFileLoader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symplify\SymfonyContainerBuilder\Contract\Config\LoaderFactoryInterface;
+use Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
 
 final class ConfigureCallMergingLoaderFactory implements LoaderFactoryInterface
 {
