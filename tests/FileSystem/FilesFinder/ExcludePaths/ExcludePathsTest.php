@@ -6,13 +6,12 @@ namespace Rector\Core\Tests\FileSystem\FilesFinder\ExcludePaths;
 
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ExcludePathsTest extends AbstractTestCase
 {
     public function testShouldFail(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/config-with-excluded-paths.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/config/config-with-excluded-paths.php']);
 
         $filesFinder = $this->getService(FilesFinder::class);
 

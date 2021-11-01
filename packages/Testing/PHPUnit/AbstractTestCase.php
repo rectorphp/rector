@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\HttpKernel\RectorKernel;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Core\Kernel\RectorKernel;
+use Webmozart\Assert\Assert;
 
 abstract class AbstractTestCase extends TestCase
 {
@@ -21,25 +21,25 @@ abstract class AbstractTestCase extends TestCase
 
     protected function boot(): void
     {
-        $this->bootFromConfigFileInfos([]);
+        $this->bootFromConfigFiles([]);
     }
 
     /**
-     * @param SmartFileInfo[] $configFileInfos
+     * @param string[] $configFiles
      */
-    protected function bootFromConfigFileInfos(array $configFileInfos): void
+    protected function bootFromConfigFiles(array $configFiles): void
     {
-        $configsHash = $this->createConfigsHash($configFileInfos);
+        $configsHash = $this->createConfigsHash($configFiles);
 
         if (isset(self::$kernelsByHash[$configsHash])) {
             $rectorKernel = self::$kernelsByHash[$configsHash];
             self::$currentContainer = $rectorKernel->getContainer();
         } else {
-            $rectorKernel = new RectorKernel('test_' . $configsHash, true, $configFileInfos);
-            $rectorKernel->boot();
+            $rectorKernel = new RectorKernel();
+            $container = $rectorKernel->createFromConfigs($configFiles);
 
             self::$kernelsByHash[$configsHash] = $rectorKernel;
-            self::$currentContainer = $rectorKernel->getContainer();
+            self::$currentContainer = $container;
         }
     }
 
@@ -66,13 +66,16 @@ abstract class AbstractTestCase extends TestCase
     }
 
     /**
-     * @param SmartFileInfo[] $configFileInfos
+     * @param string[] $configFiles
      */
-    private function createConfigsHash(array $configFileInfos): string
+    private function createConfigsHash(array $configFiles): string
     {
+        Assert::allFile($configFiles);
+        Assert::allString($configFiles);
+
         $configHash = '';
-        foreach ($configFileInfos as $configFileInfo) {
-            $configHash .= md5_file($configFileInfo->getRealPath());
+        foreach ($configFiles as $configFile) {
+            $configHash .= md5_file($configFile);
         }
 
         return $configHash;

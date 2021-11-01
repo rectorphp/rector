@@ -23,7 +23,7 @@ final class ClassWithPublicPropertiesFactoryTest extends AbstractTestCase
 
     protected function setUp(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/../../../config/config.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/../../../config/config.php']);
         $this->classWithPublicPropertiesFactory = $this->getService(ClassWithPublicPropertiesFactory::class);
         $this->betterStandardPrinter = $this->getService(BetterStandardPrinter::class);
     }

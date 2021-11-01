@@ -75,11 +75,12 @@ final class Configuration
             return null;
         }
 
-        $mainConfigFileInfo = $this->bootstrapConfigs->getMainConfigFileInfo();
-        if (! $mainConfigFileInfo instanceof SmartFileInfo) {
+        $mainConfigFile = $this->bootstrapConfigs->getMainConfigFile();
+        if (! is_string($mainConfigFile)) {
             return null;
         }
 
+        $mainConfigFileInfo = new SmartFileInfo($mainConfigFile);
         return $mainConfigFileInfo->getRelativeFilePathFromCwd();
     }
 }

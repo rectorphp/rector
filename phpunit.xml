@@ -18,6 +18,5 @@
     <php>
         <ini name="memory_limit" value="-1" />
         <env name="XDEBUG_MODE" value="coverage"/>
-        <env name="KERNEL_CACHE_DIRECTORY" value="tmp/rector/cache"/>
     </php>
 </phpunit>

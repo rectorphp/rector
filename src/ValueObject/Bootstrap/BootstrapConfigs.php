@@ -4,34 +4,32 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Bootstrap;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
-
 final class BootstrapConfigs
 {
     /**
-     * @param SmartFileInfo[] $setConfigFileInfos
+     * @param string[] $setConfigFiles
      */
     public function __construct(
-        private ?SmartFileInfo $mainConfigFileInfo,
-        private array $setConfigFileInfos
+        private ?string $mainConfigFile,
+        private array $setConfigFiles
     ) {
     }
 
-    public function getMainConfigFileInfo(): ?SmartFileInfo
+    public function getMainConfigFile(): ?string
     {
-        return $this->mainConfigFileInfo;
+        return $this->mainConfigFile;
     }
 
     /**
-     * @return SmartFileInfo[]
+     * @return string[]
      */
-    public function getConfigFileInfos(): array
+    public function getConfigFiles(): array
     {
-        $configFileInfos = [];
-        if ($this->mainConfigFileInfo !== null) {
-            $configFileInfos[] = $this->mainConfigFileInfo;
+        $configFiles = [];
+        if ($this->mainConfigFile !== null) {
+            $configFiles[] = $this->mainConfigFile;
         }
 
-        return array_merge($configFileInfos, $this->setConfigFileInfos);
+        return array_merge($configFiles, $this->setConfigFiles);
     }
 }

@@ -8,7 +8,6 @@ use Iterator;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PhpVersionProviderTest extends AbstractTestCase
 {
@@ -16,44 +15,44 @@ final class PhpVersionProviderTest extends AbstractTestCase
      * @doesNotPerformAssertions
      * @dataProvider provideValidConfigData()
      */
-    public function testValidInput(SmartFileInfo $invalidFileInfo): void
+    public function testValidInput(string $invalidFilePath): void
     {
-        $this->bootFromConfigFileInfos([$invalidFileInfo]);
+        $this->bootFromConfigFiles([$invalidFilePath]);
 
         $phpVersionProvider = $this->getService(PhpVersionProvider::class);
         $phpVersionProvider->provide();
     }
 
     /**
-     * @return Iterator<SmartFileInfo[]>
+     * @return Iterator<string[]>
      */
     public function provideValidConfigData(): Iterator
     {
-        yield [new SmartFileInfo(__DIR__ . '/config/valid_explicit_value.php')];
-        yield [new SmartFileInfo(__DIR__ . '/config/valid_minus_value.php')];
+        yield [__DIR__ . '/config/valid_explicit_value.php'];
+        yield [__DIR__ . '/config/valid_minus_value.php'];
     }
 
     /**
      * @dataProvider provideInvalidConfigData()
      */
-    public function testInvalidInput(SmartFileInfo $invalidFileInfo): void
+    public function testInvalidInput(string $invalidFilePath): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $this->bootFromConfigFileInfos([$invalidFileInfo]);
+        $this->bootFromConfigFiles([$invalidFilePath]);
 
         $phpVersionProvider = $this->getService(PhpVersionProvider::class);
         $phpVersionProvider->provide();
     }
 
     /**
-     * @return Iterator<SmartFileInfo[]>
+     * @return Iterator<string[]>
      */
     public function provideInvalidConfigData(): Iterator
     {
-        yield [new SmartFileInfo(__DIR__ . '/config/invalid_input.php')];
-        yield [new SmartFileInfo(__DIR__ . '/config/invalid_string_input.php')];
-        yield [new SmartFileInfo(__DIR__ . '/config/invalid_number_input.php')];
-        yield [new SmartFileInfo(__DIR__ . '/config/invalid_php_4_number.php')];
+        yield [__DIR__ . '/config/invalid_input.php'];
+        yield [__DIR__ . '/config/invalid_string_input.php'];
+        yield [__DIR__ . '/config/invalid_number_input.php'];
+        yield [__DIR__ . '/config/invalid_php_4_number.php'];
     }
 }

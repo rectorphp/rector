@@ -52,8 +52,8 @@ abstract class AbstractRectorTestCase extends AbstractTestCase implements Rector
             require_once __DIR__ . '/../../../preload.php';
         }
 
-        $configFileInfo = new SmartFileInfo($this->provideConfigFilePath());
-        $this->bootFromConfigFileInfos([$configFileInfo]);
+        $configFile = $this->provideConfigFilePath();
+        $this->bootFromConfigFiles([$configFile]);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);

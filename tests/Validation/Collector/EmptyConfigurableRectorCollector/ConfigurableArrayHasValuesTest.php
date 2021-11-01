@@ -7,7 +7,6 @@ namespace Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollecto
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * array configurable with has values config will be passed
@@ -18,7 +17,7 @@ final class ConfigurableArrayHasValuesTest extends AbstractTestCase
 
     protected function setUp(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/configurable_array_has_values.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/config/configurable_array_has_values.php']);
         $this->collector = $this->getService(EmptyConfigurableRectorCollector::class);
     }
 

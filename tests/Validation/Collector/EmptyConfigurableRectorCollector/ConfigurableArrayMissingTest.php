@@ -7,7 +7,6 @@ namespace Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollecto
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * array configurable with missing values config will show warning
@@ -18,7 +17,7 @@ final class ConfigurableArrayMissingTest extends AbstractTestCase
 
     protected function setUp(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/configurable_array_missing.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/config/configurable_array_missing.php']);
         $this->collector = $this->getService(EmptyConfigurableRectorCollector::class);
     }
 

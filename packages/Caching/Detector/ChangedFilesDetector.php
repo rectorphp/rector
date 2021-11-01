@@ -85,11 +85,11 @@ final class ChangedFilesDetector
     /**
      * @api
      */
-    public function setFirstResolvedConfigFileInfo(SmartFileInfo $fileInfo): void
+    public function setFirstResolvedConfigFileInfo(string $filePath): void
     {
         // the first config is core to all → if it was changed, just invalidate it
-        $configHash = $this->fileHashComputer->compute($fileInfo);
-        $this->storeConfigurationDataHash($fileInfo, $configHash);
+        $configHash = $this->fileHashComputer->compute($filePath);
+        $this->storeConfigurationDataHash($filePath, $configHash);
     }
 
     private function getFileInfoCacheKey(SmartFileInfo $smartFileInfo): string
@@ -102,9 +102,9 @@ final class ChangedFilesDetector
         return (string) sha1_file($smartFileInfo->getRealPath());
     }
 
-    private function storeConfigurationDataHash(SmartFileInfo $fileInfo, string $configurationHash): void
+    private function storeConfigurationDataHash(string $filePath, string $configurationHash): void
     {
-        $key = CacheKey::CONFIGURATION_HASH_KEY . '_' . Strings::webalize($fileInfo->getRealPath());
+        $key = CacheKey::CONFIGURATION_HASH_KEY . '_' . Strings::webalize($filePath);
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
 
         $this->cache->save($key, CacheKey::CONFIGURATION_HASH_KEY, $configurationHash);

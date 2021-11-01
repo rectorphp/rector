@@ -9,7 +9,6 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ApplicationFileProcessorTest extends AbstractTestCase
 {
@@ -21,7 +20,7 @@ final class ApplicationFileProcessorTest extends AbstractTestCase
 
     protected function setUp(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/configured_rule.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/config/configured_rule.php']);
 
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->fileFactory = $this->getService(FileFactory::class);

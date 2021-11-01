@@ -8,7 +8,6 @@ use Iterator;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractTestCase
 {
@@ -16,10 +15,9 @@ final class ConfigurableRectorImportConfigCallsMergeTest extends AbstractTestCas
      * @dataProvider provideData()
      * @param array<string, string> $expectedConfiguration
      */
-    public function testMainConfigValues(string $config, array $expectedConfiguration): void
+    public function testMainConfigValues(string $configFile, array $expectedConfiguration): void
     {
-        $configFileInfos = [new SmartFileInfo($config)];
-        $this->bootFromConfigFileInfos($configFileInfos);
+        $this->bootFromConfigFiles([$configFile]);
 
         // to invoke configure() method call
         $this->getService(RenameClassRector::class);

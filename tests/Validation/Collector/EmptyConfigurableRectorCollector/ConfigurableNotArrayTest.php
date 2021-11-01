@@ -7,7 +7,6 @@ namespace Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollecto
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Not array configurable, eg:
@@ -20,7 +19,7 @@ final class ConfigurableNotArrayTest extends AbstractTestCase
 
     protected function setUp(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/configurable_not_array.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/config/configurable_not_array.php']);
         $this->collector = $this->getService(EmptyConfigurableRectorCollector::class);
     }
 

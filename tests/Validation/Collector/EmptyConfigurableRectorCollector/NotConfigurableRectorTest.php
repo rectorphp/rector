@@ -7,7 +7,6 @@ namespace Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollecto
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Not configurable will be passed
@@ -18,7 +17,7 @@ final class NotConfigurableRectorTest extends AbstractTestCase
 
     protected function setUp(): void
     {
-        $this->bootFromConfigFileInfos([new SmartFileInfo(__DIR__ . '/config/not_configurable.php')]);
+        $this->bootFromConfigFiles([__DIR__ . '/config/not_configurable.php']);
         $this->collector = $this->getService(EmptyConfigurableRectorCollector::class);
     }
 

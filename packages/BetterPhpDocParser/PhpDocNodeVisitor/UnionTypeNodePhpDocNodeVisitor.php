@@ -14,7 +14,6 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
 final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
@@ -38,7 +37,7 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor imp
         // unwrap with parent array type...
         $startAndEnd = $node->getAttribute(PhpDocAttributeKey::START_AND_END);
         if (! $startAndEnd instanceof StartAndEnd) {
-            throw new ShouldNotHappenException();
+            return null;
         }
 
         $betterTokenProvider = $this->currentTokenIteratorProvider->provide();

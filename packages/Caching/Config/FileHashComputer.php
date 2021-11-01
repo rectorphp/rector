@@ -11,43 +11,43 @@ use Symfony\Component\Config\Loader\LoaderResolver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
  * Inspired by https://github.com/symplify/easy-coding-standard/blob/e598ab54686e416788f28fcfe007fd08e0f371d9/packages/changed-files-detector/src/FileHashComputer.php
  */
 final class FileHashComputer
 {
-    public function compute(SmartFileInfo $fileInfo): string
+    public function compute(string $filePath): string
     {
-        $this->ensureIsPhp($fileInfo);
+        $this->ensureIsPhp($filePath);
 
         $containerBuilder = new ContainerBuilder();
-        $fileLoader = $this->createFileLoader($fileInfo, $containerBuilder);
 
-        $fileLoader->load($fileInfo->getRealPath());
+        $fileLoader = $this->createFileLoader($filePath, $containerBuilder);
+        $fileLoader->load($filePath);
 
         $parameterBag = $containerBuilder->getParameterBag();
 
         return $this->arrayToHash($containerBuilder->getDefinitions()) . $this->arrayToHash($parameterBag->all());
     }
 
-    private function ensureIsPhp(SmartFileInfo $fileInfo): void
+    private function ensureIsPhp(string $filePath): void
     {
-        if ($fileInfo->hasSuffixes(['php'])) {
+        $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
+        if ($fileExtension === 'php') {
             return;
         }
 
         throw new ShouldNotHappenException(sprintf(
             // getRealPath() cannot be used, as it breaks in phar
             'Provide only PHP file, ready for Symfony Dependency Injection. "%s" given',
-            $fileInfo->getRelativeFilePath()
+            $filePath
         ));
     }
 
-    private function createFileLoader(SmartFileInfo $fileInfo, ContainerBuilder $containerBuilder): LoaderInterface
+    private function createFileLoader(string $filePath, ContainerBuilder $containerBuilder): LoaderInterface
     {
-        $fileLocator = new FileLocator([$fileInfo->getPath()]);
+        $fileLocator = new FileLocator([$filePath]);
 
         $fileLoaders = [
             new GlobFileLoader($containerBuilder, $fileLocator),
@@ -55,7 +55,7 @@ final class FileHashComputer
         ];
 
         $loaderResolver = new LoaderResolver($fileLoaders);
-        $loader = $loaderResolver->resolve($fileInfo->getRealPath());
+        $loader = $loaderResolver->resolve($filePath);
         if (! $loader) {
             throw new ShouldNotHappenException();
         }
