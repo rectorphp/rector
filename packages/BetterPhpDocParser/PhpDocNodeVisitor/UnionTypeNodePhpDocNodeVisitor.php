@@ -56,14 +56,14 @@ final class UnionTypeNodePhpDocNodeVisitor extends \RectorPrefix20211101\Symplif
         // there is no + 1, as end is right at the next token
         return $betterTokenProvider->isTokenTypeOnPosition(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_PARENTHESES, $startAndEnd->getEnd());
     }
-    private function resolveStardAndEnd(\PHPStan\PhpDocParser\Ast\Node $node) : ?\Rector\BetterPhpDocParser\ValueObject\StartAndEnd
+    private function resolveStardAndEnd(\PHPStan\PhpDocParser\Ast\Type\UnionTypeNode $unionTypeNode) : ?\Rector\BetterPhpDocParser\ValueObject\StartAndEnd
     {
-        $starAndEnd = $node->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
+        $starAndEnd = $unionTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
         if ($starAndEnd instanceof \Rector\BetterPhpDocParser\ValueObject\StartAndEnd) {
             return $starAndEnd;
         }
         // unwrap with parent array type...
-        $parent = $node->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT);
+        $parent = $unionTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT);
         if (!$parent instanceof \PHPStan\PhpDocParser\Ast\Node) {
             return null;
         }

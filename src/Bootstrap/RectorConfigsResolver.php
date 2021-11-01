@@ -41,7 +41,9 @@ final class RectorConfigsResolver
             $message = \sprintf('File "%s" was not found', $configFile);
             throw new \RectorPrefix20211101\Symplify\SmartFileSystem\Exception\FileNotFoundException($message);
         }
-        return \realpath($configFile);
+        /** @var string $configFile */
+        $configFile = \realpath($configFile);
+        return $configFile;
     }
     private function resolveFromInputWithFallback(\RectorPrefix20211101\Symfony\Component\Console\Input\ArgvInput $argvInput, string $fallbackFile) : ?string
     {

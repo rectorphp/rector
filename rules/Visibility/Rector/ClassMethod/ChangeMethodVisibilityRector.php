@@ -5,6 +5,7 @@ namespace Rector\Visibility\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
@@ -82,6 +83,9 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($scope);
         if ($parentClassName === null) {
             return null;
