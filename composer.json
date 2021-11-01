@@ -33,6 +33,7 @@
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "^0.11.26",
         "symfony/console": "^5.3.7",
+        "symfony/contracts": "^2.4",
         "symfony/dependency-injection": "^5.3.7",
         "symfony/finder": "^5.3.7",
         "symfony/process": "^5.3.7",
