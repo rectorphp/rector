@@ -4200,12 +4200,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/symplify-kernel.git",
-                "reference": "968f58c9ad0e118539379e954daeb44179f2942e"
+                "reference": "1157bc9bf1cf477ce7b9a881d1acf0a599bde7a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/symplify-kernel\/zipball\/968f58c9ad0e118539379e954daeb44179f2942e",
-                "reference": "968f58c9ad0e118539379e954daeb44179f2942e",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/symplify-kernel\/zipball\/1157bc9bf1cf477ce7b9a881d1acf0a599bde7a3",
+                "reference": "1157bc9bf1cf477ce7b9a881d1acf0a599bde7a3",
                 "shasum": ""
             },
             "require": {
@@ -4249,7 +4249,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-11-01T14:51:55+00:00",
+            "time": "2021-11-01T17:16:20+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
