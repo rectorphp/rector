@@ -526,3 +526,7 @@ parameters:
         -
             path: packages/Caching/ValueObject/Storage/FileCacheStorage.php
             message: '#Instead of "Nette\\Utils\\FileSystem" class/interface use "Symplify\\SmartFileSystem\\SmartFileSystem"#'
+
+        -
+            path: src/Bootstrap/RectorConfigsResolver.php
+            message: '#Method Rector\\Core\\Bootstrap\\RectorConfigsResolver\:\:resolveFromInput\(\) should return string\|null but returns string\|false#'
