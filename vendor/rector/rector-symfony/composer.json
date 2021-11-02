@@ -10,8 +10,8 @@
     },
     "require-dev": {
         "phpunit\/phpunit": "^9.5",
-        "rector\/rector-src": "dev-main",
         "phpstan\/phpstan": "^1.0",
+        "rector\/rector-src": "dev-main",
         "symplify\/phpstan-rules": "^10.0",
         "symfony\/security-core": "^5.3",
         "symfony\/security-http": "^5.3",

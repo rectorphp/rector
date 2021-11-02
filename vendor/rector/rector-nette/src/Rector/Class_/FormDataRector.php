@@ -7,9 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory;
 use Rector\Nette\NodeFinder\FormFieldsFinder;
 use Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder;
 use Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder;
@@ -50,10 +50,10 @@ final class FormDataRector extends \Rector\Core\Rector\AbstractRector implements
      */
     private $formOnSuccessCallbackValuesParamFinder;
     /**
-     * @var \Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory
+     * @var \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory
      */
     private $classWithPublicPropertiesFactory;
-    public function __construct(\Rector\Nette\NodeFinder\FormVariableFinder $formVariableFinder, \Rector\Nette\NodeFinder\FormFieldsFinder $formFieldsFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, \Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory)
+    public function __construct(\Rector\Nette\NodeFinder\FormVariableFinder $formVariableFinder, \Rector\Nette\NodeFinder\FormFieldsFinder $formFieldsFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder $formOnSuccessCallbackFinder, \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder $formOnSuccessCallbackValuesParamFinder, \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory)
     {
         $this->formVariableFinder = $formVariableFinder;
         $this->formFieldsFinder = $formFieldsFinder;
@@ -105,15 +105,21 @@ CODE_SAMPLE
     {
         return [\PhpParser\Node\Stmt\Class_::class];
     }
+    /**
+     * @param array<string, string|string[]>  $configuration
+     */
     public function configure(array $configuration) : void
     {
         if (isset($configuration[self::FORM_DATA_CLASS_PARENT])) {
-            \RectorPrefix20211102\Webmozart\Assert\Assert::string($configuration[self::FORM_DATA_CLASS_PARENT]);
-            $this->formDataClassParent = $configuration[self::FORM_DATA_CLASS_PARENT];
+            $formDataClassParent = $configuration[self::FORM_DATA_CLASS_PARENT];
+            \RectorPrefix20211102\Webmozart\Assert\Assert::string($formDataClassParent);
+            $this->formDataClassParent = $formDataClassParent;
         }
         if (isset($configuration[self::FORM_DATA_CLASS_TRAITS])) {
-            \RectorPrefix20211102\Webmozart\Assert\Assert::isArray($configuration[self::FORM_DATA_CLASS_TRAITS]);
-            $this->formDataClassTraits = $configuration[self::FORM_DATA_CLASS_TRAITS];
+            $formDataClassTraits = $configuration[self::FORM_DATA_CLASS_TRAITS];
+            \RectorPrefix20211102\Webmozart\Assert\Assert::isArray($formDataClassTraits);
+            \RectorPrefix20211102\Webmozart\Assert\Assert::allString($formDataClassTraits);
+            $this->formDataClassTraits = $formDataClassTraits;
         }
     }
     /**

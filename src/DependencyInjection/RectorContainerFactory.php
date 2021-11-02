@@ -10,19 +10,6 @@ use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 final class RectorContainerFactory
 {
-    /**
-     * @param string[] $configFiles
-     * @api
-     */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20211102\Psr\Container\ContainerInterface
-    {
-        // to override the configs without clearing cache
-        //        $isDebug = StaticInputDetector::isDebug();
-        $phpStanStubLoader = new \Rector\Core\Stubs\PHPStanStubLoader();
-        $phpStanStubLoader->loadStubs();
-        $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
-        return $rectorKernel->createFromConfigs($configFiles);
-    }
     public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20211102\Psr\Container\ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
@@ -35,7 +22,14 @@ final class RectorContainerFactory
         return $container;
     }
     /**
-     * @see https://symfony.com/doc/current/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance
      * @param string[] $configFiles
+     * @api
      */
+    private function createFromConfigs(array $configFiles) : \RectorPrefix20211102\Psr\Container\ContainerInterface
+    {
+        $phpStanStubLoader = new \Rector\Core\Stubs\PHPStanStubLoader();
+        $phpStanStubLoader->loadStubs();
+        $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
+        return $rectorKernel->createFromConfigs($configFiles);
+    }
 }

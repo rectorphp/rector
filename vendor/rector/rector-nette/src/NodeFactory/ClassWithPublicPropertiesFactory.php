@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeFactory;
+namespace Rector\Nette\NodeFactory;
 
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
@@ -11,7 +11,7 @@ use RectorPrefix20211102\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilde
 use RectorPrefix20211102\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use RectorPrefix20211102\Symplify\Astral\ValueObject\NodeBuilder\TraitUseBuilder;
 /**
- * @see \Rector\Core\Tests\NodeFactory\ClassWithPublicPropertiesFactory\ClassWithPublicPropertiesFactoryTest
+ * @see \Rector\Nette\Tests\NodeFactory\ClassWithPublicPropertiesFactory\ClassWithPublicPropertiesFactoryTest
  */
 final class ClassWithPublicPropertiesFactory
 {
@@ -22,7 +22,7 @@ final class ClassWithPublicPropertiesFactory
      * @param string[] $traits list of fully qualified names of traits used in class
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Namespace_
      */
-    public function createNode(string $fullyQualifiedName, array $properties, ?string $parent = null, array $traits = [])
+    public function createNode(string $fullyQualifiedName, array $properties, ?string $parent, array $traits)
     {
         $namespaceParts = \explode('\\', \ltrim($fullyQualifiedName, '\\'));
         $className = \array_pop($namespaceParts);

@@ -13,9 +13,9 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory;
 use Rector\Nette\ValueObject\LatteVariableType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,10 +36,10 @@ final class TemplateTypeBasedOnPresenterTemplateParametersRector extends \Rector
      */
     private $templateClassTraits = [];
     /**
-     * @var \Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory
+     * @var \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory
      */
     private $classWithPublicPropertiesFactory;
-    public function __construct(\Rector\Core\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory)
+    public function __construct(\Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory $classWithPublicPropertiesFactory)
     {
         $this->classWithPublicPropertiesFactory = $classWithPublicPropertiesFactory;
     }
