@@ -6,7 +6,8 @@ namespace Rector\Renaming\Contract;
 use PHPStan\Type\ObjectType;
 interface MethodCallRenameInterface
 {
-    public function getOldObjectType() : \PHPStan\Type\ObjectType;
+    public function getClass() : string;
+    public function getObjectType() : \PHPStan\Type\ObjectType;
     public function getOldMethod() : string;
     public function getNewMethod() : string;
 }

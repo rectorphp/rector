@@ -10,7 +10,7 @@ final class MethodCallRenameWithArrayKey implements \Rector\Renaming\Contract\Me
     /**
      * @var string
      */
-    private $oldClass;
+    private $class;
     /**
      * @var string
      */
@@ -23,16 +23,20 @@ final class MethodCallRenameWithArrayKey implements \Rector\Renaming\Contract\Me
     /**
      * @param mixed $arrayKey
      */
-    public function __construct(string $oldClass, string $oldMethod, string $newMethod, $arrayKey)
+    public function __construct(string $class, string $oldMethod, string $newMethod, $arrayKey)
     {
-        $this->oldClass = $oldClass;
+        $this->class = $class;
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
         $this->arrayKey = $arrayKey;
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getClass() : string
     {
-        return new \PHPStan\Type\ObjectType($this->oldClass);
+        return $this->class;
+    }
+    public function getObjectType() : \PHPStan\Type\ObjectType
+    {
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getOldMethod() : string
     {

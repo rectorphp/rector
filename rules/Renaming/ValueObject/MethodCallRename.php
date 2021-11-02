@@ -10,7 +10,7 @@ final class MethodCallRename implements \Rector\Renaming\Contract\MethodCallRena
     /**
      * @var string
      */
-    private $oldClass;
+    private $class;
     /**
      * @var string
      */
@@ -19,15 +19,19 @@ final class MethodCallRename implements \Rector\Renaming\Contract\MethodCallRena
      * @var string
      */
     private $newMethod;
-    public function __construct(string $oldClass, string $oldMethod, string $newMethod)
+    public function __construct(string $class, string $oldMethod, string $newMethod)
     {
-        $this->oldClass = $oldClass;
+        $this->class = $class;
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getClass() : string
     {
-        return new \PHPStan\Type\ObjectType($this->oldClass);
+        return $this->class;
+    }
+    public function getObjectType() : \PHPStan\Type\ObjectType
+    {
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getOldMethod() : string
     {
