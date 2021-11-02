@@ -4,6 +4,9 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -74,6 +77,9 @@ CODE_SAMPLE
         if ($this->nodesToAddCollector->isActive()) {
             return null;
         }
+        if ($this->hasDynamicMethodCallOnFetchThis($node)) {
+            return null;
+        }
         $this->removeNode($node);
         return $node;
     }
@@ -106,5 +112,30 @@ CODE_SAMPLE
             return \true;
         }
         return $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CALL);
+    }
+    private function hasDynamicMethodCallOnFetchThis(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    {
+        $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        foreach ($class->getMethods() as $method) {
+            $isFound = (bool) $this->betterNodeFinder->findFirst((array) $method->getStmts(), function (\PhpParser\Node $subNode) : bool {
+                if (!$subNode instanceof \PhpParser\Node\Expr\MethodCall) {
+                    return \false;
+                }
+                if (!$subNode->var instanceof \PhpParser\Node\Expr\Variable) {
+                    return \false;
+                }
+                if (!$this->nodeNameResolver->isName($subNode->var, 'this')) {
+                    return \false;
+                }
+                return $subNode->name instanceof \PhpParser\Node\Expr\Variable;
+            });
+            if ($isFound) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
