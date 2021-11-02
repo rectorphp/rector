@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Output\ShowOutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 final class ShowCommand extends Command
@@ -23,7 +19,6 @@ final class ShowCommand extends Command
      */
     public function __construct(
         private OutputStyleInterface $outputStyle,
-        private ShowOutputFormatterCollector $showOutputFormatterCollector,
         private array $rectors
     ) {
         parent::__construct();
@@ -32,30 +27,12 @@ final class ShowCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Show loaded Rectors with their configuration');
-
-        $names = $this->showOutputFormatterCollector->getNames();
-
-        $description = sprintf('Select output format: "%s".', implode('", "', $names));
-        $this->addOption(
-            Option::OUTPUT_FORMAT,
-            'o',
-            InputOption::VALUE_OPTIONAL,
-            $description,
-            ConsoleOutputFormatter::NAME
-        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $outputFormat = (string) $input->getOption(Option::OUTPUT_FORMAT);
+        $this->outputStyle->title('Loaded Rector rules');
 
-        $this->reportLoadedRectors($outputFormat);
-
-        return Command::SUCCESS;
-    }
-
-    private function reportLoadedRectors(string $outputFormat): void
-    {
         $rectors = array_filter(
             $this->rectors,
             function (RectorInterface $rector): bool {
@@ -76,11 +53,17 @@ final class ShowCommand extends Command
                 PHP_EOL
             );
             $this->outputStyle->warning($warningMessage);
-
-            return;
+            return self::SUCCESS;
         }
 
-        $outputFormatter = $this->showOutputFormatterCollector->getByName($outputFormat);
-        $outputFormatter->list($rectors);
+        $rectorCount = count($rectors);
+        foreach ($rectors as $rector) {
+            $this->outputStyle->writeln(' * ' . $rector::class);
+        }
+
+        $message = sprintf('%d loaded Rectors', $rectorCount);
+        $this->outputStyle->success($message);
+
+        return Command::SUCCESS;
     }
 }

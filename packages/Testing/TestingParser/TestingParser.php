@@ -13,6 +13,9 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @api
+ */
 final class TestingParser
 {
     public function __construct(
