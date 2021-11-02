@@ -99,10 +99,15 @@ CODE_SAMPLE
         return null;
     }
 
+    /**
+     * @param array<string, ChangeConstantVisibility[]> $configuration
+     */
     public function configure(array $configuration): void
     {
         $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? [];
+        Assert::isArray($classConstantVisibilityChanges);
         Assert::allIsInstanceOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
+
         $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
     }
 }

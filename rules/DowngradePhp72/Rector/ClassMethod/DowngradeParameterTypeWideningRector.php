@@ -40,12 +40,12 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
 
     /**
-     * @var class-string[]
+     * @var string[]
      */
     private array $safeTypes = [];
 
     /**
-     * @var array<class-string, string[]>
+     * @var array<string, string[]>
      */
     private array $safeTypesToMethods = [];
 
@@ -148,6 +148,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
+        Assert::isArray($safeTypes);
         Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
 

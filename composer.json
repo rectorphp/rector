@@ -55,6 +55,7 @@
         "brianium/paratest": "^6.3",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^1.0",
+        "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.4.9",
         "rector/rector-generator": "^0.4.3",

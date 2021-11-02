@@ -113,6 +113,7 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? [];
+        Assert::isArray($attributesOrder);
         Assert::allString($attributesOrder);
 
         $this->attributesOrderByName = array_flip($attributesOrder);

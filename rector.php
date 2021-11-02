@@ -92,6 +92,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         '*/tests/**/Expected*/*',
         '*/rules-tests/**/Expected*/*',
         '*/packages-tests/**/Expected*/*',
+        __DIR__ . '/tests/PhpUnit/MultipleFilesChangedTrait/MultipleFilesChangedTraitTest.php',
 
         // to keep original API from PHPStan untouched
         __DIR__ . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
