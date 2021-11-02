@@ -8,7 +8,9 @@ use PHPStan\Type\ObjectType;
 
 interface MethodCallRenameInterface
 {
-    public function getOldObjectType(): ObjectType;
+    public function getClass(): string;
+
+    public function getObjectType(): ObjectType;
 
     public function getOldMethod(): string;
 

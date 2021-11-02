@@ -13,16 +13,21 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
      * @param mixed $arrayKey
      */
     public function __construct(
-        private string $oldClass,
+        private string $class,
         private string $oldMethod,
         private string $newMethod,
-        private $arrayKey
+        private        $arrayKey
     ) {
     }
 
-    public function getOldObjectType(): ObjectType
+    public function getClass(): string
     {
-        return new ObjectType($this->oldClass);
+        return $this->class;
+    }
+
+    public function getObjectType(): ObjectType
+    {
+        return new ObjectType($this->class);
     }
 
     public function getOldMethod(): string

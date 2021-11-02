@@ -83,7 +83,7 @@ CODE_SAMPLE
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
             $implementsInterface = $this->classManipulator->hasParentMethodOrInterface(
-                $methodCallRename->getOldObjectType(),
+                $methodCallRename->getObjectType(),
                 $methodCallRename->getOldMethod()
             );
             if ($implementsInterface) {
@@ -92,7 +92,7 @@ CODE_SAMPLE
 
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
-                $methodCallRename->getOldObjectType()
+                $methodCallRename->getObjectType()
             )) {
                 continue;
             }

@@ -10,15 +10,20 @@ use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRename implements MethodCallRenameInterface
 {
     public function __construct(
-        private string $oldClass,
+        private string $class,
         private string $oldMethod,
         private string $newMethod
     ) {
     }
 
-    public function getOldObjectType(): ObjectType
+    public function getClass(): string
     {
-        return new ObjectType($this->oldClass);
+        return $this->class;
+    }
+
+    public function getObjectType(): ObjectType
+    {
+        return new ObjectType($this->class);
     }
 
     public function getOldMethod(): string
