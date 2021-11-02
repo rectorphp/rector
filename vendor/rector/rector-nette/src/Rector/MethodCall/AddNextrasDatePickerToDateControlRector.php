@@ -103,7 +103,7 @@ CODE_SAMPLE
         }
         $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($methodCall->var, $key);
         $formAssign = new \PhpParser\Node\Expr\Assign($arrayDimFetch, $new);
-        if ($parent !== null) {
+        if ($parent instanceof \PhpParser\Node) {
             $methodCalls = $this->betterNodeFinder->findInstanceOf($parent, \PhpParser\Node\Expr\MethodCall::class);
             if (\count($methodCalls) > 1) {
                 $controlName = $this->resolveControlName($methodCall);

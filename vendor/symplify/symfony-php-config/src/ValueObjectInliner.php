@@ -10,6 +10,9 @@ use RectorPrefix20211102\Symfony\Component\DependencyInjection\Loader\Configurat
 use RectorPrefix20211102\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use RectorPrefix20211102\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
+/**
+ * @api
+ */
 final class ValueObjectInliner
 {
     /**

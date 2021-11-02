@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace RectorPrefix20211102;
 
 use Rector\Core\Configuration\Option;
-use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
-use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
@@ -17,10 +17,10 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         '*/Source/*',
         '*/Fixture/*',
     ]);
+    $services = $containerConfigurator->services();
+    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->call('configure', [[\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::CLASSES_TO_SKIP => ['Nette\\*', 'Symfony\\Component\\Translation\\TranslatorInterface', 'Symfony\\Contracts\\EventDispatcher\\Event', 'Kdyby\\Events\\Subscriber']]]);
     // needed for DEAD_CODE list, just in split package like this
     $containerConfigurator->import(__DIR__ . '/config/config.php');
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_80);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_74);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_73);
+    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
 };

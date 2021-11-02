@@ -71,7 +71,6 @@ CODE_SAMPLE
     {
         $callsWithParamRenames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? [];
         \RectorPrefix20211102\Webmozart\Assert\Assert::allIsInstanceOf($callsWithParamRenames, \Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter::class);
-        /** @var RenameMethodCallBasedOnParameter[] $callsWithParamRenames */
         $this->callsWithParamRenames = $callsWithParamRenames;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter

@@ -45,6 +45,9 @@ final class FunctionLikeFirstLevelStatementResolver
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $currentStatement = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+            if (!$currentStatement instanceof \PhpParser\Node) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
         }
         return $currentStatement;
     }

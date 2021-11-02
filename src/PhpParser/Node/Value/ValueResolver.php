@@ -67,6 +67,14 @@ final class ValueResolver
     {
         return $this->getValue($expr) === $value;
     }
+    public function getStringValue(\PhpParser\Node\Expr $expr) : string
+    {
+        $resolvedValue = $this->getValue($expr);
+        if (!\is_string($resolvedValue)) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return $resolvedValue;
+    }
     /**
      * @return mixed|null
      */

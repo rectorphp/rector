@@ -50,8 +50,7 @@ CODE_SAMPLE
     {
         $typesToVariables = $this->findTypesForVariables($content);
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
-            $oldObjectType = $methodCallRename->getOldObjectType();
-            $className = $oldObjectType->getClassName();
+            $className = $methodCallRename->getClass();
             if (!isset($typesToVariables[$className])) {
                 continue;
             }

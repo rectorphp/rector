@@ -10,6 +10,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\Nette\Kdyby\ValueObject\VariableWithType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class VariableWithTypesFactory
 {

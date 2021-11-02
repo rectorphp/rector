@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -105,6 +106,9 @@ CODE_SAMPLE
             return null;
         }
         $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         foreach ($injectProperties as $injectProperty) {
             $this->removeInjectAnnotation($injectProperty);
             $this->changePropertyVisibility($injectProperty);

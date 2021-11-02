@@ -99,11 +99,9 @@ CODE_SAMPLE
     {
         $arraysToFluentCalls = $configuration[self::ARRAYS_TO_FLUENT_CALLS] ?? [];
         \RectorPrefix20211102\Webmozart\Assert\Assert::allIsInstanceOf($arraysToFluentCalls, \Rector\CakePHP\ValueObject\ArrayToFluentCall::class);
-        /** @var ArrayToFluentCall[] $arraysToFluentCalls */
         $this->arraysToFluentCalls = $arraysToFluentCalls;
         $factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
         \RectorPrefix20211102\Webmozart\Assert\Assert::allIsInstanceOf($factoryMethods, \Rector\CakePHP\ValueObject\FactoryMethod::class);
-        /** @var FactoryMethod[] $factoryMethods */
         $this->factoryMethods = $factoryMethods;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\FactoryMethod

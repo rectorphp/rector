@@ -90,7 +90,11 @@ final class ModelFactoryNodeFactory
         if (!$methodCall->args[1] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        return $this->createPublicMethod($this->valueResolver->getValue($methodCall->args[1]->value), [$return]);
+        $methodName = $this->valueResolver->getValue($methodCall->args[1]->value);
+        if (!\is_string($methodName)) {
+            return null;
+        }
+        return $this->createPublicMethod($methodName, [$return]);
     }
     public function createEmptyConfigure() : \PhpParser\Node\Stmt\ClassMethod
     {

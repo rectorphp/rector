@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Rector\Nette\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
@@ -102,6 +104,9 @@ CODE_SAMPLE
         }
         $this->changePropertyVisibility($property);
         $class = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $propertyName = $this->nodeNameResolver->getName($property);
         $propertyType = $this->nodeTypeResolver->getType($property);
         $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyType, $property->flags);

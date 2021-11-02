@@ -5,6 +5,7 @@ namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerMethodAnalyzer
@@ -26,6 +27,9 @@ final class ControllerMethodAnalyzer
             return \false;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return \false;
+        }
         $parentClassName = (string) $this->parentClassScopeResolver->resolveParentClassName($scope);
         if (\substr_compare($parentClassName, 'Controller', -\strlen('Controller')) === 0) {
             return \true;

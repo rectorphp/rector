@@ -6,6 +6,7 @@ namespace Rector\Nette\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ValueObject\MethodName;
@@ -87,6 +88,10 @@ final class GetComponentMethodCallFormControlTypeResolver implements \Rector\Net
     private function createCreateComponentMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : string
     {
         $firstArgumentValue = $methodCall->args[0]->value;
-        return 'createComponent' . \ucfirst($this->valueResolver->getValue($firstArgumentValue));
+        $componentName = $this->valueResolver->getValue($firstArgumentValue);
+        if (!\is_string($componentName)) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        return 'createComponent' . \ucfirst($componentName);
     }
 }

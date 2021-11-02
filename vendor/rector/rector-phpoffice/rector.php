@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace RectorPrefix20211102;
 
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\LevelSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
-    $services = $containerConfigurator->services();
-    $services->set(\Rector\Php74\Rector\Property\TypedPropertyRector::class);
-    $services->set(\Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector::class);
+    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
+    $parameters = $containerConfigurator->parameters();
+    $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
 };

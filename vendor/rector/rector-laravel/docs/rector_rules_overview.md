@@ -1,4 +1,4 @@
-# 19 Rules Overview
+# 20 Rules Overview
 
 ## AddArgumentDefaultValueRector
 
@@ -290,6 +290,41 @@ Change minutes argument to seconds in `Illuminate\Contracts\Cache\Store` and Ill
 +        Illuminate\Support\Facades\Cache::put('key', 'value', 60 * 60);
      }
  }
+```
+
+<br>
+
+## OptionalToNullsafeOperatorRector
+
+Convert simple calls to optional helper to use the nullsafe operator
+
+:wrench: **configure it!**
+
+- class: [`Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector`](../src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php)
+
+```php
+use Rector\Laravel\Rector\PropertyFetch\OptionalToNullsafeOperatorRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(OptionalToNullsafeOperatorRector::class)
+        ->call('configure', [[
+            OptionalToNullsafeOperatorRector::EXCLUDE_METHODS => ['present'],
+        ]]);
+};
+```
+
+↓
+
+```diff
+-optional($user)->getKey();
+-optional($user)->id;
++$user?->getKey();
++$user?->id;
+ // macro methods
+ optional($user)->present()->getKey();
 ```
 
 <br>

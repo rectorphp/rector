@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -18,6 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20211102\Webmozart\Assert\Assert;
 /**
  * @see https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
  *
@@ -36,7 +38,11 @@ final class RouteActionCallableRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @var string
      */
-    private $namespace = 'App\\Http\\Controllers';
+    private const DEFAULT_NAMESPACE = 'App\\Http\\Controllers';
+    /**
+     * @var string
+     */
+    private $namespace = self::DEFAULT_NAMESPACE;
     /**
      * @var array<string, string>
      */
@@ -87,11 +93,15 @@ CODE_SAMPLE
             return null;
         }
         $arg = $node->args[$position];
-        $segments = $this->resolveControllerFromAction($this->valueResolver->getValue($arg->value));
+        $argValue = $this->valueResolver->getValue($arg->value);
+        $segments = $this->resolveControllerFromAction($argValue);
         if ($segments === null) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
         $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection($segments[0], $segments[1], $scope);
         if (!$phpMethodReflection instanceof \PHPStan\Reflection\Php\PhpMethodReflection) {
             return null;
@@ -99,22 +109,29 @@ CODE_SAMPLE
         $node->args[$position]->value = $this->nodeFactory->createArray([$this->nodeFactory->createClassConstReference($segments[0]), $segments[1]]);
         return $node;
     }
+    /**
+     * @param array<string, string|mixed[]> $configuration
+     */
     public function configure(array $configuration) : void
     {
-        $this->routes = $configuration[self::ROUTES] ?? [];
-        if (isset($configuration[self::NAMESPACE])) {
-            $this->namespace = $configuration[self::NAMESPACE];
-        }
+        $routes = $configuration[self::ROUTES] ?? [];
+        \RectorPrefix20211102\Webmozart\Assert\Assert::allString($routes);
+        \RectorPrefix20211102\Webmozart\Assert\Assert::allString(\array_keys($routes));
+        $this->routes = $routes;
+        $namespace = $configuration[self::NAMESPACE] ?? self::DEFAULT_NAMESPACE;
+        \RectorPrefix20211102\Webmozart\Assert\Assert::string($namespace);
+        $this->namespace = $namespace;
     }
     /**
-     * @param mixed $action
      * @return array<string>|null
+     * @param mixed $action
      */
     private function resolveControllerFromAction($action) : ?array
     {
         if (!$this->isActionString($action)) {
             return null;
         }
+        /** @var string $action */
         $segments = \explode('@', $action);
         if (\count($segments) !== 2) {
             return null;

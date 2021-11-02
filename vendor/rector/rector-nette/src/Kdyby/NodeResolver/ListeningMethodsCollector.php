@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Nette\Kdyby\Naming\EventClassNaming;
 use Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod;
@@ -66,6 +67,9 @@ final class ListeningMethodsCollector
                 return;
             }
             $eventClass = $this->valueResolver->getValue($node->key);
+            if (!\is_string($eventClass)) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
             if ($type === self::EVENT_TYPE_CONTRIBUTTE) {
                 /** @var string $eventClass */
                 $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
@@ -117,6 +121,9 @@ final class ListeningMethodsCollector
     {
         // custom method name
         $classMethodName = $this->valueResolver->getValue($arrayItem->value);
+        if (!\is_string($classMethodName)) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $classMethod = $class->getMethod($classMethodName);
         if (\strpos($eventClass, '::') !== \false) {
             [$dispatchingClass, $property] = \explode('::', $eventClass);

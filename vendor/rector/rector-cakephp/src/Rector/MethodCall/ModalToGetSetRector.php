@@ -78,7 +78,6 @@ CODE_SAMPLE
     {
         $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? [];
         \RectorPrefix20211102\Webmozart\Assert\Assert::allIsInstanceOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
-        /** @var ModalToGetSet[] $unprefixedMethodsToGetSet */
         $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\ModalToGetSet

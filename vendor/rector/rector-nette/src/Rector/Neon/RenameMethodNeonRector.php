@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Neon;
 
-use RectorPrefix20211102\Nette\Utils\Strings;
+use RectorPrefix20211102\Nette\Neon\Node;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
+use Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -39,19 +40,29 @@ services:
 CODE_SAMPLE
 )]);
     }
-    public function changeContent(string $content) : string
+    /**
+     * @return class-string<Node>
+     */
+    public function getNodeType() : string
+    {
+        return \Rector\Nette\NeonParser\Node\Service_\SetupMethodCall::class;
+    }
+    /**
+     * @param SetupMethodCall $node
+     * @return \Nette\Neon\Node|null
+     */
+    public function enterNode(\RectorPrefix20211102\Nette\Neon\Node $node)
     {
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
-            $oldObjectType = $methodCallRename->getOldObjectType();
-            $objectClassName = $oldObjectType->getClassName();
-            $className = \str_replace('\\', '\\\\', $objectClassName);
-            $oldMethodName = $methodCallRename->getOldMethod();
-            $newMethodName = $methodCallRename->getNewMethod();
-            $pattern = '#\\n(.*?)(class|factory): ' . $className . '(\\n|\\((.*?)\\)\\n)\\1setup:(.*?)- ' . $oldMethodName . '\\(#s';
-            if (\RectorPrefix20211102\Nette\Utils\Strings::match($content, $pattern)) {
-                $content = \str_replace($oldMethodName . '(', $newMethodName . '(', $content);
+            if (!\is_a($node->className, $methodCallRename->getClass(), \true)) {
+                continue;
             }
+            if ($node->getMethodName() !== $methodCallRename->getOldMethod()) {
+                continue;
+            }
+            $node->methodNameLiteralNode->value = $methodCallRename->getNewMethod();
+            return $node;
         }
-        return $content;
+        return null;
     }
 }

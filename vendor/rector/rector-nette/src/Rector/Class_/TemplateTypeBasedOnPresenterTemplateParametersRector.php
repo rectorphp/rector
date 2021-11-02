@@ -102,15 +102,20 @@ CODE_SAMPLE
     {
         return [\PhpParser\Node\Stmt\Class_::class];
     }
+    /**
+     * @param array<string, string|string[]> $configuration
+     */
     public function configure(array $configuration) : void
     {
         if (isset($configuration[self::TEMPLATE_CLASS_PARENT])) {
-            \RectorPrefix20211102\Webmozart\Assert\Assert::string($configuration[self::TEMPLATE_CLASS_PARENT]);
-            $this->templateClassParent = $configuration[self::TEMPLATE_CLASS_PARENT];
+            $templateClassParent = $configuration[self::TEMPLATE_CLASS_PARENT];
+            \RectorPrefix20211102\Webmozart\Assert\Assert::string($templateClassParent);
+            $this->templateClassParent = $templateClassParent;
         }
         if (isset($configuration[self::TEMPLATE_CLASS_TRAITS])) {
-            \RectorPrefix20211102\Webmozart\Assert\Assert::isArray($configuration[self::TEMPLATE_CLASS_TRAITS]);
-            $this->templateClassTraits = $configuration[self::TEMPLATE_CLASS_TRAITS];
+            $templateClassTraits = $configuration[self::TEMPLATE_CLASS_TRAITS];
+            \RectorPrefix20211102\Webmozart\Assert\Assert::isArray($templateClassTraits);
+            $this->templateClassTraits = $templateClassTraits;
         }
     }
     /**

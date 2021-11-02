@@ -82,17 +82,20 @@ CODE_SAMPLE
     }
     public function refactorIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\PhpParser\Node\Expr\Cast\Bool_
     {
-        $parentNode = $identical->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parent = $identical->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node) {
+            return null;
+        }
         if ($identical->left instanceof \PhpParser\Node\Expr\FuncCall) {
             $refactoredFuncCall = $this->refactorFuncCall($identical->left);
             if ($refactoredFuncCall !== null && $this->valueResolver->isValue($identical->right, 1)) {
-                return $this->createBoolCast($parentNode, $refactoredFuncCall);
+                return $this->createBoolCast($parent, $refactoredFuncCall);
             }
         }
         if ($identical->right instanceof \PhpParser\Node\Expr\FuncCall) {
             $refactoredFuncCall = $this->refactorFuncCall($identical->right);
             if ($refactoredFuncCall !== null && $this->valueResolver->isValue($identical->left, 1)) {
-                return $this->createBoolCast($parentNode, $refactoredFuncCall);
+                return $this->createBoolCast($parent, $refactoredFuncCall);
             }
         }
         return null;

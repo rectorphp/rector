@@ -75,9 +75,13 @@ CODE_SAMPLE
         }
         return null;
     }
+    /**
+     * @param array<string, ChangeConstantVisibility[]> $configuration
+     */
     public function configure(array $configuration) : void
     {
         $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? [];
+        \RectorPrefix20211102\Webmozart\Assert\Assert::isArray($classConstantVisibilityChanges);
         \RectorPrefix20211102\Webmozart\Assert\Assert::allIsInstanceOf($classConstantVisibilityChanges, \Rector\Visibility\ValueObject\ChangeConstantVisibility::class);
         $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
     }

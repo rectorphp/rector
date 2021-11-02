@@ -118,11 +118,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, mixed> $configuration
+     * @param array<string, StaticCallToMethodCall[]> $configuration
      */
     public function configure(array $configuration) : void
     {
         $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
+        \RectorPrefix20211102\Webmozart\Assert\Assert::isArray($staticCallsToMethodCalls);
         \RectorPrefix20211102\Webmozart\Assert\Assert::allIsInstanceOf($staticCallsToMethodCalls, \Rector\Transform\ValueObject\StaticCallToMethodCall::class);
         $this->staticCallsToMethodCalls = $staticCallsToMethodCalls;
     }

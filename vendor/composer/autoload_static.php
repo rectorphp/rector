@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae
+class ComposerStaticInitb0744a6adb43e682b2e28b6c0b5a9843
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -129,6 +129,7 @@ class ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae
         'Rector\\Nette\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-nette/src',
+            1 => __DIR__ . '/..' . '/rector/rector-nette/packages',
         ),
         'Rector\\Laravel\\' => 
         array (
@@ -2262,11 +2263,13 @@ class ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae
         'Rector\\Laravel\\Rector\\MethodCall\\RemoveAllOnDispatchingMethodsWithJobChainingRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RemoveAllOnDispatchingMethodsWithJobChainingRector.php',
         'Rector\\Laravel\\Rector\\Namespace_\\FactoryDefinitionRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Namespace_/FactoryDefinitionRector.php',
         'Rector\\Laravel\\Rector\\New_\\AddGuardToLoginEventRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/New_/AddGuardToLoginEventRector.php',
+        'Rector\\Laravel\\Rector\\PropertyFetch\\OptionalToNullsafeOperatorRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php',
         'Rector\\Laravel\\Rector\\StaticCall\\MinutesToSecondsInCacheRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/MinutesToSecondsInCacheRector.php',
         'Rector\\Laravel\\Rector\\StaticCall\\Redirect301ToPermanentRedirectRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/Redirect301ToPermanentRedirectRector.php',
         'Rector\\Laravel\\Rector\\StaticCall\\RequestStaticValidateToInjectRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/RequestStaticValidateToInjectRector.php',
         'Rector\\Laravel\\Rector\\StaticCall\\RouteActionCallableRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/RouteActionCallableRector.php',
         'Rector\\Laravel\\Reflection\\ClassConstantReflectionResolver' => __DIR__ . '/..' . '/rector/rector-laravel/src/Reflection/ClassConstantReflectionResolver.php',
+        'Rector\\Laravel\\Set\\LaravelLevelSetList' => __DIR__ . '/..' . '/rector/rector-laravel/src/Set/LaravelLevelSetList.php',
         'Rector\\Laravel\\Set\\LaravelSetList' => __DIR__ . '/..' . '/rector/rector-laravel/src/Set/LaravelSetList.php',
         'Rector\\Laravel\\ValueObject\\AddArgumentDefaultValue' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/AddArgumentDefaultValue.php',
         'Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/ServiceNameTypeAndVariableName.php',
@@ -2368,6 +2371,19 @@ class ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae
         'Rector\\Nette\\Latte\\Parser\\TemplateTypeParser' => __DIR__ . '/..' . '/rector/rector-nette/src/Latte/Parser/TemplateTypeParser.php',
         'Rector\\Nette\\Latte\\Parser\\VarTypeParser' => __DIR__ . '/..' . '/rector/rector-nette/src/Latte/Parser/VarTypeParser.php',
         'Rector\\Nette\\Naming\\NetteControlNaming' => __DIR__ . '/..' . '/rector/rector-nette/src/Naming/NetteControlNaming.php',
+        'Rector\\Nette\\NeonParser\\Contract\\NeonNodeVisitorInterface' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Contract/NeonNodeVisitorInterface.php',
+        'Rector\\Nette\\NeonParser\\Exception\\NotImplementedYetException' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Exception/NotImplementedYetException.php',
+        'Rector\\Nette\\NeonParser\\Exception\\UnusedVirtualMethodException' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Exception/UnusedVirtualMethodException.php',
+        'Rector\\Nette\\NeonParser\\NeonNodeTraverser' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/NeonNodeTraverser.php',
+        'Rector\\Nette\\NeonParser\\NeonNodeTraverserFactory' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/NeonNodeTraverserFactory.php',
+        'Rector\\Nette\\NeonParser\\NeonNodeVisitor\\AbstractServiceNeonNodeVisitor' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/NeonNodeVisitor/AbstractServiceNeonNodeVisitor.php',
+        'Rector\\Nette\\NeonParser\\NeonParser' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/NeonParser.php',
+        'Rector\\Nette\\NeonParser\\NodeFactory\\ServiceFactory' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/NodeFactory/ServiceFactory.php',
+        'Rector\\Nette\\NeonParser\\Node\\AbstractVirtualNode' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Node/AbstractVirtualNode.php',
+        'Rector\\Nette\\NeonParser\\Node\\Service_' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Node/Service_.php',
+        'Rector\\Nette\\NeonParser\\Node\\Service_\\SetupMethodCall' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Node/Service_/SetupMethodCall.php',
+        'Rector\\Nette\\NeonParser\\Printer\\FormatPreservingNeonPrinter' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Printer/FormatPreservingNeonPrinter.php',
+        'Rector\\Nette\\NeonParser\\Services\\ServiceTypeResolver' => __DIR__ . '/..' . '/rector/rector-nette/packages/NeonParser/Services/ServiceTypeResolver.php',
         'Rector\\Nette\\NodeAdding\\FunctionLikeFirstLevelStatementResolver' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAdding/FunctionLikeFirstLevelStatementResolver.php',
         'Rector\\Nette\\NodeAnalyzer\\ArrayDimFetchAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ArrayDimFetchAnalyzer.php',
         'Rector\\Nette\\NodeAnalyzer\\AssignAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/AssignAnalyzer.php',
@@ -3529,7 +3545,6 @@ class ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae
         'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ConfiguredCodeSample.php',
         'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ExtraFileCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ExtraFileCodeSample.php',
         'Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/RuleDefinition.php',
-        'Symplify\\SymfonyPhpConfig\\Exception\\ValueObjectException' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/Exception/ValueObjectException.php',
         'Symplify\\SymfonyPhpConfig\\Reflection\\ArgumentAndParameterFactory' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php',
         'Symplify\\SymfonyPhpConfig\\ValueObjectInliner' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/ValueObjectInliner.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
@@ -3539,9 +3554,9 @@ class ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfe4e58c29112e82d9914ab75af40f1ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb0744a6adb43e682b2e28b6c0b5a9843::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb0744a6adb43e682b2e28b6c0b5a9843::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb0744a6adb43e682b2e28b6c0b5a9843::$classMap;
 
         }, null, ClassLoader::class);
     }

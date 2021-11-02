@@ -5,7 +5,9 @@ namespace RectorPrefix20211102;
 
 use Rector\Core\Configuration\Option;
 use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
@@ -16,17 +18,10 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // for tests
         '*/Source/*',
         '*/Fixture/*',
+        // skip for handle scoped, like in the rector-src as well
+        // @see https://github.com/rectorphp/rector-src/blob/7f73cf017214257c170d34db3af7283eaeeab657/rector.php#L71
+        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
     ]);
-    // needed for DEAD_CODE list, just in split package like this
-    $containerConfigurator->import(__DIR__ . '/config/config.php');
-    // reuqired for PHP 8
-    $services = $containerConfigurator->services();
-    $services->defaults()->public()->autoconfigure()->autowire();
-    // needed for sets bellow, only for this split package
-    $services->set(\Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer::class);
-    $services->set(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer::class);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_80);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_74);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_73);
+    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
 };
