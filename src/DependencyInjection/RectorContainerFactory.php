@@ -12,22 +12,6 @@ use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 
 final class RectorContainerFactory
 {
-    /**
-     * @param string[] $configFiles
-     * @api
-     */
-    public function createFromConfigs(array $configFiles): ContainerInterface
-    {
-        // to override the configs without clearing cache
-//        $isDebug = StaticInputDetector::isDebug();
-
-        $phpStanStubLoader = new PHPStanStubLoader();
-        $phpStanStubLoader->loadStubs();
-
-        $rectorKernel = new RectorKernel();
-        return $rectorKernel->createFromConfigs($configFiles);
-    }
-
     public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs): ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
@@ -43,7 +27,15 @@ final class RectorContainerFactory
     }
 
     /**
-     * @see https://symfony.com/doc/current/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance
      * @param string[] $configFiles
+     * @api
      */
+    private function createFromConfigs(array $configFiles): ContainerInterface
+    {
+        $phpStanStubLoader = new PHPStanStubLoader();
+        $phpStanStubLoader->loadStubs();
+
+        $rectorKernel = new RectorKernel();
+        return $rectorKernel->createFromConfigs($configFiles);
+    }
 }
