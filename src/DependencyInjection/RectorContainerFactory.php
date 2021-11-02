@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
-use RectorPrefix20211101\Psr\Container\ContainerInterface;
+use RectorPrefix20211102\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\Stubs\PHPStanStubLoader;
@@ -14,7 +14,7 @@ final class RectorContainerFactory
      * @param string[] $configFiles
      * @api
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20211101\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20211102\Psr\Container\ContainerInterface
     {
         // to override the configs without clearing cache
         //        $isDebug = StaticInputDetector::isDebug();
@@ -23,7 +23,7 @@ final class RectorContainerFactory
         $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
         return $rectorKernel->createFromConfigs($configFiles);
     }
-    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20211101\Psr\Container\ContainerInterface
+    public function createFromBootstrapConfigs(\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs) : \RectorPrefix20211102\Psr\Container\ContainerInterface
     {
         $container = $this->createFromConfigs($bootstrapConfigs->getConfigFiles());
         $mainConfigFile = $bootstrapConfigs->getMainConfigFile();

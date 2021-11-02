@@ -3,15 +3,19 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
+use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
@@ -51,14 +55,14 @@ final class DeadParamTagValueNodeAnalyzer
             return \false;
         }
         if (!$paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
-            return $this->isEmptyDescription($paramTagValueNode);
+            return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
         if (!$this->hasGenericType($paramTagValueNode->type)) {
-            return $this->isEmptyDescription($paramTagValueNode);
+            return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
         return \false;
     }
-    private function isEmptyDescription(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode) : bool
+    private function isEmptyDescription(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode, \PhpParser\Node $node) : bool
     {
         if ($paramTagValueNode->description !== '') {
             return \false;
@@ -72,13 +76,41 @@ final class DeadParamTagValueNodeAnalyzer
             return \true;
         }
         $children = $parent->children;
-        if (!isset($children[1])) {
+        foreach ($children as $key => $child) {
+            if ($child instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && $node instanceof \PhpParser\Node\Name\FullyQualified) {
+                return $this->isUnionIdentifier($child);
+            }
+            if (!$this->isTextNextline($key, $child)) {
+                return \false;
+            }
+        }
+        return \true;
+    }
+    private function isTextNextline(int $key, \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode $phpDocChildNode) : bool
+    {
+        if ($key < 1) {
             return \true;
         }
-        if (!$children[1] instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
+        if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
             return \true;
         }
-        return (string) $children[1] === '';
+        return (string) $phpDocChildNode === '';
+    }
+    private function isUnionIdentifier(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : bool
+    {
+        if (!$phpDocTagNode->value instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode) {
+            return \true;
+        }
+        if (!$phpDocTagNode->value->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
+            return \true;
+        }
+        $types = $phpDocTagNode->value->type->types;
+        foreach ($types as $type) {
+            if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+                return \false;
+            }
+        }
+        return \true;
     }
     private function hasGenericType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
     {

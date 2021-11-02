@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211101\TYPO3\CMS\Extbase\Domain\Model;
+namespace RectorPrefix20211102\TYPO3\CMS\Extbase\Domain\Model;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Domain\\Model\\BackendUser')) {
     return;

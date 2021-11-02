@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211101;
+namespace RectorPrefix20211102;
 
 if (\class_exists('Tx_Extbase_Object_Container_Exception_CannotInitializeCacheException')) {
     return;

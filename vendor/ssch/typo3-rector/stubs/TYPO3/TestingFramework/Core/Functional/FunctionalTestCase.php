@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211101\TYPO3\TestingFramework\Core\Functional;
+namespace RectorPrefix20211102\TYPO3\TestingFramework\Core\Functional;
 
 if (\class_exists('TYPO3\\TestingFramework\\Core\\Functional\\FunctionalTestCase')) {
     return;
