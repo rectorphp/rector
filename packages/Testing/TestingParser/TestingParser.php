@@ -11,6 +11,9 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use RectorPrefix20211102\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
+/**
+ * @api
+ */
 final class TestingParser
 {
     /**

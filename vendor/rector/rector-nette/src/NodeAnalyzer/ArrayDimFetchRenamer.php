@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Naming;
+namespace Rector\Nette\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Naming\VariableRenamer;
 use RectorPrefix20211102\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ArrayDimFetchRenamer
 {

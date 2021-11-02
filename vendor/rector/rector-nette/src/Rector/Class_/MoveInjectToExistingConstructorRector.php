@@ -12,7 +12,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer;
+use Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer
+     * @var \Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
     /**
@@ -35,7 +35,7 @@ final class MoveInjectToExistingConstructorRector extends \Rector\Core\Rector\Ab
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\FamilyTree\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    public function __construct(\Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer $propertyUsageAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyUsageAnalyzer = $propertyUsageAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;

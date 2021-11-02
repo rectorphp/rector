@@ -3,16 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Output\ShowOutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20211102\Symfony\Component\Console\Command\Command;
 use RectorPrefix20211102\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211102\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20211102\Symfony\Component\Console\Output\OutputInterface;
 final class ShowCommand extends \RectorPrefix20211102\Symfony\Component\Console\Command\Command
 {
@@ -21,29 +17,21 @@ final class ShowCommand extends \RectorPrefix20211102\Symfony\Component\Console\
      */
     private $outputStyle;
     /**
-     * @var \Rector\Core\Console\Output\ShowOutputFormatterCollector
-     */
-    private $showOutputFormatterCollector;
-    /**
      * @var \Rector\Core\Contract\Rector\RectorInterface[]
      */
     private $rectors;
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, \Rector\Core\Console\Output\ShowOutputFormatterCollector $showOutputFormatterCollector, array $rectors)
+    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $outputStyle, array $rectors)
     {
         $this->outputStyle = $outputStyle;
-        $this->showOutputFormatterCollector = $showOutputFormatterCollector;
         $this->rectors = $rectors;
         parent::__construct();
     }
     protected function configure() : void
     {
         $this->setDescription('Show loaded Rectors with their configuration');
-        $names = $this->showOutputFormatterCollector->getNames();
-        $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
-        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, 'o', \RectorPrefix20211102\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
     }
     /**
      * @param \Symfony\Component\Console\Input\InputInterface $input
@@ -51,12 +39,7 @@ final class ShowCommand extends \RectorPrefix20211102\Symfony\Component\Console\
      */
     protected function execute($input, $output) : int
     {
-        $outputFormat = (string) $input->getOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT);
-        $this->reportLoadedRectors($outputFormat);
-        return \RectorPrefix20211102\Symfony\Component\Console\Command\Command::SUCCESS;
-    }
-    private function reportLoadedRectors(string $outputFormat) : void
-    {
+        $this->outputStyle->title('Loaded Rector rules');
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
             if ($rector instanceof \Rector\PostRector\Contract\Rector\PostRectorInterface) {
                 return \false;
@@ -67,9 +50,14 @@ final class ShowCommand extends \RectorPrefix20211102\Symfony\Component\Console\
         if ($rectorCount === 0) {
             $warningMessage = \sprintf('No Rectors were loaded.%sAre sure your "rector.php" config is in the root?%sTry "--config <path>" option to include it.', \PHP_EOL . \PHP_EOL, \PHP_EOL);
             $this->outputStyle->warning($warningMessage);
-            return;
+            return self::SUCCESS;
         }
-        $outputFormatter = $this->showOutputFormatterCollector->getByName($outputFormat);
-        $outputFormatter->list($rectors);
+        $rectorCount = \count($rectors);
+        foreach ($rectors as $rector) {
+            $this->outputStyle->writeln(' * ' . \get_class($rector));
+        }
+        $message = \sprintf('%d loaded Rectors', $rectorCount);
+        $this->outputStyle->success($message);
+        return \RectorPrefix20211102\Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }

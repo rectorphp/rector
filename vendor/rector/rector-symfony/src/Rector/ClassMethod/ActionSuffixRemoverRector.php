@@ -3,10 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
+use RectorPrefix20211102\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Renaming\NodeManipulator\IdentifierManipulator;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -19,14 +20,9 @@ final class ActionSuffixRemoverRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
     private $controllerMethodAnalyzer;
-    /**
-     * @var \Rector\Renaming\NodeManipulator\IdentifierManipulator
-     */
-    private $identifierManipulator;
-    public function __construct(\Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer $controllerMethodAnalyzer, \Rector\Renaming\NodeManipulator\IdentifierManipulator $identifierManipulator)
+    public function __construct(\Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer $controllerMethodAnalyzer)
     {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
-        $this->identifierManipulator = $identifierManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -63,7 +59,13 @@ CODE_SAMPLE
         if (!$this->controllerMethodAnalyzer->isAction($node)) {
             return null;
         }
-        $this->identifierManipulator->removeSuffix($node, 'Action');
+        $this->removeSuffix($node, 'Action');
         return $node;
+    }
+    private function removeSuffix(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $suffixToRemove) : void
+    {
+        $name = $this->nodeNameResolver->getName($classMethod);
+        $newName = \RectorPrefix20211102\Nette\Utils\Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
+        $classMethod->name = new \PhpParser\Node\Identifier($newName);
     }
 }

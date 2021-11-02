@@ -1,9 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Renaming\NodeManipulator;
+namespace Rector\PHPUnit\NodeAnalyzer;
 
-use RectorPrefix20211102\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
@@ -39,18 +38,6 @@ final class IdentifierManipulator
             return;
         }
         $node->name = new \PhpParser\Node\Identifier($renameMethodMap[$oldNodeMethodName]);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
-     */
-    public function removeSuffix($node, string $suffixToRemove) : void
-    {
-        $name = $this->nodeNameResolver->getName($node);
-        if ($name === null) {
-            return;
-        }
-        $newName = \RectorPrefix20211102\Nette\Utils\Strings::replace($name, \sprintf('#%s$#', $suffixToRemove), '');
-        $node->name = new \PhpParser\Node\Identifier($newName);
     }
     /**
      * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node

@@ -6,15 +6,15 @@ namespace Rector\Nette\FormControlTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\Enum\NetteFormMethodNameToControlType;
+use Rector\Nette\NodeAnalyzer\MethodCallManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
-     * @var \Rector\Core\NodeManipulator\MethodCallManipulator
+     * @var \Rector\Nette\NodeAnalyzer\MethodCallManipulator
      */
     private $methodCallManipulator;
     /**
@@ -25,7 +25,7 @@ final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nett
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\NodeManipulator\MethodCallManipulator $methodCallManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(\Rector\Nette\NodeAnalyzer\MethodCallManipulator $methodCallManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
     {
         $this->methodCallManipulator = $methodCallManipulator;
         $this->nodeNameResolver = $nodeNameResolver;

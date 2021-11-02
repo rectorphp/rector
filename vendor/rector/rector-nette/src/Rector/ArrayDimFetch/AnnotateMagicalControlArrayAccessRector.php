@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Naming\ArrayDimFetchRenamer;
 use Rector\Nette\Naming\NetteControlNaming;
 use Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer;
+use Rector\Nette\NodeAnalyzer\ArrayDimFetchRenamer;
 use Rector\Nette\NodeAnalyzer\AssignAnalyzer;
 use Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
@@ -30,7 +30,7 @@ final class AnnotateMagicalControlArrayAccessRector extends \Rector\Core\Rector\
      */
     private $methodNamesByInputNamesResolver;
     /**
-     * @var \Rector\Naming\ArrayDimFetchRenamer
+     * @var \Rector\Nette\NodeAnalyzer\ArrayDimFetchRenamer
      */
     private $arrayDimFetchRenamer;
     /**
@@ -49,7 +49,7 @@ final class AnnotateMagicalControlArrayAccessRector extends \Rector\Core\Rector\
      * @var \Rector\Nette\NodeAnalyzer\AssignAnalyzer
      */
     private $assignAnalyzer;
-    public function __construct(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver, \Rector\Naming\ArrayDimFetchRenamer $arrayDimFetchRenamer, \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\Nette\NodeAnalyzer\AssignAnalyzer $assignAnalyzer)
+    public function __construct(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver, \Rector\Nette\NodeAnalyzer\ArrayDimFetchRenamer $arrayDimFetchRenamer, \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer $arrayDimFetchAnalyzer, \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer $controlDimFetchAnalyzer, \Rector\Nette\Naming\NetteControlNaming $netteControlNaming, \Rector\Nette\NodeAnalyzer\AssignAnalyzer $assignAnalyzer)
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
         $this->arrayDimFetchRenamer = $arrayDimFetchRenamer;

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\FamilyTree\NodeAnalyzer;
+namespace Rector\Nette\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
