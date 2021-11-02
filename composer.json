@@ -29,7 +29,7 @@
         "rector/rector-nette": "^0.11.39",
         "rector/rector-phpoffice": "^0.11.6",
         "rector/rector-phpunit": "^0.11.16",
-        "rector/rector-symfony": "^0.11.33",
+        "rector/rector-symfony": "^0.11.35",
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "^0.11.26",
         "symfony/console": "^5.3.7",
