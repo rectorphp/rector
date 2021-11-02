@@ -2,13 +2,13 @@
 
 ## Rector Generator
 
-* https://github.com/rectorphp/rector-nette
+* https://github.com/rectorphp/rector-generator
 * ![](https://github.com/rectorphp/rector-generator/actions/workflows/tests.yaml/badge.svg)
 * ![](https://github.com/rectorphp/rector-generator/actions/workflows/code_analysis.yaml/badge.svg)
 
 ## PHPStan Rules
 
-* https://github.com/rectorphp/rector-nette
+* https://github.com/rectorphp/phpstan-rules
 * ![](https://github.com/rectorphp/phpstan-rules/actions/workflows/tests.yaml/badge.svg)
 * ![](https://github.com/rectorphp/phpstan-rules/actions/workflows/code_analysis.yaml/badge.svg)
 
@@ -57,6 +57,6 @@
 
 ## PHP Office
 
-* https://github.com/rectorphp/rector-doctrine
+* https://github.com/rectorphp/rector-phpoffice
 * ![](https://github.com/rectorphp/rector-phpoffice/actions/workflows/tests.yaml/badge.svg)
 * ![](https://github.com/rectorphp/rector-phpoffice/actions/workflows/code_analysis.yaml/badge.svg)
