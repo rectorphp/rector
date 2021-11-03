@@ -6,10 +6,10 @@ namespace Rector\Autodiscovery\Rector\Interface_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Autodiscovery\NodeAnalyzer\NetteComponentFactoryInterfaceAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
-use Rector\Nette\NodeAnalyzer\Component\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRector
 {
     public function __construct(
-        private NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer,
+        private NetteComponentFactoryInterfaceAnalyzer $netteComponentFactoryInterfaceAnalyzer,
         private AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
     }
@@ -66,7 +66,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
+        if ($this->netteComponentFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
             return null;
         }
 
