@@ -202,6 +202,11 @@ CODE_SAMPLE
             if ($conditional instanceof If_) {
                 return true;
             }
+
+            $conditional = $this->betterNodeFinder->findParentType($variable, Node\Expr\Ternary::class);
+            if ($conditional instanceof Node\Expr\Ternary) {
+                return true;
+            }
         }
 
         return false;
