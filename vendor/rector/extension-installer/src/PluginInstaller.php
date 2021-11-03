@@ -62,7 +62,7 @@ CODE_SAMPLE;
      */
     private $installationManager;
     /**
-     * @var ComposerFilesystem
+     * @var \Composer\Util\Filesystem
      */
     private $composerFilesystem;
     /**
