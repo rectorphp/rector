@@ -5,17 +5,22 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
+use PHPStan\Type\BooleanType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -96,8 +101,15 @@ CODE_SAMPLE
         }
 
         foreach ($ifWithOnlyReturnsByHash as $ifWithOnlyReturns) {
-            // keep first one
-            array_shift($ifWithOnlyReturns);
+            $isBool = $this->isBoolVarIfCondReturnTrueNextReturnBoolVar($ifWithOnlyReturns);
+            if (! $isBool && count($ifWithOnlyReturns) < 2) {
+                continue;
+            }
+
+            if (! $isBool) {
+                // keep first one
+                array_shift($ifWithOnlyReturns);
+            }
 
             foreach ($ifWithOnlyReturns as $ifWithOnlyReturn) {
                 $this->removeNode($ifWithOnlyReturn);
@@ -105,6 +117,49 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    /**
+     * @param If_[] $ifWithOnlyReturns
+     */
+    private function isBoolVarIfCondReturnTrueNextReturnBoolVar(array $ifWithOnlyReturns): bool
+    {
+        if (count($ifWithOnlyReturns) > 1) {
+            return false;
+        }
+
+        /** @var Expr $cond */
+        $cond = $ifWithOnlyReturns[0]->cond;
+        if (! in_array($cond::class, [Variable::class, PropertyFetch::class, StaticPropertyFetch::class], true)) {
+            return false;
+        }
+
+        $type = $this->nodeTypeResolver->getType($cond);
+        if (! $type instanceof BooleanType) {
+            return false;
+        }
+
+        $next = $ifWithOnlyReturns[0]->getAttribute(AttributeKey::NEXT_NODE);
+        if (! $next instanceof Return_) {
+            return false;
+        }
+
+        $expr = $next->expr;
+        if (! $expr instanceof Expr) {
+            return false;
+        }
+
+        if (! $this->nodeComparator->areNodesEqual($expr, $cond)) {
+            return false;
+        }
+
+        /** @var Return_ $returnStmt */
+        $returnStmt = $ifWithOnlyReturns[0]->stmts[0];
+        if (! $returnStmt->expr instanceof Expr) {
+            return false;
+        }
+
+        return $this->valueResolver->isValue($returnStmt->expr, true);
     }
 
     /**
@@ -142,7 +197,7 @@ CODE_SAMPLE
             $ifWithOnlyReturnsByHash[$hash][] = $stmt;
         }
 
-        return $this->filterOutSingleItemStmts($ifWithOnlyReturnsByHash);
+        return $ifWithOnlyReturnsByHash;
     }
 
     /**
@@ -173,14 +228,5 @@ CODE_SAMPLE
         });
 
         return $containsVariableNames;
-    }
-
-    /**
-     * @param array<string, If_[]> $ifWithOnlyReturnsByHash
-     * @return array<string, If_[]>
-     */
-    private function filterOutSingleItemStmts(array $ifWithOnlyReturnsByHash): array
-    {
-        return array_filter($ifWithOnlyReturnsByHash, fn (array $stmts): bool => count($stmts) >= 2);
     }
 }
