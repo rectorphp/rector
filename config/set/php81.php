@@ -6,6 +6,7 @@ namespace RectorPrefix20211103;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
+use Rector\Php81\Rector\FuncCall\Php81ResourceReturnToObjectRector;
 use Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
@@ -18,4 +19,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector::class);
     $services->set(\Rector\Php81\Rector\Property\ReadOnlyPropertyRector::class);
     $services->set(\Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector::class);
+    $services->set(\Rector\Php81\Rector\FuncCall\Php81ResourceReturnToObjectRector::class);
 };

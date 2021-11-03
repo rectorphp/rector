@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6d849416dcee469d604d15a39143728c
+class ComposerStaticInitf83c3b4cb9d6183aa3c1d4823093b37e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2756,6 +2756,7 @@ class ComposerStaticInit6d849416dcee469d604d15a39143728c
         'Rector\\Php80\\NodeFactory\\MatchArmsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchArmsFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchFactory.php',
         'Rector\\Php80\\NodeFactory\\StrStartsWithFuncCallFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/StrStartsWithFuncCallFactory.php',
+        'Rector\\Php80\\NodeManipulator\\ResourceReturnToObject' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/ResourceReturnToObject.php',
         'Rector\\Php80\\NodeManipulator\\TokenManipulator' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/TokenManipulator.php',
         'Rector\\Php80\\NodeResolver\\ArgumentSorter' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/ArgumentSorter.php',
         'Rector\\Php80\\NodeResolver\\RequireOptionalParamResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/RequireOptionalParamResolver.php',
@@ -2789,6 +2790,7 @@ class ComposerStaticInit6d849416dcee469d604d15a39143728c
         'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
+        'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
@@ -3503,9 +3505,9 @@ class ComposerStaticInit6d849416dcee469d604d15a39143728c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6d849416dcee469d604d15a39143728c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6d849416dcee469d604d15a39143728c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6d849416dcee469d604d15a39143728c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf83c3b4cb9d6183aa3c1d4823093b37e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf83c3b4cb9d6183aa3c1d4823093b37e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf83c3b4cb9d6183aa3c1d4823093b37e::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -51,7 +51,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private $addCommandsToReturnRector;
     /**
-     * @var \PhpParser\Parser
+     * @var NikicParser
      */
     private $nikicParser;
     /**
