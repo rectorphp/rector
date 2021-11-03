@@ -5,10 +5,10 @@ namespace Rector\Autodiscovery\Rector\Interface_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Interface_;
+use Rector\Autodiscovery\NodeAnalyzer\NetteComponentFactoryInterfaceAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
-use Rector\Nette\NodeAnalyzer\Component\NetteControlFactoryInterfaceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -19,16 +19,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInterfacesToContractNamespaceDirectoryRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\Nette\NodeAnalyzer\Component\NetteControlFactoryInterfaceAnalyzer
+     * @var \Rector\Autodiscovery\NodeAnalyzer\NetteComponentFactoryInterfaceAnalyzer
      */
-    private $netteControlFactoryInterfaceAnalyzer;
+    private $netteComponentFactoryInterfaceAnalyzer;
     /**
      * @var \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory
      */
     private $addedFileWithNodesFactory;
-    public function __construct(\Rector\Nette\NodeAnalyzer\Component\NetteControlFactoryInterfaceAnalyzer $netteControlFactoryInterfaceAnalyzer, \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory $addedFileWithNodesFactory)
+    public function __construct(\Rector\Autodiscovery\NodeAnalyzer\NetteComponentFactoryInterfaceAnalyzer $netteComponentFactoryInterfaceAnalyzer, \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory $addedFileWithNodesFactory)
     {
-        $this->netteControlFactoryInterfaceAnalyzer = $netteControlFactoryInterfaceAnalyzer;
+        $this->netteComponentFactoryInterfaceAnalyzer = $netteComponentFactoryInterfaceAnalyzer;
         $this->addedFileWithNodesFactory = $addedFileWithNodesFactory;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($this->netteControlFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
+        if ($this->netteComponentFactoryInterfaceAnalyzer->isComponentFactoryInterface($node)) {
             return null;
         }
         $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($this->file->getSmartFileInfo(), $this->file, 'Contract');

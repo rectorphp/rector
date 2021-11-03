@@ -1207,6 +1207,7 @@ return array(
     'Rector\\Autodiscovery\\Analyzer\\ValueObjectClassAnalyzer' => $baseDir . '/rules/Autodiscovery/Analyzer/ValueObjectClassAnalyzer.php',
     'Rector\\Autodiscovery\\Configuration\\CategoryNamespaceProvider' => $baseDir . '/rules/Autodiscovery/Configuration/CategoryNamespaceProvider.php',
     'Rector\\Autodiscovery\\FileLocation\\ExpectedFileLocationResolver' => $baseDir . '/rules/Autodiscovery/FileLocation/ExpectedFileLocationResolver.php',
+    'Rector\\Autodiscovery\\NodeAnalyzer\\NetteComponentFactoryInterfaceAnalyzer' => $baseDir . '/rules/Autodiscovery/NodeAnalyzer/NetteComponentFactoryInterfaceAnalyzer.php',
     'Rector\\Autodiscovery\\Rector\\Class_\\MoveEntitiesToEntityDirectoryRector' => $baseDir . '/rules/Autodiscovery/Rector/Class_/MoveEntitiesToEntityDirectoryRector.php',
     'Rector\\Autodiscovery\\Rector\\Class_\\MoveServicesBySuffixToDirectoryRector' => $baseDir . '/rules/Autodiscovery/Rector/Class_/MoveServicesBySuffixToDirectoryRector.php',
     'Rector\\Autodiscovery\\Rector\\Class_\\MoveValueObjectsToValueObjectDirectoryRector' => $baseDir . '/rules/Autodiscovery/Rector/Class_/MoveValueObjectsToValueObjectDirectoryRector.php',
