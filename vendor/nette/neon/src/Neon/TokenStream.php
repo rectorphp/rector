@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211102\Nette\Neon;
+namespace RectorPrefix20211103\Nette\Neon;
 
 /** @internal */
 final class TokenStream
@@ -29,18 +29,18 @@ final class TokenStream
     }
     public function isNext(...$types) : bool
     {
-        while (\in_array($this->tokens[$this->pos]->type ?? null, [\RectorPrefix20211102\Nette\Neon\Token::COMMENT, \RectorPrefix20211102\Nette\Neon\Token::WHITESPACE], \true)) {
+        while (\in_array($this->tokens[$this->pos]->type ?? null, [\RectorPrefix20211103\Nette\Neon\Token::COMMENT, \RectorPrefix20211103\Nette\Neon\Token::WHITESPACE], \true)) {
             $this->pos++;
         }
         return $types ? \in_array($this->tokens[$this->pos]->type ?? null, $types, \true) : isset($this->tokens[$this->pos]);
     }
-    public function consume(...$types) : ?\RectorPrefix20211102\Nette\Neon\Token
+    public function consume(...$types) : ?\RectorPrefix20211103\Nette\Neon\Token
     {
         return $this->isNext(...$types) ? $this->tokens[$this->pos++] : null;
     }
     public function getIndentation() : string
     {
-        return \in_array($this->tokens[$this->pos - 2]->type ?? null, [\RectorPrefix20211102\Nette\Neon\Token::NEWLINE, null], \true) && ($this->tokens[$this->pos - 1]->type ?? null) === \RectorPrefix20211102\Nette\Neon\Token::WHITESPACE ? $this->tokens[$this->pos - 1]->value : '';
+        return \in_array($this->tokens[$this->pos - 2]->type ?? null, [\RectorPrefix20211103\Nette\Neon\Token::NEWLINE, null], \true) && ($this->tokens[$this->pos - 1]->type ?? null) === \RectorPrefix20211103\Nette\Neon\Token::WHITESPACE ? $this->tokens[$this->pos - 1]->value : '';
     }
     /** @return never */
     public function error(string $message = null, int $pos = null) : void
@@ -57,6 +57,6 @@ final class TokenStream
         $col = \strlen($input) - \strrpos("\n" . $input, "\n") + 1;
         $token = $this->tokens[$pos] ?? null;
         $message = $message ?? 'Unexpected ' . ($token === null ? 'end' : "'" . \str_replace("\n", '<new line>', \substr($this->tokens[$pos]->value, 0, 40)) . "'");
-        throw new \RectorPrefix20211102\Nette\Neon\Exception("{$message} on line {$line}, column {$col}.");
+        throw new \RectorPrefix20211103\Nette\Neon\Exception("{$message} on line {$line}, column {$col}.");
     }
 }

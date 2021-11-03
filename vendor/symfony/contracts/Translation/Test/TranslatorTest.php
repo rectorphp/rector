@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211102\Symfony\Contracts\Translation\Test;
+namespace RectorPrefix20211103\Symfony\Contracts\Translation\Test;
 
-use RectorPrefix20211102\PHPUnit\Framework\TestCase;
-use RectorPrefix20211102\Symfony\Contracts\Translation\TranslatorInterface;
-use RectorPrefix20211102\Symfony\Contracts\Translation\TranslatorTrait;
+use RectorPrefix20211103\PHPUnit\Framework\TestCase;
+use RectorPrefix20211103\Symfony\Contracts\Translation\TranslatorInterface;
+use RectorPrefix20211103\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.
@@ -26,11 +26,11 @@ use RectorPrefix20211102\Symfony\Contracts\Translation\TranslatorTrait;
  *
  * @author Clemens Tolboom clemens@build2be.nl
  */
-class TranslatorTest extends \RectorPrefix20211102\PHPUnit\Framework\TestCase
+class TranslatorTest extends \RectorPrefix20211103\PHPUnit\Framework\TestCase
 {
     public function getTranslator()
     {
-        return new class implements \RectorPrefix20211102\Symfony\Contracts\Translation\TranslatorInterface
+        return new class implements \RectorPrefix20211103\Symfony\Contracts\Translation\TranslatorInterface
         {
             use TranslatorTrait;
         };

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211102\TYPO3\CMS\Core\Service;
+namespace RectorPrefix20211103\TYPO3\CMS\Core\Service;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Service\\AbstractService')) {
     return;

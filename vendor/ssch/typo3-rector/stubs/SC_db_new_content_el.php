@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211102;
+namespace RectorPrefix20211103;
 
 if (\class_exists('SC_db_new_content_el')) {
     return;

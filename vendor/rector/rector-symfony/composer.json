@@ -15,6 +15,7 @@
         "symplify\/phpstan-rules": "^10.0",
         "symfony\/security-core": "^5.3",
         "symfony\/security-http": "^5.3",
+        "symplify\/monorepo-builder": "^10.0",
         "symplify\/phpstan-extensions": "^10.0",
         "symplify\/easy-coding-standard": "^10.0",
         "symplify\/rule-doc-generator": "^10.0",
@@ -35,6 +36,7 @@
         ]
     },
     "scripts": {
+        "release": "vendor\/bin\/monorepo-builder release patch --ansi",
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
