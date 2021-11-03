@@ -181,6 +181,10 @@ CODE_SAMPLE
             if ($conditional instanceof \PhpParser\Node\Stmt\If_) {
                 return \true;
             }
+            $conditional = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Expr\Ternary::class);
+            if ($conditional instanceof \PhpParser\Node\Expr\Ternary) {
+                return \true;
+            }
         }
         return \false;
     }
