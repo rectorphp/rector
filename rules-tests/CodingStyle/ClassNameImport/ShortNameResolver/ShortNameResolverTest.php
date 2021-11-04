@@ -54,6 +54,13 @@ final class ShortNameResolverTest extends AbstractTestCase
         yield [__DIR__ . '/Fixture/partial_names.php.inc', [
             'PartialNames' => 'Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\Fixture\PartialNames',
         ]];
+
+        yield [__DIR__ . '/Fixture/union_partial_import.php.inc', [
+            'UnionPartialImport' => 'Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\Fixture\UnionPartialImport',
+            'rand' => 'rand',
+            'FirstLog' => 'Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\Source\FirstLog',
+            'SecondLog' => 'Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\Source\SecondLog',
+        ]];
     }
 
     private function createFileFromFilePath(string $filePath): File
