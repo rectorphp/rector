@@ -6,9 +6,11 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -20,7 +22,8 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(
         private CurrentFileProvider $currentFileProvider,
-        private UsedImportsResolver $usedImportsResolver
+        private UsedImportsResolver $usedImportsResolver,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -37,9 +40,18 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
      */
     public function mapToPHPStan(Node $node): Type
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Param && $parent->type === $node) {
-            $possibleAliasedObjectType = $this->resolvePossibleAliasedObjectType($node);
+        $param = $this->betterNodeFinder->findParentType($node, Param::class);
+        if ($param instanceof Param) {
+            $possibleAliasedObjectType = null;
+
+            if ($param->type instanceof NullableType && $param->type->type === $node) {
+                $possibleAliasedObjectType = $this->resolvePossibleAliasedObjectType($node);
+            }
+
+            if ($param->type === $node) {
+                $possibleAliasedObjectType = $this->resolvePossibleAliasedObjectType($node);
+            }
+
             if ($possibleAliasedObjectType instanceof AliasedObjectType) {
                 return $possibleAliasedObjectType;
             }

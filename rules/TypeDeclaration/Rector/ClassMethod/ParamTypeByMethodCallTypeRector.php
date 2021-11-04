@@ -9,6 +9,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -203,8 +204,8 @@ CODE_SAMPLE
                 return true;
             }
 
-            $conditional = $this->betterNodeFinder->findParentType($variable, Node\Expr\Ternary::class);
-            if ($conditional instanceof Node\Expr\Ternary) {
+            $conditional = $this->betterNodeFinder->findParentType($variable, Ternary::class);
+            if ($conditional instanceof Ternary) {
                 return true;
             }
         }
