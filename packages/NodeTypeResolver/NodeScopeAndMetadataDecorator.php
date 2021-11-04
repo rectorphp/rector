@@ -10,7 +10,6 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeTypeResolver\NodeVisitor\FileNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
@@ -78,9 +77,6 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
-
-        $fileNodeVisitor = new FileNodeVisitor($file);
-        $nodeTraverserForFormatPreservePrinting->addVisitor($fileNodeVisitor);
 
         $stmts = $nodeTraverserForFormatPreservePrinting->traverse($stmts);
 
