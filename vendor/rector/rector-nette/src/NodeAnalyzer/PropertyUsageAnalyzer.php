@@ -41,10 +41,6 @@ final class PropertyUsageAnalyzer
     }
     public function isPropertyFetchedInChildClass(\PhpParser\Node\Stmt\Property $property) : bool
     {
-        $className = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return \false;
-        }
         $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;

@@ -32,14 +32,18 @@ final class ContextGetAspectDynamicReturnTypeExtension implements \PHPStan\Type\
     public function getTypeFromMethodCall($methodReflection, $methodCall, $scope) : \PHPStan\Type\Type
     {
         $defaultObjectType = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\AspectInterface');
-        if (!($argument = $methodCall->args[0] ?? null) instanceof \PhpParser\Node\Arg) {
+        if (null === $methodCall->args) {
             return $defaultObjectType;
         }
-        /** @var Arg $argument */
-        if (!($string = $argument->value ?? null) instanceof \PhpParser\Node\Scalar\String_) {
+        $firstArg = $methodCall->args[0];
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
             return $defaultObjectType;
         }
-        switch ($string->value) {
+        $argValue = $firstArg->value;
+        if (!$argValue instanceof \PhpParser\Node\Scalar\String_) {
+            return $defaultObjectType;
+        }
+        switch ($argValue->value) {
             case 'date':
                 return new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Context\\DateTimeAspect');
             case 'visibility':

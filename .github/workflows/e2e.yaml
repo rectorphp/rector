@@ -18,6 +18,7 @@ jobs:
                 php_version: ['7.1', '7.2', '7.3', '7.4', '8.0']
                 directory:
                     - 'e2e/attributes'
+                    - 'e2e/define-constant'
                     - 'e2e/dont-execute-code'
                     - 'e2e/finalize'
                     - 'e2e/parse-php7-code'

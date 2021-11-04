@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,12 +23,25 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDelegatingParentCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const ALLOWED_ANNOTATIONS = ['Route', 'required'];
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_ATTRIBUTES = ['Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Contracts\\Service\\Attribute\\Required'];
+    /**
      * @var \Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator
      */
     private $currentAndParentClassMethodComparator;
-    public function __construct(\Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator)
+    /**
+     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
+     */
+    private $phpAttributeAnalyzer;
+    public function __construct(\Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->currentAndParentClassMethodComparator = $currentAndParentClassMethodComparator;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -78,7 +92,7 @@ CODE_SAMPLE
         if (!$this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall)) {
             return null;
         }
-        if ($this->hasRequiredAnnotation($node)) {
+        if ($this->shouldSkipWithAnnotationsOrAttributes($node)) {
             return null;
         }
         // the method is just delegation, nothing extra
@@ -116,10 +130,13 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function hasRequiredAnnotation(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function shouldSkipWithAnnotationsOrAttributes(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByName('required');
+        if ($phpDocInfo->hasByNames(self::ALLOWED_ANNOTATIONS)) {
+            return \true;
+        }
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($classMethod, self::ALLOWED_ATTRIBUTES);
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt|null

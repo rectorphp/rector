@@ -5,6 +5,7 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
@@ -42,7 +43,7 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Param && $parent->type === $node) {
+        if ($this->isParamTyped($node, $parent)) {
             $possibleAliasedObjectType = $this->resolvePossibleAliasedObjectType($node);
             if ($possibleAliasedObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
                 return $possibleAliasedObjectType;
@@ -55,6 +56,20 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
             return new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($originalName, $fullyQualifiedName);
         }
         return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($fullyQualifiedName);
+    }
+    private function isParamTyped(\PhpParser\Node\Name\FullyQualified $fullyQualified, ?\PhpParser\Node $node) : bool
+    {
+        if ($node instanceof \PhpParser\Node\Param && $node->type === $fullyQualified) {
+            return \true;
+        }
+        if (!$node instanceof \PhpParser\Node\NullableType) {
+            return \false;
+        }
+        $parentOfParent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentOfParent instanceof \PhpParser\Node\Param) {
+            return \false;
+        }
+        return $node->type === $fullyQualified;
     }
     private function resolvePossibleAliasedObjectType(\PhpParser\Node\Name\FullyQualified $fullyQualified) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
     {

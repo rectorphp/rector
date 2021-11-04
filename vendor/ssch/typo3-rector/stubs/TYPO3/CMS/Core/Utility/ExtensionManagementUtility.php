@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211103\TYPO3\CMS\Core\Utility;
+namespace RectorPrefix20211104\TYPO3\CMS\Core\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility')) {
     return;
@@ -32,6 +32,12 @@ class ExtensionManagementUtility
     public static function findService($serviceType, $serviceSubType = '', $excludeServiceKeys = [])
     {
         return 'foo';
+    }
+    /**
+     * @return void
+     */
+    public static function addModule($main, $sub = '', $position = '', $path = null, $moduleConfiguration = [])
+    {
     }
     /**
      * @return mixed[]

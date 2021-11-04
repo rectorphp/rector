@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211103\TYPO3\CMS\Core\Utility;
+namespace RectorPrefix20211104\TYPO3\CMS\Core\Utility;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Utility\\GeneralUtility')) {
     return;
@@ -349,6 +349,9 @@ class GeneralUtility
     {
     }
     public static function initSysLog()
+    {
+    }
+    public static function shortMD5($input, $len = 10)
     {
     }
 }

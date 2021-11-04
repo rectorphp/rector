@@ -76,6 +76,25 @@ trait TcaHelperTrait
     /**
      * @param \PhpParser\Node\Expr\Array_ $configValue
      * @param string $configKey
+     */
+    protected function hasKey($configValue, $configKey) : bool
+    {
+        foreach ($configValue->items as $configItemValue) {
+            if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
+                continue;
+            }
+            if (null === $configItemValue->key) {
+                continue;
+            }
+            if ($this->isValue($configItemValue->key, $configKey)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\Array_ $configValue
+     * @param string $configKey
      * @param string $expectedValue
      */
     protected function hasKeyValuePair($configValue, $configKey, $expectedValue) : bool

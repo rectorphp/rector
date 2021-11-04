@@ -155,13 +155,7 @@ You can focus on testing and possibly learning the new implementation of previou
 ## Special cases
 
 There are changes that typo3-rector knows of but cannot fully complete.
-That's why rector provides a HTML-Reporter which informs you about changes made and necessary steps to fully migrate.
-
-```php
-    $parameters->set(Typo3Option::REPORT_DIRECTORY,
-        __DIR__ . '/typo3-rector-logs'
-    );
-```
+That's why rector provides a message to inform you about changes made and necessary steps to fully migrate.
 
 An example for this would be the TCA change of replacing `'internal_type' => 'file'` with FAL.
 

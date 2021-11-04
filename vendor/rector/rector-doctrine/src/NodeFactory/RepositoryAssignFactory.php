@@ -9,6 +9,7 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RepositoryAssignFactory
 {
@@ -17,12 +18,17 @@ final class RepositoryAssignFactory
      */
     private $entityObjectTypeResolver;
     /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver $entityObjectTypeResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver $entityObjectTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->entityObjectTypeResolver = $entityObjectTypeResolver;
+        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
     }
     /**
@@ -31,7 +37,7 @@ final class RepositoryAssignFactory
     public function create(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PhpParser\Node\Expr\Assign
     {
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($repositoryClass);
-        $className = $repositoryClass->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $this->nodeNameResolver->getName($repositoryClass);
         if (!\is_string($className)) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }

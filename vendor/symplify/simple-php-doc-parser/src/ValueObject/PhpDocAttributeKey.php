@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211103\Symplify\SimplePhpDocParser\ValueObject;
+namespace RectorPrefix20211104\Symplify\SimplePhpDocParser\ValueObject;
 
 final class PhpDocAttributeKey
 {

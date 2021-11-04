@@ -24,19 +24,63 @@ https://github.com/sabbelasichon/typo3-rector/issues You can filter by tags
 
 Assign the issue to yourself so others can see that you are working on it.
 
-## Create Rector
+## Create an own Rector
 
 Run command and answer all questions properly
 ```bash
-./vendor/bin/rector typo3-create
+./vendor/bin/rector typo3-generate
 ```
 
-Afterwards you have to write your Rector and your tests for it.
-If you need, you have to create so called stubs.
-Stubs contain basically the skeleton of the classes you would like to refactor.
-Have a look at the stubs folder.
+This command will ask you some questions to provide a proper rector setup.
+Following this will lead to the creation of the overall rector structure necessay.
+It will create the skeleton for the rector with the class, test class, fixtures and directories to start coding - basically everything you need to start!
 
-Last but not least, register your file in the right config file under the config folder (Maybe not necessary anymore in the near future).
+
+### Useful infos:
+
+- the `refactor` must return a node or null
+- keep it flat! Use early returns (with null) in case your conditions for migration are not met
+- the `getNodeTypes` method is used to define the use case of the function to migrate. It helps as well acting like an early return (see example below)
+- helper functions and classes are provided via rector to make it easy for you to control further processing
+
+### Example
+
+In this example the methods `GeneralUtility::strtoupper(...)` and `GeneralUtility::strtolower(...)` are migrated.
+- `getNodeTypes` checks for the StaticCall, preventing further rector execution if not met
+- `refactor` first checks for the ObjectType to do an early return in case the class scanned is not `TYPO3\CMS\Core\Utility\GeneralUtility`
+- after that the actual function call is checked for being one of the functions to migrate
+
+
+```php
+final class GeneralUtilityToUpperAndLowerRector extends AbstractRector
+{
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes(): array
+    {
+        return [StaticCall::class];
+    }
+
+    /**
+     * @param StaticCall $node
+     */
+    public function refactor(Node $node): ?Node
+    {
+        if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
+            $node,
+            new ObjectType('TYPO3\CMS\Core\Utility\GeneralUtility')
+        )) {
+            return null;
+        }
+
+        if (! $this->isNames($node->name, ['strtoupper', 'strtolower'])) {
+            return null;
+        }
+...
+```
+
+
 
 ## All Tests must be Green
 
@@ -47,6 +91,13 @@ All unit tests must pass before submitting a pull request.
 ```bash
 ./vendor/bin/phpunit
 ```
+
+Overall hints for testing:
+
+- testing happens via fixture files (*.php.inc)
+- those files display the code before and after execution, separated by `-----`
+- rector keeps spaces etc. as its job is migration and not code cleaning, so keep that in mind
+- provide custom test classes via "Source" folder, that will be tested, but *will not* be affected by your rector to to test and prevent side effects of your rule
 
 ## Submit your changes
 

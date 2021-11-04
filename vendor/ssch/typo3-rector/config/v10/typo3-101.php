@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211103;
+namespace RectorPrefix20211104;
 
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -22,4 +22,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set('record_history_rename_methods')->class(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\Renaming\ValueObject\MethodCallRename('TYPO3\\CMS\\Backend\\History\\RecordHistory', 'createChangeLog', 'getChangeLog'), new \Rector\Renaming\ValueObject\MethodCallRename('TYPO3\\CMS\\Backend\\History\\RecordHistory', 'getElementData', 'getElementInformation'), new \Rector\Renaming\ValueObject\MethodCallRename('TYPO3\\CMS\\Backend\\History\\RecordHistory', 'createMultipleDiff', 'getDiff'), new \Rector\Renaming\ValueObject\MethodCallRename('TYPO3\\CMS\\Backend\\History\\RecordHistory', 'setLastHistoryEntry', 'setLastHistoryEntryNumber')])]]);
     $services->set(\Ssch\TYPO3Rector\Rector\v10\v1\SendNotifyEmailToMailApiRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v10\v1\RefactorInternalPropertiesOfTSFERector::class);
+    $services->set(\Ssch\TYPO3Rector\Rector\v10\v1\RemoveEnableMultiSelectFilterTextfieldRector::class);
 };

@@ -107,7 +107,7 @@ CODE_SAMPLE
             // Keep empty parameters in trimExplode here (third parameter FALSE), so position is not changed
             $fieldArray = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(';', $fieldString);
             $fieldArray = [self::FIELD_NAME => isset($fieldArray[0]) ? $fieldArray[0] : '', self::FIELD_LABEL => isset($fieldArray[1]) ? $fieldArray[1] : null, self::PALETTE_NAME => isset($fieldArray[2]) ? $fieldArray[2] : null, self::FIELD_EXTRA => isset($fieldArray[3]) ? $fieldArray[3] : null];
-            $fieldName = $fieldArray[self::FIELD_NAME] ?? '';
+            $fieldName = (string) $fieldArray[self::FIELD_NAME];
             if (null !== $fieldArray[self::FIELD_EXTRA]) {
                 // Move fieldExtra "specConf" to columnsOverrides "defaultExtras"
                 // Merge with given defaultExtras from columns.

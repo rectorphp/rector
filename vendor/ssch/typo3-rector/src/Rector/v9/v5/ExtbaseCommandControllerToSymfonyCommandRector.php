@@ -3,16 +3,17 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v5;
 
-use RectorPrefix20211103\Nette\Utils\Strings;
+use RectorPrefix20211104\Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\Parser as NikicParser;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\Type\ObjectType;
-use Rector\Core\PhpParser\Parser\Parser;
+use Rector\Core\PhpParser\Parser\RectorParser;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
@@ -23,7 +24,7 @@ use Ssch\TYPO3Rector\Template\TemplateFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211103\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211104\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/9.5/en-us/ApiOverview/CommandControllers/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommandRector\ExtbaseCommandControllerToSymfonyCommandRectorTest
@@ -35,9 +36,9 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private $smartFileSystem;
     /**
-     * @var \Rector\Core\PhpParser\Parser\Parser
+     * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
-    private $parser;
+    private $rectorParser;
     /**
      * @var \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector
      */
@@ -51,21 +52,21 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
      */
     private $addCommandsToReturnRector;
     /**
-     * @var NikicParser
+     * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
-    private $nikicParser;
+    private $simplePhpParser;
     /**
      * @var \Ssch\TYPO3Rector\Template\TemplateFinder
      */
     private $templateFinder;
-    public function __construct(\RectorPrefix20211103\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\Parser $parser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \PhpParser\Parser $nikicParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
+    public function __construct(\RectorPrefix20211104\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector $addArgumentToSymfonyCommandRector, \Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddCommandsToReturnRector $addCommandsToReturnRector, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
     {
         $this->smartFileSystem = $smartFileSystem;
-        $this->parser = $parser;
+        $this->rectorParser = $rectorParser;
         $this->addArgumentToSymfonyCommandRector = $addArgumentToSymfonyCommandRector;
         $this->filesFinder = $filesFinder;
         $this->addCommandsToReturnRector = $addCommandsToReturnRector;
-        $this->nikicParser = $nikicParser;
+        $this->simplePhpParser = $simplePhpParser;
         $this->templateFinder = $templateFinder;
     }
     /**
@@ -117,11 +118,15 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             }
             $commandPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($commandMethod);
             $paramTags = $commandPhpDocInfo->getParamTagValueNodes();
+            /** @var PhpDocTextNode[] $descriptionPhpDocNodes */
             $descriptionPhpDocNodes = $commandPhpDocInfo->getByType(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode::class);
             $methodParameters = $commandMethod->params;
-            $commandDescription = (string) $descriptionPhpDocNodes[0] ?? '';
+            if (!isset($descriptionPhpDocNodes[0])) {
+                continue;
+            }
+            $commandDescription = $descriptionPhpDocNodes[0]->text;
             $commandTemplate = $this->templateFinder->getCommand();
-            $commandName = \RectorPrefix20211103\Nette\Utils\Strings::firstUpper($commandMethodName);
+            $commandName = \RectorPrefix20211104\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();
             $filePath = \sprintf('%s/Classes/Command/%s.php', $extensionDirectory, $commandName);
             // Do not overwrite existing file
@@ -132,11 +137,8 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             // Add traits, other methods etc. to class
             // Maybe inject dependencies into __constructor
             $commandContent = \str_replace(\array_keys($commandVariables), $commandVariables, $commandContent);
-            $nodes = $this->nikicParser->parse($commandContent);
-            if (null === $nodes) {
-                $nodes = [];
-            }
-            $this->decorateNamesToFullyQualified($nodes);
+            $stmts = $this->simplePhpParser->parseString($commandContent);
+            $this->decorateNamesToFullyQualified($stmts);
             $nodeTraverser = new \PhpParser\NodeTraverser();
             $inputArguments = [];
             foreach ($methodParameters as $key => $methodParameter) {
@@ -149,10 +151,10 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             }
             $this->addArgumentToSymfonyCommandRector->configure([\Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand\AddArgumentToSymfonyCommandRector::INPUT_ARGUMENTS => $inputArguments]);
             $nodeTraverser->addVisitor($this->addArgumentToSymfonyCommandRector);
-            $nodes = $nodeTraverser->traverse($nodes);
-            $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+            $stmts = $nodeTraverser->traverse($stmts);
+            $changedSetConfigContent = $this->betterStandardPrinter->prettyPrintFile($stmts);
             $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($filePath, $changedSetConfigContent));
-            $newCommandName = \sprintf('%s:%s', \RectorPrefix20211103\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20211103\Nette\Utils\Strings::lower($commandName));
+            $newCommandName = \sprintf('%s:%s', \RectorPrefix20211104\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20211104\Nette\Utils\Strings::lower($commandName));
             $newCommandsWithFullQualifiedNamespace[$newCommandName] = \sprintf('%s\\%s', $commandNamespace, $commandName);
         }
         $this->addNewCommandsToCommandsFile($commandsFilePath, $newCommandsWithFullQualifiedNamespace);
@@ -228,10 +230,10 @@ CODE_SAMPLE
     {
         if ($this->smartFileSystem->exists($commandsFilePath)) {
             $commandsSmartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($commandsFilePath);
-            $nodes = $this->parser->parseFileInfo($commandsSmartFileInfo);
+            $nodes = $this->rectorParser->parseFile($commandsSmartFileInfo);
         } else {
             $defaultsCommandsTemplate = $this->templateFinder->getCommandsConfiguration();
-            $nodes = $this->parser->parseFileInfo($defaultsCommandsTemplate);
+            $nodes = $this->rectorParser->parseFile($defaultsCommandsTemplate);
         }
         $this->decorateNamesToFullyQualified($nodes);
         $nodeTraverser = new \PhpParser\NodeTraverser();
@@ -242,13 +244,13 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($commandsFilePath, $changedCommandsContent));
     }
     /**
-     * @param Node[] $nodes
+     * @param Stmt[] $stmts
      */
-    private function decorateNamesToFullyQualified(array $nodes) : void
+    private function decorateNamesToFullyQualified(array $stmts) : void
     {
         // decorate nodes with names first
         $nameResolverNodeTraverser = new \PhpParser\NodeTraverser();
         $nameResolverNodeTraverser->addVisitor(new \PhpParser\NodeVisitor\NameResolver());
-        $nameResolverNodeTraverser->traverse($nodes);
+        $nameResolverNodeTraverser->traverse($stmts);
     }
 }

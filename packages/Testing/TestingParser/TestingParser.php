@@ -9,7 +9,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix20211103\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211104\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
@@ -32,7 +32,7 @@ final class TestingParser
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20211103\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20211104\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->parameterProvider = $parameterProvider;
         $this->rectorParser = $rectorParser;

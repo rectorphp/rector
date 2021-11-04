@@ -5,7 +5,7 @@ namespace Ssch\TYPO3Rector\Rector\v8\v0;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -71,8 +71,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Expr\MethodCall $node) : bool
     {
-        $staticType = $this->getStaticType($node->var);
-        if ($staticType instanceof \PHPStan\Type\TypeWithClassName && 'TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer' === $staticType->getClassName()) {
+        if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer'))) {
             return \false;
         }
         return !$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'cObj');

@@ -8,6 +8,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -22,7 +23,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
-use RectorPrefix20211103\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211104\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -42,7 +43,7 @@ final class ParamTypeByMethodCallTypeRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher, \RectorPrefix20211103\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher, \RectorPrefix20211104\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->callerParamMatcher = $callerParamMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;

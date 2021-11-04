@@ -1,4 +1,4 @@
-# 207 Rules Overview
+# 219 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -950,6 +950,26 @@ Use findByPidsAndAuthorId instead of findByPidsAndAuthor
 
 <br>
 
+## FlexFormToolsArrayValueByPathRector
+
+Replace deprecated FlexFormTools methods with ArrayUtility methods
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\FlexFormToolsArrayValueByPathRector`](../src/Rector/v11/v5/FlexFormToolsArrayValueByPathRector.php)
+
+```diff
+-use TYPO3\CMS\Core\Configuration\FlexForm\FlexFormTools;
+-$flexFormTools = new FlexFormTools();
++use TYPO3\CMS\Core\Utility\ArrayUtility;
+ $searchArray = [];
+-$value = $flexFormTools->getArrayValueByPath('search/path', $searchArray);
++$value = ArrayUtility::getValueByPath($searchArray, 'search/path');
+
+-$flexFormTools->setArrayValueByPath('set/path', $dataArray, $value);
++$dataArray = ArrayUtility::setValueByPath($dataArray, 'set/path', $value);
+```
+
+<br>
+
 ## ForceTemplateParsingInTsfeAndTemplateServiceRector
 
 Force template parsing in tsfe is replaced with context api and aspects
@@ -990,6 +1010,32 @@ Return `TYPO3\CMS\Extbase\Http\ForwardResponse` instead of `TYPO3\CMS\Extbase\Mv
 +        return new ForwardResponse('show');
     }
  }
+```
+
+<br>
+
+## FullQualifiedNamePostRector
+
+Use fully qualified names
+
+- class: [`Ssch\TYPO3Rector\Rector\PostRector\FullQualifiedNamePostRector`](../src/Rector/PostRector/FullQualifiedNamePostRector.php)
+
+```diff
+-use \TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+-
+-ExtensionUtility::configurePlugin(
++\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+         'News',
+         'Pi1',
+         [
+             \GeorgRinger\News\Controller\NewsController::class => 'list,detail,selectedList,dateMenu,searchForm,searchResult',
+             \GeorgRinger\News\Controller\CategoryController::class => 'list',
+             \GeorgRinger\News\Controller\TagController::class => 'list',
+         ],
+         [
+             'News' => 'searchForm,searchResult',
+         ]
+     );
 ```
 
 <br>
@@ -1217,6 +1263,41 @@ Use setMetaTag method from PageRenderer class
 
 <br>
 
+## MethodGetInstanceToMakeInstanceCallRector
+
+Use GeneralUtility::makeInstance instead of getInstance call
+
+:wrench: **configure it!**
+
+- class: [`Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector`](../src/Rector/General/MethodGetInstanceToMakeInstanceCallRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Ssch\TYPO3Rector\Rector\General\MethodGetInstanceToMakeInstanceCallRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(MethodGetInstanceToMakeInstanceCallRector::class)
+        ->call('configure', [[MethodGetInstanceToMakeInstanceCallRector::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE => ['SomeClass']]]);
+};
+```
+
+↓
+
+```diff
+-$instance = TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
++use TYPO3\CMS\Core\Resource\Index\ExtractorRegistry;
++
++$instance = GeneralUtility::makeInstance(ExtractorRegistry::class);
+```
+
+<br>
+
 ## MethodReadLLFileToLocalizationFactoryRector
 
 Use LocalizationFactory->getParsedData instead of GeneralUtility::readLLfile
@@ -1228,6 +1309,44 @@ Use LocalizationFactory->getParsedData instead of GeneralUtility::readLLfile
  use TYPO3\CMS\Core\Utility\GeneralUtility;
 -$locallangs = GeneralUtility::readLLfile('EXT:foo/locallang.xml', 'de');
 +$locallangs = GeneralUtility::makeInstance(LocalizationFactory::class)->getParsedData('EXT:foo/locallang.xml', 'de');
+```
+
+<br>
+
+## MigrateFileFolderConfigurationRector
+
+Migrate file folder config
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v4\MigrateFileFolderConfigurationRector`](../src/Rector/v11/v4/MigrateFileFolderConfigurationRector.php)
+
+```diff
+ 'aField' => [
+    'config' => [
+       'type' => 'select',
+       'renderType' => 'selectSingle',
+-      'fileFolder' => 'EXT:my_ext/Resources/Public/Icons',
+-      'fileFolder_extList' => 'svg',
+-      'fileFolder_recursions' => 1,
++      'fileFolderConfig' => [
++         'folder' => 'EXT:styleguide/Resources/Public/Icons',
++         'allowedExtensions' => 'svg',
++         'depth' => 1,
++      ]
+    ]
+ ]
+```
+
+<br>
+
+## MigrateFrameModuleToSvgTreeRector
+
+Migrate the iframe based file tree to SVG
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v2\MigrateFrameModuleToSvgTreeRector`](../src/Rector/v11/v2/MigrateFrameModuleToSvgTreeRector.php)
+
+```diff
+-'navigationFrameModule' => 'file_navframe'
++'navigationComponentId' => 'TYPO3/CMS/Backend/Tree/FileStorageTreeContainer'
 ```
 
 <br>
@@ -1696,6 +1815,27 @@ Use method getTSConfig instead of property userTS
 -if(is_array($GLOBALS['BE_USER']->userTS['tx_news.']) && $GLOBALS['BE_USER']->userTS['tx_news.']['singleCategoryAcl'] === '1') {
 +if(is_array($GLOBALS['BE_USER']->getTSConfig()['tx_news.']) && $GLOBALS['BE_USER']->getTSConfig()['tx_news.']['singleCategoryAcl'] === '1') {
      return true;
+ }
+```
+
+<br>
+
+## ProvideCObjViaMethodRector
+
+Replaces public `$cObj` with protected and set via method
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v4\ProvideCObjViaMethodRector`](../src/Rector/v11/v4/ProvideCObjViaMethodRector.php)
+
+```diff
+ class Foo
+ {
+-    public $cObj;
++    protected $cObj;
++
++    public function setContentObjectRenderer(ContentObjectRenderer $cObj): void
++    {
++        $this->cObj = $cObj;
++    }
  }
 ```
 
@@ -2321,6 +2461,29 @@ Remove TCA config 'max' on inputDateTime fields
 
 <br>
 
+## RemoveDefaultInternalTypeDBRector
+
+Remove the default type for internal_type
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\RemoveDefaultInternalTypeDBRector`](../src/Rector/v11/v5/RemoveDefaultInternalTypeDBRector.php)
+
+```diff
+ return [
+     'ctrl' => [
+     ],
+     'columns' => [
+         'foobar' => [
+             'config' => [
+                 'type' => 'group',
+-                'internal_type' => 'db',
+             ],
+         ],
+     ],
+ ];
+```
+
+<br>
+
 ## RemoveDivider2TabsConfigurationRector
 
 Removed dividers2tabs functionality
@@ -2338,6 +2501,25 @@ Removed dividers2tabs functionality
      'columns' => [
      ],
  ];
+```
+
+<br>
+
+## RemoveEnableMultiSelectFilterTextfieldRector
+
+Remove "enableMultiSelectFilterTextfield" => true as its default
+
+- class: [`Ssch\TYPO3Rector\Rector\v10\v1\RemoveEnableMultiSelectFilterTextfieldRector`](../src/Rector/v10/v1/RemoveEnableMultiSelectFilterTextfieldRector.php)
+
+```diff
+ 'foo' => [
+    'label' => 'foo',
+    'config' => [
+       'type' => 'select',
+       'renderType' => 'selectMultipleSideBySide',
+-      'enableMultiSelectFilterTextfield' => true,
+    ]
+ ],
 ```
 
 <br>
@@ -3129,6 +3311,19 @@ Replace $_EXTKEY with extension key
 
 <br>
 
+## ReplaceStdAuthCodeWithHmacRector
+
+Replace GeneralUtility::stdAuthCode with GeneralUtility::hmac
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v3\ReplaceStdAuthCodeWithHmacRector`](../src/Rector/v11/v3/ReplaceStdAuthCodeWithHmacRector.php)
+
+```diff
+-// Just a warning
++// Only outputting a warning message
+```
+
+<br>
+
 ## ReplacedGeneralUtilitySysLogWithLogginApiRector
 
 Replaced GeneralUtility::sysLog with Logging API
@@ -3401,6 +3596,26 @@ Substitute deprecated method calls of class GeneralUtility
 -GeneralUtility::milliseconds();
 +inet_ntop(inet_pton($address));
 +round(microtime(true) * 1000);
+```
+
+<br>
+
+## SubstituteMethodRmFromListOfGeneralUtilityRector
+
+Use native php functions instead of GeneralUtility::rmFromList
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v3\SubstituteMethodRmFromListOfGeneralUtilityRector`](../src/Rector/v11/v3/SubstituteMethodRmFromListOfGeneralUtilityRector.php)
+
+```diff
+-use TYPO3\CMS\Core\Utility\GeneralUtility;
+-
+ $element = '1';
+ $list = '1,2,3';
+-
+-$newList = GeneralUtility::rmFromList($element, $list);
++$newList = implode(',', array_filter(explode(',', $list), function($item) use($element) {
++    return $element == $item;
++}));
 ```
 
 <br>
@@ -3989,6 +4204,26 @@ htmlspecialchars directly to properly escape the content.
 
 <br>
 
+## UseIconsFromSubFolderInIconRegistryRector
+
+Use icons from subfolder in IconRegistry
+
+- class: [`Ssch\TYPO3Rector\Rector\v10\v4\UseIconsFromSubFolderInIconRegistryRector`](../src/Rector/v10/v4/UseIconsFromSubFolderInIconRegistryRector.php)
+
+```diff
+ \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class)
+         ->registerIcon(
+             'apps-pagetree-reference',
+             TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+             [
+-                'source' => 'typo3/sysext/core/Resources/Public/Icons/T3Icons/content/content-text.svg',
++                'source' => 'typo3/sysext/core/Resources/Public/Icons/T3Icons/svgs/content/content-text.svg',
+             ]
+         );
+```
+
+<br>
+
 ## UseLanguageAspectForTsfeLanguagePropertiesRector
 
 Use LanguageAspect instead of language properties of TSFE
@@ -4054,6 +4289,24 @@ Use method getPageShortcut directly from PageRepository
 ```diff
 -$GLOBALS['TSFE']->getPageShortcut('shortcut', 1, 1);
 +$GLOBALS['TSFE']->sys_page->getPageShortcut('shortcut', 1, 1);
+```
+
+<br>
+
+## UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector
+
+Use php native function instead of GeneralUtility::shortMd5
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v4\UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector`](../src/Rector/v11/v4/UseNativeFunctionInsteadOfGeneralUtilityShortMd5Rector.php)
+
+```diff
+-use TYPO3\CMS\Core\Utility\GeneralUtility;
+-
+ $length = 10;
+ $input = 'value';
+
+-$shortMd5 = GeneralUtility::shortMD5($input, $length);
++$shortMd5 = substr(md5($input), 0, $length);
 ```
 
 <br>

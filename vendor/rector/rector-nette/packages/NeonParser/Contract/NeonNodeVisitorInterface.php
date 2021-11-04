@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\NeonParser\Contract;
 
-use RectorPrefix20211103\Nette\Neon\Node;
+use RectorPrefix20211104\Nette\Neon\Node;
 interface NeonNodeVisitorInterface
 {
     /**
@@ -12,5 +12,5 @@ interface NeonNodeVisitorInterface
     /**
      * @param \Nette\Neon\Node $node
      */
-    public function enterNode($node) : \RectorPrefix20211103\Nette\Neon\Node;
+    public function enterNode($node) : \RectorPrefix20211104\Nette\Neon\Node;
 }

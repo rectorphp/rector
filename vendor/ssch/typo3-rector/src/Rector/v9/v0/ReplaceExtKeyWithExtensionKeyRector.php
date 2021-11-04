@@ -12,10 +12,13 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211104\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Important-82692-GuidelinesForExtensionFiles.html
- * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyRectorTest
+ * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromFolderNameTest
+ * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromComposerJsonNameRectorTest
+ * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\ReplaceExtKeyWithExtensionKeyRector\ReplaceExtKeyWithExtensionKeyFromComposerJsonExtensionKeyExtraSectionRectorTest
  */
 final class ReplaceExtKeyWithExtensionKeyRector extends \Rector\Core\Rector\AbstractRector
 {
@@ -78,7 +81,10 @@ CODE_SAMPLE
         if ($this->isAssignment($node)) {
             return null;
         }
-        $extensionKey = \basename($extEmConf->getRealPathDirectory());
+        $extensionKey = $this->resolveExtensionKeyByComposerJson($extEmConf);
+        if (null === $extensionKey) {
+            $extensionKey = \basename($extEmConf->getRealPathDirectory());
+        }
         return new \PhpParser\Node\Scalar\String_($extensionKey);
     }
     private function isExtensionKeyVariable(\PhpParser\Node\Expr\Variable $variable) : bool
@@ -94,5 +100,22 @@ CODE_SAMPLE
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
         return $parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node;
+    }
+    private function resolveExtensionKeyByComposerJson(\Symplify\SmartFileSystem\SmartFileInfo $extEmConf) : ?string
+    {
+        try {
+            $composerJson = new \Symplify\SmartFileSystem\SmartFileInfo($extEmConf->getRealPathDirectory() . '/composer.json');
+            $json = \json_decode($composerJson->getContents(), \true);
+            if (isset($json['extra']['typo3/cms']['extension-key'])) {
+                return $json['extra']['typo3/cms']['extension-key'];
+            }
+            if (isset($json['name'])) {
+                [, $extensionKey] = \explode('/', $json['name'], 2);
+                return \str_replace('-', '_', $extensionKey);
+            }
+        } catch (\RectorPrefix20211104\Symplify\SmartFileSystem\Exception\FileNotFoundException $exception) {
+            return null;
+        }
+        return null;
     }
 }

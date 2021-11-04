@@ -159,7 +159,7 @@ CODE_SAMPLE
             if (null === $return->expr) {
                 continue;
             }
-            $returnType = $this->nodeTypeResolver->getStaticType($return->expr);
+            $returnType = $this->getType($return->expr);
             if ($returnType->isSuperTypeOf($responseObjectType)->yes()) {
                 return \true;
             }

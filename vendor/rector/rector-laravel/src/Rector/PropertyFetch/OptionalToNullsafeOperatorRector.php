@@ -20,10 +20,10 @@ use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20211103\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20211104\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211103\Webmozart\Assert\Assert;
+use RectorPrefix20211104\Webmozart\Assert\Assert;
 /**
  * @see https://github.com/laravel/laravel/pull/5670
  * @see https://github.com/laravel/framework/pull/38868
@@ -53,7 +53,7 @@ final class OptionalToNullsafeOperatorRector extends \Rector\Core\Rector\Abstrac
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\RectorPrefix20211103\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\RectorPrefix20211104\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->typeChecker = $typeChecker;
         $this->argsAnalyzer = $argsAnalyzer;
@@ -124,7 +124,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $excludeMethods = $configuration[self::EXCLUDE_METHODS] ?? [];
-        \RectorPrefix20211103\Webmozart\Assert\Assert::allString($excludeMethods);
+        \RectorPrefix20211104\Webmozart\Assert\Assert::allString($excludeMethods);
         $this->excludeMethods = $excludeMethods;
     }
     private function hasCallback(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
