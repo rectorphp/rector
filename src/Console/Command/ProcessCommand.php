@@ -205,6 +205,15 @@ final class ProcessCommand extends \RectorPrefix20211104\Symfony\Component\Conso
      */
     private function configurePHPStanNodeScopeResolver(array $files) : void
     {
+        $filePaths = $this->resolvePhpFilePaths($files);
+        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+    }
+    /**
+     * @param File[] $files
+     * @return string[]
+     */
+    private function resolvePhpFilePaths(array $files) : array
+    {
         $filePaths = [];
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();
@@ -213,6 +222,6 @@ final class ProcessCommand extends \RectorPrefix20211104\Symfony\Component\Conso
                 $filePaths[] = $pathName;
             }
         }
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+        return $filePaths;
     }
 }

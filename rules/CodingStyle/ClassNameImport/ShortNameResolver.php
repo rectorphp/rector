@@ -26,6 +26,9 @@ use ReflectionClass;
 use RectorPrefix20211104\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20211104\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix20211104\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+/**
+ * @see \Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\ShortNameResolverTest
+ */
 final class ShortNameResolver
 {
     /**
@@ -85,15 +88,14 @@ final class ShortNameResolver
     /**
      * @return array<string, string>
      */
-    public function resolveForNode(\Rector\Core\ValueObject\Application\File $file) : array
+    public function resolveFromFile(\Rector\Core\ValueObject\Application\File $file) : array
     {
-        $smartFileInfo = $file->getSmartFileInfo();
-        $nodeRealPath = $smartFileInfo->getRealPath();
-        if (isset($this->shortNamesByFilePath[$nodeRealPath])) {
-            return $this->shortNamesByFilePath[$nodeRealPath];
+        $filePath = $file->getFilePath();
+        if (isset($this->shortNamesByFilePath[$filePath])) {
+            return $this->shortNamesByFilePath[$filePath];
         }
         $shortNamesToFullyQualifiedNames = $this->resolveForStmts($file->getNewStmts());
-        $this->shortNamesByFilePath[$nodeRealPath] = $shortNamesToFullyQualifiedNames;
+        $this->shortNamesByFilePath[$filePath] = $shortNamesToFullyQualifiedNames;
         return $shortNamesToFullyQualifiedNames;
     }
     /**

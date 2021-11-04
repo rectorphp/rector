@@ -108,7 +108,7 @@ CODE_SAMPLE
         }
         $this->resolvedNodeNames = $this->useManipulator->resolveUsedNameNodes($searchNode);
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
-        $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file, $node);
+        $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file);
         // lowercase
         $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);
         $this->resolvedNodeNames = \array_change_key_case($this->resolvedNodeNames, \CASE_LOWER);
