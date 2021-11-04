@@ -28,6 +28,9 @@ use Symfony\Contracts\Service\Attribute\Required;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
+/**
+ * @see \Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\ShortNameResolverTest
+ */
 final class ShortNameResolver
 {
     /**
@@ -64,17 +67,16 @@ final class ShortNameResolver
     /**
      * @return array<string, string>
      */
-    public function resolveForNode(File $file): array
+    public function resolveFromFile(File $file): array
     {
-        $smartFileInfo = $file->getSmartFileInfo();
-        $nodeRealPath = $smartFileInfo->getRealPath();
+        $filePath = $file->getFilePath();
 
-        if (isset($this->shortNamesByFilePath[$nodeRealPath])) {
-            return $this->shortNamesByFilePath[$nodeRealPath];
+        if (isset($this->shortNamesByFilePath[$filePath])) {
+            return $this->shortNamesByFilePath[$filePath];
         }
 
         $shortNamesToFullyQualifiedNames = $this->resolveForStmts($file->getNewStmts());
-        $this->shortNamesByFilePath[$nodeRealPath] = $shortNamesToFullyQualifiedNames;
+        $this->shortNamesByFilePath[$filePath] = $shortNamesToFullyQualifiedNames;
 
         return $shortNamesToFullyQualifiedNames;
     }

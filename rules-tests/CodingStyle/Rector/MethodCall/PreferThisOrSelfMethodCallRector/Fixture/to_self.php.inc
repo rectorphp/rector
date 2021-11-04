@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\AbstractTestCase;
+use Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\SomeAbstractTestCase;
 
-class ToSelf extends AbstractTestCase
+class ToSelf extends SomeAbstractTestCase
 {
     public function run()
     {
@@ -21,9 +21,9 @@ class ToSelf extends AbstractTestCase
 
 namespace Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\AbstractTestCase;
+use Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\Source\SomeAbstractTestCase;
 
-class ToSelf extends AbstractTestCase
+class ToSelf extends SomeAbstractTestCase
 {
     public function run()
     {

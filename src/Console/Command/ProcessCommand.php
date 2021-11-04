@@ -205,7 +205,18 @@ final class ProcessCommand extends Command
      */
     private function configurePHPStanNodeScopeResolver(array $files): void
     {
+        $filePaths = $this->resolvePhpFilePaths($files);
+        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+    }
+
+    /**
+     * @param File[] $files
+     * @return string[]
+     */
+    private function resolvePhpFilePaths(array $files): array
+    {
         $filePaths = [];
+
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();
             $pathName = $smartFileInfo->getPathname();
@@ -215,6 +226,6 @@ final class ProcessCommand extends Command
             }
         }
 
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+        return $filePaths;
     }
 }
