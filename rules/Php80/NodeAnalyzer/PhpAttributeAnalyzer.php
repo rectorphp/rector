@@ -31,4 +31,18 @@ final class PhpAttributeAnalyzer
 
         return false;
     }
+
+    /**
+     * @param string[] $attributeClasses
+     */
+    public function hasPhpAttributes(Property | ClassLike | ClassMethod | Param $node, array $attributeClasses): bool
+    {
+        foreach ($attributeClasses as $attributeClass) {
+            if ($this->hasPhpAttribute($node, $attributeClass)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

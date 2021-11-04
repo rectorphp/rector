@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -23,8 +24,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveDelegatingParentCallRector extends AbstractRector
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_ANNOTATIONS = ['Route', 'required'];
+
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_ATTRIBUTES = [
+        'Symfony\Component\Routing\Annotation\Route',
+        'Symfony\Contracts\Service\Attribute\Required',
+    ];
+
     public function __construct(
-        private CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator
+        private CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator,
+        private PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 
@@ -91,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->hasRequiredAnnotation($node)) {
+        if ($this->shouldSkipWithAnnotationsOrAttributes($node)) {
             return null;
         }
 
@@ -137,10 +152,14 @@ CODE_SAMPLE
         return null;
     }
 
-    private function hasRequiredAnnotation(ClassMethod $classMethod): bool
+    private function shouldSkipWithAnnotationsOrAttributes(ClassMethod $classMethod): bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        return $phpDocInfo->hasByName('required');
+        if ($phpDocInfo->hasByNames(self::ALLOWED_ANNOTATIONS)) {
+            return true;
+        }
+
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($classMethod, self::ALLOWED_ATTRIBUTES);
     }
 
     private function matchClassMethodOnlyStmt(ClassMethod $classMethod): null | Stmt | Expr
