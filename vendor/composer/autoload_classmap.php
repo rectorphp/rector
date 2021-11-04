@@ -2170,7 +2170,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\StaticCallMethodCallTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/StaticCallMethodCallTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\TraitTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/TraitTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\VariableTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/VariableTypeResolver.php',
-    'Rector\\NodeTypeResolver\\NodeVisitor\\FileNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/FileNodeVisitor.php',
     'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionLikeParamArgPositionNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/FunctionLikeParamArgPositionNodeVisitor.php',
     'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionMethodAndClassNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/FunctionMethodAndClassNodeVisitor.php',
     'Rector\\NodeTypeResolver\\NodeVisitor\\NamespaceNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/NamespaceNodeVisitor.php',

@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -53,13 +52,9 @@ CODE_SAMPLE
         if ($classShortName === $smartFileInfo->getBasenameWithoutSuffix()) {
             return null;
         }
-        $file = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FILE);
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
-            return null;
-        }
         // no match → rename file
         $newFileLocation = $smartFileInfo->getPath() . \DIRECTORY_SEPARATOR . $classShortName . '.php';
-        $this->removedAndAddedFilesCollector->addMovedFile($file, $newFileLocation);
+        $this->removedAndAddedFilesCollector->addMovedFile($this->file, $newFileLocation);
         return null;
     }
 }

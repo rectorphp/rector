@@ -7,7 +7,6 @@ use RectorPrefix20211104\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -56,8 +55,7 @@ CODE_SAMPLE
             return null;
         }
         $newPathName = $this->createPathName($oldPathname);
-        $file = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FILE);
-        $this->removedAndAddedFilesCollector->addMovedFile($file, $newPathName);
+        $this->removedAndAddedFilesCollector->addMovedFile($this->file, $newPathName);
         return null;
     }
     private function createPathName(string $oldRealPath) : string

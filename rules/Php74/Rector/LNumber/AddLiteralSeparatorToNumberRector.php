@@ -9,7 +9,6 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -119,12 +118,7 @@ CODE_SAMPLE
     {
         /** @var int $startToken */
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
-        $file = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::FILE);
-        // new node
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
-            return \true;
-        }
-        $oldTokens = $file->getOldTokens();
+        $oldTokens = $this->file->getOldTokens();
         foreach ($oldTokens[$startToken] as $token) {
             if (!\is_string($token)) {
                 continue;
