@@ -14,7 +14,6 @@ use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
-use Rector\Set\ValueObject\DowngradeSetList;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -64,6 +63,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 \Symplify\RuleDocGenerator\Contract\Category\CategoryInfererInterface::class,
                 \PhpParser\PrettyPrinterAbstract::class,
                 \Helmich\TypoScriptParser\Parser\Traverser\Visitor::class,
+                \Symplify\SymplifyKernel\Contract\LightKernelInterface::class,
             ],
             DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
                 ContainerInterface::class => [

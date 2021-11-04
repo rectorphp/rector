@@ -44,8 +44,10 @@ final class DowngradePathsCommand extends Command
             'vendor/symfony/dependency-injection',
             'vendor/symfony/console',
             'vendor/symfony vendor/psr',
-            'vendor/symplify vendor/nikic vendor/ssch bin src packages rector.php',
+            'vendor/symplify vendor/nikic src packages',
+            'vendor/ssch',
             'rules',
+            'bin rector.php',
         ], $downgradePaths);
 
         if (file_exists(getcwd() . '/vendor/phpstan/phpstan-extracted/vendor')) {
