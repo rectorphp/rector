@@ -60,7 +60,6 @@ use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
 use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
-use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
@@ -168,7 +167,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SetTypeToCastRector::class);
     $services->set(LogicalToBooleanRector::class);
     $services->set(VarToPublicPropertyRector::class);
-    $services->set(FixClassCaseSensitivityNameRector::class);
     $services->set(IssetOnPropertyObjectToPropertyExistsRector::class);
     $services->set(NewStaticToNewSelfRector::class);
     $services->set(DateTimeToDateTimeInterfaceRector::class);

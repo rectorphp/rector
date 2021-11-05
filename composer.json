@@ -106,7 +106,6 @@
             "rules-tests/Renaming/Rector/Name/RenameClassRector/Source"
         ],
         "files": [
-            "rules-tests/CodeQuality/Rector/Name/FixClassCaseSensitivityNameRector/Source/MissCaseTypedClass.php",
             "stubs/Doctrine/Persistence/ObjectManager.php",
             "stubs/Doctrine/Common/Persistence/ObjectManager.php",
             "rules-tests/Transform/Rector/FuncCall/FuncCallToMethodCallRector/Source/some_view_function.php",
