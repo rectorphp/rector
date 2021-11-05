@@ -181,7 +181,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
      */
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type) : bool
     {
@@ -222,7 +222,7 @@ CODE_SAMPLE
         return $possibleUnionType;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $node
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
      */
     private function shouldSkipNonClassLikeType($node, \PHPStan\Type\Type $type) : bool
     {

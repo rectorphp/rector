@@ -26,7 +26,7 @@ use RectorPrefix20211105\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211105\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
-     * @var \PhpParser\Node|null
+     * @var PhpParserNode|null
      */
     private $currentPhpParserNode;
     /**

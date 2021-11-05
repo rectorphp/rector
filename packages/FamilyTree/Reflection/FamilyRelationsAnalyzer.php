@@ -87,7 +87,7 @@ final class FamilyRelationsAnalyzer
         return $childrenClassReflections;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null $propertyTypeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $propertyTypeNode
      */
     public function getPossibleUnionPropertyType(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $varType, ?\PHPStan\Analyser\Scope $scope, $propertyTypeNode) : \Rector\FamilyTree\ValueObject\PropertyType
     {

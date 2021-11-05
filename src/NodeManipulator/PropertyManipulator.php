@@ -93,7 +93,6 @@ final class PropertyManipulator
         if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Id', 'Doctrine\\ORM\\Mapping\\Column', 'Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne', 'JMS\\Serializer\\Annotation\\Type'])) {
             return \true;
         }
-        // $propertyOrPromotedParam->attrGroups
         $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {

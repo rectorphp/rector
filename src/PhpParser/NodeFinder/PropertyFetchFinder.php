@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -39,17 +39,12 @@ final class PropertyFetchFinder
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    /**
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
-     */
-    private $classAnalyzer;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->astResolver = $astResolver;
-        $this->classAnalyzer = $classAnalyzer;
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
@@ -57,7 +52,7 @@ final class PropertyFetchFinder
      */
     public function findPrivatePropertyFetches($propertyOrPromotedParam) : array
     {
-        $classLike = $propertyOrPromotedParam->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($propertyOrPromotedParam, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return [];
         }
@@ -65,14 +60,19 @@ final class PropertyFetchFinder
         if ($propertyName === null) {
             return [];
         }
-        $className = (string) $this->nodeNameResolver->getName($classLike);
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return $this->findPropertyFetchesInClassLike($classLike->stmts, $propertyName);
+        $className = $this->nodeNameResolver->getName($classLike);
+        // unable to resolved
+        if ($className === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($this->reflectionProvider->hasClass($className)) {
+            $classReflection = $this->reflectionProvider->getClass($className);
+        } else {
+            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
+        }
         $nodes = [$classLike];
         $nodes = \array_merge($nodes, $this->astResolver->parseClassReflectionTraits($classReflection));
-        return $this->findPropertyFetchesInNonAnonymousClassLike($nodes, $propertyName);
+        return $this->findPropertyFetchesInClassLike($nodes, $propertyName);
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
@@ -95,25 +95,6 @@ final class PropertyFetchFinder
             $foundPropertyFetches[] = $propertyFetch;
         }
         return $foundPropertyFetches;
-    }
-    /**
-     * @param Stmt[] $stmts
-     * @return PropertyFetch[]|StaticPropertyFetch[]
-     */
-    private function findPropertyFetchesInNonAnonymousClassLike(array $stmts, string $propertyName) : array
-    {
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->findPropertyFetchesInClassLike($stmts, $propertyName);
-        foreach ($propertyFetches as $key => $propertyFetch) {
-            $currentClassLike = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-            if (!$currentClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
-                continue;
-            }
-            if ($this->classAnalyzer->isAnonymousClass($currentClassLike)) {
-                unset($propertyFetches[$key]);
-            }
-        }
-        return $propertyFetches;
     }
     /**
      * @param Stmt[] $stmts
