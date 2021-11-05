@@ -16,7 +16,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\NodeFinder;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
@@ -57,14 +56,10 @@ final class ClassMethodAssignManipulator
      */
     private $reflectionResolver;
     /**
-     * @var \PhpParser\NodeFinder
-     */
-    private $nodeFinder;
-    /**
      * @var \Rector\Core\NodeManipulator\ArrayDestructVariableFilter
      */
     private $arrayDestructVariableFilter;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \PhpParser\NodeFinder $nodeFinder, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
@@ -72,7 +67,6 @@ final class ClassMethodAssignManipulator
         $this->variableManipulator = $variableManipulator;
         $this->nodeComparator = $nodeComparator;
         $this->reflectionResolver = $reflectionResolver;
-        $this->nodeFinder = $nodeFinder;
         $this->arrayDestructVariableFilter = $arrayDestructVariableFilter;
     }
     /**
@@ -163,7 +157,7 @@ final class ClassMethodAssignManipulator
     {
         $referencedVariables = [];
         /** @var Variable[] $variables */
-        $variables = $this->nodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\Variable::class);
+        $variables = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Expr\Variable::class);
         foreach ($variables as $variable) {
             if ($this->nodeNameResolver->isName($variable, 'this')) {
                 continue;

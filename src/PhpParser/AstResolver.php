@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -63,10 +62,6 @@ final class AstResolver
      */
     private $smartFileSystem;
     /**
-     * @var \PhpParser\NodeFinder
-     */
-    private $nodeFinder;
-    /**
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
@@ -94,11 +89,10 @@ final class AstResolver
      * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
     private $classLikeAstResolver;
-    public function __construct(\RectorPrefix20211105\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \RectorPrefix20211105\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \PhpParser\NodeFinder $nodeFinder, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
+    public function __construct(\RectorPrefix20211105\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \RectorPrefix20211105\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->smartFileSystem = $smartFileSystem;
-        $this->nodeFinder = $nodeFinder;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -146,7 +140,7 @@ final class AstResolver
         if ($nodes === null) {
             return null;
         }
-        $class = $this->nodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             // avoids looking for a class in a file where is not present
             $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = null;
@@ -187,7 +181,7 @@ final class AstResolver
             return null;
         }
         /** @var Function_[] $functions */
-        $functions = $this->nodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Function_::class);
+        $functions = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Function_::class);
         foreach ($functions as $function) {
             if (!$this->nodeNameResolver->isName($function, $functionReflection->getName())) {
                 continue;
