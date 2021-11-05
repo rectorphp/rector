@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
+class ComposerStaticInit1597e5290d82f782f1db9173ddac309a
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1740,7 +1740,6 @@ class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
         'Rector\\CodingStyle\\Enum\\PreferenceSelfThis' => __DIR__ . '/../..' . '/rules/CodingStyle/Enum/PreferenceSelfThis.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
-        'Rector\\CodingStyle\\Naming\\NameRenamer' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/NameRenamer.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\ImplodeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/ImplodeAnalyzer.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\SpreadVariablesCollector' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/SpreadVariablesCollector.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
@@ -1749,9 +1748,7 @@ class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
         'Rector\\CodingStyle\\NodeFactory\\JsonEncodeStaticCallFactory' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeFactory/JsonEncodeStaticCallFactory.php',
         'Rector\\CodingStyle\\Node\\ConcatJoiner' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/ConcatJoiner.php',
         'Rector\\CodingStyle\\Node\\ConcatManipulator' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/ConcatManipulator.php',
-        'Rector\\CodingStyle\\Node\\DocAliasResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/DocAliasResolver.php',
         'Rector\\CodingStyle\\Node\\NameImporter' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/NameImporter.php',
-        'Rector\\CodingStyle\\Node\\UseNameAliasToNameResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/UseNameAliasToNameResolver.php',
         'Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php',
         'Rector\\CodingStyle\\Rector\\Assign\\PHPStormVarAnnotationRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php',
         'Rector\\CodingStyle\\Rector\\Assign\\SplitDoubleAssignRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php',
@@ -1789,7 +1786,6 @@ class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
         'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
         'Rector\\CodingStyle\\Rector\\Switch_\\BinarySwitchToIfElseRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Switch_/BinarySwitchToIfElseRector.php',
         'Rector\\CodingStyle\\Rector\\Ternary\\TernaryConditionVariableAssignmentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Ternary/TernaryConditionVariableAssignmentRector.php',
-        'Rector\\CodingStyle\\Rector\\Use_\\RemoveUnusedAliasRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Use_/RemoveUnusedAliasRector.php',
         'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
         'Rector\\CodingStyle\\Reflection\\VendorLocationDetector' => __DIR__ . '/../..' . '/rules/CodingStyle/Reflection/VendorLocationDetector.php',
         'Rector\\CodingStyle\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/TypeAnalyzer/IterableTypeAnalyzer.php',
@@ -1920,7 +1916,6 @@ class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
         'Rector\\Core\\PhpParser\\ClassLikeAstResolver' => __DIR__ . '/../..' . '/src/PhpParser/ClassLikeAstResolver.php',
         'Rector\\Core\\PhpParser\\Comparing\\ConditionSearcher' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/ConditionSearcher.php',
         'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/NodeComparator.php',
-        'Rector\\Core\\PhpParser\\NodeFinder\\FullyQualifiedFromUseFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/FullyQualifiedFromUseFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalConstantFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalConstantFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
@@ -2274,8 +2269,6 @@ class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlQueryMysqlErrorWithLinkRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php',
-        'Rector\\NameImporting\\NodeAnalyzer\\UseAnalyzer' => __DIR__ . '/../..' . '/packages/NameImporting/NodeAnalyzer/UseAnalyzer.php',
-        'Rector\\NameImporting\\ValueObject\\NameAndParent' => __DIR__ . '/../..' . '/packages/NameImporting/ValueObject/NameAndParent.php',
         'Rector\\Naming\\Contract\\Guard\\ConflictingNameGuardInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/Guard/ConflictingNameGuardInterface.php',
         'Rector\\Naming\\Contract\\RenameParamValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameParamValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenamePropertyValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenamePropertyValueObjectInterface.php',
@@ -3529,9 +3522,9 @@ class ComposerStaticInit7ca76728edb0a984003398e31dc50a90
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7ca76728edb0a984003398e31dc50a90::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7ca76728edb0a984003398e31dc50a90::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7ca76728edb0a984003398e31dc50a90::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1597e5290d82f782f1db9173ddac309a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1597e5290d82f782f1db9173ddac309a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1597e5290d82f782f1db9173ddac309a::$classMap;
 
         }, null, ClassLoader::class);
     }

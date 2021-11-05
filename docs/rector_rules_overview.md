@@ -12,7 +12,7 @@
 
 - [CodeQuality](#codequality) (69)
 
-- [CodingStyle](#codingstyle) (39)
+- [CodingStyle](#codingstyle) (38)
 
 - [Composer](#composer) (6)
 
@@ -76,7 +76,7 @@
 
 - [Php80](#php80) (17)
 
-- [Php81](#php81) (5)
+- [Php81](#php81) (6)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -2347,24 +2347,6 @@ Non-magic PHP object methods cannot start with "__"
 -        $anotherObject->__getSurname();
 +        $anotherObject->getSurname();
      }
- }
-```
-
-<br>
-
-### RemoveUnusedAliasRector
-
-Removes unused use aliases. Keep annotation aliases like "Doctrine\ORM\Mapping as ORM" to keep convention format
-
-- class: [`Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector`](../rules/CodingStyle/Rector/Use_/RemoveUnusedAliasRector.php)
-
-```diff
--use Symfony\Kernel as BaseKernel;
-+use Symfony\Kernel;
-
--class SomeClass extends BaseKernel
-+class SomeClass extends Kernel
- {
  }
 ```
 
@@ -8021,6 +8003,26 @@ Refactor MyCLabs enum fetch to Enum const
 ```diff
 -$name = SomeEnum::VALUE()->getKey();
 +$name = SomeEnum::VALUE;
+```
+
+<br>
+
+### Php81ResourceReturnToObjectRector
+
+Change `is_resource()` to instanceof Object
+
+- class: [`Rector\Php81\Rector\FuncCall\Php81ResourceReturnToObjectRector`](../rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $f = finfo_open();
+-        is_resource($f);
++        $f instanceof \finfo;
+     }
+ }
 ```
 
 <br>

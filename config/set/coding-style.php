@@ -31,7 +31,6 @@ use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchR
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
-use Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector;
 use Rector\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
@@ -43,7 +42,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector::class);
     $services->set(\Rector\CodingStyle\Rector\FuncCall\ConsistentImplodeRector::class);
     $services->set(\Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector::class);
-    $services->set(\Rector\CodingStyle\Rector\Use_\RemoveUnusedAliasRector::class);
     $services->set(\Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector::class);
     $services->set(\Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector::class);
     $services->set(\Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class);
