@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ClassManipulator
@@ -25,13 +26,18 @@ final class ClassManipulator
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
+     */
+    private $classChildAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->reflectionProvider = $reflectionProvider;
+        $this->classChildAnalyzer = $classChildAnalyzer;
     }
-    public function hasParentMethodOrInterface(\PHPStan\Type\ObjectType $objectType, string $methodName) : bool
+    public function hasParentMethodOrInterface(\PHPStan\Type\ObjectType $objectType, string $oldMethod, string $newMethod) : bool
     {
         if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
             return \false;
@@ -41,9 +47,13 @@ final class ClassManipulator
             if ($classReflection === $ancestorClassReflection) {
                 continue;
             }
-            if ($ancestorClassReflection->hasMethod($methodName)) {
-                return \true;
+            if (!$ancestorClassReflection->hasMethod($oldMethod)) {
+                continue;
             }
+            if ($this->classChildAnalyzer->hasChildClassMethod($ancestorClassReflection, $newMethod)) {
+                continue;
+            }
+            return \true;
         }
         return \false;
     }
