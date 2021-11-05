@@ -107,6 +107,8 @@ CODE_SAMPLE
             return null;
         }
         $this->resolvedNamesAndParentsByShortName = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
+        dump(\count($this->resolvedNamesAndParentsByShortName));
+        die;
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file);
         // lowercase
