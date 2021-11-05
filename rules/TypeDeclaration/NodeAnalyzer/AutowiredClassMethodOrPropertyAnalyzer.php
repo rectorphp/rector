@@ -8,14 +8,14 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
     public function __construct(
         private PhpDocInfoFactory $phpDocInfoFactory,
-        private NodeNameResolver $nodeNameResolver
+        private PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 
@@ -26,17 +26,6 @@ final class AutowiredClassMethodOrPropertyAnalyzer
             return true;
         }
 
-        foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isNames(
-                    $attribute->name,
-                    [Required::class, 'Nette\DI\Attributes\Inject']
-                )) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, [Required::class, 'Nette\DI\Attributes\Inject']);
     }
 }
