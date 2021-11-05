@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
@@ -61,7 +60,6 @@ final class AstResolver
     public function __construct(
         private SmartPhpParser $smartPhpParser,
         private SmartFileSystem $smartFileSystem,
-        private NodeFinder $nodeFinder,
         private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
@@ -115,7 +113,7 @@ final class AstResolver
             return null;
         }
 
-        $class = $this->nodeFinder->findFirstInstanceOf($nodes, Class_::class);
+        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, Class_::class);
         if (! $class instanceof Class_) {
             // avoids looking for a class in a file where is not present
             $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = null;
@@ -163,7 +161,7 @@ final class AstResolver
         }
 
         /** @var Function_[] $functions */
-        $functions = $this->nodeFinder->findInstanceOf($nodes, Function_::class);
+        $functions = $this->betterNodeFinder->findInstanceOf($nodes, Function_::class);
         foreach ($functions as $function) {
             if (! $this->nodeNameResolver->isName($function, $functionReflection->getName())) {
                 continue;

@@ -17,7 +17,6 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\NodeFinder;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Type\Type;
@@ -42,7 +41,6 @@ final class ClassMethodAssignManipulator
         private VariableManipulator $variableManipulator,
         private NodeComparator $nodeComparator,
         private ReflectionResolver $reflectionResolver,
-        private NodeFinder $nodeFinder,
         private ArrayDestructVariableFilter $arrayDestructVariableFilter
     ) {
     }
@@ -163,7 +161,7 @@ final class ClassMethodAssignManipulator
         $referencedVariables = [];
 
         /** @var Variable[] $variables */
-        $variables = $this->nodeFinder->findInstanceOf($classMethod, Variable::class);
+        $variables = $this->betterNodeFinder->findInstanceOf($classMethod, Variable::class);
 
         foreach ($variables as $variable) {
             if ($this->nodeNameResolver->isName($variable, 'this')) {

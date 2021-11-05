@@ -12,7 +12,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeFinder;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Reflection\ReflectionProvider;
@@ -49,7 +48,6 @@ final class ShortNameResolver
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private NodeNameResolver $nodeNameResolver,
-        private NodeFinder $nodeFinder,
         private ReflectionProvider $reflectionProvider,
         private BetterNodeFinder $betterNodeFinder,
         private UseImportNameMatcher $useImportNameMatcher,
@@ -94,7 +92,7 @@ final class ShortNameResolver
         }
 
         /** @var ClassLike[] $classLikes */
-        $classLikes = $this->nodeFinder->findInstanceOf($namespace, ClassLike::class);
+        $classLikes = $this->betterNodeFinder->findInstanceOf($namespace, ClassLike::class);
 
         $shortClassLikeNames = [];
         foreach ($classLikes as $classLike) {
@@ -197,7 +195,7 @@ final class ShortNameResolver
      */
     private function resolveNativeClassReflection(array $stmts): ?ReflectionClass
     {
-        $firstClassLike = $this->nodeFinder->findFirstInstanceOf($stmts, ClassLike::class);
+        $firstClassLike = $this->betterNodeFinder->findFirstInstanceOf($stmts, ClassLike::class);
         if (! $firstClassLike instanceof ClassLike) {
             return null;
         }
