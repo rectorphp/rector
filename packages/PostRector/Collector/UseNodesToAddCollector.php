@@ -103,7 +103,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
 
         $fileFunctionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileFunctionUseImportTypes as $fileFunctionUseImportType) {
-            if ($fileFunctionUseImportType->getShortName() === $fullyQualifiedObjectType->getShortName()) {
+            if ($fileFunctionUseImportType->getShortName() === $shortName) {
                 return true;
             }
         }
