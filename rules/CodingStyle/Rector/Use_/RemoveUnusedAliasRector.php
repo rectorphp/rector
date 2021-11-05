@@ -27,9 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedAliasRector extends AbstractRector
 {
     /**
-     * @var array<string, NameAndParent[]>
+     * @var NameAndParent[]
      */
-    private array $resolvedNamesAndParentsByShortName = [];
+    private array $namesAndParents = [];
 
     /**
      * @var array<string, string[]>
@@ -99,17 +99,12 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->resolvedNamesAndParentsByShortName = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
+        $this->namesAndParents = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file);
 
         // lowercase
         $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);
-
-        $this->resolvedNamesAndParentsByShortName = array_change_key_case(
-            $this->resolvedNamesAndParentsByShortName,
-            CASE_LOWER
-        );
 
         $this->useNamesAliasToName = array_change_key_case($this->useNamesAliasToName, CASE_LOWER);
 
@@ -119,7 +114,6 @@ CODE_SAMPLE
             }
 
             $lastName = $use->name->getLast();
-            $lowercasedLastName = strtolower($lastName);
 
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
@@ -128,7 +122,8 @@ CODE_SAMPLE
             }
 
             // only last name is used → no need for alias
-            if (isset($this->resolvedNamesAndParentsByShortName[$lowercasedLastName])) {
+            $matchedNamesAndParents = $this->matchNamesAndParentsByShort($lastName);
+            if ($matchedNamesAndParents !== []) {
                 $use->alias = null;
                 continue;
             }
@@ -166,7 +161,7 @@ CODE_SAMPLE
         $loweredAliasName = strtolower($aliasName);
 
         // both are used → nothing to remove
-        if (isset($this->resolvedNamesAndParentsByShortName[$loweredLastName], $this->resolvedNamesAndParentsByShortName[$loweredAliasName])) {
+        if ($this->areBothShortNamesUsed($loweredLastName, $loweredLastName)) {
             return true;
         }
 
@@ -198,15 +193,12 @@ CODE_SAMPLE
             return;
         }
 
-        $loweredFullUseUseName = strtolower($fullUseUseName);
-        if (! isset($this->resolvedNamesAndParentsByShortName[$loweredFullUseUseName])) {
+        $parentsAndNames = $this->matchNamesAndParentsByShort($fullUseUseName);
+        if ($parentsAndNames === []) {
             return;
         }
 
-        $this->nameRenamer->renameNameNode(
-            $this->resolvedNamesAndParentsByShortName[$loweredFullUseUseName],
-            $lastName
-        );
+        $this->nameRenamer->renameNameNode($parentsAndNames, $lastName);
         $useUse->alias = null;
     }
 
@@ -229,5 +221,24 @@ CODE_SAMPLE
         }
 
         return $use->getAttribute(AttributeKey::NEXT_NODE);
+    }
+
+    private function areBothShortNamesUsed(string $firstName, string $secondName): bool
+    {
+        $firstNamesAndParents = $this->matchNamesAndParentsByShort($firstName);
+        $secondNamesAndParents = $this->matchNamesAndParentsByShort($secondName);
+
+        return $firstNamesAndParents !== [] && $secondNamesAndParents !== [];
+    }
+
+    /**
+     * @return NameAndParent[]
+     */
+    private function matchNamesAndParentsByShort(string $shortName): array
+    {
+        return array_filter(
+            $this->namesAndParents,
+            fn (NameAndParent $nameAndParent): bool => $nameAndParent->matchShortName($shortName)
+        );
     }
 }

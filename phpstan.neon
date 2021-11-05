@@ -158,7 +158,6 @@ parameters:
                 - packages/NodeNestingScope/NodeFinder/ScopeAwareNodeFinder.php
 
         - '#Method (.*?) should return array<PhpParser\\Node\\(.*?)\> but returns array<PhpParser\\Node\>#'
-        - '#Parameter \#1 (.*?) expects Symfony\\Component\\DependencyInjection\\ContainerBuilder, Symfony\\Component\\DependencyInjection\\ContainerInterface given#'
 
         # intersection
         - '#Property Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\:\:\$returnTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
@@ -170,7 +169,6 @@ parameters:
             message: '#Comparison operation "<" between 0 and 2 is always true#'
             paths:
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
-#        - '#PHPDoc tag @param for parameter \$node with type float is incompatible with native type PhpParser\\Node#'
 
         # false postives
         - '#Parameter \#2 \$right of class PhpParser\\Node\\Expr\\BinaryOp\\Spaceship constructor expects PhpParser\\Node\\Expr, PhpParser\\Node\\Expr\|null given#'
@@ -340,7 +338,6 @@ parameters:
             message: '#Function "function_exists\(\)" cannot be used/left in the code#'
             paths:
                  - src/functions/node_helper.php
-                 - packages/ReadWrite/Guard/VariableToConstantGuard.php
                  - packages/NodeTypeResolver/PHPStan/CollisionGuard/MixinGuard.php
 
         # special case - cleanup in the future
@@ -416,19 +413,8 @@ parameters:
             paths:
                 - packages/Caching/ValueObject/Storage/FileCacheStorage.php
 
-        -
-            message: '#Arguments names conflicts with parent class method\: "\$(.*?)" should be "\$(.*?)"\. This will break named arguments#'
-            paths:
-                - src/PhpParser/Printer/BetterStandardPrinter.php
-                - packages/BetterPhpDocParser/PhpDocParser/BetterPhpDocParser.php
-                - packages/BetterPhpDocParser/PhpDocParser/BetterTypeParser.php
-
         # resolve later
         -  '#Variables "\$(.*?)" are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
-
-        -
-            message: '#Instead of array shape, use value object with specific types in constructor and getters#'
-            path: src/NodeFactory/ClassWithPublicPropertiesFactory.php #26
 
         -
             message: '#Instead of abstract class, use specific service with composition#'
@@ -517,10 +503,6 @@ parameters:
 
         # waits for enum phpstan to support PHSPtan 1.0
         - '#Constant Rector\\(.*?)\\Enum\\(.*?)\:\:(.*?) is unused#'
-
-        # type is known - skip asserts for some reason
-        - '#Property Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector\:\:\$arrayFunctionsToMethodCalls \(array<Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>\) does not accept array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\|Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>#'
-        - '#Property Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector\:\:\$argumentFuncCallToMethodCalls \(array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\>\) does not accept array<Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall\|Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall\>#'
 
         # use lighter service for performance reasons
         -

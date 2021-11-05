@@ -14,6 +14,7 @@ final class NameAndParent
      * @param Name|Identifier $nameNode
      */
     public function __construct(
+        private string $shortName,
         private Node $nameNode,
         private Node $parentNode
     ) {
@@ -27,5 +28,10 @@ final class NameAndParent
     public function getParentNode(): Node
     {
         return $this->parentNode;
+    }
+
+    public function matchShortName(string $desiredShortName): bool
+    {
+        return strtolower($this->shortName) === strtolower($desiredShortName);
     }
 }
