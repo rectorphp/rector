@@ -44,10 +44,9 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         $this->useImportTypesInFilePath[$smartFileInfo->getRealPath()][] = $objectType;
     }
     /**
-     * @param \PhpParser\Node $node
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
      */
-    public function addFunctionUseImport($node, $fullyQualifiedObjectType) : void
+    public function addFunctionUseImport($fullyQualifiedObjectType) : void
     {
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();

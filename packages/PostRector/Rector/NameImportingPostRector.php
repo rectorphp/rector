@@ -123,7 +123,7 @@ CODE_SAMPLE
         // @todo test if old stmts or new stmts! or both? :)
         /** @var Use_[] $currentUses */
         $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), \PhpParser\Node\Stmt\Use_::class);
-        if ($this->shouldImportName($name, $file, $currentUses)) {
+        if ($this->shouldImportName($name, $currentUses)) {
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
         return null;
@@ -131,7 +131,7 @@ CODE_SAMPLE
     /**
      * @param Use_[] $currentUses
      */
-    private function shouldImportName(\PhpParser\Node\Name $name, \Rector\Core\ValueObject\Application\File $file, array $currentUses) : bool
+    private function shouldImportName(\PhpParser\Node\Name $name, array $currentUses) : bool
     {
         if (\substr_count($name->toCodeString(), '\\') <= 1) {
             return \true;

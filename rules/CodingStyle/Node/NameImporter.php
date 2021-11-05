@@ -167,7 +167,7 @@ final class NameImporter
         }
         $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
-            $this->useNodesToAddCollector->addFunctionUseImport($name, $fullyQualifiedObjectType);
+            $this->useNodesToAddCollector->addFunctionUseImport($fullyQualifiedObjectType);
         } else {
             $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
         }
