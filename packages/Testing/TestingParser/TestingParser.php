@@ -6,7 +6,6 @@ namespace Rector\Testing\TestingParser;
 
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -22,7 +21,6 @@ final class TestingParser
         private ParameterProvider $parameterProvider,
         private RectorParser $rectorParser,
         private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -43,14 +41,14 @@ final class TestingParser
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
 
-    /**
-     * @template T of Node
-     * @param class-string<T> $nodeClass
-     * @return Node[]
-     */
-    public function parseFileToDecoratedNodesAndFindNodesByType(string $file, string $nodeClass): array
+    public function parseFilePathToFile(string $filePath): File
     {
-        $nodes = $this->parseFileToDecoratedNodes($file);
-        return $this->betterNodeFinder->findInstanceOf($nodes, $nodeClass);
+        $smartFileInfo = new SmartFileInfo($filePath);
+        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+
+        $stmts = $this->rectorParser->parseFile($smartFileInfo);
+        $file->hydrateStmtsAndTokens($stmts, $stmts, []);
+
+        return $file;
     }
 }

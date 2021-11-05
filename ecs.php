@@ -72,6 +72,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/StaticDoctrineAnnotationParserTest.php',
             '*TypeResolverTest.php',
+            __DIR__ . '/rules-tests/CodingStyle/Node/UseManipulator/UseManipulatorTest.php',
         ],
     ]);
 
