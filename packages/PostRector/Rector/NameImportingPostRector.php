@@ -111,7 +111,7 @@ CODE_SAMPLE
         /** @var Use_[] $currentUses */
         $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
 
-        if ($this->shouldImportName($name, $file, $currentUses)) {
+        if ($this->shouldImportName($name, $currentUses)) {
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
 
@@ -121,7 +121,7 @@ CODE_SAMPLE
     /**
      * @param Use_[] $currentUses
      */
-    private function shouldImportName(Name $name, File $file, array $currentUses): bool
+    private function shouldImportName(Name $name, array $currentUses): bool
     {
         if (substr_count($name->toCodeString(), '\\') <= 1) {
             return true;

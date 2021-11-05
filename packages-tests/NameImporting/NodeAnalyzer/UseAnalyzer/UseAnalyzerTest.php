@@ -11,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\UseUse;
 use Rector\NameImporting\NodeAnalyzer\UseAnalyzer;
 use Rector\NameImporting\ValueObject\NameAndParent;
 use Rector\Testing\PHPUnit\AbstractTestCase;
@@ -82,15 +83,17 @@ final class UseAnalyzerTest extends AbstractTestCase
             'BaseKernel',
             0,
             new Identifier('BaseKernel'),
-            Node\Stmt\UseUse::class,
+            UseUse::class,
         ];
+
         yield [
             __DIR__ . '/Fixture/use_import.php.inc',
             'BaseInterface',
             0,
             new Identifier('BaseInterface'),
-            Node\Stmt\UseUse::class,
+            UseUse::class,
         ];
+
         yield [__DIR__ . '/Fixture/use_import.php.inc', 'SomeClass', 0, new Identifier('SomeClass'), Class_::class];
     }
 }

@@ -6,5 +6,4 @@ namespace Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallR
 
 abstract class SomeAbstractTestCase
 {
-
 }

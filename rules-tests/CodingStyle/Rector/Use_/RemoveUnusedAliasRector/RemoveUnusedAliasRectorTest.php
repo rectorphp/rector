@@ -15,8 +15,6 @@ final class RemoveUnusedAliasRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
-        dump($fileInfo->getRealPath());
-
         $this->doTestFileInfo($fileInfo);
     }
 

@@ -44,7 +44,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         $this->useImportTypesInFilePath[$smartFileInfo->getRealPath()][] = $objectType;
     }
 
-    public function addFunctionUseImport(Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType): void
+    public function addFunctionUseImport(FullyQualifiedObjectType $fullyQualifiedObjectType): void
     {
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();
