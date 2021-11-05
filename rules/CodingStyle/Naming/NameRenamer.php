@@ -29,11 +29,11 @@ final class NameRenamer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param NameAndParent[] $usedNameNodes
+     * @param NameAndParent[] $namesAndParent
      */
-    public function renameNameNode(array $usedNameNodes, string $lastName) : void
+    public function renameNameNode(array $namesAndParent, string $lastName) : void
     {
-        foreach ($usedNameNodes as $usedNameNode) {
+        foreach ($namesAndParent as $usedNameNode) {
             $parentNode = $usedNameNode->getParentNode();
             $usedName = $usedNameNode->getNameNode();
             if ($parentNode instanceof \PhpParser\Node\Stmt\TraitUse) {
