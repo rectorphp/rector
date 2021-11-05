@@ -9,6 +9,10 @@ use PhpParser\Node\Name;
 final class NameAndParent
 {
     /**
+     * @var string
+     */
+    private $shortName;
+    /**
      * @var Identifier|Name
      */
     private $nameNode;
@@ -19,8 +23,9 @@ final class NameAndParent
     /**
      * @param Name|Identifier $nameNode
      */
-    public function __construct(\PhpParser\Node $nameNode, \PhpParser\Node $parentNode)
+    public function __construct(string $shortName, \PhpParser\Node $nameNode, \PhpParser\Node $parentNode)
     {
+        $this->shortName = $shortName;
         $this->nameNode = $nameNode;
         $this->parentNode = $parentNode;
     }
@@ -34,5 +39,9 @@ final class NameAndParent
     public function getParentNode() : \PhpParser\Node
     {
         return $this->parentNode;
+    }
+    public function matchShortName(string $desiredShortName) : bool
+    {
+        return \strtolower($this->shortName) === \strtolower($desiredShortName);
     }
 }

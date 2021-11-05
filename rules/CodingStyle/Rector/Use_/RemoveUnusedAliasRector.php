@@ -25,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var array<string, NameAndParent[]>
+     * @var NameAndParent[]
      */
-    private $resolvedNamesAndParentsByShortName = [];
+    private $namesAndParents = [];
     /**
      * @var array<string, string[]>
      */
@@ -106,26 +106,25 @@ CODE_SAMPLE
         if (!$searchNode instanceof \PhpParser\Node) {
             return null;
         }
-        $this->resolvedNamesAndParentsByShortName = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
+        $this->namesAndParents = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file);
         // lowercase
         $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);
-        $this->resolvedNamesAndParentsByShortName = \array_change_key_case($this->resolvedNamesAndParentsByShortName, \CASE_LOWER);
         $this->useNamesAliasToName = \array_change_key_case($this->useNamesAliasToName, \CASE_LOWER);
         foreach ($node->uses as $use) {
             if ($use->alias === null) {
                 continue;
             }
             $lastName = $use->name->getLast();
-            $lowercasedLastName = \strtolower($lastName);
             /** @var string $aliasName */
             $aliasName = $this->getName($use->alias);
             if ($this->shouldSkip($node, $lastName, $aliasName)) {
                 continue;
             }
             // only last name is used → no need for alias
-            if (isset($this->resolvedNamesAndParentsByShortName[$lowercasedLastName])) {
+            $matchedNamesAndParents = $this->matchNamesAndParentsByShort($lastName);
+            if ($matchedNamesAndParents !== []) {
                 $use->alias = null;
                 continue;
             }
@@ -156,7 +155,7 @@ CODE_SAMPLE
         $loweredLastName = \strtolower($lastName);
         $loweredAliasName = \strtolower($aliasName);
         // both are used → nothing to remove
-        if (isset($this->resolvedNamesAndParentsByShortName[$loweredLastName], $this->resolvedNamesAndParentsByShortName[$loweredAliasName])) {
+        if ($this->areBothShortNamesUsed($loweredLastName, $loweredLastName)) {
             return \true;
         }
         // part of some @Doc annotation
@@ -181,11 +180,11 @@ CODE_SAMPLE
         if ($this->classNameImportSkipper->isShortNameInUseStatement(new \PhpParser\Node\Name($lastName), $uses)) {
             return;
         }
-        $loweredFullUseUseName = \strtolower($fullUseUseName);
-        if (!isset($this->resolvedNamesAndParentsByShortName[$loweredFullUseUseName])) {
+        $parentsAndNames = $this->matchNamesAndParentsByShort($fullUseUseName);
+        if ($parentsAndNames === []) {
             return;
         }
-        $this->nameRenamer->renameNameNode($this->resolvedNamesAndParentsByShortName[$loweredFullUseUseName], $lastName);
+        $this->nameRenamer->renameNameNode($parentsAndNames, $lastName);
         $useUse->alias = null;
     }
     private function hasUseAlias(\PhpParser\Node\Stmt\Use_ $use) : bool
@@ -204,5 +203,20 @@ CODE_SAMPLE
             return $searchNode;
         }
         return $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+    }
+    private function areBothShortNamesUsed(string $firstName, string $secondName) : bool
+    {
+        $firstNamesAndParents = $this->matchNamesAndParentsByShort($firstName);
+        $secondNamesAndParents = $this->matchNamesAndParentsByShort($secondName);
+        return $firstNamesAndParents !== [] && $secondNamesAndParents !== [];
+    }
+    /**
+     * @return NameAndParent[]
+     */
+    private function matchNamesAndParentsByShort(string $shortName) : array
+    {
+        return \array_filter($this->namesAndParents, function (\Rector\NameImporting\ValueObject\NameAndParent $nameAndParent) use($shortName) : bool {
+            return $nameAndParent->matchShortName($shortName);
+        });
     }
 }

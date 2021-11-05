@@ -32,21 +32,21 @@ final class UseAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @return array<string, NameAndParent[]>
+     * @return NameAndParent[]
      */
     public function resolveUsedNameNodes(\PhpParser\Node $node) : array
     {
-        $usedNamesByShortName = $this->resolveUsedNames($node);
-        $usedClassNamesByShortName = $this->resolveUsedClassNames($node);
-        $usedTraitNamesByShortName = $this->resolveTraitUseNames($node);
-        return \array_merge($usedNamesByShortName, $usedClassNamesByShortName, $usedTraitNamesByShortName);
+        $usedNames = $this->resolveUsedNames($node);
+        $usedClassNames = $this->resolveUsedClassNames($node);
+        $usedTraitNames = $this->resolveTraitUseNames($node);
+        return \array_merge($usedNames, $usedClassNames, $usedTraitNames);
     }
     /**
-     * @return array<string, NameAndParent[]>
+     * @return NameAndParent[]
      */
     private function resolveUsedNames(\PhpParser\Node $node) : array
     {
-        $namesAndParentsByShortName = [];
+        $namesAndParents = [];
         /** @var Name[] $names */
         $names = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Name::class);
         foreach ($names as $name) {
@@ -60,16 +60,16 @@ final class UseAnalyzer
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $shortName = $originalName->toString();
-            $namesAndParentsByShortName[$shortName][] = new \Rector\NameImporting\ValueObject\NameAndParent($name, $parentNode);
+            $namesAndParents[] = new \Rector\NameImporting\ValueObject\NameAndParent($shortName, $name, $parentNode);
         }
-        return $namesAndParentsByShortName;
+        return $namesAndParents;
     }
     /**
-     * @return array<string, NameAndParent[]>
+     * @return NameAndParent[]
      */
     private function resolveUsedClassNames(\PhpParser\Node $node) : array
     {
-        $namesAndParentsByShortName = [];
+        $namesAndParents = [];
         /** @var ClassLike[] $classLikes */
         $classLikes = $this->betterNodeFinder->findClassLikes($node);
         foreach ($classLikes as $classLike) {
@@ -78,19 +78,19 @@ final class UseAnalyzer
                 continue;
             }
             $name = $this->nodeNameResolver->getName($classLikeName);
-            if ($name === null) {
+            if (!\is_string($name)) {
                 continue;
             }
-            $namesAndParentsByShortName[$name][] = new \Rector\NameImporting\ValueObject\NameAndParent($classLikeName, $classLike);
+            $namesAndParents[] = new \Rector\NameImporting\ValueObject\NameAndParent($name, $classLikeName, $classLike);
         }
-        return $namesAndParentsByShortName;
+        return $namesAndParents;
     }
     /**
-     * @return array<string, NameAndParent[]>
+     * @return NameAndParent[]
      */
     private function resolveTraitUseNames(\PhpParser\Node $node) : array
     {
-        $namesAndParentsByShortName = [];
+        $namesAndParents = [];
         /** @var Identifier[] $identifiers */
         $identifiers = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Identifier::class);
         foreach ($identifiers as $identifier) {
@@ -99,8 +99,8 @@ final class UseAnalyzer
                 continue;
             }
             $shortName = $identifier->name;
-            $namesAndParentsByShortName[$shortName][] = new \Rector\NameImporting\ValueObject\NameAndParent($identifier, $parentNode);
+            $namesAndParents[] = new \Rector\NameImporting\ValueObject\NameAndParent($shortName, $identifier, $parentNode);
         }
-        return $namesAndParentsByShortName;
+        return $namesAndParents;
     }
 }
