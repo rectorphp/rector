@@ -158,16 +158,25 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if ($this->sealedClassAnalyzer->isSealedClass($classReflection)) {
-            return \true;
-        }
-        if ($this->isSafeType($classReflection, $classMethod)) {
+        if ($classMethod->params === []) {
             return \true;
         }
         if ($classMethod->isPrivate()) {
             return \true;
         }
-        return $this->shouldSkipClassMethod($classMethod);
+        if ($classMethod->isMagic()) {
+            return \true;
+        }
+        if ($this->sealedClassAnalyzer->isSealedClass($classReflection)) {
+            return \true;
+        }
+        if ($this->autowiredClassMethodOrPropertyAnalyzer->detect($classMethod)) {
+            return \true;
+        }
+        if ($this->hasParamAlreadyNonTyped($classMethod)) {
+            return \true;
+        }
+        return $this->isSafeType($classReflection, $classMethod);
     }
     private function processRemoveParamTypeFromMethod(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
@@ -189,25 +198,12 @@ CODE_SAMPLE
         if (!$param instanceof \PhpParser\Node\Param) {
             return;
         }
-        // It already has no type => nothing to do - check original param, as it could have been removed by this rule
-        if ($param->type === null) {
-            return;
-        }
         // Add the current type in the PHPDoc
         $this->nativeParamToPhpDocDecorator->decorate($classMethod, $param);
         $param->type = null;
     }
-    private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    private function hasParamAlreadyNonTyped(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if ($classMethod->isMagic()) {
-            return \true;
-        }
-        if ($classMethod->params === []) {
-            return \true;
-        }
-        if ($this->autowiredClassMethodOrPropertyAnalyzer->detect($classMethod)) {
-            return \true;
-        }
         foreach ($classMethod->params as $param) {
             if ($param->type !== null) {
                 return \false;
@@ -217,12 +213,13 @@ CODE_SAMPLE
     }
     private function isSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
+        $classReflectionName = $classReflection->getName();
         foreach ($this->safeTypes as $safeType) {
             if ($classReflection->isSubclassOf($safeType)) {
                 return \true;
             }
             // skip self too
-            if ($classReflection->getName() === $safeType) {
+            if ($classReflectionName === $safeType) {
                 return \true;
             }
         }
@@ -234,7 +231,7 @@ CODE_SAMPLE
                 return \true;
             }
             // skip self too
-            if ($classReflection->getName() === $safeType) {
+            if ($classReflectionName === $safeType) {
                 return \true;
             }
         }

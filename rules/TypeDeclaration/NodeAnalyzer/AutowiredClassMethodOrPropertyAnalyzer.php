@@ -7,7 +7,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use RectorPrefix20211105\Symfony\Contracts\Service\Attribute\Required;
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
@@ -16,13 +16,13 @@ final class AutowiredClassMethodOrPropertyAnalyzer
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Rector\NodeNameResolver\NodeNameResolver
+     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
-    private $nodeNameResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    private $phpAttributeAnalyzer;
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     /**
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
@@ -33,13 +33,6 @@ final class AutowiredClassMethodOrPropertyAnalyzer
         if ($nodePhpDocInfo->hasByNames(['required', 'inject'])) {
             return \true;
         }
-        foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
-                if ($this->nodeNameResolver->isNames($attribute->name, [\RectorPrefix20211105\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject'])) {
-                    return \true;
-                }
-            }
-        }
-        return \false;
+        return $this->phpAttributeAnalyzer->hasPhpAttributes($node, [\RectorPrefix20211105\Symfony\Contracts\Service\Attribute\Required::class, 'Nette\\DI\\Attributes\\Inject']);
     }
 }
