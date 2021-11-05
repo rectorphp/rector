@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Naming\NameRenamer;
 use Rector\CodingStyle\Node\DocAliasResolver;
-use Rector\CodingStyle\Node\UseManipulator;
 use Rector\CodingStyle\Node\UseNameAliasToNameResolver;
-use Rector\CodingStyle\ValueObject\NameAndParent;
 use Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NameImporting\NodeAnalyzer\UseAnalyzer;
+use Rector\NameImporting\ValueObject\NameAndParent;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -25,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var NameAndParent[][]
+     * @var array<string, NameAndParent[]>
      */
-    private $resolvedNodeNames = [];
+    private $resolvedNamesAndParentsByShortName = [];
     /**
      * @var array<string, string[]>
      */
@@ -41,9 +41,9 @@ final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
      */
     private $docAliasResolver;
     /**
-     * @var \Rector\CodingStyle\Node\UseManipulator
+     * @var \Rector\NameImporting\NodeAnalyzer\UseAnalyzer
      */
-    private $useManipulator;
+    private $useAnalyzer;
     /**
      * @var \Rector\CodingStyle\Node\UseNameAliasToNameResolver
      */
@@ -60,10 +60,10 @@ final class RemoveUnusedAliasRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder
      */
     private $fullyQualifiedFromUseFinder;
-    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\CodingStyle\Node\UseManipulator $useManipulator, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder $fullyQualifiedFromUseFinder)
+    public function __construct(\Rector\CodingStyle\Node\DocAliasResolver $docAliasResolver, \Rector\NameImporting\NodeAnalyzer\UseAnalyzer $useAnalyzer, \Rector\CodingStyle\Node\UseNameAliasToNameResolver $useNameAliasToNameResolver, \Rector\CodingStyle\Naming\NameRenamer $nameRenamer, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\Core\PhpParser\NodeFinder\FullyQualifiedFromUseFinder $fullyQualifiedFromUseFinder)
     {
         $this->docAliasResolver = $docAliasResolver;
-        $this->useManipulator = $useManipulator;
+        $this->useAnalyzer = $useAnalyzer;
         $this->useNameAliasToNameResolver = $useNameAliasToNameResolver;
         $this->nameRenamer = $nameRenamer;
         $this->classNameImportSkipper = $classNameImportSkipper;
@@ -106,12 +106,12 @@ CODE_SAMPLE
         if (!$searchNode instanceof \PhpParser\Node) {
             return null;
         }
-        $this->resolvedNodeNames = $this->useManipulator->resolveUsedNameNodes($searchNode);
+        $this->resolvedNamesAndParentsByShortName = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file);
         // lowercase
         $this->resolvedDocPossibleAliases = $this->lowercaseArray($this->resolvedDocPossibleAliases);
-        $this->resolvedNodeNames = \array_change_key_case($this->resolvedNodeNames, \CASE_LOWER);
+        $this->resolvedNamesAndParentsByShortName = \array_change_key_case($this->resolvedNamesAndParentsByShortName, \CASE_LOWER);
         $this->useNamesAliasToName = \array_change_key_case($this->useNamesAliasToName, \CASE_LOWER);
         foreach ($node->uses as $use) {
             if ($use->alias === null) {
@@ -125,7 +125,7 @@ CODE_SAMPLE
                 continue;
             }
             // only last name is used → no need for alias
-            if (isset($this->resolvedNodeNames[$lowercasedLastName])) {
+            if (isset($this->resolvedNamesAndParentsByShortName[$lowercasedLastName])) {
                 $use->alias = null;
                 continue;
             }
@@ -142,14 +142,6 @@ CODE_SAMPLE
         }
         return !$this->hasUseAlias($use);
     }
-    private function resolveSearchNode(\PhpParser\Node\Stmt\Use_ $use) : ?\PhpParser\Node
-    {
-        $searchNode = $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($searchNode !== null) {
-            return $searchNode;
-        }
-        return $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-    }
     /**
      * @param string[] $values
      * @return string[]
@@ -164,7 +156,7 @@ CODE_SAMPLE
         $loweredLastName = \strtolower($lastName);
         $loweredAliasName = \strtolower($aliasName);
         // both are used → nothing to remove
-        if (isset($this->resolvedNodeNames[$loweredLastName], $this->resolvedNodeNames[$loweredAliasName])) {
+        if (isset($this->resolvedNamesAndParentsByShortName[$loweredLastName], $this->resolvedNamesAndParentsByShortName[$loweredAliasName])) {
             return \true;
         }
         // part of some @Doc annotation
@@ -190,10 +182,10 @@ CODE_SAMPLE
             return;
         }
         $loweredFullUseUseName = \strtolower($fullUseUseName);
-        if (!isset($this->resolvedNodeNames[$loweredFullUseUseName])) {
+        if (!isset($this->resolvedNamesAndParentsByShortName[$loweredFullUseUseName])) {
             return;
         }
-        $this->nameRenamer->renameNameNode($this->resolvedNodeNames[$loweredFullUseUseName], $lastName);
+        $this->nameRenamer->renameNameNode($this->resolvedNamesAndParentsByShortName[$loweredFullUseUseName], $lastName);
         $useUse->alias = null;
     }
     private function hasUseAlias(\PhpParser\Node\Stmt\Use_ $use) : bool
@@ -204,5 +196,13 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function resolveSearchNode(\PhpParser\Node\Stmt\Use_ $use) : ?\PhpParser\Node
+    {
+        $searchNode = $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($searchNode !== null) {
+            return $searchNode;
+        }
+        return $use->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
     }
 }

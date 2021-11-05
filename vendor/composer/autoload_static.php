@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e
+class ComposerStaticInit15757a555de5cfce1d189f0e9b29870b
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1751,7 +1751,6 @@ class ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e
         'Rector\\CodingStyle\\Node\\ConcatManipulator' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/ConcatManipulator.php',
         'Rector\\CodingStyle\\Node\\DocAliasResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/DocAliasResolver.php',
         'Rector\\CodingStyle\\Node\\NameImporter' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/NameImporter.php',
-        'Rector\\CodingStyle\\Node\\UseManipulator' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/UseManipulator.php',
         'Rector\\CodingStyle\\Node\\UseNameAliasToNameResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/UseNameAliasToNameResolver.php',
         'Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php',
         'Rector\\CodingStyle\\Rector\\Assign\\PHPStormVarAnnotationRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php',
@@ -1796,7 +1795,6 @@ class ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e
         'Rector\\CodingStyle\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/TypeAnalyzer/IterableTypeAnalyzer.php',
         'Rector\\CodingStyle\\ValueObject\\ConcatExpressionJoinData' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ConcatExpressionJoinData.php',
         'Rector\\CodingStyle\\ValueObject\\ConcatStringAndPlaceholders' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ConcatStringAndPlaceholders.php',
-        'Rector\\CodingStyle\\ValueObject\\NameAndParent' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/NameAndParent.php',
         'Rector\\CodingStyle\\ValueObject\\NodeToRemoveAndConcatItem' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/NodeToRemoveAndConcatItem.php',
         'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
         'Rector\\CodingStyle\\ValueObject\\ReturnArrayClassMethodToYield' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ReturnArrayClassMethodToYield.php',
@@ -2276,6 +2274,8 @@ class ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlQueryMysqlErrorWithLinkRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php',
+        'Rector\\NameImporting\\NodeAnalyzer\\UseAnalyzer' => __DIR__ . '/../..' . '/packages/NameImporting/NodeAnalyzer/UseAnalyzer.php',
+        'Rector\\NameImporting\\ValueObject\\NameAndParent' => __DIR__ . '/../..' . '/packages/NameImporting/ValueObject/NameAndParent.php',
         'Rector\\Naming\\Contract\\Guard\\ConflictingNameGuardInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/Guard/ConflictingNameGuardInterface.php',
         'Rector\\Naming\\Contract\\RenameParamValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameParamValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenamePropertyValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenamePropertyValueObjectInterface.php',
@@ -3529,9 +3529,9 @@ class ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb6c4935bfc6dfbb475aec20fc23dab6e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit15757a555de5cfce1d189f0e9b29870b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit15757a555de5cfce1d189f0e9b29870b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit15757a555de5cfce1d189f0e9b29870b::$classMap;
 
         }, null, ClassLoader::class);
     }

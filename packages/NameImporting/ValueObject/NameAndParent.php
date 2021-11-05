@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodingStyle\ValueObject;
+namespace Rector\NameImporting\ValueObject;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;

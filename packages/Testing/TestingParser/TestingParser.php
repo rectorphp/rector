@@ -33,6 +33,14 @@ final class TestingParser
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
     }
+    public function parseFilePathToFile(string $filePath) : \Rector\Core\ValueObject\Application\File
+    {
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
+        $stmts = $this->rectorParser->parseFile($smartFileInfo);
+        $file->hydrateStmtsAndTokens($stmts, $stmts, []);
+        return $file;
+    }
     /**
      * @return Node[]
      */
@@ -45,13 +53,5 @@ final class TestingParser
         $nodes = $this->rectorParser->parseFile($smartFileInfo);
         $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
-    }
-    public function parseFilePathToFile(string $filePath) : \Rector\Core\ValueObject\Application\File
-    {
-        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
-        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
-        $stmts = $this->rectorParser->parseFile($smartFileInfo);
-        $file->hydrateStmtsAndTokens($stmts, $stmts, []);
-        return $file;
     }
 }
