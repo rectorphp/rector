@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211104\TYPO3\CMS\Core\Configuration\FlexForm;
+namespace RectorPrefix20211105\TYPO3\CMS\Core\Configuration\FlexForm;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Configuration\\FlexForm\\FlexFormTools')) {
     return;

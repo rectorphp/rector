@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211104;
+namespace RectorPrefix20211105;
 
 use Ssch\TYPO3Rector\Rector\v11\v4\MigrateFileFolderConfigurationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

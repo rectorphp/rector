@@ -5,11 +5,10 @@ namespace Rector\Testing\TestingParser;
 
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix20211104\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211105\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
@@ -28,16 +27,11 @@ final class TestingParser
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-    /**
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    public function __construct(\RectorPrefix20211104\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20211105\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->parameterProvider = $parameterProvider;
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return Node[]
@@ -52,14 +46,12 @@ final class TestingParser
         $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
-    /**
-     * @template T of Node
-     * @param class-string<T> $nodeClass
-     * @return Node[]
-     */
-    public function parseFileToDecoratedNodesAndFindNodesByType(string $file, string $nodeClass) : array
+    public function parseFilePathToFile(string $filePath) : \Rector\Core\ValueObject\Application\File
     {
-        $nodes = $this->parseFileToDecoratedNodes($file);
-        return $this->betterNodeFinder->findInstanceOf($nodes, $nodeClass);
+        $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
+        $file = new \Rector\Core\ValueObject\Application\File($smartFileInfo, $smartFileInfo->getContents());
+        $stmts = $this->rectorParser->parseFile($smartFileInfo);
+        $file->hydrateStmtsAndTokens($stmts, $stmts, []);
+        return $file;
     }
 }

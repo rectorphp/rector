@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211104\TYPO3\CMS\Backend;
+namespace RectorPrefix20211105\TYPO3\CMS\Backend;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\AjaxLoginHandler')) {
     return;

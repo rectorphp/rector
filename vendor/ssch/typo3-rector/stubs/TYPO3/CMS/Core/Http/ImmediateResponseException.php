@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211104\TYPO3\CMS\Core\Http;
+namespace RectorPrefix20211105\TYPO3\CMS\Core\Http;
 
 use Exception;
 if (\class_exists('TYPO3\\CMS\\Core\\Http\\ImmediateResponseException')) {

@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211104\TYPO3\CMS\Frontend\Page\PageRepository;
+use RectorPrefix20211105\TYPO3\CMS\Frontend\Page\PageRepository;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85556-PageRepository-versioningWorkspaceId.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\UseContextApiForVersioningWorkspaceIdRector\UseContextApiForVersioningWorkspaceIdRectorTest

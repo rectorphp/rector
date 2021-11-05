@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211104\Symplify\SymplifyKernel\Contract\Config;
+namespace RectorPrefix20211105\Symplify\SymplifyKernel\Contract\Config;
 
-use RectorPrefix20211104\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20211104\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211105\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix20211105\Symfony\Component\DependencyInjection\ContainerBuilder;
 interface LoaderFactoryInterface
 {
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
      * @param string $currentWorkingDirectory
      */
-    public function create($containerBuilder, $currentWorkingDirectory) : \RectorPrefix20211104\Symfony\Component\Config\Loader\LoaderInterface;
+    public function create($containerBuilder, $currentWorkingDirectory) : \RectorPrefix20211105\Symfony\Component\Config\Loader\LoaderInterface;
 }

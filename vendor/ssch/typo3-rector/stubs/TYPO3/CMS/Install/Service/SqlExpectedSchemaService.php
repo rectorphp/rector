@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211104\TYPO3\CMS\Install\Service;
+namespace RectorPrefix20211105\TYPO3\CMS\Install\Service;
 
 if (\class_exists('TYPO3\\CMS\\Install\\Service\\SqlExpectedSchemaService')) {
     return;
