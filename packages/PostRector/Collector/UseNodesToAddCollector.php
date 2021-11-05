@@ -105,7 +105,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
         }
         $fileFunctionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileFunctionUseImportTypes as $fileFunctionUseImportType) {
-            if ($fileFunctionUseImportType->getShortName() === $fullyQualifiedObjectType->getShortName()) {
+            if ($fileFunctionUseImportType->getShortName() === $shortName) {
                 return \true;
             }
         }
