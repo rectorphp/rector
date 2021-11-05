@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NameImporting\NodeAnalyzer\UseAnalyzer;
@@ -95,5 +96,21 @@ final class UseAnalyzerTest extends AbstractTestCase
         ];
 
         yield [__DIR__ . '/Fixture/use_import.php.inc', 'SomeClass', 0, new Identifier('SomeClass'), Class_::class];
+
+        yield [
+            __DIR__ . '/Fixture/union_alias_imports.php.inc',
+            'String_',
+            0,
+            new FullyQualified(String_::class),
+            Node\UnionType::class,
+        ];
+
+        yield [
+            __DIR__ . '/Fixture/union_alias_imports.php.inc',
+            'PhpParserUnionType',
+            0,
+            new Identifier('PhpParserUnionType'),
+            UseUse::class,
+        ];
     }
 }
