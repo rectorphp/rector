@@ -1,4 +1,4 @@
-# 476 Rules Overview
+# 477 Rules Overview
 
 <br>
 
@@ -32,7 +32,7 @@
 
 - [DowngradePhp73](#downgradephp73) (6)
 
-- [DowngradePhp74](#downgradephp74) (10)
+- [DowngradePhp74](#downgradephp74) (11)
 
 - [DowngradePhp80](#downgradephp80) (18)
 
@@ -4916,6 +4916,25 @@ Remove "_" as thousands separator in numbers
 +        $int = 1000;
 +        $float = 1000500.001;
      }
+ }
+```
+
+<br>
+
+### DowngradePreviouslyImplementedInterfaceRector
+
+Downgrade previously implemented interface
+
+- class: [`Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector`](../rules/DowngradePhp74/Rector/Interface_/DowngradePreviouslyImplementedInterfaceRector.php)
+
+```diff
+ interface ContainerExceptionInterface extends Throwable
+ {
+ }
+
+-interface ExceptionInterface extends ContainerExceptionInterface, Throwable
++interface ExceptionInterface extends ContainerExceptionInterface
+ {
  }
 ```
 

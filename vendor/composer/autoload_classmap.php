@@ -1838,6 +1838,7 @@ return array(
     'Rector\\DowngradePhp74\\Rector\\FuncCall\\DowngradeArrayMergeCallWithoutArgumentsRector' => $baseDir . '/rules/DowngradePhp74/Rector/FuncCall/DowngradeArrayMergeCallWithoutArgumentsRector.php',
     'Rector\\DowngradePhp74\\Rector\\FuncCall\\DowngradeStripTagsCallWithArrayRector' => $baseDir . '/rules/DowngradePhp74/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php',
     'Rector\\DowngradePhp74\\Rector\\Identical\\DowngradeFreadFwriteFalsyToNegationRector' => $baseDir . '/rules/DowngradePhp74/Rector/Identical/DowngradeFreadFwriteFalsyToNegationRector.php',
+    'Rector\\DowngradePhp74\\Rector\\Interface_\\DowngradePreviouslyImplementedInterfaceRector' => $baseDir . '/rules/DowngradePhp74/Rector/Interface_/DowngradePreviouslyImplementedInterfaceRector.php',
     'Rector\\DowngradePhp74\\Rector\\LNumber\\DowngradeNumericLiteralSeparatorRector' => $baseDir . '/rules/DowngradePhp74/Rector/LNumber/DowngradeNumericLiteralSeparatorRector.php',
     'Rector\\DowngradePhp74\\Rector\\Property\\DowngradeTypedPropertyRector' => $baseDir . '/rules/DowngradePhp74/Rector/Property/DowngradeTypedPropertyRector.php',
     'Rector\\DowngradePhp80\\NodeAnalyzer\\NamedToUnnamedArgs' => $baseDir . '/rules/DowngradePhp80/NodeAnalyzer/NamedToUnnamedArgs.php',

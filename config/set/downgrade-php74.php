@@ -13,6 +13,7 @@ use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
 use Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector;
+use Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector;
 use Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector;
 use Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -30,4 +31,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector::class);
     $services->set(\Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector::class);
     $services->set(\Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector::class);
+    $services->set(\Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector::class);
 };

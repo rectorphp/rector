@@ -17,6 +17,6 @@ use RectorPrefix20211105\Psr\Container\ContainerExceptionInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bulat Shakirzyanov <bulat@theopenskyproject.com>
  */
-interface ExceptionInterface extends \RectorPrefix20211105\Psr\Container\ContainerExceptionInterface, \Throwable
+interface ExceptionInterface extends \RectorPrefix20211105\Psr\Container\ContainerExceptionInterface
 {
 }
