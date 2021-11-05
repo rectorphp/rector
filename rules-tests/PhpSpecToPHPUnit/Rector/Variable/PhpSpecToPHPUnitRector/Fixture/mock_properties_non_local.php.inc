@@ -39,14 +39,14 @@ class MockPropertiesNonLocalTest extends \PHPUnit\Framework\TestCase
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\MockPropertiesNonLocal $mockPropertiesNonLocal;
     protected function setUp()
     {
-        /** @var spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
+        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = $this->createMock(OrderFactory::class);
         $this->mockPropertiesNonLocal = new \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\MockPropertiesNonLocal($factory);
     }
 
     public function testLetItGo()
     {
-        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
+        /** @var AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
         $anotherMock = $this->createMock(AnotherMock::class);
         $anotherMock->setName('Nummy');
         $this->mockPropertiesNonLocal->addAnotherMock($anotherMock);
@@ -54,7 +54,7 @@ class MockPropertiesNonLocalTest extends \PHPUnit\Framework\TestCase
 
     public function testLetItGoAgain()
     {
-        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
+        /** @var AnotherMock|\PHPUnit\Framework\MockObject\MockObject $anotherMock */
         $anotherMock = $this->createMock(AnotherMock::class);
         $anotherMock->setName('Nummy2');
         $this->mockPropertiesNonLocal->addAnotherMock($anotherMock);

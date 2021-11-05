@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -31,7 +31,6 @@ final class PropertyFetchFinder
         private NodeNameResolver $nodeNameResolver,
         private ReflectionProvider $reflectionProvider,
         private AstResolver $astResolver,
-        private ClassAnalyzer $classAnalyzer
     ) {
     }
 
@@ -40,7 +39,7 @@ final class PropertyFetchFinder
      */
     public function findPrivatePropertyFetches(Property | Param $propertyOrPromotedParam): array
     {
-        $classLike = $propertyOrPromotedParam->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($propertyOrPromotedParam, ClassLike::class);
         if (! $classLike instanceof Class_) {
             return [];
         }
@@ -50,17 +49,26 @@ final class PropertyFetchFinder
             return [];
         }
 
-        $className = (string) $this->nodeNameResolver->getName($classLike);
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return $this->findPropertyFetchesInClassLike($classLike->stmts, $propertyName);
+        $className = $this->nodeNameResolver->getName($classLike);
+
+        // unable to resolved
+        if ($className === null) {
+            throw new ShouldNotHappenException();
         }
 
-        $classReflection = $this->reflectionProvider->getClass($className);
+        if ($this->reflectionProvider->hasClass($className)) {
+            $classReflection = $this->reflectionProvider->getClass($className);
+        } else {
+            $classReflection = $this->reflectionProvider->getAnonymousClassReflection(
+                $classLike,
+                $classLike->getAttribute(AttributeKey::SCOPE)
+            );
+        }
 
         $nodes = [$classLike];
         $nodes = array_merge($nodes, $this->astResolver->parseClassReflectionTraits($classReflection));
 
-        return $this->findPropertyFetchesInNonAnonymousClassLike($nodes, $propertyName);
+        return $this->findPropertyFetchesInClassLike($nodes, $propertyName);
     }
 
     /**
@@ -99,30 +107,6 @@ final class PropertyFetchFinder
         }
 
         return $foundPropertyFetches;
-    }
-
-    /**
-     * @param Stmt[] $stmts
-     * @return PropertyFetch[]|StaticPropertyFetch[]
-     */
-    private function findPropertyFetchesInNonAnonymousClassLike(array $stmts, string $propertyName): array
-    {
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->findPropertyFetchesInClassLike($stmts, $propertyName);
-
-        foreach ($propertyFetches as $key => $propertyFetch) {
-            $currentClassLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
-
-            if (! $currentClassLike instanceof ClassLike) {
-                continue;
-            }
-
-            if ($this->classAnalyzer->isAnonymousClass($currentClassLike)) {
-                unset($propertyFetches[$key]);
-            }
-        }
-
-        return $propertyFetches;
     }
 
     /**

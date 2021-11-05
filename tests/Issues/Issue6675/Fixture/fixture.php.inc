@@ -12,6 +12,6 @@ echo mysql_error();
 namespace Rector\Core\Tests\Issues\Issue6675\Fixture;
 
 $db = mysqli_connect("server","user","password");
-echo mysqli_error($db);
+echo mysql_error();
 
 ?>

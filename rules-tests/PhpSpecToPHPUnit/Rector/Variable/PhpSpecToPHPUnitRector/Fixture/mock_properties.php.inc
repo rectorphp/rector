@@ -31,7 +31,7 @@ use Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\
 class MockPropertiesTest extends \PHPUnit\Framework\TestCase
 {
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\MockProperties $mockProperties;
-    private \PHPUnit\Framework\MockObject\MockObject|\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\OrderFactory $factory;
+    private \OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory;
     protected function setUp()
     {
         $this->factory = $this->createMock(OrderFactory::class);

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Contract\Token;
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Contract;
+
 abstract class KeepStaticMethod
 {
     public static function decode(string $token): Contract\Token
@@ -22,7 +25,9 @@ declare(strict_types=1);
 
 namespace Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture;
 
-use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Fixture\Contract\Token;
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Contract\Token;
+use Rector\Tests\CodingStyle\Rector\Namespace_\ImportFullyQualifiedNamesRector\Source\Contract;
+
 abstract class KeepStaticMethod
 {
     public static function decode(string $token): Token

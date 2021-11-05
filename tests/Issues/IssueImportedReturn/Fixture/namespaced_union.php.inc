@@ -34,8 +34,6 @@ final class NamespacedUnion
 
 namespace Rector\Core\Tests\Issues\IssueImportedReturn\Fixture;
 
-use Rector\Core\Tests\Issues\IssueImportedReturn\Source\Logging;
-use Rector\Core\Tests\Issues\IssueImportedReturn\Source\Logging2;
 use Rector\Core\Tests\Issues\IssueImportedReturn\Source;
 
 final class NamespacedUnion
@@ -44,7 +42,7 @@ final class NamespacedUnion
      * @var string
      */
     private const CONFIG = 'config';
-    public function run(): Logging|Logging2
+    public function run(): Source\Logging|Source\Logging2
     {
         if ($this->config[self::CONFIG]) {
 

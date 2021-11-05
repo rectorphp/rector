@@ -26,9 +26,9 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Order $order;
     protected function setUp()
     {
-        /** @var spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
+        /** @var OrderFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = $this->createMock(OrderFactory::class);
-        /** @var spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
+        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
         $shippingMethod = $this->createMock(ShippingMethod::class);
         $factory->expects($this->atLeastOnce())->method('createShippingMethodFor')->willReturn($shippingMethod);
         $factory->expects($this->atLeastOnce())->method('anotherMethod')->with($this->equalTo(25))->willReturn($shippingMethod);

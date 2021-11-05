@@ -31,9 +31,9 @@ class DeliveryTest extends \PHPUnit\Framework\TestCase
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Delivery $delivery;
     protected function setUp()
     {
-        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\DeliveryFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
+        /** @var DeliveryFactory|\PHPUnit\Framework\MockObject\MockObject $factory */
         $factory = $this->createMock(DeliveryFactory::class);
-        /** @var Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Source\ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
+        /** @var ShippingMethod|\PHPUnit\Framework\MockObject\MockObject $shippingMethod */
         $shippingMethod = $this->createMock(ShippingMethod::class);
         $factory->expects($this->atLeastOnce())
             ->method('createShippingMethodFor')->with($this->equalTo(5))

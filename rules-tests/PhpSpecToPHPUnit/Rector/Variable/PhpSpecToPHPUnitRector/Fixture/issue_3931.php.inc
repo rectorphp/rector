@@ -67,7 +67,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 class PageLinksGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\PageLinksGenerator $pageLinksGenerator;
-    private \PHPUnit\Framework\MockObject\MockObject|\Symfony\Bundle\FrameworkBundle\Routing\Router $router;
+    private \PHPUnit\Framework\MockObject\MockObject|\Router $router;
     public function testInitializable()
     {
         $this->assertInstanceOf(PageLinksGenerator::class, $this->pageLinksGenerator);

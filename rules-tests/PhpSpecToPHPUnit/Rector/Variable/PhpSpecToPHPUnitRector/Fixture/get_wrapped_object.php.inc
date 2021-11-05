@@ -30,7 +30,7 @@ class BlablaTest extends \PHPUnit\Framework\TestCase
     }
     public function testMe()
     {
-        /** @var spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\SomeType|\PHPUnit\Framework\MockObject\MockObject $someType */
+        /** @var SomeType|\PHPUnit\Framework\MockObject\MockObject $someType */
         $someType = $this->createMock(SomeType::class);
         $assignMe = $someType;
     }

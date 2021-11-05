@@ -6,12 +6,9 @@ namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Removing\NodeManipulator\ComplexNodeRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -83,8 +80,7 @@ CODE_SAMPLE
             return true;
         }
 
-        /** @var Class_|Interface_|Trait_|null $classLike */
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        return ! $classLike instanceof Class_;
+        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
+        return ! $class instanceof Class_;
     }
 }

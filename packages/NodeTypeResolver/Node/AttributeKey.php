@@ -6,6 +6,9 @@ namespace Rector\NodeTypeResolver\Node;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
 
+/**
+ * @enum
+ */
 final class AttributeKey
 {
     /**

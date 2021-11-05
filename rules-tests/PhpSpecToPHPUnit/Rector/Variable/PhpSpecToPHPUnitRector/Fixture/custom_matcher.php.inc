@@ -64,7 +64,7 @@ use PhpSpec\ObjectBehavior;
 class RatesTest extends \PHPUnit\Framework\TestCase
 {
     private \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Rates $rates;
-    private \PHPUnit\Framework\MockObject\MockObject|\spec\Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\Fixture\Provider $provider;
+    private \PHPUnit\Framework\MockObject\MockObject|\Provider $provider;
     protected function setUp()
     {
         $this->provider = $this->createMock(Provider::class);

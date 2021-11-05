@@ -67,9 +67,8 @@ final class PropertyManipulator
             return true;
         }
 
-        // $propertyOrPromotedParam->attrGroups
-
         $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);
+
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
             if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {
                 return true;
