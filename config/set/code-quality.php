@@ -61,7 +61,6 @@ use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
 use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
 use Rector\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector;
 use Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector;
-use Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector;
 use Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector;
 use Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector;
 use Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector;
@@ -165,7 +164,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector::class);
     $services->set(\Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class);
     $services->set(\Rector\Php52\Rector\Property\VarToPublicPropertyRector::class);
-    $services->set(\Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector::class);
     $services->set(\Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector::class);
     $services->set(\Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector::class);
     $services->set(\Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector::class);

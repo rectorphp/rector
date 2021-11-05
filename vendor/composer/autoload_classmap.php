@@ -1383,7 +1383,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\Isset_\\IssetOnPropertyObjectToPropertyExistsRector' => $baseDir . '/rules/CodeQuality/Rector/Isset_/IssetOnPropertyObjectToPropertyExistsRector.php',
     'Rector\\CodeQuality\\Rector\\LogicalAnd\\AndAssignsToSeparateLinesRector' => $baseDir . '/rules/CodeQuality/Rector/LogicalAnd/AndAssignsToSeparateLinesRector.php',
     'Rector\\CodeQuality\\Rector\\LogicalAnd\\LogicalToBooleanRector' => $baseDir . '/rules/CodeQuality/Rector/LogicalAnd/LogicalToBooleanRector.php',
-    'Rector\\CodeQuality\\Rector\\Name\\FixClassCaseSensitivityNameRector' => $baseDir . '/rules/CodeQuality/Rector/Name/FixClassCaseSensitivityNameRector.php',
     'Rector\\CodeQuality\\Rector\\New_\\NewStaticToNewSelfRector' => $baseDir . '/rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php',
     'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => $baseDir . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
     'Rector\\CodeQuality\\Rector\\PropertyFetch\\ExplicitMethodCallOverMagicGetSetRector' => $baseDir . '/rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php',
