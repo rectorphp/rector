@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\UnionType;
-use Rector\CodingStyle\ValueObject\NameAndParent;
+use Rector\NameImporting\ValueObject\NameAndParent;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NameRenamer

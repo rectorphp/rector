@@ -71,6 +71,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
             __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
             __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/StaticDoctrineAnnotationParserTest.php',
+            __DIR__ . '/packages-tests/NameImporting/NodeAnalyzer/UseAnalyzer/UseAnalyzerTest.php',
             '*TypeResolverTest.php',
             __DIR__ . '/rules-tests/CodingStyle/Node/UseManipulator/UseManipulatorTest.php',
         ],

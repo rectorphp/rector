@@ -6,22 +6,20 @@ namespace Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver;
 
 use Iterator;
 use Rector\CodingStyle\ClassNameImport\ShortNameResolver;
-use Rector\Core\PhpParser\Parser\RectorParser;
-use Rector\Core\ValueObject\Application\File;
 use Rector\Testing\PHPUnit\AbstractTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Testing\TestingParser\TestingParser;
 
 final class ShortNameResolverTest extends AbstractTestCase
 {
     private ShortNameResolver $shortNameResolver;
 
-    private RectorParser $rectorParser;
+    private TestingParser $testingParser;
 
     protected function setUp(): void
     {
         $this->boot();
         $this->shortNameResolver = $this->getService(ShortNameResolver::class);
-        $this->rectorParser = $this->getService(RectorParser::class);
+        $this->testingParser = $this->getService(TestingParser::class);
     }
 
     /**
@@ -30,7 +28,7 @@ final class ShortNameResolverTest extends AbstractTestCase
      */
     public function test(string $filePath, array $expectedShortNames): void
     {
-        $file = $this->createFileFromFilePath($filePath);
+        $file = $this->testingParser->parseFilePathToFile($filePath);
         $shortNames = $this->shortNameResolver->resolveFromFile($file);
 
         $this->assertSame($expectedShortNames, $shortNames);
@@ -61,16 +59,5 @@ final class ShortNameResolverTest extends AbstractTestCase
             'FirstLog' => 'Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\Source\FirstLog',
             'SecondLog' => 'Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\Source\SecondLog',
         ]];
-    }
-
-    private function createFileFromFilePath(string $filePath): File
-    {
-        $smartFileInfo = new SmartFileInfo($filePath);
-        $file = new File($smartFileInfo, $smartFileInfo->getContents());
-
-        $stmts = $this->rectorParser->parseFile($smartFileInfo);
-        $file->hydrateStmtsAndTokens($stmts, $stmts, []);
-
-        return $file;
     }
 }
