@@ -100,6 +100,10 @@ CODE_SAMPLE
         }
 
         $this->resolvedNamesAndParentsByShortName = $this->useAnalyzer->resolveUsedNameNodes($searchNode);
+
+        dump(count($this->resolvedNamesAndParentsByShortName));
+        die;
+
         $this->resolvedDocPossibleAliases = $this->docAliasResolver->resolve($searchNode);
         $this->useNamesAliasToName = $this->useNameAliasToNameResolver->resolve($this->file);
 

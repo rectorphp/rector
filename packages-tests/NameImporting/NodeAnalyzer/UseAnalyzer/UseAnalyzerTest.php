@@ -74,6 +74,23 @@ final class UseAnalyzerTest extends AbstractTestCase
             new FullyQualified(FirstUsage::class),
             New_::class,
         ];
+
         yield [__DIR__ . '/Fixture/some_uses.php.inc', 'SomeUses', 0, new Identifier('SomeUses'), Class_::class];
+
+        yield [
+            __DIR__ . '/Fixture/use_import.php.inc',
+            'BaseKernel',
+            0,
+            new Identifier('BaseKernel'),
+            Node\Stmt\UseUse::class,
+        ];
+        yield [
+            __DIR__ . '/Fixture/use_import.php.inc',
+            'BaseInterface',
+            0,
+            new Identifier('BaseInterface'),
+            Node\Stmt\UseUse::class,
+        ];
+        yield [__DIR__ . '/Fixture/use_import.php.inc', 'SomeClass', 0, new Identifier('SomeClass'), Class_::class];
     }
 }
