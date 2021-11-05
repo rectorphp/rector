@@ -13,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\UseUse;
+use PhpParser\Node\UnionType;
 use Rector\NameImporting\NodeAnalyzer\UseAnalyzer;
 use Rector\NameImporting\ValueObject\NameAndParent;
 use Rector\Testing\PHPUnit\AbstractTestCase;
@@ -102,7 +103,7 @@ final class UseAnalyzerTest extends AbstractTestCase
             'String_',
             0,
             new FullyQualified(String_::class),
-            Node\UnionType::class,
+            UnionType::class,
         ];
 
         yield [

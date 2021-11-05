@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 
@@ -18,11 +19,12 @@ final class ClassManipulator
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private NodesToRemoveCollector $nodesToRemoveCollector,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private ClassChildAnalyzer $classChildAnalyzer
     ) {
     }
 
-    public function hasParentMethodOrInterface(ObjectType $objectType, string $methodName): bool
+    public function hasParentMethodOrInterface(ObjectType $objectType, string $oldMethod, string $newMethod): bool
     {
         if (! $this->reflectionProvider->hasClass($objectType->getClassName())) {
             return false;
@@ -34,9 +36,15 @@ final class ClassManipulator
                 continue;
             }
 
-            if ($ancestorClassReflection->hasMethod($methodName)) {
-                return true;
+            if (! $ancestorClassReflection->hasMethod($oldMethod)) {
+                continue;
             }
+
+            if ($this->classChildAnalyzer->hasChildClassMethod($ancestorClassReflection, $newMethod)) {
+                continue;
+            }
+
+            return true;
         }
 
         return false;

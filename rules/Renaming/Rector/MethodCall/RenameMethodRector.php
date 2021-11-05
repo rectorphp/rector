@@ -84,7 +84,8 @@ CODE_SAMPLE
         foreach ($this->methodCallRenames as $methodCallRename) {
             $implementsInterface = $this->classManipulator->hasParentMethodOrInterface(
                 $methodCallRename->getObjectType(),
-                $methodCallRename->getOldMethod()
+                $methodCallRename->getOldMethod(),
+                $methodCallRename->getNewMethod()
             );
             if ($implementsInterface) {
                 continue;
