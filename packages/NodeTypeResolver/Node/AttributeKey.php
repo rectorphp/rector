@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\Node;
 
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @enum
  */
