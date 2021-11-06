@@ -13,7 +13,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\MethodCallToMethodCall;
@@ -103,7 +102,10 @@ CODE_SAMPLE
                 continue;
             }
             $propertyFetch = $node->var;
-            $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+                continue;
+            }
             $newObjectType = new \PHPStan\Type\ObjectType($methodCallToMethodCall->getNewType());
             $newPropertyName = $this->matchNewPropertyName($methodCallToMethodCall, $class);
             if ($newPropertyName === null) {

@@ -141,8 +141,8 @@ CODE_SAMPLE
             return \true;
         }
         // skip node in trait, as impossible to analyse
-        $classLike = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        return $classLike instanceof \PhpParser\Node\Stmt\Trait_;
+        $trait = $this->betterNodeFinder->findParentType($funcCall, \PhpParser\Node\Stmt\Trait_::class);
+        return $trait instanceof \PhpParser\Node\Stmt\Trait_;
     }
     private function castToArray(\PhpParser\Node\Expr $countedExpr, \PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
     {

@@ -92,8 +92,8 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
         if (!$phpDocTagNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
             return null;
         }
-        $classLike = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         if (!$phpDocTagNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode) {
@@ -105,7 +105,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
             return null;
         }
         $methodName = $match['method_name'];
-        return $classLike->getMethod($methodName);
+        return $class->getMethod($methodName);
     }
     /**
      * @param Return_[] $returns

@@ -57,7 +57,7 @@ final class IsClassMethodUsedAnalyzer
     }
     public function isClassMethodUsed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }

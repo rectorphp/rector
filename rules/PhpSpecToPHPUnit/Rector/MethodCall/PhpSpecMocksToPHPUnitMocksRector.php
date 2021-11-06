@@ -88,27 +88,27 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
     }
     private function processMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        if ($this->isName($methodCall->name, 'shouldBeCalled')) {
-            if (!$methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            $mockMethodName = $this->getName($methodCall->var->name);
-            if ($mockMethodName === null) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            $arg = $methodCall->var->args[0] ?? null;
-            $expectedArg = $arg instanceof \PhpParser\Node\Arg ? $arg->value : null;
-            $methodCall->var->name = new \PhpParser\Node\Identifier('expects');
-            $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
-            $methodCall->var->args = [new \PhpParser\Node\Arg($thisOnceMethodCall)];
-            $methodCall->name = new \PhpParser\Node\Identifier('method');
-            $methodCall->args = [new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($mockMethodName))];
-            if ($expectedArg !== null) {
-                return $this->appendWithMethodCall($methodCall, $expectedArg);
-            }
-            return $methodCall;
+        if (!$this->isName($methodCall->name, 'shouldBeCalled')) {
+            return null;
         }
-        return null;
+        if (!$methodCall->var instanceof \PhpParser\Node\Expr\MethodCall) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        $mockMethodName = $this->getName($methodCall->var->name);
+        if ($mockMethodName === null) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        $arg = $methodCall->var->args[0] ?? null;
+        $expectedArg = $arg instanceof \PhpParser\Node\Arg ? $arg->value : null;
+        $methodCall->var->name = new \PhpParser\Node\Identifier('expects');
+        $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
+        $methodCall->var->args = [new \PhpParser\Node\Arg($thisOnceMethodCall)];
+        $methodCall->name = new \PhpParser\Node\Identifier('method');
+        $methodCall->args = [new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_($mockMethodName))];
+        if ($expectedArg !== null) {
+            return $this->appendWithMethodCall($methodCall, $expectedArg);
+        }
+        return $methodCall;
     }
     /**
      * Variable or property fetch, based on number of present params in whole class
@@ -116,7 +116,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
     private function createCreateMockCall(\PhpParser\Node\Param $param, \PhpParser\Node\Name $name) : ?\PhpParser\Node\Stmt\Expression
     {
         /** @var Class_ $classLike */
-        $classLike = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classLike);
         $variable = $this->getName($param->var);
         $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);

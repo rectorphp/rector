@@ -93,7 +93,7 @@ CODE_SAMPLE
                 continue;
             }
             /** @var Class_ $class */
-            $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
             $propertyName = $this->getExistingFactoryPropertyName($class, $newToMethodCall->getServiceObjectType());
             if ($propertyName === null) {
                 $serviceObjectType = $newToMethodCall->getServiceObjectType();

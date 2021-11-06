@@ -102,7 +102,7 @@ CODE_SAMPLE
         if ($isJustAdded) {
             return \true;
         }
-        $classLike = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($funcCall, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }

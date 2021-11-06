@@ -64,7 +64,6 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
             $this->classStack[] = $this->classLike;
             $this->setClassNodeAndName($node);
         }
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE, $this->classLike);
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME, $this->className);
     }
     private function processMethod(\PhpParser\Node $node) : void

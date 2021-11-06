@@ -13,6 +13,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20211106\Symfony\Contracts\Service\Attribute\Required;
@@ -29,14 +30,19 @@ final class NameScopeFactory
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
     // This is needed to avoid circular references
     /**
      * @required
      */
-    public function autowireNameScopeFactory(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper) : void
+    public function autowireNameScopeFactory(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function createNameScopeFromNodeWithoutTemplateTypes(\PhpParser\Node $node) : \PHPStan\Analyser\NameScope
     {
@@ -83,10 +89,10 @@ final class NameScopeFactory
     private function templateTemplateTypeMap(\PhpParser\Node $node) : \PHPStan\Type\Generic\TemplateTypeMap
     {
         $nodeTemplateTypes = $this->resolveTemplateTypesFromNode($node);
-        $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
         $classTemplateTypes = [];
-        if ($class instanceof \PhpParser\Node\Stmt\ClassLike) {
-            $classTemplateTypes = $this->resolveTemplateTypesFromNode($class);
+        if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            $classTemplateTypes = $this->resolveTemplateTypesFromNode($classLike);
         }
         $templateTypes = \array_merge($nodeTemplateTypes, $classTemplateTypes);
         return new \PHPStan\Type\Generic\TemplateTypeMap($templateTypes);

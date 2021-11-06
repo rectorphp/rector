@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\Node;
 
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @enum
@@ -23,10 +25,17 @@ final class AttributeKey
      */
     public const USE_NODES = 'useNodes';
     /**
+     * @deprecated Use
+     * @see BetterNodeFinder and
+     * @see NodeNameResolver to find your parent nodes.
+     *
      * @var string
      */
     public const CLASS_NAME = 'className';
     /**
+     * @deprecated Use
+     * @see BetterNodeFinder to find your parent nodes.
+     *
      * @var string
      */
     public const CLASS_NODE = 'class_node';

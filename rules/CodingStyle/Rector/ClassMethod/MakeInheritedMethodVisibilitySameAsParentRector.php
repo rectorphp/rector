@@ -128,7 +128,8 @@ CODE_SAMPLE
         if ($methodName !== \Rector\Core\ValueObject\MethodName::CONSTRUCT) {
             return \false;
         }
-        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }

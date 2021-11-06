@@ -81,7 +81,7 @@ CODE_SAMPLE
         if (!$this->php4ConstructorClassMethodAnalyzer->detect($node)) {
             return null;
         }
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }

@@ -7,12 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
@@ -22,6 +23,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -93,7 +95,11 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
      */
     private $propertyAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer)
+    /**
+     * @var \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver
+     */
+    private $propertyUnionTypeResolver;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver $propertyUnionTypeResolver)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
@@ -103,6 +109,7 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->propertyAnalyzer = $propertyAnalyzer;
+        $this->propertyUnionTypeResolver = $propertyUnionTypeResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -188,7 +195,7 @@ CODE_SAMPLE
         if (!$node instanceof \PhpParser\Node) {
             return \true;
         }
-        $type = $this->resolveTypePossibleUnionNullableType($node, $type);
+        $type = $this->propertyUnionTypeResolver->resolve($node, $type);
         // is not class-type and should be skipped
         if ($this->shouldSkipNonClassLikeType($node, $type)) {
             return \true;
@@ -201,25 +208,6 @@ CODE_SAMPLE
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
         return \true;
-    }
-    /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $node
-     */
-    private function resolveTypePossibleUnionNullableType($node, \PHPStan\Type\Type $possibleUnionType) : \PHPStan\Type\Type
-    {
-        if (!$node instanceof \PhpParser\Node\NullableType) {
-            return $possibleUnionType;
-        }
-        if (!$possibleUnionType instanceof \PHPStan\Type\UnionType) {
-            return $possibleUnionType;
-        }
-        $types = $possibleUnionType->getTypes();
-        foreach ($types as $type) {
-            if (!$type instanceof \PHPStan\Type\NullType) {
-                return $type;
-            }
-        }
-        return $possibleUnionType;
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
@@ -255,7 +243,7 @@ CODE_SAMPLE
         if (!$propertyType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        if (!$propertyType->isSuperTypeOf(new \PHPStan\Type\NullType())->yes()) {
+        if (!\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
             return;
         }
         $onlyProperty = $property->props[0];
@@ -276,6 +264,11 @@ CODE_SAMPLE
         }
         // skip multiple properties
         if (\count($property->props) > 1) {
+            return \true;
+        }
+        $trait = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Trait_::class);
+        // skip trait properties, as they ar unpredictable based on class context they appear in
+        if ($trait instanceof \PhpParser\Node\Stmt\Trait_) {
             return \true;
         }
         if (!$this->privatePropertyOnly) {

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -11,7 +12,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadReturnTagValueNodeAnalyzer
 {
@@ -19,9 +20,14 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->typeComparator = $typeComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
@@ -29,7 +35,7 @@ final class DeadReturnTagValueNodeAnalyzer
         if ($returnType === null) {
             return \false;
         }
-        $classLike = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, \PhpParser\Node\Stmt\ClassLike::class);
         if ($classLike instanceof \PhpParser\Node\Stmt\Trait_ && $returnTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\ThisTypeNode) {
             return \false;
         }

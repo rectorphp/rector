@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeFactory\ClassConstantFactory;
 use Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -109,7 +108,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         $this->propertyFetchWithConstFetchReplacer->replace($classLike, $node);
         return $this->classConstantFactory->createFromProperty($node);
     }
@@ -118,7 +117,7 @@ CODE_SAMPLE
         if (\count($property->props) !== 1) {
             return \true;
         }
-        $classLike = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }

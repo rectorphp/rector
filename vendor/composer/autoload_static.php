@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit031b58e784496a18655172bd4928ad8a
+class ComposerStaticInit459af300f88369828b2c5381ea17dddb
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2745,6 +2745,7 @@ class ComposerStaticInit031b58e784496a18655172bd4928ad8a
         'Rector\\Php74\\Rector\\Property\\TypedPropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/TypedPropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
+        'Rector\\Php74\\TypeAnalyzer\\PropertyUnionTypeResolver' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/PropertyUnionTypeResolver.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
@@ -3522,9 +3523,9 @@ class ComposerStaticInit031b58e784496a18655172bd4928ad8a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit031b58e784496a18655172bd4928ad8a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit031b58e784496a18655172bd4928ad8a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit031b58e784496a18655172bd4928ad8a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit459af300f88369828b2c5381ea17dddb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit459af300f88369828b2c5381ea17dddb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit459af300f88369828b2c5381ea17dddb::$classMap;
 
         }, null, ClassLoader::class);
     }

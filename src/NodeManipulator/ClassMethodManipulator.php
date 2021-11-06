@@ -73,14 +73,14 @@ final class ClassMethodManipulator
         if (!$this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return \false;
         }
-        $classLike = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
         if ($classMethod->isPrivate()) {
             return \true;
         }
-        if ($classLike->isFinal()) {
+        if ($class->isFinal()) {
             return \false;
         }
         return $classMethod->isProtected();

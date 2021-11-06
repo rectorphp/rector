@@ -16,7 +16,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory;
@@ -171,11 +170,15 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
             return null;
         }
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         $classMethod = $classLike->getMethod($methodName);
         // it's a method call, skip
         if ($classMethod !== null) {
             return null;
+        }
+        // direct PHPUnit method calls, no need to call on property
+        if (\in_array($methodName, ['atLeastOnce', 'equalTo', 'isInstanceOf', 'isType'], \true)) {
+            return $node;
         }
         $node->var = $this->getTestedObjectPropertyFetch();
         return $node;
@@ -192,11 +195,17 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
         if ($this->isPrepared) {
             return;
         }
-        /** @var Class_ $classLike */
-        $classLike = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classLike);
-        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($methodCall);
-        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classLike);
+        $class = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return;
+        }
+        $className = $this->getName($class);
+        if (!\is_string($className)) {
+            return;
+        }
+        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($class);
+        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($class);
+        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($class);
         $this->isPrepared = \true;
     }
     private function getTestedObjectPropertyFetch() : \PhpParser\Node\Expr\PropertyFetch

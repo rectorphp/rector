@@ -15,7 +15,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeRemoval\AssignRemover;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
@@ -158,7 +157,7 @@ CODE_SAMPLE
             if (!$this->isObjectType($new->class, $constructorInjectionObjectType)) {
                 continue;
             }
-            $classLike = $new->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $classLike = $this->betterNodeFinder->findParentType($new, \PhpParser\Node\Stmt\Class_::class);
             if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }

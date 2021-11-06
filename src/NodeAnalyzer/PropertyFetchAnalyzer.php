@@ -19,7 +19,6 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyFetchAnalyzer
 {
     /**
@@ -81,11 +80,11 @@ final class PropertyFetchAnalyzer
         if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, \Rector\Core\Enum\ObjectReference::SELF()->getValue())) {
             return \false;
         }
-        $classLike = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        foreach ($classLike->getProperties() as $property) {
+        foreach ($class->getProperties() as $property) {
             if (!$this->nodeNameResolver->areNamesEqual($property->props[0], $expr)) {
                 continue;
             }
@@ -119,7 +118,7 @@ final class PropertyFetchAnalyzer
     }
     public function isFilledByConstructParam(\PhpParser\Node\Stmt\Property $property) : bool
     {
-        $class = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }

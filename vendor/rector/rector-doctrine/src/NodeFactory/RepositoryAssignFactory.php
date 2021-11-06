@@ -47,7 +47,6 @@ final class RepositoryAssignFactory
         }
         $classConstFetch = $this->nodeFactory->createClassConstReference($entityObjectType->getClassName());
         $methodCall = $this->nodeFactory->createMethodCall('entityManager', 'getRepository', [$classConstFetch]);
-        $methodCall->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE, $repositoryClassName);
         return $this->nodeFactory->createPropertyAssignmentWithExpr('repository', $methodCall);
     }
 }

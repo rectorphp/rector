@@ -98,12 +98,12 @@ CODE_SAMPLE
     }
     private function refactorStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\MethodCall
     {
-        $class = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$class instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($staticCall, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
         /** @var ClassMethod[] $classMethods */
-        $classMethods = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Stmt\ClassMethod::class);
+        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, \PhpParser\Node\Stmt\ClassMethod::class);
         foreach ($classMethods as $classMethod) {
             if (!$this->isClassMethodMatchingStaticCall($classMethod, $staticCall)) {
                 continue;

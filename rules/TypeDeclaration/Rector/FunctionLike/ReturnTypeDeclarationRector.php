@@ -220,7 +220,7 @@ CODE_SAMPLE
         if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
-        $classLike = $functionLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, \PhpParser\Node\Stmt\Class_::class);
         return !$classLike instanceof \PhpParser\Node\Stmt\Class_;
     }
 }

@@ -101,7 +101,7 @@ CODE_SAMPLE
             }
             $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
             /** @var Class_ $class */
-            $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
             $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $staticObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
             $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             $objectPropertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);

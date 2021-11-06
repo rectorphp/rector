@@ -2415,6 +2415,7 @@ return array(
     'Rector\\Php74\\Rector\\Property\\TypedPropertyRector' => $baseDir . '/rules/Php74/Rector/Property/TypedPropertyRector.php',
     'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => $baseDir . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
     'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => $baseDir . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
+    'Rector\\Php74\\TypeAnalyzer\\PropertyUnionTypeResolver' => $baseDir . '/rules/Php74/TypeAnalyzer/PropertyUnionTypeResolver.php',
     'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => $baseDir . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
     'Rector\\Php80\\Enum\\MatchKind' => $baseDir . '/rules/Php80/Enum/MatchKind.php',
     'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => $baseDir . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',

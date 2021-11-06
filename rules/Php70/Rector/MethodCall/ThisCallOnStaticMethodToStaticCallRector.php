@@ -111,7 +111,7 @@ CODE_SAMPLE
     }
     private function resolveClassSelf(\PhpParser\Node\Expr\MethodCall $methodCall) : \Rector\Core\Enum\ObjectReference
     {
-        $classLike = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \Rector\Core\Enum\ObjectReference::STATIC();
         }
