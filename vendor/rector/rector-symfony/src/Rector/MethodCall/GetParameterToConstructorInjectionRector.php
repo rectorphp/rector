@@ -14,7 +14,6 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -105,12 +104,12 @@ CODE_SAMPLE
         $parameterName = $stringArgument->value;
         $parameterName = \RectorPrefix20211106\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, new \PHPStan\Type\StringType(), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
 }

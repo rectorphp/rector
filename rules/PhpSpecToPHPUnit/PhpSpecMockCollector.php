@@ -97,7 +97,7 @@ final class PhpSpecMockCollector
         if ($param->type === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $paramType = (string) ($param->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME) ?: $param->type);
+        $paramType = (string) ($param->type ?? $param->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME));
         $this->mocksWithsTypes[$class][$variable] = $paramType;
     }
 }

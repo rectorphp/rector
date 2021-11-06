@@ -9,11 +9,11 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Nette\Kdyby\Naming\EventClassNaming;
 use Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod;
 use Rector\Nette\Kdyby\ValueObject\NetteEventToContributeEventClass;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211106\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ListeningMethodsCollector
 {
@@ -41,22 +41,29 @@ final class ListeningMethodsCollector
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\RectorPrefix20211106\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\RectorPrefix20211106\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Nette\Kdyby\Naming\EventClassNaming $eventClassNaming, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->eventClassNaming = $eventClassNaming;
         $this->valueResolver = $valueResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return EventClassAndClassMethod[]
      */
     public function collectFromClassAndGetSubscribedEventClassMethod(\PhpParser\Node\Stmt\ClassMethod $getSubscribedEventsClassMethod, string $type) : array
     {
-        /** @var Class_ $classLike */
-        $classLike = $getSubscribedEventsClassMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($getSubscribedEventsClassMethod, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return [];
+        }
         $this->eventClassesAndClassMethods = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $getSubscribedEventsClassMethod->stmts, function (\PhpParser\Node $node) use($classLike, $type) {
-            $classMethod = $this->matchClassMethodByArrayItem($node, $classLike);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $getSubscribedEventsClassMethod->stmts, function (\PhpParser\Node $node) use($class, $type) {
+            $classMethod = $this->matchClassMethodByArrayItem($node, $class);
             if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return null;
             }
@@ -75,7 +82,7 @@ final class ListeningMethodsCollector
                 $this->resolveContributeEventClassAndSubscribedClassMethod($eventClass, $classMethod);
                 return null;
             }
-            $eventClassAndClassMethod = $this->resolveCustomClassMethodAndEventClass($node, $classLike, $eventClass);
+            $eventClassAndClassMethod = $this->resolveCustomClassMethodAndEventClass($node, $class, $eventClass);
             if (!$eventClassAndClassMethod instanceof \Rector\Nette\Kdyby\ValueObject\EventClassAndClassMethod) {
                 return null;
             }

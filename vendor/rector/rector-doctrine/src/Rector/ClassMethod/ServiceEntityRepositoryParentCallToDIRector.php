@@ -116,8 +116,8 @@ CODE_SAMPLE
         if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         // 1. remove parent::__construct()
@@ -130,12 +130,12 @@ CODE_SAMPLE
         // 3. add $entityManager->getRepository() fetch assign
         $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
         $entityManagerObjectType = new \PHPStan\Type\ObjectType('Doctrine\\ORM\\EntityManagerInterface');
-        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($classLike, 'entityManager', $entityManagerObjectType, $repositoryAssign);
-        $this->addRepositoryProperty($classLike, $entityReferenceExpr);
+        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($class, 'entityManager', $entityManagerObjectType, $repositoryAssign);
+        $this->addRepositoryProperty($class, $entityReferenceExpr);
         // 5. add param + add property, dependency
         $propertyName = $this->propertyNaming->fqnToVariableName($entityManagerObjectType);
         $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $entityManagerObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $node;
     }
     private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool

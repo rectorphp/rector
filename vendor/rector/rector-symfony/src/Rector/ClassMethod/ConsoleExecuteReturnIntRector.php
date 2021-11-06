@@ -64,11 +64,11 @@ CODE_SAMPLE
         if (!$this->isName($node, 'execute')) {
             return null;
         }
-        $classLike = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NODE);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($class, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         $this->refactorReturnTypeDeclaration($node);
