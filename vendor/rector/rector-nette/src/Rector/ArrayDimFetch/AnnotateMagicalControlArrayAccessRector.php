@@ -129,7 +129,7 @@ CODE_SAMPLE
             return null;
         }
         $this->assignAnalyzer->addAssignExpressionForFirstCase($variableName, $node, $controlObjectType);
-        $classMethod = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
         if ($classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $this->arrayDimFetchRenamer->renameToVariable($classMethod, $node, $variableName);
         }

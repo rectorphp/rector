@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
@@ -118,7 +119,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
     {
-        $classMethod = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\FunctionLike) {
             return \true;
         }

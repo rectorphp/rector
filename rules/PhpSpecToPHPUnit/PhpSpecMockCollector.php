@@ -9,6 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211106\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -34,10 +35,15 @@ final class PhpSpecMockCollector
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\RectorPrefix20211106\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\RectorPrefix20211106\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return mixed[]
@@ -88,7 +94,7 @@ final class PhpSpecMockCollector
         $variable = $this->nodeNameResolver->getName($param->var);
         /** @var string $class */
         $class = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }

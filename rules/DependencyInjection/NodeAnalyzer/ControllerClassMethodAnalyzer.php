@@ -5,9 +5,18 @@ namespace Rector\DependencyInjection\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerClassMethodAnalyzer
 {
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    {
+        $this->betterNodeFinder = $betterNodeFinder;
+    }
     public function isInControllerActionMethod(\PhpParser\Node\Expr\Variable $variable) : bool
     {
         /** @var string|null $className */
@@ -18,7 +27,7 @@ final class ControllerClassMethodAnalyzer
         if (\substr_compare($className, 'Controller', -\strlen('Controller')) !== 0) {
             return \false;
         }
-        $classMethod = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }

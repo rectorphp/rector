@@ -19,10 +19,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @var string[]
-     */
-    private const PARENT_NODE_ATTRIBUTES = [\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, \Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE];
-    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
@@ -73,26 +69,18 @@ final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\No
     }
     private function resolveNodeScope(\PhpParser\Node\Expr\Variable $variable) : ?\PHPStan\Analyser\Scope
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if ($nodeScope !== null) {
-            return $nodeScope;
+        $scope = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($scope instanceof \PHPStan\Analyser\Scope) {
+            return $scope;
         }
         return $this->resolveFromParentNodes($variable);
     }
     private function resolveFromParentNodes(\PhpParser\Node\Expr\Variable $variable) : ?\PHPStan\Analyser\Scope
     {
-        foreach (self::PARENT_NODE_ATTRIBUTES as $parentNodeAttribute) {
-            $parentNode = $variable->getAttribute($parentNodeAttribute);
-            if (!$parentNode instanceof \PhpParser\Node) {
-                continue;
-            }
-            $parentNodeScope = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            if (!$parentNodeScope instanceof \PHPStan\Analyser\Scope) {
-                continue;
-            }
-            return $parentNodeScope;
+        $parent = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node) {
+            return null;
         }
-        return null;
+        return $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
     }
 }

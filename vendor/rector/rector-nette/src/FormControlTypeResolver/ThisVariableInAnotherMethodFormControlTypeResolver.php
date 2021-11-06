@@ -12,7 +12,6 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211106\Symfony\Contracts\Service\Attribute\Required;
 final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
@@ -49,7 +48,7 @@ final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Recto
         if (!$node instanceof \PhpParser\Node\Expr\Variable) {
             return [];
         }
-        $classMethod = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }

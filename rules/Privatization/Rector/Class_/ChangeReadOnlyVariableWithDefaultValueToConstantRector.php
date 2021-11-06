@@ -101,7 +101,7 @@ CODE_SAMPLE
             return null;
         }
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
-            $classMethod = $readOnlyVariableAssign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+            $classMethod = $this->betterNodeFinder->findParentType($readOnlyVariableAssign, \PhpParser\Node\Stmt\ClassMethod::class);
             if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }

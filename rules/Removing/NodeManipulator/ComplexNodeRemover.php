@@ -99,7 +99,7 @@ final class ComplexNodeRemover
      */
     private function shouldSkipPropertyForClassMethod($expr, array $classMethodNamesToSkip) : bool
     {
-        $classMethodNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethodNode = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
@@ -122,7 +122,7 @@ final class ComplexNodeRemover
     }
     private function removeConstructorDependency(\PhpParser\Node\Expr\Assign $assign) : void
     {
-        $classMethod = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }

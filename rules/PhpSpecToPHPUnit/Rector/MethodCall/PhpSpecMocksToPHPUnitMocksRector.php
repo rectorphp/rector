@@ -119,7 +119,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
         $classLike = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classLike);
         $variable = $this->getName($param->var);
-        $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }

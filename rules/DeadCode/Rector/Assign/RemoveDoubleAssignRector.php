@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -108,6 +109,8 @@ CODE_SAMPLE
     }
     private function areInSameClassMethod(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Stmt\Expression $previousExpression) : bool
     {
-        return $this->nodeComparator->areNodesEqual($assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE), $previousExpression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE));
+        $assignClassMethod = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\Stmt\ClassMethod::class);
+        $previousExpressionClassMethod = $this->betterNodeFinder->findParentType($previousExpression, \PhpParser\Node\Stmt\ClassMethod::class);
+        return $this->nodeComparator->areNodesEqual($assignClassMethod, $previousExpressionClassMethod);
     }
 }

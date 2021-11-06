@@ -116,12 +116,12 @@ final class ClassMethodManipulator
      */
     public function addMethodParameterIfMissing(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, array $possibleNames) : string
     {
-        $classMethodNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
-        if (!$classMethodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             // or null?
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        foreach ($classMethodNode->params as $paramNode) {
+        foreach ($classMethod->params as $paramNode) {
             if (!$this->nodeTypeResolver->isObjectType($paramNode, $objectType)) {
                 continue;
             }
@@ -131,8 +131,8 @@ final class ClassMethodManipulator
             }
             return $paramName;
         }
-        $paramName = $this->resolveName($classMethodNode, $possibleNames);
-        $classMethodNode->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), null, new \PhpParser\Node\Name\FullyQualified($objectType->getClassName()));
+        $paramName = $this->resolveName($classMethod, $possibleNames);
+        $classMethod->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), null, new \PhpParser\Node\Name\FullyQualified($objectType->getClassName()));
         return $paramName;
     }
     public function isPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
