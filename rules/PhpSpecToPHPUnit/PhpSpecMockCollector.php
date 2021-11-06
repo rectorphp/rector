@@ -113,7 +113,7 @@ final class PhpSpecMockCollector
             throw new ShouldNotHappenException();
         }
 
-        $paramType = (string) ($param->type->getAttribute(AttributeKey::ORIGINAL_NAME) ?: $param->type);
+        $paramType = (string) ($param->type ?? $param->type->getAttribute(AttributeKey::ORIGINAL_NAME));
         $this->mocksWithsTypes[$class][$variable] = $paramType;
     }
 }
