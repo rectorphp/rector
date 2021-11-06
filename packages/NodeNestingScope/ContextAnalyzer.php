@@ -37,7 +37,6 @@ final class ContextAnalyzer
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
         private NodeTypeResolver $nodeTypeResolver,
-        private ParentFinder $parentFinder
     ) {
     }
 
@@ -45,7 +44,7 @@ final class ContextAnalyzer
     {
         $stopNodes = array_merge(self::LOOP_NODES, self::BREAK_NODES);
 
-        $firstParent = $this->parentFinder->findByTypes($node, $stopNodes);
+        $firstParent = $this->betterNodeFinder->findParentByTypes($node, $stopNodes);
         if (! $firstParent instanceof Node) {
             return false;
         }
@@ -68,8 +67,7 @@ final class ContextAnalyzer
     {
         $breakNodes = array_merge([If_::class], self::BREAK_NODES);
 
-        $previousNode = $this->parentFinder->findByTypes($node, $breakNodes);
-
+        $previousNode = $this->betterNodeFinder->findParentByTypes($node, $breakNodes);
         if (! $previousNode instanceof Node) {
             return false;
         }

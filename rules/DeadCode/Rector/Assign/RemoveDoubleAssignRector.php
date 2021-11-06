@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
-use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,7 +28,6 @@ final class RemoveDoubleAssignRector extends AbstractRector
     public function __construct(
         private ScopeNestingComparator $scopeNestingComparator,
         private SideEffectNodeDetector $sideEffectNodeDetector,
-        private ParentFinder $parentFinder
     ) {
     }
 
@@ -108,7 +106,7 @@ CODE_SAMPLE
             return true;
         }
 
-        return (bool) $this->parentFinder->findByTypes($assign, [Ternary::class, Coalesce::class]);
+        return (bool) $this->betterNodeFinder->findParentByTypes($assign, [Ternary::class, Coalesce::class]);
     }
 
     private function isSelfReferencing(Assign $assign): bool

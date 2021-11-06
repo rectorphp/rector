@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeManipulator\TokenManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -31,7 +30,6 @@ final class TokenGetAllToObjectRector extends AbstractRector implements MinPhpVe
 {
     public function __construct(
         private TokenManipulator $tokenManipulator,
-        private ParentFinder $parentFinder
     ) {
     }
 
@@ -113,7 +111,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassMethod|Function_|null $classMethodOrFunction */
-        $classMethodOrFunction = $this->parentFinder->findByTypes(
+        $classMethodOrFunction = $this->betterNodeFinder->findParentByTypes(
             $funcCall,
             [ClassMethod::class, Function_::class]
         );

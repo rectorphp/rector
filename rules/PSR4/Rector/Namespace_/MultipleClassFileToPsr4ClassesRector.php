@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\PSR4\Rector\Namespace_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -113,15 +114,13 @@ CODE_SAMPLE
 
     private function hasAtLeastTwoClassLikes(Node $node): bool
     {
-        $classes = $this->betterNodeFinder->findClassLikes($node);
-        return count($classes) > 1;
+        $nonAnonymousClassLikes = $this->findNonAnonymousClassLikes($node);
+        return count($nonAnonymousClassLikes) > 1;
     }
 
     private function refactorNamespace(Namespace_ $namespace): ?Namespace_
     {
-        /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findClassLikes($namespace->stmts);
-
+        $classLikes = $this->findNonAnonymousClassLikes($namespace);
         $this->namespaceManipulator->removeClassLikes($namespace);
 
         $nodeToReturn = null;
@@ -144,8 +143,7 @@ CODE_SAMPLE
 
     private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace): ?FileWithoutNamespace
     {
-        /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findClassLikes($fileWithoutNamespace->stmts);
+        $classLikes = $this->findNonAnonymousClassLikes($fileWithoutNamespace);
 
         $nodeToReturn = null;
 
@@ -189,5 +187,21 @@ CODE_SAMPLE
     {
         $currentDirectory = dirname($smartFileInfo->getRealPath());
         return $currentDirectory . DIRECTORY_SEPARATOR . $classLike->name . '.php';
+    }
+
+    /**
+     * @return ClassLike[]
+     */
+    private function findNonAnonymousClassLikes(Node $node): array
+    {
+        $classLikes = $this->betterNodeFinder->findInstanceOf([$node], ClassLike::class);
+
+        return array_filter($classLikes, function (ClassLike $classLike): bool {
+            if (! $classLike instanceof Class_) {
+                return true;
+            }
+
+            return ! $classLike->isAnonymous();
+        });
     }
 }

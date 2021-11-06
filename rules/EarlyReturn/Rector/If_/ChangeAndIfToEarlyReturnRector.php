@@ -18,7 +18,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
 use Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer;
 use Rector\NodeNestingScope\ContextAnalyzer;
-use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,7 +32,6 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
         private InvertedIfFactory $invertedIfFactory,
         private ContextAnalyzer $contextAnalyzer,
         private BooleanAndAnalyzer $booleanAndAnalyzer,
-        private ParentFinder $parentFinder
     ) {
     }
 
@@ -243,7 +241,7 @@ CODE_SAMPLE
             return false;
         }
 
-        return (bool) $this->parentFinder->findByTypes($if, [If_::class, Else_::class, ElseIf_::class]);
+        return (bool) $this->betterNodeFinder->findParentByTypes($if, [If_::class, Else_::class, ElseIf_::class]);
     }
 
     private function isLastIfOrBeforeLastReturn(If_ $if): bool

@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeNestingScope\ParentFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -25,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeDefineArrayConstantRector extends AbstractRector
 {
     public function __construct(
-        private ParentFinder $parentFinder,
         private ArgsAnalyzer $argsAnalyzer
     ) {
     }
@@ -113,6 +111,6 @@ CODE_SAMPLE
             return true;
         }
 
-        return (bool) $this->parentFinder->findByTypes($funcCall, [ClassMethod::class, Function_::class]);
+        return (bool) $this->betterNodeFinder->findParentByTypes($funcCall, [ClassMethod::class, Function_::class]);
     }
 }

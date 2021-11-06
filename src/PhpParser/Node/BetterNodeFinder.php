@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\Node;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -14,14 +15,16 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Php\TypeChecker;
 use Webmozart\Assert\Assert;
@@ -37,8 +40,31 @@ final class BetterNodeFinder
         private TypeChecker $typeChecker,
         private NodeComparator $nodeComparator,
         private ClassAnalyzer $classAnalyzer,
-        private ParentScopeFinder $parentScopeFinder
     ) {
+    }
+
+    /**
+     * @template T of \PhpParser\Node
+     * @param array<class-string<T>> $types
+     * @return T|null
+     */
+    public function findParentByTypes(Node $currentNode, array $types): ?Node
+    {
+        Assert::allIsAOf($types, Node::class);
+
+        while ($currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE)) {
+            if (! $currentNode instanceof Node) {
+                return null;
+            }
+
+            foreach ($types as $type) {
+                if (is_a($currentNode, $type, true)) {
+                    return $currentNode;
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -122,7 +148,7 @@ final class BetterNodeFinder
      */
     public function hasVariableOfName(Node | array $nodes, string $name): bool
     {
-        return (bool) $this->findVariableOfName($nodes, $name);
+        return $this->findVariableOfName($nodes, $name) instanceof Node;
     }
 
     /**
@@ -179,24 +205,6 @@ final class BetterNodeFinder
     public function find(Node | array $nodes, callable $filter): array
     {
         return $this->nodeFinder->find($nodes, $filter);
-    }
-
-    /**
-     * Excludes anonymous classes!
-     *
-     * @param Node[]|Node $nodes
-     * @return ClassLike[]
-     */
-    public function findClassLikes(array | Node $nodes): array
-    {
-        return $this->find($nodes, function (Node $node): bool {
-            if (! $node instanceof ClassLike) {
-                return false;
-            }
-
-            // skip anonymous classes
-            return ! ($node instanceof Class_ && $this->classAnalyzer->isAnonymousClass($node));
-        });
     }
 
     /**
@@ -336,8 +344,8 @@ final class BetterNodeFinder
     public function findSameNamedExprs(Expr | Variable | Property | PropertyFetch | StaticPropertyFetch $expr): array
     {
         // assign of empty string to something
-        $scopeNode = $this->parentScopeFinder->find($expr);
-        if ($scopeNode === null) {
+        $scopeNode = $this->findParentScope($expr);
+        if (! $scopeNode instanceof Node) {
             return [];
         }
 
@@ -396,5 +404,16 @@ final class BetterNodeFinder
         }
 
         return null;
+    }
+
+    private function findParentScope(Node $node): Node|null
+    {
+        return $this->findParentByTypes($node, [
+            Closure::class,
+            Function_::class,
+            ClassMethod::class,
+            Class_::class,
+            Namespace_::class,
+        ]);
     }
 }
