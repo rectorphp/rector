@@ -127,12 +127,6 @@ final class AttributeKey
     public const CURRENT_STATEMENT = 'currentExpression';
 
     /**
-     * @deprecated Use File object instead, e.g. via CurrentFileProvider
-     * @var string
-     */
-    public const FILE_INFO = SmartFileInfo::class;
-
-    /**
      * Internal php-parser name.
      * Do not change this even if you want!
      *
