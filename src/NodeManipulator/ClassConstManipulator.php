@@ -13,7 +13,6 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ClassConstManipulator
 {
@@ -26,8 +25,8 @@ final class ClassConstManipulator
 
     public function hasClassConstFetch(ClassConst $classConst, ClassReflection $classReflection): bool
     {
-        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classConst, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 

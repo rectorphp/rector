@@ -111,7 +111,7 @@ CODE_SAMPLE
             $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
 
             /** @var Class_ $class */
-            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($node, Class_::class);
 
             $propertyMetadata = new PropertyMetadata($propertyName, $staticObjectType, Class_::MODIFIER_PRIVATE);
             $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);

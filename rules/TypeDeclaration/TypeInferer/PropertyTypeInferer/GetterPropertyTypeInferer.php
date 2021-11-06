@@ -9,8 +9,8 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
@@ -24,14 +24,15 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
         private ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
         private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
         private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
     public function inferProperty(Property $property): ?Type
     {
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
+        if (! $class instanceof Class_) {
             // anonymous class
             return null;
         }
@@ -39,7 +40,7 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        foreach ($classLike->getMethods() as $classMethod) {
+        foreach ($class->getMethods() as $classMethod) {
             if (! $this->classMethodAndPropertyAnalyzer->hasClassMethodOnlyStatementReturnOfPropertyFetch(
                 $classMethod,
                 $propertyName

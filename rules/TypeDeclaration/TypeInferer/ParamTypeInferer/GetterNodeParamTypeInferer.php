@@ -15,6 +15,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
@@ -27,14 +28,15 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
         private PropertyFetchAnalyzer $propertyFetchAnalyzer,
         private PhpDocInfoFactory $phpDocInfoFactory,
         private NodeNameResolver $nodeNameResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
     public function inferParam(Param $param): Type
     {
-        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($param, Class_::class);
+        if (! $class instanceof Class_) {
             return new MixedType();
         }
 
@@ -55,7 +57,7 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
         $returnType = new MixedType();
 
         // resolve property assigns
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use (
             $propertyNames,
             &$returnType
         ): ?int {

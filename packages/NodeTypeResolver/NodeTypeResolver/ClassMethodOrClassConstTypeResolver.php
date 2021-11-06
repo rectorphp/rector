@@ -11,14 +11,19 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symfony\Contracts\Service\Attribute\Required;
 
 final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInterface
 {
     private NodeTypeResolver $nodeTypeResolver;
+
+    public function __construct(
+        private BetterNodeFinder $betterNodeFinder
+    ) {
+    }
 
     #[Required]
     public function autowireClassMethodOrClassConstTypeResolver(NodeTypeResolver $nodeTypeResolver): void
@@ -39,7 +44,7 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
      */
     public function resolve(Node $node): Type
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             // anonymous class
             return new ObjectWithoutClassType();

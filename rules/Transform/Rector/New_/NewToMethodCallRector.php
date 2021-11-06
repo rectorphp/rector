@@ -102,7 +102,7 @@ CODE_SAMPLE
             }
 
             /** @var Class_ $class */
-            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($node, Class_::class);
 
             $propertyName = $this->getExistingFactoryPropertyName(
                 $class,

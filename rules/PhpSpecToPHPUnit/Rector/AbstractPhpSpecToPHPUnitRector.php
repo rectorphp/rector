@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -61,13 +60,17 @@ CODE_SAMPLE
         ]);
     }
 
-    public function isInPhpSpecBehavior(Node $node): bool
+    protected function isInPhpSpecBehavior(Node $node): bool
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        if ($node instanceof ClassLike) {
+            return $this->isObjectType($node, new ObjectType('PhpSpec\ObjectBehavior'));
+        }
+
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return false;
         }
 
-        return $this->isObjectType($classLike, new ObjectType('PhpSpec\ObjectBehavior'));
+        return $this->isInPhpSpecBehavior($classLike);
     }
 }

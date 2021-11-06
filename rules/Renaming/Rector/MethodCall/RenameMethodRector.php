@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
@@ -145,7 +144,7 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         MethodCallRenameInterface $methodCallRename
     ): bool {
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return false;
         }

@@ -15,7 +15,6 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -92,7 +91,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassLike $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
 
         foreach ($this->parameterTypehints as $parameterTypehint) {
             if (! $this->isObjectType($classLike, $parameterTypehint->getObjectType())) {
@@ -127,7 +126,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return true;
         }

@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class LocalMethodCallFinder
@@ -27,7 +26,7 @@ final class LocalMethodCallFinder
      */
     public function match(ClassMethod $classMethod): array
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
         if (! $class instanceof Class_) {
             return [];
         }

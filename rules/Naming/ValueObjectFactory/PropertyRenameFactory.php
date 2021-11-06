@@ -6,9 +6,9 @@ namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Tests\Naming\ValueObjectFactory\PropertyRenameFactory\PropertyRenameFactoryTest
@@ -16,7 +16,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyRenameFactory
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -24,13 +25,13 @@ final class PropertyRenameFactory
     {
         $currentName = $this->nodeNameResolver->getName($property);
 
-        $propertyClassLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $propertyClassLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
-        $propertyClassLikeName = $property->getAttribute(AttributeKey::CLASS_NAME);
-        if ($propertyClassLikeName === null) {
+        $className = $this->nodeNameResolver->getName($classLike);
+        if (! is_string($className)) {
             return null;
         }
 
@@ -38,8 +39,8 @@ final class PropertyRenameFactory
             $property,
             $expectedName,
             $currentName,
-            $propertyClassLike,
-            $propertyClassLikeName,
+            $classLike,
+            $className,
             $property->props[0]
         );
     }

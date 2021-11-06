@@ -21,7 +21,6 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -170,7 +169,7 @@ CODE_SAMPLE
 
     private function resolvePropertyFetchType(PropertyFetch $propertyFetch): Type
     {
-        $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
         if (! $classLike instanceof Class_) {
             return new MixedType();
         }

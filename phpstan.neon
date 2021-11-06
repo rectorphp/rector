@@ -79,7 +79,7 @@ parameters:
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 9#'
 
         -
-            message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is 13, keep it under 9$#"
+            message: "#^Cognitive complexity for \"Rector\\\\PhpSpecToPHPUnit\\\\Rector\\\\MethodCall\\\\PhpSpecPromisesToPHPUnitAssertRector\\:\\:refactor\\(\\)\" is (.*?), keep it under 9$#"
             path: rules/PhpSpecToPHPUnit/Rector/MethodCall/PhpSpecPromisesToPHPUnitAssertRector.php
 
         -

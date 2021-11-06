@@ -13,7 +13,6 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -87,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $class instanceof Class_) {
             return null;
         }

@@ -62,7 +62,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
      * @var string[]
      */
     private const ATTRIBUTES_TO_MIRROR = [
-        AttributeKey::CLASS_NODE,
         AttributeKey::CLASS_NAME,
         AttributeKey::METHOD_NODE,
         AttributeKey::USE_NODES,

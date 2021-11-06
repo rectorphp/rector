@@ -116,13 +116,13 @@ CODE_SAMPLE
 
     private function refactorStaticCall(StaticCall $staticCall): ?MethodCall
     {
-        $class = $staticCall->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $class instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($staticCall, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
         /** @var ClassMethod[] $classMethods */
-        $classMethods = $this->betterNodeFinder->findInstanceOf($class, ClassMethod::class);
+        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
 
         foreach ($classMethods as $classMethod) {
             if (! $this->isClassMethodMatchingStaticCall($classMethod, $staticCall)) {

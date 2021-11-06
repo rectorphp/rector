@@ -12,6 +12,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -27,7 +28,8 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
 
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -56,13 +58,13 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
             return $vendorPropertyType;
         }
 
-        /** @var Scope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
-            $classNode = $node->getAttribute(AttributeKey::CLASS_NODE);
+            $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+
             // fallback to class, since property fetches are not scoped by PHPStan
-            if ($classNode instanceof ClassLike) {
-                $scope = $classNode->getAttribute(AttributeKey::SCOPE);
+            if ($classLike instanceof ClassLike) {
+                $scope = $classLike->getAttribute(AttributeKey::SCOPE);
             }
 
             if (! $scope instanceof Scope) {

@@ -85,8 +85,8 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             return null;
         }
 
-        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($param, Class_::class);
+        if (! $class instanceof Class_) {
             return null;
         }
 
@@ -101,7 +101,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         }
 
         $methodName = $match['method_name'];
-        return $classLike->getMethod($methodName);
+        return $class->getMethod($methodName);
     }
 
     /**

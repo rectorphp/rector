@@ -11,26 +11,27 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 
 final class KnownArrayParamTypeInferer implements ParamTypeInfererInterface
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
     public function inferParam(Param $param): Type
     {
-        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($param, Class_::class);
+        if (! $class instanceof Class_) {
             return new MixedType();
         }
 
-        $className = $this->nodeNameResolver->getName($classLike);
+        $className = $this->nodeNameResolver->getName($class);
         if (! $className) {
             return new MixedType();
         }

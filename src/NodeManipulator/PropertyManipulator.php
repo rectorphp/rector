@@ -76,8 +76,10 @@ final class PropertyManipulator
         }
 
         // has classLike $this->$variable call?
-        /** @var ClassLike $classLike */
-        $classLike = $propertyOrPromotedParam->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($propertyOrPromotedParam, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
 
         return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node): bool {
             if (! $node instanceof PropertyFetch) {

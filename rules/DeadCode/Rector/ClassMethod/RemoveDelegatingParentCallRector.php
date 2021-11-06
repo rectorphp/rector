@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -82,7 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if ($this->shouldSkipClass($classLike)) {
             return null;
         }

@@ -10,7 +10,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -62,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $class instanceof Class_) {
             return null;
         }

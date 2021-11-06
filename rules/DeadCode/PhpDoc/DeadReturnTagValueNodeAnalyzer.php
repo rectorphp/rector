@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -12,13 +13,14 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadReturnTagValueNodeAnalyzer
 {
     public function __construct(
-        private TypeComparator $typeComparator
+        private TypeComparator $typeComparator,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -29,7 +31,7 @@ final class DeadReturnTagValueNodeAnalyzer
             return false;
         }
 
-        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
         if ($classLike instanceof Trait_ && $returnTagValueNode->type instanceof ThisTypeNode) {
             return false;
         }

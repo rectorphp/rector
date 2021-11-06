@@ -8,12 +8,13 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
@@ -23,6 +24,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -73,7 +75,8 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         private ReflectionProvider $reflectionProvider,
         private PropertyFetchAnalyzer $propertyFetchAnalyzer,
         private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private PropertyAnalyzer $propertyAnalyzer
+        private PropertyAnalyzer $propertyAnalyzer,
+        private PropertyUnionTypeResolver $propertyUnionTypeResolver
     ) {
     }
 
@@ -199,7 +202,8 @@ CODE_SAMPLE
             return true;
         }
 
-        $type = $this->resolveTypePossibleUnionNullableType($node, $type);
+        $type = $this->propertyUnionTypeResolver->resolve($node, $type);
+
         // is not class-type and should be skipped
         if ($this->shouldSkipNonClassLikeType($node, $type)) {
             return true;
@@ -215,28 +219,6 @@ CODE_SAMPLE
         }
 
         return true;
-    }
-
-    private function resolveTypePossibleUnionNullableType(
-        Name|NullableType|\PhpParser\Node\UnionType $node,
-        Type $possibleUnionType
-    ): Type {
-        if (! $node instanceof NullableType) {
-            return $possibleUnionType;
-        }
-
-        if (! $possibleUnionType instanceof UnionType) {
-            return $possibleUnionType;
-        }
-
-        $types = $possibleUnionType->getTypes();
-        foreach ($types as $type) {
-            if (! $type instanceof NullType) {
-                return $type;
-            }
-        }
-
-        return $possibleUnionType;
     }
 
     private function shouldSkipNonClassLikeType(Name|NullableType|PhpParserUnionType $node, Type $type): bool
@@ -278,7 +260,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (! $propertyType->isSuperTypeOf(new NullType())->yes()) {
+        if (! TypeCombinator::containsNull($propertyType)) {
             return;
         }
 
@@ -305,6 +287,12 @@ CODE_SAMPLE
 
         // skip multiple properties
         if (count($property->props) > 1) {
+            return true;
+        }
+
+        $trait = $this->betterNodeFinder->findParentType($property, Trait_::class);
+        // skip trait properties, as they ar unpredictable based on class context they appear in
+        if ($trait instanceof Trait_) {
             return true;
         }
 

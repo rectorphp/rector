@@ -24,7 +24,7 @@
         "phpstan/phpstan-phpunit": "^1.0",
         "rector/extension-installer": "^0.11.1",
         "rector/rector-cakephp": "^0.11.6",
-        "rector/rector-doctrine": "^0.11.26",
+        "rector/rector-doctrine": "^0.11",
         "rector/rector-laravel": "^0.11.8",
         "rector/rector-nette": "^0.11.39",
         "rector/rector-phpoffice": "^0.11.6",

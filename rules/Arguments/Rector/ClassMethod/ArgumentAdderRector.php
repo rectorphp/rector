@@ -23,7 +23,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -150,11 +149,7 @@ CODE_SAMPLE
             return $this->isObjectType($node->class, $objectType);
         }
 
-        // ClassMethod
-        /** @var Class_|null $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-
-        // anonymous class
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $classLike instanceof Class_) {
             return false;
         }

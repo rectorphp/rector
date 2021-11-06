@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Rector\Renaming\ValueObject\RenameAnnotation;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -90,7 +89,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $classLike instanceof Class_) {
             return null;
         }

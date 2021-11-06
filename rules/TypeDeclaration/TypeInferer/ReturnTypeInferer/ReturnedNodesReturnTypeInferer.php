@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
@@ -21,9 +22,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
@@ -41,7 +42,8 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
         private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
         private AstResolver $reflectionAstResolver,
         private BetterStandardPrinter $betterStandardPrinter,
-        private ReflectionResolver $reflectionResolver
+        private ReflectionResolver $reflectionResolver,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -50,9 +52,8 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
      */
     public function inferFunctionLike(FunctionLike $functionLike): Type
     {
-        /** @var Class_|Trait_|Interface_|null $classLike */
-        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
-        if ($classLike === null) {
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
             return new MixedType();
         }
 
@@ -64,6 +65,7 @@ final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 
         $localReturnNodes = $this->collectReturns($functionLike);
         if ($localReturnNodes === []) {
+            /** @var Class_|Interface_|Trait_ $classLike */
             return $this->resolveNoLocalReturnNodes($classLike, $functionLike);
         }
 

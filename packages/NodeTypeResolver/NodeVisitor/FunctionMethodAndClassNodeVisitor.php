@@ -70,7 +70,6 @@ final class FunctionMethodAndClassNodeVisitor extends NodeVisitorAbstract
             $this->setClassNodeAndName($node);
         }
 
-        $node->setAttribute(AttributeKey::CLASS_NODE, $this->classLike);
         $node->setAttribute(AttributeKey::CLASS_NAME, $this->className);
     }
 

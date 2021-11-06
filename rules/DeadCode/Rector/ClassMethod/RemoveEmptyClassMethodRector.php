@@ -12,7 +12,6 @@ use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeManipulator\ControllerClassMethodManipulator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -65,7 +64,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $classLike instanceof Class_) {
             return null;
         }
@@ -131,7 +130,7 @@ CODE_SAMPLE
         }
 
         if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
-            $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
             return $class instanceof Class_ && $class->extends instanceof FullyQualified;
         }
 

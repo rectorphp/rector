@@ -14,6 +14,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -27,15 +28,19 @@ final class NameScopeFactory
 
     private PhpDocInfoFactory $phpDocInfoFactory;
 
+    private BetterNodeFinder $betterNodeFinder;
+
     // This is needed to avoid circular references
 
     #[Required]
     public function autowireNameScopeFactory(
         PhpDocInfoFactory $phpDocInfoFactory,
-        StaticTypeMapper $staticTypeMapper
+        StaticTypeMapper $staticTypeMapper,
+        BetterNodeFinder $betterNodeFinder,
     ): void {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
 
     public function createNameScopeFromNodeWithoutTemplateTypes(Node $node): NameScope
@@ -104,10 +109,11 @@ final class NameScopeFactory
     {
         $nodeTemplateTypes = $this->resolveTemplateTypesFromNode($node);
 
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+
         $classTemplateTypes = [];
-        if ($class instanceof ClassLike) {
-            $classTemplateTypes = $this->resolveTemplateTypesFromNode($class);
+        if ($classLike instanceof ClassLike) {
+            $classTemplateTypes = $this->resolveTemplateTypesFromNode($classLike);
         }
 
         $templateTypes = array_merge($nodeTemplateTypes, $classTemplateTypes);

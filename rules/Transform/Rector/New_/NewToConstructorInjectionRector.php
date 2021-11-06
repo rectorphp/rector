@@ -16,7 +16,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeRemoval\AssignRemover;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
@@ -171,7 +170,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $classLike = $new->getAttribute(AttributeKey::CLASS_NODE);
+            $classLike = $this->betterNodeFinder->findParentType($new, Class_::class);
             if (! $classLike instanceof Class_) {
                 continue;
             }

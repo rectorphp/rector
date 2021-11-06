@@ -36,7 +36,7 @@ final class IsClassMethodUsedAnalyzer
 
     public function isClassMethodUsed(ClassMethod $classMethod): bool
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
         if (! $class instanceof Class_) {
             return true;
         }

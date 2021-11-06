@@ -8,8 +8,8 @@ use PhpParser\Node\Const_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class LocalConstantFinder
@@ -17,12 +17,13 @@ final class LocalConstantFinder
     public function __construct(
         private NodeTypeResolver $nodeTypeResolver,
         private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
     public function match(ClassConstFetch $classConstFetch): ?Const_
     {
-        $class = $classConstFetch->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($classConstFetch, Class_::class);
         if (! $class instanceof Class_) {
             return null;
         }

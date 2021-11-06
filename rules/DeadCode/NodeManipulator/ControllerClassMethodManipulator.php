@@ -8,14 +8,15 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerClassMethodManipulator
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -35,12 +36,12 @@ final class ControllerClassMethodManipulator
             return false;
         }
 
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
-        return $this->hasParentClassController($classLike);
+        return $this->hasParentClassController($class);
     }
 
     private function hasParentClassController(Class_ $class): bool

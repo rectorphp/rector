@@ -8,9 +8,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
 use PHPStan\Type\ArrayType;
@@ -19,8 +18,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
@@ -29,7 +28,8 @@ final class ArrayTypeAnalyzer
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private NodeTypeResolver $nodeTypeResolver,
-        private PregMatchTypeCorrector $pregMatchTypeCorrector
+        private PregMatchTypeCorrector $pregMatchTypeCorrector,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -96,13 +96,12 @@ final class ArrayTypeAnalyzer
             return false;
         }
 
-        /** @var Class_|Trait_|Interface_|null $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
         if ($classLike instanceof Interface_) {
             return false;
         }
 
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return false;
         }
 

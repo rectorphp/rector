@@ -12,8 +12,8 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
@@ -24,7 +24,8 @@ final class PropertyConstructorInjectionManipulator
         private PhpDocInfoFactory $phpDocInfoFactory,
         private PhpDocTypeChanger $phpDocTypeChanger,
         private PhpDocTagRemover $phpDocTagRemover,
-        private PropertyToAddCollector $propertyToAddCollector
+        private PropertyToAddCollector $propertyToAddCollector,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -39,12 +40,12 @@ final class PropertyConstructorInjectionManipulator
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
 
-        $classLike = $property->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
+        if (! $class instanceof Class_) {
             throw new ShouldNotHappenException();
         }
 
         $propertyMetadata = new PropertyMetadata($propertyName, $type, $property->flags);
-        $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
+        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
     }
 }

@@ -120,7 +120,7 @@ final class ComplexNodeRemover
             return;
         }
 
-        $class = $assign->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($assign, Class_::class);
         if (! $class instanceof Class_) {
             return;
         }

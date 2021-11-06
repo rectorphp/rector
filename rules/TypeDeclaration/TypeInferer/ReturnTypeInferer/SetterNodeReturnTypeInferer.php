@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeManipulator\FunctionLikeManipulator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
@@ -19,13 +19,14 @@ final class SetterNodeReturnTypeInferer implements ReturnTypeInfererInterface
     public function __construct(
         private AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
         private FunctionLikeManipulator $functionLikeManipulator,
-        private TypeFactory $typeFactory
+        private TypeFactory $typeFactory,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
     public function inferFunctionLike(FunctionLike $functionLike): Type
     {
-        $classLike = $functionLike->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return new MixedType();
         }

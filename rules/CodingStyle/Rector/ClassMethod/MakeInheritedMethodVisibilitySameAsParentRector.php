@@ -155,7 +155,8 @@ CODE_SAMPLE
             return false;
         }
 
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
         if (! $classLike instanceof Class_) {
             return false;
         }

@@ -64,8 +64,8 @@ final class ClassMethodManipulator
             return false;
         }
 
-        $classLike = $classMethod->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
@@ -73,7 +73,7 @@ final class ClassMethodManipulator
             return true;
         }
 
-        if ($classLike->isFinal()) {
+        if ($class->isFinal()) {
             return false;
         }
 

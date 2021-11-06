@@ -84,7 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
         if (! $classLike instanceof ClassLike) {
             return null;
         }

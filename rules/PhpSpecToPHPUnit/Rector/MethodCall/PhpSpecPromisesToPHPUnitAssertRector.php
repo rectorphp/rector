@@ -17,7 +17,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\MatchersManipulator;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory;
@@ -175,11 +174,16 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
         }
 
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         $classMethod = $classLike->getMethod($methodName);
         // it's a method call, skip
         if ($classMethod !== null) {
             return null;
+        }
+
+        // direct PHPUnit method calls, no need to call on property
+        if (in_array($methodName, ['atLeastOnce', 'equalTo', 'isInstanceOf', 'isType'], true)) {
+            return $node;
         }
 
         $node->var = $this->getTestedObjectPropertyFetch();
@@ -202,12 +206,19 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
             return;
         }
 
-        /** @var Class_ $classLike */
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
+        if (! $class instanceof Class_) {
+            return;
+        }
 
-        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($classLike);
-        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($methodCall);
-        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($classLike);
+        $className = $this->getName($class);
+        if (! is_string($className)) {
+            return;
+        }
+
+        $this->matchersKeys = $this->matchersManipulator->resolveMatcherNamesFromClass($class);
+        $this->testedClass = $this->phpSpecRenaming->resolveTestedClass($class);
+        $this->testedObjectPropertyFetch = $this->createTestedObjectPropertyFetch($class);
 
         $this->isPrepared = true;
     }
@@ -284,7 +295,6 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private function createTestedObjectPropertyFetch(Class_ $class): PropertyFetch
     {
         $propertyName = $this->phpSpecRenaming->resolveObjectPropertyName($class);
-
         return new PropertyFetch(new Variable(self::THIS), $propertyName);
     }
 }

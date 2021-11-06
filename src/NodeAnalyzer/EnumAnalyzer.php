@@ -6,13 +6,14 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class EnumAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -21,15 +22,15 @@ final class EnumAnalyzer
      */
     public function isEnumClassConst(ClassConst $classConst): bool
     {
-        $classLike = $classConst->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classConst, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
-        if ($classLike->extends === null) {
+        if ($class->extends === null) {
             return false;
         }
 
-        return $this->nodeNameResolver->isName($classLike->extends, '*Enum');
+        return $this->nodeNameResolver->isName($class->extends, '*Enum');
     }
 }

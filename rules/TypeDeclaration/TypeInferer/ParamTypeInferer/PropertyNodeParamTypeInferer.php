@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -26,13 +27,14 @@ final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
         private NodeNameResolver $nodeNameResolver,
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private NodeTypeResolver $nodeTypeResolver,
-        private TypeFactory $typeFactory
+        private TypeFactory $typeFactory,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
     public function inferParam(Param $param): Type
     {
-        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($param, Class_::class);
         if (! $classLike instanceof Class_) {
             return new MixedType();
         }

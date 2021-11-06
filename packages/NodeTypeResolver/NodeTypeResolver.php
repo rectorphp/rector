@@ -39,6 +39,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
@@ -71,6 +72,7 @@ final class NodeTypeResolver
         private AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector,
         private IdentifierTypeResolver $identifierTypeResolver,
         private RenamedClassesDataCollector $renamedClassesDataCollector,
+        private BetterNodeFinder $betterNodeFinder,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
@@ -324,12 +326,12 @@ final class NodeTypeResolver
             return $this->isObjectType($node->class, $objectType);
         }
 
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
-        return $this->isObjectType($classLike, $objectType);
+        return $this->isObjectType($class, $objectType);
     }
 
     private function isUnionTypeable(Type $first, Type $second): bool

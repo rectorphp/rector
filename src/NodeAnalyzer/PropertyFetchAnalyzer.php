@@ -20,7 +20,6 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyFetchAnalyzer
 {
@@ -82,12 +81,12 @@ final class PropertyFetchAnalyzer
             return false;
         }
 
-        $classLike = $expr->getAttribute(AttributeKey::CLASS_NODE);
-        if (! $classLike instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($expr, Class_::class);
+        if (! $class instanceof Class_) {
             return false;
         }
 
-        foreach ($classLike->getProperties() as $property) {
+        foreach ($class->getProperties() as $property) {
             if (! $this->nodeNameResolver->areNamesEqual($property->props[0], $expr)) {
                 continue;
             }
@@ -130,7 +129,7 @@ final class PropertyFetchAnalyzer
 
     public function isFilledByConstructParam(Property $property): bool
     {
-        $class = $property->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
         if (! $class instanceof Class_) {
             return false;
         }

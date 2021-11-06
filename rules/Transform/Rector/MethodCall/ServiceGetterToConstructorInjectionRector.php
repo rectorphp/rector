@@ -15,7 +15,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
@@ -137,7 +136,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $classLike instanceof Class_) {
             return null;
         }

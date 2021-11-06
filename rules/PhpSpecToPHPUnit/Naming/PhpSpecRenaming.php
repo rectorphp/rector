@@ -109,7 +109,6 @@ final class PhpSpecRenaming
         $className = $node->getAttribute(AttributeKey::CLASS_NAME);
 
         $newClassName = StaticRectorStrings::removePrefixes($className, ['spec\\']);
-
         return StaticRectorStrings::removeSuffixes($newClassName, [self::SPEC]);
     }
 

@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -92,7 +93,7 @@ CODE_SAMPLE
         }
 
         $classLike = $this->reflectionAstResolver->resolveClassFromObjectType($type);
-        if ($classLike === null) {
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
@@ -165,7 +166,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $class = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
         if (! $class instanceof Class_) {
             return false;
         }

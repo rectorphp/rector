@@ -122,7 +122,7 @@ CODE_SAMPLE
         }
 
         /** @var Class_ $classLike */
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
 
         foreach ($this->argumentFuncCallToMethodCalls as $argumentFuncCallToMethodCall) {
             if (! $this->isName($node, $argumentFuncCallToMethodCall->getFunction())) {

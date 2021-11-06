@@ -122,7 +122,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($funcCall, Class_::class);
         if (! $classLike instanceof Class_) {
             return true;
         }

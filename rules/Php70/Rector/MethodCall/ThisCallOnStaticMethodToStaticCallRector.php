@@ -123,7 +123,7 @@ CODE_SAMPLE
 
     private function resolveClassSelf(MethodCall $methodCall): ObjectReference
     {
-        $classLike = $methodCall->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
         if (! $classLike instanceof Class_) {
             return ObjectReference::STATIC();
         }

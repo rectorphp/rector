@@ -10,7 +10,6 @@ trait MaterializedPathEntity
     public function setParent(self $parent = null) : static
     {
         $this->parent = $parent;
-
         return $this;
     }
 

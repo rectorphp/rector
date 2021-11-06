@@ -7,6 +7,7 @@ namespace Rector\Renaming\Rector\PropertyFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\VarLikeIdentifier;
@@ -14,7 +15,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -120,7 +120,8 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
 
     private function processFromPropertyFetch(PropertyFetch $propertyFetch): ?PropertyFetch
     {
-        $class = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
+
         foreach ($this->renamedProperties as $renamedProperty) {
             if (! $this->isObjectType($propertyFetch->var, $renamedProperty->getObjectType())) {
                 continue;

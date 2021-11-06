@@ -165,8 +165,8 @@ CODE_SAMPLE
         }
 
         // skip node in trait, as impossible to analyse
-        $classLike = $funcCall->getAttribute(AttributeKey::CLASS_NODE);
-        return $classLike instanceof Trait_;
+        $trait = $this->betterNodeFinder->findParentType($funcCall, Trait_::class);
+        return $trait instanceof Trait_;
     }
 
     private function castToArray(Expr $countedExpr, FuncCall $funcCall): FuncCall

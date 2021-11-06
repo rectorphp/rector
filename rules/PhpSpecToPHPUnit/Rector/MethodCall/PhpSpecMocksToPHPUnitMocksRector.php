@@ -63,7 +63,6 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
             }
 
             $this->processMethodParamsToMocks($node);
-
             return $node;
         }
 
@@ -93,35 +92,35 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function processMethodCall(MethodCall $methodCall): ?MethodCall
     {
-        if ($this->isName($methodCall->name, 'shouldBeCalled')) {
-            if (! $methodCall->var instanceof MethodCall) {
-                throw new ShouldNotHappenException();
-            }
-
-            $mockMethodName = $this->getName($methodCall->var->name);
-            if ($mockMethodName === null) {
-                throw new ShouldNotHappenException();
-            }
-
-            $arg = $methodCall->var->args[0] ?? null;
-
-            $expectedArg = $arg instanceof Arg ? $arg->value : null;
-
-            $methodCall->var->name = new Identifier('expects');
-            $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
-            $methodCall->var->args = [new Arg($thisOnceMethodCall)];
-
-            $methodCall->name = new Identifier('method');
-            $methodCall->args = [new Arg(new String_($mockMethodName))];
-
-            if ($expectedArg !== null) {
-                return $this->appendWithMethodCall($methodCall, $expectedArg);
-            }
-
-            return $methodCall;
+        if (! $this->isName($methodCall->name, 'shouldBeCalled')) {
+            return null;
         }
 
-        return null;
+        if (! $methodCall->var instanceof MethodCall) {
+            throw new ShouldNotHappenException();
+        }
+
+        $mockMethodName = $this->getName($methodCall->var->name);
+        if ($mockMethodName === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $arg = $methodCall->var->args[0] ?? null;
+
+        $expectedArg = $arg instanceof Arg ? $arg->value : null;
+
+        $methodCall->var->name = new Identifier('expects');
+        $thisOnceMethodCall = $this->nodeFactory->createLocalMethodCall('atLeastOnce');
+        $methodCall->var->args = [new Arg($thisOnceMethodCall)];
+
+        $methodCall->name = new Identifier('method');
+        $methodCall->args = [new Arg(new String_($mockMethodName))];
+
+        if ($expectedArg !== null) {
+            return $this->appendWithMethodCall($methodCall, $expectedArg);
+        }
+
+        return $methodCall;
     }
 
     /**
@@ -130,7 +129,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
     private function createCreateMockCall(Param $param, Name $name): ?Expression
     {
         /** @var Class_ $classLike */
-        $classLike = $param->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($param, Class_::class);
 
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classLike);
 

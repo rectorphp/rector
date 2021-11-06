@@ -184,7 +184,7 @@ CODE_SAMPLE
 
         /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */
         $propertyFetch = $expr;
-        $classLike = $propertyFetch->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
 
         if (! $classLike instanceof Class_) {
             return true;
@@ -217,7 +217,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $classLike = $expr->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($expr, Class_::class);
         if (! $classLike instanceof Class_) {
             return false;
         }

@@ -8,9 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 
 final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
@@ -18,7 +18,8 @@ final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterf
     public function __construct(
         private JustReadExprAnalyzer $justReadExprAnalyzer,
         private PropertyFetchFinder $propertyFetchFinder,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -32,7 +33,7 @@ final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterf
      */
     public function isRead(Node $node): bool
     {
-        $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $class instanceof Class_) {
             // assume worse to keep node protected
             return true;

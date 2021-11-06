@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -60,7 +59,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $classLike = $node->getAttribute(AttributeKey::CLASS_NODE);
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (! $classLike instanceof Class_) {
             return null;
         }

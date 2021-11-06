@@ -14,7 +14,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyPresenceChecker;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\MethodCallToMethodCall;
@@ -112,7 +111,11 @@ CODE_SAMPLE
 
             $propertyFetch = $node->var;
 
-            $class = $node->getAttribute(AttributeKey::CLASS_NODE);
+            $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+            if (! $class instanceof Class_) {
+                continue;
+            }
+
             $newObjectType = new ObjectType($methodCallToMethodCall->getNewType());
 
             $newPropertyName = $this->matchNewPropertyName($methodCallToMethodCall, $class);
