@@ -104,7 +104,7 @@ final class PropertyManipulator
             }
 
             // skip for constructor? it is allowed to set value in constructor method
-            $classMethod = $propertyFetch->getAttribute(AttributeKey::METHOD_NODE);
+            $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
             if ($classMethod instanceof ClassMethod && $this->nodeNameResolver->isName(
                 $classMethod->name,
                 MethodName::CONSTRUCT

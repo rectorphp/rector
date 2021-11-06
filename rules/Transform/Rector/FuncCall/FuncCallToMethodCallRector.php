@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -98,7 +97,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             return null;
         }

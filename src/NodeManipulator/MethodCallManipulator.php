@@ -100,7 +100,7 @@ final class MethodCallManipulator
     public function findMethodCallsOnVariable(Variable $variable): array
     {
         // get scope node, e.g. parent function call, method call or anonymous function
-        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($variable, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             return [];
         }

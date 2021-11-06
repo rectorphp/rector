@@ -40,7 +40,7 @@ final class AttributeKey
 
     /**
      * @deprecated Use
-     * @see BetterNodeFinder to find your parent nodes.
+     * @see BetterNodeFinder::findParentType($node, ClassLike::class) to find your parent nodes.
      *
      * @var string
      */
@@ -52,6 +52,9 @@ final class AttributeKey
     public const METHOD_NAME = 'methodName';
 
     /**
+     * @deprecated Use
+     * @see BetterNodeFinder::findParentType($node, ClassMethod::class) to find your parent nodes.
+     *
      * @var string
      */
     public const METHOD_NODE = 'methodNode';

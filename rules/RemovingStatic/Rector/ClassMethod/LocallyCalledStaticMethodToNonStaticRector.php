@@ -142,7 +142,7 @@ CODE_SAMPLE
 
     private function isInStaticClassMethod(StaticCall $staticCall): bool
     {
-        $locationClassMethod = $staticCall->getAttribute(AttributeKey::METHOD_NODE);
+        $locationClassMethod = $this->betterNodeFinder->findParentType($staticCall, ClassMethod::class);
         if (! $locationClassMethod instanceof ClassMethod) {
             return false;
         }

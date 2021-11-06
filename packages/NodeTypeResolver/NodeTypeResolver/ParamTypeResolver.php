@@ -16,6 +16,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -36,7 +37,8 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private PhpDocInfoFactory $phpDocInfoFactory,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -90,7 +92,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
 
     private function resolveFromFirstVariableUse(Param $param): Type
     {
-        $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             return new MixedType();
         }

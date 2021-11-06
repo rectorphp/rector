@@ -103,7 +103,7 @@ CODE_SAMPLE
         }
 
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
-            $classMethod = $readOnlyVariableAssign->getAttribute(AttributeKey::METHOD_NODE);
+            $classMethod = $this->betterNodeFinder->findParentType($readOnlyVariableAssign, ClassMethod::class);
             if (! $classMethod instanceof ClassMethod) {
                 throw new ShouldNotHappenException();
             }

@@ -16,7 +16,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -162,9 +161,8 @@ CODE_SAMPLE
     private function shouldSkipFuncCall(FuncCall $funcCall): bool
     {
         // we can inject only in injectable class method  context
-        // we can inject only in injectable class method  context
         /** @var ClassMethod|null $classMethod */
-        $classMethod = $funcCall->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($funcCall, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             return true;
         }

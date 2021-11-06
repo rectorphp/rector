@@ -9,12 +9,12 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -92,7 +92,11 @@ CODE_SAMPLE
 
             $propertyName = $this->propertyNaming->fqnToVariableName($staticObjectType);
 
-            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+            $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
+            if (! $classMethod instanceof ClassMethod) {
+                return null;
+            }
+
             if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
                 $propertyFetch = new Variable($propertyName);
             } else {

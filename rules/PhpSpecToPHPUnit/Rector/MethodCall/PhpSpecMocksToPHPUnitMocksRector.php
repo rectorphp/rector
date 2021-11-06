@@ -135,7 +135,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
         $variable = $this->getName($param->var);
 
-        $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             throw new ShouldNotHappenException();
         }

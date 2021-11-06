@@ -85,7 +85,7 @@ final class ComplexNodeRemover
         StaticPropertyFetch | PropertyFetch $expr,
         array $classMethodNamesToSkip
     ): bool {
-        $classMethodNode = $expr->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethodNode = $this->betterNodeFinder->findParentType($expr, ClassMethod::class);
         if (! $classMethodNode instanceof ClassMethod) {
             return false;
         }
@@ -111,7 +111,7 @@ final class ComplexNodeRemover
 
     private function removeConstructorDependency(Assign $assign): void
     {
-        $classMethod = $assign->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($assign, ClassMethod::class);
         if (! $classMethod instanceof  ClassMethod) {
             return;
         }

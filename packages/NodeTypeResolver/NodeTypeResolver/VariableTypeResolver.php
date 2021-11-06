@@ -20,11 +20,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class VariableTypeResolver implements NodeTypeResolverInterface
 {
-    /**
-     * @var string[]
-     */
-    private const PARENT_NODE_ATTRIBUTES = [AttributeKey::PARENT_NODE, AttributeKey::METHOD_NODE];
-
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private PhpDocInfoFactory $phpDocInfoFactory
@@ -76,10 +71,9 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
     private function resolveNodeScope(Variable $variable): ?Scope
     {
-        /** @var Scope|null $nodeScope */
-        $nodeScope = $variable->getAttribute(AttributeKey::SCOPE);
-        if ($nodeScope !== null) {
-            return $nodeScope;
+        $scope = $variable->getAttribute(AttributeKey::SCOPE);
+        if ($scope instanceof Scope) {
+            return $scope;
         }
 
         return $this->resolveFromParentNodes($variable);
@@ -87,20 +81,11 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
 
     private function resolveFromParentNodes(Variable $variable): ?Scope
     {
-        foreach (self::PARENT_NODE_ATTRIBUTES as $parentNodeAttribute) {
-            $parentNode = $variable->getAttribute($parentNodeAttribute);
-            if (! $parentNode instanceof Node) {
-                continue;
-            }
-
-            $parentNodeScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            if (! $parentNodeScope instanceof Scope) {
-                continue;
-            }
-
-            return $parentNodeScope;
+        $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Node) {
+            return null;
         }
 
-        return null;
+        return $parent->getAttribute(AttributeKey::SCOPE);
     }
 }

@@ -21,7 +21,6 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\LocalConstantFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class RegexPatternArgumentManipulator
@@ -163,7 +162,7 @@ final class RegexPatternArgumentManipulator
      */
     private function findAssignerForVariable(Variable $variable): array
     {
-        $classMethod = $variable->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($variable, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             return [];
         }

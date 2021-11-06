@@ -117,13 +117,13 @@ final class ClassMethodManipulator
      */
     public function addMethodParameterIfMissing(Node $node, ObjectType $objectType, array $possibleNames): string
     {
-        $classMethodNode = $node->getAttribute(AttributeKey::METHOD_NODE);
-        if (! $classMethodNode instanceof ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
+        if (! $classMethod instanceof ClassMethod) {
             // or null?
             throw new ShouldNotHappenException();
         }
 
-        foreach ($classMethodNode->params as $paramNode) {
+        foreach ($classMethod->params as $paramNode) {
             if (! $this->nodeTypeResolver->isObjectType($paramNode, $objectType)) {
                 continue;
             }
@@ -136,8 +136,8 @@ final class ClassMethodManipulator
             return $paramName;
         }
 
-        $paramName = $this->resolveName($classMethodNode, $possibleNames);
-        $classMethodNode->params[] = new Param(new Variable($paramName), null, new FullyQualified(
+        $paramName = $this->resolveName($classMethod, $possibleNames);
+        $classMethod->params[] = new Param(new Variable($paramName), null, new FullyQualified(
             $objectType->getClassName()
         ));
 

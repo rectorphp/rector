@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -219,8 +220,12 @@ CODE_SAMPLE
 
     private function decoratePropertyWithParamDocInfo(Param $param, Property $property): void
     {
-        $constructor = $param->getAttribute(AttributeKey::METHOD_NODE);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructor);
+        $constructorClassMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
+        if (! $constructorClassMethod instanceof ClassMethod) {
+            throw new ShouldNotHappenException();
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructorClassMethod);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }

@@ -75,7 +75,7 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
             }
 
             // what is return type?
-            $classMethod = $node->getAttribute(AttributeKey::METHOD_NODE);
+            $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
             if (! $classMethod instanceof ClassMethod) {
                 return null;
             }

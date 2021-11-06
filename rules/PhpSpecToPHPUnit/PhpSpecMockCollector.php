@@ -10,6 +10,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -33,7 +34,8 @@ final class PhpSpecMockCollector
 
     public function __construct(
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -101,7 +103,7 @@ final class PhpSpecMockCollector
         /** @var string $class */
         $class = $param->getAttribute(AttributeKey::CLASS_NAME);
 
-        $classMethod = $param->getAttribute(AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
             throw new ShouldNotHappenException();
         }
