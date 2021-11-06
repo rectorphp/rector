@@ -47,6 +47,10 @@ final class AttributeKey
     public const CLASS_NODE = 'class_node';
 
     /**
+     * @deprecated Use
+     * @see BetterNodeFinder and
+     * @see NodeNameResolver
+     *
      * @var string
      */
     public const METHOD_NAME = 'methodName';
