@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -87,8 +88,12 @@ final class VariableManipulator
 
     private function isTestCaseExpectedVariable(Variable $variable): bool
     {
-        /** @var string $className */
-        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
+        $classLike = $this->betterNodeFinder->findParentType($variable, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        $className = $classLike->namespacedName->toString();
         if (! \str_ends_with($className, 'Test')) {
             return false;
         }

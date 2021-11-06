@@ -423,7 +423,6 @@ final class NodeFactory
     public function createSelfFetchConstant(string $constantName, Node $node): ClassConstFetch
     {
         $name = new Name(ObjectReference::SELF()->getValue());
-        $name->setAttribute(AttributeKey::CLASS_NAME, $node->getAttribute(AttributeKey::CLASS_NAME));
 
         return new ClassConstFetch($name, $constantName);
     }
@@ -498,9 +497,7 @@ final class NodeFactory
         )) {
             $currentNode = $this->currentNodeProvider->getNode();
             if ($currentNode !== null) {
-                $className = $currentNode->getAttribute(AttributeKey::CLASS_NAME);
                 $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
-                $classConstFetch->class->setAttribute(AttributeKey::CLASS_NAME, $className);
             }
         } else {
             $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameString);

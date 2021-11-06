@@ -126,12 +126,6 @@ final class ClassMethodReturnTypeOverrideGuard
 
     private function shouldSkipChaoticClassMethods(ClassMethod $classMethod): bool
     {
-        /** @var string|null $className */
-        $className = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return false;
-        }
-
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;

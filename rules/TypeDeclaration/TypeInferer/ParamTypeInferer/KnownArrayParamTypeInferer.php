@@ -31,11 +31,7 @@ final class KnownArrayParamTypeInferer implements ParamTypeInfererInterface
             return new MixedType();
         }
 
-        $className = $this->nodeNameResolver->getName($class);
-        if (! $className) {
-            return new MixedType();
-        }
-
+        $className = $class->namespacedName->toString();
         if (! $this->reflectionProvider->hasClass($className)) {
             return new MixedType();
         }

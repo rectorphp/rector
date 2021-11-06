@@ -11,13 +11,13 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class PropertyFetchFinder
 {
@@ -29,7 +29,7 @@ final class PropertyFetchFinder
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
+        private ReflectionResolver $reflectionResolver,
         private AstResolver $astResolver,
     ) {
     }
@@ -49,20 +49,9 @@ final class PropertyFetchFinder
             return [];
         }
 
-        $className = $this->nodeNameResolver->getName($classLike);
-
-        // unable to resolved
-        if ($className === null) {
+        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
+        if (! $classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException();
-        }
-
-        if ($this->reflectionProvider->hasClass($className)) {
-            $classReflection = $this->reflectionProvider->getClass($className);
-        } else {
-            $classReflection = $this->reflectionProvider->getAnonymousClassReflection(
-                $classLike,
-                $classLike->getAttribute(AttributeKey::SCOPE)
-            );
         }
 
         $nodes = [$classLike];

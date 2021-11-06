@@ -10,6 +10,8 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
@@ -17,6 +19,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
@@ -31,7 +34,8 @@ final class ArrayCallableMethodMatcher
         private NodeNameResolver $nodeNameResolver,
         private NodeTypeResolver $nodeTypeResolver,
         private ValueResolver $valueResolver,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -138,8 +142,14 @@ final class ArrayCallableMethodMatcher
     private function resolveClassConstFetchType(ClassConstFetch $classConstFetch): MixedType | ObjectType
     {
         $classConstantReference = $this->valueResolver->getValue($classConstFetch);
+
         if (ObjectReference::STATIC()->getValue() === $classConstantReference) {
-            $classConstantReference = $classConstFetch->getAttribute(AttributeKey::CLASS_NAME);
+            $classLike = $this->betterNodeFinder->findParentType($classConstFetch, Class_::class);
+            if (! $classLike instanceof ClassLike) {
+                return new MixedType();
+            }
+
+            $classConstantReference = $classLike->namespacedName->toString();
         }
 
         // non-class value

@@ -9,6 +9,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
@@ -22,8 +23,8 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Traversable;
@@ -38,7 +39,8 @@ final class ReturnTypeAlreadyAddedChecker
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
         private StaticTypeMapper $staticTypeMapper,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -84,7 +86,12 @@ final class ReturnTypeAlreadyAddedChecker
             return true;
         }
 
-        $className = $functionLike->getAttribute(AttributeKey::CLASS_NAME);
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        $className = $classLike->namespacedName->toString();
 
         $nodeContent = $this->nodeComparator->printWithoutComments($returnNode);
         $nodeContentWithoutPreslash = ltrim($nodeContent, '\\');

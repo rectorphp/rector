@@ -7,6 +7,8 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -14,6 +16,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -23,7 +26,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameTypeResolver implements NodeTypeResolverInterface
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -55,8 +59,13 @@ final class NameTypeResolver implements NodeTypeResolverInterface
 
     private function resolveParent(Name $name): MixedType | ObjectType | UnionType
     {
-        $className = $name->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $class = $this->betterNodeFinder->findParentType($name, Class_::class);
+        if (! $class instanceof Class_) {
+            return new MixedType();
+        }
+
+        $className = $class->namespacedName->toString();
+        if (! is_string($className)) {
             return new MixedType();
         }
 
@@ -85,19 +94,18 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     private function resolveFullyQualifiedName(Name $name): string
     {
         $nameValue = $name->toString();
+
         if (in_array(
             $nameValue,
             [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue(), 'this'],
             true
         )) {
-            /** @var string|null $class */
-            $class = $name->getAttribute(AttributeKey::CLASS_NAME);
-            if ($class === null) {
-                // anonymous class probably
-                return 'Anonymous';
+            $classLike = $this->betterNodeFinder->findParentType($name, ClassLike::class);
+            if (! $classLike instanceof ClassLike) {
+                return $name->toString();
             }
 
-            return $class;
+            return $classLike->namespacedName->toString();
         }
 
         /** @var Name|null $resolvedNameNode */

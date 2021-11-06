@@ -22,12 +22,11 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -41,7 +40,6 @@ final class FamilyRelationsAnalyzer
         private BetterNodeFinder $betterNodeFinder,
         private StaticTypeMapper $staticTypeMapper,
         private AstResolver $astResolver,
-        private SimplePhpParser $simplePhpParser,
     ) {
     }
 
@@ -80,15 +78,17 @@ final class FamilyRelationsAnalyzer
             return new PropertyType($varType, $propertyTypeNode);
         }
 
-        /** @var ClassReflection $classReflection */
         $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            throw new ShouldNotHappenException();
+        }
 
         $ancestorClassReflections = $classReflection->getAncestors();
 
         $propertyName = $this->nodeNameResolver->getName($property);
         $kindPropertyFetch = $this->getKindPropertyFetch($property);
 
-        $className = $property->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $classReflection->getName();
 
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $ancestorClassName = $ancestorClassReflection->getName();
@@ -100,17 +100,12 @@ final class FamilyRelationsAnalyzer
                 continue;
             }
 
-            $fileName = $ancestorClassReflection->getFileName();
-            if ($fileName === null) {
+            $class = $this->astResolver->resolveClassFromClassReflection($ancestorClassReflection, $ancestorClassName);
+            if (! $class instanceof Class_) {
                 continue;
             }
 
-            $stmts = $this->simplePhpParser->parseFile($fileName);
-            if ($stmts === []) {
-                continue;
-            }
-
-            if (! $this->isPropertyWritten($stmts, $propertyName, $kindPropertyFetch)) {
+            if (! $this->isPropertyWritten($class->stmts, $propertyName, $kindPropertyFetch)) {
                 continue;
             }
 

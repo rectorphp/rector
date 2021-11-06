@@ -28,7 +28,7 @@ class FilledByTrait
 {
     use FillerTrait;
 
-    protected ?\Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass $property = null;
+    protected \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass $property;
 }
 
 ?>

@@ -44,13 +44,13 @@ final class PhpSpecMockCollector
      */
     public function resolveClassMocksFromParam(Class_ $class): array
     {
-        $className = $this->nodeNameResolver->getName($class);
+        $className = $class->namespacedName->toString();
 
         if (isset($this->mocks[$className]) && $this->mocks[$className] !== []) {
             return $this->mocks[$className];
         }
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node): void {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use ($class): void {
             if (! $node instanceof ClassMethod) {
                 return;
             }
@@ -60,7 +60,7 @@ final class PhpSpecMockCollector
             }
 
             foreach ($node->params as $param) {
-                $this->addMockFromParam($param);
+                $this->addMockFromParam($class, $param);
             }
         });
 
@@ -72,17 +72,17 @@ final class PhpSpecMockCollector
         return $this->mocks[$className];
     }
 
-    public function isVariableMockInProperty(Variable $variable): bool
+    public function isVariableMockInProperty(Class_ $class, Variable $variable): bool
     {
         $variableName = $this->nodeNameResolver->getName($variable);
-        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $class->namespacedName->toString();
 
         return in_array($variableName, $this->propertyMocksByClass[$className] ?? [], true);
     }
 
     public function getTypeForClassAndVariable(Class_ $class, string $variable): string
     {
-        $className = $this->nodeNameResolver->getName($class);
+        $className = $class->namespacedName->toString();
 
         if (! isset($this->mocksWithsTypes[$className][$variable])) {
             throw new ShouldNotHappenException();
@@ -96,12 +96,11 @@ final class PhpSpecMockCollector
         $this->propertyMocksByClass[$class][] = $property;
     }
 
-    private function addMockFromParam(Param $param): void
+    private function addMockFromParam(Class_ $class, Param $param): void
     {
         $variable = $this->nodeNameResolver->getName($param->var);
 
-        /** @var string $class */
-        $class = $param->getAttribute(AttributeKey::CLASS_NAME);
+        $className = $class->namespacedName->toString();
 
         $classMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
         if (! $classMethod instanceof ClassMethod) {
@@ -109,13 +108,13 @@ final class PhpSpecMockCollector
         }
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        $this->mocks[$class][$variable][] = $methodName;
+        $this->mocks[$className][$variable][] = $methodName;
 
         if ($param->type === null) {
             throw new ShouldNotHappenException();
         }
 
         $paramType = (string) ($param->type ?? $param->type->getAttribute(AttributeKey::ORIGINAL_NAME));
-        $this->mocksWithsTypes[$class][$variable] = $paramType;
+        $this->mocksWithsTypes[$className][$variable] = $paramType;
     }
 }

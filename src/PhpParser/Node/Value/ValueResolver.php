@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
@@ -20,9 +21,9 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 /**
@@ -37,7 +38,8 @@ final class ValueResolver
         private NodeTypeResolver $nodeTypeResolver,
         private ConstFetchAnalyzer $constFetchAnalyzer,
         private ReflectionProvider $reflectionProvider,
-        private CurrentFileProvider $currentFileProvider
+        private CurrentFileProvider $currentFileProvider,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -72,7 +74,11 @@ final class ValueResolver
             $class = $this->nodeNameResolver->getName($expr->class);
 
             if (in_array($class, [ObjectReference::SELF()->getValue(), ObjectReference::STATIC()->getValue()], true)) {
-                return $expr->getAttribute(AttributeKey::CLASS_NAME);
+                // @todo scope is needed
+                $classLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
+                if ($classLike instanceof ClassLike) {
+                    return $classLike->namespacedName->toString();
+                }
             }
 
             if ($this->nodeNameResolver->isName($expr->name, 'class')) {
@@ -269,7 +275,12 @@ final class ValueResolver
         }
 
         if ($class === ObjectReference::SELF()->getValue()) {
-            $class = (string) $classConstFetch->class->getAttribute(AttributeKey::CLASS_NAME);
+            $classLike = $this->betterNodeFinder->findParentType($classConstFetch, ClassLike::class);
+            if (! $classLike instanceof ClassLike) {
+                throw new ShouldNotHappenException();
+            }
+
+            $class = $classLike->namespacedName->toString();
         }
 
         if ($constant === 'class') {

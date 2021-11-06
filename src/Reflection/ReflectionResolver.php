@@ -11,14 +11,18 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -29,10 +33,24 @@ final class ReflectionResolver
 {
     public function __construct(
         private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder,
         private NodeTypeResolver $nodeTypeResolver,
         private NodeNameResolver $nodeNameResolver,
         private TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry
     ) {
+    }
+
+    public function resolveClassAndAnonymousClass(ClassLike $classLike): ClassReflection|null
+    {
+        if ($classLike instanceof Class_ && $this->isAnonymousClass($classLike)) {
+            return $this->reflectionProvider->getAnonymousClassReflection(
+                $classLike,
+                $classLike->getAttribute(AttributeKey::SCOPE)
+            );
+        }
+
+        $className = $classLike->namespacedName->toString();
+        return $this->reflectionProvider->getClass($className);
     }
 
     /**
@@ -62,8 +80,8 @@ final class ReflectionResolver
     {
         $objectType = $this->nodeTypeResolver->getType($staticCall->class);
 
-        /** @var array<class-string> $classes */
-        $classes = TypeUtils::getDirectClassNames($objectType);
+        /** @var array<class-string> $classNames */
+        $classNames = TypeUtils::getDirectClassNames($objectType);
 
         $methodName = $this->nodeNameResolver->getName($staticCall->name);
         if ($methodName === null) {
@@ -72,8 +90,8 @@ final class ReflectionResolver
 
         $scope = $staticCall->getAttribute(AttributeKey::SCOPE);
 
-        foreach ($classes as $class) {
-            $methodReflection = $this->resolveMethodReflection($class, $methodName, $scope);
+        foreach ($classNames as $className) {
+            $methodReflection = $this->resolveMethodReflection($className, $methodName, $scope);
             if ($methodReflection instanceof MethodReflection) {
                 return $methodReflection;
             }
@@ -114,15 +132,20 @@ final class ReflectionResolver
 
     public function resolveMethodReflectionFromClassMethod(ClassMethod $classMethod): ?MethodReflection
     {
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-        if ($class === null) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
+
+        $className = $classLike->namespacedName->toString();
+        if (! is_string($className)) {
             return null;
         }
 
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
 
-        return $this->resolveMethodReflection($class, $methodName, $scope);
+        return $this->resolveMethodReflection($className, $methodName, $scope);
     }
 
     public function resolveMethodReflectionFromNew(New_ $new): ?MethodReflection
@@ -195,5 +218,10 @@ final class ReflectionResolver
         // fallback to callable
         $funcCallNameType = $scope->getType($funcCall->name);
         return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
+    }
+
+    private function isAnonymousClass(Class_ $class): bool
+    {
+        return ! property_exists($class, 'namespacedName');
     }
 }

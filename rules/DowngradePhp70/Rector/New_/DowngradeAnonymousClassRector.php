@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeDecorator\NamespacedNameDecorator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,7 +32,8 @@ final class DowngradeAnonymousClassRector extends AbstractRector
 
     public function __construct(
         private ClassAnalyzer $classAnalyzer,
-        private ClassFromAnonymousFactory $classFromAnonymousFactory
+        private ClassFromAnonymousFactory $classFromAnonymousFactory,
+        private NamespacedNameDecorator $namespacedNameDecorator
     ) {
     }
 
@@ -120,7 +122,11 @@ CODE_SAMPLE
         }
 
         $className = $this->createAnonymousClassName();
-        $this->classes[] = $this->classFromAnonymousFactory->create($className, $node->class);
+
+        $class = $this->classFromAnonymousFactory->create($className, $node->class);
+        $this->classes[] = $class;
+
+        $this->namespacedNameDecorator->decorate($class);
 
         return new New_(new Name($className), $node->args);
     }

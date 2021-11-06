@@ -10,13 +10,14 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SingletonClassMethodAnalyzer
@@ -24,7 +25,8 @@ final class SingletonClassMethodAnalyzer
     public function __construct(
         private NodeTypeResolver $nodeTypeResolver,
         private ValueResolver $valueResolver,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
@@ -74,15 +76,21 @@ final class SingletonClassMethodAnalyzer
             return null;
         }
 
-        /** @var string $class */
-        $class = $classMethod->getAttribute(AttributeKey::CLASS_NAME);
-
-        // the "self" class is created
-        if (! $this->nodeTypeResolver->isObjectType($stmt->expr->class, new ObjectType($class))) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (! $class instanceof Class_) {
             return null;
         }
 
-        /** @var StaticPropertyFetch $staticPropertyFetch */
+        $className = $class->namespacedName->toString();
+        if (! is_string($className)) {
+            return null;
+        }
+
+        // the "self" class is created
+        if (! $this->nodeTypeResolver->isObjectType($stmt->expr->class, new ObjectType($className))) {
+            return null;
+        }
+
         return $staticPropertyFetch;
     }
 

@@ -9,13 +9,13 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\PackageBuilder\Strings\StringFormatConverter;
 
 final class PhpSpecRenaming
@@ -105,8 +105,16 @@ final class PhpSpecRenaming
 
     public function resolveTestedClass(Node $node): string
     {
-        /** @var string $className */
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+        if ($node instanceof ClassLike) {
+            $className = $node->namespacedName->toString();
+        } else {
+            $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+            if (! $classLike instanceof ClassLike) {
+                throw new ShouldNotHappenException();
+            }
+
+            $className = $classLike->namespacedName->toString();
+        }
 
         $newClassName = StaticRectorStrings::removePrefixes($className, ['spec\\']);
         return StaticRectorStrings::removeSuffixes($newClassName, [self::SPEC]);

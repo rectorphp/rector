@@ -14,7 +14,6 @@ use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\NewToMethodCall;
@@ -90,19 +89,25 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $class instanceof Class_) {
+            return null;
+        }
+
+        $className = $this->getName($class);
+        if (! is_string($className)) {
+            return null;
+        }
+
         foreach ($this->newsToMethodCalls as $newToMethodCall) {
             if (! $this->isObjectType($node, $newToMethodCall->getNewObjectType())) {
                 continue;
             }
 
             $serviceObjectType = $newToMethodCall->getServiceObjectType();
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
-
-            /** @var Class_ $class */
-            $class = $this->betterNodeFinder->findParentType($node, Class_::class);
 
             $propertyName = $this->getExistingFactoryPropertyName(
                 $class,

@@ -205,7 +205,7 @@ final class ClassRenamer
             return null;
         }
 
-        $currentName = $this->nodeNameResolver->getName($classLike);
+        $currentName = $classLike->namespacedName->toString();
         $newClassFullyQualified = $oldToNewClasses[$currentName];
 
         if ($this->reflectionProvider->hasClass($newClassFullyQualified)) {
@@ -233,24 +233,21 @@ final class ClassRenamer
         // rename interfaces
         $this->renameClassImplements($classLike, $oldToNewClasses);
 
-        $name = $this->nodeNameResolver->getName($classLike);
-        if ($name === null) {
-            return null;
-        }
+        $className = $classLike->namespacedName->toString();
 
-        $newName = $oldToNewClasses[$name] ?? null;
+        $newName = $oldToNewClasses[$className] ?? null;
         if (! $newName) {
             return null;
         }
 
         // prevents re-iterating same class in endless loop
-        if (in_array($name, $this->alreadyProcessedClasses, true)) {
+        if (in_array($className, $this->alreadyProcessedClasses, true)) {
             return null;
         }
 
-        $this->alreadyProcessedClasses[] = $name;
+        $this->alreadyProcessedClasses[] = $className;
 
-        $newName = $oldToNewClasses[$name];
+        $newName = $oldToNewClasses[$className];
         $newClassNamePart = $this->nodeNameResolver->getShortName($newName);
         $newNamespacePart = $this->classNaming->getNamespace($newName);
         if ($this->isClassAboutToBeDuplicated($newName)) {
@@ -258,14 +255,14 @@ final class ClassRenamer
         }
 
         $classLike->name = new Identifier($newClassNamePart);
-        $classNamingGetNamespace = $this->classNaming->getNamespace($name);
+        $classNamingGetNamespace = $this->classNaming->getNamespace($className);
 
         // Old class did not have any namespace, we need to wrap class with Namespace_ node
         if ($newNamespacePart && ! $classNamingGetNamespace) {
             $this->changeNameToFullyQualifiedName($classLike);
 
-            $nameNode = new Name($newNamespacePart);
-            return new Namespace_($nameNode, [$classLike]);
+            $name = new Name($newNamespacePart);
+            return new Namespace_($name, [$classLike]);
         }
 
         return $classLike;

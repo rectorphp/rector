@@ -11,13 +11,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\AnotherPropertyClass;
 use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\Class_\SomeEntityClass;
-use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\DoctrinePropertyClass;
-use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\ManyToPropertyClass;
-use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\RoutePropertyClass;
-use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\SinglePropertyClass;
 use Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\Source\TableClass;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
@@ -60,45 +54,39 @@ final class MultilineTest extends AbstractPhpDocInfoPrinterTest
 
     public function provideDataForProperty(): Iterator
     {
-        $property = $this->createPublicPropertyUnderClass('manyTo', ManyToPropertyClass::class);
+        $property = $this->createPublicPropertyUnderClass('manyTo');
         yield [__DIR__ . '/Source/Multiline/many_to.txt', $property];
 
-        $property = $this->createPublicPropertyUnderClass('anotherProperty', AnotherPropertyClass::class);
+        $property = $this->createPublicPropertyUnderClass('anotherProperty');
         yield [__DIR__ . '/Source/Multiline/assert_serialize.txt', $property];
 
-        $property = $this->createPublicPropertyUnderClass('anotherSerializeSingleLine', SinglePropertyClass::class);
+        $property = $this->createPublicPropertyUnderClass('anotherSerializeSingleLine');
         yield [__DIR__ . '/Source/Multiline/assert_serialize_single_line.txt', $property];
 
-        $property = $this->createPublicPropertyUnderClass('someProperty', DoctrinePropertyClass::class);
+        $property = $this->createPublicPropertyUnderClass('someProperty');
         yield [__DIR__ . '/Source/Multiline/multiline6.txt', $property];
 
-        $property = $this->createMethodUnderClass('someMethod', RoutePropertyClass::class);
+        $property = $this->createMethodUnderClass('someMethod');
         yield [__DIR__ . '/Source/Multiline/route_property.txt', $property];
     }
 
-    private function createPublicPropertyUnderClass(string $name, string $class): Property
+    private function createPublicPropertyUnderClass(string $name): Property
     {
         $builderFactory = new BuilderFactory();
 
         $propertyBuilder = $builderFactory->property($name);
         $propertyBuilder->makePublic();
 
-        $property = $propertyBuilder->getNode();
-        $property->setAttribute(AttributeKey::CLASS_NAME, $class);
-
-        return $property;
+        return $propertyBuilder->getNode();
     }
 
-    private function createMethodUnderClass(string $name, string $class): ClassMethod
+    private function createMethodUnderClass(string $name): ClassMethod
     {
         $builderFactory = new BuilderFactory();
 
         $methodBuilder = $builderFactory->method($name);
         $methodBuilder->makePublic();
 
-        $classMethod = $methodBuilder->getNode();
-        $classMethod->setAttribute(AttributeKey::CLASS_NAME, $class);
-
-        return $classMethod;
+        return $methodBuilder->getNode();
     }
 }

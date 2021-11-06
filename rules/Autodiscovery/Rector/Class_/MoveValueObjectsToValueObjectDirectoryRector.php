@@ -13,7 +13,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -193,8 +192,8 @@ CODE_SAMPLE
 
     private function isSuffixMatch(Class_ $class): bool
     {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $className = $this->getName($class);
+        if (! is_string($className)) {
             return false;
         }
 

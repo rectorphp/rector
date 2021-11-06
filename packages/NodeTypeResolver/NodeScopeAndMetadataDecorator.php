@@ -10,7 +10,6 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
@@ -19,7 +18,6 @@ final class NodeScopeAndMetadataDecorator
 {
     public function __construct(
         private CloningVisitor $cloningVisitor,
-        private FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor,
         private NamespaceNodeVisitor $namespaceNodeVisitor,
         private PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         private StatementNodeVisitor $statementNodeVisitor,
@@ -44,7 +42,6 @@ final class NodeScopeAndMetadataDecorator
         // this one has to be run again to re-connect nodes with new attributes
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->nodeConnectingVisitor);
 
-        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
 
@@ -65,7 +62,6 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->statementNodeVisitor);
 
         return $nodeTraverser->traverse($stmts);

@@ -19,7 +19,6 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -264,12 +263,7 @@ CODE_SAMPLE
             }
 
             // replace with constant fetch
-            $classConstFetch = new ClassConstFetch(new Name('self'), new Identifier($constantName));
-
-            // needed later
-            $classConstFetch->setAttribute(AttributeKey::CLASS_NAME, $node->getAttribute(AttributeKey::CLASS_NAME));
-
-            return $classConstFetch;
+            return new ClassConstFetch(new Name('self'), new Identifier($constantName));
         });
     }
 

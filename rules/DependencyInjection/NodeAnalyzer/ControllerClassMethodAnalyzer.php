@@ -5,22 +5,26 @@ declare(strict_types=1);
 namespace Rector\DependencyInjection\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class ControllerClassMethodAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
     ) {
     }
 
     public function isInControllerActionMethod(Variable $variable): bool
     {
-        /** @var string|null $className */
-        $className = $variable->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $class = $this->betterNodeFinder->findParentType($variable, Class_::class);
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        $className = $class->namespacedName->toString();
+        if (! is_string($className)) {
             return false;
         }
 

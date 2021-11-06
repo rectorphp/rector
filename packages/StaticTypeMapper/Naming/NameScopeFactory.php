@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\NameScope;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -50,9 +51,14 @@ final class NameScopeFactory
 
         /** @var Use_[] $useNodes */
         $useNodes = (array) $node->getAttribute(AttributeKey::USE_NODES);
-
         $uses = $this->resolveUseNamesByAlias($useNodes);
-        $className = $node->getAttribute(AttributeKey::CLASS_NAME);
+
+        if ($scope instanceof Scope && $scope->getClassReflection() instanceof ClassReflection) {
+            $classReflection = $scope->getClassReflection();
+            $className = $classReflection->getName();
+        } else {
+            $className = null;
+        }
 
         return new NameScope($namespace, $uses, $className);
     }

@@ -128,10 +128,12 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
      */
     private function createCreateMockCall(Param $param, Name $name): ?Expression
     {
-        /** @var Class_ $classLike */
-        $classLike = $this->betterNodeFinder->findParentType($param, Class_::class);
+        $class = $this->betterNodeFinder->findParentType($param, Class_::class);
+        if (! $class instanceof Class_) {
+            return null;
+        }
 
-        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classLike);
+        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($class);
 
         $variable = $this->getName($param->var);
 
@@ -148,7 +150,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
         }
 
         // single use: "$mock = $this->createMock()"
-        if (! $this->phpSpecMockCollector->isVariableMockInProperty($param->var)) {
+        if (! $this->phpSpecMockCollector->isVariableMockInProperty($class, $param->var)) {
             return $this->createNewMockVariableAssign($param, $name);
         }
 

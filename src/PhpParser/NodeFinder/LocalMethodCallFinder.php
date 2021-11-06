@@ -31,7 +31,7 @@ final class LocalMethodCallFinder
             return [];
         }
 
-        $className = $this->nodeNameResolver->getName($class);
+        $className = $class->namespacedName->toString();
         if (! is_string($className)) {
             return [];
         }

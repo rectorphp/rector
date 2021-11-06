@@ -6,6 +6,7 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
@@ -21,7 +22,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Enum\ObjectReference;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
@@ -31,7 +32,8 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(
         private RenamedClassesDataCollector $renamedClassesDataCollector,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private BetterNodeFinder $betterNodeFinder
     ) {
     }
 
@@ -76,11 +78,12 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         Name $name,
         string $reference
     ): MixedType | StaticType | ObjectWithoutClassType {
-        $className = $name->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $classLike = $this->betterNodeFinder->findParentType($name, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
             return new MixedType();
         }
 
+        $className = $classLike->namespacedName->toString();
         $classReflection = $this->reflectionProvider->getClass($className);
 
         if ($reference === ObjectReference::STATIC()->getValue()) {

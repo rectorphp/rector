@@ -200,11 +200,7 @@ final class ShortNameResolver
             return null;
         }
 
-        $className = $this->nodeNameResolver->getName($firstClassLike);
-        if (! $className) {
-            return null;
-        }
-
+        $className = $firstClassLike->namespacedName->toString();
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }

@@ -9,9 +9,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
 use Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer;
 use Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer;
@@ -51,7 +52,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
 
     public function __construct(
         private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
-        private ReflectionProvider $reflectionProvider,
+        private ReflectionResolver $reflectionResolver,
         private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
         private BuiltInMethodAnalyzer $builtInMethodAnalyzer,
         private OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer,
@@ -129,16 +130,11 @@ CODE_SAMPLE
             return $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $node);
         }
 
-        $className = $this->nodeNameResolver->getName($classLike);
-        if ($className === null) {
-            return null;
+        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
+        if (! $classReflection instanceof ClassReflection) {
+            throw new ShouldNotHappenException();
         }
 
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
         return $this->processRemoveParamTypeFromMethod($classReflection, $node);
     }
 

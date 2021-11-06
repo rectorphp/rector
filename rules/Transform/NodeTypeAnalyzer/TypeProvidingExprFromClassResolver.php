@@ -33,7 +33,7 @@ final class TypeProvidingExprFromClassResolver
         private TypeUnwrapper $typeUnwrapper,
         private ReflectionProvider $reflectionProvider,
         private NodeNameResolver $nodeNameResolver,
-        private PropertyNaming $propertyNaming
+        private PropertyNaming $propertyNaming,
     ) {
     }
 
@@ -45,10 +45,7 @@ final class TypeProvidingExprFromClassResolver
         ClassMethod | Function_ $functionLike,
         ObjectType $objectType
     ): ?Expr {
-        $className = $class->getAttribute(AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return null;
-        }
+        $className = $class->namespacedName->toString();
 
         // A. match a method
         $classReflection = $this->reflectionProvider->getClass($className);

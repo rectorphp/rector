@@ -6,9 +6,10 @@ namespace Rector\DowngradePhp70\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
@@ -23,7 +24,6 @@ final class DowngradeParentTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
         private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
-        private ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -82,14 +82,11 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($scope === null) {
-            // in a trait
-            $className = $node->getAttribute(AttributeKey::CLASS_NAME);
-            $classReflection = $this->reflectionProvider->getClass($className);
-        } else {
-            $classReflection = $scope->getClassReflection();
+        if (! $scope instanceof Scope) {
+            throw new ShouldNotHappenException();
         }
 
+        $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return null;
         }

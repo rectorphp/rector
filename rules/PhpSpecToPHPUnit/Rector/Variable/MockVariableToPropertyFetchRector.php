@@ -7,6 +7,7 @@ namespace Rector\PhpSpecToPHPUnit\Rector\Variable;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 
@@ -37,11 +38,16 @@ final class MockVariableToPropertyFetchRector extends AbstractPhpSpecToPHPUnitRe
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $this->isInPhpSpecBehavior($node)) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (! $class instanceof Class_) {
             return null;
         }
 
-        if (! $this->phpSpecMockCollector->isVariableMockInProperty($node)) {
+        if (! $this->isInPhpSpecBehavior($class)) {
+            return null;
+        }
+
+        if (! $this->phpSpecMockCollector->isVariableMockInProperty($class, $node)) {
             return null;
         }
 
