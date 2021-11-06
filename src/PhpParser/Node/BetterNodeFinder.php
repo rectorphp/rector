@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser\Node;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -13,14 +14,16 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211106\Symplify\PackageBuilder\Php\TypeChecker;
 use RectorPrefix20211106\Webmozart\Assert\Assert;
@@ -49,18 +52,33 @@ final class BetterNodeFinder
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    /**
-     * @var \Rector\NodeNestingScope\ParentScopeFinder
-     */
-    private $parentScopeFinder;
-    public function __construct(\PhpParser\NodeFinder $nodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211106\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeNestingScope\ParentScopeFinder $parentScopeFinder)
+    public function __construct(\PhpParser\NodeFinder $nodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211106\Symplify\PackageBuilder\Php\TypeChecker $typeChecker, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeChecker = $typeChecker;
         $this->nodeComparator = $nodeComparator;
         $this->classAnalyzer = $classAnalyzer;
-        $this->parentScopeFinder = $parentScopeFinder;
+    }
+    /**
+     * @template T of \PhpParser\Node
+     * @param array<class-string<T>> $types
+     * @return T|null
+     */
+    public function findParentByTypes(\PhpParser\Node $currentNode, array $types) : ?\PhpParser\Node
+    {
+        \RectorPrefix20211106\Webmozart\Assert\Assert::allIsAOf($types, \PhpParser\Node::class);
+        while ($currentNode = $currentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE)) {
+            if (!$currentNode instanceof \PhpParser\Node) {
+                return null;
+            }
+            foreach ($types as $type) {
+                if (\is_a($currentNode, $type, \true)) {
+                    return $currentNode;
+                }
+            }
+        }
+        return null;
     }
     /**
      * @template T of Node
@@ -133,7 +151,7 @@ final class BetterNodeFinder
      */
     public function hasVariableOfName($nodes, string $name) : bool
     {
-        return (bool) $this->findVariableOfName($nodes, $name);
+        return $this->findVariableOfName($nodes, $name) instanceof \PhpParser\Node;
     }
     /**
      * @param mixed[]|\PhpParser\Node $nodes
@@ -182,22 +200,6 @@ final class BetterNodeFinder
     public function find($nodes, callable $filter) : array
     {
         return $this->nodeFinder->find($nodes, $filter);
-    }
-    /**
-     * Excludes anonymous classes!
-     *
-     * @param mixed[]|\PhpParser\Node $nodes
-     * @return ClassLike[]
-     */
-    public function findClassLikes($nodes) : array
-    {
-        return $this->find($nodes, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Stmt\ClassLike) {
-                return \false;
-            }
-            // skip anonymous classes
-            return !($node instanceof \PhpParser\Node\Stmt\Class_ && $this->classAnalyzer->isAnonymousClass($node));
-        });
     }
     /**
      * @param Node[] $nodes
@@ -314,8 +316,8 @@ final class BetterNodeFinder
     public function findSameNamedExprs($expr) : array
     {
         // assign of empty string to something
-        $scopeNode = $this->parentScopeFinder->find($expr);
-        if ($scopeNode === null) {
+        $scopeNode = $this->findParentScope($expr);
+        if (!$scopeNode instanceof \PhpParser\Node) {
             return [];
         }
         if ($expr instanceof \PhpParser\Node\Expr\Variable) {
@@ -360,5 +362,12 @@ final class BetterNodeFinder
             return $foundInstance;
         }
         return null;
+    }
+    /**
+     * @return \PhpParser\Node|null
+     */
+    private function findParentScope(\PhpParser\Node $node)
+    {
+        return $this->findParentByTypes($node, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Namespace_::class]);
     }
 }

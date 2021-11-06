@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PSR4\Rector\Namespace_;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -102,13 +103,12 @@ CODE_SAMPLE
     }
     private function hasAtLeastTwoClassLikes(\PhpParser\Node $node) : bool
     {
-        $classes = $this->betterNodeFinder->findClassLikes($node);
-        return \count($classes) > 1;
+        $nonAnonymousClassLikes = $this->findNonAnonymousClassLikes($node);
+        return \count($nonAnonymousClassLikes) > 1;
     }
     private function refactorNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : ?\PhpParser\Node\Stmt\Namespace_
     {
-        /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findClassLikes($namespace->stmts);
+        $classLikes = $this->findNonAnonymousClassLikes($namespace);
         $this->namespaceManipulator->removeClassLikes($namespace);
         $nodeToReturn = null;
         foreach ($classLikes as $classLike) {
@@ -126,8 +126,7 @@ CODE_SAMPLE
     }
     private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace) : ?\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace
     {
-        /** @var ClassLike[] $classLikes */
-        $classLikes = $this->betterNodeFinder->findClassLikes($fileWithoutNamespace->stmts);
+        $classLikes = $this->findNonAnonymousClassLikes($fileWithoutNamespace);
         $nodeToReturn = null;
         foreach ($classLikes as $classLike) {
             // 1. is the class that will be kept in original file?
@@ -164,5 +163,18 @@ CODE_SAMPLE
     {
         $currentDirectory = \dirname($smartFileInfo->getRealPath());
         return $currentDirectory . \DIRECTORY_SEPARATOR . $classLike->name . '.php';
+    }
+    /**
+     * @return ClassLike[]
+     */
+    private function findNonAnonymousClassLikes(\PhpParser\Node $node) : array
+    {
+        $classLikes = $this->betterNodeFinder->findInstanceOf([$node], \PhpParser\Node\Stmt\ClassLike::class);
+        return \array_filter($classLikes, function (\PhpParser\Node\Stmt\ClassLike $classLike) : bool {
+            if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+                return \true;
+            }
+            return !$classLike->isAnonymous();
+        });
     }
 }

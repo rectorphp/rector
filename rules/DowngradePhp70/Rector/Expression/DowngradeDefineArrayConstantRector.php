@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeNestingScope\ParentFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,16 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeDefineArrayConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var \Rector\NodeNestingScope\ParentFinder
-     */
-    private $parentFinder;
-    /**
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\NodeNestingScope\ParentFinder $parentFinder, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
-        $this->parentFinder = $parentFinder;
         $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
@@ -97,6 +91,6 @@ CODE_SAMPLE
         if (!$args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
             return \true;
         }
-        return (bool) $this->parentFinder->findByTypes($funcCall, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+        return (bool) $this->betterNodeFinder->findParentByTypes($funcCall, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }
 }

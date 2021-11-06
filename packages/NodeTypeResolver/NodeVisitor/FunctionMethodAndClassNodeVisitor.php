@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbstract
@@ -19,17 +18,9 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
      */
     private $classStack = [];
     /**
-     * @var ClassMethod[]|null[]
-     */
-    private $methodStack = [];
-    /**
      * @var \PhpParser\Node\Stmt\ClassLike|null
      */
     private $classLike;
-    /**
-     * @var \PhpParser\Node\Stmt\ClassMethod|null
-     */
-    private $classMethod;
     /**
      * @param Node[] $nodes
      * @return Node[]|null
@@ -38,13 +29,11 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
     {
         $this->classLike = null;
         $this->className = null;
-        $this->classMethod = null;
         return null;
     }
     public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->processClass($node);
-        $this->processMethod($node);
         return $node;
     }
     public function leaveNode(\PhpParser\Node $node)
@@ -52,9 +41,6 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
         if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
             $classLike = \array_pop($this->classStack);
             $this->setClassNodeAndName($classLike);
-        }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            $this->classMethod = \array_pop($this->methodStack);
         }
         return null;
     }
@@ -65,14 +51,6 @@ final class FunctionMethodAndClassNodeVisitor extends \PhpParser\NodeVisitorAbst
             $this->setClassNodeAndName($node);
         }
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME, $this->className);
-    }
-    private function processMethod(\PhpParser\Node $node) : void
-    {
-        if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            $this->methodStack[] = $this->classMethod;
-            $this->classMethod = $node;
-        }
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE, $this->classMethod);
     }
     private function setClassNodeAndName(?\PhpParser\Node\Stmt\ClassLike $classLike) : void
     {

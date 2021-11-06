@@ -2132,7 +2132,6 @@ return array(
     'Rector\\NodeNestingScope\\ContextAnalyzer' => $baseDir . '/packages/NodeNestingScope/ContextAnalyzer.php',
     'Rector\\NodeNestingScope\\FlowOfControlLocator' => $baseDir . '/packages/NodeNestingScope/FlowOfControlLocator.php',
     'Rector\\NodeNestingScope\\NodeFinder\\ScopeAwareNodeFinder' => $baseDir . '/packages/NodeNestingScope/NodeFinder/ScopeAwareNodeFinder.php',
-    'Rector\\NodeNestingScope\\ParentFinder' => $baseDir . '/packages/NodeNestingScope/ParentFinder.php',
     'Rector\\NodeNestingScope\\ParentScopeFinder' => $baseDir . '/packages/NodeNestingScope/ParentScopeFinder.php',
     'Rector\\NodeNestingScope\\ScopeNestingComparator' => $baseDir . '/packages/NodeNestingScope/ScopeNestingComparator.php',
     'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => $baseDir . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',

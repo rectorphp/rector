@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\VariableAndCallForeach;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNestingScope\ParentFinder;
 final class ForeachMatcher
 {
     /**
@@ -22,14 +22,14 @@ final class ForeachMatcher
      */
     private $callMatcher;
     /**
-     * @var \Rector\NodeNestingScope\ParentFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
-    private $parentFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Matcher\CallMatcher $callMatcher, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\Matcher\CallMatcher $callMatcher, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->callMatcher = $callMatcher;
-        $this->parentFinder = $parentFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function match(\PhpParser\Node\Stmt\Foreach_ $foreach) : ?\Rector\Naming\ValueObject\VariableAndCallForeach
     {
@@ -55,6 +55,6 @@ final class ForeachMatcher
      */
     private function getFunctionLike(\PhpParser\Node\Stmt\Foreach_ $foreach)
     {
-        return $this->parentFinder->findByTypes($foreach, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+        return $this->betterNodeFinder->findParentByTypes($foreach, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }
 }

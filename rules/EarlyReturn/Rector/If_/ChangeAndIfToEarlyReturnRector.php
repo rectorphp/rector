@@ -17,7 +17,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
 use Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer;
 use Rector\NodeNestingScope\ContextAnalyzer;
-use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -42,17 +41,12 @@ final class ChangeAndIfToEarlyReturnRector extends \Rector\Core\Rector\AbstractR
      * @var \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer
      */
     private $booleanAndAnalyzer;
-    /**
-     * @var \Rector\NodeNestingScope\ParentFinder
-     */
-    private $parentFinder;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\EarlyReturn\NodeFactory\InvertedIfFactory $invertedIfFactory, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer $booleanAndAnalyzer, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\EarlyReturn\NodeFactory\InvertedIfFactory $invertedIfFactory, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer $booleanAndAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->invertedIfFactory = $invertedIfFactory;
         $this->contextAnalyzer = $contextAnalyzer;
         $this->booleanAndAnalyzer = $booleanAndAnalyzer;
-        $this->parentFinder = $parentFinder;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -215,7 +209,7 @@ CODE_SAMPLE
         if (!$this->contextAnalyzer->isInLoop($if)) {
             return \false;
         }
-        return (bool) $this->parentFinder->findByTypes($if, [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class]);
+        return (bool) $this->betterNodeFinder->findParentByTypes($if, [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class]);
     }
     private function isLastIfOrBeforeLastReturn(\PhpParser\Node\Stmt\If_ $if) : bool
     {

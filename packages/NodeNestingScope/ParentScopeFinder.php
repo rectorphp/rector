@@ -9,21 +9,22 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ParentScopeFinder
 {
     /**
-     * @var \Rector\NodeNestingScope\ParentFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
-    private $parentFinder;
-    public function __construct(\Rector\NodeNestingScope\ParentFinder $parentFinder)
+    private $betterNodeFinder;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
-        $this->parentFinder = $parentFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Namespace_|null
      */
     public function find(\PhpParser\Node $node)
     {
-        return $this->parentFinder->findByTypes($node, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Namespace_::class]);
+        return $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Namespace_::class]);
     }
 }

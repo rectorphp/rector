@@ -11,8 +11,8 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeNestingScope\ParentFinder;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
@@ -25,14 +25,14 @@ final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\C
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Rector\NodeNestingScope\ParentFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
-    private $parentFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->parentFinder = $parentFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param \PhpParser\Node\Param $param
@@ -55,7 +55,7 @@ final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\C
      */
     private function resolveScopeNode(\PhpParser\Node\Param $param) : ?\PhpParser\Node
     {
-        return $this->parentFinder->findByTypes($param, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+        return $this->betterNodeFinder->findParentByTypes($param, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }
     /**
      * @param Type[] $paramWithTypes

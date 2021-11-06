@@ -46,7 +46,7 @@ final class NextVariableUsageNodeFinder
     public function find(\PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node
     {
         $scopeNode = $this->parentScopeFinder->find($assign);
-        if ($scopeNode === null) {
+        if (!$scopeNode instanceof \PhpParser\Node) {
             return null;
         }
         /** @var Variable $expr */

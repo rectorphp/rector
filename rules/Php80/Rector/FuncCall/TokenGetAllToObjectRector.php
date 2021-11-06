@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeNestingScope\ParentFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeManipulator\TokenManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -31,14 +30,9 @@ final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Php80\NodeManipulator\TokenManipulator
      */
     private $tokenManipulator;
-    /**
-     * @var \Rector\NodeNestingScope\ParentFinder
-     */
-    private $parentFinder;
-    public function __construct(\Rector\Php80\NodeManipulator\TokenManipulator $tokenManipulator, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    public function __construct(\Rector\Php80\NodeManipulator\TokenManipulator $tokenManipulator)
     {
         $this->tokenManipulator = $tokenManipulator;
-        $this->parentFinder = $parentFinder;
     }
     public function provideMinPhpVersion() : int
     {
@@ -104,7 +98,7 @@ CODE_SAMPLE
             return;
         }
         /** @var ClassMethod|Function_|null $classMethodOrFunction */
-        $classMethodOrFunction = $this->parentFinder->findByTypes($funcCall, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+        $classMethodOrFunction = $this->betterNodeFinder->findParentByTypes($funcCall, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
         if ($classMethodOrFunction === null) {
             return;
         }

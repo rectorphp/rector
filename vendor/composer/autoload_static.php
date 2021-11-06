@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7ade9639c4b2634a59b028a99a4c8a81
+class ComposerStaticInit6dd98fcaae2a41944648fe8598fe5452
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2462,7 +2462,6 @@ class ComposerStaticInit7ade9639c4b2634a59b028a99a4c8a81
         'Rector\\NodeNestingScope\\ContextAnalyzer' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ContextAnalyzer.php',
         'Rector\\NodeNestingScope\\FlowOfControlLocator' => __DIR__ . '/../..' . '/packages/NodeNestingScope/FlowOfControlLocator.php',
         'Rector\\NodeNestingScope\\NodeFinder\\ScopeAwareNodeFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/NodeFinder/ScopeAwareNodeFinder.php',
-        'Rector\\NodeNestingScope\\ParentFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ParentFinder.php',
         'Rector\\NodeNestingScope\\ParentScopeFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ParentScopeFinder.php',
         'Rector\\NodeNestingScope\\ScopeNestingComparator' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ScopeNestingComparator.php',
         'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
@@ -3523,9 +3522,9 @@ class ComposerStaticInit7ade9639c4b2634a59b028a99a4c8a81
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7ade9639c4b2634a59b028a99a4c8a81::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7ade9639c4b2634a59b028a99a4c8a81::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7ade9639c4b2634a59b028a99a4c8a81::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6dd98fcaae2a41944648fe8598fe5452::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6dd98fcaae2a41944648fe8598fe5452::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6dd98fcaae2a41944648fe8598fe5452::$classMap;
 
         }, null, ClassLoader::class);
     }

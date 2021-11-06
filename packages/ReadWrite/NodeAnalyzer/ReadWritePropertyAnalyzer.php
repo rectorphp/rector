@@ -16,7 +16,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
-use Rector\NodeNestingScope\ParentFinder;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 final class ReadWritePropertyAnalyzer
@@ -34,15 +34,15 @@ final class ReadWritePropertyAnalyzer
      */
     private $readExprAnalyzer;
     /**
-     * @var \Rector\NodeNestingScope\ParentFinder
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
-    private $parentFinder;
-    public function __construct(\Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    private $betterNodeFinder;
+    public function __construct(\Rector\ReadWrite\Guard\VariableToConstantGuard $variableToConstantGuard, \Rector\Core\NodeManipulator\AssignManipulator $assignManipulator, \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer $readExprAnalyzer, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->variableToConstantGuard = $variableToConstantGuard;
         $this->assignManipulator = $assignManipulator;
         $this->readExprAnalyzer = $readExprAnalyzer;
-        $this->parentFinder = $parentFinder;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $node
@@ -77,7 +77,7 @@ final class ReadWritePropertyAnalyzer
     }
     private function isNotInsideIssetUnset(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
-        return !(bool) $this->parentFinder->findByTypes($arrayDimFetch, [\PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Stmt\Unset_::class]);
+        return !(bool) $this->betterNodeFinder->findParentByTypes($arrayDimFetch, [\PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Stmt\Unset_::class]);
     }
     private function isArrayDimFetchRead(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {

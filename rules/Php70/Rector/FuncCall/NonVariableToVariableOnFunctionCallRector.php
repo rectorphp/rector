@@ -92,7 +92,7 @@ final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Recto
             return null;
         }
         $scopeNode = $this->parentScopeFinder->find($node);
-        if ($scopeNode === null) {
+        if (!$scopeNode instanceof \PhpParser\Node) {
             return null;
         }
         $currentScope = $scopeNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);

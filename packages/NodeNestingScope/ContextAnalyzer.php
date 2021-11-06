@@ -38,20 +38,15 @@ final class ContextAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    /**
-     * @var \Rector\NodeNestingScope\ParentFinder
-     */
-    private $parentFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNestingScope\ParentFinder $parentFinder)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->parentFinder = $parentFinder;
     }
     public function isInLoop(\PhpParser\Node $node) : bool
     {
         $stopNodes = \array_merge(self::LOOP_NODES, self::BREAK_NODES);
-        $firstParent = $this->parentFinder->findByTypes($node, $stopNodes);
+        $firstParent = $this->betterNodeFinder->findParentByTypes($node, $stopNodes);
         if (!$firstParent instanceof \PhpParser\Node) {
             return \false;
         }
@@ -69,7 +64,7 @@ final class ContextAnalyzer
     public function isInIf(\PhpParser\Node $node) : bool
     {
         $breakNodes = \array_merge([\PhpParser\Node\Stmt\If_::class], self::BREAK_NODES);
-        $previousNode = $this->parentFinder->findByTypes($node, $breakNodes);
+        $previousNode = $this->betterNodeFinder->findParentByTypes($node, $breakNodes);
         if (!$previousNode instanceof \PhpParser\Node) {
             return \false;
         }
