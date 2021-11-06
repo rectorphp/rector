@@ -85,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var)) {
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var, true)) {
             return null;
         }
 
