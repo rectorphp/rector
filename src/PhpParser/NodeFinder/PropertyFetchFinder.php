@@ -66,9 +66,11 @@ final class PropertyFetchFinder
         }
 
         $nodes = [$classLike];
-        $nodes = array_merge($nodes, $this->astResolver->parseClassReflectionTraits($classReflection));
+        $nodesTrait = $this->astResolver->parseClassReflectionTraits($classReflection);
+        $hasTrait = $nodesTrait !== [];
+        $nodes = array_merge($nodes, $nodesTrait);
 
-        return $this->findPropertyFetchesInClassLike($nodes, $propertyName);
+        return $this->findPropertyFetchesInClassLike($classLike, $nodes, $propertyName, $hasTrait);
     }
 
     /**
@@ -113,20 +115,26 @@ final class PropertyFetchFinder
      * @param Stmt[] $stmts
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    private function findPropertyFetchesInClassLike(array $stmts, string $propertyName): array
-    {
+    private function findPropertyFetchesInClassLike(
+        Class_ $class,
+        array $stmts,
+        string $propertyName,
+        bool $hasTrait
+    ): array {
         /** @var PropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, PropertyFetch::class);
 
         /** @var PropertyFetch[] $matchingPropertyFetches */
         $matchingPropertyFetches = array_filter($propertyFetches, function (PropertyFetch $propertyFetch) use (
-            $propertyName
+            $propertyName,
+            $class,
+            $hasTrait
         ): bool {
-            if (! $this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
+            if ($this->isInAnonymous($propertyFetch, $class, $hasTrait)) {
                 return false;
             }
 
-            return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
+            return $this->isNamePropertyNameEquals($propertyFetch, $propertyName);
         });
 
         /** @var StaticPropertyFetch[] $staticPropertyFetches */
@@ -142,6 +150,25 @@ final class PropertyFetchFinder
         );
 
         return array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
+    }
+
+    private function isInAnonymous(PropertyFetch $propertyFetch, Class_ $class, bool $hasTrait): bool
+    {
+        $parent = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
+        if (! $parent instanceof Class_) {
+            return false;
+        }
+
+        return $parent !== $class && ! $hasTrait;
+    }
+
+    private function isNamePropertyNameEquals(PropertyFetch $propertyFetch, string $propertyName): bool
+    {
+        if (! $this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
+            return false;
+        }
+
+        return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
     }
 
     private function resolvePropertyName(Property | Param $propertyOrPromotedParam): ?string
