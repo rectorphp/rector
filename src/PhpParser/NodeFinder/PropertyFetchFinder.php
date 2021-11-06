@@ -71,8 +71,10 @@ final class PropertyFetchFinder
             $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
         }
         $nodes = [$classLike];
-        $nodes = \array_merge($nodes, $this->astResolver->parseClassReflectionTraits($classReflection));
-        return $this->findPropertyFetchesInClassLike($nodes, $propertyName);
+        $nodesTrait = $this->astResolver->parseClassReflectionTraits($classReflection);
+        $hasTrait = $nodesTrait !== [];
+        $nodes = \array_merge($nodes, $nodesTrait);
+        return $this->findPropertyFetchesInClassLike($classLike, $nodes, $propertyName, $hasTrait);
     }
     /**
      * @return PropertyFetch[]|StaticPropertyFetch[]
@@ -100,16 +102,16 @@ final class PropertyFetchFinder
      * @param Stmt[] $stmts
      * @return PropertyFetch[]|StaticPropertyFetch[]
      */
-    private function findPropertyFetchesInClassLike(array $stmts, string $propertyName) : array
+    private function findPropertyFetchesInClassLike(\PhpParser\Node\Stmt\Class_ $class, array $stmts, string $propertyName, bool $hasTrait) : array
     {
         /** @var PropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Expr\PropertyFetch::class);
         /** @var PropertyFetch[] $matchingPropertyFetches */
-        $matchingPropertyFetches = \array_filter($propertyFetches, function (\PhpParser\Node\Expr\PropertyFetch $propertyFetch) use($propertyName) : bool {
-            if (!$this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
+        $matchingPropertyFetches = \array_filter($propertyFetches, function (\PhpParser\Node\Expr\PropertyFetch $propertyFetch) use($propertyName, $class, $hasTrait) : bool {
+            if ($this->isInAnonymous($propertyFetch, $class, $hasTrait)) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
+            return $this->isNamePropertyNameEquals($propertyFetch, $propertyName);
         });
         /** @var StaticPropertyFetch[] $staticPropertyFetches */
         $staticPropertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, \PhpParser\Node\Expr\StaticPropertyFetch::class);
@@ -118,6 +120,21 @@ final class PropertyFetchFinder
             return $this->isLocalStaticPropertyByFetchName($staticPropertyFetch, $propertyName);
         });
         return \array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
+    }
+    private function isInAnonymous(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, \PhpParser\Node\Stmt\Class_ $class, bool $hasTrait) : bool
+    {
+        $parent = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\Class_::class);
+        if (!$parent instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        return $parent !== $class && !$hasTrait;
+    }
+    private function isNamePropertyNameEquals(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $propertyName) : bool
+    {
+        if (!$this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
     }
     /**
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $propertyOrPromotedParam
