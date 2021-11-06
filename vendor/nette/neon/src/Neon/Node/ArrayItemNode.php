@@ -5,11 +5,11 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211105\Nette\Neon\Node;
+namespace RectorPrefix20211106\Nette\Neon\Node;
 
-use RectorPrefix20211105\Nette\Neon\Node;
+use RectorPrefix20211106\Nette\Neon\Node;
 /** @internal */
-final class ArrayItemNode extends \RectorPrefix20211105\Nette\Neon\Node
+final class ArrayItemNode extends \RectorPrefix20211106\Nette\Neon\Node
 {
     /** @var ?Node */
     public $key;

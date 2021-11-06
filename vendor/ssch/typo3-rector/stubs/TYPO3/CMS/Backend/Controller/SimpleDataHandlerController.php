@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211105\TYPO3\CMS\Backend\Controller;
+namespace RectorPrefix20211106\TYPO3\CMS\Backend\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Controller\\SimpleDataHandlerController')) {
     return;

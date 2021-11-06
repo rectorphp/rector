@@ -75,7 +75,7 @@ CODE_SAMPLE
         if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
-        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var)) {
+        if ($this->exprUsedInNextNodeAnalyzer->isUsed($node->var, \true)) {
             return null;
         }
         $exprType = $this->nodeTypeResolver->getType($node->expr);

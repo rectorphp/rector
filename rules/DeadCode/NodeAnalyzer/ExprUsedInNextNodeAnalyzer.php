@@ -4,8 +4,12 @@ declare (strict_types=1);
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
+use PHPStan\Analyser\Scope;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprUsedInNextNodeAnalyzer
 {
     /**
@@ -21,9 +25,21 @@ final class ExprUsedInNextNodeAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
-    public function isUsed(\PhpParser\Node\Expr $expr) : bool
+    /**
+     * $isCheckNameScope parameter is used to whether to check scope of Name that may be renamed
+     * @see https://github.com/rectorphp/rector/issues/6675
+     */
+    public function isUsed(\PhpParser\Node\Expr $expr, bool $isCheckNameScope = \false) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstNext($expr, function (\PhpParser\Node $node) use($expr) : bool {
+        return (bool) $this->betterNodeFinder->findFirstNext($expr, function (\PhpParser\Node $node) use($expr, $isCheckNameScope) : bool {
+            if ($isCheckNameScope && $node instanceof \PhpParser\Node\Name) {
+                $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+                $resolvedName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME);
+                $next = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+                if (!$scope instanceof \PHPStan\Analyser\Scope && !$resolvedName instanceof \PhpParser\Node\Name && $next instanceof \PhpParser\Node\Arg) {
+                    return \true;
+                }
+            }
             return $this->exprUsedInNodeAnalyzer->isUsed($node, $expr);
         });
     }

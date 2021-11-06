@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211105\TYPO3\CMS\Extbase\Validation\Exception;
+namespace RectorPrefix20211106\TYPO3\CMS\Extbase\Validation\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Validation\\Exception\\InvalidSubjectException')) {
     return;
