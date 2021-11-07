@@ -31,11 +31,7 @@ final class UsedImportsResolver
      */
     public function resolveForNode(\PhpParser\Node $node) : array
     {
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
-            $namespace = $node;
-        } else {
-            $namespace = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
-        }
+        $namespace = $node instanceof \PhpParser\Node\Stmt\Namespace_ ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Namespace_::class);
         if ($namespace instanceof \PhpParser\Node\Stmt\Namespace_) {
             return $this->resolveForNamespace($namespace);
         }
@@ -51,7 +47,8 @@ final class UsedImportsResolver
         /** @var Class_|null $class */
         $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, \PhpParser\Node\Stmt\Class_::class);
         // add class itself
-        if ($class !== null) {
+        // is not anonymous class
+        if ($class !== null && \property_exists($class, 'namespacedName')) {
             $className = $class->namespacedName->toString();
             $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
