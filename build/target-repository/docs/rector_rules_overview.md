@@ -1,4 +1,4 @@
-# 477 Rules Overview
+# 476 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (69)
+- [CodeQuality](#codequality) (68)
 
 - [CodingStyle](#codingstyle) (38)
 
@@ -872,29 +872,6 @@ Replace magic property fetch using `__get()` and `__set()` with existing method 
 -        return $magicObject->name;
 +        return $magicObject->getName();
      }
- }
-```
-
-<br>
-
-### FixClassCaseSensitivityNameRector
-
-Change miss-typed case sensitivity name to correct one
-
-- class: [`Rector\CodeQuality\Rector\Name\FixClassCaseSensitivityNameRector`](../rules/CodeQuality/Rector/Name/FixClassCaseSensitivityNameRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        $anotherClass = new anotherclass;
-+        $anotherClass = new AnotherClass;
-     }
- }
-
- final class AnotherClass
- {
  }
 ```
 
