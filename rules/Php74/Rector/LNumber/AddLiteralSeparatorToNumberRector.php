@@ -142,16 +142,10 @@ CODE_SAMPLE
         $startToken = $node->getAttribute(AttributeKey::START_TOKEN_POSITION);
 
         $oldTokens = $this->file->getOldTokens();
+        $tokenValue = $oldTokens[$startToken][1] ?? null;
 
-        foreach ($oldTokens[$startToken] as $token) {
-            if (! is_string($token)) {
-                continue;
-            }
-
-            if (! str_contains($token, '_')) {
-                continue;
-            }
-
+        // already contains separator
+        if (str_contains($tokenValue, '_')) {
             return true;
         }
 
