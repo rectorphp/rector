@@ -2327,6 +2327,7 @@ return array(
     'Rector\\PSR4\\NodeManipulator\\NamespaceManipulator' => $baseDir . '/rules/PSR4/NodeManipulator/NamespaceManipulator.php',
     'Rector\\PSR4\\Rector\\FileWithoutNamespace\\NormalizeNamespaceByPSR4ComposerAutoloadRector' => $baseDir . '/rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php',
     'Rector\\PSR4\\Rector\\Namespace_\\MultipleClassFileToPsr4ClassesRector' => $baseDir . '/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php',
+    'Rector\\Parallel\\Contract\\SerializableInterface' => $baseDir . '/packages/Parallel/Contract/SerializableInterface.php',
     'Rector\\Php52\\Rector\\Property\\VarToPublicPropertyRector' => $baseDir . '/rules/Php52/Rector/Property/VarToPublicPropertyRector.php',
     'Rector\\Php52\\Rector\\Switch_\\ContinueToBreakInSwitchRector' => $baseDir . '/rules/Php52/Rector/Switch_/ContinueToBreakInSwitchRector.php',
     'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => $baseDir . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',

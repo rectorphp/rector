@@ -171,4 +171,8 @@ final class File
     {
         return $this->rectorErrors;
     }
+    public function getRelativeFilePath() : string
+    {
+        return $this->smartFileInfo->getRelativeFilePathFromCwd();
+    }
 }

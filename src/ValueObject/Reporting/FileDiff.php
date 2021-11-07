@@ -6,8 +6,8 @@ namespace Rector\Core\ValueObject\Reporting;
 use RectorPrefix20211107\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
-final class FileDiff
+use Rector\Parallel\Contract\SerializableInterface;
+final class FileDiff implements \Rector\Parallel\Contract\SerializableInterface
 {
     /**
      * @var string
@@ -19,9 +19,25 @@ final class FileDiff
      */
     private const FIRST_LINE_KEY = 'first_line';
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo
+     * @var string
      */
-    private $smartFileInfo;
+    private const KEY_RELATIVE_FILE_PATH = 'relative_file_path';
+    /**
+     * @var string
+     */
+    private const KEY_DIFF = 'diff';
+    /**
+     * @var string
+     */
+    private const KEY_DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
+    /**
+     * @var string
+     */
+    private const KEY_RECTORS_WITH_LINE_CHANGES = 'rectors_with_line_changes';
+    /**
+     * @var string
+     */
+    private $relativeFilePath;
     /**
      * @var string
      */
@@ -33,16 +49,16 @@ final class FileDiff
     /**
      * @var \Rector\ChangesReporting\ValueObject\RectorWithLineChange[]
      */
-    private $rectorWithLineChanges = [];
+    private $rectorsWithLineChanges = [];
     /**
-     * @param RectorWithLineChange[] $rectorWithLineChanges
+     * @param RectorWithLineChange[] $rectorsWithLineChanges
      */
-    public function __construct(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $diff, string $diffConsoleFormatted, array $rectorWithLineChanges = [])
+    public function __construct(string $relativeFilePath, string $diff, string $diffConsoleFormatted, array $rectorsWithLineChanges = [])
     {
-        $this->smartFileInfo = $smartFileInfo;
+        $this->relativeFilePath = $relativeFilePath;
         $this->diff = $diff;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
-        $this->rectorWithLineChanges = $rectorWithLineChanges;
+        $this->rectorsWithLineChanges = $rectorsWithLineChanges;
     }
     public function getDiff() : string
     {
@@ -54,18 +70,14 @@ final class FileDiff
     }
     public function getRelativeFilePath() : string
     {
-        return $this->smartFileInfo->getRelativeFilePath();
-    }
-    public function getFileInfo() : \Symplify\SmartFileSystem\SmartFileInfo
-    {
-        return $this->smartFileInfo;
+        return $this->relativeFilePath;
     }
     /**
      * @return RectorWithLineChange[]
      */
     public function getRectorChanges() : array
     {
-        return $this->rectorWithLineChanges;
+        return $this->rectorsWithLineChanges;
     }
     /**
      * @return array<class-string<RectorInterface>>
@@ -73,7 +85,7 @@ final class FileDiff
     public function getRectorClasses() : array
     {
         $rectorClasses = [];
-        foreach ($this->rectorWithLineChanges as $rectorWithLineChange) {
+        foreach ($this->rectorsWithLineChanges as $rectorWithLineChange) {
             $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
         return $this->sortClasses($rectorClasses);
@@ -86,6 +98,20 @@ final class FileDiff
             return null;
         }
         return (int) $match[self::FIRST_LINE_KEY] - 1;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize() : array
+    {
+        return [self::KEY_RELATIVE_FILE_PATH => $this->relativeFilePath, self::KEY_DIFF => $this->diff, self::KEY_DIFF_CONSOLE_FORMATTED => $this->diffConsoleFormatted, self::KEY_RECTORS_WITH_LINE_CHANGES => $this->rectorsWithLineChanges];
+    }
+    /**
+     * @param array<string, mixed> $json
+     */
+    public static function decode($json) : \Rector\Parallel\Contract\SerializableInterface
+    {
+        return new self($json[self::KEY_RELATIVE_FILE_PATH], $json[self::KEY_DIFF], $json[self::KEY_DIFF_CONSOLE_FORMATTED], $json[self::KEY_RECTORS_WITH_LINE_CHANGES]);
     }
     /**
      * @template TType as object

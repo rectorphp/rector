@@ -156,7 +156,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             if ($this->symfonyStyle->isVerbose() || \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
-            $rectorError = new \Rector\Core\ValueObject\Application\RectorError($throwable->getMessage(), $file->getSmartFileInfo(), $throwable->getLine());
+            $rectorError = new \Rector\Core\ValueObject\Application\RectorError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
             $file->addRectorError($rectorError);
         }
     }

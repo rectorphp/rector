@@ -25,6 +25,6 @@ final class FileDiffFactory
     public function createFileDiff(\Rector\Core\ValueObject\Application\File $file, string $oldContent, string $newContent) : \Rector\Core\ValueObject\Reporting\FileDiff
     {
         // always keep the most recent diff
-        return new \Rector\Core\ValueObject\Reporting\FileDiff($file->getSmartFileInfo(), $this->defaultDiffer->diff($oldContent, $newContent), $this->consoleDiffer->diff($oldContent, $newContent), $file->getRectorWithLineChanges());
+        return new \Rector\Core\ValueObject\Reporting\FileDiff($file->getRelativeFilePath(), $this->defaultDiffer->diff($oldContent, $newContent), $this->consoleDiffer->diff($oldContent, $newContent), $file->getRectorWithLineChanges());
     }
 }

@@ -39,7 +39,7 @@ final class RectorChangeCollector
         if (!$currentRector instanceof \Rector\Core\Contract\Rector\RectorInterface) {
             return;
         }
-        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($currentRector, $node->getLine());
+        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($currentRector), $node->getLine());
         $file->addRectorClassWithLine($rectorWithLineChange);
     }
 }

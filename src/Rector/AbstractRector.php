@@ -264,7 +264,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         }
         // changed!
         if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
-            $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, $originalNode->getLine());
+            $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
             $this->file->addRectorClassWithLine($rectorWithLineChange);
             // update parents relations - must run before connectParentNodes()
             $this->mirrorAttributes($originalAttributes, $node);
