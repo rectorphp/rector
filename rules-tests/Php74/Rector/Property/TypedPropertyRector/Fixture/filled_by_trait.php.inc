@@ -5,7 +5,7 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\FillerTrait;
 
-final class FilledByTrait
+class FilledByTrait
 {
     use FillerTrait;
 
@@ -14,3 +14,5 @@ final class FilledByTrait
      */
     protected $property;
 }
+
+?>
