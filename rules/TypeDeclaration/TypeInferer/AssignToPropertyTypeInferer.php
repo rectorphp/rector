@@ -30,7 +30,7 @@ final class AssignToPropertyTypeInferer
         private NullTypeAssignDetector $nullTypeAssignDetector,
         private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
         private TypeFactory $typeFactory,
-        private NodeTypeResolver $nodeTypeResolver
+        private NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 
@@ -51,9 +51,7 @@ final class AssignToPropertyTypeInferer
                 return null;
             }
 
-            $exprStaticType = $this->resolveExprStaticTypeIncludingDimFetch($node);
-
-            $assignedExprTypes[] = $exprStaticType;
+            $assignedExprTypes[] = $this->resolveExprStaticTypeIncludingDimFetch($node);
 
             return null;
         });

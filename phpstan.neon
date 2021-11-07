@@ -502,3 +502,7 @@ parameters:
             # name resolver php-parser feature
             message: '#Function "property_exists\(\)" cannot be used/left in the code#'
             path: src/Reflection/ReflectionResolver.php
+
+        -
+            path: rules/Php74/Rector/Property/TypedPropertyRector.php
+            message: '#Class cognitive complexity is 36, keep it under 30#'

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
@@ -15,6 +16,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
@@ -27,8 +29,12 @@ final class SilentVoidResolver
 
     public function hasExclusiveVoid(ClassMethod | Closure | Function_ $functionLike): bool
     {
-        $interface = $this->betterNodeFinder->findParentType($functionLike, Interface_::class);
-        if ($interface instanceof Interface_) {
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
+        if ($classLike instanceof Interface_) {
+            return false;
+        }
+
+        if ($classLike instanceof Trait_) {
             return false;
         }
 

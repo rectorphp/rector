@@ -7,8 +7,11 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -26,6 +29,7 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
         private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
         private NodeNameResolver $nodeNameResolver,
         private BetterNodeFinder $betterNodeFinder,
+        private AstResolver $astResolver
     ) {
     }
 
@@ -33,29 +37,41 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
     {
         $class = $this->betterNodeFinder->findParentType($property, Class_::class);
         if (! $class instanceof Class_) {
-            // anonymous class
             return null;
         }
 
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        foreach ($class->getMethods() as $classMethod) {
+        $returnTypes = [];
+
+        $classAndTraitMethods = $this->resolveClassAndTraitMethods($class);
+
+        foreach ($classAndTraitMethods as $classAndTraitMethod) {
             if (! $this->classMethodAndPropertyAnalyzer->hasClassMethodOnlyStatementReturnOfPropertyFetch(
-                $classMethod,
+                $classAndTraitMethod,
                 $propertyName
             )) {
                 continue;
             }
 
-            $returnType = $this->inferClassMethodReturnType($classMethod);
-
-            if (! $returnType instanceof MixedType) {
-                return $returnType;
+            $returnType = $this->inferClassMethodReturnType($classAndTraitMethod);
+            if ($returnType instanceof MixedType) {
+                continue;
             }
+
+            $returnTypes[] = $returnType;
         }
 
-        return null;
+        if ($returnTypes === []) {
+            return null;
+        }
+
+        if (count($returnTypes) === 1) {
+            return $returnTypes[0];
+        }
+
+        return new UnionType($returnTypes);
     }
 
     public function getPriority(): int
@@ -79,5 +95,26 @@ final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
         }
 
         return $this->returnTagReturnTypeInferer->inferFunctionLike($classMethod);
+    }
+
+    /**
+     * @return ClassMethod[]
+     */
+    private function resolveClassAndTraitMethods(Class_ $class): array
+    {
+        $classAndTraitMethods = $class->getMethods();
+
+        foreach ($class->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $traitName) {
+                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
+                if (! $trait instanceof Trait_) {
+                    continue;
+                }
+
+                $classAndTraitMethods = array_merge($classAndTraitMethods, $trait->getMethods());
+            }
+        }
+
+        return $classAndTraitMethods;
     }
 }

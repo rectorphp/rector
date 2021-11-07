@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -23,14 +23,14 @@ final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInter
 
     public function inferProperty(Property $property): ?Type
     {
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        if (! $class instanceof Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
             return null;
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $class);
+        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
     }
 
     public function getPriority(): int

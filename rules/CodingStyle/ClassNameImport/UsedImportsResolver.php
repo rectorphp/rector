@@ -53,9 +53,7 @@ final class UsedImportsResolver
         // add class itself
         if ($class !== null) {
             $className = $class->namespacedName->toString();
-            if ($className !== null) {
-                $usedImports[] = new FullyQualifiedObjectType($className);
-            }
+            $usedImports[] = new FullyQualifiedObjectType($className);
         }
 
         $this->useImportsTraverser->traverserStmts($stmts, function (

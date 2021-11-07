@@ -7,18 +7,21 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -76,7 +79,8 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         private PropertyFetchAnalyzer $propertyFetchAnalyzer,
         private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
         private PropertyAnalyzer $propertyAnalyzer,
-        private PropertyUnionTypeResolver $propertyUnionTypeResolver
+        private PropertyUnionTypeResolver $propertyUnionTypeResolver,
+        private AstResolver $astResolver,
     ) {
     }
 
@@ -167,6 +171,7 @@ CODE_SAMPLE
             $scope,
             $propertyTypeNode
         );
+
         $varType = $propertyType->getVarType();
         $propertyTypeNode = $propertyType->getPropertyTypeNode();
 
@@ -260,7 +265,7 @@ CODE_SAMPLE
             return;
         }
 
-        if (! TypeCombinator::containsNull($propertyType)) {
+        if (! $propertyType->isSuperTypeOf(new NullType())->yes()) {
             return;
         }
 
@@ -296,6 +301,13 @@ CODE_SAMPLE
             return true;
         }
 
+        $propertyName = $this->getName($property);
+
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if ($classLike instanceof ClassLike && $this->isModifiedByTrait($classLike, $propertyName)) {
+            return true;
+        }
+
         if (! $this->privatePropertyOnly) {
             return $this->propertyAnalyzer->hasForbiddenType($property);
         }
@@ -305,5 +317,27 @@ CODE_SAMPLE
         }
 
         return true;
+    }
+
+    private function isModifiedByTrait(ClassLike $classLike, string $propertyName): bool
+    {
+        if (! $classLike instanceof Class_) {
+            return false;
+        }
+
+        foreach ($classLike->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $traitName) {
+                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
+                if (! $trait instanceof Trait_) {
+                    continue;
+                }
+
+                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

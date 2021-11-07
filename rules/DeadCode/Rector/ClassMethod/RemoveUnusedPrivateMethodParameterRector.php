@@ -6,7 +6,6 @@ namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -74,11 +73,6 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-
-//        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-//        if (! $classLike instanceof ClassLike) {
-//            return null;
-//        }
 
         $unusedParameters = $this->unusedParameterResolver->resolve($node);
         if ($unusedParameters === []) {
