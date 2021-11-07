@@ -26,7 +26,7 @@ jobs:
 
                     -
                         name: 'Along PHPStan'
-                        install: composer require phpstan/phpstan:^1.0 --dev --ansi
+                        install: composer require phpstan/phpstan:^1.1.1 --dev --ansi
 
         name: "PHP ${{ matrix.php_version }}"
 
