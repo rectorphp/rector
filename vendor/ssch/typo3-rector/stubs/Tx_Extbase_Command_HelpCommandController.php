@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211106;
+namespace RectorPrefix20211107;
 
 if (\class_exists('Tx_Extbase_Command_HelpCommandController')) {
     return;

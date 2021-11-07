@@ -13,7 +13,6 @@ use Rector\CodingStyle\Reflection\VendorLocationDetector;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeResolver\ArgumentSorter;
 use Rector\Php80\NodeResolver\RequireOptionalParamResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -106,7 +105,6 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return null;
         }
-        $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
         $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod);
         if (!$classMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;

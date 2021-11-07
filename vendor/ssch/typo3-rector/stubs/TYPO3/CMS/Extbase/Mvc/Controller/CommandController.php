@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211106\TYPO3\CMS\Extbase\Mvc\Controller;
+namespace RectorPrefix20211107\TYPO3\CMS\Extbase\Mvc\Controller;
 
 if (\class_exists('TYPO3\\CMS\\Extbase\\Mvc\\Controller\\CommandController')) {
     return;

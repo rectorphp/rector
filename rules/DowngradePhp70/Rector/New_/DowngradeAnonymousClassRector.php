@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeDecorator\NamespacedNameDecorator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,10 +34,15 @@ final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory
      */
     private $classFromAnonymousFactory;
-    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory $classFromAnonymousFactory)
+    /**
+     * @var \Rector\Core\NodeDecorator\NamespacedNameDecorator
+     */
+    private $namespacedNameDecorator;
+    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory $classFromAnonymousFactory, \Rector\Core\NodeDecorator\NamespacedNameDecorator $namespacedNameDecorator)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->classFromAnonymousFactory = $classFromAnonymousFactory;
+        $this->namespacedNameDecorator = $namespacedNameDecorator;
     }
     /**
      * @return array<class-string<Node>>
@@ -109,7 +115,9 @@ CODE_SAMPLE
             return null;
         }
         $className = $this->createAnonymousClassName();
-        $this->classes[] = $this->classFromAnonymousFactory->create($className, $node->class);
+        $class = $this->classFromAnonymousFactory->create($className, $node->class);
+        $this->classes[] = $class;
+        $this->namespacedNameDecorator->decorate($class);
         return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name($className), $node->args);
     }
     private function createAnonymousClassName() : string

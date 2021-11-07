@@ -18,9 +18,8 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
-use RectorPrefix20211106\Stringy\Stringy;
+use RectorPrefix20211107\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -223,10 +222,7 @@ CODE_SAMPLE
                 return null;
             }
             // replace with constant fetch
-            $classConstFetch = new \PhpParser\Node\Expr\ClassConstFetch(new \PhpParser\Node\Name('self'), new \PhpParser\Node\Identifier($constantName));
-            // needed later
-            $classConstFetch->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME, $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME));
-            return $classConstFetch;
+            return new \PhpParser\Node\Expr\ClassConstFetch(new \PhpParser\Node\Name('self'), new \PhpParser\Node\Identifier($constantName));
         });
     }
     private function createConstantNameFromVariable(\PhpParser\Node\Expr\Variable $variable) : string
@@ -235,7 +231,7 @@ CODE_SAMPLE
         if ($variableName === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $stringy = new \RectorPrefix20211106\Stringy\Stringy($variableName);
+        $stringy = new \RectorPrefix20211107\Stringy\Stringy($variableName);
         return (string) $stringy->underscored()->toUpperCase();
     }
 }

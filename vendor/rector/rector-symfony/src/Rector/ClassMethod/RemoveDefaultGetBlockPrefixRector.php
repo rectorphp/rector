@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
-use RectorPrefix20211106\Nette\Utils\Strings;
+use RectorPrefix20211107\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20211106\Stringy\Stringy;
+use RectorPrefix20211107\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -65,15 +65,19 @@ CODE_SAMPLE
             return null;
         }
         $returnedValue = $this->valueResolver->getValue($returnedExpr);
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return null;
+        }
+        $className = $this->nodeNameResolver->getName($classLike);
         if (!\is_string($className)) {
             return null;
         }
         $shortClassName = $this->nodeNameResolver->getShortName($className);
         if (\substr_compare($shortClassName, 'Type', -\strlen('Type')) === 0) {
-            $shortClassName = (string) \RectorPrefix20211106\Nette\Utils\Strings::before($shortClassName, 'Type');
+            $shortClassName = (string) \RectorPrefix20211107\Nette\Utils\Strings::before($shortClassName, 'Type');
         }
-        $stringy = new \RectorPrefix20211106\Stringy\Stringy($shortClassName);
+        $stringy = new \RectorPrefix20211107\Stringy\Stringy($shortClassName);
         $underscoredClassShortName = (string) $stringy->underscored();
         if ($underscoredClassShortName !== $returnedValue) {
             return null;

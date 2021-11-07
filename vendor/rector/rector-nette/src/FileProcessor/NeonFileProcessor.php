@@ -44,6 +44,9 @@ final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FilePro
      */
     public function process($file, $configuration) : void
     {
+        if ($this->neonRectors === []) {
+            return;
+        }
         $fileContent = $file->getFileContent();
         $neonNode = $this->neonParser->parseString($fileContent);
         $neonNodeTraverser = $this->neonNodeTraverserFactory->create();

@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Enum\ObjectReference;
@@ -14,7 +15,6 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeCollector\StaticAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -97,11 +97,11 @@ CODE_SAMPLE
         if ($this->isObjectType($node->var, new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\TestCase'))) {
             return null;
         }
-        /** @var class-string $className */
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if (!\is_string($className)) {
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
+        $className = $classLike->namespacedName->toString();
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if (!$isStaticMethod) {
             return null;

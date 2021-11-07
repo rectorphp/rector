@@ -42,10 +42,7 @@ final class KnownArrayParamTypeInferer implements \Rector\TypeDeclaration\Contra
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return new \PHPStan\Type\MixedType();
         }
-        $className = $this->nodeNameResolver->getName($class);
-        if (!$className) {
-            return new \PHPStan\Type\MixedType();
-        }
+        $className = $class->namespacedName->toString();
         if (!$this->reflectionProvider->hasClass($className)) {
             return new \PHPStan\Type\MixedType();
         }

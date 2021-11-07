@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
-use RectorPrefix20211106\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211107\Symfony\Contracts\Service\Attribute\Required;
 final class ReturnFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**

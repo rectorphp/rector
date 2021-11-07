@@ -39,7 +39,7 @@ final class LocalMethodCallFinder
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return [];
         }
-        $className = $this->nodeNameResolver->getName($class);
+        $className = $class->namespacedName->toString();
         if (!\is_string($className)) {
             return [];
         }

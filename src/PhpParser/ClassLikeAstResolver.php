@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix20211106\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20211107\Symplify\Astral\PhpParser\SmartPhpParser;
 final class ClassLikeAstResolver
 {
     /**
@@ -28,7 +28,7 @@ final class ClassLikeAstResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20211106\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20211107\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->betterNodeFinder = $betterNodeFinder;

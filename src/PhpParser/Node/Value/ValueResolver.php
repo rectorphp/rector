@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
@@ -19,9 +20,9 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
@@ -52,13 +53,18 @@ final class ValueResolver
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\NodeAnalyzer\ConstFetchAnalyzer $constFetchAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\NodeAnalyzer\ConstFetchAnalyzer $constFetchAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->constFetchAnalyzer = $constFetchAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
         $this->currentFileProvider = $currentFileProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param mixed $value
@@ -86,7 +92,11 @@ final class ValueResolver
         if ($expr instanceof \PhpParser\Node\Expr\ClassConstFetch && $resolvedClassReference) {
             $class = $this->nodeNameResolver->getName($expr->class);
             if (\in_array($class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()], \true)) {
-                return $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+                // @todo scope is needed
+                $classLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassLike::class);
+                if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+                    return $classLike->namespacedName->toString();
+                }
             }
             if ($this->nodeNameResolver->isName($expr->name, 'class')) {
                 return $class;
@@ -240,7 +250,11 @@ final class ValueResolver
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         if ($class === \Rector\Core\Enum\ObjectReference::SELF()->getValue()) {
-            $class = (string) $classConstFetch->class->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+            $classLike = $this->betterNodeFinder->findParentType($classConstFetch, \PhpParser\Node\Stmt\ClassLike::class);
+            if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            $class = $classLike->namespacedName->toString();
         }
         if ($constant === 'class') {
             return $class;

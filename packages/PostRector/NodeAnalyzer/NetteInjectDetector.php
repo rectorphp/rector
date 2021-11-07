@@ -50,10 +50,7 @@ final class NetteInjectDetector
     }
     private function hasParentClassConstructor(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        $className = $this->nodeNameResolver->getName($class);
-        if ($className === null) {
-            return \false;
-        }
+        $className = $class->namespacedName->toString();
         if (!$this->reflectionProvider->hasClass($className)) {
             return \false;
         }

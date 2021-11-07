@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -35,12 +35,12 @@ final class AllAssignNodePropertyTypeInferer implements \Rector\TypeDeclaration\
      */
     public function inferProperty($property) : ?\PHPStan\Type\Type
     {
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
-        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $class);
+        return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
     }
     public function getPriority() : int
     {

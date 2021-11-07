@@ -13,13 +13,12 @@ use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\NewToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211106\Webmozart\Assert\Assert;
+use RectorPrefix20211107\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToMethodCallRector\NewToMethodCallRectorTest
  */
@@ -83,17 +82,22 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return null;
+        }
+        $className = $this->getName($class);
+        if (!\is_string($className)) {
+            return null;
+        }
         foreach ($this->newsToMethodCalls as $newToMethodCall) {
             if (!$this->isObjectType($node, $newToMethodCall->getNewObjectType())) {
                 continue;
             }
             $serviceObjectType = $newToMethodCall->getServiceObjectType();
-            $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
             if ($className === $serviceObjectType->getClassName()) {
                 continue;
             }
-            /** @var Class_ $class */
-            $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
             $propertyName = $this->getExistingFactoryPropertyName($class, $newToMethodCall->getServiceObjectType());
             if ($propertyName === null) {
                 $serviceObjectType = $newToMethodCall->getServiceObjectType();
@@ -113,7 +117,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $newsToMethodCalls = $configuration[self::NEWS_TO_METHOD_CALLS] ?? [];
-        \RectorPrefix20211106\Webmozart\Assert\Assert::allIsInstanceOf($newsToMethodCalls, \Rector\Transform\ValueObject\NewToMethodCall::class);
+        \RectorPrefix20211107\Webmozart\Assert\Assert::allIsInstanceOf($newsToMethodCalls, \Rector\Transform\ValueObject\NewToMethodCall::class);
         $this->newsToMethodCalls = $newsToMethodCalls;
     }
     private function getExistingFactoryPropertyName(\PhpParser\Node\Stmt\Class_ $class, \PHPStan\Type\ObjectType $factoryObjectType) : ?string

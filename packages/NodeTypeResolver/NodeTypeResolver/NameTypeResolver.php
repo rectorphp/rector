@@ -6,6 +6,8 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -13,6 +15,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -24,9 +27,14 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return array<class-string<Node>>
@@ -54,8 +62,12 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
      */
     private function resolveParent(\PhpParser\Node\Name $name)
     {
-        $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $class = $this->betterNodeFinder->findParentType($name, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return new \PHPStan\Type\MixedType();
+        }
+        $className = $class->namespacedName->toString();
+        if (!\is_string($className)) {
             return new \PHPStan\Type\MixedType();
         }
         if (!$this->reflectionProvider->hasClass($className)) {
@@ -78,13 +90,11 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
     {
         $nameValue = $name->toString();
         if (\in_array($nameValue, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue(), 'this'], \true)) {
-            /** @var string|null $class */
-            $class = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-            if ($class === null) {
-                // anonymous class probably
-                return 'Anonymous';
+            $classLike = $this->betterNodeFinder->findParentType($name, \PhpParser\Node\Stmt\ClassLike::class);
+            if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+                return $name->toString();
             }
-            return $class;
+            return $classLike->namespacedName->toString();
         }
         /** @var Name|null $resolvedNameNode */
         $resolvedNameNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME);

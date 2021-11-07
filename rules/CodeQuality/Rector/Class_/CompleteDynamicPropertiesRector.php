@@ -129,10 +129,7 @@ CODE_SAMPLE
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return \true;
         }
-        $className = $this->nodeNameResolver->getName($class);
-        if ($className === null) {
-            return \true;
-        }
+        $className = $class->namespacedName->toString();
         if (!$this->reflectionProvider->hasClass($className)) {
             return \true;
         }

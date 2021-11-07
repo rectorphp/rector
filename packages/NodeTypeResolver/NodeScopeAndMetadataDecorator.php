@@ -9,7 +9,6 @@ use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
-use Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor;
 use Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
@@ -19,10 +18,6 @@ final class NodeScopeAndMetadataDecorator
      * @var \PhpParser\NodeVisitor\CloningVisitor
      */
     private $cloningVisitor;
-    /**
-     * @var \Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor
-     */
-    private $functionMethodAndClassNodeVisitor;
     /**
      * @var \Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor
      */
@@ -43,10 +38,9 @@ final class NodeScopeAndMetadataDecorator
      * @var \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor
      */
     private $functionLikeParamArgPositionNodeVisitor;
-    public function __construct(\PhpParser\NodeVisitor\CloningVisitor $cloningVisitor, \Rector\NodeTypeResolver\NodeVisitor\FunctionMethodAndClassNodeVisitor $functionMethodAndClassNodeVisitor, \Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor $namespaceNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver, \Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor $statementNodeVisitor, \PhpParser\NodeVisitor\NodeConnectingVisitor $nodeConnectingVisitor, \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor)
+    public function __construct(\PhpParser\NodeVisitor\CloningVisitor $cloningVisitor, \Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor $namespaceNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver $phpStanNodeScopeResolver, \Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor $statementNodeVisitor, \PhpParser\NodeVisitor\NodeConnectingVisitor $nodeConnectingVisitor, \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor)
     {
         $this->cloningVisitor = $cloningVisitor;
-        $this->functionMethodAndClassNodeVisitor = $functionMethodAndClassNodeVisitor;
         $this->namespaceNodeVisitor = $namespaceNodeVisitor;
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->statementNodeVisitor = $statementNodeVisitor;
@@ -66,7 +60,6 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->cloningVisitor);
         // this one has to be run again to re-connect nodes with new attributes
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->nodeConnectingVisitor);
-        $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->namespaceNodeVisitor);
         $nodeTraverserForFormatPreservePrinting->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
         $stmts = $nodeTraverserForFormatPreservePrinting->traverse($stmts);
@@ -83,7 +76,6 @@ final class NodeScopeAndMetadataDecorator
     {
         $nodeTraverser = new \PhpParser\NodeTraverser();
         $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-        $nodeTraverser->addVisitor($this->functionMethodAndClassNodeVisitor);
         $nodeTraverser->addVisitor($this->statementNodeVisitor);
         return $nodeTraverser->traverse($stmts);
     }

@@ -8,14 +8,14 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\StaticRectorStrings;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20211106\Symplify\PackageBuilder\Strings\StringFormatConverter;
+use RectorPrefix20211107\Symplify\PackageBuilder\Strings\StringFormatConverter;
 final class PhpSpecRenaming
 {
     /**
@@ -34,7 +34,7 @@ final class PhpSpecRenaming
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211106\Symplify\PackageBuilder\Strings\StringFormatConverter $stringFormatConverter, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211107\Symplify\PackageBuilder\Strings\StringFormatConverter $stringFormatConverter, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->stringFormatConverter = $stringFormatConverter;
@@ -96,8 +96,15 @@ final class PhpSpecRenaming
     }
     public function resolveTestedClass(\PhpParser\Node $node) : string
     {
-        /** @var string $className */
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
+            $className = $node->namespacedName->toString();
+        } else {
+            $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+            if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            $className = $classLike->namespacedName->toString();
+        }
         $newClassName = \Rector\Core\Util\StaticRectorStrings::removePrefixes($className, ['spec\\']);
         return \Rector\Core\Util\StaticRectorStrings::removeSuffixes($newClassName, [self::SPEC]);
     }

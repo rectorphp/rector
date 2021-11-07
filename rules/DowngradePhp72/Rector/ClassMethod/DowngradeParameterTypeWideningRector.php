@@ -8,9 +8,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
 use Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer;
 use Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer;
@@ -18,7 +19,7 @@ use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211106\Webmozart\Assert\Assert;
+use RectorPrefix20211107\Webmozart\Assert\Assert;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
@@ -48,9 +49,9 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      */
     private $nativeParamToPhpDocDecorator;
     /**
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $reflectionProvider;
+    private $reflectionResolver;
     /**
      * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer
      */
@@ -67,10 +68,10 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      * @var \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer
      */
     private $sealedClassAnalyzer;
-    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer $builtInMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer $sealedClassAnalyzer)
+    public function __construct(\Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer $builtInMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, \Rector\DowngradePhp72\NodeAnalyzer\SealedClassAnalyzer $sealedClassAnalyzer)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
-        $this->reflectionProvider = $reflectionProvider;
+        $this->reflectionResolver = $reflectionResolver;
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->builtInMethodAnalyzer = $builtInMethodAnalyzer;
         $this->overrideFromAnonymousClassMethodAnalyzer = $overrideFromAnonymousClassMethodAnalyzer;
@@ -129,14 +130,10 @@ CODE_SAMPLE
         if ($ancestorOverridableAnonymousClass instanceof \PHPStan\Reflection\ClassReflection) {
             return $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $node);
         }
-        $className = $this->nodeNameResolver->getName($classLike);
-        if ($className === null) {
-            return null;
+        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
         return $this->processRemoveParamTypeFromMethod($classReflection, $node);
     }
     /**
@@ -145,14 +142,14 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
-        \RectorPrefix20211106\Webmozart\Assert\Assert::isArray($safeTypes);
-        \RectorPrefix20211106\Webmozart\Assert\Assert::allString($safeTypes);
+        \RectorPrefix20211107\Webmozart\Assert\Assert::isArray($safeTypes);
+        \RectorPrefix20211107\Webmozart\Assert\Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
         $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
-        \RectorPrefix20211106\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
+        \RectorPrefix20211107\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
         foreach ($safeTypesToMethods as $key => $value) {
-            \RectorPrefix20211106\Webmozart\Assert\Assert::string($key);
-            \RectorPrefix20211106\Webmozart\Assert\Assert::allString($value);
+            \RectorPrefix20211107\Webmozart\Assert\Assert::string($key);
+            \RectorPrefix20211107\Webmozart\Assert\Assert::allString($value);
         }
         $this->safeTypesToMethods = $safeTypesToMethods;
     }

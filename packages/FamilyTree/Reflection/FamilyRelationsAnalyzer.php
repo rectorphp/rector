@@ -21,15 +21,14 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211106\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211107\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -56,11 +55,7 @@ final class FamilyRelationsAnalyzer
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    /**
-     * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
-     */
-    private $simplePhpParser;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211106\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \RectorPrefix20211107\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->privatesAccessor = $privatesAccessor;
@@ -68,7 +63,6 @@ final class FamilyRelationsAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->astResolver = $astResolver;
-        $this->simplePhpParser = $simplePhpParser;
     }
     /**
      * @return ClassReflection[]
@@ -97,12 +91,14 @@ final class FamilyRelationsAnalyzer
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return new \Rector\FamilyTree\ValueObject\PropertyType($varType, $propertyTypeNode);
         }
-        /** @var ClassReflection $classReflection */
         $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         $ancestorClassReflections = $classReflection->getAncestors();
         $propertyName = $this->nodeNameResolver->getName($property);
         $kindPropertyFetch = $this->getKindPropertyFetch($property);
-        $className = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $classReflection->getName();
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $ancestorClassName = $ancestorClassReflection->getName();
             if ($ancestorClassName === $className) {
@@ -111,15 +107,11 @@ final class FamilyRelationsAnalyzer
             if ($ancestorClassReflection->isSubclassOf('PHPUnit\\Framework\\TestCase')) {
                 continue;
             }
-            $fileName = $ancestorClassReflection->getFileName();
-            if ($fileName === null) {
+            $class = $this->astResolver->resolveClassFromClassReflection($ancestorClassReflection, $ancestorClassName);
+            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
                 continue;
             }
-            $stmts = $this->simplePhpParser->parseFile($fileName);
-            if ($stmts === []) {
-                continue;
-            }
-            if (!$this->isPropertyWritten($stmts, $propertyName, $kindPropertyFetch)) {
+            if (!$this->isPropertyWritten($class->stmts, $propertyName, $kindPropertyFetch)) {
                 continue;
             }
             $varType = new \PHPStan\Type\UnionType([$varType, new \PHPStan\Type\NullType()]);

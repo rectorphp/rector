@@ -60,9 +60,9 @@ final class PropertyFetchAnalyzer
         /** @var PropertyFetch|StaticPropertyFetch $node */
         return $this->nodeNameResolver->isName($node->name, $desiredPropertyName);
     }
-    public function containsLocalPropertyFetchName(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : bool
+    public function containsLocalPropertyFetchName(\PhpParser\Node $node, string $propertyName) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($classMethod, function (\PhpParser\Node $node) use($propertyName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($node, function (\PhpParser\Node $node) use($propertyName) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return \false;
             }

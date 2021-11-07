@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211106\Symfony\Component\Console\Tester;
+namespace RectorPrefix20211107\Symfony\Component\Console\Tester;
 
-use RectorPrefix20211106\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211106\Symfony\Component\Console\Input\ArrayInput;
+use RectorPrefix20211107\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211107\Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console commands.
  *
@@ -24,7 +24,7 @@ class CommandTester
     private $command;
     private $input;
     private $statusCode;
-    public function __construct(\RectorPrefix20211106\Symfony\Component\Console\Command\Command $command)
+    public function __construct(\RectorPrefix20211107\Symfony\Component\Console\Command\Command $command)
     {
         $this->command = $command;
     }
@@ -43,14 +43,14 @@ class CommandTester
      *
      * @return int The command exit code
      */
-    public function execute($input, $options = [])
+    public function execute(array $input, array $options = [])
     {
         // set the command name automatically if the application requires
         // this argument and no command name was passed
         if (!isset($input['command']) && null !== ($application = $this->command->getApplication()) && $application->getDefinition()->hasArgument('command')) {
             $input = \array_merge(['command' => $this->command->getName()], $input);
         }
-        $this->input = new \RectorPrefix20211106\Symfony\Component\Console\Input\ArrayInput($input);
+        $this->input = new \RectorPrefix20211107\Symfony\Component\Console\Input\ArrayInput($input);
         // Use an in-memory input stream even if no inputs are set so that QuestionHelper::ask() does not rely on the blocking STDIN.
         $this->input->setStream(self::createStream($this->inputs));
         if (isset($options['interactive'])) {

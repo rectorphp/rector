@@ -6,18 +6,21 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -99,7 +102,11 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver
      */
     private $propertyUnionTypeResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver $propertyUnionTypeResolver)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver $propertyUnionTypeResolver, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
@@ -110,6 +117,7 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->propertyAnalyzer = $propertyAnalyzer;
         $this->propertyUnionTypeResolver = $propertyUnionTypeResolver;
+        $this->astResolver = $astResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -243,7 +251,7 @@ CODE_SAMPLE
         if (!$propertyType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        if (!\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
+        if (!$propertyType->isSuperTypeOf(new \PHPStan\Type\NullType())->yes()) {
             return;
         }
         $onlyProperty = $property->props[0];
@@ -271,6 +279,11 @@ CODE_SAMPLE
         if ($trait instanceof \PhpParser\Node\Stmt\Trait_) {
             return \true;
         }
+        $propertyName = $this->getName($property);
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
+        if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike && $this->isModifiedByTrait($classLike, $propertyName)) {
+            return \true;
+        }
         if (!$this->privatePropertyOnly) {
             return $this->propertyAnalyzer->hasForbiddenType($property);
         }
@@ -278,5 +291,23 @@ CODE_SAMPLE
             return $this->propertyAnalyzer->hasForbiddenType($property);
         }
         return \true;
+    }
+    private function isModifiedByTrait(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
+    {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        foreach ($classLike->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $traitName) {
+                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
+                if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
+                    continue;
+                }
+                if ($this->propertyFetchAnalyzer->containsLocalPropertyFetchName($trait, $propertyName)) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
 }

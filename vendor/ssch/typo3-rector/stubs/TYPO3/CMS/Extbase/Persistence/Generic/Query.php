@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211106\TYPO3\CMS\Extbase\Persistence\Generic;
+namespace RectorPrefix20211107\TYPO3\CMS\Extbase\Persistence\Generic;
 
-use RectorPrefix20211106\TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use RectorPrefix20211107\TYPO3\CMS\Extbase\Persistence\QueryInterface;
 if (\class_exists('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Query')) {
     return;
 }
-final class Query implements \RectorPrefix20211106\TYPO3\CMS\Extbase\Persistence\QueryInterface
+final class Query implements \RectorPrefix20211107\TYPO3\CMS\Extbase\Persistence\QueryInterface
 {
     public function logicalAnd($constraint1)
     {

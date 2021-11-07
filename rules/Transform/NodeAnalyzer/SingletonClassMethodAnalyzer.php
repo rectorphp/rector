@@ -9,13 +9,14 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SingletonClassMethodAnalyzer
 {
@@ -31,11 +32,16 @@ final class SingletonClassMethodAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
         $this->nodeComparator = $nodeComparator;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * Match this code:
@@ -74,13 +80,18 @@ final class SingletonClassMethodAnalyzer
         if (!$stmt->expr instanceof \PhpParser\Node\Expr\New_) {
             return null;
         }
-        /** @var string $class */
-        $class = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        // the "self" class is created
-        if (!$this->nodeTypeResolver->isObjectType($stmt->expr->class, new \PHPStan\Type\ObjectType($class))) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        /** @var StaticPropertyFetch $staticPropertyFetch */
+        $className = $class->namespacedName->toString();
+        if (!\is_string($className)) {
+            return null;
+        }
+        // the "self" class is created
+        if (!$this->nodeTypeResolver->isObjectType($stmt->expr->class, new \PHPStan\Type\ObjectType($className))) {
+            return null;
+        }
         return $staticPropertyFetch;
     }
     private function matchStaticPropertyFetchInIfCond(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\StaticPropertyFetch

@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpSpecToPHPUnit\PhpSpecMockCollector;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 /**
@@ -45,8 +44,10 @@ final class AddMockPropertiesRector extends \Rector\PhpSpecToPHPUnit\Rector\Abst
             return null;
         }
         $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($node);
-        /** @var string $class */
-        $class = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $className = $this->getName($node);
+        if (!\is_string($className)) {
+            return null;
+        }
         foreach ($classMocks as $name => $methods) {
             if ((\is_array($methods) || $methods instanceof \Countable ? \count($methods) : 0) <= 1) {
                 continue;
@@ -55,7 +56,7 @@ final class AddMockPropertiesRector extends \Rector\PhpSpecToPHPUnit\Rector\Abst
             if (!\in_array('let', $methods, \true)) {
                 continue;
             }
-            $this->phpSpecMockCollector->addPropertyMock($class, $name);
+            $this->phpSpecMockCollector->addPropertyMock($className, $name);
             $variableType = $this->phpSpecMockCollector->getTypeForClassAndVariable($node, $name);
             $unionType = new \PHPStan\Type\UnionType([new \PHPStan\Type\ObjectType($variableType), new \PHPStan\Type\ObjectType('PHPUnit\\Framework\\MockObject\\MockObject')]);
             $this->classInsertManipulator->addPropertyToClass($node, $name, $unionType);

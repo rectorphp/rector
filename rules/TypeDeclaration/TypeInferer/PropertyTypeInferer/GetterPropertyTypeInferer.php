@@ -6,8 +6,11 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
@@ -41,7 +44,11 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer $returnTagReturnTypeInferer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer, \Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInferer $returnTagReturnTypeInferer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer, \Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver)
     {
         $this->returnTagReturnTypeInferer = $returnTagReturnTypeInferer;
         $this->returnedNodesReturnTypeInferer = $returnedNodesReturnTypeInferer;
@@ -49,6 +56,7 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->astResolver = $astResolver;
     }
     /**
      * @param \PhpParser\Node\Stmt\Property $property
@@ -57,21 +65,29 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
     {
         $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
-            // anonymous class
             return null;
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-        foreach ($class->getMethods() as $classMethod) {
-            if (!$this->classMethodAndPropertyAnalyzer->hasClassMethodOnlyStatementReturnOfPropertyFetch($classMethod, $propertyName)) {
+        $returnTypes = [];
+        $classAndTraitMethods = $this->resolveClassAndTraitMethods($class);
+        foreach ($classAndTraitMethods as $classAndTraitMethod) {
+            if (!$this->classMethodAndPropertyAnalyzer->hasClassMethodOnlyStatementReturnOfPropertyFetch($classAndTraitMethod, $propertyName)) {
                 continue;
             }
-            $returnType = $this->inferClassMethodReturnType($classMethod);
-            if (!$returnType instanceof \PHPStan\Type\MixedType) {
-                return $returnType;
+            $returnType = $this->inferClassMethodReturnType($classAndTraitMethod);
+            if ($returnType instanceof \PHPStan\Type\MixedType) {
+                continue;
             }
+            $returnTypes[] = $returnType;
         }
-        return null;
+        if ($returnTypes === []) {
+            return null;
+        }
+        if (\count($returnTypes) === 1) {
+            return $returnTypes[0];
+        }
+        return new \PHPStan\Type\UnionType($returnTypes);
     }
     public function getPriority() : int
     {
@@ -88,5 +104,22 @@ final class GetterPropertyTypeInferer implements \Rector\TypeDeclaration\Contrac
             return $inferedType;
         }
         return $this->returnTagReturnTypeInferer->inferFunctionLike($classMethod);
+    }
+    /**
+     * @return ClassMethod[]
+     */
+    private function resolveClassAndTraitMethods(\PhpParser\Node\Stmt\Class_ $class) : array
+    {
+        $classAndTraitMethods = $class->getMethods();
+        foreach ($class->getTraitUses() as $traitUse) {
+            foreach ($traitUse->traits as $traitName) {
+                $trait = $this->astResolver->resolveClassFromName($traitName->toString());
+                if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
+                    continue;
+                }
+                $classAndTraitMethods = \array_merge($classAndTraitMethods, $trait->getMethods());
+            }
+        }
+        return $classAndTraitMethods;
     }
 }

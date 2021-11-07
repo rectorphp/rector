@@ -17,7 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211106\Webmozart\Assert\Assert;
+use RectorPrefix20211107\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\RenamePropertyRectorTest
  */
@@ -58,7 +58,7 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
     public function configure(array $configuration) : void
     {
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
-        \RectorPrefix20211106\Webmozart\Assert\Assert::allIsInstanceOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
+        \RectorPrefix20211107\Webmozart\Assert\Assert::allIsInstanceOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }
     private function processFromClassLike(\PhpParser\Node\Stmt\ClassLike $classLike) : \PhpParser\Node\Stmt\ClassLike
@@ -70,10 +70,10 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
     }
     private function renameProperty(\PhpParser\Node\Stmt\ClassLike $classLike, \Rector\Renaming\ValueObject\RenameProperty $renameProperty) : void
     {
-        $classLikeName = $this->nodeNameResolver->getName($classLike);
+        $classLikeName = $classLike->namespacedName->toString();
         $renamePropertyObjectType = $renameProperty->getObjectType();
         $className = $renamePropertyObjectType->getClassName();
-        $classLikeNameObjectType = new \PHPStan\Type\ObjectType((string) $classLikeName);
+        $classLikeNameObjectType = new \PHPStan\Type\ObjectType($classLikeName);
         $classNameObjectType = new \PHPStan\Type\ObjectType($className);
         $isSuperType = $classNameObjectType->isSuperTypeOf($classLikeNameObjectType)->yes();
         if ($classLikeName !== $className && !$isSuperType) {

@@ -10,7 +10,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RepositoryAssignFactory
 {
     /**

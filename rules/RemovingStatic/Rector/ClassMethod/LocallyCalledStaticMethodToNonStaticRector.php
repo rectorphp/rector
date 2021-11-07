@@ -126,7 +126,11 @@ CODE_SAMPLE
     }
     private function isClassMethodMatchingStaticCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        $className = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return \false;
+        }
+        $className = $classLike->namespacedName->toString();
         $objectType = new \PHPStan\Type\ObjectType($className);
         $callerType = $this->nodeTypeResolver->getType($staticCall->class);
         return $objectType->equals($callerType);

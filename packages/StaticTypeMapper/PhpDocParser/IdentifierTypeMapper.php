@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\NameScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -16,7 +17,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
@@ -38,11 +39,16 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
-    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return class-string<TypeNode>
@@ -77,7 +83,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
             return $this->mapParent($scope);
         }
         if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
-            return $this->mapStatic($node, $scope);
+            return $this->mapStatic($scope);
         }
         if ($loweredName === 'iterable') {
             return new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
@@ -91,9 +97,13 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
      */
     private function mapSelf(\PhpParser\Node $node)
     {
-        /** @var string|null $className */
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+            return new \PHPStan\Type\MixedType();
+        }
+        // @todo check FQN
+        $className = $classLike->namespacedName->toString();
+        if (!\is_string($className)) {
             // self outside the class, e.g. in a function
             return new \PHPStan\Type\MixedType();
         }
@@ -113,16 +123,11 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
      */
-    private function mapStatic(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope)
+    private function mapStatic(\PHPStan\Analyser\Scope $scope)
     {
-        /** @var string|null $className */
-        $className = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
-            return new \PHPStan\Type\MixedType();
-        }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return new \PHPStan\Type\MixedType();
         }
         return new \PHPStan\Type\StaticType($classReflection);
     }

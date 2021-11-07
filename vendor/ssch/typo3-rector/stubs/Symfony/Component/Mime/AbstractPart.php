@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211106\Symfony\Component\Mime;
+namespace RectorPrefix20211107\Symfony\Component\Mime;
 
 if (\class_exists('Symfony\\Component\\Mime\\AbstractPart')) {
     return;

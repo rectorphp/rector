@@ -5,6 +5,7 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
@@ -20,7 +21,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Enum\ObjectReference;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
@@ -35,10 +36,15 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->reflectionProvider = $reflectionProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return class-string<Node>
@@ -75,10 +81,11 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
      */
     private function createClassReferenceType(\PhpParser\Node\Name $name, string $reference)
     {
-        $className = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CLASS_NAME);
-        if ($className === null) {
+        $classLike = $this->betterNodeFinder->findParentType($name, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return new \PHPStan\Type\MixedType();
         }
+        $className = $classLike->namespacedName->toString();
         $classReflection = $this->reflectionProvider->getClass($className);
         if ($reference === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
             return new \PHPStan\Type\StaticType($classReflection);

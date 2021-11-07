@@ -115,9 +115,11 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
      */
     private function createCreateMockCall(\PhpParser\Node\Param $param, \PhpParser\Node\Name $name) : ?\PhpParser\Node\Stmt\Expression
     {
-        /** @var Class_ $classLike */
-        $classLike = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
-        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($classLike);
+        $class = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return null;
+        }
+        $classMocks = $this->phpSpecMockCollector->resolveClassMocksFromParam($class);
         $variable = $this->getName($param->var);
         $classMethod = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -129,7 +131,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
             return null;
         }
         // single use: "$mock = $this->createMock()"
-        if (!$this->phpSpecMockCollector->isVariableMockInProperty($param->var)) {
+        if (!$this->phpSpecMockCollector->isVariableMockInProperty($class, $param->var)) {
             return $this->createNewMockVariableAssign($param, $name);
         }
         $reversedMethodsWithThisMock = \array_flip($methodsWithWThisMock);
