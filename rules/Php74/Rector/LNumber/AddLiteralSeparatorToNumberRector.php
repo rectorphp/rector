@@ -119,13 +119,9 @@ CODE_SAMPLE
         /** @var int $startToken */
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
         $oldTokens = $this->file->getOldTokens();
-        foreach ($oldTokens[$startToken] as $token) {
-            if (!\is_string($token)) {
-                continue;
-            }
-            if (\strpos($token, '_') === \false) {
-                continue;
-            }
+        $tokenValue = $oldTokens[$startToken][1] ?? null;
+        // already contains separator
+        if (\strpos($tokenValue, '_') !== \false) {
             return \true;
         }
         if ($numericValueAsString < $this->limitValue) {
