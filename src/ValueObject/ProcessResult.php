@@ -85,7 +85,7 @@ final class ProcessResult
     {
         $fileInfos = [];
         foreach ($this->fileDiffs as $fileDiff) {
-            $fileInfos[] = $fileDiff->getFileInfo();
+            $fileInfos[] = new SmartFileInfo($fileDiff->getRelativeFilePath());
         }
 
         return array_unique($fileInfos);

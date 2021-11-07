@@ -36,7 +36,7 @@ final class RectorChangeCollector
             return;
         }
 
-        $rectorWithLineChange = new RectorWithLineChange($currentRector, $node->getLine());
+        $rectorWithLineChange = new RectorWithLineChange($currentRector::class, $node->getLine());
         $file->addRectorClassWithLine($rectorWithLineChange);
     }
 }

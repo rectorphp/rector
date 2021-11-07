@@ -7,9 +7,9 @@ namespace Rector\Core\ValueObject\Reporting;
 use Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Parallel\Contract\SerializableInterface;
 
-final class FileDiff
+final class FileDiff implements SerializableInterface
 {
     /**
      * @var string
@@ -23,13 +23,33 @@ final class FileDiff
     private const FIRST_LINE_KEY = 'first_line';
 
     /**
-     * @param RectorWithLineChange[] $rectorWithLineChanges
+     * @var string
+     */
+    private const KEY_RELATIVE_FILE_PATH = 'relative_file_path';
+
+    /**
+     * @var string
+     */
+    private const KEY_DIFF = 'diff';
+
+    /**
+     * @var string
+     */
+    private const KEY_DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
+
+    /**
+     * @var string
+     */
+    private const KEY_RECTORS_WITH_LINE_CHANGES = 'rectors_with_line_changes';
+
+    /**
+     * @param RectorWithLineChange[] $rectorsWithLineChanges
      */
     public function __construct(
-        private SmartFileInfo $smartFileInfo,
+        private string $relativeFilePath,
         private string $diff,
         private string $diffConsoleFormatted,
-        private array $rectorWithLineChanges = []
+        private array $rectorsWithLineChanges = []
     ) {
     }
 
@@ -45,12 +65,7 @@ final class FileDiff
 
     public function getRelativeFilePath(): string
     {
-        return $this->smartFileInfo->getRelativeFilePath();
-    }
-
-    public function getFileInfo(): SmartFileInfo
-    {
-        return $this->smartFileInfo;
+        return $this->relativeFilePath;
     }
 
     /**
@@ -58,7 +73,7 @@ final class FileDiff
      */
     public function getRectorChanges(): array
     {
-        return $this->rectorWithLineChanges;
+        return $this->rectorsWithLineChanges;
     }
 
     /**
@@ -67,7 +82,7 @@ final class FileDiff
     public function getRectorClasses(): array
     {
         $rectorClasses = [];
-        foreach ($this->rectorWithLineChanges as $rectorWithLineChange) {
+        foreach ($this->rectorsWithLineChanges as $rectorWithLineChange) {
             $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
 
@@ -84,6 +99,32 @@ final class FileDiff
         }
 
         return (int) $match[self::FIRST_LINE_KEY] - 1;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            self::KEY_RELATIVE_FILE_PATH => $this->relativeFilePath,
+            self::KEY_DIFF => $this->diff,
+            self::KEY_DIFF_CONSOLE_FORMATTED => $this->diffConsoleFormatted,
+            self::KEY_RECTORS_WITH_LINE_CHANGES => $this->rectorsWithLineChanges,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    public static function decode(array $json): SerializableInterface
+    {
+        return new self(
+            $json[self::KEY_RELATIVE_FILE_PATH],
+            $json[self::KEY_DIFF],
+            $json[self::KEY_DIFF_CONSOLE_FORMATTED],
+            $json[self::KEY_RECTORS_WITH_LINE_CHANGES],
+        );
     }
 
     /**

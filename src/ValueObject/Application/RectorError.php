@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject\Application;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Parallel\Contract\SerializableInterface;
 
-final class RectorError
+final class RectorError implements SerializableInterface
 {
+    /**
+     * @param class-string<RectorInterface>|null $rectorClass
+     */
     public function __construct(
         private string $message,
-        private SmartFileInfo $fileInfo,
+        private string $relativeFilePath,
         private ?int $line = null,
         private ?string $rectorClass = null
     ) {
@@ -18,12 +22,7 @@ final class RectorError
 
     public function getRelativeFilePath(): string
     {
-        return $this->fileInfo->getRelativeFilePathFromCwd();
-    }
-
-    public function getFileInfo(): SmartFileInfo
-    {
-        return $this->fileInfo;
+        return $this->relativeFilePath;
     }
 
     public function getMessage(): string
@@ -36,8 +35,32 @@ final class RectorError
         return $this->line;
     }
 
+    /**
+     * @return class-string<RectorInterface>|null
+     */
     public function getRectorClass(): ?string
     {
         return $this->rectorClass;
+    }
+
+    /**
+     * @param array<string, mixed> $json
+     */
+    public static function decode(array $json): SerializableInterface
+    {
+        return new self($json['message'], $json['relative_file_path'], $json['line'], $json['rector_class'],);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'message' => $this->message,
+            'relative_file_path' => $this->relativeFilePath,
+            'line' => $this->line,
+            'rector_class' => $this->rectorClass,
+        ];
     }
 }

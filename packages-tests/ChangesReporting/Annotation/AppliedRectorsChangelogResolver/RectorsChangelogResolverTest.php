@@ -40,10 +40,12 @@ final class RectorsChangelogResolverTest extends AbstractTestCase
     {
         // This is by intention to test the array_unique functionality
         $rectorWithLineChanges = [];
-        $rectorWithLineChanges[] = new RectorWithLineChange(new RectorWithChangelog(), 1);
-        $rectorWithLineChanges[] = new RectorWithLineChange(new RectorWithChangelog(), 1);
-        $rectorWithLineChanges[] = new RectorWithLineChange(new RectorWithOutChangelog(), 1);
+        $rectorWithLineChanges[] = new RectorWithLineChange(RectorWithChangelog::class, 1);
+        $rectorWithLineChanges[] = new RectorWithLineChange(RectorWithChangelog::class, 1);
+        $rectorWithLineChanges[] = new RectorWithLineChange(RectorWithOutChangelog::class, 1);
 
-        return new FileDiff(new SmartFileInfo(__FILE__), 'foo', 'foo', $rectorWithLineChanges);
+        $smartFileInfo = new SmartFileInfo(__FILE__);
+
+        return new FileDiff($smartFileInfo->getRelativeFilePathFromCwd(), 'foo', 'foo', $rectorWithLineChanges);
     }
 }

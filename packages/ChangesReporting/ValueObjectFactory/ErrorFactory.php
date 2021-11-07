@@ -21,6 +21,6 @@ final class ErrorFactory
         SmartFileInfo $smartFileInfo
     ): RectorError {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-        return new RectorError($message, $smartFileInfo);
+        return new RectorError($message, $smartFileInfo->getRelativeFilePathFromCwd());
     }
 }

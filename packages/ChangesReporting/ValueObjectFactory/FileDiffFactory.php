@@ -21,7 +21,7 @@ final class FileDiffFactory
     {
         // always keep the most recent diff
         return new FileDiff(
-            $file->getSmartFileInfo(),
+            $file->getRelativeFilePath(),
             $this->defaultDiffer->diff($oldContent, $newContent),
             $this->consoleDiffer->diff($oldContent, $newContent),
             $file->getRectorWithLineChanges()

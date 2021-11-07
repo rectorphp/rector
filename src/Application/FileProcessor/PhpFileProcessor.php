@@ -136,7 +136,11 @@ final class PhpFileProcessor implements FileProcessorInterface
                 throw $throwable;
             }
 
-            $rectorError = new RectorError($throwable->getMessage(), $file->getSmartFileInfo(), $throwable->getLine());
+            $rectorError = new RectorError(
+                $throwable->getMessage(),
+                $file->getRelativeFilePath(),
+                $throwable->getLine()
+            );
             $file->addRectorError($rectorError);
         }
     }
