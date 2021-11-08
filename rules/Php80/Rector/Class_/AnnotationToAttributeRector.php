@@ -16,6 +16,7 @@ use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\Annotation\ChangeResolvedClassInParticularContextForAnnotation;
 use Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -68,12 +69,17 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer
      */
     private $doctrineAnnotationTagValueNodeAnalyzer;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer)
+    /**
+     * @var \Rector\BetterPhpDocParser\Annotation\ChangeResolvedClassInParticularContextForAnnotation
+     */
+    private $changeResolvedClassInParticularContextForAnnotation;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer, \Rector\BetterPhpDocParser\Annotation\ChangeResolvedClassInParticularContextForAnnotation $changeResolvedClassInParticularContextForAnnotation)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->convertedAnnotationToAttributeParentRemover = $convertedAnnotationToAttributeParentRemover;
         $this->attrGroupsFactory = $attrGroupsFactory;
         $this->doctrineAnnotationTagValueNodeAnalyzer = $doctrineAnnotationTagValueNodeAnalyzer;
+        $this->changeResolvedClassInParticularContextForAnnotation = $changeResolvedClassInParticularContextForAnnotation;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -195,6 +201,7 @@ CODE_SAMPLE
                 if (!$docNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
+                $this->changeResolvedClassInParticularContextForAnnotation->changeResolvedClassIfNeed($annotationToAttribute, $docNode);
                 if ($this->doctrineAnnotationTagValueNodeAnalyzer->isNested($docNode, $this->annotationsToAttributes)) {
                     $stringValues = $this->getStringFromNestedDoctrineTagAnnotationToAttribute($docNode);
                     $newDoctrineTagValueNode = $this->resolveNewDoctrineTagValueNode($docNode, $stringValues);
