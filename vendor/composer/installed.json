@@ -1335,17 +1335,17 @@
         },
         {
             "name": "rector\/rector-doctrine",
-            "version": "0.11.33",
-            "version_normalized": "0.11.33.0",
+            "version": "0.11.34",
+            "version_normalized": "0.11.34.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "45d4b4bcc7a0221b8327f9e04a4682e0d9114927"
+                "reference": "176db6b2b783f42ff4f584354f7525735883a667"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/45d4b4bcc7a0221b8327f9e04a4682e0d9114927",
-                "reference": "45d4b4bcc7a0221b8327f9e04a4682e0d9114927",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/176db6b2b783f42ff4f584354f7525735883a667",
+                "reference": "176db6b2b783f42ff4f584354f7525735883a667",
                 "shasum": ""
             },
             "require": {
@@ -1368,7 +1368,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0"
             },
-            "time": "2021-11-06T19:40:26+00:00",
+            "time": "2021-11-08T15:27:56+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -1393,7 +1393,7 @@
             "description": "Rector upgrades rules for Doctrine",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-doctrine\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.11.33"
+                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.11.34"
             },
             "install-path": "..\/rector\/rector-doctrine"
         },

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-final class ChangeResolvedClassInParticularContextForAnnotationRule
+final class ChangeResolvedClassInParticularContext
 {
     /**
      * @var string

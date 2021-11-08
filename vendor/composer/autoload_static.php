@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e
+class ComposerStaticInitde4eeca911744423ff2265989c118a69
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1588,7 +1588,7 @@ class ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e
         'Rector\\BetterPhpDocParser\\Printer\\EmptyPhpDocDetector' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/EmptyPhpDocDetector.php',
         'Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php',
         'Rector\\BetterPhpDocParser\\Printer\\RemoveNodesStartAndEndResolver' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/RemoveNodesStartAndEndResolver.php',
-        'Rector\\BetterPhpDocParser\\ValueObject\\ChangeResolvedClassInParticularContextForAnnotationRule' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/ChangeResolvedClassInParticularContextForAnnotationRule.php',
+        'Rector\\BetterPhpDocParser\\ValueObject\\ChangeResolvedClassInParticularContext' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/ChangeResolvedClassInParticularContext.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\DoctrineAnnotation\\SilentKeyMap' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/DoctrineAnnotation/SilentKeyMap.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\NodeTypes' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/NodeTypes.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Parser\\BetterTokenIterator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php',
@@ -2191,13 +2191,16 @@ class ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e
         'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',
         'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeMixedTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php',
         'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
+        'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradePhp80ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php',
         'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeNamedArgumentRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php',
         'Rector\\DowngradePhp80\\Rector\\NullsafeMethodCall\\DowngradeNullsafeToTernaryOperatorRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php',
         'Rector\\DowngradePhp80\\Rector\\Property\\DowngradeUnionTypeTypedPropertyRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php',
         'Rector\\DowngradePhp80\\Rector\\StaticCall\\DowngradePhpTokenRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php',
         'Rector\\DowngradePhp80\\Reflection\\DefaultParameterValueResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Reflection/DefaultParameterValueResolver.php',
         'Rector\\DowngradePhp80\\ValueObject\\DowngradeAttributeToAnnotation' => __DIR__ . '/../..' . '/rules/DowngradePhp80/ValueObject/DowngradeAttributeToAnnotation.php',
+        'Rector\\DowngradePhp81\\NodeManipulator\\ObjectToResourceReturn' => __DIR__ . '/../..' . '/rules/DowngradePhp81/NodeManipulator/ObjectToResourceReturn.php',
         'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
+        'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
         'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
         'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
         'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
@@ -3527,9 +3530,9 @@ class ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitefb69119733e7012a87a0d55c9e8c68e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitde4eeca911744423ff2265989c118a69::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitde4eeca911744423ff2265989c118a69::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitde4eeca911744423ff2265989c118a69::$classMap;
 
         }, null, ClassLoader::class);
     }
