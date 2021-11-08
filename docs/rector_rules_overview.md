@@ -1,4 +1,4 @@
-# 476 Rules Overview
+# 480 Rules Overview
 
 <br>
 
@@ -24,6 +24,8 @@
 
 - [DowngradePhp54](#downgradephp54) (1)
 
+- [DowngradePhp56](#downgradephp56) (2)
+
 - [DowngradePhp70](#downgradephp70) (11)
 
 - [DowngradePhp71](#downgradephp71) (10)
@@ -34,9 +36,9 @@
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (18)
+- [DowngradePhp80](#downgradephp80) (19)
 
-- [DowngradePhp81](#downgradephp81) (1)
+- [DowngradePhp81](#downgradephp81) (2)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -4050,6 +4052,34 @@ Remove static from closure
 
 <br>
 
+## DowngradePhp56
+
+### DowngradeExponentialAssignmentOperatorRector
+
+Remove exponential assignment operator **=
+
+- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector`](../rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php)
+
+```diff
+-$a **= 3;
++$a = pow($a, 3);
+```
+
+<br>
+
+### DowngradeExponentialOperatorRector
+
+Changes ** (exp) operator to pow(val, val2)
+
+- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector`](../rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php)
+
+```diff
+-1**2;
++pow(1, 2);
+```
+
+<br>
+
 ## DowngradePhp70
 
 ### DowngradeAnonymousClassRector
@@ -5165,6 +5195,25 @@ Change nullsafe operator to ternary operator rector
 
 <br>
 
+### DowngradePhp80ResourceReturnToObjectRector
+
+change instanceof Object to is_resource
+
+- class: [`Rector\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector`](../rules/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($obj)
+     {
+-        $obj instanceof \CurlHandle;
++        is_resource($obj);
+     }
+ }
+```
+
+<br>
+
 ### DowngradePhpTokenRector
 
 `"something()"` will be renamed to `"somethingElse()"`
@@ -5381,6 +5430,25 @@ Remove final from class constants
  {
 -    final public const NAME = 'value';
 +    public const NAME = 'value';
+ }
+```
+
+<br>
+
+### DowngradePhp81ResourceReturnToObjectRector
+
+change instanceof Object to is_resource
+
+- class: [`Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector`](../rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($obj)
+     {
+-        $obj instanceof \finfo;
++        is_resource($obj);
+     }
  }
 ```
 

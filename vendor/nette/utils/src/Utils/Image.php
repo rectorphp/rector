@@ -258,7 +258,7 @@ class Image
      */
     protected function setImageResource($image)
     {
-        if (!\is_resource($image) && !(\is_resource($image) && \get_resource_type($image) === 'gd')) {
+        if (!$image instanceof \GdImage && !(\is_resource($image) && \get_resource_type($image) === 'gd')) {
             throw new \RectorPrefix20211108\Nette\InvalidArgumentException('Image is not valid.');
         }
         $this->image = $image;
@@ -585,7 +585,7 @@ class Image
             }
         }
         $res = $function($this->image, ...$args);
-        return \is_resource($res) || \is_resource($res) && \get_resource_type($res) === 'gd' ? $this->setImageResource($res) : $res;
+        return $res instanceof \GdImage || \is_resource($res) && \get_resource_type($res) === 'gd' ? $this->setImageResource($res) : $res;
     }
     public function __clone()
     {
