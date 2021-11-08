@@ -17,6 +17,7 @@ use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\Annotation\ChangeResolvedClassInParticularContextForAnnotation;
 use Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -66,7 +67,8 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         private PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover,
         private AttrGroupsFactory $attrGroupsFactory,
-        private DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer
+        private DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer,
+        private ChangeResolvedClassInParticularContextForAnnotation $changeResolvedClassInParticularContextForAnnotation
     ) {
     }
 
@@ -242,6 +244,11 @@ CODE_SAMPLE
                 if (! $docNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
+
+                $this->changeResolvedClassInParticularContextForAnnotation->changeResolvedClassIfNeed(
+                    $annotationToAttribute,
+                    $docNode
+                );
 
                 if ($this->doctrineAnnotationTagValueNodeAnalyzer->isNested(
                     $docNode,
