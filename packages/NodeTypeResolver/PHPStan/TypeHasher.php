@@ -27,7 +27,7 @@ final class TypeHasher
     public function createTypeHash(\PHPStan\Type\Type $type) : string
     {
         if ($type instanceof \PHPStan\Type\MixedType) {
-            return \serialize($type) . $type->isExplicitMixed();
+            return $type->describe(\PHPStan\Type\VerbosityLevel::precise()) . $type->isExplicitMixed();
         }
         if ($type instanceof \PHPStan\Type\ArrayType) {
             return $this->createTypeHash($type->getItemType()) . $this->createTypeHash($type->getKeyType()) . '[]';
