@@ -63,7 +63,7 @@ class SomeClass
 {
     public function run($obj)
     {
-        is_resource($obj);
+        is_resource($obj) || $obj instanceof \finfo;
     }
 }
 CODE_SAMPLE
