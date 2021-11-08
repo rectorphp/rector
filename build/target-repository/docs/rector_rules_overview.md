@@ -5207,7 +5207,7 @@ change instanceof Object to is_resource
      public function run($obj)
      {
 -        $obj instanceof \CurlHandle;
-+        is_resource($obj);
++        is_resource($obj) || $obj instanceof \CurlHandle;
      }
  }
 ```
@@ -5447,7 +5447,7 @@ change instanceof Object to is_resource
      public function run($obj)
      {
 -        $obj instanceof \finfo;
-+        is_resource($obj);
++        is_resource($obj) || $obj instanceof \finfo;
      }
  }
 ```

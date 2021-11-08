@@ -5,11 +5,15 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp81\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -19,6 +23,7 @@ final class ObjectToResourceReturn
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
         private NodeNameResolver $nodeNameResolver,
+        private NodeComparator $nodeComparator,
         private NodeFactory $nodeFactory
     ) {
     }
@@ -26,7 +31,7 @@ final class ObjectToResourceReturn
     /**
      * @param string[] $collectionObjectToResource
      */
-    public function refactor(Instanceof_ $instanceof, array $collectionObjectToResource): ?FuncCall
+    public function refactor(Instanceof_ $instanceof, array $collectionObjectToResource): ?BooleanOr
     {
         if (! $instanceof->class instanceof FullyQualified) {
             return null;
@@ -39,22 +44,25 @@ final class ObjectToResourceReturn
             }
 
             $binaryOp = $this->betterNodeFinder->findParentType($instanceof, BinaryOp::class);
-            if ($this->hasIsResourceCheck($binaryOp)) {
+            if ($this->hasIsResourceCheck($instanceof->expr, $binaryOp)) {
                 continue;
             }
 
-            return $this->nodeFactory->createFuncCall('is_resource', [$instanceof->expr]);
+            return new BooleanOr(
+                $this->nodeFactory->createFuncCall('is_resource', [$instanceof->expr]),
+                $instanceof
+            );
         }
 
         return null;
     }
 
-    private function hasIsResourceCheck(?BinaryOp $binaryOp): bool
+    private function hasIsResourceCheck(Expr $expr, ?BinaryOp $binaryOp): bool
     {
         if ($binaryOp instanceof BinaryOp) {
             return (bool) $this->betterNodeFinder->findFirst(
                 $binaryOp,
-                function (Node $subNode): bool {
+                function (Node $subNode) use ($expr): bool {
                     if (! $subNode instanceof FuncCall) {
                         return false;
                     }
@@ -63,7 +71,19 @@ final class ObjectToResourceReturn
                         return false;
                     }
 
-                    return $this->nodeNameResolver->isName($subNode->name, 'is_resource');
+                    if (! $this->nodeNameResolver->isName($subNode->name, 'is_resource')) {
+                        return false;
+                    }
+
+                    if (! isset($subNode->args[0])) {
+                        return false;
+                    }
+
+                    if (! $subNode->args[0] instanceof Arg) {
+                        return false;
+                    }
+
+                    return $this->nodeComparator->areNodesEqual($subNode->args[0], $expr);
                 }
             );
         }

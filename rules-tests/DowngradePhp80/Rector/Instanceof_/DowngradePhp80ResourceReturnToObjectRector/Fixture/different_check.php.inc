@@ -20,7 +20,7 @@ class DifferentCheck
 {
     public function run($obj)
     {
-        is_resource($obj) && rand(0, 1) === 1;
+        (is_resource($obj) || $obj instanceof \CurlHandle) && rand(0, 1) === 1;
     }
 }
 

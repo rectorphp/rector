@@ -28,15 +28,15 @@ class SomeClass
 {
     public function run($obj)
     {
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
-        is_resource($obj);
+        is_resource($obj) || $obj instanceof \finfo;
+        is_resource($obj) || $obj instanceof \FTP\Connection;
+        is_resource($obj) || $obj instanceof \IMAP\Connection;
+        is_resource($obj) || $obj instanceof \PSpell\Config;
+        is_resource($obj) || $obj instanceof \PSpell\Dictionary;
+        is_resource($obj) || $obj instanceof \LDAP\Result;
+        is_resource($obj) || $obj instanceof \LDAP\ResultEntry;
+        is_resource($obj) || $obj instanceof \PgSql\Result;
+        is_resource($obj) || $obj instanceof \PgSql\Lob;
     }
 }
 
