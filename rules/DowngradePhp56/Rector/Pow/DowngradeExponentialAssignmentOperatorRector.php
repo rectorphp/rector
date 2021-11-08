@@ -39,8 +39,8 @@ final class DowngradeExponentialAssignmentOperatorRector extends AbstractRector
      */
     public function refactor(Node $node): Assign
     {
-        $powCall = $this->nodeFactory->createFuncCall('pow', [$node->var, $node->expr]);
+        $powFuncCall = $this->nodeFactory->createFuncCall('pow', [$node->var, $node->expr]);
 
-        return new Assign($node->var, $powCall);
+        return new Assign($node->var, $powFuncCall);
     }
 }

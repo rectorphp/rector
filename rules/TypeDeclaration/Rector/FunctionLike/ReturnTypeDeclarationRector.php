@@ -220,6 +220,12 @@ CODE_SAMPLE
             return false;
         }
 
+        // probably more/less strict union type on purpose
+        if ($currentType->isSubTypeOf($inferedType)
+            ->yes()) {
+            return true;
+        }
+
         return $inferedType->isSubTypeOf($currentType)
             ->yes();
     }

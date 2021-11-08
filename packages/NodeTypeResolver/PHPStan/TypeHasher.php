@@ -30,7 +30,7 @@ final class TypeHasher
     public function createTypeHash(Type $type): string
     {
         if ($type instanceof MixedType) {
-            return serialize($type) . $type->isExplicitMixed();
+            return $type->describe(VerbosityLevel::precise()) . $type->isExplicitMixed();
         }
 
         if ($type instanceof ArrayType) {
