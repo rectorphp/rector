@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211107;
+namespace RectorPrefix20211108;
 
 if (\class_exists('t3lib_tree_LabelEditable')) {
     return;

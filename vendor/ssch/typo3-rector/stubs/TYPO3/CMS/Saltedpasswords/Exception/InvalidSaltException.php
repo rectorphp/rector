@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211107\TYPO3\CMS\Saltedpasswords\Exception;
+namespace RectorPrefix20211108\TYPO3\CMS\Saltedpasswords\Exception;
 
 if (\class_exists('TYPO3\\CMS\\Saltedpasswords\\Exception\\InvalidSaltException')) {
     return;

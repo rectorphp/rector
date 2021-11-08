@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211107;
+namespace RectorPrefix20211108;
 
 if (\class_exists('Apache_Solr_Document')) {
     return;

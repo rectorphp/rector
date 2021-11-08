@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Enum;
 
-use RectorPrefix20211107\MyCLabs\Enum\Enum;
+use RectorPrefix20211108\MyCLabs\Enum\Enum;
 /**
  * @see https://github.com/myclabs/php-enum
  *
@@ -11,7 +11,7 @@ use RectorPrefix20211107\MyCLabs\Enum\Enum;
  * @method static ObjectReference STATIC()
  * @method static ObjectReference PARENT()
  */
-final class ObjectReference extends \RectorPrefix20211107\MyCLabs\Enum\Enum
+final class ObjectReference extends \RectorPrefix20211108\MyCLabs\Enum\Enum
 {
     /**
      * @var string

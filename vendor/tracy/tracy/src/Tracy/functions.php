@@ -5,40 +5,40 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211107;
+namespace RectorPrefix20211108;
 
-if (!\function_exists('RectorPrefix20211107\\dump')) {
+if (!\function_exists('RectorPrefix20211108\\dump')) {
     /**
      * Tracy\Debugger::dump() shortcut.
      * @tracySkipLocation
      */
     function dump($var)
     {
-        \array_map([\RectorPrefix20211107\Tracy\Debugger::class, 'dump'], \func_get_args());
+        \array_map([\RectorPrefix20211108\Tracy\Debugger::class, 'dump'], \func_get_args());
         return $var;
     }
 }
-if (!\function_exists('RectorPrefix20211107\\dumpe')) {
+if (!\function_exists('RectorPrefix20211108\\dumpe')) {
     /**
      * Tracy\Debugger::dump() & exit shortcut.
      * @tracySkipLocation
      */
     function dumpe($var) : void
     {
-        \array_map([\RectorPrefix20211107\Tracy\Debugger::class, 'dump'], \func_get_args());
-        if (!\RectorPrefix20211107\Tracy\Debugger::$productionMode) {
+        \array_map([\RectorPrefix20211108\Tracy\Debugger::class, 'dump'], \func_get_args());
+        if (!\RectorPrefix20211108\Tracy\Debugger::$productionMode) {
             exit;
         }
     }
 }
-if (!\function_exists('RectorPrefix20211107\\bdump')) {
+if (!\function_exists('RectorPrefix20211108\\bdump')) {
     /**
      * Tracy\Debugger::barDump() shortcut.
      * @tracySkipLocation
      */
     function bdump($var)
     {
-        \RectorPrefix20211107\Tracy\Debugger::barDump(...\func_get_args());
+        \RectorPrefix20211108\Tracy\Debugger::barDump(...\func_get_args());
         return $var;
     }
 }

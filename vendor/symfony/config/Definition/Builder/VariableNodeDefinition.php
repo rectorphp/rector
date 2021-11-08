@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211107\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20211108\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20211107\Symfony\Component\Config\Definition\VariableNode;
+use RectorPrefix20211108\Symfony\Component\Config\Definition\VariableNode;
 /**
  * This class provides a fluent interface for defining a node.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class VariableNodeDefinition extends \RectorPrefix20211107\Symfony\Component\Config\Definition\Builder\NodeDefinition
+class VariableNodeDefinition extends \RectorPrefix20211108\Symfony\Component\Config\Definition\Builder\NodeDefinition
 {
     /**
      * Instantiate a Node.
@@ -25,7 +25,7 @@ class VariableNodeDefinition extends \RectorPrefix20211107\Symfony\Component\Con
      */
     protected function instantiateNode()
     {
-        return new \RectorPrefix20211107\Symfony\Component\Config\Definition\VariableNode($this->name, $this->parent, $this->pathSeparator);
+        return new \RectorPrefix20211108\Symfony\Component\Config\Definition\VariableNode($this->name, $this->parent, $this->pathSeparator);
     }
     /**
      * {@inheritdoc}

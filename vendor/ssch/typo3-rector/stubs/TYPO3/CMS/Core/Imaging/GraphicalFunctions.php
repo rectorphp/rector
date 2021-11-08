@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211107\TYPO3\CMS\Core\Imaging;
+namespace RectorPrefix20211108\TYPO3\CMS\Core\Imaging;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Imaging\\GraphicalFunctions')) {
     return;

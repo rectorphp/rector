@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211107\TYPO3\CMS\Backend\Form\Wizard;
+namespace RectorPrefix20211108\TYPO3\CMS\Backend\Form\Wizard;
 
 if (\class_exists('TYPO3\\CMS\\Backend\\Form\\Wizard\\ImageManipulationWizard')) {
     return;

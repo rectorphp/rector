@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211107;
+namespace RectorPrefix20211108;
 
-use RectorPrefix20211107\Symplify\EasyTesting\Kernel\EasyTestingKernel;
-use RectorPrefix20211107\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun;
+use RectorPrefix20211108\Symplify\EasyTesting\Kernel\EasyTestingKernel;
+use RectorPrefix20211108\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun;
 $possibleAutoloadPaths = [
     // dependency
     __DIR__ . '/../../../autoload.php',
@@ -19,5 +19,5 @@ foreach ($possibleAutoloadPaths as $possibleAutoloadPath) {
         break;
     }
 }
-$kernelBootAndApplicationRun = new \RectorPrefix20211107\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun(\RectorPrefix20211107\Symplify\EasyTesting\Kernel\EasyTestingKernel::class);
+$kernelBootAndApplicationRun = new \RectorPrefix20211108\Symplify\SymplifyKernel\ValueObject\KernelBootAndApplicationRun(\RectorPrefix20211108\Symplify\EasyTesting\Kernel\EasyTestingKernel::class);
 $kernelBootAndApplicationRun->run();
