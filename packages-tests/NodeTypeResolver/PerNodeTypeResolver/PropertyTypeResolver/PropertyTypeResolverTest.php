@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
@@ -52,7 +51,11 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         $unionType = new UnionType([new ObjectType(SomeChild::class), new NullType()]);
         yield [__DIR__ . '/Source/ActionClass.php', 0, $unionType];
 
-        $unionType = new UnionType([new ConstantStringType(Enum::MODE_ADD), new ConstantStringType(Enum::MODE_EDIT), new ConstantStringType(Enum::MODE_CLONE)]);
+        $unionType = new UnionType([
+            new ConstantStringType(Enum::MODE_ADD),
+            new ConstantStringType(Enum::MODE_EDIT),
+            new ConstantStringType(Enum::MODE_CLONE),
+        ]);
         yield [__DIR__ . '/Source/Enum.php', 0, $unionType];
     }
 

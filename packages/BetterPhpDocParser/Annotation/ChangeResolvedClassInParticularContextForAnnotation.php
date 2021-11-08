@@ -5,21 +5,21 @@ declare(strict_types=1);
 namespace Rector\BetterPhpDocParser\Annotation;
 
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\ChangeResolvedClassInParticularContextForAnnotationRule;
+use Rector\BetterPhpDocParser\ValueObject\ChangeResolvedClassInParticularContext;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 
 final class ChangeResolvedClassInParticularContextForAnnotation
 {
     /**
-     * @var ChangeResolvedClassInParticularContextForAnnotationRule[]
+     * @var ChangeResolvedClassInParticularContext[]
      */
-    private array $rules;
+    private array $rules = [];
 
     public function __construct()
     {
         $this->rules = [
-            new ChangeResolvedClassInParticularContextForAnnotationRule(
+            new ChangeResolvedClassInParticularContext(
                 'Doctrine\ORM\Mapping\JoinTable',
                 'inverseJoinColumns',
                 'Doctrine\ORM\Mapping\InverseJoinColumns'
@@ -29,31 +29,43 @@ final class ChangeResolvedClassInParticularContextForAnnotation
 
     public function changeResolvedClassIfNeed(
         AnnotationToAttribute $annotationToAttribute,
-        DoctrineAnnotationTagValueNode $docNode
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): void {
         foreach ($this->rules as $rule) {
-            $this->applyRule($docNode, $rule, $annotationToAttribute);
+            $this->applyRule($doctrineAnnotationTagValueNode, $rule, $annotationToAttribute);
         }
     }
 
     private function applyRule(
-        DoctrineAnnotationTagValueNode $docNode,
-        ChangeResolvedClassInParticularContextForAnnotationRule $rule,
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
+        ChangeResolvedClassInParticularContext $changeResolvedClassInParticularContext,
         AnnotationToAttribute $annotationToAttribute
     ): void {
-        $docNodeValue = $docNode->getValue($rule->getValue());
+        $docNodeValue = $doctrineAnnotationTagValueNode->getValue(
+            $changeResolvedClassInParticularContext->getValue()
+        );
+        if ($annotationToAttribute->getTag() !== $changeResolvedClassInParticularContext->getTag()) {
+            return;
+        }
 
-        if ($annotationToAttribute->getTag() !== $rule->getTag() || ! ($docNodeValue instanceof CurlyListNode)) {
+        if (! ($docNodeValue instanceof CurlyListNode)) {
             return;
         }
 
         $toTraverse = [$docNodeValue->getValues(), $docNodeValue->getOriginalValues()];
 
-        foreach ($toTraverse as $tmp) {
-            if (! array_key_exists(0, $tmp) && ! ($tmp[0] instanceof DoctrineAnnotationTagValueNode)) {
+        foreach ($toTraverse as $singleToTraverse) {
+            if (! array_key_exists(
+                0,
+                $singleToTraverse
+            ) && ! ($singleToTraverse[0] instanceof DoctrineAnnotationTagValueNode)) {
                 continue;
             }
-            $tmp[0]->identifierTypeNode->setAttribute('resolved_class', $rule->getResolvedClass());
+
+            $singleToTraverse[0]->identifierTypeNode->setAttribute(
+                'resolved_class',
+                $changeResolvedClassInParticularContext->getResolvedClass()
+            );
         }
     }
 }
