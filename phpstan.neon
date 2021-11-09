@@ -43,6 +43,7 @@ parameters:
     excludePaths:
         # temporary stinrgable migration from template type provider
         - src/Console/Command/InitCommand.php
+        - bin/generate-changelog.php
 
         - */config.php
         - tests/debug_functions.php

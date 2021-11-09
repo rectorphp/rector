@@ -53,6 +53,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
+        "nategood/httpful": "^0.3.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^1.0",
         "phpstan/phpstan-webmozart-assert": "^1.0",
@@ -142,7 +143,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-main": "0.11-dev"
+            "dev-main": "0.12-dev"
         }
     },
     "config": {
