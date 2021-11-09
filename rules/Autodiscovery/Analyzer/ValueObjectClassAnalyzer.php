@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ValueObjectClassAnalyzer
@@ -24,7 +25,8 @@ final class ValueObjectClassAnalyzer
         private NodeTypeResolver $nodeTypeResolver,
         private PhpDocInfoFactory $phpDocInfoFactory,
         private AstResolver $astResolver,
-        private ClassAnalyzer $classAnalyzer
+        private ClassAnalyzer $classAnalyzer,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -35,7 +37,7 @@ final class ValueObjectClassAnalyzer
         }
 
         /** @var string $className */
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
 
         if (isset($this->valueObjectStatusByClassName[$className])) {
             return $this->valueObjectStatusByClassName[$className];

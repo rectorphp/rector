@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
@@ -17,7 +18,8 @@ final class UsedImportsResolver
 {
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
-        private UseImportsTraverser $useImportsTraverser
+        private UseImportsTraverser $useImportsTraverser,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -52,7 +54,7 @@ final class UsedImportsResolver
         // add class itself
         // is not anonymous class
         if ($class !== null && property_exists($class, 'namespacedName')) {
-            $className = $class->namespacedName->toString();
+            $className = (string) $this->nodeNameResolver->getName($class);
             $usedImports[] = new FullyQualifiedObjectType($className);
         }
 

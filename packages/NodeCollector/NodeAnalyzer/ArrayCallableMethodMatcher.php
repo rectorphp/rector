@@ -149,7 +149,7 @@ final class ArrayCallableMethodMatcher
                 return new MixedType();
             }
 
-            $classConstantReference = $classLike->namespacedName->toString();
+            $classConstantReference = (string) $this->nodeNameResolver->getName($classLike);
         }
 
         // non-class value

@@ -8,11 +8,13 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class ControllerClassMethodAnalyzer
 {
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -23,7 +25,7 @@ final class ControllerClassMethodAnalyzer
             return false;
         }
 
-        $className = $class->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($class);
         if (! is_string($className)) {
             return false;
         }

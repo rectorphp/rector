@@ -205,7 +205,7 @@ final class ClassRenamer
             return null;
         }
 
-        $currentName = $classLike->namespacedName->toString();
+        $currentName = (string) $this->nodeNameResolver->getName($classLike);
         $newClassFullyQualified = $oldToNewClasses[$currentName];
 
         if ($this->reflectionProvider->hasClass($newClassFullyQualified)) {
@@ -233,7 +233,7 @@ final class ClassRenamer
         // rename interfaces
         $this->renameClassImplements($classLike, $oldToNewClasses);
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
 
         $newName = $oldToNewClasses[$className] ?? null;
         if (! $newName) {

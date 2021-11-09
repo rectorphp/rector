@@ -49,7 +49,7 @@ final class ReflectionResolver
             );
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         return $this->reflectionProvider->getClass($className);
     }
 
@@ -137,7 +137,7 @@ final class ReflectionResolver
             return null;
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($classLike);
         if (! is_string($className)) {
             return null;
         }

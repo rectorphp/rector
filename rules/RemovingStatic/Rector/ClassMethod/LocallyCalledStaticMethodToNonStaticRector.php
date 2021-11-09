@@ -157,7 +157,7 @@ CODE_SAMPLE
             return false;
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
 
         $objectType = new ObjectType($className);
         $callerType = $this->nodeTypeResolver->getType($staticCall->class);

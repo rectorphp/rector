@@ -131,7 +131,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (! $this->reflectionProvider->hasClass($className)) {
             return true;
         }

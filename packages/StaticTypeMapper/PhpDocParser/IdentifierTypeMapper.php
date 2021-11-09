@@ -20,6 +20,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
@@ -33,7 +34,8 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         private ObjectTypeSpecifier $objectTypeSpecifier,
         private ScalarStringToTypeMapper $scalarStringToTypeMapper,
         private ParentClassScopeResolver $parentClassScopeResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -97,7 +99,7 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         // @todo check FQN
-        $className = $classLike->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($classLike);
         if (! is_string($className)) {
             // self outside the class, e.g. in a function
             return new MixedType();

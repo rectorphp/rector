@@ -93,7 +93,7 @@ final class VariableManipulator
             return false;
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         if (! \str_ends_with($className, 'Test')) {
             return false;
         }

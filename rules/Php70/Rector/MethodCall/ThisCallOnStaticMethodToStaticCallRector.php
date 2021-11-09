@@ -111,7 +111,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
 
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if (! $isStaticMethod) {

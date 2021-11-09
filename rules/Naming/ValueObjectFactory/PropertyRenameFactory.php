@@ -30,7 +30,7 @@ final class PropertyRenameFactory
             return null;
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
 
         return new PropertyRename(
             $property,

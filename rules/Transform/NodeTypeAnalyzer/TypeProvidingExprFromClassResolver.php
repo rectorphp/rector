@@ -45,7 +45,7 @@ final class TypeProvidingExprFromClassResolver
         ClassMethod | Function_ $functionLike,
         ObjectType $objectType
     ): ?Expr {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
 
         // A. match a method
         $classReflection = $this->reflectionProvider->getClass($className);

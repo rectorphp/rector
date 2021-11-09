@@ -18,6 +18,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class SingletonClassMethodAnalyzer
@@ -27,6 +28,7 @@ final class SingletonClassMethodAnalyzer
         private ValueResolver $valueResolver,
         private NodeComparator $nodeComparator,
         private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -81,7 +83,7 @@ final class SingletonClassMethodAnalyzer
             return null;
         }
 
-        $className = $class->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($class);
         if (! is_string($className)) {
             return null;
         }

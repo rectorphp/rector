@@ -91,7 +91,7 @@ final class ReturnTypeAlreadyAddedChecker
             return false;
         }
 
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
 
         $nodeContent = $this->nodeComparator->printWithoutComments($returnNode);
         $nodeContentWithoutPreslash = ltrim($nodeContent, '\\');

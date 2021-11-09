@@ -64,7 +64,7 @@ final class IsClassMethodUsedAnalyzer
 
     private function isClassMethodUsedInLocalStaticCall(Class_ $class, string $classMethodName): bool
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
 
         /** @var StaticCall[] $staticCalls */
         $staticCalls = $this->betterNodeFinder->findInstanceOf($class, StaticCall::class);
@@ -73,7 +73,7 @@ final class IsClassMethodUsedAnalyzer
 
     private function isClassMethodCalledInLocalMethodCall(Class_ $class, string $classMethodName): bool
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
 
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);

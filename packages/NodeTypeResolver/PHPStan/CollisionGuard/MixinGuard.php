@@ -11,12 +11,14 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class MixinGuard
 {
     public function __construct(
         private BetterNodeFinder $betterNodeFinder,
         private ReflectionProvider $reflectionProvider,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -34,7 +36,9 @@ final class MixinGuard
                 return false;
             }
 
-            $className = $node instanceof FullyQualified ? $node->toString() : $node->namespacedName->toString();
+            $className = $node instanceof FullyQualified ? $node->toString() : (string) $this->nodeNameResolver->getName(
+                $node
+            );
 
             return $this->isCircularMixin($className);
         });

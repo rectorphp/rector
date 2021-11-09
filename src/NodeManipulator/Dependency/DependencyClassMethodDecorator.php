@@ -15,6 +15,7 @@ use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class DependencyClassMethodDecorator
@@ -24,7 +25,8 @@ final class DependencyClassMethodDecorator
         private PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
         private ReflectionProvider $reflectionProvider,
         private AstResolver $astResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -36,7 +38,7 @@ final class DependencyClassMethodDecorator
         ClassMethod $classMethod,
         Scope $scope
     ): void {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (! $this->reflectionProvider->hasClass($className)) {
             return;
         }

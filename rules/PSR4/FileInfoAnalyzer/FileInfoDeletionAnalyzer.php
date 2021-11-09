@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\ValueObject\Application\File;
+use Rector\NodeNameResolver\NodeNameResolver;
 
 final class FileInfoDeletionAnalyzer
 {
@@ -18,13 +19,14 @@ final class FileInfoDeletionAnalyzer
     private const TESTING_PREFIX_REGEX = '#input_(.*?)_#';
 
     public function __construct(
-        private ClassNaming $classNaming
+        private ClassNaming $classNaming,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
     public function isClassLikeAndFileInfoMatch(File $file, ClassLike $classLike): bool
     {
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $smartFileInfo = $file->getSmartFileInfo();
 
         $baseFileName = $this->clearNameFromTestingPrefix($smartFileInfo->getBasenameWithoutSuffix());

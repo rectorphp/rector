@@ -17,6 +17,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -28,6 +29,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     public function __construct(
         private ReflectionProvider $reflectionProvider,
         private BetterNodeFinder $betterNodeFinder,
+        private NodeNameResolver $nodeNameResolver
     ) {
     }
 
@@ -64,7 +66,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
             return new MixedType();
         }
 
-        $className = $class->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($class);
         if (! is_string($className)) {
             return new MixedType();
         }
@@ -105,7 +107,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
                 return $name->toString();
             }
 
-            return $classLike->namespacedName->toString();
+            return (string) $this->nodeNameResolver->getName($classLike);
         }
 
         /** @var Name|null $resolvedNameNode */

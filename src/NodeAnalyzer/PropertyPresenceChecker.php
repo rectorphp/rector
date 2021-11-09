@@ -40,7 +40,7 @@ final class PropertyPresenceChecker
 
     public function getClassContextProperty(Class_ $class, PropertyMetadata $propertyMetadata): Property | Param | null
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
         }
