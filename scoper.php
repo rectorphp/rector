@@ -13,7 +13,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 // [BEWARE] this path is relative to the root and location of this file
 $filePathsToRemoveNamespace = [
     // @see https://github.com/rectorphp/rector/issues/2852#issuecomment-586315588
-    'vendor/symfony/deprecation-contracts/function.php',
+    'vendor/symfony/contracts/Deprecation/function.php',
     // it would make polyfill function work only with namespace = brokes
     'vendor/symfony/polyfill-ctype/bootstrap.php',
     'vendor/symfony/polyfill-ctype/bootstrap80.php',
