@@ -145,7 +145,7 @@ final class ArrayCallableMethodMatcher
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 return new \PHPStan\Type\MixedType();
             }
-            $classConstantReference = $classLike->namespacedName->toString();
+            $classConstantReference = (string) $this->nodeNameResolver->getName($classLike);
         }
         // non-class value
         if (!\is_string($classConstantReference)) {

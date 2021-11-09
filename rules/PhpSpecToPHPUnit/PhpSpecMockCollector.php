@@ -50,7 +50,7 @@ final class PhpSpecMockCollector
      */
     public function resolveClassMocksFromParam(\PhpParser\Node\Stmt\Class_ $class) : array
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (isset($this->mocks[$className]) && $this->mocks[$className] !== []) {
             return $this->mocks[$className];
         }
@@ -74,12 +74,12 @@ final class PhpSpecMockCollector
     public function isVariableMockInProperty(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Variable $variable) : bool
     {
         $variableName = $this->nodeNameResolver->getName($variable);
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         return \in_array($variableName, $this->propertyMocksByClass[$className] ?? [], \true);
     }
     public function getTypeForClassAndVariable(\PhpParser\Node\Stmt\Class_ $class, string $variable) : string
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (!isset($this->mocksWithsTypes[$className][$variable])) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
@@ -92,7 +92,7 @@ final class PhpSpecMockCollector
     private function addMockFromParam(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Param $param) : void
     {
         $variable = $this->nodeNameResolver->getName($param->var);
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         $classMethod = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();

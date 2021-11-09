@@ -97,13 +97,13 @@ final class PhpSpecRenaming
     public function resolveTestedClass(\PhpParser\Node $node) : string
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
-            $className = $node->namespacedName->toString();
+            $className = (string) $this->nodeNameResolver->getName($node);
         } else {
             $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $className = $classLike->namespacedName->toString();
+            $className = (string) $this->nodeNameResolver->getName($classLike);
         }
         $newClassName = \Rector\Core\Util\StaticRectorStrings::removePrefixes($className, ['spec\\']);
         return \Rector\Core\Util\StaticRectorStrings::removeSuffixes($newClassName, [self::SPEC]);

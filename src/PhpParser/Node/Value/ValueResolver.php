@@ -95,7 +95,7 @@ final class ValueResolver
                 // @todo scope is needed
                 $classLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassLike::class);
                 if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
-                    return $classLike->namespacedName->toString();
+                    return (string) $this->nodeNameResolver->getName($classLike);
                 }
             }
             if ($this->nodeNameResolver->isName($expr->name, 'class')) {
@@ -254,7 +254,7 @@ final class ValueResolver
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            $class = $classLike->namespacedName->toString();
+            $class = (string) $this->nodeNameResolver->getName($classLike);
         }
         if ($constant === 'class') {
             return $class;

@@ -65,7 +65,7 @@ final class ReflectionResolver
         if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && $this->isAnonymousClass($classLike)) {
             return $this->reflectionProvider->getAnonymousClassReflection($classLike, $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         return $this->reflectionProvider->getClass($className);
     }
     /**
@@ -138,7 +138,7 @@ final class ReflectionResolver
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        $className = $classLike->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($classLike);
         if (!\is_string($className)) {
             return null;
         }

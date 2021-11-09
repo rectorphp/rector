@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ValueObjectClassAnalyzer
 {
@@ -33,12 +34,17 @@ final class ValueObjectClassAnalyzer
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->astResolver = $astResolver;
         $this->classAnalyzer = $classAnalyzer;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     public function isValueObjectClass(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
@@ -46,7 +52,7 @@ final class ValueObjectClassAnalyzer
             return \false;
         }
         /** @var string $className */
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (isset($this->valueObjectStatusByClassName[$className])) {
             return $this->valueObjectStatusByClassName[$className];
         }

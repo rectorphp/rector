@@ -103,7 +103,7 @@ final class VariableManipulator
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \false;
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         if (\substr_compare($className, 'Test', -\strlen('Test')) !== 0) {
             return \false;
         }

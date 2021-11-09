@@ -55,7 +55,7 @@ final class PropertyPresenceChecker
      */
     public function getClassContextProperty(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }

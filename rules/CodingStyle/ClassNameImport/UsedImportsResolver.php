@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UsedImportsResolver
@@ -21,10 +22,15 @@ final class UsedImportsResolver
      * @var \Rector\CodingStyle\ClassNameImport\UseImportsTraverser
      */
     private $useImportsTraverser;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsTraverser = $useImportsTraverser;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
@@ -49,7 +55,7 @@ final class UsedImportsResolver
         // add class itself
         // is not anonymous class
         if ($class !== null && \property_exists($class, 'namespacedName')) {
-            $className = $class->namespacedName->toString();
+            $className = (string) $this->nodeNameResolver->getName($class);
             $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }
         $this->useImportsTraverser->traverserStmts($stmts, function (\PhpParser\Node\Stmt\UseUse $useUse, string $name) use(&$usedImports) : void {

@@ -185,7 +185,7 @@ final class ShortNameResolver
         if (!$firstClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        $className = $firstClassLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($firstClassLike);
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }

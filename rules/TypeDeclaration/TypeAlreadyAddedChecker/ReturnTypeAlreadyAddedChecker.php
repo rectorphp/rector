@@ -96,7 +96,7 @@ final class ReturnTypeAlreadyAddedChecker
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \false;
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $nodeContent = $this->nodeComparator->printWithoutComments($returnNode);
         $nodeContentWithoutPreslash = \ltrim($nodeContent, '\\');
         return $nodeContentWithoutPreslash === $className;

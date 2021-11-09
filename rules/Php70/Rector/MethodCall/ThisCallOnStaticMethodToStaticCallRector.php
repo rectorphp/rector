@@ -101,7 +101,7 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
         if (!$isStaticMethod) {
             return null;

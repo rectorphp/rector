@@ -22,6 +22,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
@@ -40,11 +41,16 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return class-string<Node>
@@ -85,7 +91,7 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return new \PHPStan\Type\MixedType();
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $classReflection = $this->reflectionProvider->getClass($className);
         if ($reference === \Rector\Core\Enum\ObjectReference::STATIC()->getValue()) {
             return new \PHPStan\Type\StaticType($classReflection);

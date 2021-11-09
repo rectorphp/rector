@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class MixinGuard
 {
     /**
@@ -20,10 +21,15 @@ final class MixinGuard
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionProvider = $reflectionProvider;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @param Stmt[] $stmts
@@ -37,7 +43,7 @@ final class MixinGuard
             if ($node instanceof \PhpParser\Node\Stmt\Class_ && $node->isAnonymous()) {
                 return \false;
             }
-            $className = $node instanceof \PhpParser\Node\Name\FullyQualified ? $node->toString() : $node->namespacedName->toString();
+            $className = $node instanceof \PhpParser\Node\Name\FullyQualified ? $node->toString() : (string) $this->nodeNameResolver->getName($node);
             return $this->isCircularMixin($className);
         });
     }

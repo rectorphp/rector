@@ -130,7 +130,7 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \false;
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $objectType = new \PHPStan\Type\ObjectType($className);
         $callerType = $this->nodeTypeResolver->getType($staticCall->class);
         return $objectType->equals($callerType);

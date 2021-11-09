@@ -79,14 +79,14 @@ final class IsClassMethodUsedAnalyzer
     }
     private function isClassMethodUsedInLocalStaticCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         /** @var StaticCall[] $staticCalls */
         $staticCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\StaticCall::class);
         return $this->callCollectionAnalyzer->isExists($staticCalls, $classMethodName, $className);
     }
     private function isClassMethodCalledInLocalMethodCall(\PhpParser\Node\Stmt\Class_ $class, string $classMethodName) : bool
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         /** @var MethodCall[] $methodCalls */
         $methodCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\MethodCall::class);
         return $this->callCollectionAnalyzer->isExists($methodCalls, $classMethodName, $className);

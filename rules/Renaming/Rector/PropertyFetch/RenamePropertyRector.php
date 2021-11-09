@@ -70,7 +70,7 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
     }
     private function renameProperty(\PhpParser\Node\Stmt\ClassLike $classLike, \Rector\Renaming\ValueObject\RenameProperty $renameProperty) : void
     {
-        $classLikeName = $classLike->namespacedName->toString();
+        $classLikeName = (string) $this->nodeNameResolver->getName($classLike);
         $renamePropertyObjectType = $renameProperty->getObjectType();
         $className = $renamePropertyObjectType->getClassName();
         $classLikeNameObjectType = new \PHPStan\Type\ObjectType($classLikeName);

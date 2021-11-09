@@ -7,6 +7,7 @@ use RectorPrefix20211109\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\ValueObject\Application\File;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class FileInfoDeletionAnalyzer
 {
     /**
@@ -18,13 +19,18 @@ final class FileInfoDeletionAnalyzer
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
-    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->classNaming = $classNaming;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     public function isClassLikeAndFileInfoMatch(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Stmt\ClassLike $classLike) : bool
     {
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $smartFileInfo = $file->getSmartFileInfo();
         $baseFileName = $this->clearNameFromTestingPrefix($smartFileInfo->getBasenameWithoutSuffix());
         $classShortName = $this->classNaming->getShortName($className);

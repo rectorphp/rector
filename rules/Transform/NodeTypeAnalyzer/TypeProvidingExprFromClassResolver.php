@@ -56,7 +56,7 @@ final class TypeProvidingExprFromClassResolver
      */
     public function resolveTypeProvidingExprFromClass(\PhpParser\Node\Stmt\Class_ $class, $functionLike, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr
     {
-        $className = $class->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($class);
         // A. match a method
         $classReflection = $this->reflectionProvider->getClass($className);
         $methodCallProvidingType = $this->resolveMethodCallProvidingType($classReflection, $objectType);

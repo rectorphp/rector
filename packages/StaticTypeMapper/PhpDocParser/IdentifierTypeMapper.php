@@ -19,6 +19,7 @@ use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
@@ -43,12 +44,17 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return class-string<TypeNode>
@@ -102,7 +108,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
             return new \PHPStan\Type\MixedType();
         }
         // @todo check FQN
-        $className = $classLike->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($classLike);
         if (!\is_string($className)) {
             // self outside the class, e.g. in a function
             return new \PHPStan\Type\MixedType();

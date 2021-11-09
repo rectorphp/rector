@@ -16,6 +16,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -31,10 +32,15 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return array<class-string<Node>>
@@ -66,7 +72,7 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return new \PHPStan\Type\MixedType();
         }
-        $className = $class->namespacedName->toString();
+        $className = $this->nodeNameResolver->getName($class);
         if (!\is_string($className)) {
             return new \PHPStan\Type\MixedType();
         }
@@ -94,7 +100,7 @@ final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTy
             if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
                 return $name->toString();
             }
-            return $classLike->namespacedName->toString();
+            return (string) $this->nodeNameResolver->getName($classLike);
         }
         /** @var Name|null $resolvedNameNode */
         $resolvedNameNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME);

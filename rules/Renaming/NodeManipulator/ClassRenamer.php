@@ -208,7 +208,7 @@ final class ClassRenamer
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        $currentName = $classLike->namespacedName->toString();
+        $currentName = (string) $this->nodeNameResolver->getName($classLike);
         $newClassFullyQualified = $oldToNewClasses[$currentName];
         if ($this->reflectionProvider->hasClass($newClassFullyQualified)) {
             return null;
@@ -229,7 +229,7 @@ final class ClassRenamer
     {
         // rename interfaces
         $this->renameClassImplements($classLike, $oldToNewClasses);
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         $newName = $oldToNewClasses[$className] ?? null;
         if (!$newName) {
             return null;

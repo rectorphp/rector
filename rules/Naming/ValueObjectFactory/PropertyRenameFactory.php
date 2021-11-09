@@ -33,7 +33,7 @@ final class PropertyRenameFactory
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
-        $className = $classLike->namespacedName->toString();
+        $className = (string) $this->nodeNameResolver->getName($classLike);
         return new \Rector\Naming\ValueObject\PropertyRename($property, $expectedName, $currentName, $classLike, $className, $property->props[0]);
     }
 }
