@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject\Reporting;
 
-use RectorPrefix20211108\Nette\Utils\Strings;
+use RectorPrefix20211109\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Parallel\Contract\SerializableInterface;
@@ -92,7 +92,7 @@ final class FileDiff implements \Rector\Parallel\Contract\SerializableInterface
     }
     public function getFirstLineNumber() : ?int
     {
-        $match = \RectorPrefix20211108\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
+        $match = \RectorPrefix20211109\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
         // probably some error in diff
         if (!isset($match[self::FIRST_LINE_KEY])) {
             return null;

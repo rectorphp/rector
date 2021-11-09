@@ -33,7 +33,7 @@
         "nette\/mail": "^3.0",
         "nette\/tester": "^2.2",
         "latte\/latte": "^2.5",
-        "psr\/log": "^1.0",
+        "psr\/log": "^1.0 || ^2.0 || ^3.0",
         "phpstan\/phpstan": "^0.12"
     },
     "conflict": {

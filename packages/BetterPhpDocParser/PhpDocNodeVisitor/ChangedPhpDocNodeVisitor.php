@@ -5,8 +5,8 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use RectorPrefix20211108\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ChangedPhpDocNodeVisitor extends \RectorPrefix20211108\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20211109\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class ChangedPhpDocNodeVisitor extends \RectorPrefix20211109\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var bool

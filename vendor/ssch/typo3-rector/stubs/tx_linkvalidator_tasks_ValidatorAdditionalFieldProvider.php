@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211108;
+namespace RectorPrefix20211109;
 
 if (\class_exists('tx_linkvalidator_tasks_ValidatorAdditionalFieldProvider')) {
     return;

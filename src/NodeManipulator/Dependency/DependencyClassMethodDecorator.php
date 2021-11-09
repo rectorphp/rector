@@ -14,7 +14,7 @@ use Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
-use RectorPrefix20211108\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211109\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class DependencyClassMethodDecorator
 {
     /**
@@ -37,7 +37,7 @@ final class DependencyClassMethodDecorator
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20211108\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20211109\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFactory = $nodeFactory;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;

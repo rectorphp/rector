@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
-use RectorPrefix20211108\Nette\Utils\Strings;
+use RectorPrefix20211109\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
@@ -132,9 +132,9 @@ CODE_SAMPLE
         }
         /** @var String_ $string */
         $string = $arg->value;
-        $string->value = \RectorPrefix20211108\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
+        $string->value = \RectorPrefix20211109\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
             $printedString = $this->betterStandardPrinter->print($string);
-            if (\RectorPrefix20211108\Nette\Utils\Strings::match($printedString, self::DOUBLE_QUOTED_REGEX)) {
+            if (\RectorPrefix20211109\Nette\Utils\Strings::match($printedString, self::DOUBLE_QUOTED_REGEX)) {
                 $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN, \true);
             }
             $innerPattern = $match['content'];

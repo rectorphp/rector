@@ -142,7 +142,7 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 			<?php endif ?>
 
 
-			<?php if ($ex instanceof \ErrorException && isset($ex->context) && is_array($ex->context)):?>
+			<?php if ($ex instanceof \ErrorException && !empty($ex->context) && is_array($ex->context)):?>
 			<div class="panel">
 			<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Variables</a></h2>
 
@@ -268,7 +268,7 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 		<?php endif ?>
 
 
-		<?php if (PHP_SAPI === 'cli'): ?>
+		<?php if (Helpers::isCli()): ?>
 		<div class="panel">
 		<h2><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">CLI request</a></h2>
 
@@ -331,7 +331,7 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 			<div class="outer">
 			<table class="tracy-sortable">
 			<?php
-			foreach (headers_list() as $s) { $s = explode(':', $s, 2); echo '<tr><th>', Helpers::escapeHtml($s[0]), '</th><td>', Helpers::escapeHtml(trim($s[1])), "</td></tr>\n"; }
+			foreach (headers_list() as $s) { $s = explode(':', $s, 2); echo '<tr><th>', Helpers::escapeHtml($s[0]), '</th><td>', $dump(trim($s[1]), $s[0]), "</td></tr>\n"; }
 			?>
 			</table>
 			</div>

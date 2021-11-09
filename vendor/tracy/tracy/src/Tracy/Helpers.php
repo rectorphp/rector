@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211108\Tracy;
+namespace RectorPrefix20211109\Tracy;
 
 /**
  * Rendering helpers for Debugger.
@@ -19,7 +19,7 @@ class Helpers
      */
     public static function editorLink($file, $line = null) : string
     {
-        $file = \strtr($origFile = $file, \RectorPrefix20211108\Tracy\Debugger::$editorMapping);
+        $file = \strtr($origFile = $file, \RectorPrefix20211109\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
             $file = \strtr($file, '\\', '/');
             if (\preg_match('#(^[a-z]:)?/.{1,40}$#i', $file, $m) && \strlen($file) > \strlen($m[0])) {
@@ -41,10 +41,10 @@ class Helpers
      */
     public static function editorUri($file, $line = null, $action = 'open', $search = '', $replace = '') : ?string
     {
-        if (\RectorPrefix20211108\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
+        if (\RectorPrefix20211109\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
-            $file = \strtr($file, \RectorPrefix20211108\Tracy\Debugger::$editorMapping);
-            return \strtr(\RectorPrefix20211108\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
+            $file = \strtr($file, \RectorPrefix20211109\Tracy\Debugger::$editorMapping);
+            return \strtr(\RectorPrefix20211109\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
         }
         return null;
     }
@@ -114,10 +114,12 @@ class Helpers
     /** @internal */
     public static function getSource() : string
     {
-        if (isset($_SERVER['REQUEST_URI'])) {
+        if (self::isCli()) {
+            return 'CLI (PID: ' . \getmypid() . ')' . (isset($_SERVER['argv']) ? ': ' . \implode(' ', \array_map([self::class, 'escapeArg'], $_SERVER['argv'])) : '');
+        } elseif (isset($_SERVER['REQUEST_URI'])) {
             return (!empty($_SERVER['HTTPS']) && \strcasecmp($_SERVER['HTTPS'], 'off') ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? '') . $_SERVER['REQUEST_URI'];
         } else {
-            return 'CLI (PID: ' . \getmypid() . ')' . (isset($_SERVER['argv']) ? ': ' . \implode(' ', \array_map([self::class, 'escapeArg'], $_SERVER['argv'])) : '');
+            return \PHP_SAPI;
         }
     }
     /** @internal
@@ -125,7 +127,7 @@ class Helpers
     public static function improveException($e) : void
     {
         $message = $e->getMessage();
-        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211108\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
+        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211109\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
             // do nothing
         } elseif (\preg_match('#^Call to undefined function (\\S+\\\\)?(\\w+)\\(#', $message, $m)) {
             $funcs = \array_merge(\get_defined_functions()['internal'], \get_defined_functions()['user']);
@@ -228,12 +230,17 @@ class Helpers
     /** @internal */
     public static function isHtmlMode() : bool
     {
-        return empty($_SERVER['HTTP_X_REQUESTED_WITH']) && empty($_SERVER['HTTP_X_TRACY_AJAX']) && \PHP_SAPI !== 'cli' && !\preg_match('#^Content-Type: (?!text/html)#im', \implode("\n", \headers_list()));
+        return empty($_SERVER['HTTP_X_REQUESTED_WITH']) && empty($_SERVER['HTTP_X_TRACY_AJAX']) && !self::isCli() && !\preg_match('#^Content-Type: (?!text/html)#im', \implode("\n", \headers_list()));
     }
     /** @internal */
     public static function isAjax() : bool
     {
         return isset($_SERVER['HTTP_X_TRACY_AJAX']) && \preg_match('#^\\w{10,15}$#D', $_SERVER['HTTP_X_TRACY_AJAX']);
+    }
+    /** @internal */
+    public static function isCli() : bool
+    {
+        return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
     }
     /** @internal */
     public static function getNonce() : ?string
@@ -272,26 +279,33 @@ class Helpers
      * @param bool $showWhitespaces */
     public static function encodeString($s, $maxLength = null, $showWhitespaces = \true) : string
     {
-        static $tableU, $tableB;
-        if ($tableU === null) {
-            foreach (\range("\0", "\37") as $ch) {
-                $tableU[$ch] = '<i>\\x' . \str_pad(\strtoupper(\dechex(\ord($ch))), 2, '0', \STR_PAD_LEFT) . '</i>';
-            }
-            $tableB = $tableU = ["\r" => '<i>\\r</i>', "\n" => "<i>\\n</i>\n", "\t" => '<i>\\t</i>    ', "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;'] + $tableU;
-            foreach (\range("", "�") as $ch) {
-                $tableB[$ch] = '<i>\\x' . \str_pad(\strtoupper(\dechex(\ord($ch))), 2, '0', \STR_PAD_LEFT) . '</i>';
-            }
-        }
-        $utf = self::isUtf8($s);
-        $table = $utf ? $tableU : $tableB;
-        if (!$showWhitespaces) {
-            unset($table["\r"], $table["\n"], $table["\t"]);
-        }
-        $len = $utf ? self::utf8Length($s) : \strlen($s);
-        $s = $maxLength && $len > $maxLength + 20 ? \strtr(self::truncateString($s, $maxLength, $utf), $table) . ' <span>…</span> ' . \strtr(self::truncateString($s, -10, $utf), $table) : \strtr($s, $table);
+        $utf8 = self::isUtf8($s);
+        $len = $utf8 ? self::utf8Length($s) : \strlen($s);
+        return $maxLength && $len > $maxLength + 20 ? self::doEncodeString(self::truncateString($s, $maxLength, $utf8), $utf8, $showWhitespaces) . ' <span>…</span> ' . self::doEncodeString(self::truncateString($s, -10, $utf8), $utf8, $showWhitespaces) : self::doEncodeString($s, $utf8, $showWhitespaces);
+    }
+    private static function doEncodeString(string $s, bool $utf8, bool $showWhitespaces) : string
+    {
+        static $specials = [\true => ["\r" => '<i>\\r</i>', "\n" => "<i>\\n</i>\n", "\t" => '<i>\\t</i>    ', "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;'], \false => ["\r" => "\r", "\n" => "\n", "\t" => "\t", "\33" => '<i>\\e</i>', '<' => '&lt;', '&' => '&amp;']];
+        $special = $specials[$showWhitespaces];
+        $s = \preg_replace_callback($utf8 ? '#[\\p{C}<&]#u' : '#[\\x00-\\x1F\\x7F-\\xFF<&]#', function ($m) use($special) {
+            return $special[$m[0]] ?? (\strlen($m[0]) === 1 ? '<i>\\x' . \str_pad(\strtoupper(\dechex(\ord($m[0]))), 2, '0', \STR_PAD_LEFT) . '</i>' : '<i>\\u{' . \strtoupper(\ltrim(\dechex(self::utf8Ord($m[0])), '0')) . '}</i>');
+        }, $s);
         $s = \str_replace('</i><i>', '', $s);
         $s = \preg_replace('~\\n$~D', '', $s);
         return $s;
+    }
+    private static function utf8Ord(string $c) : int
+    {
+        $ord0 = \ord($c[0]);
+        if ($ord0 < 0x80) {
+            return $ord0;
+        } elseif ($ord0 < 0xe0) {
+            return ($ord0 << 6) + \ord($c[1]) - 0x3080;
+        } elseif ($ord0 < 0xf0) {
+            return ($ord0 << 12) + (\ord($c[1]) << 6) + \ord($c[2]) - 0xe2080;
+        } else {
+            return ($ord0 << 18) + (\ord($c[1]) << 12) + (\ord($c[2]) << 6) + \ord($c[3]) - 0x3c82080;
+        }
     }
     /** @internal
      * @param string $s */
@@ -409,7 +423,7 @@ XX
             }
             return \function_exists('posix_isatty') && @\posix_isatty($stream);
         };
-        return (\PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg') && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
+        return self::isCli() && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
     }
     /**
      * @param \Throwable $ex
