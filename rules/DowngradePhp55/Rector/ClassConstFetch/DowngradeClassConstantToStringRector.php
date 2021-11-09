@@ -16,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see Rector\Tests\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector\DowngradeClassConstantToStringRectorTest
  */
-class DowngradeClassConstantToStringRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeClassConstantToStringRector extends \Rector\Core\Rector\AbstractRector
 {
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -58,7 +58,13 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->name instanceof \PhpParser\Node\Identifier || \strtolower($node->name->name) !== 'class' || !$node->class instanceof \PhpParser\Node\Name) {
+        if (!$node->name instanceof \PhpParser\Node\Identifier) {
+            return null;
+        }
+        if (\strtolower($node->name->name) !== 'class') {
+            return null;
+        }
+        if (!$node->class instanceof \PhpParser\Node\Name) {
             return null;
         }
         $className = $node->class->toString();
