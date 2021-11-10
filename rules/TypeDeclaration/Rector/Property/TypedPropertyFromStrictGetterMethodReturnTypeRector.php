@@ -12,9 +12,11 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector\TypedPropertyFromStrictGetterMethodReturnTypeRectorTest
  * @todo make generic
  */
-final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector
+final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
         private GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer,
@@ -134,5 +136,10 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 }
