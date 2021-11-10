@@ -14,6 +14,7 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -31,11 +32,16 @@ final class CountableAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     public function isCastableArrayType(\PhpParser\Node\Expr $expr) : bool
     {
@@ -72,6 +78,9 @@ final class CountableAnalyzer
         }
         $nativeType = $phpPropertyReflection->getNativeType();
         if ($nativeType->isIterable()->yes()) {
+            return \false;
+        }
+        if ($this->propertyFetchAnalyzer->isFilledByConstructParam($expr)) {
             return \false;
         }
         $propertyDefaultValue = $propertiesDefaults[$propertyName];

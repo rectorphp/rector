@@ -116,7 +116,10 @@ final class PropertyFetchAnalyzer
         }
         return $this->isLocalPropertyFetch($node->var);
     }
-    public function isFilledByConstructParam(\PhpParser\Node\Stmt\Property $property) : bool
+    /**
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Stmt\Property $property
+     */
+    public function isFilledByConstructParam($property) : bool
     {
         $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
@@ -135,8 +138,12 @@ final class PropertyFetchAnalyzer
             return \false;
         }
         /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($property->props[0]->name);
-        $kindPropertyFetch = $property->isStatic() ? \PhpParser\Node\Expr\StaticPropertyFetch::class : \PhpParser\Node\Expr\PropertyFetch::class;
+        $propertyName = $property instanceof \PhpParser\Node\Stmt\Property ? $this->nodeNameResolver->getName($property->props[0]->name) : $this->nodeNameResolver->getName($property);
+        if ($property instanceof \PhpParser\Node\Stmt\Property) {
+            $kindPropertyFetch = $property->isStatic() ? \PhpParser\Node\Expr\StaticPropertyFetch::class : \PhpParser\Node\Expr\PropertyFetch::class;
+        } else {
+            $kindPropertyFetch = \get_class($property);
+        }
         return $this->isParamFilledStmts($params, $stmts, $propertyName, $kindPropertyFetch);
     }
     /**
