@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1d5edd3e3386ca70331384577b9499b7
+class ComposerStaticInitec86a4dc857ac5724d0475135842d19a
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2125,6 +2125,7 @@ class ComposerStaticInit1d5edd3e3386ca70331384577b9499b7
         'Rector\\DowngradePhp53\\Rector\\Dir\\DirConstToFileConstRector' => __DIR__ . '/../..' . '/rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php',
         'Rector\\DowngradePhp54\\Rector\\Array_\\ShortArrayToLongArrayRector' => __DIR__ . '/../..' . '/rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php',
         'Rector\\DowngradePhp54\\Rector\\Closure\\DowngradeStaticClosureRector' => __DIR__ . '/../..' . '/rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php',
+        'Rector\\DowngradePhp54\\Rector\\LNumber\\DowngradeBinaryNotationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php',
         'Rector\\DowngradePhp55\\Rector\\ClassConstFetch\\DowngradeClassConstantToStringRector' => __DIR__ . '/../..' . '/rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php',
         'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialAssignmentOperatorRector' => __DIR__ . '/../..' . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php',
         'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialOperatorRector' => __DIR__ . '/../..' . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php',
@@ -3532,9 +3533,9 @@ class ComposerStaticInit1d5edd3e3386ca70331384577b9499b7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1d5edd3e3386ca70331384577b9499b7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1d5edd3e3386ca70331384577b9499b7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1d5edd3e3386ca70331384577b9499b7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitec86a4dc857ac5724d0475135842d19a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitec86a4dc857ac5724d0475135842d19a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitec86a4dc857ac5724d0475135842d19a::$classMap;
 
         }, null, ClassLoader::class);
     }
