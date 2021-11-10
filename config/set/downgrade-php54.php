@@ -7,7 +7,6 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector;
 use Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector;
-use Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
@@ -15,5 +14,4 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services = $containerConfigurator->services();
     $services->set(\Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector::class);
     $services->set(\Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector::class);
-    $services->set(\Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector::class);
 };

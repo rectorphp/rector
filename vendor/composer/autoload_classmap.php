@@ -1795,7 +1795,6 @@ return array(
     'Rector\\DowngradePhp53\\Rector\\Dir\\DirConstToFileConstRector' => $baseDir . '/rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php',
     'Rector\\DowngradePhp54\\Rector\\Array_\\ShortArrayToLongArrayRector' => $baseDir . '/rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php',
     'Rector\\DowngradePhp54\\Rector\\Closure\\DowngradeStaticClosureRector' => $baseDir . '/rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php',
-    'Rector\\DowngradePhp54\\Rector\\LNumber\\DowngradeBinaryNotationRector' => $baseDir . '/rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php',
     'Rector\\DowngradePhp55\\Rector\\ClassConstFetch\\DowngradeClassConstantToStringRector' => $baseDir . '/rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php',
     'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialAssignmentOperatorRector' => $baseDir . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php',
     'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialOperatorRector' => $baseDir . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php',
