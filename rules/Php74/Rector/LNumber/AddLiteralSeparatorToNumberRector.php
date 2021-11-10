@@ -144,6 +144,10 @@ CODE_SAMPLE
         $oldTokens = $this->file->getOldTokens();
         $tokenValue = $oldTokens[$startToken][1] ?? null;
 
+        if (! is_string($tokenValue)) {
+            return true;
+        }
+
         // already contains separator
         if (str_contains($tokenValue, '_')) {
             return true;

@@ -101,6 +101,11 @@ CODE_SAMPLE
         return $node;
     }
 
+    public function provideMinPhpVersion(): int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
+    }
+
     private function decorateDefaultNull(Type $propertyType, Property $property): void
     {
         if (! TypeCombinator::containsNull($propertyType)) {
@@ -136,10 +141,5 @@ CODE_SAMPLE
         }
 
         return false;
-    }
-
-    public function provideMinPhpVersion(): int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES;
     }
 }
