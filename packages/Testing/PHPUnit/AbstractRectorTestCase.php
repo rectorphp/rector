@@ -59,6 +59,9 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         if (\file_exists(__DIR__ . '/../../../preload.php') && \file_exists(__DIR__ . '/../../../vendor')) {
             require_once __DIR__ . '/../../../preload.php';
         }
+        if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {
+            require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
+        }
         $configFile = $this->provideConfigFilePath();
         $this->bootFromConfigFiles([$configFile]);
         $this->applicationFileProcessor = $this->getService(\Rector\Core\Application\ApplicationFileProcessor::class);

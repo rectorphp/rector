@@ -21,7 +21,6 @@ use RectorPrefix20211110\PHPUnit\Framework\TestCase;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
@@ -173,8 +172,10 @@ CODE_SAMPLE
         foreach ($paramAndArgs as $paramAndArg) {
             $methodCall->args[] = new \PhpParser\Node\Arg($paramAndArg->getVariable());
         }
-        /** @var ClassMethod $classMethod */
-        $classMethod = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $classMethod = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\ClassMethod::class);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return;
+        }
         $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
         // add data provider annotation
         $dataProviderTagNode = $this->createDataProviderTagNode($dataProviderMethodName);
@@ -202,7 +203,7 @@ CODE_SAMPLE
     }
     private function createDataProviderMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
-        $methodNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::METHOD_NODE);
+        $methodNode = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$methodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
