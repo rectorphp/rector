@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211109;
+namespace RectorPrefix20211110;
 
 if (\class_exists('SC_wizard_add')) {
     return;

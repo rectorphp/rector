@@ -5,4 +5,4 @@
 class UnhandledMatchError extends \Error
 {
 }
-\class_alias('RectorPrefix20211109\\UnhandledMatchError', 'UnhandledMatchError', \false);
+\class_alias('RectorPrefix20211110\\UnhandledMatchError', 'UnhandledMatchError', \false);

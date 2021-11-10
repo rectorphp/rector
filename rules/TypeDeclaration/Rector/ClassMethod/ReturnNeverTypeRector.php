@@ -16,6 +16,7 @@ use PHPStan\Type\NeverType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -94,17 +95,17 @@ CODE_SAMPLE
      */
     private function shouldSkip($node) : bool
     {
-        $returns = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Stmt\Return_::class);
-        if ($returns !== []) {
+        $return = $this->betterNodeFinder->findFirstInstanceOf($node, \PhpParser\Node\Stmt\Return_::class);
+        if ($return instanceof \PhpParser\Node\Stmt\Return_) {
             return \true;
         }
-        $notNeverNodes = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Expr\Yield_::class);
-        if ($notNeverNodes !== []) {
+        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOf($node, [\PhpParser\Node\Expr\Yield_::class] + \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
+        if ($hasNotNeverNodes) {
             return \true;
         }
-        $neverNodes = $this->betterNodeFinder->findInstancesOf($node, [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class]);
+        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOf($node, [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class]);
         $hasNeverFuncCall = $this->hasNeverFuncCall($node);
-        if ($neverNodes === [] && !$hasNeverFuncCall) {
+        if (!$hasNeverNodes && !$hasNeverFuncCall) {
             return \true;
         }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && !$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($node)) {

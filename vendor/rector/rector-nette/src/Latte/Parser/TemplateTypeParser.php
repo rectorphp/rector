@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Latte\Parser;
 
-use RectorPrefix20211109\Nette\Utils\Strings;
+use RectorPrefix20211110\Nette\Utils\Strings;
 use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\ReflectionNamedType;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;
@@ -20,7 +20,7 @@ final class TemplateTypeParser
      */
     public function parse(string $content) : array
     {
-        $templateTypeMatch = \RectorPrefix20211109\Nette\Utils\Strings::match($content, self::TEMPLATE_TYPE_REGEX);
+        $templateTypeMatch = \RectorPrefix20211110\Nette\Utils\Strings::match($content, self::TEMPLATE_TYPE_REGEX);
         if (!isset($templateTypeMatch['template'])) {
             return [];
         }

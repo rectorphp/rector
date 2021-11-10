@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211109;
+namespace RectorPrefix20211110;
 
 if (\class_exists('Tx_Fluid_ViewHelpers_Be_Menus_ActionMenuItemViewHelper')) {
     return;

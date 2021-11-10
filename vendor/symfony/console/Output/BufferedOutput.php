@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211109\Symfony\Component\Console\Output;
+namespace RectorPrefix20211110\Symfony\Component\Console\Output;
 
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class BufferedOutput extends \RectorPrefix20211109\Symfony\Component\Console\Output\Output
+class BufferedOutput extends \RectorPrefix20211110\Symfony\Component\Console\Output\Output
 {
     private $buffer = '';
     /**
