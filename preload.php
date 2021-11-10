@@ -253,3 +253,4 @@ require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/Reflection/Argum
 require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/ValueObjectInliner.php';
 require_once __DIR__ . '/vendor/symfony/dependency-injection/Loader/Configurator/AbstractConfigurator.php';
 require_once __DIR__ . '/vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php';
+require_once __DIR__ . '/vendor/symfony/contracts/Deprecation/function.php';

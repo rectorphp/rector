@@ -35,6 +35,7 @@
         "symfony/console": "^5.3",
         "symfony/contracts": "^2.4",
         "symfony/dependency-injection": "^5.3",
+        "symfony/deprecation-contracts": "^2.4",
         "symfony/finder": "^5.3",
         "symfony/process": "^5.3",
         "symfony/yaml": "^5.3",
