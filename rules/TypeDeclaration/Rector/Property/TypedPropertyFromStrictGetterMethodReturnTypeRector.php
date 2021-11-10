@@ -88,6 +88,10 @@ CODE_SAMPLE
         $this->decorateDefaultNull($getterReturnType, $node);
         return $node;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
+    }
     private function decorateDefaultNull(\PHPStan\Type\Type $propertyType, \PhpParser\Node\Stmt\Property $property) : void
     {
         if (!\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
@@ -116,9 +120,5 @@ CODE_SAMPLE
             }
         }
         return \false;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
 }

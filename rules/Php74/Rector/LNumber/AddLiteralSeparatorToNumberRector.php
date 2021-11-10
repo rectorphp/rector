@@ -120,6 +120,9 @@ CODE_SAMPLE
         $startToken = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::START_TOKEN_POSITION);
         $oldTokens = $this->file->getOldTokens();
         $tokenValue = $oldTokens[$startToken][1] ?? null;
+        if (!\is_string($tokenValue)) {
+            return \true;
+        }
         // already contains separator
         if (\strpos($tokenValue, '_') !== \false) {
             return \true;
