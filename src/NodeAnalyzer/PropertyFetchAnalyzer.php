@@ -127,7 +127,7 @@ final class PropertyFetchAnalyzer
         return $this->isLocalPropertyFetch($node->var);
     }
 
-    public function isFilledByConstructParam(Property $property): bool
+    public function isFilledByConstructParam(Property|PropertyFetch|StaticPropertyFetch $property): bool
     {
         $class = $this->betterNodeFinder->findParentType($property, Class_::class);
         if (! $class instanceof Class_) {
@@ -150,10 +150,17 @@ final class PropertyFetchAnalyzer
         }
 
         /** @var string $propertyName */
-        $propertyName = $this->nodeNameResolver->getName($property->props[0]->name);
-        $kindPropertyFetch = $property->isStatic()
-            ? StaticPropertyFetch::class
-            : PropertyFetch::class;
+        $propertyName = $property instanceof Property
+            ? $this->nodeNameResolver->getName($property->props[0]->name)
+            : $this->nodeNameResolver->getName($property);
+
+        if ($property instanceof Property) {
+            $kindPropertyFetch = $property->isStatic()
+                ? StaticPropertyFetch::class
+                : PropertyFetch::class;
+        } else {
+            $kindPropertyFetch = $property::class;
+        }
 
         return $this->isParamFilledStmts($params, $stmts, $propertyName, $kindPropertyFetch);
     }

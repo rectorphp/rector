@@ -15,6 +15,7 @@ use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -24,7 +25,8 @@ final class CountableAnalyzer
     public function __construct(
         private NodeTypeResolver $nodeTypeResolver,
         private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider
+        private ReflectionProvider $reflectionProvider,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -75,6 +77,10 @@ final class CountableAnalyzer
 
         $nativeType = $phpPropertyReflection->getNativeType();
         if ($nativeType->isIterable()->yes()) {
+            return false;
+        }
+
+        if ($this->propertyFetchAnalyzer->isFilledByConstructParam($expr)) {
             return false;
         }
 
