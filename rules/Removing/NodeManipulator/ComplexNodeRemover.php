@@ -44,6 +44,8 @@ final class ComplexNodeRemover
 
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
 
+        $assigns = [];
+        $propertyNames = [];
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
                 $shouldKeepProperty = true;
@@ -55,10 +57,12 @@ final class ComplexNodeRemover
                 return;
             }
 
-            // remove assigns
-            $this->assignRemover->removeAssignNode($assign);
-            $this->removeConstructorDependency($assign);
+            $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
+            $propertyNames[] = $propertyName;
+            $assigns[$propertyName][] = $assign;
         }
+
+        $this->processRemovePropertyAssigns($assigns, $propertyNames);
 
         if ($shouldKeepProperty) {
             return;
@@ -77,6 +81,22 @@ final class ComplexNodeRemover
         }
 
         $this->nodeRemover->removeNode($property);
+    }
+
+    /**
+     * @param array<string, Assign[]> $assigns
+     * @param string[] $propertyNames
+     */
+    private function processRemovePropertyAssigns(array $assigns, array $propertyNames): void
+    {
+        $propertyNames = array_unique($propertyNames);
+        foreach ($propertyNames as $propertyName) {
+            foreach ($assigns[$propertyName] as $propertyNameAssign) {
+                // remove assigns
+                $this->assignRemover->removeAssignNode($propertyNameAssign);
+                $this->removeConstructorDependency($propertyNameAssign);
+            }
+        }
     }
 
     /**
@@ -104,6 +124,15 @@ final class ComplexNodeRemover
         }
 
         if (! $assign instanceof Assign) {
+            return null;
+        }
+
+        $isInExpr = (bool) $this->betterNodeFinder->findFirst(
+            $assign->expr,
+            fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($subNode, $expr)
+        );
+
+        if ($isInExpr) {
             return null;
         }
 
