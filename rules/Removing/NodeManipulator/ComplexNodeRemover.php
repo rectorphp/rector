@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -137,7 +138,9 @@ final class ComplexNodeRemover
         if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
-        foreach ($constructClassMethod->getParams() as $param) {
+        $params = $constructClassMethod->getParams();
+        $paramKeysToBeRemoved = [];
+        foreach ($params as $key => $param) {
             $variable = $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (\PhpParser\Node $node) use($param) : bool {
                 return $this->nodeComparator->areNodesEqual($param->var, $node);
             });
@@ -150,7 +153,31 @@ final class ComplexNodeRemover
             if (!$this->nodeComparator->areNodesEqual($param->var, $assign->expr)) {
                 continue;
             }
-            $this->nodeRemover->removeNode($param);
+            $paramKeysToBeRemoved[] = $key;
+        }
+        $this->processRemoveParamWithKeys($params, $paramKeysToBeRemoved);
+    }
+    /**
+     * @param Param[] $params
+     * @param int[] $paramKeysToBeRemoved
+     */
+    private function processRemoveParamWithKeys(array $params, array $paramKeysToBeRemoved) : void
+    {
+        $totalKeys = \count($params) - 1;
+        foreach ($paramKeysToBeRemoved as $paramKeyToBeRemoved) {
+            $startNextKey = $paramKeyToBeRemoved + 1;
+            for ($nextKey = $startNextKey; $nextKey <= $totalKeys; ++$nextKey) {
+                if (!isset($params[$nextKey])) {
+                    // no next param, break the inner loop, remove the param
+                    break;
+                }
+                if (\in_array($nextKey, $paramKeysToBeRemoved, \true)) {
+                    // keep searching next key not in $paramKeysToBeRemoved
+                    continue;
+                }
+                return;
+            }
+            $this->nodeRemover->removeNode($params[$paramKeyToBeRemoved]);
         }
     }
     private function isExpressionVariableNotAssign(\PhpParser\Node $node) : bool

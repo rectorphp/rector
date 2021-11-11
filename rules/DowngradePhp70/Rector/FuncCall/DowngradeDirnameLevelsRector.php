@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
@@ -67,7 +66,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $levelsArg = $this->getLevelsArg($node);
-        if ($levelsArg === null) {
+        if (!$levelsArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $levels = $this->getLevelsRealValue($levelsArg);
@@ -116,9 +115,9 @@ CODE_SAMPLE
         $funcCall->name = $funcVariable;
         return $funcCall;
     }
-    private function createExprAssign(\PhpParser\Node\Expr\Variable $var, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Stmt\Expression
+    private function createExprAssign(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Stmt\Expression
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($var, $expr));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $expr));
     }
     private function createClosure() : \PhpParser\Node\Expr\Closure
     {
@@ -128,8 +127,8 @@ CODE_SAMPLE
         $closure = new \PhpParser\Node\Expr\Closure();
         $closure->params = [new \PhpParser\Node\Param($pathVariable), new \PhpParser\Node\Param($levelsVariable)];
         $closure->stmts[] = $this->createExprAssign($dirVariable, $this->nodeFactory->createNull());
-        $whileCond = new \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual(new \PhpParser\Node\Expr\PreDec($levelsVariable), new \PhpParser\Node\Scalar\LNumber(0));
-        $closure->stmts[] = new \PhpParser\Node\Stmt\While_($whileCond, [$this->createExprAssign($dirVariable, $this->createDirnameFuncCall(new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Ternary($dirVariable, null, $pathVariable))))]);
+        $greaterOrEqual = new \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual(new \PhpParser\Node\Expr\PreDec($levelsVariable), new \PhpParser\Node\Scalar\LNumber(0));
+        $closure->stmts[] = new \PhpParser\Node\Stmt\While_($greaterOrEqual, [$this->createExprAssign($dirVariable, $this->createDirnameFuncCall(new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Ternary($dirVariable, null, $pathVariable))))]);
         $closure->stmts[] = new \PhpParser\Node\Stmt\Return_($dirVariable);
         return $closure;
     }
