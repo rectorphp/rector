@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211110\Symfony\Component\Config\Resource;
+namespace RectorPrefix20211111\Symfony\Component\Config\Resource;
 
 /**
  * FileResource represents a resource stored on the filesystem.
@@ -19,7 +19,7 @@ namespace RectorPrefix20211110\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class FileResource implements \RectorPrefix20211110\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class FileResource implements \RectorPrefix20211111\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string|false

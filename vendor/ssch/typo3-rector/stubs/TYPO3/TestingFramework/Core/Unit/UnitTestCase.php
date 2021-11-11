@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211110\TYPO3\TestingFramework\Core\Unit;
+namespace RectorPrefix20211111\TYPO3\TestingFramework\Core\Unit;
 
 if (\class_exists('TYPO3\\TestingFramework\\Core\\Unit\\UnitTestCase')) {
     return;

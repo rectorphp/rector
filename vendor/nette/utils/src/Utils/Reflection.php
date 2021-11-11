@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211110\Nette\Utils;
+namespace RectorPrefix20211111\Nette\Utils;
 
-use RectorPrefix20211110\Nette;
+use RectorPrefix20211111\Nette;
 /**
  * PHP reflection helpers.
  */
@@ -40,7 +40,7 @@ final class Reflection
      */
     public static function getReturnTypes($func) : array
     {
-        $type = \RectorPrefix20211110\Nette\Utils\Type::fromReflection($func);
+        $type = \RectorPrefix20211111\Nette\Utils\Type::fromReflection($func);
         return $type ? $type->getNames() : [];
     }
     /**
@@ -59,7 +59,7 @@ final class Reflection
      */
     public static function getParameterTypes($param) : array
     {
-        $type = \RectorPrefix20211110\Nette\Utils\Type::fromReflection($param);
+        $type = \RectorPrefix20211111\Nette\Utils\Type::fromReflection($param);
         return $type ? $type->getNames() : [];
     }
     /**
@@ -78,7 +78,7 @@ final class Reflection
      */
     public static function getPropertyTypes($prop) : array
     {
-        $type = \RectorPrefix20211110\Nette\Utils\Type::fromReflection($prop);
+        $type = \RectorPrefix20211111\Nette\Utils\Type::fromReflection($prop);
         return $type ? $type->getNames() : [];
     }
     /**
@@ -89,11 +89,11 @@ final class Reflection
         if ($type === null) {
             return null;
         } elseif ($type instanceof \ReflectionNamedType) {
-            return \RectorPrefix20211110\Nette\Utils\Type::resolve($type->getName(), $reflection);
-        } elseif ($type instanceof \ReflectionUnionType || $type instanceof \RectorPrefix20211110\ReflectionIntersectionType) {
-            throw new \RectorPrefix20211110\Nette\InvalidStateException('The ' . self::toString($reflection) . ' is not expected to have a union or intersection type.');
+            return \RectorPrefix20211111\Nette\Utils\Type::resolve($type->getName(), $reflection);
+        } elseif ($type instanceof \ReflectionUnionType || $type instanceof \RectorPrefix20211111\ReflectionIntersectionType) {
+            throw new \RectorPrefix20211111\Nette\InvalidStateException('The ' . self::toString($reflection) . ' is not expected to have a union or intersection type.');
         } else {
-            throw new \RectorPrefix20211110\Nette\InvalidStateException('Unexpected type of ' . self::toString($reflection));
+            throw new \RectorPrefix20211111\Nette\InvalidStateException('Unexpected type of ' . self::toString($reflection));
         }
     }
     /**
@@ -108,7 +108,7 @@ final class Reflection
             $const = $orig = $param->getDefaultValueConstantName();
             $pair = \explode('::', $const);
             if (isset($pair[1])) {
-                $pair[0] = \RectorPrefix20211110\Nette\Utils\Type::resolve($pair[0], $param);
+                $pair[0] = \RectorPrefix20211111\Nette\Utils\Type::resolve($pair[0], $param);
                 try {
                     $rcc = new \ReflectionClassConstant($pair[0], $pair[1]);
                 } catch (\ReflectionException $e) {
@@ -187,7 +187,7 @@ final class Reflection
         } elseif ($ref instanceof \ReflectionParameter) {
             return '$' . $ref->name . ' in ' . self::toString($ref->getDeclaringFunction());
         } else {
-            throw new \RectorPrefix20211110\Nette\InvalidArgumentException();
+            throw new \RectorPrefix20211111\Nette\InvalidArgumentException();
         }
     }
     /**
@@ -201,7 +201,7 @@ final class Reflection
     {
         $lower = \strtolower($name);
         if (empty($name)) {
-            throw new \RectorPrefix20211110\Nette\InvalidArgumentException('Class name must not be empty.');
+            throw new \RectorPrefix20211111\Nette\InvalidArgumentException('Class name must not be empty.');
         } elseif (isset(self::BUILTIN_TYPES[$lower])) {
             return $lower;
         } elseif ($lower === 'self' || $lower === 'static') {
@@ -226,7 +226,7 @@ final class Reflection
     public static function getUseStatements($class) : array
     {
         if ($class->isAnonymous()) {
-            throw new \RectorPrefix20211110\Nette\NotImplementedException('Anonymous classes are not supported.');
+            throw new \RectorPrefix20211111\Nette\NotImplementedException('Anonymous classes are not supported.');
         }
         static $cache = [];
         if (!isset($cache[$name = $class->name])) {

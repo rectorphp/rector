@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\String_;
 
-use RectorPrefix20211110\Nette\Utils\Strings;
+use RectorPrefix20211111\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -94,6 +94,6 @@ CODE_SAMPLE
     }
     private function isMatchEscapedChars(string $string) : bool
     {
-        return (bool) \RectorPrefix20211110\Nette\Utils\Strings::match($string, self::ESCAPED_CHAR_REGEX);
+        return (bool) \RectorPrefix20211111\Nette\Utils\Strings::match($string, self::ESCAPED_CHAR_REGEX);
     }
 }

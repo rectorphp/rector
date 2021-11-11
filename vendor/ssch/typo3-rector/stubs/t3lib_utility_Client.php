@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211110;
+namespace RectorPrefix20211111;
 
 if (\class_exists('t3lib_utility_Client')) {
     return;
