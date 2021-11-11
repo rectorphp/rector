@@ -24,6 +24,10 @@ final class FinalizeClassesWithoutChildrenRector extends \Rector\Core\Rector\Abs
      */
     private const DOCTRINE_ORM_MAPPING_ANNOTATION = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable'];
     /**
+     * @var string[]
+     */
+    private const DOCTRINE_ODM_MAPPING_ANNOTATION = ['Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\Document', 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\EmbeddedDocument'];
+    /**
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
@@ -82,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo->hasByAnnotationClasses(self::DOCTRINE_ORM_MAPPING_ANNOTATION)) {
+        if ($phpDocInfo->hasByAnnotationClasses(self::DOCTRINE_ORM_MAPPING_ANNOTATION) || $phpDocInfo->hasByAnnotationClasses(self::DOCTRINE_ODM_MAPPING_ANNOTATION)) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -97,13 +101,13 @@ CODE_SAMPLE
         if ($childrenClassReflections !== []) {
             return null;
         }
-        if ($this->hasEntityOrEmbeddableAttr($node)) {
+        if ($this->hasDoctrineAttr($node)) {
             return null;
         }
         $this->visibilityManipulator->makeFinal($node);
         return $node;
     }
-    private function hasEntityOrEmbeddableAttr(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function hasDoctrineAttr(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         foreach ($class->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
@@ -111,7 +115,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $className = $this->nodeNameResolver->getName($attribute->name);
-                if (\in_array($className, self::DOCTRINE_ORM_MAPPING_ANNOTATION, \true)) {
+                if (\in_array($className, self::DOCTRINE_ORM_MAPPING_ANNOTATION, \true) || \in_array($className, self::DOCTRINE_ODM_MAPPING_ANNOTATION, \true)) {
                     return \true;
                 }
             }
