@@ -1805,6 +1805,7 @@ return array(
     'Rector\\DowngradePhp70\\Rector\\Coalesce\\DowngradeNullCoalesceRector' => $baseDir . '/rules/DowngradePhp70/Rector/Coalesce/DowngradeNullCoalesceRector.php',
     'Rector\\DowngradePhp70\\Rector\\Declare_\\DowngradeStrictTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp70/Rector/Declare_/DowngradeStrictTypeDeclarationRector.php',
     'Rector\\DowngradePhp70\\Rector\\Expression\\DowngradeDefineArrayConstantRector' => $baseDir . '/rules/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php',
+    'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeDirnameLevelsRector' => $baseDir . '/rules/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php',
     'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeSessionStartArrayOptionsRector' => $baseDir . '/rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php',
     'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeScalarTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php',
     'Rector\\DowngradePhp70\\Rector\\GroupUse\\SplitGroupedUseImportsRector' => $baseDir . '/rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php',
