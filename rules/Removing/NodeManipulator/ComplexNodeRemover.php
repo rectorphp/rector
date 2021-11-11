@@ -67,6 +67,8 @@ final class ComplexNodeRemover
     {
         $shouldKeepProperty = \false;
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
+        $assigns = [];
+        $propertyNames = [];
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
                 $shouldKeepProperty = \true;
@@ -76,10 +78,11 @@ final class ComplexNodeRemover
             if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
                 return;
             }
-            // remove assigns
-            $this->assignRemover->removeAssignNode($assign);
-            $this->removeConstructorDependency($assign);
+            $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
+            $propertyNames[] = $propertyName;
+            $assigns[$propertyName][] = $assign;
         }
+        $this->processRemovePropertyAssigns($assigns, $propertyNames);
         if ($shouldKeepProperty) {
             return;
         }
@@ -93,6 +96,21 @@ final class ComplexNodeRemover
             }
         }
         $this->nodeRemover->removeNode($property);
+    }
+    /**
+     * @param array<string, Assign[]> $assigns
+     * @param string[] $propertyNames
+     */
+    private function processRemovePropertyAssigns(array $assigns, array $propertyNames) : void
+    {
+        $propertyNames = \array_unique($propertyNames);
+        foreach ($propertyNames as $propertyName) {
+            foreach ($assigns[$propertyName] as $propertyNameAssign) {
+                // remove assigns
+                $this->assignRemover->removeAssignNode($propertyNameAssign);
+                $this->removeConstructorDependency($propertyNameAssign);
+            }
+        }
     }
     /**
      * @param string[] $classMethodNamesToSkip
@@ -117,6 +135,12 @@ final class ComplexNodeRemover
             $assign = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         }
         if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
+            return null;
+        }
+        $isInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $subNode) use($expr) : bool {
+            return $this->nodeComparator->areNodesEqual($subNode, $expr);
+        });
+        if ($isInExpr) {
             return null;
         }
         return $assign;
