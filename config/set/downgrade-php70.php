@@ -9,6 +9,7 @@ use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector;
+use Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector;
 use Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
@@ -29,6 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeNullCoalesceRector::class);
     $services->set(DowngradeSpaceshipRector::class);
     $services->set(DowngradeDefineArrayConstantRector::class);
+    $services->set(DowngradeDirnameLevelsRector::class);
     $services->set(DowngradeSessionStartArrayOptionsRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
     $services->set(DowngradeGeneratedScalarTypesRector::class);
