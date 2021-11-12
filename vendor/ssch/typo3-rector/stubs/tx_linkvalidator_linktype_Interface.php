@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211111;
+namespace RectorPrefix20211112;
 
 if (\interface_exists('tx_linkvalidator_linktype_Interface')) {
     return;

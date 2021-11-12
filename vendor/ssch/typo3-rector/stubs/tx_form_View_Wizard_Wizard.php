@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211111;
+namespace RectorPrefix20211112;
 
 if (\class_exists('tx_form_View_Wizard_Wizard')) {
     return;

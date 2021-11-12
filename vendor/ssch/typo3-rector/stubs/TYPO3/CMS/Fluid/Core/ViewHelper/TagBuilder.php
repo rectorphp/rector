@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211111\TYPO3\CMS\Fluid\Core\ViewHelper;
+namespace RectorPrefix20211112\TYPO3\CMS\Fluid\Core\ViewHelper;
 
 if (\class_exists('TYPO3\\CMS\\Fluid\\Core\\ViewHelper\\TagBuilder')) {
     return;

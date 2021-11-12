@@ -99,7 +99,8 @@ CODE_SAMPLE
         if ($return instanceof \PhpParser\Node\Stmt\Return_) {
             return \true;
         }
-        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOf($node, [\PhpParser\Node\Expr\Yield_::class] + \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
+        $yieldAndConditionalNodes = \array_merge([\PhpParser\Node\Expr\Yield_::class], \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
+        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOf($node, $yieldAndConditionalNodes);
         if ($hasNotNeverNodes) {
             return \true;
         }
