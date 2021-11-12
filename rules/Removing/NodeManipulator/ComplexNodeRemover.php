@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -19,7 +20,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer;
 final class ComplexNodeRemover
 {
     /**
@@ -43,22 +44,22 @@ final class ComplexNodeRemover
      */
     private $nodeRemover;
     /**
-     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-    /**
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    /**
+     * @var \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer
+     */
+    private $forbiddenPropertyRemovalAnalyzer;
+    public function __construct(\Rector\NodeRemoval\AssignRemover $assignRemover, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer)
     {
         $this->assignRemover = $assignRemover;
         $this->propertyFetchFinder = $propertyFetchFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeRemover = $nodeRemover;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeComparator = $nodeComparator;
+        $this->forbiddenPropertyRemovalAnalyzer = $forbiddenPropertyRemovalAnalyzer;
     }
     /**
      * @param string[] $classMethodNamesToSkip
@@ -68,7 +69,6 @@ final class ComplexNodeRemover
         $shouldKeepProperty = \false;
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
         $assigns = [];
-        $propertyNames = [];
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
                 $shouldKeepProperty = \true;
@@ -78,38 +78,23 @@ final class ComplexNodeRemover
             if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
                 return;
             }
-            $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
-            $propertyNames[] = $propertyName;
-            $assigns[$propertyName][] = $assign;
+            $assigns[] = $assign;
         }
-        $this->processRemovePropertyAssigns($assigns, $propertyNames);
+        $this->processRemovePropertyAssigns($assigns);
         if ($shouldKeepProperty) {
             return;
-        }
-        // remove __construct param
-        /** @var Property $property */
-        $this->nodeRemover->removeNode($property);
-        foreach ($property->props as $prop) {
-            if (!$this->nodesToRemoveCollector->isNodeRemoved($prop)) {
-                // if the property has at least one node left -> return
-                return;
-            }
         }
         $this->nodeRemover->removeNode($property);
     }
     /**
-     * @param array<string, Assign[]> $assigns
-     * @param string[] $propertyNames
+     * @param Assign[] $assigns
      */
-    private function processRemovePropertyAssigns(array $assigns, array $propertyNames) : void
+    private function processRemovePropertyAssigns(array $assigns) : void
     {
-        $propertyNames = \array_unique($propertyNames);
-        foreach ($propertyNames as $propertyName) {
-            foreach ($assigns[$propertyName] as $propertyNameAssign) {
-                // remove assigns
-                $this->assignRemover->removeAssignNode($propertyNameAssign);
-                $this->removeConstructorDependency($propertyNameAssign);
-            }
+        foreach ($assigns as $assign) {
+            // remove assigns
+            $this->assignRemover->removeAssignNode($assign);
+            $this->removeConstructorDependency($assign);
         }
     }
     /**
@@ -141,6 +126,11 @@ final class ComplexNodeRemover
             return $this->nodeComparator->areNodesEqual($subNode, $expr);
         });
         if ($isInExpr) {
+            return null;
+        }
+        $classLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassLike::class);
+        $propertyName = (string) $this->nodeNameResolver->getName($expr);
+        if ($this->forbiddenPropertyRemovalAnalyzer->isForbiddenInNewCurrentClassNameSelfClone($propertyName, $classLike)) {
             return null;
         }
         return $assign;
@@ -206,12 +196,7 @@ final class ComplexNodeRemover
     }
     private function isExpressionVariableNotAssign(\PhpParser\Node $node) : bool
     {
-        if ($node !== null) {
-            $expressionVariable = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if (!$expressionVariable instanceof \PhpParser\Node\Expr\Assign) {
-                return \true;
-            }
-        }
-        return \false;
+        $expressionVariable = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return !$expressionVariable instanceof \PhpParser\Node\Expr\Assign;
     }
 }

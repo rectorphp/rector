@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9e813c2df08d1dd85839f8a772ec8e90
+class ComposerStaticInit7bc969ebdc0fee9bedfa13cdb224983f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2889,6 +2889,7 @@ class ComposerStaticInit9e813c2df08d1dd85839f8a772ec8e90
         'Rector\\RemovingStatic\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector.php',
         'Rector\\RemovingStatic\\Rector\\StaticCall\\DesiredStaticCallTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/StaticCall/DesiredStaticCallTypeToDynamicRector.php',
         'Rector\\RemovingStatic\\Rector\\StaticPropertyFetch\\DesiredStaticPropertyFetchTypeToDynamicRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/StaticPropertyFetch/DesiredStaticPropertyFetchTypeToDynamicRector.php',
+        'Rector\\Removing\\NodeAnalyzer\\ForbiddenPropertyRemovalAnalyzer' => __DIR__ . '/../..' . '/rules/Removing/NodeAnalyzer/ForbiddenPropertyRemovalAnalyzer.php',
         'Rector\\Removing\\NodeManipulator\\ComplexNodeRemover' => __DIR__ . '/../..' . '/rules/Removing/NodeManipulator/ComplexNodeRemover.php',
         'Rector\\Removing\\Rector\\ClassMethod\\ArgumentRemoverRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php',
         'Rector\\Removing\\Rector\\Class_\\RemoveInterfacesRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/Class_/RemoveInterfacesRector.php',
@@ -3535,9 +3536,9 @@ class ComposerStaticInit9e813c2df08d1dd85839f8a772ec8e90
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9e813c2df08d1dd85839f8a772ec8e90::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9e813c2df08d1dd85839f8a772ec8e90::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9e813c2df08d1dd85839f8a772ec8e90::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7bc969ebdc0fee9bedfa13cdb224983f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7bc969ebdc0fee9bedfa13cdb224983f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7bc969ebdc0fee9bedfa13cdb224983f::$classMap;
 
         }, null, ClassLoader::class);
     }

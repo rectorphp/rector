@@ -2559,6 +2559,7 @@ return array(
     'Rector\\RemovingStatic\\Rector\\Property\\DesiredPropertyClassMethodTypeToDynamicRector' => $baseDir . '/rules/RemovingStatic/Rector/Property/DesiredPropertyClassMethodTypeToDynamicRector.php',
     'Rector\\RemovingStatic\\Rector\\StaticCall\\DesiredStaticCallTypeToDynamicRector' => $baseDir . '/rules/RemovingStatic/Rector/StaticCall/DesiredStaticCallTypeToDynamicRector.php',
     'Rector\\RemovingStatic\\Rector\\StaticPropertyFetch\\DesiredStaticPropertyFetchTypeToDynamicRector' => $baseDir . '/rules/RemovingStatic/Rector/StaticPropertyFetch/DesiredStaticPropertyFetchTypeToDynamicRector.php',
+    'Rector\\Removing\\NodeAnalyzer\\ForbiddenPropertyRemovalAnalyzer' => $baseDir . '/rules/Removing/NodeAnalyzer/ForbiddenPropertyRemovalAnalyzer.php',
     'Rector\\Removing\\NodeManipulator\\ComplexNodeRemover' => $baseDir . '/rules/Removing/NodeManipulator/ComplexNodeRemover.php',
     'Rector\\Removing\\Rector\\ClassMethod\\ArgumentRemoverRector' => $baseDir . '/rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php',
     'Rector\\Removing\\Rector\\Class_\\RemoveInterfacesRector' => $baseDir . '/rules/Removing/Rector/Class_/RemoveInterfacesRector.php',
