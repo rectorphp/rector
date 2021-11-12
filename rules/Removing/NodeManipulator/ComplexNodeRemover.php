@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -20,7 +21,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\AssignRemover;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer;
 
 final class ComplexNodeRemover
 {
@@ -30,8 +31,8 @@ final class ComplexNodeRemover
         private NodeNameResolver $nodeNameResolver,
         private BetterNodeFinder $betterNodeFinder,
         private NodeRemover $nodeRemover,
-        private NodesToRemoveCollector $nodesToRemoveCollector,
-        private NodeComparator $nodeComparator
+        private NodeComparator $nodeComparator,
+        private ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer
     ) {
     }
 
@@ -43,9 +44,7 @@ final class ComplexNodeRemover
         $shouldKeepProperty = false;
 
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($property);
-
         $assigns = [];
-        $propertyNames = [];
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->shouldSkipPropertyForClassMethod($propertyFetch, $classMethodNamesToSkip)) {
                 $shouldKeepProperty = true;
@@ -57,45 +56,27 @@ final class ComplexNodeRemover
                 return;
             }
 
-            $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
-            $propertyNames[] = $propertyName;
-            $assigns[$propertyName][] = $assign;
+            $assigns[] = $assign;
         }
 
-        $this->processRemovePropertyAssigns($assigns, $propertyNames);
+        $this->processRemovePropertyAssigns($assigns);
 
         if ($shouldKeepProperty) {
             return;
-        }
-
-        // remove __construct param
-
-        /** @var Property $property */
-        $this->nodeRemover->removeNode($property);
-
-        foreach ($property->props as $prop) {
-            if (! $this->nodesToRemoveCollector->isNodeRemoved($prop)) {
-                // if the property has at least one node left -> return
-                return;
-            }
         }
 
         $this->nodeRemover->removeNode($property);
     }
 
     /**
-     * @param array<string, Assign[]> $assigns
-     * @param string[] $propertyNames
+     * @param Assign[] $assigns
      */
-    private function processRemovePropertyAssigns(array $assigns, array $propertyNames): void
+    private function processRemovePropertyAssigns(array $assigns): void
     {
-        $propertyNames = array_unique($propertyNames);
-        foreach ($propertyNames as $propertyName) {
-            foreach ($assigns[$propertyName] as $propertyNameAssign) {
-                // remove assigns
-                $this->assignRemover->removeAssignNode($propertyNameAssign);
-                $this->removeConstructorDependency($propertyNameAssign);
-            }
+        foreach ($assigns as $assign) {
+            // remove assigns
+            $this->assignRemover->removeAssignNode($assign);
+            $this->removeConstructorDependency($assign);
         }
     }
 
@@ -133,6 +114,16 @@ final class ComplexNodeRemover
         );
 
         if ($isInExpr) {
+            return null;
+        }
+
+        $classLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
+        $propertyName = (string) $this->nodeNameResolver->getName($expr);
+
+        if ($this->forbiddenPropertyRemovalAnalyzer->isForbiddenInNewCurrentClassNameSelfClone(
+            $propertyName,
+            $classLike
+        )) {
             return null;
         }
 
@@ -215,14 +206,7 @@ final class ComplexNodeRemover
 
     private function isExpressionVariableNotAssign(Node $node): bool
     {
-        if ($node !== null) {
-            $expressionVariable = $node->getAttribute(AttributeKey::PARENT_NODE);
-
-            if (! $expressionVariable instanceof Assign) {
-                return true;
-            }
-        }
-
-        return false;
+        $expressionVariable = $node->getAttribute(AttributeKey::PARENT_NODE);
+        return ! $expressionVariable instanceof Assign;
     }
 }
