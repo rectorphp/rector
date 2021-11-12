@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
@@ -165,6 +166,9 @@ final class NodeTypeResolver
     public function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         if ($node instanceof \PhpParser\Node\NullableType) {
+            if ($node->type instanceof \PhpParser\Node\Name && $node->type->hasAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME)) {
+                $node->type = new \PhpParser\Node\Name\FullyQualified($node->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME));
+            }
             $type = $this->getType($node->type);
             if (!$type instanceof \PHPStan\Type\MixedType) {
                 return new \PHPStan\Type\UnionType([$type, new \PHPStan\Type\NullType()]);
