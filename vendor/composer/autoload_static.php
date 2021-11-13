@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit69387b451e53fa05cffe87da5ea4f662
+class ComposerStaticInitba17b363b6d15060ff4e10e823b02404
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2129,6 +2129,9 @@ class ComposerStaticInit69387b451e53fa05cffe87da5ea4f662
         'Rector\\DowngradePhp54\\Rector\\FunctionLike\\DowngradeCallableTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp54/Rector/FunctionLike/DowngradeCallableTypeDeclarationRector.php',
         'Rector\\DowngradePhp54\\Rector\\LNumber\\DowngradeBinaryNotationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php',
         'Rector\\DowngradePhp55\\Rector\\ClassConstFetch\\DowngradeClassConstantToStringRector' => __DIR__ . '/../..' . '/rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php',
+        'Rector\\DowngradePhp56\\NodeManipulator\\ArgManipulator' => __DIR__ . '/../..' . '/rules/DowngradePhp56/NodeManipulator/ArgManipulator.php',
+        'Rector\\DowngradePhp56\\NodeManipulator\\UnpackedArgList' => __DIR__ . '/../..' . '/rules/DowngradePhp56/NodeManipulator/UnpackedArgList.php',
+        'Rector\\DowngradePhp56\\Rector\\CallLike\\DowngradeArgumentUnpackingRector' => __DIR__ . '/../..' . '/rules/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php',
         'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialAssignmentOperatorRector' => __DIR__ . '/../..' . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php',
         'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialOperatorRector' => __DIR__ . '/../..' . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php',
         'Rector\\DowngradePhp70\\NodeFactory\\ClassFromAnonymousFactory' => __DIR__ . '/../..' . '/rules/DowngradePhp70/NodeFactory/ClassFromAnonymousFactory.php',
@@ -3537,9 +3540,9 @@ class ComposerStaticInit69387b451e53fa05cffe87da5ea4f662
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit69387b451e53fa05cffe87da5ea4f662::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit69387b451e53fa05cffe87da5ea4f662::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit69387b451e53fa05cffe87da5ea4f662::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitba17b363b6d15060ff4e10e823b02404::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitba17b363b6d15060ff4e10e823b02404::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitba17b363b6d15060ff4e10e823b02404::$classMap;
 
         }, null, ClassLoader::class);
     }
