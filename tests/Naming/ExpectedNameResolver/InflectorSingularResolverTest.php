@@ -39,5 +39,6 @@ final class InflectorSingularResolverTest extends AbstractTestCase
         // news and plural
         yield ['staticCallsToNews', 'staticCallToNew'];
         yield ['newsToMethodCalls', 'newToMethodCall'];
+        yield ['hasFilters', 'hasFilter'];
     }
 }
