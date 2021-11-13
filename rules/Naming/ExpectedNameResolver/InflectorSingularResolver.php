@@ -29,6 +29,10 @@ final class InflectorSingularResolver
      */
     private const SINGLE = 'single';
     /**
+     * @var string
+     */
+    private const CAMELCASE = 'camelcase';
+    /**
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
@@ -88,9 +92,9 @@ final class InflectorSingularResolver
         $camelCases = \RectorPrefix20211113\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
-            $value = $this->inflector->singularize($camelCase['camelcase']);
-            if (\in_array($camelCase['camelcase'], ['is', 'has'])) {
-                $value = $camelCase['camelcase'];
+            $value = $this->inflector->singularize($camelCase[self::CAMELCASE]);
+            if (\in_array($camelCase[self::CAMELCASE], ['is', 'has'], \true)) {
+                $value = $camelCase[self::CAMELCASE];
             }
             $resolvedName .= $value;
         }
