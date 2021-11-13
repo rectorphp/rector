@@ -232,6 +232,29 @@ final class BetterNodeFinder
     }
 
     /**
+     * @return Assign[]
+     */
+    public function findClassMethodAssignsToLocalProperty(ClassMethod $classMethod, string $propertyName): array
+    {
+        return $this->find((array) $classMethod->stmts, function (Node $node) use ($propertyName): bool {
+            if (! $node instanceof Assign) {
+                return false;
+            }
+
+            if (! $node->var instanceof PropertyFetch) {
+                return false;
+            }
+
+            $propertyFetch = $node->var;
+            if (! $this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
+        });
+    }
+
+    /**
      * @return Assign|null
      */
     public function findPreviousAssignToExpr(Expr $expr): ?Node

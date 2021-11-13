@@ -530,4 +530,10 @@ final class PhpVersionFeature
      * @var int
      */
     public const PHP81_RESOURCE_TO_OBJECT = PhpVersion::PHP_81;
+
+    /**
+     * @see https://wiki.php.net/rfc/new_in_initializers
+     * @var int
+     */
+    public const NEW_INITIALIZERS = PhpVersion::PHP_81;
 }

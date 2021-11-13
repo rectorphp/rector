@@ -106,13 +106,9 @@ parameters:
         -
             message: '#Array (with keys|destruct) is not allowed\. Use value object to pass data instead#'
             path: rules/Php70/EregToPcreTransformer.php
-
-        # 3rd party code
         -
             message: '#Use explicit return value over magic &reference#'
             path: rules/Php70/EregToPcreTransformer.php
-
-        # 3rd party code
         -
             message: '#Use value object over return of values#'
             path: rules/Php70/EregToPcreTransformer.php
@@ -429,6 +425,12 @@ parameters:
                 - rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
                 - src/Application/FileProcessor.php
+                - src/PhpParser/Node/BetterNodeFinder.php
+
+        # find everything class, better then 10 different finders
+        -
+            message: '#Class cognitive complexity is \d+, keep it under 50#'
+            paths:
                 - src/PhpParser/Node/BetterNodeFinder.php
 
         -
