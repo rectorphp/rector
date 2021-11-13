@@ -90,8 +90,13 @@ CODE_SAMPLE
             return null;
         }
 
+        // if property is public, it should be nullable
+        if ($node->isPublic() && ! TypeCombinator::containsNull($getterReturnType)) {
+            $getterReturnType = TypeCombinator::addNull($getterReturnType);
+        }
+
         $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, TypeKind::PROPERTY());
-        if ($propertyType === null) {
+        if (! $propertyType instanceof Node) {
             return null;
         }
 
