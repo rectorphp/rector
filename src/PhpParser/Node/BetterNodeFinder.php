@@ -223,6 +223,25 @@ final class BetterNodeFinder
         return $this->nodeFinder->findFirst($nodes, $filter);
     }
     /**
+     * @return Assign[]
+     */
+    public function findClassMethodAssignsToLocalProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : array
+    {
+        return $this->find((array) $classMethod->stmts, function (\PhpParser\Node $node) use($propertyName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+                return \false;
+            }
+            if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+                return \false;
+            }
+            $propertyFetch = $node->var;
+            if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
+        });
+    }
+    /**
      * @return Assign|null
      */
     public function findPreviousAssignToExpr(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node

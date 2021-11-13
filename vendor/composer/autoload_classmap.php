@@ -2479,6 +2479,7 @@ return array(
     'Rector\\Php80\\ValueObject\\StrStartsWith' => $baseDir . '/rules/Php80/ValueObject/StrStartsWith.php',
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
     'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => $baseDir . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
+    'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => $baseDir . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
     'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
     'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
     'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => $baseDir . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',

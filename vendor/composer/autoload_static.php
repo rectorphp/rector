@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitba17b363b6d15060ff4e10e823b02404
+class ComposerStaticInit31981303893d54560204e228819fdcd8
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2809,6 +2809,7 @@ class ComposerStaticInitba17b363b6d15060ff4e10e823b02404
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
         'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
+        'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
         'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',
@@ -3540,9 +3541,9 @@ class ComposerStaticInitba17b363b6d15060ff4e10e823b02404
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitba17b363b6d15060ff4e10e823b02404::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitba17b363b6d15060ff4e10e823b02404::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitba17b363b6d15060ff4e10e823b02404::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit31981303893d54560204e228819fdcd8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit31981303893d54560204e228819fdcd8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit31981303893d54560204e228819fdcd8::$classMap;
 
         }, null, ClassLoader::class);
     }
