@@ -1798,6 +1798,7 @@ return array(
     'Rector\\DowngradePhp54\\Rector\\Closure\\DowngradeStaticClosureRector' => $baseDir . '/rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php',
     'Rector\\DowngradePhp54\\Rector\\FunctionLike\\DowngradeCallableTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp54/Rector/FunctionLike/DowngradeCallableTypeDeclarationRector.php',
     'Rector\\DowngradePhp54\\Rector\\LNumber\\DowngradeBinaryNotationRector' => $baseDir . '/rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php',
+    'Rector\\DowngradePhp54\\Rector\\MethodCall\\DowngradeInstanceMethodCallRector' => $baseDir . '/rules/DowngradePhp54/Rector/MethodCall/DowngradeInstanceMethodCallRector.php',
     'Rector\\DowngradePhp55\\Rector\\ClassConstFetch\\DowngradeClassConstantToStringRector' => $baseDir . '/rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php',
     'Rector\\DowngradePhp56\\NodeManipulator\\ArgManipulator' => $baseDir . '/rules/DowngradePhp56/NodeManipulator/ArgManipulator.php',
     'Rector\\DowngradePhp56\\NodeManipulator\\UnpackedArgList' => $baseDir . '/rules/DowngradePhp56/NodeManipulator/UnpackedArgList.php',
