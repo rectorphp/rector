@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211112\TYPO3\CMS\Extensionmanager\Service;
+namespace RectorPrefix20211113\TYPO3\CMS\Extensionmanager\Service;
 
 if (\class_exists('TYPO3\\CMS\\Extensionmanager\\Service\\ExtensionManagementService')) {
     return;

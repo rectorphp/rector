@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211112\TYPO3\CMS\Core\Database\Query\Restriction;
+namespace RectorPrefix20211113\TYPO3\CMS\Core\Database\Query\Restriction;
 
 if (\class_exists('TYPO3\\CMS\\Core\\Database\\Query\\Restriction\\DeletedRestriction')) {
     return;

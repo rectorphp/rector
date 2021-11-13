@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211112\TYPO3\CMS\Backend\Controller;
+namespace RectorPrefix20211113\TYPO3\CMS\Backend\Controller;
 
-use RectorPrefix20211112\TYPO3\CMS\Backend\Template\ModuleTemplate;
+use RectorPrefix20211113\TYPO3\CMS\Backend\Template\ModuleTemplate;
 if (\class_exists('TYPO3\\CMS\\Backend\\Controller\\PageLayoutController')) {
     return;
 }
@@ -19,6 +19,6 @@ class PageLayoutController
      */
     public function getModuleTemplate()
     {
-        return new \RectorPrefix20211112\TYPO3\CMS\Backend\Template\ModuleTemplate();
+        return new \RectorPrefix20211113\TYPO3\CMS\Backend\Template\ModuleTemplate();
     }
 }

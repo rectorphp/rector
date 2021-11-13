@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211112;
+namespace RectorPrefix20211113;
 
 if (\class_exists('Tx_Extbase_Persistence_Exception_InvalidPropertyType')) {
     return;

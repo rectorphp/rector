@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211112\Psr\Http\Message;
+namespace RectorPrefix20211113\Psr\Http\Message;
 
 /**
  * Representation of an outgoing, client-side request.
@@ -21,7 +21,7 @@ namespace RectorPrefix20211112\Psr\Http\Message;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-interface RequestInterface extends \RectorPrefix20211112\Psr\Http\Message\MessageInterface
+interface RequestInterface extends \RectorPrefix20211113\Psr\Http\Message\MessageInterface
 {
     /**
      * Retrieves the message's request target.
