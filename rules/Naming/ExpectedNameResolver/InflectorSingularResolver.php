@@ -88,7 +88,11 @@ final class InflectorSingularResolver
         $camelCases = \RectorPrefix20211113\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
-            $resolvedName .= $this->inflector->singularize($camelCase['camelcase']);
+            $value = $this->inflector->singularize($camelCase['camelcase']);
+            if (\in_array($camelCase['camelcase'], ['is', 'has'])) {
+                $value = $camelCase['camelcase'];
+            }
+            $resolvedName .= $value;
         }
         return $resolvedName;
     }
