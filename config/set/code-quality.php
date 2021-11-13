@@ -13,6 +13,7 @@ use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector;
 use Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
+use Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
 use Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector;
@@ -181,4 +182,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CountArrayToEmptyArrayComparisonRector::class);
     $services->set(FlipTypeControlToUseExclusiveTypeRector::class);
     $services->set(ExplicitMethodCallOverMagicGetSetRector::class);
+    $services->set(DoWhileBreakFalseToIfElseRector::class);
 };

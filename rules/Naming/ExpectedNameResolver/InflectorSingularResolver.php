@@ -36,6 +36,11 @@ final class InflectorSingularResolver
      */
     private const SINGLE = 'single';
 
+    /**
+     * @var string
+     */
+    private const CAMELCASE = 'camelcase';
+
     public function __construct(
         private Inflector $inflector
     ) {
@@ -105,10 +110,10 @@ final class InflectorSingularResolver
 
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
-            $value = $this->inflector->singularize($camelCase['camelcase']);
+            $value = $this->inflector->singularize($camelCase[self::CAMELCASE]);
 
-            if (in_array($camelCase['camelcase'], ['is', 'has'])) {
-                $value = $camelCase['camelcase'];
+            if (in_array($camelCase[self::CAMELCASE], ['is', 'has'], true)) {
+                $value = $camelCase[self::CAMELCASE];
             }
 
             $resolvedName .= $value;
