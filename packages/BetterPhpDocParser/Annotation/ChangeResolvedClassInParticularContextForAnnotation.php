@@ -22,7 +22,7 @@ final class ChangeResolvedClassInParticularContextForAnnotation
             new ChangeResolvedClassInParticularContext(
                 'Doctrine\ORM\Mapping\JoinTable',
                 'inverseJoinColumns',
-                'Doctrine\ORM\Mapping\InverseJoinColumns'
+                'Doctrine\ORM\Mapping\InverseJoinColumn'
             ),
         ];
     }

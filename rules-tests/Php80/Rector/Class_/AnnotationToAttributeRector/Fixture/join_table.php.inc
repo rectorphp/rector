@@ -32,7 +32,7 @@ class AnEntity
     #[\Doctrine\ORM\Mapping\ManyToMany(targetEntity: AnEntity::class)]
     #[\Doctrine\ORM\Mapping\JoinTable(name: 'my_join_table')]
     #[\Doctrine\ORM\Mapping\JoinColumn(name: 'first_column', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[\Doctrine\ORM\Mapping\InverseJoinColumns(name: 'second_column', referencedColumnName: 'id')]
+    #[\Doctrine\ORM\Mapping\InverseJoinColumn(name: 'second_column', referencedColumnName: 'id')]
     protected Collection $list;
 }
 
