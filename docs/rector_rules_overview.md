@@ -1,4 +1,4 @@
-# 480 Rules Overview
+# 489 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (68)
+- [CodeQuality](#codequality) (69)
 
 - [CodingStyle](#codingstyle) (38)
 
@@ -22,11 +22,13 @@
 
 - [DowngradePhp53](#downgradephp53) (1)
 
-- [DowngradePhp54](#downgradephp54) (1)
+- [DowngradePhp54](#downgradephp54) (5)
 
-- [DowngradePhp56](#downgradephp56) (2)
+- [DowngradePhp55](#downgradephp55) (1)
 
-- [DowngradePhp70](#downgradephp70) (11)
+- [DowngradePhp56](#downgradephp56) (3)
+
+- [DowngradePhp70](#downgradephp70) (12)
 
 - [DowngradePhp71](#downgradephp71) (10)
 
@@ -78,7 +80,7 @@
 
 - [Php80](#php80) (17)
 
-- [Php81](#php81) (6)
+- [Php81](#php81) (7)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -822,6 +824,29 @@ Changes DateTime type-hint to DateTimeInterface
          return true;
      }
  }
+```
+
+<br>
+
+### DoWhileBreakFalseToIfElseRector
+
+Replace do (...} while (false); with more readable if/else conditions
+
+- class: [`Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector`](../rules/CodeQuality/Rector/Do_/DoWhileBreakFalseToIfElseRector.php)
+
+```diff
+-do {
+-    if (mt_rand(0, 1)) {
+-        $value = 5;
+-        break;
+-    }
+-
++if (mt_rand(0, 1)) {
++    $value = 5;
++} else {
+     $value = 10;
+-} while (false);
++}
 ```
 
 <br>
@@ -4031,6 +4056,54 @@ Refactor __DIR__ to dirname(__FILE__)
 
 ## DowngradePhp54
 
+### DowngradeBinaryNotationRector
+
+Downgrade binary notation for integers
+
+- class: [`Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector`](../rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php)
+
+```diff
+-$a = 0b11111100101;
++$a = 2021;
+```
+
+<br>
+
+### DowngradeCallableTypeDeclarationRector
+
+Remove the "callable" param type, add a `@param` tag instead
+
+- class: [`Rector\DowngradePhp54\Rector\FunctionLike\DowngradeCallableTypeDeclarationRector`](../rules/DowngradePhp54/Rector/FunctionLike/DowngradeCallableTypeDeclarationRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function someFunction(callable $callback)
++    /**
++     * @param callable $callback
++     */
++    public function someFunction($callback)
+     {
+     }
+ }
+```
+
+<br>
+
+### DowngradeInstanceMethodCallRector
+
+Downgrade instance and method call/property access
+
+- class: [`Rector\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector`](../rules/DowngradePhp54/Rector/MethodCall/DowngradeInstanceMethodCallRector.php)
+
+```diff
+-echo (new \ReflectionClass('\\stdClass'))->getName();
++$object = new \ReflectionClass('\\stdClass');
++echo $object->getName();
+```
+
+<br>
+
 ### DowngradeStaticClosureRector
 
 Remove static from closure
@@ -4052,7 +4125,63 @@ Remove static from closure
 
 <br>
 
+### ShortArrayToLongArrayRector
+
+Replace short arrays by long arrays
+
+- class: [`Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector`](../rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php)
+
+```diff
+-$a = [1, 2, 3];
++$a = array(1, 2, 3);
+```
+
+<br>
+
+## DowngradePhp55
+
+### DowngradeClassConstantToStringRector
+
+Replace <class>::class constant by string class names
+
+- class: [`Rector\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector`](../rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php)
+
+```diff
+ class AnotherClass
+ {
+ }
+ class SomeClass
+ {
+     public function run()
+     {
+-        return \AnotherClass::class;
++        return 'AnotherClass';
+     }
+ }
+```
+
+<br>
+
 ## DowngradePhp56
+
+### DowngradeArgumentUnpackingRector
+
+Replace argument unpacking by `call_user_func_array()`
+
+- class: [`Rector\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector`](../rules/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(array $items)
+     {
+-        some_function(...$items);
++        call_user_func_array('some_function', $items);
+     }
+ }
+```
+
+<br>
 
 ### DowngradeExponentialAssignmentOperatorRector
 
@@ -4125,6 +4254,19 @@ Change array contant definition via define to const
      'bird'
 -]);
 +];
+```
+
+<br>
+
+### DowngradeDirnameLevelsRector
+
+Replace the 2nd argument of `dirname()`
+
+- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php)
+
+```diff
+-return dirname($path, 2);
++return dirname(dirname($path));
 ```
 
 <br>
@@ -8067,6 +8209,28 @@ Refactor MyCLabs enum fetch to Enum const
 ```diff
 -$name = SomeEnum::VALUE()->getKey();
 +$name = SomeEnum::VALUE;
+```
+
+<br>
+
+### NewInInitializerRector
+
+Replace property declaration of new state with direct new
+
+- class: [`Rector\Php81\Rector\ClassMethod\NewInInitializerRector`](../rules/Php81/Rector/ClassMethod/NewInInitializerRector.php)
+
+```diff
+ class SomeClass
+ {
+-    private Logger $logger;
+-
+     public function __construct(
+-        ?Logger $logger = null,
++        private Logger $logger = new NullLogger,
+     ) {
+-        $this->logger = $logger ?? new NullLogger;
+     }
+ }
 ```
 
 <br>

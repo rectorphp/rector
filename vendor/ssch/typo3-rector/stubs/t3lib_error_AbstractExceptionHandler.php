@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211113;
+namespace RectorPrefix20211114;
 
 if (\class_exists('t3lib_error_AbstractExceptionHandler')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211113;
+namespace RectorPrefix20211114;
 
 if (\interface_exists('Tx_Extbase_Persistence_QOM_JoinConditionInterface')) {
     return;

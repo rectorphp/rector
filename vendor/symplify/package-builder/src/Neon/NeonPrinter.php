@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211113\Symplify\PackageBuilder\Neon;
+namespace RectorPrefix20211114\Symplify\PackageBuilder\Neon;
 
-use RectorPrefix20211113\Nette\Neon\Encoder;
-use RectorPrefix20211113\Nette\Neon\Neon;
-use RectorPrefix20211113\Nette\Utils\Strings;
+use RectorPrefix20211114\Nette\Neon\Encoder;
+use RectorPrefix20211114\Nette\Neon\Neon;
+use RectorPrefix20211114\Nette\Utils\Strings;
 /**
  * @api
  */
@@ -26,7 +26,7 @@ final class NeonPrinter
      */
     public function printNeon(array $phpStanNeon) : string
     {
-        $neonContent = \RectorPrefix20211113\Nette\Neon\Neon::encode($phpStanNeon, \RectorPrefix20211113\Nette\Neon\Encoder::BLOCK);
+        $neonContent = \RectorPrefix20211114\Nette\Neon\Neon::encode($phpStanNeon, \RectorPrefix20211114\Nette\Neon\Encoder::BLOCK);
         // tabs to spaces for consistency
         $neonContent = $this->replaceTabsWithSpaces($neonContent);
         // inline single tags, dummy
@@ -36,14 +36,14 @@ final class NeonPrinter
     }
     private function replaceTabsWithSpaces(string $neonContent) : string
     {
-        return \RectorPrefix20211113\Nette\Utils\Strings::replace($neonContent, '#\\t#', '    ');
+        return \RectorPrefix20211114\Nette\Utils\Strings::replace($neonContent, '#\\t#', '    ');
     }
     private function inlineSingleTags(string $neonContent) : string
     {
-        return \RectorPrefix20211113\Nette\Utils\Strings::replace($neonContent, self::TAGS_REGEX, 'tags: [$1]');
+        return \RectorPrefix20211114\Nette\Utils\Strings::replace($neonContent, self::TAGS_REGEX, 'tags: [$1]');
     }
     private function fixDoubleSpaceInArguments(string $neonContent) : string
     {
-        return \RectorPrefix20211113\Nette\Utils\Strings::replace($neonContent, self::ARGUMENTS_DOUBLE_SPACE_REGEX, '$1');
+        return \RectorPrefix20211114\Nette\Utils\Strings::replace($neonContent, self::ARGUMENTS_DOUBLE_SPACE_REGEX, '$1');
     }
 }
