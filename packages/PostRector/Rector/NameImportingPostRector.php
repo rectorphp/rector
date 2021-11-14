@@ -41,24 +41,19 @@ final class NameImportingPostRector extends AbstractPostRector
         }
 
         $file = $this->currentFileProvider->getFile();
+        if (! $file instanceof File) {
+            return null;
+        }
+
+        if (! $this->shouldApply($file)) {
+            return null;
+        }
 
         if ($node instanceof Name) {
-            if (! $file instanceof File) {
-                return null;
-            }
-
-            if (! $this->shouldApply($file)) {
-                return null;
-            }
-
             return $this->processNodeName($node, $file);
         }
 
         if (! $this->parameterProvider->provideBoolParameter(Option::IMPORT_DOC_BLOCKS)) {
-            return null;
-        }
-
-        if ($file instanceof File && ! $this->shouldApply($file)) {
             return null;
         }
 

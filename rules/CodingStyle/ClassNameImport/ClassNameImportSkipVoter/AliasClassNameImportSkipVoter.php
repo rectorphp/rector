@@ -29,12 +29,13 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node): bool
     {
         $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node);
+        $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();
 
         foreach ($aliasedUses as $aliasedUse) {
             $aliasedUseLowered = strtolower($aliasedUse);
 
             // its aliased, we cannot just rename it
-            if (\str_ends_with($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered())) {
+            if (\str_ends_with($aliasedUseLowered, '\\' . $shortNameLowered)) {
                 return true;
             }
         }

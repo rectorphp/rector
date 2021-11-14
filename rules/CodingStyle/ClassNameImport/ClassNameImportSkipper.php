@@ -56,9 +56,11 @@ final class ClassNameImportSkipper
      */
     public function isAlreadyImported(Name $name, array $uses): bool
     {
+        $stringName = $name->toString();
+
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
-                if ($useUse->name->toString() === $name->toString()) {
+                if ($useUse->name->toString() === $stringName) {
                     return true;
                 }
             }
@@ -72,7 +74,9 @@ final class ClassNameImportSkipper
      */
     public function isFoundInUse(Name $name, array $uses): bool
     {
+        $stringName = $name->toString();
         $nameLastName = strtolower($name->getLast());
+
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
                 $useUseLastName = strtolower($useUse->name->getLast());
@@ -81,7 +85,7 @@ final class ClassNameImportSkipper
                     continue;
                 }
 
-                if ($this->isJustRenamedClass($name, $useUse)) {
+                if ($this->isJustRenamedClass($stringName, $useUse)) {
                     continue;
                 }
 
@@ -92,16 +96,18 @@ final class ClassNameImportSkipper
         return false;
     }
 
-    private function isJustRenamedClass(Name $name, UseUse $useUse): bool
+    private function isJustRenamedClass(string $stringName, UseUse $useUse): bool
     {
+        $useUseNameString = $useUse->name->toString();
+
         // is in renamed classes? skip it
         foreach ($this->renamedClassesDataCollector->getOldToNewClasses() as $oldClass => $newClass) {
             // is class being renamed in use imports?
-            if ($name->toString() !== $newClass) {
+            if ($stringName !== $newClass) {
                 continue;
             }
 
-            if ($useUse->name->toString() !== $oldClass) {
+            if ($useUseNameString !== $oldClass) {
                 continue;
             }
 
