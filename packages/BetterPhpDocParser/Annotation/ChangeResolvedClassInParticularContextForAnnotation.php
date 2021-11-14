@@ -15,7 +15,7 @@ final class ChangeResolvedClassInParticularContextForAnnotation
     private $rules = [];
     public function __construct()
     {
-        $this->rules = [new \Rector\BetterPhpDocParser\ValueObject\ChangeResolvedClassInParticularContext('Doctrine\\ORM\\Mapping\\JoinTable', 'inverseJoinColumns', 'Doctrine\\ORM\\Mapping\\InverseJoinColumns')];
+        $this->rules = [new \Rector\BetterPhpDocParser\ValueObject\ChangeResolvedClassInParticularContext('Doctrine\\ORM\\Mapping\\JoinTable', 'inverseJoinColumns', 'Doctrine\\ORM\\Mapping\\InverseJoinColumn')];
     }
     public function changeResolvedClassIfNeed(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
