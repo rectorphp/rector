@@ -332,14 +332,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         return $this->nodeTypeResolver->getType($node);
     }
     /**
-     * @deprecated
-     * Use @see AbstractRector::getType() instead, as single method to get types
-     */
-    protected function getStaticType(\PhpParser\Node $node) : \PHPStan\Type\Type
-    {
-        return $this->nodeTypeResolver->getType($node);
-    }
-    /**
      * @param mixed[]|\PhpParser\Node $nodes
      */
     protected function traverseNodesWithCallable($nodes, callable $callable) : void
