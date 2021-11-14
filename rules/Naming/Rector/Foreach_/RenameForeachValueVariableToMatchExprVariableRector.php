@@ -5,12 +5,16 @@ namespace Rector\Naming\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,10 +30,15 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends \Rector\
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+    public function __construct(\Rector\Naming\ExpectedNameResolver\InflectorSingularResolver $inflectorSingularResolver, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
         $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -71,13 +80,16 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Variable && !$node->expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        $isPropertyFetch = $this->propertyFetchAnalyzer->isPropertyFetch($node->expr);
+        if (!$node->expr instanceof \PhpParser\Node\Expr\Variable && !$isPropertyFetch) {
             return null;
         }
-        if ($this->isNotThisTypePropertyFetch($node->expr)) {
+        /** @var Variable|PropertyFetch|StaticPropertyFetch $expr */
+        $expr = $node->expr;
+        if ($this->isNotCurrentClassLikePropertyFetch($expr, $isPropertyFetch)) {
             return null;
         }
-        $exprName = $this->getName($node->expr);
+        $exprName = $this->getName($expr);
         if ($exprName === null) {
             return null;
         }
@@ -101,15 +113,22 @@ CODE_SAMPLE
         return $this->processRename($node, $valueVarName, $singularValueVarName);
     }
     /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable $expr
+     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\Variable $expr
      */
-    private function isNotThisTypePropertyFetch($expr) : bool
+    private function isNotCurrentClassLikePropertyFetch($expr, bool $isPropertyFetch) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            $variableType = $this->getType($expr->var);
-            return !$variableType instanceof \PHPStan\Type\ThisType;
+        if (!$isPropertyFetch) {
+            return \false;
         }
-        return \false;
+        /** @var PropertyFetch|StaticPropertyFetch $expr */
+        $variableType = $expr instanceof \PhpParser\Node\Expr\PropertyFetch ? $this->nodeTypeResolver->getType($expr->var) : $this->nodeTypeResolver->getType($expr->class);
+        if ($variableType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            $currentClassLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\ClassLike::class);
+            if ($currentClassLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+                return !$this->nodeNameResolver->isName($currentClassLike, $variableType->getClassName());
+            }
+        }
+        return !$variableType instanceof \PHPStan\Type\ThisType;
     }
     private function processRename(\PhpParser\Node\Stmt\Foreach_ $foreach, string $valueVarName, string $singularValueVarName) : \PhpParser\Node\Stmt\Foreach_
     {
