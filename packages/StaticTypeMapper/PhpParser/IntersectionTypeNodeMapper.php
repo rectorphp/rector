@@ -4,29 +4,20 @@ declare (strict_types=1);
 namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
-use PhpParser\Node\UnionType;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use RectorPrefix20211114\Symfony\Contracts\Service\Attribute\Required;
 /**
- * @implements PhpParserNodeMapperInterface<UnionType>
+ * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
  */
-final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
+final class IntersectionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
     private $phpParserNodeMapper;
-    /**
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
-     */
-    private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
-    {
-        $this->typeFactory = $typeFactory;
-    }
     /**
      * @required
      */
@@ -39,7 +30,7 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
      */
     public function getNodeType() : string
     {
-        return \PhpParser\Node\UnionType::class;
+        return \PhpParser\Node\IntersectionType::class;
     }
     /**
      * @param \PhpParser\Node $node
@@ -47,9 +38,9 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
     public function mapToPHPStan($node) : \PHPStan\Type\Type
     {
         $types = [];
-        foreach ($node->types as $unionedType) {
-            $types[] = $this->phpParserNodeMapper->mapToPHPStanType($unionedType);
+        foreach ($node->types as $intersectionedType) {
+            $types[] = $this->phpParserNodeMapper->mapToPHPStanType($intersectionedType);
         }
-        return $this->typeFactory->createMixedPassedOrUnionType($types);
+        return new \PHPStan\Type\IntersectionType($types);
     }
 }

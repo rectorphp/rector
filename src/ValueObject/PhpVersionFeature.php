@@ -433,4 +433,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const NEW_INITIALIZERS = \Rector\Core\ValueObject\PhpVersion::PHP_81;
+    /**
+     * @see https://wiki.php.net/rfc/pure-intersection-types
+     * @var int
+     */
+    public const INTERSECTION_TYPES = \Rector\Core\ValueObject\PhpVersion::PHP_81;
 }

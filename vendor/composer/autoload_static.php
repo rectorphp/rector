@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfdda04122218d22f3d1286c001e6865b
+class ComposerStaticInit66c79d459c0fd56f56e8cc9903398fee
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2814,6 +2814,7 @@ class ComposerStaticInitfdda04122218d22f3d1286c001e6865b
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
         'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',
+        'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
@@ -2948,12 +2949,14 @@ class ComposerStaticInitfdda04122218d22f3d1286c001e6865b
         'Rector\\StaticTypeMapper\\Mapper\\ScalarStringToTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/Mapper/ScalarStringToTypeMapper.php',
         'Rector\\StaticTypeMapper\\Naming\\NameScopeFactory' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/Naming/NameScopeFactory.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\IdentifierTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/IdentifierTypeMapper.php',
+        'Rector\\StaticTypeMapper\\PhpDocParser\\IntersectionTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\NullableTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/NullableTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/UnionTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDoc\\PhpDocTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDoc/PhpDocTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\ExprNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/ExprNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\FullyQualifiedNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/FullyQualifiedNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\IdentifierNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/IdentifierNodeMapper.php',
+        'Rector\\StaticTypeMapper\\PhpParser\\IntersectionTypeNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/IntersectionTypeNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\NameNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/NameNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\NullableTypeNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/NullableTypeNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\StringNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/StringNodeMapper.php',
@@ -3542,9 +3545,9 @@ class ComposerStaticInitfdda04122218d22f3d1286c001e6865b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfdda04122218d22f3d1286c001e6865b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfdda04122218d22f3d1286c001e6865b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfdda04122218d22f3d1286c001e6865b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit66c79d459c0fd56f56e8cc9903398fee::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit66c79d459c0fd56f56e8cc9903398fee::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit66c79d459c0fd56f56e8cc9903398fee::$classMap;
 
         }, null, ClassLoader::class);
     }

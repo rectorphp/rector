@@ -3,10 +3,8 @@
 declare (strict_types=1);
 namespace Rector\FamilyTree\ValueObject;
 
-use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\Type;
 final class PropertyType
 {
@@ -15,13 +13,13 @@ final class PropertyType
      */
     private $varType;
     /**
-     * @var Name|NullableType|PhpParserUnionType|null
+     * @var \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null
      */
     private $propertyTypeNode;
     /**
-     * @param Name|NullableType|PhpParserUnionType|null $propertyTypeNode
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $propertyTypeNode
      */
-    public function __construct(\PHPStan\Type\Type $varType, ?\PhpParser\Node $propertyTypeNode)
+    public function __construct(\PHPStan\Type\Type $varType, $propertyTypeNode)
     {
         $this->varType = $varType;
         $this->propertyTypeNode = $propertyTypeNode;
@@ -31,9 +29,9 @@ final class PropertyType
         return $this->varType;
     }
     /**
-     * @return Name|NullableType|PhpParserUnionType|null
+     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null
      */
-    public function getPropertyTypeNode() : ?\PhpParser\Node
+    public function getPropertyTypeNode()
     {
         return $this->propertyTypeNode;
     }

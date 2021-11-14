@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
@@ -196,7 +196,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|null $node
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $node
      */
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type) : bool
     {
@@ -218,7 +218,7 @@ CODE_SAMPLE
         return \true;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType $node
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name $node
      */
     private function shouldSkipNonClassLikeType($node, \PHPStan\Type\Type $type) : bool
     {

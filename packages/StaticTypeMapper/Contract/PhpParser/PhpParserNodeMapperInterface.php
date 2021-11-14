@@ -5,10 +5,13 @@ namespace Rector\StaticTypeMapper\Contract\PhpParser;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;
+/**
+ * @template TNode as \PhpParser\Node
+ */
 interface PhpParserNodeMapperInterface
 {
     /**
-     * @return class-string<Node>
+     * @return class-string<TNode>
      */
     public function getNodeType() : string;
     /**

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php74\TypeAnalyzer;
 
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PHPStan\Type\NullType;
@@ -11,7 +12,7 @@ use PHPStan\Type\UnionType;
 final class PropertyUnionTypeResolver
 {
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $phpUnionType
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name $phpUnionType
      */
     public function resolve($phpUnionType, \PHPStan\Type\Type $possibleUnionType) : \PHPStan\Type\Type
     {

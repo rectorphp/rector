@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -142,7 +143,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
         if ($nullabledTypeNode instanceof \PhpParser\Node\NullableType) {
             return $nullabledTypeNode;
         }
-        if ($nullabledTypeNode instanceof \PhpParser\Node\UnionType) {
+        if ($nullabledTypeNode instanceof \PhpParser\Node\ComplexType) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return new \PhpParser\Node\NullableType($nullabledTypeNode);

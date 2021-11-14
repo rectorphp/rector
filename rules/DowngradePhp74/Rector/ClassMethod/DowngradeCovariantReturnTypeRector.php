@@ -129,7 +129,7 @@ CODE_SAMPLE
             return null;
         }
         // Make it nullable?
-        if ($node->returnType instanceof \PhpParser\Node\NullableType && !$parentReturnTypeNode instanceof \PhpParser\Node\NullableType && !$parentReturnTypeNode instanceof \PhpParser\Node\UnionType) {
+        if ($node->returnType instanceof \PhpParser\Node\NullableType && !$parentReturnTypeNode instanceof \PhpParser\Node\ComplexType) {
             $parentReturnTypeNode = new \PhpParser\Node\NullableType($parentReturnTypeNode);
         }
         // skip if type is already set

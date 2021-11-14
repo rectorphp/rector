@@ -3,9 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper;
 
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
@@ -44,7 +43,7 @@ final class PHPStanStaticTypeMapper
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
-     * @return \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|null
+     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null
      */
     public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind)
     {

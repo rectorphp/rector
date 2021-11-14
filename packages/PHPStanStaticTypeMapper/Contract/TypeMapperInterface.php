@@ -4,14 +4,13 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\Contract;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 /**
- * @template T of Type
+ * @template TType of Type
  */
 interface TypeMapperInterface
 {
@@ -26,7 +25,7 @@ interface TypeMapperInterface
     public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode;
     /**
      * @param \PHPStan\Type\Type $type
-     * @return Name|NullableType|UnionType|null
+     * @return Name|ComplexType|null
      * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node;

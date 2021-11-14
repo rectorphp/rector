@@ -4,10 +4,14 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
@@ -21,6 +25,14 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
+    /**
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    {
+        $this->phpVersionProvider = $phpVersionProvider;
+    }
     /**
      * @required
      */
@@ -46,6 +58,9 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
             $intersectionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($intersectionedType, $typeKind);
         }
         $intersectionTypesNodes = \array_unique($intersectionTypesNodes);
+        if (\count($intersectionTypesNodes) === 1) {
+            return $intersectionTypesNodes[0];
+        }
         return new \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode($intersectionTypesNodes);
     }
     /**
@@ -54,7 +69,17 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
-        // intersection types in PHP are not yet supported
-        return null;
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::INTERSECTION_TYPES)) {
+            return null;
+        }
+        $intersectionedTypeNodes = [];
+        foreach ($type->getTypes() as $intersectionedType) {
+            $resolvedType = $this->phpStanStaticTypeMapper->mapToPhpParserNode($intersectionedType, $typeKind);
+            if (!$resolvedType instanceof \PhpParser\Node\Name) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
+            $intersectionedTypeNodes[] = $resolvedType;
+        }
+        return new \PhpParser\Node\IntersectionType($intersectionedTypeNodes);
     }
 }
