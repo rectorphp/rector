@@ -6,12 +6,16 @@ namespace Rector\Naming\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Type\ThisType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -22,7 +26,8 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
 {
     public function __construct(
         private InflectorSingularResolver $inflectorSingularResolver,
-        private ForeachAnalyzer $foreachAnalyzer
+        private ForeachAnalyzer $foreachAnalyzer,
+        private PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 
@@ -73,15 +78,18 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if (! $node->expr instanceof Variable && ! $node->expr instanceof PropertyFetch) {
+        $isPropertyFetch = $this->propertyFetchAnalyzer->isPropertyFetch($node->expr);
+        if (! $node->expr instanceof Variable && ! $isPropertyFetch) {
             return null;
         }
 
-        if ($this->isNotThisTypePropertyFetch($node->expr)) {
+        /** @var Variable|PropertyFetch|StaticPropertyFetch $expr */
+        $expr = $node->expr;
+        if ($this->isNotCurrentClassLikePropertyFetch($expr, $isPropertyFetch)) {
             return null;
         }
 
-        $exprName = $this->getName($node->expr);
+        $exprName = $this->getName($expr);
         if ($exprName === null) {
             return null;
         }
@@ -111,14 +119,27 @@ CODE_SAMPLE
         return $this->processRename($node, $valueVarName, $singularValueVarName);
     }
 
-    private function isNotThisTypePropertyFetch(PropertyFetch|Variable $expr): bool
-    {
-        if ($expr instanceof PropertyFetch) {
-            $variableType = $this->getType($expr->var);
-            return ! $variableType instanceof ThisType;
+    private function isNotCurrentClassLikePropertyFetch(
+        PropertyFetch|StaticPropertyFetch|Variable $expr,
+        bool $isPropertyFetch
+    ): bool {
+        if (! $isPropertyFetch) {
+            return false;
         }
 
-        return false;
+        /** @var PropertyFetch|StaticPropertyFetch $expr */
+        $variableType = $expr instanceof PropertyFetch
+            ? $this->nodeTypeResolver->getType($expr->var)
+            : $this->nodeTypeResolver->getType($expr->class);
+
+        if ($variableType instanceof FullyQualifiedObjectType) {
+            $currentClassLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
+            if ($currentClassLike instanceof ClassLike) {
+                return ! $this->nodeNameResolver->isName($currentClassLike, $variableType->getClassName());
+            }
+        }
+
+        return ! $variableType instanceof ThisType;
     }
 
     private function processRename(Foreach_ $foreach, string $valueVarName, string $singularValueVarName): Foreach_
