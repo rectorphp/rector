@@ -13,6 +13,9 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements PhpParserNodeMapperInterface<NullableType>
+ */
 final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
 {
     private PhpParserNodeMapper $phpParserNodeMapper;

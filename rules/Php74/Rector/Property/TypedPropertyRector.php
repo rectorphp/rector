@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
@@ -165,6 +165,7 @@ CODE_SAMPLE
         }
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
         $propertyType = $this->familyRelationsAnalyzer->getPossibleUnionPropertyType(
             $node,
             $varType,
@@ -199,7 +200,7 @@ CODE_SAMPLE
     }
 
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn(
-        Name | NullableType | PhpParserUnionType | null $node,
+        Name | ComplexType | null $node,
         Property $property,
         Type $type
     ): bool {
@@ -226,7 +227,7 @@ CODE_SAMPLE
         return true;
     }
 
-    private function shouldSkipNonClassLikeType(Name|NullableType|PhpParserUnionType $node, Type $type): bool
+    private function shouldSkipNonClassLikeType(Name|ComplexType $node, Type $type): bool
     {
         // unwrap nullable type
         if ($node instanceof NullableType) {

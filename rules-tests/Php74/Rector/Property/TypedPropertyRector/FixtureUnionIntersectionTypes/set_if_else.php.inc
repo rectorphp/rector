@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
 class SetIfElse
 {
@@ -20,7 +20,7 @@ class SetIfElse
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
 class SetIfElse
 {

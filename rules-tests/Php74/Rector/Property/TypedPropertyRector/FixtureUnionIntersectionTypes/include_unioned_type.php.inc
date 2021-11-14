@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
 class IncludeUnionedType
 {
@@ -27,7 +27,7 @@ class IncludeUnionedType
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionTypes;
+namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
 class IncludeUnionedType
 {

@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\Contract;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 
 /**
- * @template T of Type
+ * @template TType of Type
  */
 interface TypeMapperInterface
 {
@@ -23,13 +22,13 @@ interface TypeMapperInterface
     public function getNodeClass(): string;
 
     /**
-     * @param T $type
+     * @param TType $type
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type, TypeKind $typeKind): TypeNode;
 
     /**
-     * @param T $type
-     * @return Name|NullableType|UnionType|null
+     * @param TType $type
+     * @return Name|ComplexType|null
      */
     public function mapToPhpParserNode(Type $type, TypeKind $typeKind): ?Node;
 }

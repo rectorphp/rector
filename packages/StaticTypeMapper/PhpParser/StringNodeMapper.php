@@ -10,6 +10,9 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 
+/**
+ * @implements PhpParserNodeMapperInterface<String_>
+ */
 final class StringNodeMapper implements PhpParserNodeMapperInterface
 {
     /**

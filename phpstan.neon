@@ -511,3 +511,9 @@ parameters:
         -
             path: rules/Php74/Rector/Property/TypedPropertyRector.php
             message: '#Class cognitive complexity is 36, keep it under 30#'
+
+        -
+            message: '#Autowired/inject method name must respect "autowire/inject" \+ class name#'
+            paths:
+                - packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php
+                - packages/StaticTypeMapper/PhpParser/IntersectionTypeNodeMapper.php

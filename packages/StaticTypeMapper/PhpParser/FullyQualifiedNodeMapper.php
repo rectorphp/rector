@@ -17,6 +17,9 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 
+/**
+ * @implements PhpParserNodeMapperInterface<FullyQualified>
+ */
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(

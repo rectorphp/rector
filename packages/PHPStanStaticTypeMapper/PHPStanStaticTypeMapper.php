@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\PHPStanStaticTypeMapper;
 
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
@@ -47,7 +46,7 @@ final class PHPStanStaticTypeMapper
         throw new NotImplementedYetException(__METHOD__ . ' for ' . $type::class);
     }
 
-    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): Name | NullableType | UnionType | null
+    public function mapToPhpParserNode(Type $type, TypeKind $typeKind): Name | ComplexType | null
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (! is_a($type, $typeMapper->getNodeClass(), true)) {

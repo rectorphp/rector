@@ -536,4 +536,10 @@ final class PhpVersionFeature
      * @var int
      */
     public const NEW_INITIALIZERS = PhpVersion::PHP_81;
+
+    /**
+     * @see https://wiki.php.net/rfc/pure-intersection-types
+     * @var int
+     */
+    public const INTERSECTION_TYPES = PhpVersion::PHP_81;
 }

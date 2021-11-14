@@ -134,7 +134,7 @@ CODE_SAMPLE
         }
 
         // Make it nullable?
-        if ($node->returnType instanceof NullableType && ! $parentReturnTypeNode instanceof NullableType && ! $parentReturnTypeNode instanceof UnionType) {
+        if ($node->returnType instanceof NullableType && ! $parentReturnTypeNode instanceof ComplexType) {
             $parentReturnTypeNode = new NullableType($parentReturnTypeNode);
         }
 

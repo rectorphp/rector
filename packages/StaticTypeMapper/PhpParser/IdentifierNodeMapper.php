@@ -10,6 +10,9 @@ use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 
+/**
+ * @implements PhpParserNodeMapperInterface<Identifier>
+ */
 final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(

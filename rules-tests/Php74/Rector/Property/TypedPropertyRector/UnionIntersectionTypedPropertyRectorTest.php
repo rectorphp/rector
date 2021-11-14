@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class UnionTypedPropertyRectorTest extends AbstractRectorTestCase
+final class UnionIntersectionTypedPropertyRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -23,11 +23,11 @@ final class UnionTypedPropertyRectorTest extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionTypes');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureUnionIntersectionTypes');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/union_type_rule.php';
+        return __DIR__ . '/config/union_and_intersection_type_rule.php';
     }
 }

@@ -5,17 +5,16 @@ declare(strict_types=1);
 namespace Rector\FamilyTree\Reflection;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -68,7 +67,7 @@ final class FamilyRelationsAnalyzer
         Property $property,
         Type $varType,
         ?Scope $scope,
-        Name | NullableType | PhpParserUnionType | null $propertyTypeNode
+        Name | ComplexType | null $propertyTypeNode
     ): PropertyType {
         if ($varType instanceof UnionType) {
             return new PropertyType($varType, $propertyTypeNode);
