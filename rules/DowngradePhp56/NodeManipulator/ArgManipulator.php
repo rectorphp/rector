@@ -43,9 +43,11 @@ final class ArgManipulator
             if (! $arg->unpack) {
                 continue;
             }
+
             if ($arg->value instanceof Array_) {
                 continue;
             }
+
             return false;
         }
 
