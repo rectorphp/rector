@@ -489,9 +489,6 @@ parameters:
             paths:
                 - packages/VersionBonding/PhpVersionedFilter.php
 
-        # waits for enum phpstan to support PHSPtan 1.0
-        - '#Constant Rector\\(.*?)\\Enum\\(.*?)\:\:(.*?) is unused#'
-
         # use lighter service for performance reasons
         -
             path: packages/Caching/ValueObject/Storage/FileCacheStorage.php
