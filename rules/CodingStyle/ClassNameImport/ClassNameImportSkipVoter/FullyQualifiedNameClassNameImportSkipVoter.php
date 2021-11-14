@@ -36,9 +36,10 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\Coding
     {
         // "new X" or "X::static()"
         $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveFromFile($file);
+        $loweredShortNameFullyQualified = $fullyQualifiedObjectType->getShortNameLowered();
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
             $shortNameLowered = \strtolower($shortName);
-            if ($fullyQualifiedObjectType->getShortNameLowered() !== $shortNameLowered) {
+            if ($loweredShortNameFullyQualified !== $shortNameLowered) {
                 continue;
             }
             return $fullyQualifiedObjectType->getClassNameLowered() !== \strtolower($fullyQualifiedName);

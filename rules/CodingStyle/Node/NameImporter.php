@@ -80,8 +80,10 @@ final class NameImporter
         if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             return null;
         }
-        $this->aliasedUses = $this->aliasUsesResolver->resolveFromStmts($uses);
-        return $this->importNameAndCollectNewUseStatement($file, $name, $staticType);
+        $className = $staticType->getClassName();
+        // class has \, no need to search in aliases, mark aliasedUses as empty
+        $this->aliasedUses = \strpos($className, '\\') !== \false ? [] : $this->aliasUsesResolver->resolveFromStmts($uses);
+        return $this->importNameAndCollectNewUseStatement($file, $name, $staticType, $className);
     }
     private function shouldSkipName(\PhpParser\Node\Name $name) : bool
     {
@@ -110,7 +112,7 @@ final class NameImporter
         }
         return \false;
     }
-    private function importNameAndCollectNewUseStatement(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : ?\PhpParser\Node\Name
+    private function importNameAndCollectNewUseStatement(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, string $className) : ?\PhpParser\Node\Name
     {
         // the same end is already imported → skip
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $name, $fullyQualifiedObjectType)) {
@@ -123,9 +125,12 @@ final class NameImporter
             return null;
         }
         $this->addUseImport($file, $name, $fullyQualifiedObjectType);
+        if ($this->aliasedUses === []) {
+            return $fullyQualifiedObjectType->getShortNameNode();
+        }
         // possibly aliased
         foreach ($this->aliasedUses as $aliasedUse) {
-            if ($fullyQualifiedObjectType->getClassName() === $aliasedUse) {
+            if ($className === $aliasedUse) {
                 return null;
             }
         }

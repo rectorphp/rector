@@ -35,10 +35,11 @@ final class AliasClassNameImportSkipVoter implements \Rector\CodingStyle\Contrac
     public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
     {
         $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node);
+        $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();
         foreach ($aliasedUses as $aliasedUse) {
             $aliasedUseLowered = \strtolower($aliasedUse);
             // its aliased, we cannot just rename it
-            if (\substr_compare($aliasedUseLowered, '\\' . $fullyQualifiedObjectType->getShortNameLowered(), -\strlen('\\' . $fullyQualifiedObjectType->getShortNameLowered())) === 0) {
+            if (\substr_compare($aliasedUseLowered, '\\' . $shortNameLowered, -\strlen('\\' . $shortNameLowered)) === 0) {
                 return \true;
             }
         }

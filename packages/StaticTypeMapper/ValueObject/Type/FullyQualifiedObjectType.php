@@ -24,10 +24,11 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
     }
     public function getShortName() : string
     {
-        if (\strpos($this->getClassName(), '\\') === \false) {
-            return $this->getClassName();
+        $className = $this->getClassName();
+        if (\strpos($className, '\\') === \false) {
+            return $className;
         }
-        return (string) \RectorPrefix20211114\Nette\Utils\Strings::after($this->getClassName(), '\\', -1);
+        return (string) \RectorPrefix20211114\Nette\Utils\Strings::after($className, '\\', -1);
     }
     public function getShortNameNode() : \PhpParser\Node\Name
     {

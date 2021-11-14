@@ -39,18 +39,18 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     public function addUseImport($objectType) : void
     {
+        /** @var File $file */
         $file = $this->currentFileProvider->getFile();
-        $smartFileInfo = $file->getSmartFileInfo();
-        $this->useImportTypesInFilePath[$smartFileInfo->getRealPath()][] = $objectType;
+        $this->useImportTypesInFilePath[$file->getFilePath()][] = $objectType;
     }
     /**
      * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
      */
     public function addFunctionUseImport($fullyQualifiedObjectType) : void
     {
+        /** @var File $file */
         $file = $this->currentFileProvider->getFile();
-        $smartFileInfo = $file->getSmartFileInfo();
-        $this->functionUseImportTypesInFilePath[$smartFileInfo->getRealPath()][] = $fullyQualifiedObjectType;
+        $this->functionUseImportTypesInFilePath[$file->getFilePath()][] = $fullyQualifiedObjectType;
     }
     /**
      * @return AliasedObjectType[]|FullyQualifiedObjectType[]
@@ -59,8 +59,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     public function getUseImportTypesByNode($file, $node) : array
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $filePath = $fileInfo->getRealPath();
+        $filePath = $file->getFilePath();
         $objectTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
         /** @var Use_[] $useNodes */
         $useNodes = (array) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES);
@@ -96,10 +95,9 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     public function isShortImported($file, $fullyQualifiedObjectType) : bool
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $filePath = $fileInfo->getRealPath();
         $shortName = $fullyQualifiedObjectType->getShortName();
-        if ($this->isShortClassImported($file, $shortName)) {
+        $filePath = $file->getFilePath();
+        if ($this->isShortClassImported($filePath, $shortName)) {
             return \true;
         }
         $fileFunctionUseImportTypes = $this->functionUseImportTypesInFilePath[$filePath] ?? [];
@@ -116,8 +114,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     public function isImportShortable($file, $fullyQualifiedObjectType) : bool
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $filePath = $fileInfo->getRealPath();
+        $filePath = $file->getFilePath();
         $fileUseImportTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileUseImportTypes as $fileUseImportType) {
             if ($fullyQualifiedObjectType->equals($fileUseImportType)) {
@@ -148,11 +145,9 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
     {
         return $this->functionUseImportTypesInFilePath[$smartFileInfo->getRealPath()] ?? [];
     }
-    private function isShortClassImported(\Rector\Core\ValueObject\Application\File $file, string $shortName) : bool
+    private function isShortClassImported(string $filePath, string $shortName) : bool
     {
-        $fileInfo = $file->getSmartFileInfo();
-        $realPath = $fileInfo->getRealPath();
-        $fileUseImports = $this->useImportTypesInFilePath[$realPath] ?? [];
+        $fileUseImports = $this->useImportTypesInFilePath[$filePath] ?? [];
         foreach ($fileUseImports as $fileUseImport) {
             if ($fileUseImport->getShortName() === $shortName) {
                 return \true;

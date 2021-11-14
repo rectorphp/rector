@@ -54,9 +54,10 @@ final class ClassNameImportSkipper
      */
     public function isAlreadyImported(\PhpParser\Node\Name $name, array $uses) : bool
     {
+        $stringName = $name->toString();
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
-                if ($useUse->name->toString() === $name->toString()) {
+                if ($useUse->name->toString() === $stringName) {
                     return \true;
                 }
             }
@@ -68,6 +69,7 @@ final class ClassNameImportSkipper
      */
     public function isFoundInUse(\PhpParser\Node\Name $name, array $uses) : bool
     {
+        $stringName = $name->toString();
         $nameLastName = \strtolower($name->getLast());
         foreach ($uses as $use) {
             foreach ($use->uses as $useUse) {
@@ -75,7 +77,7 @@ final class ClassNameImportSkipper
                 if ($useUseLastName !== $nameLastName) {
                     continue;
                 }
-                if ($this->isJustRenamedClass($name, $useUse)) {
+                if ($this->isJustRenamedClass($stringName, $useUse)) {
                     continue;
                 }
                 return \true;
@@ -83,15 +85,16 @@ final class ClassNameImportSkipper
         }
         return \false;
     }
-    private function isJustRenamedClass(\PhpParser\Node\Name $name, \PhpParser\Node\Stmt\UseUse $useUse) : bool
+    private function isJustRenamedClass(string $stringName, \PhpParser\Node\Stmt\UseUse $useUse) : bool
     {
+        $useUseNameString = $useUse->name->toString();
         // is in renamed classes? skip it
         foreach ($this->renamedClassesDataCollector->getOldToNewClasses() as $oldClass => $newClass) {
             // is class being renamed in use imports?
-            if ($name->toString() !== $newClass) {
+            if ($stringName !== $newClass) {
                 continue;
             }
-            if ($useUse->name->toString() !== $oldClass) {
+            if ($useUseNameString !== $oldClass) {
                 continue;
             }
             return \true;

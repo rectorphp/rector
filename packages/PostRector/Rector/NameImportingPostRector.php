@@ -69,19 +69,16 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return null;
         }
         $file = $this->currentFileProvider->getFile();
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+            return null;
+        }
+        if (!$this->shouldApply($file)) {
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Name) {
-            if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
-                return null;
-            }
-            if (!$this->shouldApply($file)) {
-                return null;
-            }
             return $this->processNodeName($node, $file);
         }
         if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_DOC_BLOCKS)) {
-            return null;
-        }
-        if ($file instanceof \Rector\Core\ValueObject\Application\File && !$this->shouldApply($file)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
