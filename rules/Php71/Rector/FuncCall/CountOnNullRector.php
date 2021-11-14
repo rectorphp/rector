@@ -19,6 +19,8 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -100,6 +102,9 @@ CODE_SAMPLE
             return $this->castToArray($countedNode, $node);
         }
         $countedType = $this->getType($countedNode);
+        if ($this->isAlwaysIterableType($countedType)) {
+            return null;
+        }
         if ($this->nodeTypeResolver->isNullableType($countedNode) || $countedType instanceof \PHPStan\Type\NullType) {
             $identical = new \PhpParser\Node\Expr\BinaryOp\Identical($countedNode, $this->nodeFactory->createNull());
             $ternary = new \PhpParser\Node\Expr\Ternary($identical, new \PhpParser\Node\Scalar\LNumber(0), $node);
@@ -116,6 +121,19 @@ CODE_SAMPLE
         // prevent infinity loop re-resolution
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, \true);
         return new \PhpParser\Node\Expr\Ternary($conditionNode, $node, new \PhpParser\Node\Scalar\LNumber(0));
+    }
+    private function isAlwaysIterableType(\PHPStan\Type\Type $possibleUnionType) : bool
+    {
+        if (!$possibleUnionType instanceof \PHPStan\Type\UnionType) {
+            return \false;
+        }
+        $types = $possibleUnionType->getTypes();
+        foreach ($types as $type) {
+            if ($type->isIterable()->no()) {
+                return \false;
+            }
+        }
+        return \true;
     }
     private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
