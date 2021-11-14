@@ -20,6 +20,8 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -110,6 +112,10 @@ CODE_SAMPLE
 
         $countedType = $this->getType($countedNode);
 
+        if ($this->isAlwaysIterableType($countedType)) {
+            return null;
+        }
+
         if ($this->nodeTypeResolver->isNullableType($countedNode) || $countedType instanceof NullType) {
             $identical = new Identical($countedNode, $this->nodeFactory->createNull());
             $ternary = new Ternary($identical, new LNumber(0), $node);
@@ -132,6 +138,23 @@ CODE_SAMPLE
         $node->setAttribute(self::ALREADY_CHANGED_ON_COUNT, true);
 
         return new Ternary($conditionNode, $node, new LNumber(0));
+    }
+
+    private function isAlwaysIterableType(Type $possibleUnionType): bool
+    {
+        if (! $possibleUnionType instanceof UnionType) {
+            return false;
+        }
+
+        $types = $possibleUnionType->getTypes();
+
+        foreach ($types as $type) {
+            if ($type->isIterable()->no()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function shouldSkip(FuncCall $funcCall): bool
