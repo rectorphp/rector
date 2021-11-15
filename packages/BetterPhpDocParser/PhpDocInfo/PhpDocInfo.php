@@ -27,7 +27,6 @@ use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 
@@ -339,6 +338,9 @@ final class PhpDocInfo
         }
 
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
+        if (! is_string($name)) {
+            return;
+        }
 
         $phpDocTagNode = new PhpDocTagNode($name, $phpDocTagValueNode);
         $this->addPhpDocTagNode($phpDocTagNode);
@@ -476,16 +478,7 @@ final class PhpDocInfo
         return $this->node;
     }
 
-    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): MixedType | Type
-    {
-        if ($phpDocTagValueNode === null) {
-            return new MixedType();
-        }
-
-        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
-    }
-
-    private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): string
+    public function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode): ?string
     {
         foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
             /** @var class-string<PhpDocTagNode> $tagValueNodeType */
@@ -494,6 +487,15 @@ final class PhpDocInfo
             }
         }
 
-        throw new NotImplementedYetException($phpDocTagValueNode::class);
+        return null;
+    }
+
+    private function getTypeOrMixed(?PhpDocTagValueNode $phpDocTagValueNode): MixedType | Type
+    {
+        if ($phpDocTagValueNode === null) {
+            return new MixedType();
+        }
+
+        return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
     }
 }
