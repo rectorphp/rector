@@ -91,7 +91,7 @@ CODE_SAMPLE
         }
 
         /** @var ClassLike $classLike */
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
 
         foreach ($this->parameterTypehints as $parameterTypehint) {
             if (! $this->isObjectType($classLike, $parameterTypehint->getObjectType())) {
