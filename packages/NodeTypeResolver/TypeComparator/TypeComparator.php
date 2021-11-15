@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -12,9 +14,11 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -87,7 +91,20 @@ final class TypeComparator
         // normalize bool union types
         $phpParserNodeType = $this->normalizeConstantBooleanType($phpParserNodeType);
         $phpStanDocType = $this->normalizeConstantBooleanType($phpStanDocType);
-        return $this->areTypesEqual($phpParserNodeType, $phpStanDocType);
+        if (!$this->areTypesEqual($phpParserNodeType, $phpStanDocType)) {
+            return \false;
+        }
+        // special case for non-final $this/self compare; in case of interface/abstract class, it can be another $this
+        if ($phpStanDocType instanceof \PHPStan\Type\ThisType && $phpParserNodeType instanceof \PHPStan\Type\ThisType) {
+            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            if ($scope instanceof \PHPStan\Analyser\Scope) {
+                $classReflection = $scope->getClassReflection();
+                if ($classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+                    return $classReflection->isFinal();
+                }
+            }
+        }
+        return \true;
     }
     public function isSubtype(\PHPStan\Type\Type $checkedType, \PHPStan\Type\Type $mainType) : bool
     {
