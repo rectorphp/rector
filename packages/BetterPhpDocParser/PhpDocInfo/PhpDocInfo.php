@@ -26,7 +26,6 @@ use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20211115\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
@@ -311,6 +310,9 @@ final class PhpDocInfo
             return;
         }
         $name = $this->resolveNameForPhpDocTagValueNode($phpDocTagValueNode);
+        if (!\is_string($name)) {
+            return;
+        }
         $phpDocTagNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($name, $phpDocTagValueNode);
         $this->addPhpDocTagNode($phpDocTagNode);
     }
@@ -420,6 +422,16 @@ final class PhpDocInfo
     {
         return $this->node;
     }
+    public function resolveNameForPhpDocTagValueNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $phpDocTagValueNode) : ?string
+    {
+        foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
+            /** @var class-string<PhpDocTagNode> $tagValueNodeType */
+            if (\is_a($phpDocTagValueNode, $tagValueNodeType, \true)) {
+                return $name;
+            }
+        }
+        return null;
+    }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\Type
      */
@@ -429,15 +441,5 @@ final class PhpDocInfo
             return new \PHPStan\Type\MixedType();
         }
         return $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($phpDocTagValueNode, $this->node);
-    }
-    private function resolveNameForPhpDocTagValueNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $phpDocTagValueNode) : string
-    {
-        foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
-            /** @var class-string<PhpDocTagNode> $tagValueNodeType */
-            if (\is_a($phpDocTagValueNode, $tagValueNodeType, \true)) {
-                return $name;
-            }
-        }
-        throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($phpDocTagValueNode));
     }
 }
