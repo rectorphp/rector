@@ -47,12 +47,13 @@ final class GenerateChangelogCommand extends \RectorPrefix20211115\Symfony\Compo
      */
     protected function execute($input, $output) : int
     {
-        $commitHashRange = \sprintf('%s..%s', $input->getArgument(self::OPTION_FROM_COMMIT), $input->getArgument(self::OPTION_TO_COMMIT));
-        $commitLines = $this->exec(['git', 'log', $commitHashRange, '--reverse', '--pretty=%H %s']);
+        $fromCommit = (string) $input->getArgument(self::OPTION_FROM_COMMIT);
+        $toCommit = (string) $input->getArgument(self::OPTION_TO_COMMIT);
+        $commitLines = $this->resolveCommitLinesFromToHashes($fromCommit, $toCommit);
         $commits = \array_map(function (string $line) : array {
             [$hash, $message] = \explode(' ', $line, 2);
             return ['hash' => $hash, 'message' => $message];
-        }, \explode("\n", $commitLines));
+        }, $commitLines);
         $i = 0;
         foreach ($commits as $commit) {
             $searchPullRequestsUri = \sprintf('https://api.github.com/search/issues?q=repo:' . self::DEVELOPMENT_REPOSITORY_NAME . '+%s', $commit['hash']);
@@ -97,6 +98,17 @@ final class GenerateChangelogCommand extends \RectorPrefix20211115\Symfony\Compo
         $process = new \RectorPrefix20211115\Symfony\Component\Process\Process($commandParts);
         $process->run();
         return $process->getOutput();
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveCommitLinesFromToHashes(string $fromCommit, string $toCommit) : array
+    {
+        $commitHashRange = \sprintf('%s..%s', $fromCommit, $toCommit);
+        $output = $this->exec(['git', 'log', $commitHashRange, '--reverse', '--pretty=%H %s']);
+        $commitLines = \explode("\n", $output);
+        // remove empty values
+        return \array_filter($commitLines);
     }
 }
 /**
