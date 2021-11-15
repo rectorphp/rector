@@ -95,6 +95,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
             return new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
         }
         $objectType = new \PHPStan\Type\ObjectType($typeNode->name);
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope);
     }
     /**
@@ -117,11 +118,8 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     /**
      * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType
      */
-    private function mapParent(?\PHPStan\Analyser\Scope $scope)
+    private function mapParent(\PHPStan\Analyser\Scope $scope)
     {
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return new \PHPStan\Type\MixedType();
-        }
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return new \PHPStan\Type\MixedType();
@@ -131,11 +129,8 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
      */
-    private function mapStatic(?\PHPStan\Analyser\Scope $scope)
+    private function mapStatic(\PHPStan\Analyser\Scope $scope)
     {
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return new \PHPStan\Type\MixedType();
-        }
         $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return new \PHPStan\Type\MixedType();
