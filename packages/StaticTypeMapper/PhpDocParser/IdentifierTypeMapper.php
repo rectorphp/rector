@@ -86,8 +86,6 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         }
 
         $objectType = new ObjectType($typeNode->name);
-
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope);
     }
 
@@ -108,8 +106,12 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new SelfObjectType($className);
     }
 
-    private function mapParent(Scope $scope): ParentStaticType | MixedType
+    private function mapParent(?Scope $scope): ParentStaticType | MixedType
     {
+        if (! $scope instanceof Scope) {
+            return new MixedType();
+        }
+
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         if (! $parentClassReflection instanceof ClassReflection) {
             return new MixedType();
@@ -118,8 +120,12 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new ParentStaticType($parentClassReflection);
     }
 
-    private function mapStatic(Scope $scope): MixedType | StaticType
+    private function mapStatic(?Scope $scope): MixedType | StaticType
     {
+        if (! $scope instanceof Scope) {
+            return new MixedType();
+        }
+
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
             return new MixedType();
