@@ -39,7 +39,7 @@ final class DeadReturnTagValueNodeAnalyzer
         if (! $this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual(
             $returnType,
             $returnTagValueNode->type,
-            $functionLike
+            $functionLike,
         )) {
             return false;
         }
