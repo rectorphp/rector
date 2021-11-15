@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211114\Symfony\Component\VarExporter;
+namespace RectorPrefix20211115\Symfony\Component\VarExporter;
 
-use RectorPrefix20211114\Symfony\Component\VarExporter\Exception\ExceptionInterface;
-use RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Exporter;
-use RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Hydrator;
-use RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Registry;
-use RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Values;
+use RectorPrefix20211115\Symfony\Component\VarExporter\Exception\ExceptionInterface;
+use RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Exporter;
+use RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Hydrator;
+use RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Registry;
+use RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Values;
 /**
  * Exports serializable PHP values to PHP code.
  *
@@ -41,14 +41,14 @@ final class VarExporter
     public static function export($value, bool &$isStaticValue = null, array &$foundClasses = []) : string
     {
         $isStaticValue = \true;
-        if (!\is_object($value) && !(\is_array($value) && $value) && !\is_resource($value) || $value instanceof \RectorPrefix20211114\UnitEnum) {
-            return \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Exporter::export($value);
+        if (!\is_object($value) && !(\is_array($value) && $value) && !\is_resource($value) || $value instanceof \RectorPrefix20211115\UnitEnum) {
+            return \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Exporter::export($value);
         }
         $objectsPool = new \SplObjectStorage();
         $refsPool = [];
         $objectsCount = 0;
         try {
-            $value = \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Exporter::prepare([$value], $objectsPool, $refsPool, $objectsCount, $isStaticValue)[0];
+            $value = \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Exporter::prepare([$value], $objectsPool, $refsPool, $objectsCount, $isStaticValue)[0];
         } finally {
             $references = [];
             foreach ($refsPool as $i => $v) {
@@ -59,7 +59,7 @@ final class VarExporter
             }
         }
         if ($isStaticValue) {
-            return \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Exporter::export($value);
+            return \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Exporter::export($value);
         }
         $classes = [];
         $values = [];
@@ -95,10 +95,10 @@ final class VarExporter
             }
         }
         if ($classes || $references) {
-            $value = new \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Hydrator(new \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Registry($classes), $references ? new \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Values($references) : null, $properties, $value, $wakeups);
+            $value = new \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Hydrator(new \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Registry($classes), $references ? new \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Values($references) : null, $properties, $value, $wakeups);
         } else {
             $isStaticValue = \true;
         }
-        return \RectorPrefix20211114\Symfony\Component\VarExporter\Internal\Exporter::export($value);
+        return \RectorPrefix20211115\Symfony\Component\VarExporter\Internal\Exporter::export($value);
     }
 }

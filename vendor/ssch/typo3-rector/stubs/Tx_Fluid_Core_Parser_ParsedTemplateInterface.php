@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211114;
+namespace RectorPrefix20211115;
 
 if (\interface_exists('Tx_Fluid_Core_Parser_ParsedTemplateInterface')) {
     return;

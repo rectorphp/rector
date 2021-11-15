@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211114;
+namespace RectorPrefix20211115;
 
 if (\class_exists('Tx_Fluid_Core_Parser_SyntaxTree_TextNode')) {
     return;

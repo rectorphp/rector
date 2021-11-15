@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211114;
+namespace RectorPrefix20211115;
 
 if (\class_exists('tslib_content_UserInternal')) {
     return;

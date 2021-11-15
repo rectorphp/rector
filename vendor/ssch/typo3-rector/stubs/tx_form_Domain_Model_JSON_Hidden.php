@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211114;
+namespace RectorPrefix20211115;
 
 if (\class_exists('tx_form_Domain_Model_JSON_Hidden')) {
     return;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211114\TYPO3\CMS\Frontend\ContentObject;
+namespace RectorPrefix20211115\TYPO3\CMS\Frontend\ContentObject;
 
 if (\class_exists('TYPO3\\CMS\\Frontend\\ContentObject\\ClearGifContentObject')) {
     return;

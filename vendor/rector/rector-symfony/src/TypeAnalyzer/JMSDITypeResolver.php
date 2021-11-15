@@ -77,7 +77,7 @@ final class JMSDITypeResolver
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $errorMessage = \sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
-        $rectorError = new \Rector\Core\ValueObject\Application\RectorError($errorMessage, $file->getSmartFileInfo(), $property->getLine());
+        $rectorError = new \Rector\Core\ValueObject\Application\RectorError($errorMessage, $file->getRelativeFilePath(), $property->getLine());
         $file->addRectorError($rectorError);
     }
     private function resolveFromServiceName(string $serviceName, \Rector\Symfony\ValueObject\ServiceMap\ServiceMap $serviceMap) : \PHPStan\Type\Type
