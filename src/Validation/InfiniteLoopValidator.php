@@ -12,8 +12,13 @@ use Rector\Core\PhpParser\NodeVisitor\CreatedByRuleNodeVisitor;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 final class InfiniteLoopValidator
 {
+    /**
+     * @var array<class-string<RectorInterface>>
+     */
+    private const ALLOWED_INFINITE_RECTOR_CLASSES = [\Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector::class, \Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector::class, \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class];
     /**
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -27,10 +32,7 @@ final class InfiniteLoopValidator
      */
     public function process(\PhpParser\Node $node, \PhpParser\Node $originalNode, string $rectorClass) : void
     {
-        if ($rectorClass === \Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector::class) {
-            return;
-        }
-        if ($rectorClass === \Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector::class) {
+        if (\in_array($rectorClass, self::ALLOWED_INFINITE_RECTOR_CLASSES, \true)) {
             return;
         }
         $createdByRule = $originalNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE);
