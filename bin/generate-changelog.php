@@ -49,13 +49,10 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $commitHashRange = sprintf(
-            '%s..%s',
-            $input->getArgument(self::OPTION_FROM_COMMIT),
-            $input->getArgument(self::OPTION_TO_COMMIT)
-        );
+        $fromCommit = (string) $input->getArgument(self::OPTION_FROM_COMMIT);
+        $toCommit = (string) $input->getArgument(self::OPTION_TO_COMMIT);
 
-        $commitLines = $this->exec(['git', 'log', $commitHashRange, '--reverse', '--pretty=%H %s']);
+        $commitLines = $this->resolveCommitLinesFromToHashes($fromCommit, $toCommit);
 
         $commits = array_map(function (string $line): array {
             [$hash, $message] = explode(' ', $line, 2);
@@ -63,7 +60,7 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
                 'hash' => $hash,
                 'message' => $message,
             ];
-        }, explode("\n", $commitLines));
+        }, $commitLines);
 
         $i = 0;
 
@@ -146,6 +143,20 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
         $process->run();
 
         return $process->getOutput();
+    }
+
+    /**
+     * @return string[]
+     */
+    private function resolveCommitLinesFromToHashes(string $fromCommit, string $toCommit): array
+    {
+        $commitHashRange = sprintf('%s..%s', $fromCommit, $toCommit);
+
+        $output = $this->exec(['git', 'log', $commitHashRange, '--reverse', '--pretty=%H %s']);
+        $commitLines = explode("\n", $output);
+
+        // remove empty values
+        return array_filter($commitLines);
     }
 }
 
