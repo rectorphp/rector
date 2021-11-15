@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 use Httpful\Request;
 use Symfony\Component\Console\Application;
+
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -18,7 +21,7 @@ require __DIR__ . '/../vendor/autoload.php';
  * GITHUB_TOKEN=<github_token> php bin/generate-changelog.php <from-commit> <to-commit> >> <file_to_dump.md>
  * GITHUB_TOKEN=ghp_... php bin/generate-changelog.php 07736c1 cb74bb6 >> CHANGELOG_dumped.md
  */
-final class GenerateChangelogCommand extends Symfony\Component\Console\Command\Command
+final class GenerateChangelogCommand extends Command
 {
     /**
      * @var string
@@ -40,6 +43,11 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
      */
     private const OPTION_TO_COMMIT = 'to-commit';
 
+    /**
+     * @var string
+     */
+    private const HASH = 'hash';
+
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
@@ -57,7 +65,7 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
         $commits = array_map(function (string $line): array {
             [$hash, $message] = explode(' ', $line, 2);
             return [
-                'hash' => $hash,
+                self::HASH => $hash,
                 'message' => $message,
             ];
         }, $commitLines);
@@ -67,7 +75,7 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
         foreach ($commits as $commit) {
             $searchPullRequestsUri = sprintf(
                 'https://api.github.com/search/issues?q=repo:' . self::DEVELOPMENT_REPOSITORY_NAME . '+%s',
-                $commit['hash']
+                $commit[self::HASH]
             );
 
             $searchPullRequestsResponse = Request::get($searchPullRequestsUri)
@@ -84,7 +92,7 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
 
             $searchIssuesUri = sprintf(
                 'https://api.github.com/search/issues?q=repo:' . self::DEPLOY_REPOSITORY_NAME . '+%s',
-                $commit['hash']
+                $commit[self::HASH]
             );
 
             $searchIssuesResponse = Request::get($searchIssuesUri)
@@ -99,27 +107,25 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
 
             $searchIssuesResponse = $searchIssuesResponse->body;
             $items = array_merge($searchPullRequestsResponse->items, $searchIssuesResponse->items);
-            $parenthesis = 'https://github.com/' . self::DEVELOPMENT_REPOSITORY_NAME . '/commit/' . $commit['hash'];
+            $parenthesis = 'https://github.com/' . self::DEVELOPMENT_REPOSITORY_NAME . '/commit/' . $commit[self::HASH];
             $thanks = null;
             $issuesToReference = [];
 
-            foreach ($items as $responseItem) {
-                if (isset($responseItem->pull_request)) {
+            foreach ($items as $item) {
+                if (property_exists($item, 'pull_request') && $item->pull_request !== null) {
                     $parenthesis = sprintf(
                         '[#%d](%s)',
-                        $responseItem->number,
-                        'https://github.com/' . self::DEVELOPMENT_REPOSITORY_NAME . '/pull/' . $responseItem->number
+                        $item->number,
+                        'https://github.com/' . self::DEVELOPMENT_REPOSITORY_NAME . '/pull/' . $item->number
                     );
-                    $thanks = $responseItem->user->login;
+                    $thanks = $item->user->login;
                 } else {
-                    $issuesToReference[] = sprintf('#%d', $responseItem->number);
+                    $issuesToReference[] = sprintf('#%d', $item->number);
                 }
             }
 
             $output->writeln(
-                sprintf('* %s (%s)%s%s', $commit['message'], $parenthesis, count(
-                    $issuesToReference
-                ) > 0 ? ', ' . implode(
+                sprintf('* %s (%s)%s%s', $commit['message'], $parenthesis, $issuesToReference !== [] ? ', ' . implode(
                     ', ',
                     $issuesToReference
                 ) : '', $thanks !== null ? sprintf(', Thanks @%s!', $thanks) : '')
@@ -139,7 +145,7 @@ final class GenerateChangelogCommand extends Symfony\Component\Console\Command\C
      */
     private function exec(array $commandParts): string
     {
-        $process = new Symfony\Component\Process\Process($commandParts);
+        $process = new Process($commandParts);
         $process->run();
 
         return $process->getOutput();
