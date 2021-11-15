@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Httpful\Request;
+use Nette\Utils\Strings;
 use Symfony\Component\Console\Application;
 
 use Symfony\Component\Console\Command\Command;
@@ -32,6 +33,11 @@ final class GenerateChangelogCommand extends Command
      * @var string
      */
     private const DEVELOPMENT_REPOSITORY_NAME = 'rectorphp/rector-src';
+
+    /**
+     * @var string[]
+     */
+    private const EXCLUDED_THANKS_NAMES = ['TomasVotruba'];
 
     /**
      * @var string
@@ -124,12 +130,22 @@ final class GenerateChangelogCommand extends Command
                 }
             }
 
-            $output->writeln(
-                sprintf('* %s (%s)%s%s', $commit['message'], $parenthesis, $issuesToReference !== [] ? ', ' . implode(
-                    ', ',
-                    $issuesToReference
-                ) : '', $thanks !== null ? sprintf(', Thanks @%s!', $thanks) : '')
+            // clean commit from duplicating issue number
+            $commitMatch = Strings::match($commit['message'], '#(.*?)( \(\#\d+\))?$#ms');
+
+            $commit = $commitMatch[1] ?? $commit['message'];
+
+            $changelogLine = sprintf(
+                '* %s (%s)%s%s',
+                $commit,
+                $parenthesis,
+                $issuesToReference !== [] ? ', ' . implode(', ', $issuesToReference) : '',
+                $this->createThanks($thanks)
             );
+
+            $output->writeln($changelogLine);
+
+            // not to throttle the GitHub API
             if ($i > 0 && $i % 8 === 0) {
                 sleep(60);
             }
@@ -138,6 +154,19 @@ final class GenerateChangelogCommand extends Command
         }
 
         return self::SUCCESS;
+    }
+
+    protected function createThanks(string|null $thanks): string
+    {
+        if ($thanks === null) {
+            return '';
+        }
+
+        if (in_array($thanks, self::EXCLUDED_THANKS_NAMES, true)) {
+            return '';
+        }
+
+        return sprintf(', Thanks @%s!', $thanks);
     }
 
     /**
