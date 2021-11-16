@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -92,7 +94,15 @@ CODE_SAMPLE
         if ($expr instanceof Variable) {
             return true;
         }
-        
+
+        if ($expr instanceof PropertyFetch) {
+            return true;
+        }
+
+        if ($expr instanceof StaticPropertyFetch) {
+            return true;
+        }
+
         return $expr instanceof ArrayDimFetch;
     }
 

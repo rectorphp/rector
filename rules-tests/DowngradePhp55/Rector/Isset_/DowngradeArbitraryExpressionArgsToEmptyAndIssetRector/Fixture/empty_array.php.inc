@@ -6,7 +6,7 @@ final class SomeClass
 {
     public function run()
     {
-        return empty(some_function()['a']) && empty(['b']);
+        return empty(['a']);
     }
 }
 
@@ -20,7 +20,7 @@ final class SomeClass
 {
     public function run()
     {
-        return empty(some_function()['a']) && !['b'];
+        return !['a'];
     }
 }
 
