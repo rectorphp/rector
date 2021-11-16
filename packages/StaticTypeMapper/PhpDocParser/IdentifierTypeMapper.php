@@ -7,10 +7,10 @@ namespace Rector\StaticTypeMapper\PhpDocParser;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\NameScope;
-use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ClassStringType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
@@ -19,7 +19,6 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
@@ -33,9 +32,9 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
     public function __construct(
         private ObjectTypeSpecifier $objectTypeSpecifier,
         private ScalarStringToTypeMapper $scalarStringToTypeMapper,
-        private ParentClassScopeResolver $parentClassScopeResolver,
         private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -67,18 +66,16 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
             return new ClassStringType();
         }
 
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-
         if ($loweredName === ObjectReference::SELF()->getValue()) {
             return $this->mapSelf($node);
         }
 
         if ($loweredName === ObjectReference::PARENT()->getValue()) {
-            return $this->mapParent($scope);
+            return $this->mapParent($node);
         }
 
         if ($loweredName === ObjectReference::STATIC()->getValue()) {
-            return $this->mapStatic($scope);
+            return $this->mapStatic($node);
         }
 
         if ($loweredName === 'iterable') {
@@ -93,13 +90,8 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 
     private function mapSelf(Node $node): MixedType | SelfObjectType
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        if (! $classLike instanceof ClassLike) {
-            return new MixedType();
-        }
-
         // @todo check FQN
-        $className = $this->nodeNameResolver->getName($classLike);
+        $className = $this->resolveClassName($node);
         if (! is_string($className)) {
             // self outside the class, e.g. in a function
             return new MixedType();
@@ -108,9 +100,18 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new SelfObjectType($className);
     }
 
-    private function mapParent(Scope $scope): ParentStaticType | MixedType
+    private function mapParent(Node $node): ParentStaticType | MixedType
     {
-        $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
+        $className = $this->resolveClassName($node);
+        if (! is_string($className)) {
+            // parent outside the class, e.g. in a function
+            return new MixedType();
+        }
+
+        /** @var ClassReflection $classReflection */
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $parentClassReflection = $classReflection->getParentClass();
+
         if (! $parentClassReflection instanceof ClassReflection) {
             return new MixedType();
         }
@@ -118,13 +119,38 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
         return new ParentStaticType($parentClassReflection);
     }
 
-    private function mapStatic(Scope $scope): MixedType | StaticType
+    private function mapStatic(Node $node): MixedType | StaticType
     {
-        $classReflection = $scope->getClassReflection();
-        if (! $classReflection instanceof ClassReflection) {
+        $className = $this->resolveClassName($node);
+        if (! is_string($className)) {
+            // static outside the class, e.g. in a function
             return new MixedType();
         }
 
+        /** @var ClassReflection $classReflection */
+        $classReflection = $this->reflectionProvider->getClass($className);
         return new StaticType($classReflection);
+    }
+
+    private function resolveClassName(Node $node): ?string
+    {
+        $classLike = $node instanceof ClassLike
+            ? $node
+            : $this->betterNodeFinder->findParentType($node, ClassLike::class);
+
+        if (! $classLike instanceof ClassLike) {
+            return null;
+        }
+
+        $className = $this->nodeNameResolver->getName($classLike);
+        if (! is_string($className)) {
+            return null;
+        }
+
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+
+        return $className;
     }
 }
