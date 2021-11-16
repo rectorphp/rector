@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -75,6 +77,12 @@ CODE_SAMPLE
     private function isAcceptable(\PhpParser\Node\Expr $expr) : bool
     {
         if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+            return \true;
+        }
+        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            return \true;
+        }
+        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
             return \true;
         }
         return $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch;
