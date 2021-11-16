@@ -158,6 +158,9 @@ CODE_SAMPLE
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $param = $classMethod->params[0];
+        if ($param->type instanceof \PhpParser\Node) {
+            return null;
+        }
         /** @var string $parameterName */
         $parameterName = $this->getName($param);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $collectionObjectType, $param, $parameterName);

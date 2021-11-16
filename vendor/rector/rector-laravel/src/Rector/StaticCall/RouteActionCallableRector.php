@@ -19,7 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211115\Webmozart\Assert\Assert;
+use RectorPrefix20211116\Webmozart\Assert\Assert;
 /**
  * @see https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
  *
@@ -115,11 +115,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $routes = $configuration[self::ROUTES] ?? [];
-        \RectorPrefix20211115\Webmozart\Assert\Assert::allString($routes);
-        \RectorPrefix20211115\Webmozart\Assert\Assert::allString(\array_keys($routes));
+        \RectorPrefix20211116\Webmozart\Assert\Assert::allString($routes);
+        \RectorPrefix20211116\Webmozart\Assert\Assert::allString(\array_keys($routes));
         $this->routes = $routes;
         $namespace = $configuration[self::NAMESPACE] ?? self::DEFAULT_NAMESPACE;
-        \RectorPrefix20211115\Webmozart\Assert\Assert::string($namespace);
+        \RectorPrefix20211116\Webmozart\Assert\Assert::string($namespace);
         $this->namespace = $namespace;
     }
     /**

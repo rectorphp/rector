@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211115\Symplify\Astral\Reflection;
+namespace RectorPrefix20211116\Symplify\Astral\Reflection;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeFinder;
 use ReflectionMethod;
 use ReflectionProperty;
-use RectorPrefix20211115\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20211116\Symplify\Astral\PhpParser\SmartPhpParser;
 use Throwable;
 /**
  * @api
@@ -24,7 +24,7 @@ final class ReflectionParser
      * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
-    public function __construct(\RectorPrefix20211115\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \PhpParser\NodeFinder $nodeFinder)
+    public function __construct(\RectorPrefix20211116\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \PhpParser\NodeFinder $nodeFinder)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->nodeFinder = $nodeFinder;

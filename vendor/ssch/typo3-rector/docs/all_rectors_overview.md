@@ -1,4 +1,4 @@
-# 219 Rules Overview
+# 222 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -1138,6 +1138,20 @@ Use GraphicalFunctions->getTemporaryImageWithText instead of LocalImageProcessor
 ```diff
 -GeneralUtility::makeInstance(LocalImageProcessor::class)->getTemporaryImageWithText("foo", "bar", "baz", "foo")
 +GeneralUtility::makeInstance(GraphicalFunctions::class)->getTemporaryImageWithText("foo", "bar", "baz", "foo")
+```
+
+<br>
+
+## HandleCObjRendererATagParamsMethodRector
+
+Removes deprecated params of the `ContentObjectRenderer->getATagParams()` method
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\HandleCObjRendererATagParamsMethodRector`](../src/Rector/v11/v5/HandleCObjRendererATagParamsMethodRector.php)
+
+```diff
+ $cObjRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
+-$bar = $cObjRenderer->getATagParams([], false);
++$bar = $cObjRenderer->getATagParams([]);
 ```
 
 <br>
@@ -3324,6 +3338,19 @@ Replace GeneralUtility::stdAuthCode with GeneralUtility::hmac
 
 <br>
 
+## ReplaceTSFEATagParamsCallOnGlobalsRector
+
+Replaces all direct calls to `$GLOBALS['TSFE']->ATagParams.`
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\ReplaceTSFEATagParamsCallOnGlobalsRector`](../src/Rector/v11/v5/ReplaceTSFEATagParamsCallOnGlobalsRector.php)
+
+```diff
+-$foo = $GLOBALS['TSFE']->ATagParams;
++$foo = $GLOBALS['TSFE']->config['config']['ATagParams'] ?? '';
+```
+
+<br>
+
 ## ReplacedGeneralUtilitySysLogWithLogginApiRector
 
 Replaced GeneralUtility::sysLog with Logging API
@@ -3705,6 +3732,22 @@ New Mail API based on symfony/mailer and symfony/mime
 +    ->html('<p>Here is the message itself</p>')
 +    ->attachFromPath('my-document.pdf')
      ->send();
+```
+
+<br>
+
+## SwitchBehaviorOfArrayUtilityMethodsRector
+
+Handles the methods `arrayDiffAssocRecursive()` and `arrayDiffKeyRecursive()` of ArrayUtility
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v3\SwitchBehaviorOfArrayUtilityMethodsRector`](../src/Rector/v11/v3/SwitchBehaviorOfArrayUtilityMethodsRector.php)
+
+```diff
+ $foo = ArrayUtility::arrayDiffAssocRecursive([], [], true);
+-$bar = ArrayUtility::arrayDiffAssocRecursive([], [], false);
+-$test = ArrayUtility::arrayDiffAssocRecursive([], []);
++$bar = ArrayUtility::arrayDiffKeyRecursive([], []);
++$test = ArrayUtility::arrayDiffKeyRecursive([], []);
 ```
 
 <br>

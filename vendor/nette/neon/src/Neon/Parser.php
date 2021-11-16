@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211115\Nette\Neon;
+namespace RectorPrefix20211116\Nette\Neon;
 
 /** @internal */
 final class Parser
@@ -19,29 +19,29 @@ final class Parser
     private const ESCAPE_SEQUENCES = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\10", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
     /** @var TokenStream */
     private $tokens;
-    public function parse(\RectorPrefix20211115\Nette\Neon\TokenStream $tokens) : \RectorPrefix20211115\Nette\Neon\Node
+    public function parse(\RectorPrefix20211116\Nette\Neon\TokenStream $tokens) : \RectorPrefix20211116\Nette\Neon\Node
     {
         $this->tokens = $tokens;
-        while ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        while ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
         }
         $node = $this->parseBlock($this->tokens->getIndentation());
-        while ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        while ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
         }
         if ($this->tokens->isNext()) {
             $this->tokens->error();
         }
         return $node;
     }
-    private function parseBlock(string $indent, bool $onlyBullets = \false) : \RectorPrefix20211115\Nette\Neon\Node
+    private function parseBlock(string $indent, bool $onlyBullets = \false) : \RectorPrefix20211116\Nette\Neon\Node
     {
-        $res = new \RectorPrefix20211115\Nette\Neon\Node\ArrayNode($indent, $this->tokens->getPos());
+        $res = new \RectorPrefix20211116\Nette\Neon\Node\ArrayNode($indent, $this->tokens->getPos());
         $keyCheck = [];
         loop:
-        $item = new \RectorPrefix20211115\Nette\Neon\Node\ArrayItemNode($this->tokens->getPos());
+        $item = new \RectorPrefix20211116\Nette\Neon\Node\ArrayItemNode($this->tokens->getPos());
         if ($this->tokens->consume('-')) {
             // continue
         } elseif (!$this->tokens->isNext() || $onlyBullets) {
-            return $res->items ? $res : new \RectorPrefix20211115\Nette\Neon\Node\LiteralNode(null, $this->tokens->getPos());
+            return $res->items ? $res : new \RectorPrefix20211116\Nette\Neon\Node\LiteralNode(null, $this->tokens->getPos());
         } else {
             $value = $this->parseValue();
             if ($this->tokens->consume(':', '=')) {
@@ -55,9 +55,9 @@ final class Parser
             }
         }
         $res->items[] = $item;
-        $item->value = new \RectorPrefix20211115\Nette\Neon\Node\LiteralNode(null, $this->tokens->getPos());
-        if ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
-            while ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        $item->value = new \RectorPrefix20211116\Nette\Neon\Node\LiteralNode(null, $this->tokens->getPos());
+        if ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
+            while ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
             }
             $nextIndent = $this->tokens->getIndentation();
             if (\strncmp($nextIndent, $indent, \min(\strlen($nextIndent), \strlen($indent)))) {
@@ -77,12 +77,12 @@ final class Parser
             // open new block after dash
         } elseif ($this->tokens->isNext()) {
             $item->value = $this->parseValue();
-            if ($this->tokens->isNext() && !$this->tokens->isNext(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+            if ($this->tokens->isNext() && !$this->tokens->isNext(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
                 $this->tokens->error();
             }
         }
         $res->endPos = $item->endPos = $item->value->endPos;
-        while ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        while ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
         }
         if (!$this->tokens->isNext()) {
             return $res;
@@ -98,13 +98,13 @@ final class Parser
         }
         goto loop;
     }
-    private function parseValue() : \RectorPrefix20211115\Nette\Neon\Node
+    private function parseValue() : \RectorPrefix20211116\Nette\Neon\Node
     {
-        if ($token = $this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::STRING)) {
-            $node = new \RectorPrefix20211115\Nette\Neon\Node\StringNode($this->decodeString($token->value), $this->tokens->getPos() - 1);
-        } elseif ($token = $this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::LITERAL)) {
+        if ($token = $this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::STRING)) {
+            $node = new \RectorPrefix20211116\Nette\Neon\Node\StringNode($this->decodeString($token->value), $this->tokens->getPos() - 1);
+        } elseif ($token = $this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::LITERAL)) {
             $pos = $this->tokens->getPos() - 1;
-            $node = new \RectorPrefix20211115\Nette\Neon\Node\LiteralNode($this->literalToValue($token->value, $this->tokens->isNext(':', '=')), $pos);
+            $node = new \RectorPrefix20211116\Nette\Neon\Node\LiteralNode($this->literalToValue($token->value, $this->tokens->isNext(':', '=')), $pos);
         } elseif ($this->tokens->isNext('[', '(', '{')) {
             $node = $this->parseBraces();
         } else {
@@ -112,52 +112,52 @@ final class Parser
         }
         return $this->parseEntity($node);
     }
-    private function parseEntity(\RectorPrefix20211115\Nette\Neon\Node $node) : \RectorPrefix20211115\Nette\Neon\Node
+    private function parseEntity(\RectorPrefix20211116\Nette\Neon\Node $node) : \RectorPrefix20211116\Nette\Neon\Node
     {
         if (!$this->tokens->isNext('(')) {
             return $node;
         }
         $attributes = $this->parseBraces();
-        $entities[] = new \RectorPrefix20211115\Nette\Neon\Node\EntityNode($node, $attributes->items, $node->startPos, $attributes->endPos);
-        while ($token = $this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::LITERAL)) {
-            $valueNode = new \RectorPrefix20211115\Nette\Neon\Node\LiteralNode($this->literalToValue($token->value), $this->tokens->getPos() - 1);
+        $entities[] = new \RectorPrefix20211116\Nette\Neon\Node\EntityNode($node, $attributes->items, $node->startPos, $attributes->endPos);
+        while ($token = $this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::LITERAL)) {
+            $valueNode = new \RectorPrefix20211116\Nette\Neon\Node\LiteralNode($this->literalToValue($token->value), $this->tokens->getPos() - 1);
             if ($this->tokens->isNext('(')) {
                 $attributes = $this->parseBraces();
-                $entities[] = new \RectorPrefix20211115\Nette\Neon\Node\EntityNode($valueNode, $attributes->items, $valueNode->startPos, $attributes->endPos);
+                $entities[] = new \RectorPrefix20211116\Nette\Neon\Node\EntityNode($valueNode, $attributes->items, $valueNode->startPos, $attributes->endPos);
             } else {
-                $entities[] = new \RectorPrefix20211115\Nette\Neon\Node\EntityNode($valueNode, [], $valueNode->startPos);
+                $entities[] = new \RectorPrefix20211116\Nette\Neon\Node\EntityNode($valueNode, [], $valueNode->startPos);
                 break;
             }
         }
-        return \count($entities) === 1 ? $entities[0] : new \RectorPrefix20211115\Nette\Neon\Node\EntityChainNode($entities, $node->startPos, \end($entities)->endPos);
+        return \count($entities) === 1 ? $entities[0] : new \RectorPrefix20211116\Nette\Neon\Node\EntityChainNode($entities, $node->startPos, \end($entities)->endPos);
     }
-    private function parseBraces() : \RectorPrefix20211115\Nette\Neon\Node\ArrayNode
+    private function parseBraces() : \RectorPrefix20211116\Nette\Neon\Node\ArrayNode
     {
         $token = $this->tokens->consume();
         $endBrace = ['[' => ']', '{' => '}', '(' => ')'][$token->value];
-        $res = new \RectorPrefix20211115\Nette\Neon\Node\ArrayNode(null, $this->tokens->getPos() - 1);
+        $res = new \RectorPrefix20211116\Nette\Neon\Node\ArrayNode(null, $this->tokens->getPos() - 1);
         $keyCheck = [];
         loop:
-        while ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        while ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
         }
         if ($this->tokens->consume($endBrace)) {
             $res->endPos = $this->tokens->getPos() - 1;
             return $res;
         }
-        $res->items[] = $item = new \RectorPrefix20211115\Nette\Neon\Node\ArrayItemNode($this->tokens->getPos());
+        $res->items[] = $item = new \RectorPrefix20211116\Nette\Neon\Node\ArrayItemNode($this->tokens->getPos());
         $value = $this->parseValue();
         if ($this->tokens->consume(':', '=')) {
             $this->checkArrayKey($value, $keyCheck);
             $item->key = $value;
-            $item->value = $this->tokens->isNext(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE, ',', $endBrace) ? new \RectorPrefix20211115\Nette\Neon\Node\LiteralNode(null, $this->tokens->getPos()) : $this->parseValue();
+            $item->value = $this->tokens->isNext(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE, ',', $endBrace) ? new \RectorPrefix20211116\Nette\Neon\Node\LiteralNode(null, $this->tokens->getPos()) : $this->parseValue();
         } else {
             $item->value = $value;
         }
         $item->endPos = $item->value->endPos;
-        if ($this->tokens->consume(',', \RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        if ($this->tokens->consume(',', \RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
             goto loop;
         }
-        while ($this->tokens->consume(\RectorPrefix20211115\Nette\Neon\Token::NEWLINE)) {
+        while ($this->tokens->consume(\RectorPrefix20211116\Nette\Neon\Token::NEWLINE)) {
         }
         if (!$this->tokens->isNext($endBrace)) {
             $this->tokens->error();
@@ -204,9 +204,9 @@ final class Parser
         }
         return \function_exists('iconv') ? \iconv('UTF-32BE', 'UTF-8//IGNORE', \pack('N', $code)) : \mb_convert_encoding(\pack('N', $code), 'UTF-8', 'UTF-32BE');
     }
-    private function checkArrayKey(\RectorPrefix20211115\Nette\Neon\Node $key, array &$arr) : void
+    private function checkArrayKey(\RectorPrefix20211116\Nette\Neon\Node $key, array &$arr) : void
     {
-        if (!$key instanceof \RectorPrefix20211115\Nette\Neon\Node\StringNode && !$key instanceof \RectorPrefix20211115\Nette\Neon\Node\LiteralNode || !\is_scalar($key->value)) {
+        if (!$key instanceof \RectorPrefix20211116\Nette\Neon\Node\StringNode && !$key instanceof \RectorPrefix20211116\Nette\Neon\Node\LiteralNode || !\is_scalar($key->value)) {
             $this->tokens->error('Unacceptable key', $key->startPos);
         }
         $k = (string) $key->value;

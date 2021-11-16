@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeFactory;
 
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
-use PhpParser\Node\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Doctrine\ValueObject\AssignToPropertyFetch;
@@ -69,7 +69,7 @@ final class ParamFactory
         $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
         // the param is optional - make it nullable
         if (\in_array($propertyName, $optionalParamNames, \true)) {
-            if (!$paramTypeNode instanceof \PhpParser\Node\UnionType && $paramTypeNode !== null && !$paramTypeNode instanceof \PhpParser\Node\NullableType) {
+            if (!$paramTypeNode instanceof \PhpParser\Node\ComplexType && $paramTypeNode !== null) {
                 $paramTypeNode = new \PhpParser\Node\NullableType($paramTypeNode);
             }
             $param->default = $this->nodeFactory->createNull();

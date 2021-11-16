@@ -19,7 +19,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
-use RectorPrefix20211115\Stringy\Stringy;
+use RectorPrefix20211116\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -231,7 +231,7 @@ CODE_SAMPLE
         if ($variableName === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $stringy = new \RectorPrefix20211115\Stringy\Stringy($variableName);
+        $stringy = new \RectorPrefix20211116\Stringy\Stringy($variableName);
         return (string) $stringy->underscored()->toUpperCase();
     }
 }

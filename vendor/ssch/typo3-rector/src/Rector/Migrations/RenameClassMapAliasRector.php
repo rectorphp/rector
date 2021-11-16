@@ -47,6 +47,7 @@ final class RenameClassMapAliasRector extends \Rector\Core\Rector\AbstractRector
     private $classesToSkip = [
         // can be string
         'language',
+        'template',
     ];
     /**
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector

@@ -139,6 +139,9 @@ CODE_SAMPLE
         if (!$defaultExpr instanceof \PhpParser\Node\Expr) {
             return;
         }
+        if ($this->valueResolver->isNull($defaultExpr)) {
+            return;
+        }
         $expression = $this->valueAssignFactory->createDefaultDateTimeWithValueAssign($propertyName, $defaultExpr);
         $this->constructorManipulator->addStmtToConstructor($class, $expression);
     }
