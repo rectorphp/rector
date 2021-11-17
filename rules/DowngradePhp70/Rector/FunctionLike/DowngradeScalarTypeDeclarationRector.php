@@ -80,7 +80,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param Function_|ClassMethod $node
+     * @param Function_|ClassMethod|Closure $node
      */
     public function refactor(Node $node): ?Node
     {
