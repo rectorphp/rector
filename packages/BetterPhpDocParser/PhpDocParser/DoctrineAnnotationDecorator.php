@@ -21,6 +21,11 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class DoctrineAnnotationDecorator
 {
     /**
+     * Special short annotations, that are resolved as FQN by Doctrine annotation parser
+     * @var string[]
+     */
+    private const ALLOWED_SHORT_ANNOTATIONS = ['Target'];
+    /**
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
@@ -129,7 +134,7 @@ final class DoctrineAnnotationDecorator
             // known doc tag to annotation class
             $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($phpDocChildNode->name, $currentPhpNode);
             // not an annotations class
-            if (\strpos($fullyQualifiedAnnotationClass, '\\') === \false) {
+            if (\strpos($fullyQualifiedAnnotationClass, '\\') === \false && !\in_array($fullyQualifiedAnnotationClass, self::ALLOWED_SHORT_ANNOTATIONS, \true)) {
                 continue;
             }
             $genericTagValueNode = $phpDocChildNode->value;

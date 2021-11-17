@@ -9,17 +9,17 @@ use PhpParser\Node\Expr\ClassConstFetch;
 final class AttributeFlagFactory
 {
     /**
-     * @param ClassConstFetch[] $flags
+     * @param ClassConstFetch[] $classConstFetches
      * @return ClassConstFetch|BitwiseOr|null
      */
-    public function createFlagCollection(array $flags) : ?\PhpParser\Node\Expr
+    public function createFlagCollection(array $classConstFetches) : ?\PhpParser\Node\Expr
     {
-        if ($flags === []) {
+        if ($classConstFetches === []) {
             return null;
         }
-        $flagCollection = \array_shift($flags);
-        foreach ($flags as $flag) {
-            $flagCollection = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($flagCollection, $flag);
+        $flagCollection = \array_shift($classConstFetches);
+        foreach ($classConstFetches as $classConstFetch) {
+            $flagCollection = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($flagCollection, $classConstFetch);
         }
         return $flagCollection;
     }

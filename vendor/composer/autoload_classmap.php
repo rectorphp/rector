@@ -2442,6 +2442,7 @@ return array(
     'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => $baseDir . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
     'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => $baseDir . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
     'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => $baseDir . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
+    'Rector\\Php80\\NodeAnalyzer\\AnnotationTargetResolver' => $baseDir . '/rules/Php80/NodeAnalyzer/AnnotationTargetResolver.php',
     'Rector\\Php80\\NodeAnalyzer\\MatchSwitchAnalyzer' => $baseDir . '/rules/Php80/NodeAnalyzer/MatchSwitchAnalyzer.php',
     'Rector\\Php80\\NodeAnalyzer\\PhpAttributeAnalyzer' => $baseDir . '/rules/Php80/NodeAnalyzer/PhpAttributeAnalyzer.php',
     'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyCandidateResolver' => $baseDir . '/rules/Php80/NodeAnalyzer/PromotedPropertyCandidateResolver.php',

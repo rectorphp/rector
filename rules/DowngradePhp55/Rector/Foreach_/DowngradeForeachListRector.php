@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp55\Rector\Foreach_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -15,7 +14,6 @@ use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211117\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/foreachlist
  *
@@ -62,9 +60,9 @@ CODE_SAMPLE
             return null;
         }
         $variable = $this->createVariable($node);
-        $exprAssign = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($node->valueVar, $variable));
+        $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($node->valueVar, $variable));
         $node->valueVar = $variable;
-        $node->stmts = \array_merge([$exprAssign], $node->stmts);
+        $node->stmts = \array_merge([$expression], $node->stmts);
         return $node;
     }
     private function createVariable(\PhpParser\Node\Stmt\Foreach_ $foreach) : \PhpParser\Node\Expr\Variable

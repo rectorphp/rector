@@ -252,6 +252,20 @@ final class PhpDocInfo
         return $this->getByAnnotationClasses($annotationsClasses) !== null;
     }
     /**
+     * @param string[] $desiredClasses
+     */
+    public function findOneByAnnotationClasses(array $desiredClasses) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    {
+        foreach ($desiredClasses as $desiredClass) {
+            $doctrineAnnotationTagValueNode = $this->findOneByAnnotationClass($desiredClass);
+            if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+            return $doctrineAnnotationTagValueNode;
+        }
+        return null;
+    }
+    /**
      * @param class-string $desiredClass
      */
     public function findOneByAnnotationClass(string $desiredClass) : ?\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
