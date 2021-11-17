@@ -46,4 +46,8 @@ final class DowngradeLevelSetList implements \Rector\Set\Contract\SetListInterfa
      * @var string
      */
     public const DOWN_TO_PHP_53 = __DIR__ . '/../../../config/set/level/down-to-php53.php';
+    /**
+     * @var string
+     */
+    public const DOWN_TO_PHP_52 = __DIR__ . '/../../../config/set/level/down-to-php52.php';
 }
