@@ -299,7 +299,7 @@ CODE_SAMPLE
 
         return new DoctrineAnnotationTagValueNode(
             $doctrineAnnotationTagValueNode->identifierTypeNode,
-            current($stringValues),
+            null,
             $stringValues
         );
     }
@@ -311,15 +311,8 @@ CODE_SAMPLE
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
     ): array {
         $values = $doctrineAnnotationTagValueNode->getValues();
-        foreach ($values as $key => $value) {
-            if (is_string($value)) {
-                return [
-                    $key => $value,
-                ];
-            }
-        }
 
-        return [];
+        return array_filter($values, 'is_string');
     }
 
     /**
