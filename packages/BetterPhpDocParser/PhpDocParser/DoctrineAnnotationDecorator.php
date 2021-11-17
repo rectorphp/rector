@@ -22,6 +22,12 @@ use Rector\Core\Exception\ShouldNotHappenException;
 
 final class DoctrineAnnotationDecorator
 {
+    /**
+     * Special short annotations, that are resolved as FQN by Doctrine annotation parser
+     * @var string[]
+     */
+    private const ALLOWED_SHORT_ANNOTATIONS = ['Target'];
+
     public function __construct(
         private CurrentNodeProvider $currentNodeProvider,
         private ClassAnnotationMatcher $classAnnotationMatcher,
@@ -142,7 +148,11 @@ final class DoctrineAnnotationDecorator
             );
 
             // not an annotations class
-            if (! \str_contains($fullyQualifiedAnnotationClass, '\\')) {
+            if (! \str_contains($fullyQualifiedAnnotationClass, '\\') && ! in_array(
+                $fullyQualifiedAnnotationClass,
+                self::ALLOWED_SHORT_ANNOTATIONS,
+                true
+            )) {
                 continue;
             }
 

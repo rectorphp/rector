@@ -11,18 +11,18 @@ use PhpParser\Node\Expr\ClassConstFetch;
 final class AttributeFlagFactory
 {
     /**
-     * @param ClassConstFetch[] $flags
+     * @param ClassConstFetch[] $classConstFetches
      * @return ClassConstFetch|BitwiseOr|null
      */
-    public function createFlagCollection(array $flags): ?Expr
+    public function createFlagCollection(array $classConstFetches): ?Expr
     {
-        if ($flags === []) {
+        if ($classConstFetches === []) {
             return null;
         }
 
-        $flagCollection = array_shift($flags);
-        foreach ($flags as $flag) {
-            $flagCollection = new BitwiseOr($flagCollection, $flag);
+        $flagCollection = array_shift($classConstFetches);
+        foreach ($classConstFetches as $classConstFetch) {
+            $flagCollection = new BitwiseOr($flagCollection, $classConstFetch);
         }
 
         return $flagCollection;

@@ -7,7 +7,6 @@ namespace Rector\Php80\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\MixedType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -17,6 +16,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php80\NodeAnalyzer\AnnotationTargetResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttributeFlagFactory;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
@@ -43,20 +43,6 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
     public const REMOVE_ANNOTATIONS = 'remove_annotations';
 
     /**
-     * @see https://github.com/doctrine/annotations/blob/e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f/lib/Doctrine/Common/Annotations/Annotation/Target.php#L24-L29
-     * @var array<string, string>
-     */
-    private const TARGET_TO_CONSTANT_MAP = [
-        'METHOD' => 'TARGET_METHOD',
-        'PROPERTY' => 'TARGET_PROPERTY',
-        'CLASS' => 'TARGET_CLASS',
-        'FUNCTION' => 'TARGET_FUNCTION',
-        'ALL' => 'TARGET_ALL',
-        // special case
-        'ANNOTATION' => 'TARGET_CLASS',
-    ];
-
-    /**
      * @var string
      */
     private const ATTRIBUTE = 'Attribute';
@@ -68,7 +54,8 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
         private AttributeFlagFactory $attributeFlagFactory,
         private PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private PropertyToAddCollector $propertyToAddCollector
+        private PropertyToAddCollector $propertyToAddCollector,
+        private AnnotationTargetResolver $annotationTargetResolver
     ) {
     }
 
@@ -186,29 +173,12 @@ CODE_SAMPLE
         $this->shouldRemoveAnnotations = $shouldRemoveAnnotations;
     }
 
-    /**
-     * @param array<int|string, mixed> $targetValues
-     * @return ClassConstFetch[]
-     */
-    private function resolveFlags(array $targetValues): array
-    {
-        $flags = [];
-        foreach (self::TARGET_TO_CONSTANT_MAP as $target => $constant) {
-            if (! in_array($target, $targetValues, true)) {
-                continue;
-            }
-
-            $flags[] = $this->nodeFactory->createClassConstFetch(self::ATTRIBUTE, $constant);
-        }
-
-        return $flags;
-    }
-
     private function decorateTarget(PhpDocInfo $phpDocInfo, AttributeGroup $attributeGroup): void
     {
-        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(
-            'Doctrine\Common\Annotations\Annotation\Target'
-        );
+        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClasses([
+            'Doctrine\Common\Annotations\Annotation\Target',
+            'Target',
+        ]);
 
         if (! $targetDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
@@ -227,8 +197,9 @@ CODE_SAMPLE
             return;
         }
 
-        $flags = $this->resolveFlags($targetValues);
-        $flagCollection = $this->attributeFlagFactory->createFlagCollection($flags);
+        $flagClassConstFetches = $this->annotationTargetResolver->resolveFlagClassConstFetches($targetValues);
+
+        $flagCollection = $this->attributeFlagFactory->createFlagCollection($flagClassConstFetches);
         if ($flagCollection === null) {
             return;
         }
