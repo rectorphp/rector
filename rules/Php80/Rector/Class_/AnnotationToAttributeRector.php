@@ -227,7 +227,7 @@ CODE_SAMPLE
         if ($stringValues === []) {
             return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode);
         }
-        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode, \current($stringValues), $stringValues);
+        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode, null, $stringValues);
     }
     /**
      * @return string[]
@@ -235,12 +235,7 @@ CODE_SAMPLE
     private function getStringFromNestedDoctrineTagAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : array
     {
         $values = $doctrineAnnotationTagValueNode->getValues();
-        foreach ($values as $key => $value) {
-            if (\is_string($value)) {
-                return [$key => $value];
-            }
-        }
-        return [];
+        return \array_filter($values, 'is_string');
     }
     /**
      * @param DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
