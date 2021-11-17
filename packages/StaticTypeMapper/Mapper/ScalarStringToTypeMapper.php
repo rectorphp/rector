@@ -13,6 +13,7 @@ use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\ResourceType;
@@ -35,6 +36,7 @@ final class ScalarStringToTypeMapper
         ResourceType::class => ['resource'],
         CallableType::class => ['callback', 'callable'],
         ObjectWithoutClassType::class => ['object'],
+        NeverType::class => ['never'],
     ];
 
     public function mapScalarStringToType(string $scalarName): Type
