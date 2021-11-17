@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211116\Symfony\Component\Console\Formatter;
+namespace RectorPrefix20211117\Symfony\Component\Console\Formatter;
 
-use RectorPrefix20211116\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211116\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20211117\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211117\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class OutputFormatterStyleStack implements \RectorPrefix20211116\Symfony\Contracts\Service\ResetInterface
+class OutputFormatterStyleStack implements \RectorPrefix20211117\Symfony\Contracts\Service\ResetInterface
 {
     /**
      * @var OutputFormatterStyleInterface[]
      */
     private $styles;
     private $emptyStyle;
-    public function __construct(\RectorPrefix20211116\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle = null)
+    public function __construct(\RectorPrefix20211117\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle = null)
     {
-        $this->emptyStyle = $emptyStyle ?? new \RectorPrefix20211116\Symfony\Component\Console\Formatter\OutputFormatterStyle();
+        $this->emptyStyle = $emptyStyle ?? new \RectorPrefix20211117\Symfony\Component\Console\Formatter\OutputFormatterStyle();
         $this->reset();
     }
     /**
@@ -64,7 +64,7 @@ class OutputFormatterStyleStack implements \RectorPrefix20211116\Symfony\Contrac
                 return $stackedStyle;
             }
         }
-        throw new \RectorPrefix20211116\Symfony\Component\Console\Exception\InvalidArgumentException('Incorrectly nested style tag found.');
+        throw new \RectorPrefix20211117\Symfony\Component\Console\Exception\InvalidArgumentException('Incorrectly nested style tag found.');
     }
     /**
      * Computes current style with stacks top codes.

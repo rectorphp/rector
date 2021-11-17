@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211116\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20211117\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20211116\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211117\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Descriptor interface.
  *

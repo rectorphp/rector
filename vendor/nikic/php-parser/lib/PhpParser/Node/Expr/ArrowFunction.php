@@ -38,7 +38,7 @@ class ArrowFunction extends \PhpParser\Node\Expr implements \PhpParser\Node\Func
         $this->params = $subNodes['params'] ?? [];
         $returnType = $subNodes['returnType'] ?? null;
         $this->returnType = \is_string($returnType) ? new \PhpParser\Node\Identifier($returnType) : $returnType;
-        $this->expr = $subNodes['expr'] ?? null;
+        $this->expr = $subNodes['expr'];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
     public function getSubNodeNames() : array

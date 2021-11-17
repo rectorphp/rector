@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeNameResolver;
 
-use RectorPrefix20211116\Nette\Utils\Strings;
+use RectorPrefix20211117\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
@@ -182,7 +182,7 @@ final class NodeNameResolver
     public function endsWith(string $currentName, string $expectedName) : bool
     {
         $suffixNamePattern = '#\\w+' . \ucfirst($expectedName) . '#';
-        return (bool) \RectorPrefix20211116\Nette\Utils\Strings::match($currentName, $suffixNamePattern);
+        return (bool) \RectorPrefix20211117\Nette\Utils\Strings::match($currentName, $suffixNamePattern);
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\Stmt\ClassLike|string $name
@@ -206,7 +206,7 @@ final class NodeNameResolver
         }
         // is probably regex pattern
         if ($this->regexPatternDetector->isRegexPattern($desiredName)) {
-            return (bool) \RectorPrefix20211116\Nette\Utils\Strings::match($resolvedName, $desiredName);
+            return (bool) \RectorPrefix20211117\Nette\Utils\Strings::match($resolvedName, $desiredName);
         }
         // is probably fnmatch
         if (\strpos($desiredName, '*') !== \false) {

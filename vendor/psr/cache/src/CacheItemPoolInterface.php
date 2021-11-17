@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211116\Psr\Cache;
+namespace RectorPrefix20211117\Psr\Cache;
 
 /**
  * CacheItemPoolInterface generates CacheItemInterface objects.
@@ -29,7 +29,7 @@ interface CacheItemPoolInterface
      * @return CacheItemInterface
      *   The corresponding Cache Item.
      */
-    public function getItem($key) : \RectorPrefix20211116\Psr\Cache\CacheItemInterface;
+    public function getItem($key) : \RectorPrefix20211117\Psr\Cache\CacheItemInterface;
     /**
      * Returns a traversable set of cache items.
      *

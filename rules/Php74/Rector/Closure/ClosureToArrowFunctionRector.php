@@ -68,11 +68,7 @@ CODE_SAMPLE
         if (!$returnExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        $arrowFunction = new \PhpParser\Node\Expr\ArrowFunction();
-        $arrowFunction->params = $node->params;
-        $arrowFunction->returnType = $node->returnType;
-        $arrowFunction->byRef = $node->byRef;
-        $arrowFunction->expr = $returnExpr;
+        $arrowFunction = new \PhpParser\Node\Expr\ArrowFunction(['params' => $node->params, 'returnType' => $node->returnType, 'byRef' => $node->byRef, 'expr' => $returnExpr]);
         if ($node->static) {
             $arrowFunction->static = \true;
         }
