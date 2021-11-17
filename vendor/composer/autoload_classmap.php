@@ -1883,6 +1883,7 @@ return array(
     'Rector\\DowngradePhp80\\ValueObject\\DowngradeAttributeToAnnotation' => $baseDir . '/rules/DowngradePhp80/ValueObject/DowngradeAttributeToAnnotation.php',
     'Rector\\DowngradePhp81\\NodeManipulator\\ObjectToResourceReturn' => $baseDir . '/rules/DowngradePhp81/NodeManipulator/ObjectToResourceReturn.php',
     'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => $baseDir . '/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
+    'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNeverTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php',
     'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => $baseDir . '/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
