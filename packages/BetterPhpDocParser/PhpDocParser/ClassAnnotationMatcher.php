@@ -51,6 +51,7 @@ final class ClassAnnotationMatcher
     private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag): string
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
         if ($scope instanceof Scope) {
             $namespace = $scope->getNamespace();
             if ($namespace !== null) {

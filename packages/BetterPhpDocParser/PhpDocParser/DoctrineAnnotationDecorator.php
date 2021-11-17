@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
+use Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
@@ -27,6 +29,12 @@ final class DoctrineAnnotationDecorator
      * @var string[]
      */
     private const ALLOWED_SHORT_ANNOTATIONS = ['Target'];
+
+    /**
+     * @see https://regex101.com/r/95kIw4/1
+     * @var string
+     */
+    private const LONG_ANNOTATION_REGEX = '#@\\\\(?<class_name>.*?)(?<annotation_content>\(.*?\))#';
 
     public function __construct(
         private CurrentNodeProvider $currentNodeProvider,
@@ -133,6 +141,31 @@ final class DoctrineAnnotationDecorator
         Node $currentPhpNode
     ): void {
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+            // the @\FQN use case
+            if ($phpDocChildNode instanceof PhpDocTextNode) {
+                $match = Strings::match($phpDocChildNode->text, self::LONG_ANNOTATION_REGEX);
+                $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
+
+                if ($fullyQualifiedAnnotationClass === null) {
+                    continue;
+                }
+
+                $annotationContent = $match['annotation_content'] ?? null;
+                $tagName = '@\\' . $fullyQualifiedAnnotationClass;
+
+                $formerStartEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+
+                $spacelessPhpDocTagNode = $this->createDoctrineSpacelessPhpDocTagNode(
+                    $annotationContent,
+                    $tagName,
+                    $fullyQualifiedAnnotationClass,
+                    $formerStartEnd
+                );
+
+                $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+                continue;
+            }
+
             if (! $phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
@@ -156,30 +189,10 @@ final class DoctrineAnnotationDecorator
                 continue;
             }
 
-            $genericTagValueNode = $phpDocChildNode->value;
-            $nestedTokenIterator = $this->tokenIteratorFactory->create($genericTagValueNode->value);
-
-            // mimics doctrine behavior just in phpdoc-parser syntax :)
-            // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
-            $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator);
-
-            $formerStartEnd = $genericTagValueNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-
-            $identifierTypeNode = new IdentifierTypeNode($phpDocChildNode->name);
-            $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
-
-            $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode(
-                $identifierTypeNode,
-                $genericTagValueNode->value,
-                $values,
-                SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null
-            );
-
-            $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $formerStartEnd);
-
-            $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode(
+            $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode(
                 $phpDocChildNode->name,
-                $doctrineAnnotationTagValueNode
+                $phpDocChildNode->value,
+                $fullyQualifiedAnnotationClass
             );
 
             $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
@@ -222,5 +235,49 @@ final class DoctrineAnnotationDecorator
         } while ($composedTokenIterator->currentPosition() < ($tokenCount - 1));
 
         return $openBracketCount === $closeBracketCount;
+    }
+
+    private function createSpacelessPhpDocTagNode(
+        string $tagName,
+        GenericTagValueNode $genericTagValueNode,
+        string $fullyQualifiedAnnotationClass
+    ): SpacelessPhpDocTagNode {
+        $annotationContent = $genericTagValueNode->value;
+        $formerStartEnd = $genericTagValueNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+
+        return $this->createDoctrineSpacelessPhpDocTagNode(
+            $annotationContent,
+            $tagName,
+            $fullyQualifiedAnnotationClass,
+            $formerStartEnd
+        );
+    }
+
+    private function createDoctrineSpacelessPhpDocTagNode(
+        string $annotationContent,
+        string $tagName,
+        string $fullyQualifiedAnnotationClass,
+        StartAndEnd $startAndEnd
+    ): SpacelessPhpDocTagNode {
+        $nestedTokenIterator = $this->tokenIteratorFactory->create($annotationContent);
+
+        // mimics doctrine behavior just in phpdoc-parser syntax :)
+        // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
+
+        $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator);
+
+        $identifierTypeNode = new IdentifierTypeNode($tagName);
+        $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
+
+        $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode(
+            $identifierTypeNode,
+            $annotationContent,
+            $values,
+            SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null
+        );
+
+        $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+
+        return new SpacelessPhpDocTagNode($tagName, $doctrineAnnotationTagValueNode);
     }
 }

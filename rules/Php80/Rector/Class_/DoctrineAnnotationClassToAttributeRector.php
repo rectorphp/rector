@@ -189,6 +189,7 @@ CODE_SAMPLE
         }
 
         $targets = $targetDoctrineAnnotationTagValueNode->getSilentValue();
+
         if ($targets instanceof CurlyListNode) {
             $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
         } elseif (is_string($targets)) {

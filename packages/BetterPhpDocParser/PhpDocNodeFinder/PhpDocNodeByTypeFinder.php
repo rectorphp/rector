@@ -65,7 +65,6 @@ final class PhpDocNodeByTypeFinder
 
         /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
         $doctrineTagValueNodes = $this->findByType($phpDocNode, DoctrineAnnotationTagValueNode::class);
-
         foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
             if ($doctrineTagValueNode->hasClassName($desiredClass)) {
                 $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
