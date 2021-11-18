@@ -1470,6 +1470,8 @@ return array(
     'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => $baseDir . '/packages/Comments/NodeDocBlock/DocBlockUpdater.php',
     'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => $baseDir . '/packages/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
     'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => $baseDir . '/packages/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+    'Rector\\Compatibility\\Rector\\Class_\\AttributeCompatibleAnnotationRector' => $baseDir . '/rules/Compatibility/Rector/Class_/AttributeCompatibleAnnotationRector.php',
+    'Rector\\Compatibility\\ValueObject\\PropertyWithPhpDocInfo' => $baseDir . '/rules/Compatibility/ValueObject/PropertyWithPhpDocInfo.php',
     'Rector\\Composer\\Application\\FileProcessor\\ComposerFileProcessor' => $baseDir . '/rules/Composer/Application/FileProcessor/ComposerFileProcessor.php',
     'Rector\\Composer\\Contract\\Rector\\ComposerRectorInterface' => $baseDir . '/rules/Composer/Contract/Rector/ComposerRectorInterface.php',
     'Rector\\Composer\\Contract\\VersionAwareInterface' => $baseDir . '/rules/Composer/Contract/VersionAwareInterface.php',
