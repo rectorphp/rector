@@ -187,6 +187,9 @@ CODE_SAMPLE
      */
     private function processDoctrineAnnotationClasses(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : array
     {
+        if ($phpDocInfo->getPhpDocNode()->children === []) {
+            return [];
+        }
         $doctrineTagAndAnnotationToAttributes = [];
         $phpDocNodeTraverser = new \RectorPrefix20211118\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) : ?int {
