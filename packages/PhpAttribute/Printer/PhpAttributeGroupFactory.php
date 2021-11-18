@@ -18,6 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
 use Rector\PhpAttribute\Value\ValueNormalizer;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
@@ -145,6 +146,8 @@ final class PhpAttributeGroupFactory
      */
     private function completeNamedArguments(array $args, array $argumentNames): void
     {
+        Assert::allIsAOf($args, Arg::class);
+
         foreach ($args as $key => $arg) {
             $argumentName = $argumentNames[$key] ?? null;
             if ($argumentName === null) {

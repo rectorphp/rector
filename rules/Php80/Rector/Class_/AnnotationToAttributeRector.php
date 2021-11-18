@@ -223,6 +223,10 @@ CODE_SAMPLE
      */
     private function processDoctrineAnnotationClasses(PhpDocInfo $phpDocInfo): array
     {
+        if ($phpDocInfo->getPhpDocNode()->children === []) {
+            return [];
+        }
+
         $doctrineTagAndAnnotationToAttributes = [];
 
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
