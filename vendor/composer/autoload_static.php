@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56
+class ComposerStaticInitcb8a3884e2a1d755e219a4422b6f2dec
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2218,6 +2218,7 @@ class ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56
         'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',
         'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNeverTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php',
         'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
+        'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => __DIR__ . '/../..' . '/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
         'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
         'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
         'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
@@ -3556,9 +3557,9 @@ class ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcb8a3884e2a1d755e219a4422b6f2dec::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcb8a3884e2a1d755e219a4422b6f2dec::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcb8a3884e2a1d755e219a4422b6f2dec::$classMap;
 
         }, null, ClassLoader::class);
     }

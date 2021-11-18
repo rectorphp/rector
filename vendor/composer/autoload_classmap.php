@@ -1888,6 +1888,7 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => $baseDir . '/rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNeverTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php',
     'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => $baseDir . '/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
+    'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => $baseDir . '/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
     'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',

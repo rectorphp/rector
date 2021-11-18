@@ -125,7 +125,21 @@ final class VisibilityManipulator
      */
     public function makeReadonly($node) : void
     {
-        $this->addVisibilityFlag($node, \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY);
+        $this->addVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::READONLY);
+    }
+    /**
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
+     */
+    public function isReadonly($node) : bool
+    {
+        return $this->hasVisibility($node, \Rector\Core\ValueObject\Visibility::READONLY);
+    }
+    /**
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property $node
+     */
+    public function removeReadonly($node) : void
+    {
+        $this->removeVisibilityFlag($node, \Rector\Core\ValueObject\Visibility::READONLY);
     }
     /**
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
@@ -133,6 +147,13 @@ final class VisibilityManipulator
     private function addVisibilityFlag($node, int $visibility) : void
     {
         $node->flags |= $visibility;
+    }
+    /**
+     * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     */
+    private function removeVisibilityFlag($node, int $visibility) : void
+    {
+        $node->flags &= ~$visibility;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node

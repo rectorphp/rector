@@ -1,3 +1,6 @@
+parameters:
+    phpVersion: 80100
+
 services:
     defaultAnalysisParser:
         factory: @cachedRectorParser

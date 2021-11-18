@@ -30,4 +30,8 @@ final class Visibility
      * @var int
      */
     public const FINAL = \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL;
+    /**
+     * @var int
+     */
+    public const READONLY = \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY;
 }
