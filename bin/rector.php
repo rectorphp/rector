@@ -30,25 +30,13 @@ $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
 
 
-// load extracted PHPStan with its own preload.php
-$extractedPhpstanAutoload = __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/autoload.php';
-if (file_exists($extractedPhpstanAutoload)) {
-    require_once $extractedPhpstanAutoload;
-}
-
 if (file_exists(__DIR__ . '/../preload.php') && is_dir(__DIR__ . '/../vendor')) {
     require_once __DIR__ . '/../preload.php';
 }
 
 require_once __DIR__ . '/../src/constants.php';
 
-// pre-set for PHP 5.6/7.0 downgraded version
-$autoloadIncluder->loadIfExistsAndNotLoadedYet(
-    __DIR__ . '/../vendor/phpstan/phpstan-extracted/vendor/phpstan-autoload.php'
-);
-
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
-
 $autoloadIncluder->autoloadProjectAutoloaderFile();
 $autoloadIncluder->autoloadFromCommandLine();
 
@@ -129,7 +117,6 @@ final class AutoloadIncluder
 
     public function loadIfExistsAndNotLoadedYet(string $filePath): void
     {
-        // the scoper-autoload.php is exists in phpstan-extracted/vendor/scoper-autoload.php, move the check in :
         if (! file_exists($filePath)) {
             return;
         }

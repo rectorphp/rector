@@ -50,28 +50,6 @@ final class DowngradePathsCommand extends Command
             'bin rector.php',
         ], $downgradePaths);
 
-        if (file_exists(getcwd() . '/vendor/phpstan/phpstan-extracted/vendor')) {
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/phpstan/phpdoc-parser/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/ondrejmirtes/better-reflection/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/di/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/php-generator/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/utils/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/schema/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/finder/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/robot-loader/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/nette/bootstrap/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/ondram/ci-detector/src';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/finder';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Output/OutputInterface.php';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Output/TrimmedBufferOutput.php';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Logger/ConsoleLogger.php';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console/Style/SymfonyStyle.php';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-extracted/vendor/symfony/console';
-            $downgradePaths[] = 'vendor/phpstan/phpstan-phpunit/src';
-        }
-
         // bash format
         $downgradePathsLine = implode(';', $downgradePaths);
         echo $downgradePathsLine . PHP_EOL;
