@@ -5,19 +5,16 @@ declare(strict_types=1);
 namespace Rector\Compatibility\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Compatibility\NodeAnalyzer\RequiredAnnotationPropertyAnalyzer;
 use Rector\Compatibility\ValueObject\PropertyWithPhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -39,7 +36,8 @@ final class AttributeCompatibleAnnotationRector extends AbstractRector
     public function __construct(
         private PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private PhpDocTagRemover $phpDocTagRemover,
-        private ParamTagRemover $paramTagRemover
+        private ParamTagRemover $paramTagRemover,
+        private RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer
     ) {
     }
 
@@ -127,7 +125,7 @@ CODE_SAMPLE
             }
 
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if (! $this->isRequiredProperty($propertyPhpDocInfo, $property)) {
+            if (! $this->requiredAnnotationPropertyAnalyzer->isRequiredProperty($propertyPhpDocInfo, $property)) {
                 continue;
             }
 
@@ -193,35 +191,6 @@ CODE_SAMPLE
         }
 
         return $params;
-    }
-
-    private function isRequiredProperty(PhpDocInfo $propertyPhpDocInfo, Property $property): bool
-    {
-        if ($propertyPhpDocInfo->hasByAnnotationClass('Doctrine\Common\Annotations\Annotation\Required')) {
-            return true;
-        }
-
-        // sometimes property has default null, but @var says its not null - that's due to nullability of typed properties
-        // in that case, we should treat property as required
-        $firstProperty = $property->props[0];
-        if (! $firstProperty->default instanceof Expr) {
-            return false;
-        }
-
-        if (! $this->valueResolver->isNull($firstProperty->default)) {
-            return false;
-        }
-
-        $varTagValueNode = $propertyPhpDocInfo->getVarTagValueNode();
-        if (! $varTagValueNode instanceof VarTagValueNode) {
-            return false;
-        }
-
-        if ($varTagValueNode->type instanceof NullableTypeNode) {
-            return false;
-        }
-
-        return $property->type instanceof NullableType;
     }
 
     /**

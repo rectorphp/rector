@@ -17,7 +17,7 @@ use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Annotation\ChangeResolvedClassInParticularContextForAnnotation;
+use Rector\BetterPhpDocParser\Annotation\InverseJoinColumnCorrector;
 use Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -68,7 +68,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         private ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover,
         private AttrGroupsFactory $attrGroupsFactory,
         private DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer,
-        private ChangeResolvedClassInParticularContextForAnnotation $changeResolvedClassInParticularContextForAnnotation
+        private InverseJoinColumnCorrector $inverseJoinColumnCorrector,
     ) {
     }
 
@@ -245,10 +245,7 @@ CODE_SAMPLE
                     continue;
                 }
 
-                $this->changeResolvedClassInParticularContextForAnnotation->changeResolvedClassIfNeed(
-                    $annotationToAttribute,
-                    $docNode
-                );
+                $this->inverseJoinColumnCorrector->correctInverseJoinColumn($annotationToAttribute, $docNode);
 
                 if ($this->doctrineAnnotationTagValueNodeAnalyzer->isNested(
                     $docNode,

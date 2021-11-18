@@ -13,8 +13,8 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
@@ -79,7 +79,7 @@ CODE_SAMPLE
         if ($node instanceof FuncCall) {
             return $node->name instanceof Name ? new String_($node->name->toString()) : $node->name;
         }
-        
+
         if ($node instanceof MethodCall) {
             $object = $node->var;
             $method = $node->name instanceof Identifier ? new String_($node->name->toString()) : $node->name;
