@@ -58,7 +58,7 @@ class AsciiSlugger implements \RectorPrefix20211118\Symfony\Component\String\Slu
     /**
      * {@inheritdoc}
      */
-    public function slug(string $string, string $separator = '-', string $locale = null) : \RectorPrefix20211118\Symfony\Component\String\AbstractUnicodeString
+    public function slug($string, $separator = '-', $locale = null) : \RectorPrefix20211118\Symfony\Component\String\AbstractUnicodeString
     {
         $locale = $locale ?? $this->defaultLocale;
         $transliterator = [];
