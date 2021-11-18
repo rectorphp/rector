@@ -15,11 +15,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Annotation\InverseJoinColumnCorrector;
-use Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -45,11 +43,6 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      */
     public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
     /**
-     * List of annotations that should not be unwrapped
-     * @var string[]
-     */
-    private const SKIP_UNWRAP_ANNOTATIONS = ['Symfony\\Component\\Validator\\Constraints\\All', 'Symfony\\Component\\Validator\\Constraints\\AtLeastOneOf', 'Symfony\\Component\\Validator\\Constraints\\Collection', 'Symfony\\Component\\Validator\\Constraints\\Sequentially'];
-    /**
      * @var AnnotationToAttribute[]
      */
     private $annotationsToAttributes = [];
@@ -66,20 +59,15 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      */
     private $attrGroupsFactory;
     /**
-     * @var \Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
-    private $doctrineAnnotationTagValueNodeAnalyzer;
-    /**
-     * @var \Rector\BetterPhpDocParser\Annotation\InverseJoinColumnCorrector
-     */
-    private $inverseJoinColumnCorrector;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer, \Rector\BetterPhpDocParser\Annotation\InverseJoinColumnCorrector $inverseJoinColumnCorrector)
+    private $phpDocTagRemover;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->convertedAnnotationToAttributeParentRemover = $convertedAnnotationToAttributeParentRemover;
         $this->attrGroupsFactory = $attrGroupsFactory;
-        $this->doctrineAnnotationTagValueNodeAnalyzer = $doctrineAnnotationTagValueNodeAnalyzer;
-        $this->inverseJoinColumnCorrector = $inverseJoinColumnCorrector;
+        $this->phpDocTagRemover = $phpDocTagRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -134,7 +122,7 @@ CODE_SAMPLE
             return null;
         }
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
-        $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode($phpDocInfo->getPhpDocNode(), $this->annotationsToAttributes, self::SKIP_UNWRAP_ANNOTATIONS);
+        $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode($phpDocInfo->getPhpDocNode(), $this->annotationsToAttributes);
         return $node;
     }
     /**
@@ -191,88 +179,43 @@ CODE_SAMPLE
             return [];
         }
         $doctrineTagAndAnnotationToAttributes = [];
-        $phpDocNodeTraverser = new \RectorPrefix20211118\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $node) use(&$doctrineTagAndAnnotationToAttributes, $phpDocInfo) : ?int {
-            $docNode = $this->doctrineAnnotationTagValueNodeAnalyzer->resolveDoctrineAnnotationTagValueNode($node);
-            if (!$docNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                return null;
+        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+                continue;
             }
-            if ($docNode->hasClassNames(self::SKIP_UNWRAP_ANNOTATIONS)) {
-                return \RectorPrefix20211118\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                continue;
             }
+            $nestedDoctrineAnnotationTagValueNodes = $this->findNestedDoctrineAnnotationTagValueNodes($phpDocChildNode);
+            // depends on PHP 8.1+ - nested values, skip for now
+            if ($nestedDoctrineAnnotationTagValueNodes !== []) {
+                continue;
+            }
+            $doctrineTagValueNode = $phpDocChildNode->value;
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                if (!$docNode->hasClassName($annotationToAttribute->getTag())) {
+                if (!$doctrineTagValueNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
-                $this->inverseJoinColumnCorrector->correctInverseJoinColumn($annotationToAttribute, $docNode);
-                if ($this->doctrineAnnotationTagValueNodeAnalyzer->isNested($docNode, $this->annotationsToAttributes)) {
-                    $stringValues = $this->getStringFromNestedDoctrineTagAnnotationToAttribute($docNode);
-                    $newDoctrineTagValueNode = $this->resolveNewDoctrineTagValueNode($docNode, $stringValues);
-                    $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($newDoctrineTagValueNode, $annotationToAttribute);
-                    /** @var DoctrineAnnotationTagValueNode $docNode */
-                    $doctrineTagAndAnnotationToAttributes = $this->addNestedDoctrineTagAndAnnotationToAttribute($docNode, $doctrineTagAndAnnotationToAttributes);
-                } else {
-                    $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($docNode, $annotationToAttribute);
-                }
-                $phpDocInfo->markAsChanged();
-                // remove the original doctrine annotation, it becomes an attribute
-                return \RectorPrefix20211118\Symplify\SimplePhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
+                $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($phpDocChildNode->value, $annotationToAttribute);
+                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
             }
-            return null;
-        });
+        }
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
     }
     /**
-     * @param string[] $stringValues
+     * @return DoctrineAnnotationTagValueNode[]
      */
-    private function resolveNewDoctrineTagValueNode(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $stringValues) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    private function findNestedDoctrineAnnotationTagValueNodes(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : array
     {
-        if ($stringValues === []) {
-            return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode);
-        }
-        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode, null, $stringValues);
-    }
-    /**
-     * @return string[]
-     */
-    private function getStringFromNestedDoctrineTagAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : array
-    {
-        $values = $doctrineAnnotationTagValueNode->getValues();
-        return \array_filter($values, 'is_string');
-    }
-    /**
-     * @param DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     * @return DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     */
-    private function addNestedDoctrineTagAndAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $doctrineTagAndAnnotationToAttributes) : array
-    {
-        $values = $doctrineAnnotationTagValueNode->getValues();
-        foreach ($values as $value) {
-            if (\is_string($value)) {
-                $originalValue = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($value));
-                $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttributes($originalValue, $doctrineTagAndAnnotationToAttributes);
-                continue;
+        $nestedDoctrineAnnotationTagValueNodes = [];
+        $phpDocNodeTraverser = new \RectorPrefix20211118\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocTagNode->value, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use(&$nestedDoctrineAnnotationTagValueNodes) {
+            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+                return null;
             }
-            $originalValues = $value->getOriginalValues();
-            foreach ($originalValues as $originalValue) {
-                $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttributes($originalValue, $doctrineTagAndAnnotationToAttributes);
-            }
-        }
-        return $doctrineTagAndAnnotationToAttributes;
-    }
-    /**
-     * @param DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     * @return DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     */
-    private function collectDoctrineTagAndAnnotationToAttributes(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $doctrineTagAndAnnotationToAttributes) : array
-    {
-        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-            $tag = $annotationToAttribute->getTag();
-            if (!$doctrineAnnotationTagValueNode->hasClassName($tag)) {
-                continue;
-            }
-            $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineAnnotationTagValueNode, $annotationToAttribute);
-        }
-        return $doctrineTagAndAnnotationToAttributes;
+            $nestedDoctrineAnnotationTagValueNodes[] = $node;
+            return null;
+        });
+        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcd68a7ce4f01cfd8591ae9f076eacc22
+class ComposerStaticInite273d33d5641424695d5603756303355
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1549,9 +1549,7 @@ class ComposerStaticInitcd68a7ce4f01cfd8591ae9f076eacc22
         'Rector\\Autodiscovery\\Rector\\Class_\\MoveServicesBySuffixToDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveServicesBySuffixToDirectoryRector.php',
         'Rector\\Autodiscovery\\Rector\\Class_\\MoveValueObjectsToValueObjectDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Class_/MoveValueObjectsToValueObjectDirectoryRector.php',
         'Rector\\Autodiscovery\\Rector\\Interface_\\MoveInterfacesToContractNamespaceDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector.php',
-        'Rector\\BetterPhpDocParser\\AnnotationAnalyzer\\DoctrineAnnotationTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/AnnotationAnalyzer/DoctrineAnnotationTagValueNodeAnalyzer.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
-        'Rector\\BetterPhpDocParser\\Annotation\\InverseJoinColumnCorrector' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/InverseJoinColumnCorrector.php',
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
         'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
         'Rector\\BetterPhpDocParser\\Contract\\BasePhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Contract/BasePhpDocNodeVisitorInterface.php',
@@ -3558,9 +3556,9 @@ class ComposerStaticInitcd68a7ce4f01cfd8591ae9f076eacc22
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcd68a7ce4f01cfd8591ae9f076eacc22::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcd68a7ce4f01cfd8591ae9f076eacc22::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcd68a7ce4f01cfd8591ae9f076eacc22::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite273d33d5641424695d5603756303355::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite273d33d5641424695d5603756303355::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite273d33d5641424695d5603756303355::$classMap;
 
         }, null, ClassLoader::class);
     }
