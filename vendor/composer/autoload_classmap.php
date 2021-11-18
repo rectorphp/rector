@@ -1470,6 +1470,7 @@ return array(
     'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => $baseDir . '/packages/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
     'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => $baseDir . '/packages/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
     'Rector\\Compatibility\\NodeAnalyzer\\RequiredAnnotationPropertyAnalyzer' => $baseDir . '/rules/Compatibility/NodeAnalyzer/RequiredAnnotationPropertyAnalyzer.php',
+    'Rector\\Compatibility\\NodeFactory\\ConstructorClassMethodFactory' => $baseDir . '/rules/Compatibility/NodeFactory/ConstructorClassMethodFactory.php',
     'Rector\\Compatibility\\Rector\\Class_\\AttributeCompatibleAnnotationRector' => $baseDir . '/rules/Compatibility/Rector/Class_/AttributeCompatibleAnnotationRector.php',
     'Rector\\Compatibility\\ValueObject\\PropertyWithPhpDocInfo' => $baseDir . '/rules/Compatibility/ValueObject/PropertyWithPhpDocInfo.php',
     'Rector\\Composer\\Application\\FileProcessor\\ComposerFileProcessor' => $baseDir . '/rules/Composer/Application/FileProcessor/ComposerFileProcessor.php',
