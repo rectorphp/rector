@@ -6,7 +6,6 @@ namespace Rector\Php81\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -111,7 +110,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->visibilityManipulator->hasVisibility($param, Class_::MODIFIER_READONLY)) {
+        if ($this->visibilityManipulator->isReadonly($param)) {
             return null;
         }
 

@@ -37,4 +37,9 @@ final class Visibility
      * @var int
      */
     public const FINAL = Class_::MODIFIER_FINAL;
+
+    /**
+     * @var int
+     */
+    public const READONLY = Class_::MODIFIER_READONLY;
 }
