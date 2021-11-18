@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit39fad64e83ecf974f45aadf22df0963f
+class ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1551,7 +1551,7 @@ class ComposerStaticInit39fad64e83ecf974f45aadf22df0963f
         'Rector\\Autodiscovery\\Rector\\Interface_\\MoveInterfacesToContractNamespaceDirectoryRector' => __DIR__ . '/../..' . '/rules/Autodiscovery/Rector/Interface_/MoveInterfacesToContractNamespaceDirectoryRector.php',
         'Rector\\BetterPhpDocParser\\AnnotationAnalyzer\\DoctrineAnnotationTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/AnnotationAnalyzer/DoctrineAnnotationTagValueNodeAnalyzer.php',
         'Rector\\BetterPhpDocParser\\Annotation\\AnnotationNaming' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/AnnotationNaming.php',
-        'Rector\\BetterPhpDocParser\\Annotation\\ChangeResolvedClassInParticularContextForAnnotation' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/ChangeResolvedClassInParticularContextForAnnotation.php',
+        'Rector\\BetterPhpDocParser\\Annotation\\InverseJoinColumnCorrector' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Annotation/InverseJoinColumnCorrector.php',
         'Rector\\BetterPhpDocParser\\Attributes\\AttributeMirrorer' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Attributes/AttributeMirrorer.php',
         'Rector\\BetterPhpDocParser\\Comment\\CommentsMerger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Comment/CommentsMerger.php',
         'Rector\\BetterPhpDocParser\\Contract\\BasePhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Contract/BasePhpDocNodeVisitorInterface.php',
@@ -1588,7 +1588,6 @@ class ComposerStaticInit39fad64e83ecf974f45aadf22df0963f
         'Rector\\BetterPhpDocParser\\Printer\\EmptyPhpDocDetector' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/EmptyPhpDocDetector.php',
         'Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php',
         'Rector\\BetterPhpDocParser\\Printer\\RemoveNodesStartAndEndResolver' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/RemoveNodesStartAndEndResolver.php',
-        'Rector\\BetterPhpDocParser\\ValueObject\\ChangeResolvedClassInParticularContext' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/ChangeResolvedClassInParticularContext.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\DoctrineAnnotation\\SilentKeyMap' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/DoctrineAnnotation/SilentKeyMap.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\NodeTypes' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/NodeTypes.php',
         'Rector\\BetterPhpDocParser\\ValueObject\\Parser\\BetterTokenIterator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/ValueObject/Parser/BetterTokenIterator.php',
@@ -1800,6 +1799,7 @@ class ComposerStaticInit39fad64e83ecf974f45aadf22df0963f
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/packages/Comments/NodeDocBlock/DocBlockUpdater.php',
         'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => __DIR__ . '/../..' . '/packages/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
         'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => __DIR__ . '/../..' . '/packages/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+        'Rector\\Compatibility\\NodeAnalyzer\\RequiredAnnotationPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/Compatibility/NodeAnalyzer/RequiredAnnotationPropertyAnalyzer.php',
         'Rector\\Compatibility\\Rector\\Class_\\AttributeCompatibleAnnotationRector' => __DIR__ . '/../..' . '/rules/Compatibility/Rector/Class_/AttributeCompatibleAnnotationRector.php',
         'Rector\\Compatibility\\ValueObject\\PropertyWithPhpDocInfo' => __DIR__ . '/../..' . '/rules/Compatibility/ValueObject/PropertyWithPhpDocInfo.php',
         'Rector\\Composer\\Application\\FileProcessor\\ComposerFileProcessor' => __DIR__ . '/../..' . '/rules/Composer/Application/FileProcessor/ComposerFileProcessor.php',
@@ -3556,9 +3556,9 @@ class ComposerStaticInit39fad64e83ecf974f45aadf22df0963f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit39fad64e83ecf974f45aadf22df0963f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit39fad64e83ecf974f45aadf22df0963f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit39fad64e83ecf974f45aadf22df0963f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdd516ad6f055956fc703c8bf548e5b56::$classMap;
 
         }, null, ClassLoader::class);
     }
