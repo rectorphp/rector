@@ -3,6 +3,7 @@
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Validation\NotNull;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class SkipUnwrapSymfonyNestedValidators
@@ -13,7 +14,7 @@ final class SkipUnwrapSymfonyNestedValidators
      * @var array
      * @Assert\All(
      *     constraints={
-     *         @GenericAnnotation()
+     *         @NotNull()
      *     }
      * )
      */
@@ -27,6 +28,7 @@ final class SkipUnwrapSymfonyNestedValidators
 namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture;
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\Validation\NotNull;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final class SkipUnwrapSymfonyNestedValidators
@@ -36,7 +38,7 @@ final class SkipUnwrapSymfonyNestedValidators
      * @var array
      * @Assert\All(
      *     constraints={
-     *         @GenericAnnotation()
+     *         @NotNull()
      *     }
      * )
      */

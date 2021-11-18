@@ -29,10 +29,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 class AnEntity
 {
+    /**
+     * @ORM\JoinTable(
+     *     name="my_join_table",
+     *     joinColumns={@ORM\JoinColumn(name="first_column", referencedColumnName="id", onDelete="CASCADE")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="second_column", referencedColumnName="id")}
+     * )
+     **/
     #[\Doctrine\ORM\Mapping\ManyToMany(targetEntity: AnEntity::class)]
-    #[\Doctrine\ORM\Mapping\JoinTable(name: 'my_join_table')]
-    #[\Doctrine\ORM\Mapping\JoinColumn(name: 'first_column', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    #[\Doctrine\ORM\Mapping\InverseJoinColumn(name: 'second_column', referencedColumnName: 'id')]
     protected Collection $list;
 }
 

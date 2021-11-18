@@ -30,6 +30,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\JoinTable'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\UniqueConstraint'),
                 new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
+                // validation
+                new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),
             ]),
         ]]);
 };

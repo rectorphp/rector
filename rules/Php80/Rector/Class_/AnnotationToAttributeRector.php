@@ -16,11 +16,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use Rector\BetterPhpDocParser\Annotation\InverseJoinColumnCorrector;
-use Rector\BetterPhpDocParser\AnnotationAnalyzer\DoctrineAnnotationTagValueNodeAnalyzer;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -48,17 +46,6 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
     public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
 
     /**
-     * List of annotations that should not be unwrapped
-     * @var string[]
-     */
-    private const SKIP_UNWRAP_ANNOTATIONS = [
-        'Symfony\Component\Validator\Constraints\All',
-        'Symfony\Component\Validator\Constraints\AtLeastOneOf',
-        'Symfony\Component\Validator\Constraints\Collection',
-        'Symfony\Component\Validator\Constraints\Sequentially',
-    ];
-
-    /**
      * @var AnnotationToAttribute[]
      */
     private array $annotationsToAttributes = [];
@@ -67,8 +54,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         private PhpAttributeGroupFactory $phpAttributeGroupFactory,
         private ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover,
         private AttrGroupsFactory $attrGroupsFactory,
-        private DoctrineAnnotationTagValueNodeAnalyzer $doctrineAnnotationTagValueNodeAnalyzer,
-        private InverseJoinColumnCorrector $inverseJoinColumnCorrector,
+        private PhpDocTagRemover $phpDocTagRemover,
     ) {
     }
 
@@ -139,6 +125,7 @@ CODE_SAMPLE
 
         // 1. generic tags
         $genericAttributeGroups = $this->processGenericTags($phpDocInfo);
+
         // 2. Doctrine annotation classes
         $annotationAttributeGroups = $this->processDoctrineAnnotationClasses($phpDocInfo);
 
@@ -151,8 +138,7 @@ CODE_SAMPLE
 
         $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode(
             $phpDocInfo->getPhpDocNode(),
-            $this->annotationsToAttributes,
-            self::SKIP_UNWRAP_ANNOTATIONS
+            $this->annotationsToAttributes
         );
 
         return $node;
@@ -229,145 +215,60 @@ CODE_SAMPLE
 
         $doctrineTagAndAnnotationToAttributes = [];
 
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (
-            DocNode $node
-        ) use (&$doctrineTagAndAnnotationToAttributes, $phpDocInfo): ?int {
-            $docNode = $this->doctrineAnnotationTagValueNodeAnalyzer->resolveDoctrineAnnotationTagValueNode($node);
-
-            if (! $docNode instanceof DoctrineAnnotationTagValueNode) {
-                return null;
+        foreach ($phpDocInfo->getPhpDocNode()->children as $phpDocChildNode) {
+            if (! $phpDocChildNode instanceof PhpDocTagNode) {
+                continue;
             }
 
-            if ($docNode->hasClassNames(self::SKIP_UNWRAP_ANNOTATIONS)) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if (! $phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode) {
+                continue;
             }
+
+            $nestedDoctrineAnnotationTagValueNodes = $this->findNestedDoctrineAnnotationTagValueNodes($phpDocChildNode);
+
+            // depends on PHP 8.1+ - nested values, skip for now
+            if ($nestedDoctrineAnnotationTagValueNodes !== []) {
+                continue;
+            }
+
+            $doctrineTagValueNode = $phpDocChildNode->value;
 
             foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                if (! $docNode->hasClassName($annotationToAttribute->getTag())) {
+                if (! $doctrineTagValueNode->hasClassName($annotationToAttribute->getTag())) {
                     continue;
                 }
 
-                $this->inverseJoinColumnCorrector->correctInverseJoinColumn($annotationToAttribute, $docNode);
+                $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
+                    $phpDocChildNode->value,
+                    $annotationToAttribute
+                );
 
-                if ($this->doctrineAnnotationTagValueNodeAnalyzer->isNested(
-                    $docNode,
-                    $this->annotationsToAttributes
-                )) {
-                    $stringValues = $this->getStringFromNestedDoctrineTagAnnotationToAttribute($docNode);
-                    $newDoctrineTagValueNode = $this->resolveNewDoctrineTagValueNode($docNode, $stringValues);
-
-                    $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                        $newDoctrineTagValueNode,
-                        $annotationToAttribute
-                    );
-
-                    /** @var DoctrineAnnotationTagValueNode $docNode */
-                    $doctrineTagAndAnnotationToAttributes = $this->addNestedDoctrineTagAndAnnotationToAttribute(
-                        $docNode,
-                        $doctrineTagAndAnnotationToAttributes
-                    );
-                } else {
-                    $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                        $docNode,
-                        $annotationToAttribute
-                    );
-                }
-
-                $phpDocInfo->markAsChanged();
-
-                // remove the original doctrine annotation, it becomes an attribute
-                return PhpDocNodeTraverser::NODE_REMOVE;
+                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
             }
-
-            return null;
-        });
+        }
 
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
     }
 
     /**
-     * @param string[] $stringValues
+     * @return DoctrineAnnotationTagValueNode[]
      */
-    private function resolveNewDoctrineTagValueNode(
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        array $stringValues
-    ): DoctrineAnnotationTagValueNode {
-        if ($stringValues === []) {
-            return new DoctrineAnnotationTagValueNode($doctrineAnnotationTagValueNode->identifierTypeNode);
-        }
+    private function findNestedDoctrineAnnotationTagValueNodes(PhpDocTagNode $phpDocTagNode): array
+    {
+        $nestedDoctrineAnnotationTagValueNodes = [];
 
-        return new DoctrineAnnotationTagValueNode(
-            $doctrineAnnotationTagValueNode->identifierTypeNode,
-            null,
-            $stringValues
-        );
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getStringFromNestedDoctrineTagAnnotationToAttribute(
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
-    ): array {
-        $values = $doctrineAnnotationTagValueNode->getValues();
-
-        return array_filter($values, 'is_string');
-    }
-
-    /**
-     * @param DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     * @return DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     */
-    private function addNestedDoctrineTagAndAnnotationToAttribute(
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        array $doctrineTagAndAnnotationToAttributes
-    ): array {
-        $values = $doctrineAnnotationTagValueNode->getValues();
-        foreach ($values as $value) {
-            if (is_string($value)) {
-                $originalValue = new DoctrineAnnotationTagValueNode(new IdentifierTypeNode($value));
-                $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttributes(
-                    $originalValue,
-                    $doctrineTagAndAnnotationToAttributes
-                );
-
-                continue;
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocTagNode->value, '', function (DocNode $node) use (
+            &$nestedDoctrineAnnotationTagValueNodes
+        ) {
+            if (! $node instanceof DoctrineAnnotationTagValueNode) {
+                return null;
             }
 
-            $originalValues = $value->getOriginalValues();
-            foreach ($originalValues as $originalValue) {
-                $doctrineTagAndAnnotationToAttributes = $this->collectDoctrineTagAndAnnotationToAttributes(
-                    $originalValue,
-                    $doctrineTagAndAnnotationToAttributes
-                );
-            }
-        }
+            $nestedDoctrineAnnotationTagValueNodes[] = $node;
+            return null;
+        });
 
-        return $doctrineTagAndAnnotationToAttributes;
-    }
-
-    /**
-     * @param DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     * @return DoctrineTagAndAnnotationToAttribute[] $doctrineTagAndAnnotationToAttributes
-     */
-    private function collectDoctrineTagAndAnnotationToAttributes(
-        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        array $doctrineTagAndAnnotationToAttributes
-    ): array {
-        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-            $tag = $annotationToAttribute->getTag();
-            if (! $doctrineAnnotationTagValueNode->hasClassName($tag)) {
-                continue;
-            }
-
-            $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                $doctrineAnnotationTagValueNode,
-                $annotationToAttribute
-            );
-        }
-
-        return $doctrineTagAndAnnotationToAttributes;
+        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }
