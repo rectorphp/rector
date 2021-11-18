@@ -9,16 +9,14 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Compatibility\NodeAnalyzer\RequiredAnnotationPropertyAnalyzer;
+use Rector\Compatibility\NodeFactory\ConstructorClassMethodFactory;
 use Rector\Compatibility\ValueObject\PropertyWithPhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\MethodName;
-use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,8 +34,8 @@ final class AttributeCompatibleAnnotationRector extends AbstractRector
     public function __construct(
         private PhpAttributeAnalyzer $phpAttributeAnalyzer,
         private PhpDocTagRemover $phpDocTagRemover,
-        private ParamTagRemover $paramTagRemover,
-        private RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer
+        private RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer,
+        private ConstructorClassMethodFactory $constructorClassMethodFactory
     ) {
     }
 
@@ -138,7 +136,13 @@ CODE_SAMPLE
             );
         }
 
-        $constructorClassMethod = $this->createConstructorClassMethod($requiredPropertiesWithPhpDocInfos);
+        $params = $this->createConstructParams($requiredPropertiesWithPhpDocInfos);
+
+        $constructorClassMethod = $this->constructorClassMethodFactory->createConstructorClassMethod(
+            $requiredPropertiesWithPhpDocInfos,
+            $params
+        );
+
         $node->stmts = array_merge($node->stmts, [$constructorClassMethod]);
 
         return $node;
@@ -191,27 +195,5 @@ CODE_SAMPLE
         }
 
         return $params;
-    }
-
-    /**
-     * @param PropertyWithPhpDocInfo[] $requiredPropertiesWithPhpDocInfos
-     */
-    private function createConstructorClassMethod(array $requiredPropertiesWithPhpDocInfos): ClassMethod
-    {
-        $classMethod = new ClassMethod(MethodName::CONSTRUCT, [
-            'flags' => Class_::MODIFIER_PUBLIC,
-            'params' => $this->createConstructParams($requiredPropertiesWithPhpDocInfos),
-        ]);
-
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-
-        foreach ($requiredPropertiesWithPhpDocInfos as $requiredPropertyWithPhpDocInfo) {
-            $paramTagValueNode = $requiredPropertyWithPhpDocInfo->getParamTagValueNode();
-            $phpDocInfo->addTagValueNode($paramTagValueNode);
-        }
-
-        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $classMethod);
-
-        return $classMethod;
     }
 }
