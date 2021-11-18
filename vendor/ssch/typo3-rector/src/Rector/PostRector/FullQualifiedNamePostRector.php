@@ -16,10 +16,10 @@ use Rector\NodeRemoval\NodeRemover;
 use Rector\PostRector\Rector\AbstractPostRector;
 use Rector\PostRector\Rector\NameImportingPostRector;
 use Ssch\TYPO3Rector\Configuration\Typo3Option;
-use RectorPrefix20211117\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211118\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211117\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix20211118\Symplify\Skipper\Matcher\FileInfoMatcher;
 /**
  * @see \Ssch\TYPO3Rector\Tests\Rector\PostRector\FullQualifiedNamePostRector\FullQualifiedNamePostRectorTest
  */
@@ -49,7 +49,7 @@ final class FullQualifiedNamePostRector extends \Rector\PostRector\Rector\Abstra
      * @var \Symplify\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
-    public function __construct(\RectorPrefix20211117\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \RectorPrefix20211117\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
+    public function __construct(\RectorPrefix20211118\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \RectorPrefix20211118\Symplify\Skipper\Matcher\FileInfoMatcher $fileInfoMatcher)
     {
         $this->parameterProvider = $parameterProvider;
         $this->currentFileProvider = $currentFileProvider;
@@ -144,7 +144,7 @@ CODE_SAMPLE
         $filesAndDirectories = $this->parameterProvider->provideArrayParameter(\Ssch\TYPO3Rector\Configuration\Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES);
         return !$this->fileInfoMatcher->doesFileInfoMatchPatterns($file->getSmartFileInfo(), $filesAndDirectories);
     }
-    private function changeNameImportingPostRectorSkipConfiguration(\RectorPrefix20211117\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider) : void
+    private function changeNameImportingPostRectorSkipConfiguration(\RectorPrefix20211118\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider) : void
     {
         if (!$parameterProvider->hasParameter(\Ssch\TYPO3Rector\Configuration\Typo3Option::PATHS_FULL_QUALIFIED_NAMESPACES)) {
             return;

@@ -15,10 +15,10 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20211117\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20211118\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211117\Webmozart\Assert\Assert;
+use RectorPrefix20211118\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/class_name_scalars https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
@@ -43,7 +43,7 @@ final class StringClassNameToClassConstantRector extends \Rector\Core\Rector\Abs
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
-    public function __construct(\RectorPrefix20211117\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
+    public function __construct(\RectorPrefix20211118\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
     {
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
     }
@@ -107,7 +107,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? [];
-        \RectorPrefix20211117\Webmozart\Assert\Assert::allString($classesToSkip);
+        \RectorPrefix20211118\Webmozart\Assert\Assert::allString($classesToSkip);
         $this->classesToSkip = $classesToSkip;
     }
     public function provideMinPhpVersion() : int

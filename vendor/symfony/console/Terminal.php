@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211117\Symfony\Component\Console;
+namespace RectorPrefix20211118\Symfony\Component\Console;
 
 class Terminal
 {
