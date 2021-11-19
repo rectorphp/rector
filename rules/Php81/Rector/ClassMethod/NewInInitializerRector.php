@@ -16,6 +16,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
+ * @changelog https://wiki.php.net/rfc/new_in_initializers
+ *
  * @see \Rector\Tests\Php81\Rector\ClassMethod\NewInInitializerRector\NewInInitializerRectorTest
  */
 final class NewInInitializerRector extends AbstractRector implements MinPhpVersionInterface
