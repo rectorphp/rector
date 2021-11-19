@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211118\\Symfony\\Polyfill\\Php81\\": ""
+            "RectorPrefix20211119\\Symfony\\Polyfill\\Php81\\": ""
         },
         "files": [
             "bootstrap.php"

@@ -5,11 +5,11 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211118\Nette\Neon\Node;
+namespace RectorPrefix20211119\Nette\Neon\Node;
 
-use RectorPrefix20211118\Nette\Neon\Node;
+use RectorPrefix20211119\Nette\Neon\Node;
 /** @internal */
-final class ArrayNode extends \RectorPrefix20211118\Nette\Neon\Node
+final class ArrayNode extends \RectorPrefix20211119\Nette\Neon\Node
 {
     /** @var ArrayItemNode[] */
     public $items = [];
@@ -22,7 +22,7 @@ final class ArrayNode extends \RectorPrefix20211118\Nette\Neon\Node
     }
     public function toValue() : array
     {
-        return \RectorPrefix20211118\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->items);
+        return \RectorPrefix20211119\Nette\Neon\Node\ArrayItemNode::itemsToArray($this->items);
     }
     public function toString() : string
     {
@@ -30,12 +30,12 @@ final class ArrayNode extends \RectorPrefix20211118\Nette\Neon\Node
             $isList = !\array_filter($this->items, function ($item) {
                 return $item->key;
             });
-            $res = \RectorPrefix20211118\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->items);
+            $res = \RectorPrefix20211119\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->items);
             return ($isList ? '[' : '{') . $res . ($isList ? ']' : '}');
         } elseif (\count($this->items) === 0) {
             return '[]';
         } else {
-            return \RectorPrefix20211118\Nette\Neon\Node\ArrayItemNode::itemsToBlockString($this->items);
+            return \RectorPrefix20211119\Nette\Neon\Node\ArrayItemNode::itemsToBlockString($this->items);
         }
     }
     public function getSubNodes() : array

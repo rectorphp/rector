@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
 use Rector\PhpAttribute\Value\ValueNormalizer;
-use RectorPrefix20211118\Webmozart\Assert\Assert;
+use RectorPrefix20211119\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
  */
@@ -124,7 +124,7 @@ final class PhpAttributeGroupFactory
      */
     private function completeNamedArguments(array $args, array $argumentNames) : void
     {
-        \RectorPrefix20211118\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
+        \RectorPrefix20211119\Webmozart\Assert\Assert::allIsAOf($args, \PhpParser\Node\Arg::class);
         foreach ($args as $key => $arg) {
             $argumentName = $argumentNames[$key] ?? null;
             if ($argumentName === null) {

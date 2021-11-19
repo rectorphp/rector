@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20211118\Nette\Utils\Strings;
+use RectorPrefix20211119\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -134,7 +134,7 @@ final class DoctrineAnnotationDecorator
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             // the @\FQN use case
             if ($phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
-                $match = \RectorPrefix20211118\Nette\Utils\Strings::match($phpDocChildNode->text, self::LONG_ANNOTATION_REGEX);
+                $match = \RectorPrefix20211119\Nette\Utils\Strings::match($phpDocChildNode->text, self::LONG_ANNOTATION_REGEX);
                 $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
                 if ($fullyQualifiedAnnotationClass === null) {
                     continue;

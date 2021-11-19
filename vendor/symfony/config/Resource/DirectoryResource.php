@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211118\Symfony\Component\Config\Resource;
+namespace RectorPrefix20211119\Symfony\Component\Config\Resource;
 
 /**
  * DirectoryResource represents a resources stored in a subdirectory tree.
@@ -17,7 +17,7 @@ namespace RectorPrefix20211118\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class DirectoryResource implements \RectorPrefix20211118\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class DirectoryResource implements \RectorPrefix20211119\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $resource;
     private $pattern;
