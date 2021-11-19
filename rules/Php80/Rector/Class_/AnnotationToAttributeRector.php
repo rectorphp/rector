@@ -23,7 +23,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
-use Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover;
+use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
@@ -52,9 +52,9 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
 
     public function __construct(
         private PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        private ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover,
         private AttrGroupsFactory $attrGroupsFactory,
         private PhpDocTagRemover $phpDocTagRemover,
+        private PhpDocNodeFinder $phpDocNodeFinder,
     ) {
     }
 
@@ -135,11 +135,6 @@ CODE_SAMPLE
         }
 
         $node->attrGroups = array_merge($node->attrGroups, $attributeGroups);
-
-        $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode(
-            $phpDocInfo->getPhpDocNode(),
-            $this->annotationsToAttributes
-        );
 
         return $node;
     }
@@ -224,7 +219,10 @@ CODE_SAMPLE
                 continue;
             }
 
-            $nestedDoctrineAnnotationTagValueNodes = $this->findNestedDoctrineAnnotationTagValueNodes($phpDocChildNode);
+            $nestedDoctrineAnnotationTagValueNodes = $this->phpDocNodeFinder->findByType(
+                $phpDocChildNode->value,
+                DoctrineAnnotationTagValueNode::class
+            );
 
             // depends on PHP 8.1+ - nested values, skip for now
             if ($nestedDoctrineAnnotationTagValueNodes !== []) {
@@ -248,27 +246,5 @@ CODE_SAMPLE
         }
 
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
-    }
-
-    /**
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function findNestedDoctrineAnnotationTagValueNodes(PhpDocTagNode $phpDocTagNode): array
-    {
-        $nestedDoctrineAnnotationTagValueNodes = [];
-
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocTagNode->value, '', function (DocNode $node) use (
-            &$nestedDoctrineAnnotationTagValueNodes
-        ) {
-            if (! $node instanceof DoctrineAnnotationTagValueNode) {
-                return null;
-            }
-
-            $nestedDoctrineAnnotationTagValueNodes[] = $node;
-            return null;
-        });
-
-        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }
