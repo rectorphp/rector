@@ -64,6 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 \PhpParser\PrettyPrinterAbstract::class,
                 \Helmich\TypoScriptParser\Parser\Traverser\Visitor::class,
                 \Symplify\SymplifyKernel\Contract\LightKernelInterface::class,
+                \Symfony\Component\String\Slugger\SluggerInterface::class,
             ],
             DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
                 ContainerInterface::class => [

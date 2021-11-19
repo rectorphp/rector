@@ -33,6 +33,8 @@ sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
 cd rector-prefixed-downgraded
 cp ../build/target-repository/bootstrap.php .
 cp ../preload.php .
-bin/rector list --ansi && cd ..
+bin/rector list --ansi
+bin/rector process vendor/symfony/string/Slugger/ --dry-run
 
+cd ..
 rm -rf rector-prefixed-downgraded
