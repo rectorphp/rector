@@ -510,6 +510,10 @@ parameters:
             message: '#Class cognitive complexity is 36, keep it under 30#'
 
         -
+            path: rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
+            message: '#Class cognitive complexity is 31, keep it under 30#'
+
+        -
             message: '#Autowired/inject method name must respect "autowire/inject" \+ class name#'
             paths:
                 - packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php
