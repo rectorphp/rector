@@ -22,7 +22,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
-use Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover;
+use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
@@ -51,10 +51,6 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      */
     private $phpAttributeGroupFactory;
     /**
-     * @var \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover
-     */
-    private $convertedAnnotationToAttributeParentRemover;
-    /**
      * @var \Rector\Php80\NodeFactory\AttrGroupsFactory
      */
     private $attrGroupsFactory;
@@ -62,12 +58,16 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\PhpDocCleaner\ConvertedAnnotationToAttributeParentRemover $convertedAnnotationToAttributeParentRemover, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover)
+    /**
+     * @var \Rector\Php80\PhpDoc\PhpDocNodeFinder
+     */
+    private $phpDocNodeFinder;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
-        $this->convertedAnnotationToAttributeParentRemover = $convertedAnnotationToAttributeParentRemover;
         $this->attrGroupsFactory = $attrGroupsFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->phpDocNodeFinder = $phpDocNodeFinder;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -122,7 +122,6 @@ CODE_SAMPLE
             return null;
         }
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
-        $this->convertedAnnotationToAttributeParentRemover->processPhpDocNode($phpDocInfo->getPhpDocNode(), $this->annotationsToAttributes);
         return $node;
     }
     /**
@@ -186,7 +185,7 @@ CODE_SAMPLE
             if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 continue;
             }
-            $nestedDoctrineAnnotationTagValueNodes = $this->findNestedDoctrineAnnotationTagValueNodes($phpDocChildNode);
+            $nestedDoctrineAnnotationTagValueNodes = $this->phpDocNodeFinder->findByType($phpDocChildNode->value, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
             // depends on PHP 8.1+ - nested values, skip for now
             if ($nestedDoctrineAnnotationTagValueNodes !== []) {
                 continue;
@@ -201,21 +200,5 @@ CODE_SAMPLE
             }
         }
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
-    }
-    /**
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    private function findNestedDoctrineAnnotationTagValueNodes(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : array
-    {
-        $nestedDoctrineAnnotationTagValueNodes = [];
-        $phpDocNodeTraverser = new \RectorPrefix20211119\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocTagNode->value, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use(&$nestedDoctrineAnnotationTagValueNodes) {
-            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
-                return null;
-            }
-            $nestedDoctrineAnnotationTagValueNodes[] = $node;
-            return null;
-        });
-        return $nestedDoctrineAnnotationTagValueNodes;
     }
 }
