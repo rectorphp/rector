@@ -185,20 +185,32 @@ CODE_SAMPLE
             if (!$phpDocChildNode->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 continue;
             }
-            $nestedDoctrineAnnotationTagValueNodes = $this->phpDocNodeFinder->findByType($phpDocChildNode->value, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
-            // depends on PHP 8.1+ - nested values, skip for now
-            if ($nestedDoctrineAnnotationTagValueNodes !== []) {
+            $doctrineTagValueNode = $phpDocChildNode->value;
+            $annotationToAttribute = $this->matchAnnotationToAttribute($doctrineTagValueNode);
+            if (!$annotationToAttribute instanceof \Rector\Php80\ValueObject\AnnotationToAttribute) {
                 continue;
             }
-            $doctrineTagValueNode = $phpDocChildNode->value;
-            foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                if (!$doctrineTagValueNode->hasClassName($annotationToAttribute->getTag())) {
-                    continue;
-                }
-                $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($phpDocChildNode->value, $annotationToAttribute);
-                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
+            $nestedDoctrineAnnotationTagValueNodes = $this->phpDocNodeFinder->findByType($doctrineTagValueNode, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
+            // depends on PHP 8.1+ - nested values, skip for now
+            if ($nestedDoctrineAnnotationTagValueNodes !== [] && !$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
+                continue;
             }
+            $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineTagValueNode, $annotationToAttribute);
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
         }
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
+    }
+    /**
+     * @return \Rector\Php80\ValueObject\AnnotationToAttribute|null
+     */
+    private function matchAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    {
+        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+            if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
+                continue;
+            }
+            return $annotationToAttribute;
+        }
+        return null;
     }
 }

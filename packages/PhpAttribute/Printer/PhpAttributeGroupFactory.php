@@ -74,15 +74,12 @@ final class PhpAttributeGroupFactory
     {
         $args = [];
         if ($silentKey !== null && isset($items[$silentKey])) {
-            $silentValue = \PhpParser\BuilderHelpers::normalizeValue($items[$silentKey]);
-            $this->normalizeStringDoubleQuote($silentValue);
+            $silentValue = $this->mapAnnotationValueToAttribute($items[$silentKey]);
             $args[] = new \PhpParser\Node\Arg($silentValue);
             unset($items[$silentKey]);
         }
         foreach ($items as $key => $value) {
-            $value = $this->valueNormalizer->normalize($value);
-            $value = \PhpParser\BuilderHelpers::normalizeValue($value);
-            $this->normalizeStringDoubleQuote($value);
+            $value = $this->mapAnnotationValueToAttribute($value);
             $name = null;
             if (\is_string($key)) {
                 $name = new \PhpParser\Node\Identifier($key);
@@ -135,5 +132,15 @@ final class PhpAttributeGroupFactory
             }
             $arg->name = new \PhpParser\Node\Identifier($argumentName);
         }
+    }
+    /**
+     * @param mixed $annotationValue
+     */
+    private function mapAnnotationValueToAttribute($annotationValue) : \PhpParser\Node\Expr
+    {
+        $value = $this->valueNormalizer->normalize($annotationValue);
+        $value = \PhpParser\BuilderHelpers::normalizeValue($value);
+        $this->normalizeStringDoubleQuote($value);
+        return $value;
     }
 }

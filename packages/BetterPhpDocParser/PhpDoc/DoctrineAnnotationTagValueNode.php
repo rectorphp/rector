@@ -58,7 +58,7 @@ final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\Va
         if ($annotationName === $className) {
             return \true;
         }
-        // the name is not fully qualified in the original name, look for resolvd class attirubte
+        // the name is not fully qualified in the original name, look for resolved class attribute
         $resolvedClass = $this->identifierTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
         return $resolvedClass === $className;
     }

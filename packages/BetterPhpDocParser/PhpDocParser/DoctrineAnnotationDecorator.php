@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 use RectorPrefix20211120\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
@@ -32,6 +33,11 @@ final class DoctrineAnnotationDecorator
      * @var string
      */
     private const LONG_ANNOTATION_REGEX = '#@\\\\(?<class_name>.*?)(?<annotation_content>\\(.*?\\))#';
+    /**
+     * @see https://regex101.com/r/xWaLOz/1
+     * @var string
+     */
+    private const NESTED_ANNOTATION_END_REGEX = '#(\\s+)?\\}\\)(\\s+)?#';
     /**
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
@@ -94,6 +100,17 @@ final class DoctrineAnnotationDecorator
                     break;
                 }
                 $nextPhpDocChildNode = $phpDocNode->children[$key];
+                if ($nextPhpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode && \RectorPrefix20211120\Nette\Utils\Strings::match($nextPhpDocChildNode->text, self::NESTED_ANNOTATION_END_REGEX)) {
+                    // @todo how to detect previously opened brackets?
+                    // probably local property with holding count of opened brackets
+                    $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->text;
+                    $genericTagValueNode->value = $composedContent;
+                    $startAndEnd = $this->combineStartAndEnd($phpDocChildNode, $nextPhpDocChildNode);
+                    $phpDocChildNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END, $startAndEnd);
+                    $removedKeys[] = $key;
+                    $removedKeys[] = $key + 1;
+                    continue;
+                }
                 if (!$nextPhpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                     continue;
                 }
@@ -103,13 +120,10 @@ final class DoctrineAnnotationDecorator
                 if ($this->isClosedContent($genericTagValueNode->value)) {
                     break;
                 }
-                $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->name . $nextPhpDocChildNode->value;
+                $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->name . $nextPhpDocChildNode->value->value;
+                // cleanup the next from closing
                 $genericTagValueNode->value = $composedContent;
-                /** @var StartAndEnd $currentStartAndEnd */
-                $currentStartAndEnd = $phpDocChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
-                /** @var StartAndEnd $nextStartAndEnd */
-                $nextStartAndEnd = $nextPhpDocChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
-                $startAndEnd = new \Rector\BetterPhpDocParser\ValueObject\StartAndEnd($currentStartAndEnd->getStart(), $nextStartAndEnd->getEnd());
+                $startAndEnd = $this->combineStartAndEnd($phpDocChildNode, $nextPhpDocChildNode);
                 $phpDocChildNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END, $startAndEnd);
                 $currentChildValueNode = $phpDocNode->children[$key];
                 if (!$currentChildValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
@@ -134,15 +148,10 @@ final class DoctrineAnnotationDecorator
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
             // the @\FQN use case
             if ($phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
-                $match = \RectorPrefix20211120\Nette\Utils\Strings::match($phpDocChildNode->text, self::LONG_ANNOTATION_REGEX);
-                $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
-                if ($fullyQualifiedAnnotationClass === null) {
+                $spacelessPhpDocTagNode = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocChildNode);
+                if (!$spacelessPhpDocTagNode instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                     continue;
                 }
-                $annotationContent = $match['annotation_content'] ?? null;
-                $tagName = '@\\' . $fullyQualifiedAnnotationClass;
-                $formerStartEnd = $phpDocChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
-                $spacelessPhpDocTagNode = $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd);
                 $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
                 continue;
             }
@@ -204,5 +213,25 @@ final class DoctrineAnnotationDecorator
         $doctrineAnnotationTagValueNode = new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationContent, $values, \Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null);
         $doctrineAnnotationTagValueNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END, $startAndEnd);
         return new \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode($tagName, $doctrineAnnotationTagValueNode);
+    }
+    private function combineStartAndEnd(\PHPStan\PhpDocParser\Ast\Node $startPhpDocChildNode, \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode $endPhpDocChildNode) : \Rector\BetterPhpDocParser\ValueObject\StartAndEnd
+    {
+        /** @var StartAndEnd $currentStartAndEnd */
+        $currentStartAndEnd = $startPhpDocChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
+        /** @var StartAndEnd $nextStartAndEnd */
+        $nextStartAndEnd = $endPhpDocChildNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
+        return new \Rector\BetterPhpDocParser\ValueObject\StartAndEnd($currentStartAndEnd->getStart(), $nextStartAndEnd->getEnd());
+    }
+    private function resolveFqnAnnotationSpacelessPhpDocTagNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode $phpDocTextNode) : ?\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
+    {
+        $match = \RectorPrefix20211120\Nette\Utils\Strings::match($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
+        $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
+        if ($fullyQualifiedAnnotationClass === null) {
+            return null;
+        }
+        $annotationContent = $match['annotation_content'] ?? null;
+        $tagName = '@\\' . $fullyQualifiedAnnotationClass;
+        $formerStartEnd = $phpDocTextNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END);
+        return $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd);
     }
 }

@@ -2511,6 +2511,7 @@ return array(
     'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => $baseDir . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
     'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
     'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => $baseDir . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
+    'Rector\\PhpAttribute\\Exception\\InvalidNestedAttributeException' => $baseDir . '/packages/PhpAttribute/Exception/InvalidNestedAttributeException.php',
     'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => $baseDir . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
     'Rector\\PhpAttribute\\Printer\\DoctrineAnnotationFactory' => $baseDir . '/packages/PhpAttribute/Printer/DoctrineAnnotationFactory.php',
     'Rector\\PhpAttribute\\Printer\\PhpAttributeGroupFactory' => $baseDir . '/packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php',
