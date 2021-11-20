@@ -522,3 +522,6 @@ parameters:
         -
             message: '#\$service\-\>call\("configure", \[\[ \.\.\. \]\]\) must be followed by exact array#'
             path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
+
+        # this rule should only check parent autowire override case, @todo update in symplify
+        - '#Autowired/inject method name must respect "autowire/inject" \+ class name#'

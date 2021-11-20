@@ -16,8 +16,8 @@ use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
-use Rector\PhpAttribute\Value\ValueNormalizer;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,7 +27,7 @@ final class PhpAttributeGroupFactory
 {
     public function __construct(
         private NamedArgumentsResolver $namedArgumentsResolver,
-        private ValueNormalizer $valueNormalizer
+        private AnnotationToAttributeMapper $annotationToAttributeMapper
     ) {
     }
 
@@ -160,7 +160,7 @@ final class PhpAttributeGroupFactory
 
     private function mapAnnotationValueToAttribute(mixed $annotationValue): Expr
     {
-        $value = $this->valueNormalizer->normalize($annotationValue);
+        $value = $this->annotationToAttributeMapper->map($annotationValue);
         $value = BuilderHelpers::normalizeValue($value);
         $this->normalizeStringDoubleQuote($value);
 

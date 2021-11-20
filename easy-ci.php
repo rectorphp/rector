@@ -9,14 +9,17 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NodeManipulator\MethodCallManipulator;
+use Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
+use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
+use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 use Rector\Set\Contract\SetListInterface;
@@ -64,7 +67,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // fix later - rector-symfony
         PropertyConstructorInjectionManipulator::class,
         // used in tests
-        \Rector\FileSystemRector\Parser\FileInfoParser::class,
-        \Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer::class,
+        FileInfoParser::class,
+        SameClassMethodCallAnalyzer::class,
+        AnnotationToAttributeMapperInterface::class,
     ]);
 };
