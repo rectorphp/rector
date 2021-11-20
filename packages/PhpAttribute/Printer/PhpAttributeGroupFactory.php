@@ -15,8 +15,8 @@ use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
-use Rector\PhpAttribute\Value\ValueNormalizer;
 use RectorPrefix20211120\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
@@ -28,13 +28,13 @@ final class PhpAttributeGroupFactory
      */
     private $namedArgumentsResolver;
     /**
-     * @var \Rector\PhpAttribute\Value\ValueNormalizer
+     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
-    private $valueNormalizer;
-    public function __construct(\Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver $namedArgumentsResolver, \Rector\PhpAttribute\Value\ValueNormalizer $valueNormalizer)
+    private $annotationToAttributeMapper;
+    public function __construct(\Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver $namedArgumentsResolver, \Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper)
     {
         $this->namedArgumentsResolver = $namedArgumentsResolver;
-        $this->valueNormalizer = $valueNormalizer;
+        $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
     public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
@@ -138,7 +138,7 @@ final class PhpAttributeGroupFactory
      */
     private function mapAnnotationValueToAttribute($annotationValue) : \PhpParser\Node\Expr
     {
-        $value = $this->valueNormalizer->normalize($annotationValue);
+        $value = $this->annotationToAttributeMapper->map($annotationValue);
         $value = \PhpParser\BuilderHelpers::normalizeValue($value);
         $this->normalizeStringDoubleQuote($value);
         return $value;

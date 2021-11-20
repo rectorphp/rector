@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitaf6bf29c9e28ababdd8d474573d30313
+class ComposerStaticInitc889328173cdb871b8a881519c90a2d6
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2851,11 +2851,18 @@ class ComposerStaticInitaf6bf29c9e28ababdd8d474573d30313
         'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ClassConstFetchAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ClassConstFetchAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ConstExprNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ConstExprNodeAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\CurlyListNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/CurlyListNodeAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\DoctrineAnnotationAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/DoctrineAnnotationAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/StringAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => __DIR__ . '/../..' . '/packages/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
         'Rector\\PhpAttribute\\Exception\\InvalidNestedAttributeException' => __DIR__ . '/../..' . '/packages/PhpAttribute/Exception/InvalidNestedAttributeException.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
         'Rector\\PhpAttribute\\Printer\\DoctrineAnnotationFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/Printer/DoctrineAnnotationFactory.php',
         'Rector\\PhpAttribute\\Printer\\PhpAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php',
-        'Rector\\PhpAttribute\\Value\\ValueNormalizer' => __DIR__ . '/../..' . '/packages/PhpAttribute/Value/ValueNormalizer.php',
         'Rector\\PhpSpecToPHPUnit\\LetManipulator' => __DIR__ . '/../..' . '/rules/PhpSpecToPHPUnit/LetManipulator.php',
         'Rector\\PhpSpecToPHPUnit\\MatchersManipulator' => __DIR__ . '/../..' . '/rules/PhpSpecToPHPUnit/MatchersManipulator.php',
         'Rector\\PhpSpecToPHPUnit\\Naming\\PhpSpecRenaming' => __DIR__ . '/../..' . '/rules/PhpSpecToPHPUnit/Naming/PhpSpecRenaming.php',
@@ -3583,9 +3590,9 @@ class ComposerStaticInitaf6bf29c9e28ababdd8d474573d30313
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitaf6bf29c9e28ababdd8d474573d30313::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitaf6bf29c9e28ababdd8d474573d30313::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitaf6bf29c9e28ababdd8d474573d30313::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc889328173cdb871b8a881519c90a2d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc889328173cdb871b8a881519c90a2d6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc889328173cdb871b8a881519c90a2d6::$classMap;
 
         }, null, ClassLoader::class);
     }
