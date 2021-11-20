@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211119\Webmozart\Assert\Assert;
+use RectorPrefix20211120\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\EntityAliasToClassConstantReferenceRectorTest
  */
@@ -84,8 +84,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $aliasesToNamespaces = $configuration[self::ALIASES_TO_NAMESPACES] ?? [];
-        \RectorPrefix20211119\Webmozart\Assert\Assert::allString($aliasesToNamespaces);
-        \RectorPrefix20211119\Webmozart\Assert\Assert::allString(\array_keys($aliasesToNamespaces));
+        \RectorPrefix20211120\Webmozart\Assert\Assert::allString($aliasesToNamespaces);
+        \RectorPrefix20211120\Webmozart\Assert\Assert::allString(\array_keys($aliasesToNamespaces));
         $this->aliasesToNamespaces = $aliasesToNamespaces;
     }
     private function isAliasWithConfiguredEntity(string $name) : bool

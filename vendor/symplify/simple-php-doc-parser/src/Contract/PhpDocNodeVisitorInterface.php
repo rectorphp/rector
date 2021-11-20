@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211119\Symplify\SimplePhpDocParser\Contract;
+namespace RectorPrefix20211120\Symplify\SimplePhpDocParser\Contract;
 
 use PHPStan\PhpDocParser\Ast\Node;
 /**

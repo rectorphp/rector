@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211119;
+namespace RectorPrefix20211120;
 
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;

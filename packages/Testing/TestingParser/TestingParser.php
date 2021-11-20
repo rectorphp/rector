@@ -8,7 +8,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix20211119\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211120\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
@@ -27,7 +27,7 @@ final class TestingParser
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
-    public function __construct(\RectorPrefix20211119\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    public function __construct(\RectorPrefix20211120\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Parser\RectorParser $rectorParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
     {
         $this->parameterProvider = $parameterProvider;
         $this->rectorParser = $rectorParser;

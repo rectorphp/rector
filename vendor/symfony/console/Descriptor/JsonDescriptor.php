@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211119\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20211120\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20211119\Symfony\Component\Console\Application;
-use RectorPrefix20211119\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211119\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20211119\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20211119\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20211120\Symfony\Component\Console\Application;
+use RectorPrefix20211120\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211120\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20211120\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20211120\Symfony\Component\Console\Input\InputOption;
 /**
  * JSON descriptor.
  *
@@ -22,7 +22,7 @@ use RectorPrefix20211119\Symfony\Component\Console\Input\InputOption;
  *
  * @internal
  */
-class JsonDescriptor extends \RectorPrefix20211119\Symfony\Component\Console\Descriptor\Descriptor
+class JsonDescriptor extends \RectorPrefix20211120\Symfony\Component\Console\Descriptor\Descriptor
 {
     /**
      * {@inheritdoc}
@@ -71,7 +71,7 @@ class JsonDescriptor extends \RectorPrefix20211119\Symfony\Component\Console\Des
     protected function describeApplication($application, $options = [])
     {
         $describedNamespace = $options['namespace'] ?? null;
-        $description = new \RectorPrefix20211119\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace, \true);
+        $description = new \RectorPrefix20211120\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace, \true);
         $commands = [];
         foreach ($description->getCommands() as $command) {
             $commands[] = $this->getCommandData($command, $options['short'] ?? \false);
@@ -99,15 +99,15 @@ class JsonDescriptor extends \RectorPrefix20211119\Symfony\Component\Console\Des
         $flags = $options['json_encoding'] ?? 0;
         $this->write(\json_encode($data, $flags));
     }
-    private function getInputArgumentData(\RectorPrefix20211119\Symfony\Component\Console\Input\InputArgument $argument) : array
+    private function getInputArgumentData(\RectorPrefix20211120\Symfony\Component\Console\Input\InputArgument $argument) : array
     {
         return ['name' => $argument->getName(), 'is_required' => $argument->isRequired(), 'is_array' => $argument->isArray(), 'description' => \preg_replace('/\\s*[\\r\\n]\\s*/', ' ', $argument->getDescription()), 'default' => \INF === $argument->getDefault() ? 'INF' : $argument->getDefault()];
     }
-    private function getInputOptionData(\RectorPrefix20211119\Symfony\Component\Console\Input\InputOption $option, bool $negated = \false) : array
+    private function getInputOptionData(\RectorPrefix20211120\Symfony\Component\Console\Input\InputOption $option, bool $negated = \false) : array
     {
         return $negated ? ['name' => '--no-' . $option->getName(), 'shortcut' => '', 'accept_value' => \false, 'is_value_required' => \false, 'is_multiple' => \false, 'description' => 'Negate the "--' . $option->getName() . '" option', 'default' => \false] : ['name' => '--' . $option->getName(), 'shortcut' => $option->getShortcut() ? '-' . \str_replace('|', '|-', $option->getShortcut()) : '', 'accept_value' => $option->acceptValue(), 'is_value_required' => $option->isValueRequired(), 'is_multiple' => $option->isArray(), 'description' => \preg_replace('/\\s*[\\r\\n]\\s*/', ' ', $option->getDescription()), 'default' => \INF === $option->getDefault() ? 'INF' : $option->getDefault()];
     }
-    private function getInputDefinitionData(\RectorPrefix20211119\Symfony\Component\Console\Input\InputDefinition $definition) : array
+    private function getInputDefinitionData(\RectorPrefix20211120\Symfony\Component\Console\Input\InputDefinition $definition) : array
     {
         $inputArguments = [];
         foreach ($definition->getArguments() as $name => $argument) {
@@ -122,7 +122,7 @@ class JsonDescriptor extends \RectorPrefix20211119\Symfony\Component\Console\Des
         }
         return ['arguments' => $inputArguments, 'options' => $inputOptions];
     }
-    private function getCommandData(\RectorPrefix20211119\Symfony\Component\Console\Command\Command $command, bool $short = \false) : array
+    private function getCommandData(\RectorPrefix20211120\Symfony\Component\Console\Command\Command $command, bool $short = \false) : array
     {
         $data = ['name' => $command->getName(), 'description' => $command->getDescription()];
         if ($short) {
