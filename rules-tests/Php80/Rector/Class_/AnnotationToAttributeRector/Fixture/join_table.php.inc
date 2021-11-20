@@ -36,7 +36,7 @@ class AnEntity
      *     inverseJoinColumns={@ORM\JoinColumn(name="second_column", referencedColumnName="id")}
      * )
      **/
-    #[\Doctrine\ORM\Mapping\ManyToMany(targetEntity: AnEntity::class)]
+    #[ORM\ManyToMany(targetEntity: AnEntity::class)]
     protected Collection $list;
 }
 

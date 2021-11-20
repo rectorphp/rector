@@ -59,7 +59,6 @@ final class PhpAttributeGroupFactory
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
         AnnotationToAttribute $annotationToAttribute,
     ): AttributeGroup {
-        $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
 
         $args = $this->createArgsFromItems($values);
@@ -67,7 +66,9 @@ final class PhpAttributeGroupFactory
 
         $this->completeNamedArguments($args, $argumentNames);
 
-        $attribute = new Attribute($fullyQualified, $args);
+        $attributeName = $this->createAttributeName($annotationToAttribute, $doctrineAnnotationTagValueNode);
+
+        $attribute = new Attribute($attributeName, $args);
         return new AttributeGroup([$attribute]);
     }
 
@@ -164,5 +165,19 @@ final class PhpAttributeGroupFactory
         $this->normalizeStringDoubleQuote($value);
 
         return $value;
+    }
+
+    private function createAttributeName(
+        AnnotationToAttribute $annotationToAttribute,
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+    ): FullyQualified|Name {
+        // attribute and class name are the same, so we re-use the short form to keep code compatible with previous one
+        if ($annotationToAttribute->getAttributeClass() === $annotationToAttribute->getTag()) {
+            $attributeName = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
+            $attributeName = ltrim($attributeName, '@');
+            return new Name($attributeName);
+        }
+
+        return new FullyQualified($annotationToAttribute->getAttributeClass());
     }
 }

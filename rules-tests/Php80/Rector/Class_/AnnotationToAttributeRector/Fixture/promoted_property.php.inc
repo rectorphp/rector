@@ -25,7 +25,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericA
 final class PromotedProperty
 {
     public function __construct(
-        #[\Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation] private string $property,
+        #[GenericAnnotation] private string $property,
     ) {}
 }
 

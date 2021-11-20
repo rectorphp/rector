@@ -8,8 +8,9 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81\All;
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81\Length;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81\NotNull;
+use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81\NotNumber;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // covers https://wiki.php.net/rfc/new_in_initializers#nested_attributes
@@ -18,10 +19,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(AnnotationToAttributeRector::class)
-        ->call('configure', [[
-            AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => ValueObjectInliner::inline([
+        ->configure([
+            AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => [
                 new AnnotationToAttribute(All::class),
                 new AnnotationToAttribute(Length::class),
-            ]),
-        ]]);
+                new AnnotationToAttribute(NotNull::class),
+                new AnnotationToAttribute(NotNumber::class),
+            ],
+        ]);
 };

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute\Value;
 
+use PhpParser\BuilderHelpers;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
@@ -18,7 +20,6 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -77,10 +78,36 @@ final class ValueNormalizer
             throw new InvalidNestedAttributeException();
         }
 
-        $resolveClass = $doctrineAnnotationTagValueNode->identifierTypeNode->getAttribute(
-            PhpDocAttributeKey::RESOLVED_CLASS
-        );
-        return new New_(new FullyQualified($resolveClass));
+        $annotationShortName = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
+        $annotationShortName = ltrim($annotationShortName, '@');
+
+        $values = $doctrineAnnotationTagValueNode->getValues();
+        if ($values !== []) {
+            $argValues = $this->normalize(
+                $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes()
+            );
+
+            $args = [];
+            if (! is_array($argValues)) {
+                throw new ShouldNotHappenException();
+            }
+
+            foreach ($argValues as $key => $argValue) {
+                $expr = BuilderHelpers::normalizeValue($argValue);
+                $name = null;
+
+                // for named arguments
+                if (is_string($key)) {
+                    $name = new Identifier($key);
+                }
+
+                $args[] = new Arg($expr, false, false, [], $name);
+            }
+        } else {
+            $args = [];
+        }
+
+        return new New_(new Name($annotationShortName), $args);
     }
 
     private function normalizeConstrExprNode(ConstExprNode $constExprNode): int|bool|float

@@ -35,7 +35,7 @@ jobs:
 
             # with --runner=WrapperRunner, it is faster, only ideal with 4 processes (p4)
             # @see https://github.com/rectorphp/rector-src/pull/551#issuecomment-889990905
-            -   run: vendor/bin/paratest -p4 --runner=WrapperRunner ${{ matrix.path }} --colors
+            -   run: vendor/bin/paratest -p5 --runner=WrapperRunner ${{ matrix.path }} --colors
                 if: ${{ matrix.path == 'rules-tests' }}
 
             -   run: vendor/bin/phpunit ${{ matrix.path }}

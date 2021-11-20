@@ -42,7 +42,7 @@ final class SkipUnwrapSymfonyNestedValidators
      *     }
      * )
      */
-    #[\Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation(some: 'hey')]
+    #[GenericAnnotation(some: 'hey')]
     public $all;
 }
 

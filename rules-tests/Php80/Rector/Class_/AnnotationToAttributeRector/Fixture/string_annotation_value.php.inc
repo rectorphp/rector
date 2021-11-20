@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Table(name=App\Entity\Aktenzeichen::TABLE_NAME, uniqueConstraints={@ORM\UniqueConstraint(name="aktenzeichen_idx", columns={"aktenzeichen"})})
  */
-#[\Doctrine\ORM\Mapping\Entity]
+#[ORM\Entity]
 class StringAnnotationValue
 {
 }

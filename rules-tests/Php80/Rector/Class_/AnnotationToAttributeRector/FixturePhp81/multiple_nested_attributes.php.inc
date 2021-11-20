@@ -4,11 +4,12 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixturePh
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as Assert;
 
-final class NestedAttributeWithBrackets
+final class MultipleNestedAttribute
 {
     /**
      * @Assert\All({
-     *     @Assert\NotNull()
+     *     @Assert\NotNull(),
+     *     @Assert\NotNumber(),
      * })
      */
     public $value;
@@ -22,9 +23,9 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixturePh
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as Assert;
 
-final class NestedAttributeWithBrackets
+final class MultipleNestedAttribute
 {
-    #[Assert\All(nestedAsserts: [new Assert\NotNull()])]
+    #[Assert\All(nestedAsserts: [new Assert\NotNull(), new Assert\NotNumber()])]
     public $value;
 }
 

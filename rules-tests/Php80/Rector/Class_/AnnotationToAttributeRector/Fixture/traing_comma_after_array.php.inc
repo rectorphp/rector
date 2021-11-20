@@ -27,7 +27,7 @@ use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericA
 
 final class TrailingCommadAfterArray
 {
-    #[\Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Source\GenericAnnotation(first: 'item', next: 'item')]
+    #[GenericAnnotation(first: 'item', next: 'item')]
     public function action()
     {
     }

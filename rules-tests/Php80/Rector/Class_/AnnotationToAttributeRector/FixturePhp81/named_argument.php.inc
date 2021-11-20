@@ -4,11 +4,11 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixturePh
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as Assert;
 
-final class NestedAttributeWithBrackets
+final class NamedArgument
 {
     /**
      * @Assert\All({
-     *     @Assert\NotNull()
+     *     @Assert\NotNumber(secondValue=1000)
      * })
      */
     public $value;
@@ -22,9 +22,9 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixturePh
 
 use Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\SourcePhp81 as Assert;
 
-final class NestedAttributeWithBrackets
+final class NamedArgument
 {
-    #[Assert\All(nestedAsserts: [new Assert\NotNull()])]
+    #[Assert\All(nestedAsserts: [new Assert\NotNumber(secondValue: 1000)])]
     public $value;
 }
 
