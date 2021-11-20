@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -81,6 +82,7 @@ CODE_SAMPLE
             $originalNode = clone $node;
             $if = new If_($node->cond);
             $if->stmts = $node->stmts;
+            $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
 
             $this->nodesToAddCollector->addNodeBeforeNode($if, $node);
             $this->mirrorComments($if, $node);
@@ -107,6 +109,8 @@ CODE_SAMPLE
         if ($node->else !== null) {
             $this->nodesToAddCollector->addNodesAfterNode($node->else->stmts, $node);
             $node->else = null;
+
+            $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
             return $node;
         }
 
