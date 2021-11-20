@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\BuilderHelpers;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -16,6 +13,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
+use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
@@ -26,7 +24,8 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
     private AnnotationToAttributeMapper $annotationToAttributeMapper;
 
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private PhpVersionProvider $phpVersionProvider,
+        private NamedArgsFactory $namedArgsFactory
     ) {
     }
 
@@ -62,22 +61,11 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
                 $value->getValuesWithExplicitSilentAndWithoutQuotes()
             );
 
-            $args = [];
             if (! is_array($argValues)) {
                 throw new ShouldNotHappenException();
             }
 
-            foreach ($argValues as $key => $argValue) {
-                $expr = BuilderHelpers::normalizeValue($argValue);
-                $name = null;
-
-                // for named arguments
-                if (is_string($key)) {
-                    $name = new Identifier($key);
-                }
-
-                $args[] = new Arg($expr, false, false, [], $name);
-            }
+            $args = $this->namedArgsFactory->createFromValues($argValues);
         } else {
             $args = [];
         }

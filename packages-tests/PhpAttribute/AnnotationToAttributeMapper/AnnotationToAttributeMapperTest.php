@@ -22,5 +22,8 @@ final class AnnotationToAttributeMapperTest extends AbstractTestCase
     {
         $mappedExpr = $this->annotationToAttributeMapper->map('hey');
         $this->assertInstanceOf(String_::class, $mappedExpr);
+
+        $mappedExprs = $this->annotationToAttributeMapper->map(['hey']);
+        $this->assertInstanceOf(String_::class, $mappedExprs[0]);
     }
 }

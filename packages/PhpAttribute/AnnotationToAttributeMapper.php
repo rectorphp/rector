@@ -32,6 +32,10 @@ final class AnnotationToAttributeMapper
             }
         }
 
+        if ($value instanceof Expr) {
+            return $value;
+        }
+
         throw new NotImplementedYetException();
     }
 }
