@@ -15,7 +15,6 @@ use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // include the latest PHP version + all bellow in one config!
@@ -38,18 +37,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // phpunit
     $services->set(PreferThisOrSelfMethodCallRector::class)
-        ->call('configure', [[
+        ->configure([
             PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                TestCase::class => ValueObjectInliner::inline(PreferenceSelfThis::PREFER_THIS()),
+                TestCase::class => PreferenceSelfThis::PREFER_THIS(),
             ],
-        ]]);
+        ]);
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => ValueObjectInliner::inline([
+        ->configure([
+            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
                 new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
-            ]),
-        ]]);
+            ],
+        ]);
 
     $parameters = $containerConfigurator->parameters();
 

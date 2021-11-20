@@ -49,6 +49,7 @@
         "symplify/skipper": "^10.0",
         "symplify/smart-file-system": "^10.0",
         "symplify/symfony-php-config": "^10.0",
+        "symplify/vendor-patches": "^10.0",
         "tracy/tracy": "^2.8",
         "webmozart/assert": "^1.10"
     },
@@ -142,6 +143,11 @@
         "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
+        "patches": {
+            "symfony/dependency-injection": [
+                "patches/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
+            ]
+        },
         "branch-alias": {
             "dev-main": "0.12-dev"
         }

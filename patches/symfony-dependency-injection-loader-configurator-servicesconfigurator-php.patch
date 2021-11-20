@@ -1,0 +1,20 @@
+--- /dev/null
++++ ../Loader/Configurator/ServicesConfigurator.php
+@@ -70,7 +70,7 @@
+      * @param string|null $id    The service id, or null to create an anonymous service
+      * @param string|null $class The class of the service, or null when $id is also the class name
+      */
+-    final public function set(?string $id, string $class = null): ServiceConfigurator
++    final public function set(?string $id, string $class = null): \Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator
+     {
+         $defaults = $this->defaults;
+         $definition = new Definition();
+@@ -91,7 +91,7 @@
+         $definition->setBindings(unserialize(serialize($defaults->getBindings())));
+         $definition->setChanges([]);
+ 
+-        $configurator = new ServiceConfigurator($this->container, $this->instanceof, true, $this, $definition, $id, $defaults->getTags(), $this->path);
++        $configurator = new \Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator($this->container, $this->instanceof, true, $this, $definition, $id, $defaults->getTags(), $this->path);
+ 
+         return null !== $class ? $configurator->class($class) : $configurator;
+     }

@@ -514,3 +514,11 @@ parameters:
             paths:
                 - packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php
                 - packages/StaticTypeMapper/PhpParser/IntersectionTypeNodeMapper.php
+
+        -
+            message: '#Use separate function calls with readable variable names#'
+            path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
+
+        -
+            message: '#\$service\-\>call\("configure", \[\[ \.\.\. \]\]\) must be followed by exact array#'
+            path: src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
