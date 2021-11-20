@@ -58,12 +58,12 @@ final class PhpAttributeGroupFactory
     }
     public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
-        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
         $args = $this->createArgsFromItems($values);
         $argumentNames = $this->namedArgumentsResolver->resolveFromClass($annotationToAttribute->getAttributeClass());
         $this->completeNamedArguments($args, $argumentNames);
-        $attribute = new \PhpParser\Node\Attribute($fullyQualified, $args);
+        $attributeName = $this->createAttributeName($annotationToAttribute, $doctrineAnnotationTagValueNode);
+        $attribute = new \PhpParser\Node\Attribute($attributeName, $args);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     /**
@@ -142,5 +142,18 @@ final class PhpAttributeGroupFactory
         $value = \PhpParser\BuilderHelpers::normalizeValue($value);
         $this->normalizeStringDoubleQuote($value);
         return $value;
+    }
+    /**
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
+     */
+    private function createAttributeName(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    {
+        // attribute and class name are the same, so we re-use the short form to keep code compatible with previous one
+        if ($annotationToAttribute->getAttributeClass() === $annotationToAttribute->getTag()) {
+            $attributeName = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
+            $attributeName = \ltrim($attributeName, '@');
+            return new \PhpParser\Node\Name($attributeName);
+        }
+        return new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
     }
 }
