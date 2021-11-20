@@ -84,6 +84,7 @@ final class BetterPhpDocParser extends PhpDocParser
     {
         $startPosition = $tokenIterator->currentPosition();
         $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
+
         $endPosition = $tokenIterator->currentPosition();
 
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);

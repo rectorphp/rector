@@ -57,10 +57,9 @@ final class PhpAttributeGroupFactory
 
     public function create(
         DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        AnnotationToAttribute $annotationToAttribute
+        AnnotationToAttribute $annotationToAttribute,
     ): AttributeGroup {
         $fullyQualified = new FullyQualified($annotationToAttribute->getAttributeClass());
-
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
 
         $args = $this->createArgsFromItems($values);
@@ -80,18 +79,14 @@ final class PhpAttributeGroupFactory
     {
         $args = [];
         if ($silentKey !== null && isset($items[$silentKey])) {
-            $silentValue = BuilderHelpers::normalizeValue($items[$silentKey]);
-            $this->normalizeStringDoubleQuote($silentValue);
+            $silentValue = $this->mapAnnotationValueToAttribute($items[$silentKey]);
 
             $args[] = new Arg($silentValue);
             unset($items[$silentKey]);
         }
 
         foreach ($items as $key => $value) {
-            $value = $this->valueNormalizer->normalize($value);
-            $value = BuilderHelpers::normalizeValue($value);
-
-            $this->normalizeStringDoubleQuote($value);
+            $value = $this->mapAnnotationValueToAttribute($value);
 
             $name = null;
             if (is_string($key)) {
@@ -160,5 +155,14 @@ final class PhpAttributeGroupFactory
 
             $arg->name = new Identifier($argumentName);
         }
+    }
+
+    private function mapAnnotationValueToAttribute(mixed $annotationValue): Expr
+    {
+        $value = $this->valueNormalizer->normalize($annotationValue);
+        $value = BuilderHelpers::normalizeValue($value);
+        $this->normalizeStringDoubleQuote($value);
+
+        return $value;
     }
 }

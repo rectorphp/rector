@@ -16,7 +16,6 @@ final class PhpAttributeGroupFactoryTest extends AbstractTestCase
     protected function setUp(): void
     {
         $this->boot();
-
         $this->phpAttributeGroupFactory = $this->getService(PhpAttributeGroupFactory::class);
     }
 

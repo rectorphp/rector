@@ -148,7 +148,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
 
         foreach (array_keys($this->values) as $key) {
             $valueWithoutQuotes = $this->getValueWithoutQuotes($key);
-
             if (is_int($key) && $this->silentKey !== null) {
                 $explicitKeysValues[$this->silentKey] = $valueWithoutQuotes;
             } else {

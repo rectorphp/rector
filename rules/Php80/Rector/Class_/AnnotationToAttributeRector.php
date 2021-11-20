@@ -219,32 +219,46 @@ CODE_SAMPLE
                 continue;
             }
 
+            $doctrineTagValueNode = $phpDocChildNode->value;
+            $annotationToAttribute = $this->matchAnnotationToAttribute($doctrineTagValueNode);
+            if (! $annotationToAttribute instanceof AnnotationToAttribute) {
+                continue;
+            }
+
             $nestedDoctrineAnnotationTagValueNodes = $this->phpDocNodeFinder->findByType(
-                $phpDocChildNode->value,
+                $doctrineTagValueNode,
                 DoctrineAnnotationTagValueNode::class
             );
 
             // depends on PHP 8.1+ - nested values, skip for now
-            if ($nestedDoctrineAnnotationTagValueNodes !== []) {
+            if ($nestedDoctrineAnnotationTagValueNodes !== [] && ! $this->phpVersionProvider->isAtLeastPhpVersion(
+                PhpVersionFeature::NEW_INITIALIZERS
+            )) {
                 continue;
             }
 
-            $doctrineTagValueNode = $phpDocChildNode->value;
+            $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
+                $doctrineTagValueNode,
+                $annotationToAttribute,
+            );
 
-            foreach ($this->annotationsToAttributes as $annotationToAttribute) {
-                if (! $doctrineTagValueNode->hasClassName($annotationToAttribute->getTag())) {
-                    continue;
-                }
-
-                $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                    $phpDocChildNode->value,
-                    $annotationToAttribute
-                );
-
-                $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
-            }
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
         }
 
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);
+    }
+
+    private function matchAnnotationToAttribute(
+        DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode
+    ): AnnotationToAttribute|null {
+        foreach ($this->annotationsToAttributes as $annotationToAttribute) {
+            if (! $doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {
+                continue;
+            }
+
+            return $annotationToAttribute;
+        }
+
+        return null;
     }
 }

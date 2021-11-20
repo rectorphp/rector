@@ -29,7 +29,7 @@ final class AttrGroupsFactory
             // add attributes
             $attributeGroups[] = $this->phpAttributeGroupFactory->create(
                 $doctrineAnnotationTagValueNode,
-                $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute()
+                $doctrineTagAndAnnotationToAttribute->getAnnotationToAttribute(),
             );
         }
 

@@ -69,7 +69,7 @@ final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode imple
             return true;
         }
 
-        // the name is not fully qualified in the original name, look for resolvd class attirubte
+        // the name is not fully qualified in the original name, look for resolved class attribute
         $resolvedClass = $this->identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
         return $resolvedClass === $className;
     }

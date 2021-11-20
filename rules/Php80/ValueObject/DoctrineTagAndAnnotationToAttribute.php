@@ -10,7 +10,7 @@ final class DoctrineTagAndAnnotationToAttribute
 {
     public function __construct(
         private DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        private AnnotationToAttribute $annotationToAttribute
+        private AnnotationToAttribute $annotationToAttribute,
     ) {
     }
 

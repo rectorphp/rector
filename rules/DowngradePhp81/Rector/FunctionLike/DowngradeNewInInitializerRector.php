@@ -98,9 +98,11 @@ CODE_SAMPLE
             if (! $param->default instanceof New_) {
                 continue;
             }
+
             if ($param->type instanceof IntersectionType) {
                 continue;
             }
+
             return false;
         }
 
