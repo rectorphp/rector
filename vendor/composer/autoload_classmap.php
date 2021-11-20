@@ -2521,6 +2521,8 @@ return array(
     'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => $baseDir . '/packages/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
     'Rector\\PhpAttribute\\Exception\\InvalidNestedAttributeException' => $baseDir . '/packages/PhpAttribute/Exception/InvalidNestedAttributeException.php',
     'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => $baseDir . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
+    'Rector\\PhpAttribute\\NodeFactory\\AttributeNameFactory' => $baseDir . '/packages/PhpAttribute/NodeFactory/AttributeNameFactory.php',
+    'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => $baseDir . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
     'Rector\\PhpAttribute\\Printer\\DoctrineAnnotationFactory' => $baseDir . '/packages/PhpAttribute/Printer/DoctrineAnnotationFactory.php',
     'Rector\\PhpAttribute\\Printer\\PhpAttributeGroupFactory' => $baseDir . '/packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php',
     'Rector\\PhpSpecToPHPUnit\\LetManipulator' => $baseDir . '/rules/PhpSpecToPHPUnit/LetManipulator.php',

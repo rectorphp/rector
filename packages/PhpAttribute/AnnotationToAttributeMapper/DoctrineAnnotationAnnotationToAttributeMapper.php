@@ -3,10 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
-use PhpParser\BuilderHelpers;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -15,6 +12,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
+use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
 use RectorPrefix20211120\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
@@ -29,9 +27,14 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    /**
+     * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
+     */
+    private $namedArgsFactory;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory)
     {
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->namedArgsFactory = $namedArgsFactory;
     }
     /**
      * Avoid circular reference
@@ -61,19 +64,10 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
         $values = $value->getValues();
         if ($values !== []) {
             $argValues = $this->annotationToAttributeMapper->map($value->getValuesWithExplicitSilentAndWithoutQuotes());
-            $args = [];
             if (!\is_array($argValues)) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
-            foreach ($argValues as $key => $argValue) {
-                $expr = \PhpParser\BuilderHelpers::normalizeValue($argValue);
-                $name = null;
-                // for named arguments
-                if (\is_string($key)) {
-                    $name = new \PhpParser\Node\Identifier($key);
-                }
-                $args[] = new \PhpParser\Node\Arg($expr, \false, \false, [], $name);
-            }
+            $args = $this->namedArgsFactory->createFromValues($argValues);
         } else {
             $args = [];
         }

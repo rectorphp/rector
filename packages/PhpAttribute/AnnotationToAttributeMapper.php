@@ -33,6 +33,9 @@ final class AnnotationToAttributeMapper
                 return $annotationToAttributeMapper->map($value);
             }
         }
+        if ($value instanceof \PhpParser\Node\Expr) {
+            return $value;
+        }
         throw new \Rector\Core\Exception\NotImplementedYetException();
     }
 }

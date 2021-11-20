@@ -3,20 +3,18 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\Printer;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
+use Rector\PhpAttribute\NodeFactory\AttributeNameFactory;
+use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
 use RectorPrefix20211120\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
@@ -31,10 +29,20 @@ final class PhpAttributeGroupFactory
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
     private $annotationToAttributeMapper;
-    public function __construct(\Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver $namedArgumentsResolver, \Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper)
+    /**
+     * @var \Rector\PhpAttribute\NodeFactory\AttributeNameFactory
+     */
+    private $attributeNameFactory;
+    /**
+     * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
+     */
+    private $namedArgsFactory;
+    public function __construct(\Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver $namedArgumentsResolver, \Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory)
     {
         $this->namedArgumentsResolver = $namedArgumentsResolver;
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
+        $this->attributeNameFactory = $attributeNameFactory;
+        $this->namedArgsFactory = $namedArgsFactory;
     }
     public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
@@ -62,7 +70,7 @@ final class PhpAttributeGroupFactory
         $args = $this->createArgsFromItems($values);
         $argumentNames = $this->namedArgumentsResolver->resolveFromClass($annotationToAttribute->getAttributeClass());
         $this->completeNamedArguments($args, $argumentNames);
-        $attributeName = $this->createAttributeName($annotationToAttribute, $doctrineAnnotationTagValueNode);
+        $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode);
         $attribute = new \PhpParser\Node\Attribute($attributeName, $args);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
@@ -70,50 +78,11 @@ final class PhpAttributeGroupFactory
      * @param mixed[] $items
      * @return Arg[]
      */
-    public function createArgsFromItems(array $items, ?string $silentKey = null) : array
+    public function createArgsFromItems(array $items) : array
     {
-        $args = [];
-        if ($silentKey !== null && isset($items[$silentKey])) {
-            $silentValue = $this->mapAnnotationValueToAttribute($items[$silentKey]);
-            $args[] = new \PhpParser\Node\Arg($silentValue);
-            unset($items[$silentKey]);
-        }
-        foreach ($items as $key => $value) {
-            $value = $this->mapAnnotationValueToAttribute($value);
-            $name = null;
-            if (\is_string($key)) {
-                $name = new \PhpParser\Node\Identifier($key);
-            }
-            // resolve argument name
-            $args[] = $this->isArrayArguments($items) ? new \PhpParser\Node\Arg($value, \false, \false, [], $name) : new \PhpParser\Node\Arg($value);
-        }
-        return $args;
-    }
-    /**
-     * @param mixed[] $items
-     */
-    private function isArrayArguments(array $items) : bool
-    {
-        foreach (\array_keys($items) as $key) {
-            if (!\is_int($key)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function normalizeStringDoubleQuote(\PhpParser\Node\Expr $expr) : void
-    {
-        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
-            return;
-        }
-        // avoid escaping quotes + preserve newlines
-        if (\strpos($expr->value, "'") === \false) {
-            return;
-        }
-        if (\strpos($expr->value, "\n") !== \false) {
-            return;
-        }
-        $expr->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
+        /** @var Expr[] $items */
+        $items = $this->annotationToAttributeMapper->map($items);
+        return $this->namedArgsFactory->createFromValues($items);
     }
     /**
      * @param Arg[] $args
@@ -132,28 +101,5 @@ final class PhpAttributeGroupFactory
             }
             $arg->name = new \PhpParser\Node\Identifier($argumentName);
         }
-    }
-    /**
-     * @param mixed $annotationValue
-     */
-    private function mapAnnotationValueToAttribute($annotationValue) : \PhpParser\Node\Expr
-    {
-        $value = $this->annotationToAttributeMapper->map($annotationValue);
-        $value = \PhpParser\BuilderHelpers::normalizeValue($value);
-        $this->normalizeStringDoubleQuote($value);
-        return $value;
-    }
-    /**
-     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
-     */
-    private function createAttributeName(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
-    {
-        // attribute and class name are the same, so we re-use the short form to keep code compatible with previous one
-        if ($annotationToAttribute->getAttributeClass() === $annotationToAttribute->getTag()) {
-            $attributeName = $doctrineAnnotationTagValueNode->identifierTypeNode->name;
-            $attributeName = \ltrim($attributeName, '@');
-            return new \PhpParser\Node\Name($attributeName);
-        }
-        return new \PhpParser\Node\Name\FullyQualified($annotationToAttribute->getAttributeClass());
     }
 }
