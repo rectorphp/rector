@@ -102,6 +102,8 @@ final class DowngradeRectorConfig
         // no event-dispatcher used
         'vendor/symfony/console/Event/*',
         'vendor/symfony/console/EventListener/*',
+        // only for composer patches on composer install - not needed in final package
+        'vendor/cweagans/*',
         'nette/caching/src/Bridges/*',
 
         // This class has an issue for PHP 7.1:
