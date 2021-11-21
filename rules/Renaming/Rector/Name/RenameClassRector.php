@@ -33,12 +33,6 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
      */
     public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
 
-    /**
-     * @api
-     * @var string
-     */
-    public const CLASS_MAP_FILES = 'class_map_files';
-
     public function __construct(
         private RenamedClassesDataCollector $renamedClassesDataCollector,
         private ClassRenamer $classRenamer
@@ -120,21 +114,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param array<string, mixed[]> $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->addOldToNewClasses($configuration[self::OLD_TO_NEW_CLASSES] ?? []);
+        $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? $configuration;
 
-        $classMapFiles = $configuration[self::CLASS_MAP_FILES] ?? [];
-        Assert::allString($classMapFiles);
+        Assert::isArray($oldToNewClasses);
+        Assert::allString($oldToNewClasses);
 
-        foreach ($classMapFiles as $classMapFile) {
-            Assert::fileExists($classMapFile);
-
-            $oldToNewClasses = require_once $classMapFile;
-            $this->addOldToNewClasses($oldToNewClasses);
-        }
+        $this->addOldToNewClasses($oldToNewClasses);
     }
 
     /**
