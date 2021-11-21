@@ -31,11 +31,6 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      */
     public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
     /**
-     * @api
-     * @var string
-     */
-    public const CLASS_MAP_FILES = 'class_map_files';
-    /**
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
@@ -98,18 +93,14 @@ CODE_SAMPLE
         return $this->processCleanUpUse($node, $oldToNewClasses);
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param array<string, mixed[]> $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->addOldToNewClasses($configuration[self::OLD_TO_NEW_CLASSES] ?? []);
-        $classMapFiles = $configuration[self::CLASS_MAP_FILES] ?? [];
-        \RectorPrefix20211121\Webmozart\Assert\Assert::allString($classMapFiles);
-        foreach ($classMapFiles as $classMapFile) {
-            \RectorPrefix20211121\Webmozart\Assert\Assert::fileExists($classMapFile);
-            $oldToNewClasses = (require_once $classMapFile);
-            $this->addOldToNewClasses($oldToNewClasses);
-        }
+        $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? $configuration;
+        \RectorPrefix20211121\Webmozart\Assert\Assert::isArray($oldToNewClasses);
+        \RectorPrefix20211121\Webmozart\Assert\Assert::allString($oldToNewClasses);
+        $this->addOldToNewClasses($oldToNewClasses);
     }
     /**
      * @param array<string, string> $oldToNewClasses
