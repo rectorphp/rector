@@ -5,7 +5,7 @@ namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use RectorPrefix20211120\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211121\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<array>
  */

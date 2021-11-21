@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\FuncCall;
 
-use RectorPrefix20211120\Nette\Utils\Strings;
+use RectorPrefix20211121\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -178,7 +178,7 @@ CODE_SAMPLE
         if (!\is_string($patternValue)) {
             return;
         }
-        $match = \RectorPrefix20211120\Nette\Utils\Strings::match($patternValue, self::SLASH_REGEX);
+        $match = \RectorPrefix20211121\Nette\Utils\Strings::match($patternValue, self::SLASH_REGEX);
         if ($match === null) {
             return;
         }
