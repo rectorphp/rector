@@ -7,7 +7,10 @@ namespace Rector\Php81\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -43,10 +46,8 @@ CODE_SAMPLE
                 <<<'CODE_SAMPLE'
 class SomeClass
 {
-    private Logger $logger;
-
     public function __construct(
-        Logger $logger = new NullLogger,
+        private Logger $logger = new NullLogger,
     ) {
     }
 }
@@ -103,6 +104,7 @@ CODE_SAMPLE
                 $param->default = $coalesce->right;
 
                 $this->removeNode($toPropertyAssign);
+                $this->processPropertyPromotion($node, $param, $paramName);
             }
         }
 
@@ -112,5 +114,21 @@ CODE_SAMPLE
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::NEW_INITIALIZERS;
+    }
+
+    private function processPropertyPromotion(ClassMethod $classMethod, Param $param, string $paramName): void
+    {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return;
+        }
+
+        $property = $classLike->getProperty($paramName);
+        if (! $property instanceof Property) {
+            return;
+        }
+
+        $param->flags = $property->flags;
+        $this->removeNode($property);
     }
 }
