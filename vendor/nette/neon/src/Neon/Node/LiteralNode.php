@@ -5,11 +5,11 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211121\Nette\Neon\Node;
+namespace RectorPrefix20211122\Nette\Neon\Node;
 
-use RectorPrefix20211121\Nette\Neon\Node;
+use RectorPrefix20211122\Nette\Neon\Node;
 /** @internal */
-final class LiteralNode extends \RectorPrefix20211121\Nette\Neon\Node
+final class LiteralNode extends \RectorPrefix20211122\Nette\Neon\Node
 {
     /** @var mixed */
     public $value;

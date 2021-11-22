@@ -5,4 +5,4 @@
 class ValueError extends \Error
 {
 }
-\class_alias('RectorPrefix20211121\\ValueError', 'ValueError', \false);
+\class_alias('RectorPrefix20211122\\ValueError', 'ValueError', \false);
