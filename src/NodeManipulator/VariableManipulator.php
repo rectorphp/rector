@@ -5,11 +5,13 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -74,7 +76,7 @@ final class VariableManipulator
             if (!$node->expr instanceof \PhpParser\Node\Expr\Array_ && !$node->expr instanceof \PhpParser\Node\Scalar) {
                 return null;
             }
-            if ($node->expr instanceof \PhpParser\Node\Scalar\Encapsed) {
+            if ($this->hasEncapsedStringPart($node->expr)) {
                 return null;
             }
             if ($node->expr instanceof \PhpParser\Node\Expr\Array_ && !$this->arrayManipulator->isArrayOnlyScalarValues($node->expr)) {
@@ -95,6 +97,12 @@ final class VariableManipulator
     {
         return \array_filter($assignsOfArrayToVariable, function (\PhpParser\Node\Expr\Assign $assign) use($classMethod) : bool {
             return $this->isReadOnlyVariable($classMethod, $assign);
+        });
+    }
+    private function hasEncapsedStringPart(\PhpParser\Node\Expr $expr) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($expr, function (\PhpParser\Node $subNode) : bool {
+            return $subNode instanceof \PhpParser\Node\Scalar\Encapsed || $subNode instanceof \PhpParser\Node\Scalar\EncapsedStringPart;
         });
     }
     private function isTestCaseExpectedVariable(\PhpParser\Node\Expr\Variable $variable) : bool
