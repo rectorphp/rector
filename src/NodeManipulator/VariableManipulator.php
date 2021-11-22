@@ -6,11 +6,13 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -55,7 +57,7 @@ final class VariableManipulator
                     return null;
                 }
 
-                if ($node->expr instanceof Encapsed) {
+                if ($this->hasEncapsedStringPart($node->expr)) {
                     return null;
                 }
 
@@ -83,6 +85,14 @@ final class VariableManipulator
         return array_filter(
             $assignsOfArrayToVariable,
             fn (Assign $assign): bool => $this->isReadOnlyVariable($classMethod, $assign)
+        );
+    }
+
+    private function hasEncapsedStringPart(Expr $expr): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst(
+            $expr,
+            fn (Node $subNode): bool => $subNode instanceof Encapsed || $subNode instanceof EncapsedStringPart
         );
     }
 
