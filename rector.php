@@ -14,6 +14,7 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -96,6 +97,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
         // to keep original API from PHPStan untouched
         __DIR__ . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
+
+        FuncCallToStaticCallRector::class => [
+            // file_get_content on purpose
+            __DIR__ . '/packages/Parallel/CpuCoreCountProvider.php',
+        ],
     ]);
 
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-rector.neon');

@@ -8,6 +8,7 @@ use Rector\ChangesReporting\Collector\AffectedFilesCollector;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 
 final class FileProcessor
@@ -34,14 +35,20 @@ final class FileProcessor
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
 
-    public function refactor(File $file): void
+    /**
+     * @return mixed[]
+     */
+    public function refactor(File $file, Configuration $configuration): array
     {
         $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
         $file->changeNewStmts($newStmts);
 
         $this->affectedFilesCollector->removeFromList($file);
         while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
-            $this->refactor($otherTouchedFile);
+            $this->refactor($otherTouchedFile, $configuration);
         }
+
+        // @todo parallel - to be implemented
+        return [];
     }
 }

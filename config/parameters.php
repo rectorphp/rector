@@ -17,6 +17,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // these files will be executed, useful e.g. for constant definitions
     $parameters->set(Option::BOOTSTRAP_FILES, []);
 
+    // parallel
+    $parameters->set(Option::PARALLEL, false);
+
     // FQN class importing
     $parameters->set(Option::AUTO_IMPORT_NAMES, false);
     $parameters->set(Option::IMPORT_SHORT_CLASSES, true);

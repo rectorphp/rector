@@ -25,6 +25,8 @@ final class Configuration
         private array $paths = [],
         private bool $showDiffs = true,
         private ?BootstrapConfigs $bootstrapConfigs = null,
+        private string | null $parallelPort = null,
+        private string | null $parallelIdentifier = null,
     ) {
     }
 
@@ -82,5 +84,15 @@ final class Configuration
 
         $mainConfigFileInfo = new SmartFileInfo($mainConfigFile);
         return $mainConfigFileInfo->getRelativeFilePathFromCwd();
+    }
+
+    public function getParallelPort(): ?string
+    {
+        return $this->parallelPort;
+    }
+
+    public function getParallelIdentifier(): ?string
+    {
+        return $this->parallelIdentifier;
     }
 }

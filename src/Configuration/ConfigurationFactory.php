@@ -42,6 +42,9 @@ final class ConfigurationFactory
 
         $fileExtensions = $this->parameterProvider->provideArrayParameter(Option::FILE_EXTENSIONS);
 
+        $parallelPort = (string) $input->getOption(Option::PARALLEL_PORT);
+        $parallelIdentifier = (string) $input->getOption(Option::PARALLEL_IDENTIFIER);
+
         return new Configuration(
             $isDryRun,
             $showProgressBar,
@@ -49,7 +52,10 @@ final class ConfigurationFactory
             $outputFormat,
             $fileExtensions,
             $paths,
-            $showDiffs
+            $showDiffs,
+            null,
+            $parallelPort,
+            $parallelIdentifier
         );
     }
 

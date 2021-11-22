@@ -525,3 +525,33 @@ parameters:
 
         # this rule should only check parent autowire override case, @todo update in symplify
         - '#Autowired/inject method name must respect "autowire/inject" \+ class name#'
+
+        # on purpose to make use of worker paralle pattern
+        -
+            message: '#Instead of abstract class, use specific service with composition#'
+            path: src/Console/Command/AbstractProcessCommand.php
+
+        # parallel run
+        - '#popen(.*?) is forbidden to use#'
+
+        # json for paralell serialization
+        -
+            message: '#Use value object over return of values#'
+            path: packages/Parallel/Application/ParallelFileProcessor.php
+
+        # known value object, nullable due to typed property
+        -
+            message: '#Cannot call method (.*?)\(\) on Rector\\Parallel\\ValueObject\\ProcessPool\|null#'
+            path: packages/Parallel/Application/ParallelFileProcessor.php
+
+        # messed closure PHP vs php-parser type
+        -
+            message: '#Instead of "Closure" class/interface use "PhpParser\\Node\\Expr\\Closure"#'
+            path:  packages/Parallel/Application/ParallelFileProcessor.php
+        - '#PHPDoc tag @param for parameter \$postFileCallback with type \(Closure\)\|null is not subtype of native type Closure#'
+
+        # parallel complexity
+        - '#Cognitive complexity for "Rector\\Parallel\\Application\\ParallelFileProcessor\:\:check\(\)" is \d+, keep it under 10#'
+
+        # false postivie on command option/attribute check in symplify - @todo fix there later
+        - '#Argument and options "debug", "clear\-cache" got confused#'

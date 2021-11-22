@@ -58,7 +58,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             }
 
             $file->changeHasChanged(false);
-            $this->refactorNodesWithRectors($file);
+            $this->refactorNodesWithRectors($file, $configuration);
 
             // 3. apply post rectors
             $this->tryCatchWrapper($file, function (File $file): void {
@@ -99,12 +99,12 @@ final class PhpFileProcessor implements FileProcessorInterface
         return ['php'];
     }
 
-    private function refactorNodesWithRectors(File $file): void
+    private function refactorNodesWithRectors(File $file, Configuration $configuration): void
     {
         $this->currentFileProvider->setFile($file);
 
-        $this->tryCatchWrapper($file, function (File $file): void {
-            $this->fileProcessor->refactor($file);
+        $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
+            $this->fileProcessor->refactor($file, $configuration);
         }, ApplicationPhase::REFACTORING());
     }
 

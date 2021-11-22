@@ -78,6 +78,11 @@ final class Option
     public const CLEAR_CACHE = 'clear-cache';
 
     /**
+     * @var string
+     */
+    public const PARALLEL = 'parallel';
+
+    /**
      * @deprecated Cache is enabled by default
      * @var string
      */
@@ -175,4 +180,14 @@ final class Option
      * @var string
      */
     public const APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY = 'apply_auto_import_names_on_changed_files_only';
+
+    /**
+     * @var string
+     */
+    public const PARALLEL_IDENTIFIER = 'identifier';
+
+    /**
+     * @var string
+     */
+    public const PARALLEL_PORT = 'port';
 }

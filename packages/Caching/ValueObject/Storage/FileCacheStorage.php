@@ -10,7 +10,7 @@ use Nette\Utils\Random;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
-use Symplify\EasyCodingStandard\Caching\Exception\CachingException;
+use Rector\Core\Exception\Cache\CachingException;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**

@@ -10,7 +10,6 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
-use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Contract\Rector\RectorInterface;
@@ -26,12 +25,11 @@ use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class ProcessCommand extends Command
+final class ProcessCommand extends AbstractProcessCommand
 {
     /**
      * @param RectorInterface[] $rectors
@@ -39,7 +37,6 @@ final class ProcessCommand extends Command
     public function __construct(
         private AdditionalAutoloader $additionalAutoloader,
         private ChangedFilesDetector $changedFilesDetector,
-        private OutputFormatterCollector $outputFormatterCollector,
         private MissingRectorRulesReporter $missingRectorRulesReporter,
         private ApplicationFileProcessor $applicationFileProcessor,
         private FileFactory $fileFactory,
@@ -47,9 +44,9 @@ final class ProcessCommand extends Command
         private ProcessResultFactory $processResultFactory,
         private NodeScopeResolver $nodeScopeResolver,
         private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
-        private ConfigurationFactory $configurationFactory,
         private MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
         private EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
+        private OutputFormatterCollector $outputFormatterCollector,
         private array $rectors
     ) {
         parent::__construct();
@@ -58,26 +55,6 @@ final class ProcessCommand extends Command
     protected function configure(): void
     {
         $this->setDescription('Upgrades or refactors source code with provided rectors');
-
-        $this->addArgument(
-            Option::SOURCE,
-            InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
-            'Files or directories to be upgraded.'
-        );
-
-        $this->addOption(
-            Option::DRY_RUN,
-            Option::DRY_RUN_SHORT,
-            InputOption::VALUE_NONE,
-            'Only see the diff of changes, do not save them to files.'
-        );
-
-        $this->addOption(
-            Option::AUTOLOAD_FILE,
-            Option::AUTOLOAD_FILE_SHORT,
-            InputOption::VALUE_REQUIRED,
-            'Path to file with extra autoload (will be included)'
-        );
 
         $names = $this->outputFormatterCollector->getNames();
 
@@ -90,21 +67,7 @@ final class ProcessCommand extends Command
             ConsoleOutputFormatter::NAME
         );
 
-        $this->addOption(
-            Option::NO_PROGRESS_BAR,
-            null,
-            InputOption::VALUE_NONE,
-            'Hide progress bar. Useful e.g. for nicer CI output.'
-        );
-
-        $this->addOption(
-            Option::NO_DIFFS,
-            null,
-            InputOption::VALUE_NONE,
-            'Hide diffs of changed files. Useful e.g. for nicer CI output.'
-        );
-
-        $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
+        parent::configure();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -149,7 +112,6 @@ final class ProcessCommand extends Command
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
 
-        // here should be value obect factory
         $processResult = $this->processResultFactory->create($files);
         $outputFormatter->report($processResult, $configuration);
 
