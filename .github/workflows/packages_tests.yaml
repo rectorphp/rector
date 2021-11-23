@@ -66,7 +66,7 @@ jobs:
                 run: composer require symplify/rule-doc-generator:^10.0-beta11 --no-update
                 if: ${{ github.event_name == 'pull_request' }}
             -
-                run: composer require nette/neon:"3.3.0 as 3.3.2" --no-update
+                run: composer require nette/neon:"3.3.0 as 3.3.1" --no-update
                 if: ${{ github.event_name == 'pull_request' }}
 
             -   run: composer install --ansi
