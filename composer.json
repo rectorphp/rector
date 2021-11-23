@@ -49,7 +49,7 @@
         "symplify/autowire-array-parameter": "^10.0",
         "symplify/composer-json-manipulator": "^10.0",
         "symplify/console-color-diff": "^10.0",
-        "symplify/package-builder": "^10.0",
+        "symplify/package-builder": "^10.0-beta11",
         "symplify/rule-doc-generator-contracts": "^10.0",
         "symplify/simple-php-doc-parser": "^10.0",
         "symplify/skipper": "^10.0",

@@ -60,7 +60,7 @@ jobs:
                 run: composer require symplify/symfony-php-config:^10.0 --no-update
                 if: ${{ github.event_name == 'pull_request' }}
             -
-                run: composer require symplify/package-builder:^10.0 --no-update
+                run: composer require symplify/package-builder:^10.0-beta11 --no-update
                 if: ${{ github.event_name == 'pull_request' }}
             -
                 run: composer require symplify/rule-doc-generator:^10.0 --no-update
