@@ -63,6 +63,9 @@ jobs:
                 run: composer require symplify/package-builder:^10.0 --no-update
                 if: ${{ github.event_name == 'pull_request' }}
             -
+                run: composer require symplify/rule-doc-generator:^10.0 --no-update
+                if: ${{ github.event_name == 'pull_request' }}
+            -
                 run: composer require nette/neon:"dev-master#d4c38b4 as 3.3.1" --no-update
                 if: ${{ github.event_name == 'pull_request' }}
 
