@@ -1927,6 +1927,7 @@ return array(
     'Rector\\DowngradePhp54\\Rector\\MethodCall\\DowngradeInstanceMethodCallRector' => $baseDir . '/rules/DowngradePhp54/Rector/MethodCall/DowngradeInstanceMethodCallRector.php',
     'Rector\\DowngradePhp55\\Rector\\ClassConstFetch\\DowngradeClassConstantToStringRector' => $baseDir . '/rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php',
     'Rector\\DowngradePhp55\\Rector\\Foreach_\\DowngradeForeachListRector' => $baseDir . '/rules/DowngradePhp55/Rector/Foreach_/DowngradeForeachListRector.php',
+    'Rector\\DowngradePhp55\\Rector\\FuncCall\\DowngradeBoolvalRector' => $baseDir . '/rules/DowngradePhp55/Rector/FuncCall/DowngradeBoolvalRector.php',
     'Rector\\DowngradePhp55\\Rector\\Isset_\\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector' => $baseDir . '/rules/DowngradePhp55/Rector/Isset_/DowngradeArbitraryExpressionArgsToEmptyAndIssetRector.php',
     'Rector\\DowngradePhp56\\NodeManipulator\\ArgManipulator' => $baseDir . '/rules/DowngradePhp56/NodeManipulator/ArgManipulator.php',
     'Rector\\DowngradePhp56\\NodeManipulator\\UnpackedArgList' => $baseDir . '/rules/DowngradePhp56/NodeManipulator/UnpackedArgList.php',
