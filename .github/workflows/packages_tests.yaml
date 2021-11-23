@@ -52,6 +52,20 @@ jobs:
                 run: composer require rector/rector-src dev-main#${{github.event.pull_request.head.sha}} --no-update
                 if: ${{ github.event_name == 'pull_request' }}
 
+            # until symplify/easy-parallel is tagged
+            -
+                run: composer require symplify/easy-parallel:^10.0 --no-update
+                if: ${{ github.event_name == 'pull_request' }}
+            -
+                run: composer require symplify/symfony-php-config:^10.0 --no-update
+                if: ${{ github.event_name == 'pull_request' }}
+            -
+                run: composer require symplify/package-builder:^10.0 --no-update
+                if: ${{ github.event_name == 'pull_request' }}
+            -
+                run: composer require nette/neon:"dev-master#d4c38b4 as 3.3.1" --no-update
+                if: ${{ github.event_name == 'pull_request' }}
+
             -   run: composer install --ansi
 
             -   run: vendor/bin/phpunit

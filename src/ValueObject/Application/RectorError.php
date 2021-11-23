@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\ValueObject\Application;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Parallel\Contract\SerializableInterface;
+use Symplify\EasyParallel\Contract\SerializableInterface;
 
 final class RectorError implements SerializableInterface
 {

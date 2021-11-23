@@ -541,7 +541,7 @@ parameters:
 
         # known value object, nullable due to typed property
         -
-            message: '#Cannot call method (.*?)\(\) on Rector\\Parallel\\ValueObject\\ProcessPool\|null#'
+            message: '#Cannot call method (.*?)\(\) on (.*?)\\ProcessPool\|null#'
             path: packages/Parallel/Application/ParallelFileProcessor.php
 
         # messed closure PHP vs php-parser type

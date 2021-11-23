@@ -9,11 +9,11 @@ use Clue\React\NDJson\Encoder;
 use React\EventLoop\StreamSelectLoop;
 use React\Socket\ConnectionInterface;
 use React\Socket\TcpConnector;
-use Rector\Parallel\Enum\Action;
-use Rector\Parallel\Enum\ReactCommand;
 use Rector\Parallel\WorkerRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\EasyParallel\Enum\Action;
+use Symplify\EasyParallel\Enum\ReactCommand;
 
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92

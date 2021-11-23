@@ -7,7 +7,7 @@ namespace Rector\Core\ValueObject\Reporting;
 use Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use Rector\Parallel\Contract\SerializableInterface;
+use Symplify\EasyParallel\Contract\SerializableInterface;
 
 final class FileDiff implements SerializableInterface
 {

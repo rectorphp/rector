@@ -10,10 +10,10 @@ use Rector\Core\Application\FileProcessor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
-use Rector\Parallel\Enum\Action;
 use Rector\Parallel\ValueObject\Bridge;
-use Rector\Parallel\ValueObject\ReactCommand;
-use Rector\Parallel\ValueObject\ReactEvent;
+use Symplify\EasyParallel\Enum\Action;
+use Symplify\EasyParallel\Enum\ReactCommand;
+use Symplify\EasyParallel\Enum\ReactEvent;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
@@ -53,7 +53,7 @@ final class WorkerRunner
         // 2. collect diffs + errors from file processor
         $decoder->on(ReactEvent::DATA, function (array $json) use ($encoder, $configuration): void {
             $action = $json[ReactCommand::ACTION];
-            if ($action !== Action::PROCESS) {
+            if ($action !== Action::MAIN) {
                 return;
             }
 
@@ -85,7 +85,7 @@ final class WorkerRunner
             }
 
             /**
-             * this invokes all listeners listening $decoder->on(...) @see ReactEvent::DATA
+             * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */
             $encoder->write([
                 ReactCommand::ACTION => Action::RESULT,

@@ -17,15 +17,16 @@ use Rector\Core\Console\Command\WorkerCommand;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
-use Rector\Parallel\Enum\Action;
 use Rector\Parallel\ValueObject\Bridge;
-use Rector\Parallel\ValueObject\ParallelProcess;
-use Rector\Parallel\ValueObject\ProcessPool;
-use Rector\Parallel\ValueObject\ReactCommand;
-use Rector\Parallel\ValueObject\ReactEvent;
-use Rector\Parallel\ValueObject\Schedule;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\EasyParallel\Enum\Action;
+use Symplify\EasyParallel\Enum\Content;
+use Symplify\EasyParallel\Enum\ReactCommand;
+use Symplify\EasyParallel\Enum\ReactEvent;
+use Symplify\EasyParallel\ValueObject\ParallelProcess;
+use Symplify\EasyParallel\ValueObject\ProcessPool;
+use Symplify\EasyParallel\ValueObject\Schedule;
 use Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Throwable;
 
@@ -101,8 +102,8 @@ final class ParallelFileProcessor
 
                 $job = array_pop($jobs);
                 $parallelProcess->request([
-                    ReactCommand::ACTION => Action::PROCESS,
-                    'files' => $job,
+                    ReactCommand::ACTION => Action::MAIN,
+                    Content::FILES => $job,
                 ]);
             });
         });
@@ -196,8 +197,8 @@ final class ParallelFileProcessor
 
                     $job = array_pop($jobs);
                     $parallelProcess->request([
-                        ReactCommand::ACTION => Action::PROCESS,
-                        'files' => $job,
+                        ReactCommand::ACTION => Action::MAIN,
+                        Content::FILES => $job,
                     ]);
                 },
 

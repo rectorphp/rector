@@ -65,6 +65,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 \Helmich\TypoScriptParser\Parser\Traverser\Visitor::class,
                 \Symplify\SymplifyKernel\Contract\LightKernelInterface::class,
                 \Symfony\Component\String\Slugger\SluggerInterface::class,
+                \Psr\Log\LoggerInterface::class,
+                // phsptan
+                \PHPStan\Type\DynamicStaticMethodReturnTypeExtension::class,
+                \PHPStan\Type\DynamicFunctionReturnTypeExtension::class,
+                \PHPStan\Type\DynamicFunctionThrowTypeExtension::class,
+                \PHPStan\Type\DynamicMethodReturnTypeExtension::class,
+                \PHPStan\Type\DynamicMethodThrowTypeExtension::class,
+                \PHPStan\Type\DynamicReturnTypeExtensionRegistry::class,
+                \PHPStan\Type\DynamicStaticMethodReturnTypeExtension::class,
+                \PHPStan\Type\DynamicStaticMethodThrowTypeExtension::class,
             ],
             DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
                 ContainerInterface::class => [
