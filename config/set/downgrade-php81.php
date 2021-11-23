@@ -8,6 +8,7 @@ use Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstant
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector;
+use Rector\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector;
 use Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector;
 use Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -20,6 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeFinalizePublicClassConstantRector::class);
     $services->set(DowngradeFirstClassCallableSyntaxRector::class);
     $services->set(DowngradeNeverTypeDeclarationRector::class);
+    $services->set(DowngradePureIntersectionTypeRector::class);
     $services->set(DowngradeNewInInitializerRector::class);
     $services->set(DowngradePhp81ResourceReturnToObjectRector::class);
     $services->set(DowngradeReadonlyPropertyRector::class);

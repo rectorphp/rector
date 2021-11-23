@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -31,7 +32,7 @@ final class PhpDocFromTypeDeclarationDecorator
     ) {
     }
 
-    public function decorate(ClassMethod | Function_ | Closure $functionLike): void
+    public function decorate(ClassMethod | Function_ | Closure | ArrowFunction $functionLike): void
     {
         if ($functionLike->returnType === null) {
             return;
@@ -49,7 +50,7 @@ final class PhpDocFromTypeDeclarationDecorator
      */
     public function decorateParam(
         Param $param,
-        ClassMethod | Function_ | Closure $functionLike,
+        ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
         array $requiredTypes
     ): void {
         if ($param->type === null) {
@@ -114,7 +115,7 @@ final class PhpDocFromTypeDeclarationDecorator
     }
 
     private function moveParamTypeToParamDoc(
-        ClassMethod | Function_ | Closure $functionLike,
+        ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
         Param $param,
         Type $type
     ): void {
