@@ -1,0 +1,129 @@
+<?php
+
+declare (strict_types=1);
+namespace RectorPrefix20211123\Symplify\EasyParallel\CommandLine;
+
+use RectorPrefix20211123\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211123\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211123\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix20211123\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
+/**
+ * @see \Symplify\EasyParallel\Tests\CommandLine\WorkerCommandLineFactoryTest
+ */
+final class WorkerCommandLineFactory
+{
+    /**
+     * @var string
+     */
+    private const OPTION_DASHES = '--';
+    /**
+     * These options are not relevant for nested worker command line.
+     *
+     * @var string[]
+     */
+    private const EXCLUDED_OPTION_NAMES = ['output-format'];
+    /**
+     * @var \Symplify\EasyParallel\Reflection\CommandFromReflectionFactory
+     */
+    private $commandFromReflectionFactory;
+    public function __construct()
+    {
+        $this->commandFromReflectionFactory = new \RectorPrefix20211123\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
+    }
+    /**
+     * @param class-string<Command> $mainCommandClass
+     */
+    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, \RectorPrefix20211123\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
+    {
+        $commandArguments = \array_slice($_SERVER['argv'], 1);
+        $args = \array_merge([\PHP_BINARY, $baseScript], $commandArguments);
+        $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
+        if ($mainCommand->getName() === null) {
+            $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
+            throw new \RectorPrefix20211123\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
+        }
+        $mainCommandName = $mainCommand->getName();
+        $processCommandArray = [];
+        foreach ($args as $arg) {
+            // skip command name
+            if ($arg === $mainCommandName) {
+                break;
+            }
+            $processCommandArray[] = \escapeshellarg($arg);
+        }
+        $processCommandArray[] = $workerCommandName;
+        if ($projectConfigFile !== null) {
+            $processCommandArray[] = '--config';
+            $processCommandArray[] = \escapeshellarg($projectConfigFile);
+        }
+        $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
+        $processCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
+        $processCommandArray = \array_merge($processCommandArray, $processCommandOptions);
+        // for TCP local server
+        $processCommandArray[] = '--port';
+        $processCommandArray[] = $port;
+        $processCommandArray[] = '--identifier';
+        $processCommandArray[] = \escapeshellarg($identifier);
+        /** @var string[] $paths */
+        $paths = (array) $input->getArgument($pathsOptionName);
+        foreach ($paths as $path) {
+            $processCommandArray[] = \escapeshellarg($path);
+        }
+        // set json output
+        $processCommandArray[] = '--output-format';
+        $processCommandArray[] = \escapeshellarg('json');
+        // explicitly disable colors, breaks json_decode() otherwise
+        // @see https://github.com/symfony/symfony/issues/1238
+        $processCommandArray[] = '--no-ansi';
+        return \implode(' ', $processCommandArray);
+    }
+    /**
+     * @return string[]
+     */
+    private function getCommandOptionNames(\RectorPrefix20211123\Symfony\Component\Console\Command\Command $command) : array
+    {
+        $inputDefinition = $command->getDefinition();
+        $optionNames = [];
+        foreach ($inputDefinition->getOptions() as $inputOption) {
+            $optionNames[] = $inputOption->getName();
+        }
+        return $optionNames;
+    }
+    /**
+     * Keeps all options that are allowed in check command options
+     *
+     * @param string[] $mainCommandOptionNames
+     * @return string[]
+     */
+    private function mirrorCommandOptions(\RectorPrefix20211123\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
+    {
+        $processCommandOptions = [];
+        foreach ($mainCommandOptionNames as $mainCommandOptionName) {
+            if ($this->shouldSkipOption($input, $mainCommandOptionName)) {
+                continue;
+            }
+            /** @var bool|string|null $optionValue */
+            $optionValue = $input->getOption($mainCommandOptionName);
+            // skip clutter
+            if ($optionValue === null) {
+                continue;
+            }
+            if (\is_bool($optionValue)) {
+                if ($optionValue) {
+                    $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+                }
+                continue;
+            }
+            $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+            $processCommandOptions[] = \escapeshellarg($optionValue);
+        }
+        return $processCommandOptions;
+    }
+    private function shouldSkipOption(\RectorPrefix20211123\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
+    {
+        if (!$input->hasOption($optionName)) {
+            return \true;
+        }
+        return \in_array($optionName, self::EXCLUDED_OPTION_NAMES, \true);
+    }
+}

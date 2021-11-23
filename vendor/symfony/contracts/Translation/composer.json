@@ -30,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211122\\Symfony\\Contracts\\Translation\\": ""
+            "RectorPrefix20211123\\Symfony\\Contracts\\Translation\\": ""
         }
     },
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "2.4-dev"
+            "dev-main": "2.5-dev"
         },
         "thanks": {
             "name": "symfony\/contracts",

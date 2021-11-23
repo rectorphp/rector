@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20211122\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20211123\JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -43,10 +43,20 @@ final class Configuration
      */
     private $bootstrapConfigs;
     /**
+     * @var string|null
+     */
+    private $parallelPort = null;
+    /**
+     * @var string|null
+     */
+    private $parallelIdentifier = null;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
+     * @param string|null $parallelPort
+     * @param string|null $parallelIdentifier
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs = null, $parallelPort = null, $parallelIdentifier = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -56,6 +66,8 @@ final class Configuration
         $this->paths = $paths;
         $this->showDiffs = $showDiffs;
         $this->bootstrapConfigs = $bootstrapConfigs;
+        $this->parallelPort = $parallelPort;
+        $this->parallelIdentifier = $parallelIdentifier;
     }
     public function isDryRun() : bool
     {
@@ -102,5 +114,13 @@ final class Configuration
         }
         $mainConfigFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($mainConfigFile);
         return $mainConfigFileInfo->getRelativeFilePathFromCwd();
+    }
+    public function getParallelPort() : ?string
+    {
+        return $this->parallelPort;
+    }
+    public function getParallelIdentifier() : ?string
+    {
+        return $this->parallelIdentifier;
     }
 }

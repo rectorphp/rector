@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Nette\Kdyby\ValueObject;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -20,11 +21,11 @@ final class VariableWithType
      */
     private $type;
     /**
-     * @var Identifier|Name|NullableType|UnionType|null
+     * @var ComplexType|Identifier|Name|NullableType|UnionType|null
      */
     private $phpParserTypeNode;
     /**
-     * @param Identifier|Name|NullableType|UnionType|null $phpParserTypeNode
+     * @param ComplexType|Identifier|Name|NullableType|UnionType|null $phpParserTypeNode
      */
     public function __construct(string $name, \PHPStan\Type\Type $type, $phpParserTypeNode)
     {
@@ -41,7 +42,7 @@ final class VariableWithType
         return $this->type;
     }
     /**
-     * @return Identifier|Name|NullableType|UnionType|null
+     * @return ComplexType|Identifier|Name|NullableType|UnionType|null
      */
     public function getPhpParserTypeNode() : ?\PhpParser\Node
     {

@@ -1,0 +1,69 @@
+{
+    "name": "symplify\/easy-parallel",
+    "description": "Helper package for easier CLI project parallelization",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0",
+        "clue\/ndjson-react": "^1.2",
+        "react\/child-process": "^0.6.3",
+        "react\/event-loop": "^1.2",
+        "react\/socket": "^1.9",
+        "symfony\/console": "^5.3|^6.0",
+        "symplify\/package-builder": "^10.0"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20211123\\Symplify\\EasyParallel\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20211123\\Symplify\\EasyParallel\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "10.0-dev"
+        }
+    },
+    "config": {
+        "platform-check": false
+    },
+    "conflict": {
+        "symplify\/astral": "<10.0.0-beta12",
+        "symplify\/easy-coding-standard": "<10.0.0-beta12",
+        "symplify\/phpstan-rules": "<10.0.0-beta12",
+        "symplify\/easy-testing": "<10.0.0-beta12",
+        "symplify\/rule-doc-generator-contracts": "<10.0.0-beta12",
+        "symplify\/symfony-php-config": "<10.0.0-beta12",
+        "symplify\/simple-php-doc-parser": "<10.0.0-beta12",
+        "symplify\/php-config-printer": "<10.0.0-beta12",
+        "symplify\/autowire-array-parameter": "<10.0.0-beta12",
+        "symplify\/markdown-diff": "<10.0.0-beta12",
+        "symplify\/amnesia": "<10.0.0-beta12",
+        "symplify\/phpstan-extensions": "<10.0.0-beta12",
+        "symplify\/rule-doc-generator": "<10.0.0-beta12",
+        "symplify\/vendor-patches": "<10.0.0-beta12",
+        "symplify\/skipper": "<10.0.0-beta12",
+        "symplify\/symfony-static-dumper": "<10.0.0-beta12",
+        "symplify\/git-wrapper": "<10.0.0-beta12",
+        "symplify\/config-transformer": "<10.0.0-beta12",
+        "symplify\/easy-ci": "<10.0.0-beta12",
+        "symplify\/coding-standard": "<10.0.0-beta12",
+        "symplify\/twig-phpstan-compiler": "<10.0.0-beta12",
+        "symplify\/latte-phpstan-compiler": "<10.0.0-beta12",
+        "symplify\/template-phpstan-compiler": "<10.0.0-beta12",
+        "symplify\/phpstan-latte-rules": "<10.0.0-beta12",
+        "symplify\/phpstan-twig-rules": "<10.0.0-beta12",
+        "symplify\/composer-json-manipulator": "<10.0.0-beta12",
+        "symplify\/smart-file-system": "<10.0.0-beta12",
+        "symplify\/monorepo-builder": "<10.0.0-beta12",
+        "symplify\/console-color-diff": "<10.0.0-beta12",
+        "symplify\/symplify-kernel": "<10.0.0-beta12"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

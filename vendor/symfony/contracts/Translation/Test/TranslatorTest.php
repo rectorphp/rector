@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211122\Symfony\Contracts\Translation\Test;
+namespace RectorPrefix20211123\Symfony\Contracts\Translation\Test;
 
-use RectorPrefix20211122\PHPUnit\Framework\TestCase;
-use RectorPrefix20211122\Symfony\Contracts\Translation\TranslatorInterface;
-use RectorPrefix20211122\Symfony\Contracts\Translation\TranslatorTrait;
+use RectorPrefix20211123\PHPUnit\Framework\TestCase;
+use RectorPrefix20211123\Symfony\Contracts\Translation\TranslatorInterface;
+use RectorPrefix20211123\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.
@@ -26,11 +26,24 @@ use RectorPrefix20211122\Symfony\Contracts\Translation\TranslatorTrait;
  *
  * @author Clemens Tolboom clemens@build2be.nl
  */
-class TranslatorTest extends \RectorPrefix20211122\PHPUnit\Framework\TestCase
+class TranslatorTest extends \RectorPrefix20211123\PHPUnit\Framework\TestCase
 {
+    private $defaultLocale;
+    protected function setUp() : void
+    {
+        $this->defaultLocale = \Locale::getDefault();
+        \Locale::setDefault('en');
+    }
+    protected function tearDown() : void
+    {
+        \Locale::setDefault($this->defaultLocale);
+    }
+    /**
+     * @return TranslatorInterface
+     */
     public function getTranslator()
     {
-        return new class implements \RectorPrefix20211122\Symfony\Contracts\Translation\TranslatorInterface
+        return new class implements \RectorPrefix20211123\Symfony\Contracts\Translation\TranslatorInterface
         {
             use TranslatorTrait;
         };
@@ -49,7 +62,6 @@ class TranslatorTest extends \RectorPrefix20211122\PHPUnit\Framework\TestCase
     public function testTransChoiceWithExplicitLocale($expected, $id, $number)
     {
         $translator = $this->getTranslator();
-        $translator->setLocale('en');
         $this->assertEquals($expected, $translator->trans($id, ['%count%' => $number]));
     }
     /**
@@ -59,14 +71,21 @@ class TranslatorTest extends \RectorPrefix20211122\PHPUnit\Framework\TestCase
      */
     public function testTransChoiceWithDefaultLocale($expected, $id, $number)
     {
-        \Locale::setDefault('en');
         $translator = $this->getTranslator();
+        $this->assertEquals($expected, $translator->trans($id, ['%count%' => $number]));
+    }
+    /**
+     * @dataProvider getTransChoiceTests
+     */
+    public function testTransChoiceWithEnUsPosix($expected, $id, $number)
+    {
+        $translator = $this->getTranslator();
+        $translator->setLocale('en_US_POSIX');
         $this->assertEquals($expected, $translator->trans($id, ['%count%' => $number]));
     }
     public function testGetSetLocale()
     {
         $translator = $this->getTranslator();
-        $translator->setLocale('en');
         $this->assertEquals('en', $translator->getLocale());
     }
     /**
@@ -241,7 +260,7 @@ class TranslatorTest extends \RectorPrefix20211122\PHPUnit\Framework\TestCase
      */
     public function successLangcodes()
     {
-        return [['1', ['ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky']], ['2', ['nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM']], ['3', ['be', 'bs', 'cs', 'hr']], ['4', ['cy', 'mt', 'sl']], ['6', ['ar']]];
+        return [['1', ['ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky']], ['2', ['nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM', 'en_US_POSIX']], ['3', ['be', 'bs', 'cs', 'hr']], ['4', ['cy', 'mt', 'sl']], ['6', ['ar']]];
     }
     /**
      * This array should be at least empty within the near future.

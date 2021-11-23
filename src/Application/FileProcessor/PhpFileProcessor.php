@@ -18,7 +18,7 @@ use Rector\Core\ValueObject\Application\RectorError;
 use Rector\Core\ValueObject\Configuration;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20211122\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211123\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
@@ -58,7 +58,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
-    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20211122\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
+    public function __construct(\Rector\Core\PhpParser\Printer\FormatPerservingPrinter $formatPerservingPrinter, \Rector\Core\Application\FileProcessor $fileProcessor, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20211123\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor, \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory $errorFactory)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
@@ -88,7 +88,7 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
                 break;
             }
             $file->changeHasChanged(\false);
-            $this->refactorNodesWithRectors($file);
+            $this->refactorNodesWithRectors($file, $configuration);
             // 3. apply post rectors
             $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
                 $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
@@ -125,11 +125,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
     {
         return ['php'];
     }
-    private function refactorNodesWithRectors(\Rector\Core\ValueObject\Application\File $file) : void
+    private function refactorNodesWithRectors(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $this->currentFileProvider->setFile($file);
-        $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
-            $this->fileProcessor->refactor($file);
+        $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
+            $this->fileProcessor->refactor($file, $configuration);
         }, \Rector\Core\Enum\ApplicationPhase::REFACTORING());
     }
     private function tryCatchWrapper(\Rector\Core\ValueObject\Application\File $file, callable $callback, \Rector\Core\Enum\ApplicationPhase $applicationPhase) : void

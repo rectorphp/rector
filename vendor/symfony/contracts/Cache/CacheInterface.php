@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211122\Symfony\Contracts\Cache;
+namespace RectorPrefix20211123\Symfony\Contracts\Cache;
 
-use RectorPrefix20211122\Psr\Cache\CacheItemInterface;
-use RectorPrefix20211122\Psr\Cache\InvalidArgumentException;
+use RectorPrefix20211123\Psr\Cache\CacheItemInterface;
+use RectorPrefix20211123\Psr\Cache\InvalidArgumentException;
 /**
  * Covers most simple to advanced caching needs.
  *
@@ -36,7 +36,7 @@ interface CacheInterface
      *                                              See https://en.wikipedia.org/wiki/Cache_stampede#Probabilistic_early_expiration
      * @param array                      &$metadata The metadata of the cached item {@see ItemInterface::getMetadata()}
      *
-     * @return mixed The value corresponding to the provided key
+     * @return mixed
      *
      * @throws InvalidArgumentException When $key is not valid or when $beta is negative
      */

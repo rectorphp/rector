@@ -19,7 +19,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211122\Webmozart\Assert\Assert;
+use RectorPrefix20211123\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Generics\Rector\ClassMethod\GenericClassMethodParamRector\GenericClassMethodParamRectorTest
  */
@@ -111,7 +111,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? [];
-        \RectorPrefix20211122\Webmozart\Assert\Assert::allIsAOf($makeClassMethodGenerics, \Rector\Generics\ValueObject\GenericClassMethodParam::class);
+        \RectorPrefix20211123\Webmozart\Assert\Assert::allIsAOf($makeClassMethodGenerics, \Rector\Generics\ValueObject\GenericClassMethodParam::class);
         $this->genericClassMethodParams = $makeClassMethodGenerics;
     }
     private function refactorParam(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Generics\ValueObject\GenericClassMethodParam $genericClassMethodParam) : void

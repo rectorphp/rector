@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Contract\Rector;
 
-use RectorPrefix20211122\Nette\Neon\Node;
+use RectorPrefix20211123\Nette\Neon\Node;
 use Rector\Core\Contract\Rector\RectorInterface;
 interface NeonRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
@@ -14,5 +14,5 @@ interface NeonRectorInterface extends \Rector\Core\Contract\Rector\RectorInterfa
     /**
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode(\RectorPrefix20211122\Nette\Neon\Node $node);
+    public function enterNode(\RectorPrefix20211123\Nette\Neon\Node $node);
 }

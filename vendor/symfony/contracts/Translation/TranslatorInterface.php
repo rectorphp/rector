@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211122\Symfony\Contracts\Translation;
+namespace RectorPrefix20211123\Symfony\Contracts\Translation;
 
 /**
  * @author Fabien Potencier <fabien@symfony.com>
@@ -58,7 +58,7 @@ interface TranslatorInterface
      * @param string|null $domain     The domain for the message or null to use the default
      * @param string|null $locale     The locale or null to use the default
      *
-     * @return string The translated string
+     * @return string
      *
      * @throws \InvalidArgumentException If the locale contains invalid characters
      */

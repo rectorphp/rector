@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20211122\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20211123\JetBrains\PhpStorm\Immutable;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use RectorPrefix20211122\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20211123\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]
 final class Option
 {
@@ -63,6 +63,10 @@ final class Option
      */
     public const CLEAR_CACHE = 'clear-cache';
     /**
+     * @var string
+     */
+    public const PARALLEL = 'parallel';
+    /**
      * @deprecated Cache is enabled by default
      * @var string
      */
@@ -78,7 +82,7 @@ final class Option
     /**
      * @var string
      */
-    public const SKIP = \RectorPrefix20211122\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = \RectorPrefix20211123\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @var string
      */
@@ -142,4 +146,12 @@ final class Option
      * @var string
      */
     public const APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY = 'apply_auto_import_names_on_changed_files_only';
+    /**
+     * @var string
+     */
+    public const PARALLEL_IDENTIFIER = 'identifier';
+    /**
+     * @var string
+     */
+    public const PARALLEL_PORT = 'port';
 }
