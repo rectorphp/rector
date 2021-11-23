@@ -28,6 +28,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringToArrayArgumentProcessRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const EXCLUDED_PROCESS_METHOD_CALLS = ['setWorkingDirectory', 'addOutput', 'addErrorOutput'];
+    /**
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;
@@ -84,12 +88,20 @@ CODE_SAMPLE
         if ($activeArgValue instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall && $this->shouldSkipProcessMethodCall($node)) {
+            return null;
+        }
         // type analyzer
         $activeValueType = $this->getType($activeArgValue);
         if ($activeValueType instanceof \PHPStan\Type\StringType) {
             $this->processStringType($node, $argumentPosition, $activeArgValue);
         }
         return $node;
+    }
+    private function shouldSkipProcessMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    {
+        $methodName = (string) $this->nodeNameResolver->getName($methodCall->name);
+        return \in_array($methodName, self::EXCLUDED_PROCESS_METHOD_CALLS, \true);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $expr
