@@ -35,6 +35,7 @@
         "rector/rector-phpoffice": "^0.11.7",
         "rector/rector-phpunit": "^0.11.22",
         "rector/rector-symfony": "^0.11.41",
+        "symplify/easy-parallel": "^10.0",
         "sebastian/diff": "^4.0.4",
         "ssch/typo3-rector": "^0.11.31",
         "symfony/console": "^5.3",
@@ -75,7 +76,6 @@
         "symplify/monorepo-builder": "^10.0",
         "symplify/phpstan-extensions": "^10.0",
         "symplify/phpstan-rules": "^10.0",
-        "symplify/easy-parallel": "^10.0",
         "symplify/rule-doc-generator": "^10.0",
         "timeweb/phpstan-enum": "dev-22-upgrade-phpstan-to-1.0"
     },
