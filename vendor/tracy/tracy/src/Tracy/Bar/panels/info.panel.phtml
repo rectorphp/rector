@@ -11,6 +11,8 @@ declare(strict_types=1);
 
 namespace Tracy;
 
+/** @var DefaultBarPanel $this */
+
 if (isset($this->cpuUsage) && $this->time) {
 	foreach (getrusage() as $key => $val) {
 		$this->cpuUsage[$key] -= $val;

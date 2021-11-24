@@ -431,6 +431,8 @@ class Strings
             $len = \strlen($haystack);
             if ($needle === '') {
                 return $len;
+            } elseif ($len === 0) {
+                return null;
             }
             $pos = $len - 1;
             while (($pos = \strrpos($haystack, $needle, $pos - $len)) !== \false && ++$nth) {
@@ -440,8 +442,8 @@ class Strings
         return \RectorPrefix20211124\Nette\Utils\Helpers::falseToNull($pos);
     }
     /**
-     * Splits a string into array by the regular expression.
-     * Argument $flag takes same arguments as preg_split(), but PREG_SPLIT_DELIM_CAPTURE is set by default.
+     * Splits a string into array by the regular expression. Parenthesized expression in the delimiter are captured.
+     * Parameter $flags can be any combination of PREG_SPLIT_NO_EMPTY and PREG_OFFSET_CAPTURE flags.
      * @param string $subject
      * @param string $pattern
      * @param int $flags
@@ -452,7 +454,7 @@ class Strings
     }
     /**
      * Checks if given string matches a regular expression pattern and returns an array with first found match and each subpattern.
-     * Argument $flag takes same arguments as function preg_match().
+     * Parameter $flags can be any combination of PREG_OFFSET_CAPTURE and PREG_UNMATCHED_AS_NULL flags.
      * @param string $subject
      * @param string $pattern
      * @param int $flags
@@ -466,8 +468,8 @@ class Strings
         return self::pcre('preg_match', [$pattern, $subject, &$m, $flags, $offset]) ? $m : null;
     }
     /**
-     * Finds all occurrences matching regular expression pattern and returns a two-dimensional array.
-     * Argument $flag takes same arguments as function preg_match_all(), but PREG_SET_ORDER is set by default.
+     * Finds all occurrences matching regular expression pattern and returns a two-dimensional array. Result is array of matches (ie uses by default PREG_SET_ORDER).
+     * Parameter $flags can be any combination of PREG_OFFSET_CAPTURE, PREG_UNMATCHED_AS_NULL and PREG_PATTERN_ORDER flags.
      * @param string $subject
      * @param string $pattern
      * @param int $flags

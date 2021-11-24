@@ -5,16 +5,18 @@
  *
  * This file is part of the Tracy (https://tracy.nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
- *
- * @param  array $exception
- * @param  string $title
- * @param  string $nonce
- * @return void
  */
 
 declare(strict_types=1);
 
 namespace Tracy;
+
+/**
+ * @var \Throwable $exception
+ * @var string $title
+ * @var ?string $nonce
+ * @var string $css
+ */
 
 $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';

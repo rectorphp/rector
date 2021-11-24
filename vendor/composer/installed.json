@@ -797,17 +797,17 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v3.2.5",
-            "version_normalized": "3.2.5.0",
+            "version": "v3.2.6",
+            "version_normalized": "3.2.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "9cd80396ca58d7969ab44fc7afcf03624dfa526e"
+                "reference": "2f261e55bd6a12057442045bf2c249806abc1d02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/9cd80396ca58d7969ab44fc7afcf03624dfa526e",
-                "reference": "9cd80396ca58d7969ab44fc7afcf03624dfa526e",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/2f261e55bd6a12057442045bf2c249806abc1d02",
+                "reference": "2f261e55bd6a12057442045bf2c249806abc1d02",
                 "shasum": ""
             },
             "require": {
@@ -818,7 +818,7 @@
             },
             "require-dev": {
                 "nette\/tester": "~2.0",
-                "phpstan\/phpstan": "^0.12",
+                "phpstan\/phpstan": "^1.0",
                 "tracy\/tracy": "^2.3"
             },
             "suggest": {
@@ -830,7 +830,7 @@
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()",
                 "ext-xml": "to use Strings::length() etc. when mbstring is not available"
             },
-            "time": "2021-09-20T10:50:11+00:00",
+            "time": "2021-11-24T15:47:23+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -879,7 +879,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v3.2.5"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v3.2.6"
             },
             "install-path": "..\/nette\/utils"
         },
@@ -5334,17 +5334,17 @@
         },
         {
             "name": "tracy\/tracy",
-            "version": "v2.8.8",
-            "version_normalized": "2.8.8.0",
+            "version": "v2.8.9",
+            "version_normalized": "2.8.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/tracy.git",
-                "reference": "1a18df64f6b745962e9a0bdf87eccfc62309e593"
+                "reference": "81c769040cd0396eabed3c6d5cebe68399531c7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/1a18df64f6b745962e9a0bdf87eccfc62309e593",
-                "reference": "1a18df64f6b745962e9a0bdf87eccfc62309e593",
+                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/81c769040cd0396eabed3c6d5cebe68399531c7b",
+                "reference": "81c769040cd0396eabed3c6d5cebe68399531c7b",
                 "shasum": ""
             },
             "require": {
@@ -5361,10 +5361,10 @@
                 "nette\/mail": "^3.0",
                 "nette\/tester": "^2.2",
                 "nette\/utils": "^3.0",
-                "phpstan\/phpstan": "^0.12",
+                "phpstan\/phpstan": "^1.0",
                 "psr\/log": "^1.0 || ^2.0 || ^3.0"
             },
-            "time": "2021-11-08T23:40:20+00:00",
+            "time": "2021-11-24T16:04:35+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -5405,7 +5405,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/tracy\/issues",
-                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.8.8"
+                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.8.9"
             },
             "install-path": "..\/tracy\/tracy"
         },

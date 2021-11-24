@@ -12,7 +12,10 @@ namespace RectorPrefix20211124\Nette;
  */
 trait StaticClass
 {
-    /** @throws \Error */
+    /**
+     * @return never
+     * @throws \Error
+     */
     public final function __construct()
     {
         throw new \Error('Class ' . static::class . ' is static and cannot be instantiated.');

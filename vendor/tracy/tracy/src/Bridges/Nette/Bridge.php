@@ -20,8 +20,10 @@ class Bridge
     public static function initialize() : void
     {
         $blueScreen = \RectorPrefix20211124\Tracy\Debugger::getBlueScreen();
-        $blueScreen->addPanel([self::class, 'renderLatteError']);
-        $blueScreen->addAction([self::class, 'renderLatteUnknownMacro']);
+        if (!\class_exists(\RectorPrefix20211124\Latte\Bridges\Tracy\BlueScreenPanel::class)) {
+            $blueScreen->addPanel([self::class, 'renderLatteError']);
+            $blueScreen->addAction([self::class, 'renderLatteUnknownMacro']);
+        }
         $blueScreen->addAction([self::class, 'renderMemberAccessException']);
         $blueScreen->addPanel([self::class, 'renderNeonError']);
     }
@@ -75,10 +77,14 @@ class Bridge
      */
     public static function renderNeonError($e) : ?array
     {
-        if ($e instanceof \RectorPrefix20211124\Nette\Neon\Exception && \preg_match('#line (\\d+)#', $e->getMessage(), $m) && ($trace = \RectorPrefix20211124\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211124\Nette\Neon\Decoder::class, 'decode']))) {
-            return ['tab' => 'NEON', 'panel' => ($trace2 = \RectorPrefix20211124\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211124\Nette\DI\Config\Adapters\NeonAdapter::class, 'load'])) ? '<p><b>File:</b> ' . \RectorPrefix20211124\Tracy\Helpers::editorLink($trace2['args'][0], (int) $m[1]) . '</p>' . self::highlightNeon(\file_get_contents($trace2['args'][0]), (int) $m[1]) : self::highlightNeon($trace['args'][0], (int) $m[1])];
+        if (!$e instanceof \RectorPrefix20211124\Nette\Neon\Exception || !\preg_match('#line (\\d+)#', $e->getMessage(), $m)) {
+            return null;
+        } elseif ($trace = \RectorPrefix20211124\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211124\Nette\Neon\Decoder::class, 'decodeFile']) ?? \RectorPrefix20211124\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211124\Nette\DI\Config\Adapters\NeonAdapter::class, 'load'])) {
+            $panel = '<p><b>File:</b> ' . \RectorPrefix20211124\Tracy\Helpers::editorLink($trace['args'][0], (int) $m[1]) . '</p>' . self::highlightNeon(\file_get_contents($trace['args'][0]), (int) $m[1]);
+        } elseif ($trace = \RectorPrefix20211124\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211124\Nette\Neon\Decoder::class, 'decode'])) {
+            $panel = self::highlightNeon($trace['args'][0], (int) $m[1]);
         }
-        return null;
+        return isset($panel) ? ['tab' => 'NEON', 'panel' => $panel] : null;
     }
     private static function highlightNeon(string $code, int $line) : string
     {

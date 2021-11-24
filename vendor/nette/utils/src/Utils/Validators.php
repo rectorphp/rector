@@ -318,6 +318,6 @@ XX
      */
     public static function isPhpIdentifier($value) : bool
     {
-        return \is_string($value) && \preg_match('#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$#D', $value);
+        return \preg_match('#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$#D', $value) === 1;
     }
 }

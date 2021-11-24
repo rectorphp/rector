@@ -5,21 +5,29 @@
  *
  * This file is part of the Tracy (https://tracy.nette.org)
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
- *
- * @param  array $exception
- * @param  array[] $actions
- * @param  array $info
- * @param  string $title
- * @param  string $source
- * @param  array $lastError
- * @param  array $httpHeaders
- * @param  callable $dump
- * @return void
  */
 
 declare(strict_types=1);
 
 namespace Tracy;
+
+/**
+ * @var \Throwable $exception
+ * @var array[] $actions
+ * @var string[] $info
+ * @var string $title
+ * @var string $source
+ * @var ?array $lastError
+ * @var string[] $httpHeaders
+ * @var callable $dump
+ * @var array $snapshot
+ * @var bool $showEnvironment
+ * @var BlueScreen $this
+ * @var bool $headersSent
+ * @var ?string $headersFile
+ * @var ?int $headersLine
+ * @var ?array $obStatus
+ */
 
 $code = $exception->getCode() ? ' #' . $exception->getCode() : '';
 $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
@@ -82,7 +90,7 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 
 			<div class="<?= $collapsed ? 'tracy-collapsed ' : '' ?>inner">
 				<p><b>File:</b> <?= Helpers::editorLink($ex->getFile(), $ex->getLine()) ?></p>
-				<?php if (is_file($ex->getFile())): ?><?= self::highlightFile($ex->getFile(), $ex->getLine()) ?><?php endif ?>
+				<?php if (is_file($ex->getFile())): ?><?= BlueScreen::highlightFile($ex->getFile(), $ex->getLine()) ?><?php endif ?>
 			</div></div>
 
 
@@ -111,7 +119,7 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 					</p>
 
 					<?php if (isset($row['file']) && is_file($row['file'])): ?>
-						<div class="<?php if ($expanded !== $key) echo 'tracy-collapsed ' ?>file"><?= self::highlightFile($row['file'], $row['line']) ?></div>
+						<div class="<?php if ($expanded !== $key) echo 'tracy-collapsed ' ?>file"><?= BlueScreen::highlightFile($row['file'], $row['line']) ?></div>
 					<?php endif ?>
 
 
@@ -178,9 +186,10 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 		<div class="tracy-collapsed inner">
 
 		<h3><?= Helpers::errorTypeToString($lastError['type']) ?>: <?= Helpers::escapeHtml($lastError['message']) ?></h3>
+		<p><i>Note: the last muted error may have nothing to do with the thrown exception.</i></p>
 		<?php if (isset($lastError['file']) && is_file($lastError['file'])): ?>
 			<p><?= Helpers::editorLink($lastError['file'], $lastError['line']) ?></p>
-			<div><?= self::highlightFile($lastError['file'], $lastError['line']) ?></div>
+			<div><?= BlueScreen::highlightFile($lastError['file'], $lastError['line']) ?></div>
 		<?php else: ?>
 			<p><i>inner-code</i><?php if (isset($lastError['line'])) echo ':', $lastError['line'] ?></p>
 		<?php endif ?>
@@ -264,6 +273,14 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 			<div class="outer tracy-collapsed">
 			<?php $this->renderPhpInfo() ?>
 			</div>
+
+
+			<?php if ($obStatus): ?>
+			<h3><a data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Output buffers status</a></h3>
+			<div class="outer tracy-collapsed">
+				<?php echo $dump($obStatus) ?>
+			</div>
+			<?php endif ?>
 		</div></div>
 		<?php endif ?>
 
@@ -337,6 +354,16 @@ $exceptions = $exceptions ?? Helpers::getExceptionChain($exception);
 			</div>
 			<?php else: ?>
 			<p><i>no headers</i></p>
+			<?php endif ?>
+
+
+			<?php if ($headersSent && $headersFile && @is_file($headersFile)): ?>
+			<p>Headers have been sent, output started at <?= Helpers::editorLink($headersFile, $headersLine) ?> <a data-tracy-ref="^p + div" class="tracy-toggle tracy-collapsed">source</a></p>
+			<div class="tracy-collapsed"><?= BlueScreen::highlightFile($headersFile, $headersLine) ?></div>
+			<?php elseif ($headersSent): ?>
+			<p>Headers have been sent</p>
+			<?php else: ?>
+			<p>Headers were not sent at the time of the exception</p>
 			<?php endif ?>
 		</div></div>
 		<?php endif ?>

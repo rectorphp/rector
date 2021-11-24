@@ -5,9 +5,6 @@
  *
  * This file is part of the Tracy (http://tracy.nette.org)
  * Copyright (c) 2004 David Grudl (http://davidgrudl.com)
- *
- * @param  string  $type
- * @param  array  $panels
  */
 
 declare(strict_types=1);
@@ -15,6 +12,11 @@ declare(strict_types=1);
 namespace Tracy;
 
 use Tracy\Helpers;
+
+/**
+ * @var string $type
+ * @var \stdClass[] $panels
+ */
 
 $icons = '
 	<div class="tracy-icons">

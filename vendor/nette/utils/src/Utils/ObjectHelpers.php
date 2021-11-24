@@ -15,9 +15,12 @@ use RectorPrefix20211124\Nette\MemberAccessException;
 final class ObjectHelpers
 {
     use Nette\StaticClass;
-    /** @throws MemberAccessException
+    /**
+     * @return never
+     * @throws MemberAccessException
      * @param string $class
-     * @param string $name */
+     * @param string $name
+     */
     public static function strictGet($class, $name) : void
     {
         $rc = new \ReflectionClass($class);
@@ -26,9 +29,12 @@ final class ObjectHelpers
         }), self::parseFullDoc($rc, '~^[ \\t*]*@property(?:-read)?[ \\t]+(?:\\S+[ \\t]+)??\\$(\\w+)~m')), $name);
         throw new \RectorPrefix20211124\Nette\MemberAccessException("Cannot read an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
     }
-    /** @throws MemberAccessException
+    /**
+     * @return never
+     * @throws MemberAccessException
      * @param string $class
-     * @param string $name */
+     * @param string $name
+     */
     public static function strictSet($class, $name) : void
     {
         $rc = new \ReflectionClass($class);
@@ -37,10 +43,13 @@ final class ObjectHelpers
         }), self::parseFullDoc($rc, '~^[ \\t*]*@property(?:-write)?[ \\t]+(?:\\S+[ \\t]+)??\\$(\\w+)~m')), $name);
         throw new \RectorPrefix20211124\Nette\MemberAccessException("Cannot write to an undeclared property {$class}::\${$name}" . ($hint ? ", did you mean \${$hint}?" : '.'));
     }
-    /** @throws MemberAccessException
+    /**
+     * @return never
+     * @throws MemberAccessException
      * @param string $class
      * @param string $method
-     * @param mixed[] $additionalMethods */
+     * @param mixed[] $additionalMethods
+     */
     public static function strictCall($class, $method, $additionalMethods = []) : void
     {
         $trace = \debug_backtrace(0, 3);
@@ -60,9 +69,12 @@ final class ObjectHelpers
             throw new \RectorPrefix20211124\Nette\MemberAccessException("Call to undefined method {$class}::{$method}()" . ($hint ? ", did you mean {$hint}()?" : '.'));
         }
     }
-    /** @throws MemberAccessException
+    /**
+     * @return never
+     * @throws MemberAccessException
      * @param string $class
-     * @param string $method */
+     * @param string $method
+     */
     public static function strictStaticCall($class, $method) : void
     {
         $trace = \debug_backtrace(0, 3);

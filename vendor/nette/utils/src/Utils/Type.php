@@ -160,6 +160,13 @@ final class Type
         return $this->single && !\RectorPrefix20211124\Nette\Utils\Reflection::isBuiltinType($this->types[0]);
     }
     /**
+     * Determines if type is special class name self/parent/static.
+     */
+    public function isClassKeyword() : bool
+    {
+        return $this->single && \RectorPrefix20211124\Nette\Utils\Reflection::isClassKeyword($this->types[0]);
+    }
+    /**
      * Verifies type compatibility. For example, it checks if a value of a certain type could be passed as a parameter.
      * @param string $type
      */

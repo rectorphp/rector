@@ -13,6 +13,12 @@ declare(strict_types=1);
 
 namespace Tracy;
 
+/**
+ * @var ?string $nonce
+ * @var bool $async
+ * @var string $contentId
+ */
+
 $baseUrl = $_SERVER['REQUEST_URI'] ?? '';
 $baseUrl .= strpos($baseUrl, '?') === false ? '?' : '&';
 $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';

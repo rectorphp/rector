@@ -99,6 +99,8 @@ class BlueScreen
     }
     private function renderTemplate(\Throwable $exception, string $template, $toScreen = \true) : void
     {
+        $headersSent = \headers_sent($headersFile, $headersLine);
+        $obStatus = \RectorPrefix20211124\Tracy\Debugger::$obStatus;
         $showEnvironment = $this->showEnvironment && \strpos($exception->getMessage(), 'Allowed memory size') === \false;
         $info = \array_filter($this->info);
         $source = \RectorPrefix20211124\Tracy\Helpers::getSource();
@@ -269,7 +271,7 @@ class BlueScreen
      * @param int $line
      * @param int $lines
      */
-    public static function highlightPhpCli($file, $line, $lines = 15) : string
+    public static function highlightPhpCli($file, $line, $lines = 15) : ?string
     {
         $source = @\file_get_contents($file);
         // @ file may not exist
