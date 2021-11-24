@@ -10,6 +10,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 /**
  * @see \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
  */
@@ -23,10 +24,15 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
      * @var \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming
      */
     private $phpSpecRenaming;
-    public function __construct(\Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming $phpSpecRenaming)
+    /**
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    public function __construct(\Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator, \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming $phpSpecRenaming, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
     {
         $this->phpUnitTypeDeclarationDecorator = $phpUnitTypeDeclarationDecorator;
         $this->phpSpecRenaming = $phpSpecRenaming;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
     /**
      * @return array<class-string<Node>>

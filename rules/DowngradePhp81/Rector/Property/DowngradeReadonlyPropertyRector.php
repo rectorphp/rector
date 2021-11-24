@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,6 +23,14 @@ final class DowngradeReadonlyPropertyRector extends \Rector\Core\Rector\Abstract
      * @var string
      */
     private const TAGNAME = 'readonly';
+    /**
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    {
+        $this->visibilityManipulator = $visibilityManipulator;
+    }
     /**
      * @return array<class-string<Node>>
      */
