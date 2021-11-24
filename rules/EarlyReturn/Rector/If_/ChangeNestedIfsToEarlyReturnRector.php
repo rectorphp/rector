@@ -119,9 +119,9 @@ CODE_SAMPLE
             $booleanNotPartIf = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot($invertedCondition->expr->left));
             $booleanNotPartIf->stmts = [clone $return];
             $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
-            $booleanNotPartIf = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot($invertedCondition->expr->right));
-            $booleanNotPartIf->stmts = [clone $return];
-            $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
+            $secondBooleanNotPartIf = new \PhpParser\Node\Stmt\If_(new \PhpParser\Node\Expr\BooleanNot($invertedCondition->expr->right));
+            $secondBooleanNotPartIf->stmts = [clone $return];
+            $this->nodesToAddCollector->addNodeAfterNode($secondBooleanNotPartIf, $if);
             return;
         }
         $nestedIfWithOnlyReturn->cond = $invertedCondition;

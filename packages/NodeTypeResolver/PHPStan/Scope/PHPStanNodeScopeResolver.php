@@ -14,7 +14,6 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
-use PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection;
 use PHPStan\BetterReflection\Reflector\ClassReflector;
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
@@ -27,11 +26,9 @@ use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use RectorPrefix20211124\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Throwable;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
@@ -43,11 +40,6 @@ final class PHPStanNodeScopeResolver
      * @see https://regex101.com/r/aXsCkK/1
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\\w+)#';
-    /**
-     * @var string
-     * @see https://regex101.com/r/AIA24M/1
-     */
-    private const NOT_AN_INTERFACE_EXCEPTION_REGEX = '#^Provided node ".*" is not interface, but "class"$#';
     /**
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
@@ -84,11 +76,7 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator
      */
     private $parentAttributeSourceLocator;
-    /**
-     * @var \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard
-     */
-    private $mixinGuard;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211124\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard $mixinGuard)
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211124\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -99,7 +87,6 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->parentAttributeSourceLocator = $parentAttributeSourceLocator;
-        $this->mixinGuard = $mixinGuard;
     }
     /**
      * @param Stmt[] $stmts
@@ -137,27 +124,15 @@ final class PHPStanNodeScopeResolver
             }
         };
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
-        return $this->processNodesWithMixinHandling($smartFileInfo, $stmts, $scope, $nodeCallback);
+        return $this->processNodesWithDependentFiles($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function processNodesWithMixinHandling(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $stmts, \PHPStan\Analyser\MutatingScope $mutatingScope, callable $nodeCallback) : array
+    private function processNodesWithDependentFiles(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, array $stmts, \PHPStan\Analyser\MutatingScope $mutatingScope, callable $nodeCallback) : array
     {
-        if ($this->mixinGuard->containsMixinPhpDoc($stmts)) {
-            return $stmts;
-        }
-        try {
-            $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        } catch (\Throwable $throwable) {
-            if (!$throwable instanceof \PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection) {
-                throw $throwable;
-            }
-            if (!\RectorPrefix20211124\Nette\Utils\Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
-                throw $throwable;
-            }
-        }
+        $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         $this->resolveAndSaveDependentFiles($stmts, $mutatingScope, $smartFileInfo);
         return $stmts;
     }
