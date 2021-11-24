@@ -2401,17 +2401,17 @@
         },
         {
             "name": "rector\/rector-phpunit",
-            "version": "0.11.22",
-            "version_normalized": "0.11.22.0",
+            "version": "0.11.23",
+            "version_normalized": "0.11.23.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "42663b3b206449c4b8271f3be80d73b42763052f"
+                "reference": "8e8c285cdc8937012ef27e785b0d94d4f4591327"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/42663b3b206449c4b8271f3be80d73b42763052f",
-                "reference": "42663b3b206449c4b8271f3be80d73b42763052f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/8e8c285cdc8937012ef27e785b0d94d4f4591327",
+                "reference": "8e8c285cdc8937012ef27e785b0d94d4f4591327",
                 "shasum": ""
             },
             "require": {
@@ -2431,7 +2431,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0"
             },
-            "time": "2021-11-10T10:11:29+00:00",
+            "time": "2021-11-18T08:52:00+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -2456,7 +2456,7 @@
             "description": "Rector upgrades rules for PHPUnit",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpunit\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.11.22"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.11.23"
             },
             "install-path": "..\/rector\/rector-phpunit"
         },
