@@ -41,7 +41,7 @@ $value = 'App\SomeClass::someMethod()';
 CODE_SAMPLE
                     ,
                     <<<'CODE_SAMPLE'
-$value = \App\SomeClass . '::someMethod()';
+$value = \App\SomeClass::class . '::someMethod()';
 CODE_SAMPLE
                 ),
             ]
