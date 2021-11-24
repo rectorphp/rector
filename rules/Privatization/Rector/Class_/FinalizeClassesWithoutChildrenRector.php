@@ -13,6 +13,7 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -39,7 +40,8 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
 
     public function __construct(
         private ClassAnalyzer $classAnalyzer,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

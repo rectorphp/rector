@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Transform\NodeAnalyzer\SingletonClassMethodAnalyzer;
 use Rector\Transform\ValueObject\PropertyAndClassMethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -25,7 +26,8 @@ final class ChangeSingletonToServiceRector extends AbstractRector
 {
     public function __construct(
         private SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer,
-        private ClassAnalyzer $classAnalyzer
+        private ClassAnalyzer $classAnalyzer,
+        private VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

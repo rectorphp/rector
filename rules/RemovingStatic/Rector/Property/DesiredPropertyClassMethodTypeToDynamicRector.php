@@ -13,6 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,8 +28,10 @@ final class DesiredPropertyClassMethodTypeToDynamicRector extends AbstractRector
      */
     private array $staticObjectTypes = [];
 
-    public function __construct(ParameterProvider $parameterProvider)
-    {
+    public function __construct(
+        ParameterProvider $parameterProvider,
+        private VisibilityManipulator $visibilityManipulator,
+    ) {
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
         foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {
             $this->staticObjectTypes[] = new ObjectType($typeToRemoveStaticFrom);

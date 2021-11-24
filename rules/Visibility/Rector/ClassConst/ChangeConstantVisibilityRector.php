@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,6 +29,11 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
      * @var ChangeConstantVisibility[]
      */
     private array $classConstantVisibilityChanges = [];
+
+    public function __construct(
+        private VisibilityManipulator $visibilityManipulator,
+    ) {
+    }
 
     public function getRuleDefinition(): RuleDefinition
     {

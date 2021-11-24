@@ -88,8 +88,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected NodeFactory $nodeFactory;
 
-    protected VisibilityManipulator $visibilityManipulator;
-
     protected ValueResolver $valueResolver;
 
     protected BetterNodeFinder $betterNodeFinder;
@@ -172,7 +170,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->visibilityManipulator = $visibilityManipulator;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->symfonyStyle = $symfonyStyle;

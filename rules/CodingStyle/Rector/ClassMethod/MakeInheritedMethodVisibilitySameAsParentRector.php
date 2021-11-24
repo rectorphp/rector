@@ -16,6 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,6 +28,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRector
 {
+    public function __construct(
+        private VisibilityManipulator $visibilityManipulator
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Make method visibility same as parent one', [

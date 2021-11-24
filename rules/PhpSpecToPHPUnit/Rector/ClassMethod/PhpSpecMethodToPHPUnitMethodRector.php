@@ -11,6 +11,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
 use Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator;
 use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 
 /**
  * @see \Rector\Tests\PhpSpecToPHPUnit\Rector\Variable\PhpSpecToPHPUnitRector\PhpSpecToPHPUnitRectorTest
@@ -19,7 +20,8 @@ final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitR
 {
     public function __construct(
         private PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        private PhpSpecRenaming $phpSpecRenaming
+        private PhpSpecRenaming $phpSpecRenaming,
+        private VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

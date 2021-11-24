@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp81\Rector\ClassConst;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -17,6 +18,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeFinalizePublicClassConstantRector extends AbstractRector
 {
+    public function __construct(
+        private VisibilityManipulator $visibilityManipulator,
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove final from class constants', [

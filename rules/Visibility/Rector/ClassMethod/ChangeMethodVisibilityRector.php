@@ -12,6 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\Visibility;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -33,7 +34,8 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     private array $methodVisibilities = [];
 
     public function __construct(
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private ParentClassScopeResolver $parentClassScopeResolver,
+        private VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

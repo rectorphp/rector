@@ -18,6 +18,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Generics\ValueObject\GenericClassMethodParam;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Webmozart\Assert\Assert;
@@ -39,7 +40,8 @@ final class GenericClassMethodParamRector extends AbstractRector implements Conf
 
     public function __construct(
         private PhpDocTypeChanger $phpDocTypeChanger,
-        private PropertyNaming $propertyNaming
+        private PropertyNaming $propertyNaming,
+        private VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

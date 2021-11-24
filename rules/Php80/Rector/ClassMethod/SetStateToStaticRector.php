@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,6 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SetStateToStaticRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function __construct(
+        private VisibilityManipulator $visibilityManipulator
+    ) {
+    }
+
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::STATIC_VISIBILITY_SET_STATE;
