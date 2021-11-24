@@ -332,15 +332,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     }
 
     /**
-     * @deprecated
-     * Use @see AbstractRector::getType() instead, as single method to get types
-     */
-    protected function getObjectType(Node $node): Type
-    {
-        return $this->nodeTypeResolver->getType($node);
-    }
-
-    /**
      * @param Node|Node[] $nodes
      */
     protected function traverseNodesWithCallable(Node | array $nodes, callable $callable): void
