@@ -555,3 +555,8 @@ parameters:
 
         # false postivie on command option/attribute check in symplify - @todo fix there later
         - '#Argument and options "debug", "clear\-cache" got confused#'
+
+        # false positive - @todo fix in symplify
+        -
+            path: rules/Php80/NodeManipulator/TokenManipulator.php
+            message: '#Property set "\$node\-\>expr" is overridden#'

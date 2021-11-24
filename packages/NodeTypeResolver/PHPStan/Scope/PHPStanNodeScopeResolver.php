@@ -15,7 +15,6 @@ use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
-use PHPStan\BetterReflection\Reflection\Exception\NotAnInterfaceReflection;
 use PHPStan\BetterReflection\Reflector\ClassReflector;
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
@@ -28,11 +27,9 @@ use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Stubs\DummyTraitClass;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\CollisionGuard\MixinGuard;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
 use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Throwable;
 
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -46,12 +43,6 @@ final class PHPStanNodeScopeResolver
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\w+)#';
 
-    /**
-     * @var string
-     * @see https://regex101.com/r/AIA24M/1
-     */
-    private const NOT_AN_INTERFACE_EXCEPTION_REGEX = '#^Provided node ".*" is not interface, but "class"$#';
-
     public function __construct(
         private ChangedFilesDetector $changedFilesDetector,
         private DependencyResolver $dependencyResolver,
@@ -62,7 +53,6 @@ final class PHPStanNodeScopeResolver
         private PrivatesAccessor $privatesAccessor,
         private RenamedClassesSourceLocator $renamedClassesSourceLocator,
         private ParentAttributeSourceLocator $parentAttributeSourceLocator,
-        private MixinGuard $mixinGuard,
     ) {
     }
 
@@ -112,35 +102,20 @@ final class PHPStanNodeScopeResolver
 
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
 
-        return $this->processNodesWithMixinHandling($smartFileInfo, $stmts, $scope, $nodeCallback);
+        return $this->processNodesWithDependentFiles($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
 
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function processNodesWithMixinHandling(
+    private function processNodesWithDependentFiles(
         SmartFileInfo $smartFileInfo,
         array $stmts,
         MutatingScope $mutatingScope,
         callable $nodeCallback
     ): array {
-        if ($this->mixinGuard->containsMixinPhpDoc($stmts)) {
-            return $stmts;
-        }
-
-        try {
-            $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        } catch (Throwable $throwable) {
-            if (! $throwable instanceof NotAnInterfaceReflection) {
-                throw $throwable;
-            }
-
-            if (! Strings::match($throwable->getMessage(), self::NOT_AN_INTERFACE_EXCEPTION_REGEX)) {
-                throw $throwable;
-            }
-        }
-
+        $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         $this->resolveAndSaveDependentFiles($stmts, $mutatingScope, $smartFileInfo);
 
         return $stmts;

@@ -129,9 +129,9 @@ CODE_SAMPLE
             $booleanNotPartIf->stmts = [clone $return];
             $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
 
-            $booleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
-            $booleanNotPartIf->stmts = [clone $return];
-            $this->nodesToAddCollector->addNodeAfterNode($booleanNotPartIf, $if);
+            $secondBooleanNotPartIf = new If_(new BooleanNot($invertedCondition->expr->right));
+            $secondBooleanNotPartIf->stmts = [clone $return];
+            $this->nodesToAddCollector->addNodeAfterNode($secondBooleanNotPartIf, $if);
             return;
         }
 
