@@ -7,10 +7,10 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20211123\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211123\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211123\Symfony\Component\Console\Output\OutputInterface;
-final class ShowCommand extends \RectorPrefix20211123\Symfony\Component\Console\Command\Command
+use RectorPrefix20211124\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211124\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211124\Symfony\Component\Console\Output\OutputInterface;
+final class ShowCommand extends \RectorPrefix20211124\Symfony\Component\Console\Command\Command
 {
     /**
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
@@ -58,6 +58,6 @@ final class ShowCommand extends \RectorPrefix20211123\Symfony\Component\Console\
         }
         $message = \sprintf('%d loaded Rectors', $rectorCount);
         $this->outputStyle->success($message);
-        return \RectorPrefix20211123\Symfony\Component\Console\Command\Command::SUCCESS;
+        return \RectorPrefix20211124\Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }
