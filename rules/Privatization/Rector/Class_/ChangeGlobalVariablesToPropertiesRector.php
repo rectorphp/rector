@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Privatization\Rector\ClassMethod;
+namespace Rector\Privatization\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Global_;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see https://3v4l.org/DWC4P
  *
  * @changelog https://stackoverflow.com/a/12446305/1348344
- * @see \Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\ChangeGlobalVariablesToPropertiesRectorTest
+ * @see \Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\ChangeGlobalVariablesToPropertiesRectorTest
  */
 final class ChangeGlobalVariablesToPropertiesRector extends \Rector\Core\Rector\AbstractRector
 {
@@ -74,33 +75,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
-            return null;
+        foreach ($node->getMethods() as $classMethod) {
+            $this->collectGlobalVariableNamesAndRefactorToPropertyFetch($node, $classMethod);
         }
-        $this->collectGlobalVariableNamesAndRefactorToPropertyFetch($classLike, $node);
         if ($this->globalVariableNames === []) {
             return null;
         }
         foreach ($this->globalVariableNames as $globalVariableName) {
-            $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($globalVariableName, null, $classLike);
+            $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($globalVariableName, null, $node);
         }
         return $node;
     }
     private function collectGlobalVariableNamesAndRefactorToPropertyFetch(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $this->globalVariableNames = [];
-        $this->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use($class) : ?PropertyFetch {
+        $this->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use($class) {
             if ($node instanceof \PhpParser\Node\Stmt\Global_) {
                 $this->refactorGlobal($class, $node);
-                return null;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
             if ($node instanceof \PhpParser\Node\Expr\Variable) {
                 return $this->refactorGlobalVariable($node);

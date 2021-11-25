@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf886a30e8d66cb95346cea3d74f2b584
+class ComposerStaticInit6ec690acecac2de5a5cbe8b2f6318b9e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3079,8 +3079,8 @@ class ComposerStaticInitf886a30e8d66cb95346cea3d74f2b584
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\NodeReplacer\\PropertyFetchWithConstFetchReplacer' => __DIR__ . '/../..' . '/rules/Privatization/NodeReplacer/PropertyFetchWithConstFetchReplacer.php',
         'Rector\\Privatization\\NodeReplacer\\PropertyFetchWithVariableReplacer' => __DIR__ . '/../..' . '/rules/Privatization/NodeReplacer/PropertyFetchWithVariableReplacer.php',
-        'Rector\\Privatization\\Rector\\ClassMethod\\ChangeGlobalVariablesToPropertiesRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/ChangeGlobalVariablesToPropertiesRector.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
+        'Rector\\Privatization\\Rector\\Class_\\ChangeGlobalVariablesToPropertiesRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php',
         'Rector\\Privatization\\Rector\\Class_\\ChangeLocalPropertyToVariableRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeLocalPropertyToVariableRector.php',
         'Rector\\Privatization\\Rector\\Class_\\ChangeReadOnlyVariableWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
@@ -3764,9 +3764,9 @@ class ComposerStaticInitf886a30e8d66cb95346cea3d74f2b584
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf886a30e8d66cb95346cea3d74f2b584::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf886a30e8d66cb95346cea3d74f2b584::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf886a30e8d66cb95346cea3d74f2b584::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6ec690acecac2de5a5cbe8b2f6318b9e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6ec690acecac2de5a5cbe8b2f6318b9e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6ec690acecac2de5a5cbe8b2f6318b9e::$classMap;
 
         }, null, ClassLoader::class);
     }
