@@ -275,11 +275,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             }
         }
 
-        // if Stmt ("$value;") was replaced by Expr ("$value"), add Expression (the ending ";") to prevent breaking the code
-        if ($originalNode instanceof Stmt && $node instanceof Expr) {
-            $node = new Expression($node);
-        }
-
         return $node;
     }
 

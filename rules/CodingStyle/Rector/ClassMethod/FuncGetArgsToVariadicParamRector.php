@@ -94,7 +94,8 @@ CODE_SAMPLE
     }
 
     private function applyVariadicParams(
-        ClassMethod | Function_ | Closure $node, string $variableName
+        ClassMethod | Function_ | Closure $node,
+        string $variableName
     ): ClassMethod | Function_ | Closure | null {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
