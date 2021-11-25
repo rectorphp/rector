@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -71,7 +72,7 @@ CODE_SAMPLE
         }
         $variableName = 'args';
         $assign->expr = new \PhpParser\Node\Expr\Variable('args');
-        return $this->applyVariadicParams($node, $assign, $variableName);
+        return $this->applyVariadicParams($node, $variableName);
     }
     public function provideMinPhpVersion() : int
     {
@@ -80,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function applyVariadicParams($node, \PhpParser\Node\Expr\Assign $assign, string $variableName) : ?\PhpParser\Node
+    private function applyVariadicParams($node, string $variableName) : ?\PhpParser\Node
     {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
@@ -92,13 +93,14 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
-    private function removeOrChangeAssignToVariable($node, \PhpParser\Node\Expr\Assign $assign, string $variableName) : ?\PhpParser\Node
+    private function removeOrChangeAssignToVariable($node, \PhpParser\Node\Expr\Assign $assign, string $variableName)
     {
         $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\Stmt\Expression) {
             $this->removeNode($assign);
-            return $this->applyVariadicParams($node, $assign, $variableName);
+            return $this->applyVariadicParams($node, $variableName);
         }
         $variable = $assign->var;
         /** @var ClassMethod|Function_|Closure $functionLike */
@@ -109,9 +111,12 @@ CODE_SAMPLE
             if (!$this->nodeComparator->areNodesEqual($node, $assign)) {
                 return null;
             }
+            if ($node instanceof \PhpParser\Node\Arg) {
+                return null;
+            }
             return $variable;
         });
-        $this->applyVariadicParams($functionLike, $assign, $variableName);
+        $this->applyVariadicParams($functionLike, $variableName);
         return $node;
     }
     /**
