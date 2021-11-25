@@ -88,7 +88,6 @@ CODE_SAMPLE
         }
 
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-
         if (! $parent instanceof Node) {
             return null;
         }

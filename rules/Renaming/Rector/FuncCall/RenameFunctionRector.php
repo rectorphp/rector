@@ -77,11 +77,11 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param array<string, mixed[]> $configuration
      */
     public function configure(array $configuration): void
     {
-        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? [];
+        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration ?: [];
         Assert::allString($oldFunctionToNewFunction);
         Assert::allString(array_values($oldFunctionToNewFunction));
 

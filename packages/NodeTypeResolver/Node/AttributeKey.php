@@ -209,4 +209,10 @@ final class AttributeKey
      * @var string
      */
     public const CREATED_BY_RULE = 'created_by_rule';
+
+    /**
+     * Provided by PHPStan parser, depth in sense of nesting
+     * @var string
+     */
+    public const STATEMENT_DEPTH = 'statementDepth';
 }

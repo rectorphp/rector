@@ -41,6 +41,11 @@ final class PHPStanNodeScopeResolver
      */
     private const ANONYMOUS_CLASS_START_REGEX = '#^AnonymousClass(\w+)#';
 
+    /**
+     * @var string
+     */
+    private const CONTEXT = 'context';
+
     public function __construct(
         private ChangedFilesDetector $changedFilesDetector,
         private DependencyResolver $dependencyResolver,
@@ -74,7 +79,7 @@ final class PHPStanNodeScopeResolver
 
                 $scopeContext = $this->traitScopeFaker->createDummyClassScopeContext($scope);
                 $traitScope = clone $scope;
-                $this->privatesAccessor->setPrivateProperty($traitScope, 'context', $scopeContext);
+                $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $scopeContext);
 
                 $traitScope = $traitScope->enterTrait($traitReflectionClass);
 
