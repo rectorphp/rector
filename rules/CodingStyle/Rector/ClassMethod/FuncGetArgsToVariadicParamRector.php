@@ -93,8 +93,9 @@ CODE_SAMPLE
         return PhpVersionFeature::VARIADIC_PARAM;
     }
 
-    private function applyVariadicParams(ClassMethod | Function_ | Closure $node, string $variableName): ?Node
-    {
+    private function applyVariadicParams(
+        ClassMethod | Function_ | Closure $node, string $variableName
+    ): ClassMethod | Function_ | Closure | null {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
         if ($variableParam instanceof Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
@@ -117,6 +118,7 @@ CODE_SAMPLE
         }
 
         $variable = $assign->var;
+
         /** @var ClassMethod|Function_|Closure $functionLike */
         $functionLike = $this->betterNodeFinder->findParentType($parent, FunctionLike::class);
 
