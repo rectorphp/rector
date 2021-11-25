@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9
+class ComposerStaticInitb8f1b1d584f5457151b1187ff2ea7d6a
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2341,6 +2341,7 @@ class ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9
         'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeSessionStartArrayOptionsRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php',
         'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeScalarTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php',
         'Rector\\DowngradePhp70\\Rector\\GroupUse\\SplitGroupedUseImportsRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php',
+        'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeClosureCallRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php',
         'Rector\\DowngradePhp70\\Rector\\New_\\DowngradeAnonymousClassRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php',
         'Rector\\DowngradePhp70\\Rector\\Spaceship\\DowngradeSpaceshipRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php',
         'Rector\\DowngradePhp70\\Rector\\String_\\DowngradeGeneratedScalarTypesRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/String_/DowngradeGeneratedScalarTypesRector.php',
@@ -2736,6 +2737,7 @@ class ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocator\\IntermediateSourceLocator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocator/IntermediateSourceLocator.php',
         'Rector\\NodeTypeResolver\\TypeAnalyzer\\ArrayTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/ArrayTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\TypeAnalyzer\\CountableTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/CountableTypeAnalyzer.php',
+        'Rector\\NodeTypeResolver\\TypeAnalyzer\\MethodTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/MethodTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\TypeAnalyzer\\StringTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/StringTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\TypeComparator\\ArrayTypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/ArrayTypeComparator.php',
         'Rector\\NodeTypeResolver\\TypeComparator\\ScalarTypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/ScalarTypeComparator.php',
@@ -3764,9 +3766,9 @@ class ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0e6c3ab496bf28ae5ef2fde5d7cb27e9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb8f1b1d584f5457151b1187ff2ea7d6a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb8f1b1d584f5457151b1187ff2ea7d6a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb8f1b1d584f5457151b1187ff2ea7d6a::$classMap;
 
         }, null, ClassLoader::class);
     }
