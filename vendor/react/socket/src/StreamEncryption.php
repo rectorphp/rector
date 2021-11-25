@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20211124\React\Socket;
+namespace RectorPrefix20211125\React\Socket;
 
-use RectorPrefix20211124\React\EventLoop\LoopInterface;
-use RectorPrefix20211124\React\Promise\Deferred;
+use RectorPrefix20211125\React\EventLoop\LoopInterface;
+use RectorPrefix20211125\React\Promise\Deferred;
 use RuntimeException;
 use UnexpectedValueException;
 /**
@@ -17,7 +17,7 @@ class StreamEncryption
     private $loop;
     private $method;
     private $server;
-    public function __construct(\RectorPrefix20211124\React\EventLoop\LoopInterface $loop, $server = \true)
+    public function __construct(\RectorPrefix20211125\React\EventLoop\LoopInterface $loop, $server = \true)
     {
         $this->loop = $loop;
         $this->server = $server;
@@ -56,7 +56,7 @@ class StreamEncryption
         $stream->pause();
         // TODO: add write() event to make sure we're not sending any excessive data
         // cancelling this leaves this stream in an inconsistent state…
-        $deferred = new \RectorPrefix20211124\React\Promise\Deferred(function () {
+        $deferred = new \RectorPrefix20211125\React\Promise\Deferred(function () {
             throw new \RuntimeException();
         });
         // get actual stream socket from stream instance

@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix20211124\React\ChildProcess;
+namespace RectorPrefix20211125\React\ChildProcess;
 
-use RectorPrefix20211124\Evenement\EventEmitter;
-use RectorPrefix20211124\React\EventLoop\Loop;
-use RectorPrefix20211124\React\EventLoop\LoopInterface;
-use RectorPrefix20211124\React\Stream\ReadableResourceStream;
-use RectorPrefix20211124\React\Stream\ReadableStreamInterface;
-use RectorPrefix20211124\React\Stream\WritableResourceStream;
-use RectorPrefix20211124\React\Stream\WritableStreamInterface;
-use RectorPrefix20211124\React\Stream\DuplexResourceStream;
-use RectorPrefix20211124\React\Stream\DuplexStreamInterface;
+use RectorPrefix20211125\Evenement\EventEmitter;
+use RectorPrefix20211125\React\EventLoop\Loop;
+use RectorPrefix20211125\React\EventLoop\LoopInterface;
+use RectorPrefix20211125\React\Stream\ReadableResourceStream;
+use RectorPrefix20211125\React\Stream\ReadableStreamInterface;
+use RectorPrefix20211125\React\Stream\WritableResourceStream;
+use RectorPrefix20211125\React\Stream\WritableStreamInterface;
+use RectorPrefix20211125\React\Stream\DuplexResourceStream;
+use RectorPrefix20211125\React\Stream\DuplexStreamInterface;
 /**
  * Process component.
  *
@@ -55,7 +55,7 @@ use RectorPrefix20211124\React\Stream\DuplexStreamInterface;
  *     Accordingly, if either of these pipes is in a paused state (`pause()` method
  *     or internally due to a `pipe()` call), this detection may not trigger.
  */
-class Process extends \RectorPrefix20211124\Evenement\EventEmitter
+class Process extends \RectorPrefix20211125\Evenement\EventEmitter
 {
     /**
      * @var WritableStreamInterface|null|DuplexStreamInterface|ReadableStreamInterface
@@ -156,7 +156,7 @@ class Process extends \RectorPrefix20211124\Evenement\EventEmitter
         if ($this->isRunning()) {
             throw new \RuntimeException('Process is already running');
         }
-        $loop = $loop ?: \RectorPrefix20211124\React\EventLoop\Loop::get();
+        $loop = $loop ?: \RectorPrefix20211125\React\EventLoop\Loop::get();
         $cmd = $this->cmd;
         $fdSpec = $this->fds;
         $sigchild = null;
@@ -217,13 +217,13 @@ class Process extends \RectorPrefix20211124\Evenement\EventEmitter
             $meta = \stream_get_meta_data($fd);
             $mode = $meta['mode'] === '' ? $this->fds[$n][1] === 'r' ? 'w' : 'r' : $meta['mode'];
             if ($mode === 'r+') {
-                $stream = new \RectorPrefix20211124\React\Stream\DuplexResourceStream($fd, $loop);
+                $stream = new \RectorPrefix20211125\React\Stream\DuplexResourceStream($fd, $loop);
                 $stream->on('close', $streamCloseHandler);
                 $closeCount++;
             } elseif ($mode === 'w') {
-                $stream = new \RectorPrefix20211124\React\Stream\WritableResourceStream($fd, $loop);
+                $stream = new \RectorPrefix20211125\React\Stream\WritableResourceStream($fd, $loop);
             } else {
-                $stream = new \RectorPrefix20211124\React\Stream\ReadableResourceStream($fd, $loop);
+                $stream = new \RectorPrefix20211125\React\Stream\ReadableResourceStream($fd, $loop);
                 $stream->on('close', $streamCloseHandler);
                 $closeCount++;
             }

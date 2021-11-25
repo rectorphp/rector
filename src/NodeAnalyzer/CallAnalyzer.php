@@ -16,7 +16,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20211124\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211125\Symfony\Contracts\Service\Attribute\Required;
 final class CallAnalyzer
 {
     /**

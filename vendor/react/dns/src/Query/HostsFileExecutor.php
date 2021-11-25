@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix20211124\React\Dns\Query;
+namespace RectorPrefix20211125\React\Dns\Query;
 
-use RectorPrefix20211124\React\Dns\Config\HostsFile;
-use RectorPrefix20211124\React\Dns\Model\Message;
-use RectorPrefix20211124\React\Dns\Model\Record;
-use RectorPrefix20211124\React\Promise;
+use RectorPrefix20211125\React\Dns\Config\HostsFile;
+use RectorPrefix20211125\React\Dns\Model\Message;
+use RectorPrefix20211125\React\Dns\Model\Record;
+use RectorPrefix20211125\React\Promise;
 /**
  * Resolves hosts from the given HostsFile or falls back to another executor
  *
@@ -13,11 +13,11 @@ use RectorPrefix20211124\React\Promise;
  * DNS executor. If the host is not found in the hosts file, it will be passed
  * to the DNS executor as a fallback.
  */
-final class HostsFileExecutor implements \RectorPrefix20211124\React\Dns\Query\ExecutorInterface
+final class HostsFileExecutor implements \RectorPrefix20211125\React\Dns\Query\ExecutorInterface
 {
     private $hosts;
     private $fallback;
-    public function __construct(\RectorPrefix20211124\React\Dns\Config\HostsFile $hosts, \RectorPrefix20211124\React\Dns\Query\ExecutorInterface $fallback)
+    public function __construct(\RectorPrefix20211125\React\Dns\Config\HostsFile $hosts, \RectorPrefix20211125\React\Dns\Query\ExecutorInterface $fallback)
     {
         $this->hosts = $hosts;
         $this->fallback = $fallback;
@@ -27,29 +27,29 @@ final class HostsFileExecutor implements \RectorPrefix20211124\React\Dns\Query\E
      */
     public function query($query)
     {
-        if ($query->class === \RectorPrefix20211124\React\Dns\Model\Message::CLASS_IN && ($query->type === \RectorPrefix20211124\React\Dns\Model\Message::TYPE_A || $query->type === \RectorPrefix20211124\React\Dns\Model\Message::TYPE_AAAA)) {
+        if ($query->class === \RectorPrefix20211125\React\Dns\Model\Message::CLASS_IN && ($query->type === \RectorPrefix20211125\React\Dns\Model\Message::TYPE_A || $query->type === \RectorPrefix20211125\React\Dns\Model\Message::TYPE_AAAA)) {
             // forward lookup for type A or AAAA
             $records = array();
-            $expectsColon = $query->type === \RectorPrefix20211124\React\Dns\Model\Message::TYPE_AAAA;
+            $expectsColon = $query->type === \RectorPrefix20211125\React\Dns\Model\Message::TYPE_AAAA;
             foreach ($this->hosts->getIpsForHost($query->name) as $ip) {
                 // ensure this is an IPv4/IPV6 address according to query type
                 if ((\strpos($ip, ':') !== \false) === $expectsColon) {
-                    $records[] = new \RectorPrefix20211124\React\Dns\Model\Record($query->name, $query->type, $query->class, 0, $ip);
+                    $records[] = new \RectorPrefix20211125\React\Dns\Model\Record($query->name, $query->type, $query->class, 0, $ip);
                 }
             }
             if ($records) {
-                return \RectorPrefix20211124\React\Promise\resolve(\RectorPrefix20211124\React\Dns\Model\Message::createResponseWithAnswersForQuery($query, $records));
+                return \RectorPrefix20211125\React\Promise\resolve(\RectorPrefix20211125\React\Dns\Model\Message::createResponseWithAnswersForQuery($query, $records));
             }
-        } elseif ($query->class === \RectorPrefix20211124\React\Dns\Model\Message::CLASS_IN && $query->type === \RectorPrefix20211124\React\Dns\Model\Message::TYPE_PTR) {
+        } elseif ($query->class === \RectorPrefix20211125\React\Dns\Model\Message::CLASS_IN && $query->type === \RectorPrefix20211125\React\Dns\Model\Message::TYPE_PTR) {
             // reverse lookup: extract IPv4 or IPv6 from special `.arpa` domain
             $ip = $this->getIpFromHost($query->name);
             if ($ip !== null) {
                 $records = array();
                 foreach ($this->hosts->getHostsForIp($ip) as $host) {
-                    $records[] = new \RectorPrefix20211124\React\Dns\Model\Record($query->name, $query->type, $query->class, 0, $host);
+                    $records[] = new \RectorPrefix20211125\React\Dns\Model\Record($query->name, $query->type, $query->class, 0, $host);
                 }
                 if ($records) {
-                    return \RectorPrefix20211124\React\Promise\resolve(\RectorPrefix20211124\React\Dns\Model\Message::createResponseWithAnswersForQuery($query, $records));
+                    return \RectorPrefix20211125\React\Promise\resolve(\RectorPrefix20211125\React\Dns\Model\Message::createResponseWithAnswersForQuery($query, $records));
                 }
             }
         }
