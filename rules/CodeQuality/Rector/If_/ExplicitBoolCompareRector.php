@@ -23,6 +23,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\FloatType;
@@ -168,8 +169,13 @@ CODE_SAMPLE
         return null;
     }
 
-    private function resolveCount(bool $isNegated, FuncCall $funcCall): Identical | Greater
+    private function resolveCount(bool $isNegated, FuncCall $funcCall): Identical | Greater | null
     {
+        $countedType = $this->getType($funcCall->args[0]->value);
+        if ($countedType instanceof ArrayType) {
+            return null;
+        }
+
         $lNumber = new LNumber(0);
 
         // compare === 0, assumption

@@ -33,7 +33,7 @@ final class OnCallMethodReturnArray
     {
         $array = $this->get();
 
-        if (count($array) > 0) {
+        if ($array !== []) {
         }
     }
 

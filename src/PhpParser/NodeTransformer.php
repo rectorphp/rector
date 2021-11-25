@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\PhpParser;
 
 use Nette\Utils\Strings;
+use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -14,6 +15,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\SprintfStringAndArgs;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -88,7 +90,12 @@ final class NodeTransformer
     {
         $arrayItems = $this->transformConcatToItems($concat);
 
-        return new Array_($arrayItems);
+        $array = BuilderHelpers::normalizeValue($arrayItems);
+        if (! $array instanceof Array_) {
+            throw new ShouldNotHappenException();
+        }
+
+        return $array;
     }
 
     private function splitMessageAndArgs(FuncCall $sprintfFuncCall): ?SprintfStringAndArgs

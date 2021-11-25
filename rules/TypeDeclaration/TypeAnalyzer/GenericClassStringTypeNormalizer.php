@@ -62,9 +62,7 @@ final class GenericClassStringTypeNormalizer
 
     public function isAllGenericClassStringType(UnionType $unionType): bool
     {
-        $types = $unionType->getTypes();
-
-        foreach ($types as $type) {
+        foreach ($unionType->getTypes() as $type) {
             if (! $type instanceof GenericClassStringType) {
                 return false;
             }
