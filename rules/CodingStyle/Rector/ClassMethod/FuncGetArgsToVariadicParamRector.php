@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -84,7 +85,7 @@ CODE_SAMPLE
 
         $variableName = 'args';
         $assign->expr = new Variable('args');
-        return $this->applyVariadicParams($node, $assign, $variableName);
+        return $this->applyVariadicParams($node, $variableName);
     }
 
     public function provideMinPhpVersion(): int
@@ -92,11 +93,8 @@ CODE_SAMPLE
         return PhpVersionFeature::VARIADIC_PARAM;
     }
 
-    private function applyVariadicParams(
-        ClassMethod | Function_ | Closure $node,
-        Assign $assign,
-        string $variableName
-    ): ?Node {
+    private function applyVariadicParams(ClassMethod | Function_ | Closure $node, string $variableName): ?Node
+    {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
         if ($variableParam instanceof Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
@@ -111,16 +109,17 @@ CODE_SAMPLE
         ClassMethod | Function_ | Closure $node,
         Assign $assign,
         string $variableName
-    ): ?Node {
+    ): ClassMethod | Function_ | Closure | null {
         $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
             $this->removeNode($assign);
-            return $this->applyVariadicParams($node, $assign, $variableName);
+            return $this->applyVariadicParams($node, $variableName);
         }
 
         $variable = $assign->var;
         /** @var ClassMethod|Function_|Closure $functionLike */
         $functionLike = $this->betterNodeFinder->findParentType($parent, FunctionLike::class);
+
         /** @var Stmt[] $stmts */
         $stmts = $functionLike->getStmts();
         $this->traverseNodesWithCallable($stmts, function (Node $node) use ($assign, $variable): ?Expr {
@@ -128,10 +127,14 @@ CODE_SAMPLE
                 return null;
             }
 
+            if ($node instanceof Arg) {
+                return null;
+            }
+
             return $variable;
         });
 
-        $this->applyVariadicParams($functionLike, $assign, $variableName);
+        $this->applyVariadicParams($functionLike, $variableName);
         return $node;
     }
 
