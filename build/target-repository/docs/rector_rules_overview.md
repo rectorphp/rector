@@ -1,4 +1,4 @@
-# 501 Rules Overview
+# 499 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [CodeQuality](#codequality) (69)
 
-- [CodingStyle](#codingstyle) (38)
+- [CodingStyle](#codingstyle) (37)
 
 - [Compatibility](#compatibility) (1)
 
@@ -20,7 +20,7 @@
 
 - [DeadCode](#deadcode) (50)
 
-- [DependencyInjection](#dependencyinjection) (3)
+- [DependencyInjection](#dependencyinjection) (2)
 
 - [DowngradePhp53](#downgradephp53) (1)
 
@@ -2317,25 +2317,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### PreslashSimpleFunctionRector
-
-Add pre-slash to short named functions to improve performance
-
-- class: [`Rector\CodingStyle\Rector\FuncCall\PreslashSimpleFunctionRector`](../rules/CodingStyle/Rector/FuncCall/PreslashSimpleFunctionRector.php)
-
-```diff
- class SomeClass
- {
-     public function shorten($value)
-     {
--        return trim($value);
-+        return \trim($value);
-     }
- }
-```
-
-<br>
-
 ### RemoveDoubleUnderscoreInMethodNameRector
 
 Non-magic PHP object methods cannot start with "__"
@@ -4001,18 +3982,14 @@ Turns action injection in Controllers to constructor injection
  final class SomeController
  {
 -    public function default(ProductRepository $productRepository)
-+    /**
-+     * @var ProductRepository
-+     */
-+    private $productRepository;
-+    public function __construct(ProductRepository $productRepository)
-     {
--        $products = $productRepository->fetchAll();
-+        $this->productRepository = $productRepository;
++    public function __construct(
++        private ProductRepository $productRepository
++    ) {
 +    }
 +
 +    public function default()
-+    {
+     {
+-        $products = $productRepository->fetchAll();
 +        $products = $this->productRepository->fetchAll();
      }
  }
@@ -4054,35 +4031,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
          $value = 5;
 +
 +        parent::__construct();
-     }
- }
-```
-
-<br>
-
-### ReplaceVariableByPropertyFetchRector
-
-Turns variable in controller action to property fetch, as follow up to action injection variable to property change.
-
-- class: [`Rector\DependencyInjection\Rector\Variable\ReplaceVariableByPropertyFetchRector`](../rules/DependencyInjection/Rector/Variable/ReplaceVariableByPropertyFetchRector.php)
-
-```diff
- final class SomeController
- {
-     /**
-      * @var ProductRepository
-      */
-     private $productRepository;
-
-     public function __construct(ProductRepository $productRepository)
-     {
-         $this->productRepository = $productRepository;
-     }
-
-     public function default()
-     {
--        $products = $productRepository->fetchAll();
-+        $products = $this->productRepository->fetchAll();
      }
  }
 ```
@@ -8883,7 +8831,7 @@ Add unique use imports collected during Rector run
 
 Change global `$variables` to private properties
 
-- class: [`Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`](../rules/Privatization/Rector/ClassMethod/ChangeGlobalVariablesToPropertiesRector.php)
+- class: [`Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`](../rules/Privatization/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php)
 
 ```diff
  class SomeClass
