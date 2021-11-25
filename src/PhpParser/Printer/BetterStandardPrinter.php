@@ -7,6 +7,7 @@ namespace Rector\Core\PhpParser\Printer;
 use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
@@ -18,7 +19,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
@@ -264,7 +264,8 @@ final class BetterStandardPrinter extends Standard
         }
 
         $parentNode = $yield->getAttribute(AttributeKey::PARENT_NODE);
-        $shouldAddBrackets = ! $parentNode instanceof Expression;
+        // brackets are needed only in case of assign, @see https://www.php.net/manual/en/language.generators.syntax.php
+        $shouldAddBrackets = $parentNode instanceof Assign;
 
         return sprintf(
             '%syield %s%s%s',

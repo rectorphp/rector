@@ -6,6 +6,7 @@ namespace Rector\Core\Tests\PhpParser\Printer;
 
 use Iterator;
 use PhpParser\Comment;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
@@ -79,10 +80,15 @@ final class BetterStandardPrinterTest extends AbstractTestCase
         $yield = new Yield_(new String_('value'));
 
         $printed = $this->betterStandardPrinter->print($yield);
-        $this->assertSame("(yield 'value')", $printed);
+        $this->assertSame("yield 'value'", $printed);
 
         $printed = $this->betterStandardPrinter->print(new Yield_());
         $this->assertSame('yield', $printed);
+
+        $yieldAssign = new Assign(new Variable('yieldMe'), $yield);
+        $yield->setAttribute(AttributeKey::PARENT_NODE, $yieldAssign);
+        $printed = $this->betterStandardPrinter->print($yield);
+        $this->assertSame("(yield 'value')", $printed);
 
         $expression = new Expression($yield);
         $yield->setAttribute(AttributeKey::PARENT_NODE, $expression);
