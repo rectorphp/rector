@@ -13,6 +13,7 @@ use Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector;
 use Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
+use Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
 use Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector;
 use Rector\DowngradePhp70\Rector\String_\DowngradeGeneratedScalarTypesRector;
@@ -33,6 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeDirnameLevelsRector::class);
     $services->set(DowngradeSessionStartArrayOptionsRector::class);
     $services->set(SplitGroupedUseImportsRector::class);
+    $services->set(DowngradeClosureCallRector::class);
     $services->set(DowngradeGeneratedScalarTypesRector::class);
     $services->set(DowngradeParentTypeDeclarationRector::class);
 };
