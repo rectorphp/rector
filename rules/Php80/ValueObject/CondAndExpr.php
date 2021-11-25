@@ -27,8 +27,13 @@ final class CondAndExpr
     /**
      * @return Expr[]
      */
-    public function getCondExprs(): array
+    public function getCondExprs(): array|null
     {
+        // internally checked by PHPStan, cannot be empty array
+        if ($this->condExprs === []) {
+            return null;
+        }
+
         return $this->condExprs;
     }
 

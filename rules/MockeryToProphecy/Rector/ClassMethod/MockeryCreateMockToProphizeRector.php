@@ -123,7 +123,7 @@ CODE_SAMPLE
             return;
         }
 
-        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?MethodCall {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node): ?Arg {
             if (! $node instanceof Arg) {
                 return null;
             }
@@ -139,7 +139,9 @@ CODE_SAMPLE
                 return null;
             }
 
-            return $this->nodeFactory->createMethodCall($node->value, 'reveal');
+            $methodCall = $this->nodeFactory->createMethodCall($node->value, 'reveal');
+            $node->value = $methodCall;
+            return $node;
         });
     }
 
