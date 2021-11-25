@@ -1,4 +1,4 @@
-# 499 Rules Overview
+# 498 Rules Overview
 
 <br>
 
@@ -18,7 +18,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (50)
+- [DeadCode](#deadcode) (49)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -3009,29 +3009,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 - */
  final class SomeClass
  {
- }
-```
-
-<br>
-
-### RemoveAssignOfVoidReturnFunctionRector
-
-Remove assign of void function/method to variable
-
-- class: [`Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector`](../rules/DeadCode/Rector/Assign/RemoveAssignOfVoidReturnFunctionRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $value = $this->getOne();
-+        $this->getOne();
-     }
-
-     private function getOne(): void
-     {
-     }
  }
 ```
 
@@ -7990,9 +7967,10 @@ Change simple property init and assign to constructor promotion
  {
 -    public float $someVariable;
 -
--    public function __construct(float $someVariable = 0.0)
-+    public function __construct(private float $someVariable = 0.0)
-     {
+     public function __construct(
+-        float $someVariable = 0.0
++        private float $someVariable = 0.0
+     ) {
 -        $this->someVariable = $someVariable;
      }
  }

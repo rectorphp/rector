@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
-use Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
@@ -85,7 +84,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveUnusedVariableAssignRector::class);
     $services->set(RemoveDuplicatedIfReturnRector::class);
     $services->set(RemoveUnusedNonEmptyArrayBeforeForeachRector::class);
-    $services->set(RemoveAssignOfVoidReturnFunctionRector::class);
     $services->set(RemoveEmptyMethodCallRector::class);
     $services->set(RemoveDeadConditionAboveReturnRector::class);
     $services->set(RemoveUnusedConstructorParamRector::class);
