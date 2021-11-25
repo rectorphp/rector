@@ -68,11 +68,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const LEAGUE_EVENT_30 = __DIR__ . '/../../../config/set/league-event-30.php';
-
-    /**
-     * @var string
-     */
     public const MONOLOG_20 = __DIR__ . '/../../../config/set/monolog20.php';
 
     /**
