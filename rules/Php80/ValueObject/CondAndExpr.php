@@ -33,10 +33,14 @@ final class CondAndExpr
         return $this->expr;
     }
     /**
-     * @return Expr[]
+     * @return mixed[]|null
      */
-    public function getCondExprs() : array
+    public function getCondExprs()
     {
+        // internally checked by PHPStan, cannot be empty array
+        if ($this->condExprs === []) {
+            return null;
+        }
         return $this->condExprs;
     }
     public function getMatchKind() : \Rector\Php80\Enum\MatchKind

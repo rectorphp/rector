@@ -4,10 +4,13 @@ declare (strict_types=1);
 namespace Rector\DependencyInjection\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection;
 use Rector\PostRector\Collector\PropertyToAddCollector;
@@ -52,13 +55,9 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeController
 {
-    /**
-     * @var ProductRepository
-     */
-    private $productRepository;
-    public function __construct(ProductRepository $productRepository)
-    {
-        $this->productRepository = $productRepository;
+    public function __construct(
+        private ProductRepository $productRepository
+    ) {
     }
 
     public function default()
@@ -87,7 +86,31 @@ CODE_SAMPLE
         foreach ($node->getMethods() as $classMethod) {
             $this->processClassMethod($node, $classMethod);
         }
+        foreach ($node->getMethods() as $classMethod) {
+            $this->refactorVariablesToPropertyFetches($classMethod);
+        }
         return $node;
+    }
+    private function refactorVariablesToPropertyFetches(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    {
+        if (!$classMethod->isPublic()) {
+            return;
+        }
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) : ?PropertyFetch {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+                return null;
+            }
+            foreach ($this->variablesToPropertyFetchCollection->getVariableNamesAndTypes() as $name => $objectType) {
+                if (!$this->isName($node, $name)) {
+                    continue;
+                }
+                if (!$this->isObjectType($node, $objectType)) {
+                    continue;
+                }
+                return $this->nodeFactory->createPropertyFetch('this', $name);
+            }
+            return null;
+        });
     }
     private function processClassMethod(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
@@ -96,6 +119,9 @@ CODE_SAMPLE
                 continue;
             }
             $paramType = $this->getType($paramNode);
+            if (!$paramType instanceof \PHPStan\Type\ObjectType) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            }
             /** @var string $paramName */
             $paramName = $this->getName($paramNode->var);
             $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($paramName, $paramType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);

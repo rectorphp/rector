@@ -103,7 +103,7 @@ CODE_SAMPLE
         if ($classMethod->stmts === null) {
             return;
         }
-        $this->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) : ?MethodCall {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) : ?Arg {
             if (!$node instanceof \PhpParser\Node\Arg) {
                 return null;
             }
@@ -115,7 +115,9 @@ CODE_SAMPLE
             if (!isset($this->mockVariableTypesByNames[$variableName])) {
                 return null;
             }
-            return $this->nodeFactory->createMethodCall($node->value, 'reveal');
+            $methodCall = $this->nodeFactory->createMethodCall($node->value, 'reveal');
+            $node->value = $methodCall;
+            return $node;
         });
     }
     private function createProphesizeMethodCall(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Expr\MethodCall
