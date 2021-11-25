@@ -1560,7 +1560,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\FuncCall\\ConsistentImplodeRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ConsistentImplodeRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\ConsistentPregDelimiterRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/ConsistentPregDelimiterRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CountArrayToEmptyArrayComparisonRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CountArrayToEmptyArrayComparisonRector.php',
-    'Rector\\CodingStyle\\Rector\\FuncCall\\PreslashSimpleFunctionRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/PreslashSimpleFunctionRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
     'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => $baseDir . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
