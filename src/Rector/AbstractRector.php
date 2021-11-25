@@ -275,10 +275,6 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
                 return $node;
             }
         }
-        // if Stmt ("$value;") was replaced by Expr ("$value"), add Expression (the ending ";") to prevent breaking the code
-        if ($originalNode instanceof \PhpParser\Node\Stmt && $node instanceof \PhpParser\Node\Expr) {
-            $node = new \PhpParser\Node\Stmt\Expression($node);
-        }
         return $node;
     }
     /**
