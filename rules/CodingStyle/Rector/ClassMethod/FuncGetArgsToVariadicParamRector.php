@@ -80,8 +80,9 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
-    private function applyVariadicParams($node, string $variableName) : ?\PhpParser\Node
+    private function applyVariadicParams($node, string $variableName)
     {
         $param = $this->createVariadicParam($variableName);
         $variableParam = $param->var;
