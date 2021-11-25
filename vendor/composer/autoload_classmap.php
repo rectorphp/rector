@@ -2323,6 +2323,7 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\TraitScopeFaker' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/TraitScopeFaker.php',
     'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => $baseDir . '/packages/NodeTypeResolver/PHPStan/TypeHasher.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Type\\StaticTypeAnalyzer' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Type/StaticTypeAnalyzer.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php',

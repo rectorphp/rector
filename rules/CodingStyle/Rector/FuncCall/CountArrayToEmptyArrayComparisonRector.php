@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -75,10 +74,6 @@ CODE_SAMPLE
         if (!$parent instanceof \PhpParser\Node) {
             return null;
         }
-        $parentScope = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$parentScope instanceof \PHPStan\Analyser\Scope) {
-            return null;
-        }
         $processIdentical = $this->processIdenticalOrNotIdentical($parent, $node, $expr);
         if ($processIdentical !== null) {
             return $processIdentical;
@@ -113,12 +108,7 @@ CODE_SAMPLE
     }
     private function isArray(\PhpParser\Node\Expr $expr) : bool
     {
-        /** @var Scope|null $scope */
-        $scope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            return \false;
-        }
-        return $scope->getType($expr) instanceof \PHPStan\Type\ArrayType;
+        return $this->getType($expr) instanceof \PHPStan\Type\ArrayType;
     }
     private function processIdenticalOrNotIdentical(\PhpParser\Node $node, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr
     {
