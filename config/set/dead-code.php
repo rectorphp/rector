@@ -5,7 +5,6 @@ namespace RectorPrefix20211125;
 
 use Rector\CodeQuality\Rector\Return_\SimplifyUselessVariableRector;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
-use Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
@@ -85,7 +84,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector::class);
     $services->set(\Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector::class);
     $services->set(\Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector::class);
-    $services->set(\Rector\DeadCode\Rector\Assign\RemoveAssignOfVoidReturnFunctionRector::class);
     $services->set(\Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector::class);
     $services->set(\Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector::class);
     $services->set(\Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector::class);

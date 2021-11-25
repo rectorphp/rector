@@ -1803,7 +1803,6 @@ return array(
     'Rector\\DeadCode\\PhpDoc\\TagRemover\\ReturnTagRemover' => $baseDir . '/rules/DeadCode/PhpDoc/TagRemover/ReturnTagRemover.php',
     'Rector\\DeadCode\\PhpDoc\\TagRemover\\VarTagRemover' => $baseDir . '/rules/DeadCode/PhpDoc/TagRemover/VarTagRemover.php',
     'Rector\\DeadCode\\Rector\\Array_\\RemoveDuplicatedArrayKeyRector' => $baseDir . '/rules/DeadCode/Rector/Array_/RemoveDuplicatedArrayKeyRector.php',
-    'Rector\\DeadCode\\Rector\\Assign\\RemoveAssignOfVoidReturnFunctionRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveAssignOfVoidReturnFunctionRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveDoubleAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveDoubleAssignRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveUnusedAssignVariableRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveUnusedAssignVariableRector.php',
     'Rector\\DeadCode\\Rector\\Assign\\RemoveUnusedVariableAssignRector' => $baseDir . '/rules/DeadCode/Rector/Assign/RemoveUnusedVariableAssignRector.php',
