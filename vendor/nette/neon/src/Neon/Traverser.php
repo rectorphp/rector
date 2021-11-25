@@ -10,9 +10,9 @@ namespace RectorPrefix20211125\Nette\Neon;
 /** @internal */
 final class Traverser
 {
-    /** @var callable(Node): void */
+    /** @var callable(Node): ?Node */
     private $callback;
-    /** @param  callable(Node): void  $callback */
+    /** @param  callable(Node): ?Node  $callback */
     public function traverse(\RectorPrefix20211125\Nette\Neon\Node $node, callable $callback) : \RectorPrefix20211125\Nette\Neon\Node
     {
         $this->callback = $callback;
@@ -20,9 +20,9 @@ final class Traverser
     }
     private function traverseNode(\RectorPrefix20211125\Nette\Neon\Node $node) : \RectorPrefix20211125\Nette\Neon\Node
     {
-        ($this->callback)($node);
-        foreach ($node->getSubNodes() as $subnode) {
-            $this->traverseNode($subnode);
+        $node = ($this->callback)($node) ?? $node;
+        foreach ($node->getSubNodes() as &$subnode) {
+            $subnode = $this->traverseNode($subnode);
         }
         return $node;
     }

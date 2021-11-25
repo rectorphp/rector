@@ -30,7 +30,7 @@
     },
     "require-dev": {
         "nette\/tester": "^2.0",
-        "tracy\/tracy": "^2.3",
+        "tracy\/tracy": "^2.7",
         "phpstan\/phpstan": "^0.12"
     },
     "autoload": {
@@ -39,6 +39,9 @@
         ]
     },
     "minimum-stability": "dev",
+    "bin": [
+        "bin\/neon-lint"
+    ],
     "scripts": {
         "phpstan": "phpstan analyse",
         "tester": "tester tests -s"

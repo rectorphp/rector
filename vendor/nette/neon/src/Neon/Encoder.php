@@ -13,13 +13,18 @@ namespace RectorPrefix20211125\Nette\Neon;
  */
 final class Encoder
 {
-    public const BLOCK = 1;
+    /** @deprecated */
+    public const BLOCK = \true;
+    /** @var bool */
+    public $blockMode = \false;
+    /** @var string */
+    public $indentation = "\t";
     /**
      * Returns the NEON representation of a value.
      */
-    public function encode($val, int $flags = 0) : string
+    public function encode($val) : string
     {
-        $node = $this->valueToNode($val, (bool) ($flags & self::BLOCK));
+        $node = $this->valueToNode($val, $this->blockMode);
         return $node->toString();
     }
     public function valueToNode($val, bool $blockMode = \false) : \RectorPrefix20211125\Nette\Neon\Node
@@ -29,13 +34,18 @@ final class Encoder
         } elseif ($val instanceof \RectorPrefix20211125\Nette\Neon\Entity && $val->value === \RectorPrefix20211125\Nette\Neon\Neon::CHAIN) {
             $node = new \RectorPrefix20211125\Nette\Neon\Node\EntityChainNode();
             foreach ($val->attributes as $entity) {
-                $node->chain[] = $this->valueToNode($entity, $blockMode);
+                $node->chain[] = $this->valueToNode($entity);
             }
             return $node;
         } elseif ($val instanceof \RectorPrefix20211125\Nette\Neon\Entity) {
             return new \RectorPrefix20211125\Nette\Neon\Node\EntityNode($this->valueToNode($val->value), $this->arrayToNodes((array) $val->attributes));
         } elseif (\is_object($val) || \is_array($val)) {
-            $node = new \RectorPrefix20211125\Nette\Neon\Node\ArrayNode($blockMode ? '' : null);
+            if ($blockMode) {
+                $node = new \RectorPrefix20211125\Nette\Neon\Node\BlockArrayNode();
+            } else {
+                $isList = \is_array($val) && (!$val || \array_keys($val) === \range(0, \count($val) - 1));
+                $node = new \RectorPrefix20211125\Nette\Neon\Node\InlineArrayNode($isList ? '[' : '{');
+            }
             $node->items = $this->arrayToNodes($val, $blockMode);
             return $node;
         } elseif (\is_string($val) && \RectorPrefix20211125\Nette\Neon\Lexer::requiresDelimiters($val)) {
@@ -53,6 +63,9 @@ final class Encoder
             $res[] = $item = new \RectorPrefix20211125\Nette\Neon\Node\ArrayItemNode();
             $item->key = $hide && $k === $counter ? null : self::valueToNode($k);
             $item->value = self::valueToNode($v, $blockMode);
+            if ($item->value instanceof \RectorPrefix20211125\Nette\Neon\Node\BlockArrayNode) {
+                $item->value->indentation = $this->indentation;
+            }
             if ($hide && \is_int($k)) {
                 $hide = $k === $counter;
                 $counter = \max($k + 1, $counter);

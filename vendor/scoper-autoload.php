@@ -12,8 +12,8 @@ if (!class_exists('GenerateChangelogCommand', false) && !interface_exists('Gener
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20211125\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit7cc6c46aa09441a6a6e4fa36663ff12a', false) && !interface_exists('ComposerAutoloaderInit7cc6c46aa09441a6a6e4fa36663ff12a', false) && !trait_exists('ComposerAutoloaderInit7cc6c46aa09441a6a6e4fa36663ff12a', false)) {
-    spl_autoload_call('RectorPrefix20211125\ComposerAutoloaderInit7cc6c46aa09441a6a6e4fa36663ff12a');
+if (!class_exists('ComposerAutoloaderInit1c8635e3fbfc3fb7106f9de24e8c41eb', false) && !interface_exists('ComposerAutoloaderInit1c8635e3fbfc3fb7106f9de24e8c41eb', false) && !trait_exists('ComposerAutoloaderInit1c8635e3fbfc3fb7106f9de24e8c41eb', false)) {
+    spl_autoload_call('RectorPrefix20211125\ComposerAutoloaderInit1c8635e3fbfc3fb7106f9de24e8c41eb');
 }
 if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
     spl_autoload_call('RectorPrefix20211125\Helmich\TypoScriptParser\Parser\AST\Statement');
@@ -81,9 +81,19 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20211125\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire7cc6c46aa09441a6a6e4fa36663ff12a')) {
-    function composerRequire7cc6c46aa09441a6a6e4fa36663ff12a() {
-        return \RectorPrefix20211125\composerRequire7cc6c46aa09441a6a6e4fa36663ff12a(...func_get_args());
+if (!function_exists('composerRequire1c8635e3fbfc3fb7106f9de24e8c41eb')) {
+    function composerRequire1c8635e3fbfc3fb7106f9de24e8c41eb() {
+        return \RectorPrefix20211125\composerRequire1c8635e3fbfc3fb7106f9de24e8c41eb(...func_get_args());
+    }
+}
+if (!function_exists('scanPath')) {
+    function scanPath() {
+        return \RectorPrefix20211125\scanPath(...func_get_args());
+    }
+}
+if (!function_exists('lintFile')) {
+    function lintFile() {
+        return \RectorPrefix20211125\lintFile(...func_get_args());
     }
 }
 if (!function_exists('parseArgs')) {

@@ -33,6 +33,10 @@ final class EntityNode extends \RectorPrefix20211125\Nette\Neon\Node
     }
     public function getSubNodes() : array
     {
-        return \array_merge([$this->value], $this->attributes);
+        $res = [&$this->value];
+        foreach ($this->attributes as &$item) {
+            $res[] =& $item;
+        }
+        return $res;
     }
 }

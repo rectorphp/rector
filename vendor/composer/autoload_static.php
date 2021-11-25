@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7cc6c46aa09441a6a6e4fa36663ff12a
+class ComposerStaticInit1c8635e3fbfc3fb7106f9de24e8c41eb
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -881,8 +881,10 @@ class ComposerStaticInit7cc6c46aa09441a6a6e4fa36663ff12a
         'RectorPrefix20211125\\Nette\\Neon\\Node' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node.php',
         'RectorPrefix20211125\\Nette\\Neon\\Node\\ArrayItemNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/ArrayItemNode.php',
         'RectorPrefix20211125\\Nette\\Neon\\Node\\ArrayNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/ArrayNode.php',
+        'RectorPrefix20211125\\Nette\\Neon\\Node\\BlockArrayNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/BlockArrayNode.php',
         'RectorPrefix20211125\\Nette\\Neon\\Node\\EntityChainNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/EntityChainNode.php',
         'RectorPrefix20211125\\Nette\\Neon\\Node\\EntityNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/EntityNode.php',
+        'RectorPrefix20211125\\Nette\\Neon\\Node\\InlineArrayNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/InlineArrayNode.php',
         'RectorPrefix20211125\\Nette\\Neon\\Node\\LiteralNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/LiteralNode.php',
         'RectorPrefix20211125\\Nette\\Neon\\Node\\StringNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/StringNode.php',
         'RectorPrefix20211125\\Nette\\Neon\\Parser' => __DIR__ . '/..' . '/nette/neon/src/Neon/Parser.php',
@@ -3764,9 +3766,9 @@ class ComposerStaticInit7cc6c46aa09441a6a6e4fa36663ff12a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7cc6c46aa09441a6a6e4fa36663ff12a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7cc6c46aa09441a6a6e4fa36663ff12a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7cc6c46aa09441a6a6e4fa36663ff12a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1c8635e3fbfc3fb7106f9de24e8c41eb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1c8635e3fbfc3fb7106f9de24e8c41eb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1c8635e3fbfc3fb7106f9de24e8c41eb::$classMap;
 
         }, null, ClassLoader::class);
     }

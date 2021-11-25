@@ -16,25 +16,38 @@ final class Neon
     public const BLOCK = \RectorPrefix20211125\Nette\Neon\Encoder::BLOCK;
     public const CHAIN = '!!chain';
     /**
-     * Returns value converted to NEON. The flag can be Neon::BLOCK, which will create multiline output.
+     * Returns value converted to NEON.
      */
-    public static function encode($value, int $flags = 0) : string
+    public static function encode($value, bool $blockMode = \false, string $indentation = "\t") : string
     {
         $encoder = new \RectorPrefix20211125\Nette\Neon\Encoder();
-        return $encoder->encode($value, $flags);
+        $encoder->blockMode = $blockMode;
+        $encoder->indentation = $indentation;
+        return $encoder->encode($value);
     }
     /**
      * Converts given NEON to PHP value.
-     * Returns scalars, arrays, DateTimeImmutable and Entity objects.
      * @return mixed
      */
     public static function decode(string $input)
     {
+        $decoder = new \RectorPrefix20211125\Nette\Neon\Decoder();
+        return $decoder->decode($input);
+    }
+    /**
+     * Converts given NEON file to PHP value.
+     * @return mixed
+     */
+    public static function decodeFile(string $file)
+    {
+        if (!\is_file($file)) {
+            throw new \RectorPrefix20211125\Nette\Neon\Exception("File '{$file}' does not exist.");
+        }
+        $input = \file_get_contents($file);
         if (\substr($input, 0, 3) === "﻿") {
             // BOM
             $input = \substr($input, 3);
         }
-        $decoder = new \RectorPrefix20211125\Nette\Neon\Decoder();
-        return $decoder->decode($input);
+        return self::decode($input);
     }
 }

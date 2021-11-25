@@ -729,17 +729,17 @@
         },
         {
             "name": "nette\/neon",
-            "version": "v3.3.0",
-            "version_normalized": "3.3.0.0",
+            "version": "v3.3.2",
+            "version_normalized": "3.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/neon.git",
-                "reference": "33d262a0c4fb6c6371385f6dc8532f4e32c20ebc"
+                "reference": "54b287d8c2cdbe577b02e28ca1713e275b05ece2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/neon\/zipball\/33d262a0c4fb6c6371385f6dc8532f4e32c20ebc",
-                "reference": "33d262a0c4fb6c6371385f6dc8532f4e32c20ebc",
+                "url": "https:\/\/api.github.com\/repos\/nette\/neon\/zipball\/54b287d8c2cdbe577b02e28ca1713e275b05ece2",
+                "reference": "54b287d8c2cdbe577b02e28ca1713e275b05ece2",
                 "shasum": ""
             },
             "require": {
@@ -749,9 +749,12 @@
             "require-dev": {
                 "nette\/tester": "^2.0",
                 "phpstan\/phpstan": "^0.12",
-                "tracy\/tracy": "^2.3"
+                "tracy\/tracy": "^2.7"
             },
-            "time": "2021-10-19T22:11:22+00:00",
+            "time": "2021-11-25T15:57:41+00:00",
+            "bin": [
+                "bin\/neon-lint"
+            ],
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -791,7 +794,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/neon\/issues",
-                "source": "https:\/\/github.com\/nette\/neon\/tree\/v3.3.0"
+                "source": "https:\/\/github.com\/nette\/neon\/tree\/v3.3.2"
             },
             "install-path": "..\/nette\/neon"
         },
@@ -2266,23 +2269,23 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.52",
-            "version_normalized": "0.11.52.0",
+            "version": "0.11.53",
+            "version_normalized": "0.11.53.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "b59d2f630aa226c17f1f621cc8516caacd505f39"
+                "reference": "3e11f9b607242be25ffb71cba76766a07cc6c00e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/b59d2f630aa226c17f1f621cc8516caacd505f39",
-                "reference": "b59d2f630aa226c17f1f621cc8516caacd505f39",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/3e11f9b607242be25ffb71cba76766a07cc6c00e",
+                "reference": "3e11f9b607242be25ffb71cba76766a07cc6c00e",
                 "shasum": ""
             },
             "require": {
                 "danielstjules\/stringy": "^3.1",
                 "ext-xml": "*",
-                "nette\/neon": "3.3.0",
+                "nette\/neon": "^3.3.2",
                 "php": ">=8.0",
                 "rector\/rector-phpunit": "^0.11.15"
             },
@@ -2305,7 +2308,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0"
             },
-            "time": "2021-11-23T12:22:24+00:00",
+            "time": "2021-11-25T17:09:43+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -2333,7 +2336,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.52"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.53"
             },
             "install-path": "..\/rector\/rector-nette"
         },
@@ -4635,21 +4638,21 @@
         },
         {
             "name": "symplify\/package-builder",
-            "version": "10.0.0-beta14",
-            "version_normalized": "10.0.0.0-beta14",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "01672e4d10507e1a7cc4af5d25606e890a4796b1"
+                "reference": "ad8ad6b333a5ac0e056c71c53cfb4986d4c6a548"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/01672e4d10507e1a7cc4af5d25606e890a4796b1",
-                "reference": "01672e4d10507e1a7cc4af5d25606e890a4796b1",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/ad8ad6b333a5ac0e056c71c53cfb4986d4c6a548",
+                "reference": "ad8ad6b333a5ac0e056c71c53cfb4986d4c6a548",
                 "shasum": ""
             },
             "require": {
-                "nette\/neon": "3.3.0",
+                "nette\/neon": "^3.3.2",
                 "nette\/utils": "^3.2",
                 "php": ">=8.0",
                 "symfony\/config": "^5.3|^6.0",
@@ -4693,7 +4696,8 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-11-24T20:02:43+00:00",
+            "time": "2021-11-25T17:08:43+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4712,7 +4716,7 @@
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/package-builder\/tree\/10.0.0-beta14"
+                "source": "https:\/\/github.com\/symplify\/package-builder\/tree\/main"
             },
             "funding": [
                 {
