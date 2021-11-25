@@ -8,7 +8,7 @@ use Rector\Php80\Enum\MatchKind;
 final class CondAndExpr
 {
     /**
-     * @var \PhpParser\Node\Expr[]
+     * @var \PhpParser\Node\Expr[]|null
      */
     private $condExprs;
     /**
@@ -20,9 +20,9 @@ final class CondAndExpr
      */
     private $matchKind;
     /**
-     * @param Expr[] $condExprs
+     * @param Expr[]|null $condExprs
      */
-    public function __construct(array $condExprs, \PhpParser\Node\Expr $expr, \Rector\Php80\Enum\MatchKind $matchKind)
+    public function __construct($condExprs, \PhpParser\Node\Expr $expr, \Rector\Php80\Enum\MatchKind $matchKind)
     {
         $this->condExprs = $condExprs;
         $this->expr = $expr;

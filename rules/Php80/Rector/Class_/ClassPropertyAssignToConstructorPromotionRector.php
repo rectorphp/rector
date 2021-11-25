@@ -74,8 +74,9 @@ class SomeClass
 {
     public float $someVariable;
 
-    public function __construct(float $someVariable = 0.0)
-    {
+    public function __construct(
+        float $someVariable = 0.0
+    ) {
         $this->someVariable = $someVariable;
     }
 }
@@ -83,8 +84,9 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function __construct(private float $someVariable = 0.0)
-    {
+    public function __construct(
+        private float $someVariable = 0.0
+    ) {
     }
 }
 CODE_SAMPLE
