@@ -16,6 +16,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveLastReturnRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParamInRequiredAutowireRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
@@ -91,6 +92,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RemoveDeadInstanceOfRector::class);
     $services->set(RemoveDeadLoopRector::class);
     $services->set(RemoveUnusedPrivateMethodParameterRector::class);
+    $services->set(RemoveUnusedParamInRequiredAutowireRector::class);
 
     // docblock
     $services->set(RemoveUselessParamTagRector::class);
