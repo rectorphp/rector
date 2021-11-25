@@ -2085,7 +2085,6 @@ return array(
     'Rector\\Laravel\\ValueObject\\AddArgumentDefaultValue' => $vendorDir . '/rector/rector-laravel/src/ValueObject/AddArgumentDefaultValue.php',
     'Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName' => $vendorDir . '/rector/rector-laravel/src/ValueObject/ServiceNameTypeAndVariableName.php',
     'Rector\\Laravel\\ValueObject\\TypeToTimeMethodAndPosition' => $vendorDir . '/rector/rector-laravel/src/ValueObject/TypeToTimeMethodAndPosition.php',
-    'Rector\\LeagueEvent\\Rector\\MethodCall\\DispatchStringToObjectRector' => $baseDir . '/rules/LeagueEvent/Rector/MethodCall/DispatchStringToObjectRector.php',
     'Rector\\MockeryToProphecy\\Collector\\MockVariableCollector' => $baseDir . '/rules/MockeryToProphecy/Collector/MockVariableCollector.php',
     'Rector\\MockeryToProphecy\\Rector\\ClassMethod\\MockeryCreateMockToProphizeRector' => $baseDir . '/rules/MockeryToProphecy/Rector/ClassMethod/MockeryCreateMockToProphizeRector.php',
     'Rector\\MockeryToProphecy\\Rector\\StaticCall\\MockeryCloseRemoveRector' => $baseDir . '/rules/MockeryToProphecy/Rector/StaticCall/MockeryCloseRemoveRector.php',

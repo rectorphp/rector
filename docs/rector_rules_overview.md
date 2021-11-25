@@ -1,4 +1,4 @@
-# 498 Rules Overview
+# 501 Rules Overview
 
 <br>
 
@@ -18,7 +18,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (49)
+- [DeadCode](#deadcode) (50)
 
 - [DependencyInjection](#dependencyinjection) (3)
 
@@ -26,9 +26,9 @@
 
 - [DowngradePhp54](#downgradephp54) (6)
 
-- [DowngradePhp55](#downgradephp55) (3)
+- [DowngradePhp55](#downgradephp55) (4)
 
-- [DowngradePhp56](#downgradephp56) (3)
+- [DowngradePhp56](#downgradephp56) (4)
 
 - [DowngradePhp70](#downgradephp70) (12)
 
@@ -42,13 +42,11 @@
 
 - [DowngradePhp80](#downgradephp80) (19)
 
-- [DowngradePhp81](#downgradephp81) (6)
+- [DowngradePhp81](#downgradephp81) (7)
 
 - [EarlyReturn](#earlyreturn) (11)
 
 - [Generics](#generics) (1)
-
-- [LeagueEvent](#leagueevent) (1)
 
 - [MockeryToProphecy](#mockerytoprophecy) (2)
 
@@ -2576,7 +2574,7 @@ Use `class` keyword for class name resolution in string instead of hardcoded str
 
 ```diff
 -$value = 'App\SomeClass::someMethod()';
-+$value = \App\SomeClass . '::someMethod()';
++$value = \App\SomeClass::class . '::someMethod()';
 ```
 
 <br>
@@ -3686,6 +3684,29 @@ Remove unused if check to non-empty array before foreach of the array
 
 <br>
 
+### RemoveUnusedParamInRequiredAutowireRector
+
+Remove unused parameter in required autowire method
+
+- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParamInRequiredAutowireRector`](../rules/DeadCode/Rector/ClassMethod/RemoveUnusedParamInRequiredAutowireRector.php)
+
+```diff
+ use Symfony\Contracts\Service\Attribute\Required;
+
+ final class SomeService
+ {
+     private $visibilityManipulator;
+
+     #[Required]
+-    public function autowireSomeService(VisibilityManipulator $visibilityManipulator)
++    public function autowireSomeService()
+     {
+     }
+ }
+```
+
+<br>
+
 ### RemoveUnusedPrivateClassConstantRector
 
 Remove unused class constants
@@ -4210,6 +4231,19 @@ Downgrade arbitrary expression arguments to `empty()` and `isset()`
 
 <br>
 
+### DowngradeBoolvalRector
+
+Replace `boolval()` by type casting to boolean
+
+- class: [`Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector`](../rules/DowngradePhp55/Rector/FuncCall/DowngradeBoolvalRector.php)
+
+```diff
+-$bool = boolval($value);
++$bool = (bool) $value;
+```
+
+<br>
+
 ### DowngradeClassConstantToStringRector
 
 Replace <class>::class constant by string class names
@@ -4291,6 +4325,21 @@ Changes ** (exp) operator to pow(val, val2)
 ```diff
 -1**2;
 +pow(1, 2);
+```
+
+<br>
+
+### DowngradeUseFunctionRector
+
+Replace imports of functions and constants
+
+- class: [`Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector`](../rules/DowngradePhp56/Rector/Use_/DowngradeUseFunctionRector.php)
+
+```diff
+-use function Foo\Bar\baz;
+-
+-$var = baz();
++$var = \Foo\Bar\baz();
 ```
 
 <br>
@@ -5732,6 +5781,24 @@ change instanceof Object to is_resource
 
 <br>
 
+### DowngradePureIntersectionTypeRector
+
+Remove the intersection type params and returns, add `@param/@return` tags instead
+
+- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector`](../rules/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php)
+
+```diff
+-function someFunction(): Foo&Bar
++/**
++ * @return Foo&Bar
++ */
++function someFunction()
+ {
+ }
+```
+
+<br>
+
 ### DowngradeReadonlyPropertyRector
 
 Remove "readonly" property type, add a "@readonly" tag instead
@@ -6098,36 +6165,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +     */
 +    public method getParams(ParamInterface $someParam)
      {
-     }
- }
-```
-
-<br>
-
-## LeagueEvent
-
-### DispatchStringToObjectRector
-
-Change string events to anonymous class which implement \League\Event\HasEventName
-
-- class: [`Rector\LeagueEvent\Rector\MethodCall\DispatchStringToObjectRector`](../rules/LeagueEvent/Rector/MethodCall/DispatchStringToObjectRector.php)
-
-```diff
- final class SomeClass
- {
-     /** @var \League\Event\EventDispatcher */
-     private $dispatcher;
-
-     public function run()
-     {
--        $this->dispatcher->dispatch('my-event');
-+        $this->dispatcher->dispatch(new class implements \League\Event\HasEventName
-+        {
-+            public function eventName(): string
-+            {
-+                return 'my-event';
-+            }
-+        });
      }
  }
 ```
@@ -8403,11 +8440,11 @@ Replace property declaration of new state with direct new
 ```diff
  class SomeClass
  {
-     private Logger $logger;
-
+-    private Logger $logger;
+-
      public function __construct(
 -        ?Logger $logger = null,
-+        Logger $logger = new NullLogger,
++        private Logger $logger = new NullLogger,
      ) {
 -        $this->logger = $logger ?? new NullLogger;
      }

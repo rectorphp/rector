@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita378f01759779c21d23eddbf84bc56a6
+class ComposerStaticInit9700ae60b7b5a0e4487aaa0707d29349
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2482,7 +2482,6 @@ class ComposerStaticInita378f01759779c21d23eddbf84bc56a6
         'Rector\\Laravel\\ValueObject\\AddArgumentDefaultValue' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/AddArgumentDefaultValue.php',
         'Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/ServiceNameTypeAndVariableName.php',
         'Rector\\Laravel\\ValueObject\\TypeToTimeMethodAndPosition' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/TypeToTimeMethodAndPosition.php',
-        'Rector\\LeagueEvent\\Rector\\MethodCall\\DispatchStringToObjectRector' => __DIR__ . '/../..' . '/rules/LeagueEvent/Rector/MethodCall/DispatchStringToObjectRector.php',
         'Rector\\MockeryToProphecy\\Collector\\MockVariableCollector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Collector/MockVariableCollector.php',
         'Rector\\MockeryToProphecy\\Rector\\ClassMethod\\MockeryCreateMockToProphizeRector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Rector/ClassMethod/MockeryCreateMockToProphizeRector.php',
         'Rector\\MockeryToProphecy\\Rector\\StaticCall\\MockeryCloseRemoveRector' => __DIR__ . '/../..' . '/rules/MockeryToProphecy/Rector/StaticCall/MockeryCloseRemoveRector.php',
@@ -3767,9 +3766,9 @@ class ComposerStaticInita378f01759779c21d23eddbf84bc56a6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita378f01759779c21d23eddbf84bc56a6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita378f01759779c21d23eddbf84bc56a6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita378f01759779c21d23eddbf84bc56a6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9700ae60b7b5a0e4487aaa0707d29349::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9700ae60b7b5a0e4487aaa0707d29349::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9700ae60b7b5a0e4487aaa0707d29349::$classMap;
 
         }, null, ClassLoader::class);
     }
