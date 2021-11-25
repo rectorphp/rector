@@ -8883,7 +8883,7 @@ Add unique use imports collected during Rector run
 
 Change global `$variables` to private properties
 
-- class: [`Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector`](../rules/Privatization/Rector/ClassMethod/ChangeGlobalVariablesToPropertiesRector.php)
+- class: [`Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`](../rules/Privatization/Rector/ClassMethod/ChangeGlobalVariablesToPropertiesRector.php)
 
 ```diff
  class SomeClass

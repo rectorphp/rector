@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
+namespace Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

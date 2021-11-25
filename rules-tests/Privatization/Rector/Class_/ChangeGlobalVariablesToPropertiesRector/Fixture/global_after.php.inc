@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
 class GlobalAfter
 {
@@ -23,7 +23,7 @@ class GlobalAfter
 -----
 <?php
 
-namespace Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
 class GlobalAfter
 {

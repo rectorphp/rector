@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Rector\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector;
+use Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

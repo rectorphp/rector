@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
 class Fixture
 {
@@ -21,7 +21,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Tests\Privatization\Rector\ClassMethod\ChangeGlobalVariablesToPropertiesRector\Fixture;
+namespace Rector\Tests\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector\Fixture;
 
 class Fixture
 {
