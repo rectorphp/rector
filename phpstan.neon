@@ -560,3 +560,6 @@ parameters:
         -
             path: rules/Php80/NodeManipulator/TokenManipulator.php
             message: '#Property set "\$node\-\>expr" is overridden#'
+
+        # @todo fix in symplify
+        - '#Parameter \#3 \$configuration of class Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample constructor expects array<string, mixed\>, array<int, Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration\> given#'

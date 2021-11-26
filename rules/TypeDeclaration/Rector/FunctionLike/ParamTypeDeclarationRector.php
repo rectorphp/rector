@@ -18,7 +18,6 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use Rector\TypeDeclaration\ValueObject\NewType;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -208,6 +207,6 @@ CODE_SAMPLE
         }
 
         // already set → skip
-        return ! $param->type->getAttribute(NewType::HAS_NEW_INHERITED_TYPE, false);
+        return ! $param->type->getAttribute(AttributeKey::HAS_NEW_INHERITED_TYPE, false);
     }
 }

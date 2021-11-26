@@ -1,4 +1,4 @@
-# 498 Rules Overview
+# 501 Rules Overview
 
 <br>
 
@@ -30,7 +30,7 @@
 
 - [DowngradePhp56](#downgradephp56) (4)
 
-- [DowngradePhp70](#downgradephp70) (12)
+- [DowngradePhp70](#downgradephp70) (13)
 
 - [DowngradePhp71](#downgradephp71) (10)
 
@@ -98,9 +98,9 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (35)
+- [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (21)
+- [TypeDeclaration](#typedeclaration) (22)
 
 - [Visibility](#visibility) (2)
 
@@ -4296,6 +4296,19 @@ Remove anonymous class
 +        return new Anonymous();
      }
  }
+```
+
+<br>
+
+### DowngradeClosureCallRector
+
+Replace `Closure::call()` by `Closure::bindTo()`
+
+- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector`](../rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php)
+
+```diff
+-$closure->call($newObj, ...$args);
++call_user_func($closure->bindTo($newObj, $newObj), ...$args);
 ```
 
 <br>
@@ -10167,6 +10180,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ## Transform
 
+### AddAllowDynamicPropertiesAttributeRector
+
+Add the `AllowDynamicProperties` attribute to all classes
+
+- class: [`Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector`](../rules/Transform/Rector/Class_/AddAllowDynamicPropertiesAttributeRector.php)
+
+```diff
++#[AllowDynamicProperties]
+ class SomeObject {
+     public string $someProperty = 'hello world';
+ }
+```
+
+<br>
+
 ### AddInterfaceByParentRector
 
 Add interface by parent
@@ -11800,6 +11828,44 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 +    public function process(string $name)
      {
      }
+ }
+```
+
+<br>
+
+### AddPropertyTypeDeclarationRector
+
+Add type to property by added rules, mostly public/property by parent type
+
+:wrench: **configure it!**
+
+- class: [`Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector`](../rules/TypeDeclaration/Rector/Property/AddPropertyTypeDeclarationRector.php)
+
+```php
+use PHPStan\Type\StringType;
+use Rector\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector;
+use Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symplify\SymfonyPhpConfig\ValueObjectInliner;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddPropertyTypeDeclarationRector::class)
+        ->call(
+            'configure',
+            [[ValueObjectInliner::inline(new AddPropertyTypeDeclaration('ParentClass', 'name', new StringType()))]]
+        );
+};
+```
+
+↓
+
+```diff
+ class SomeClass extends ParentClass
+ {
+-    public $name;
++    public string $name;
  }
 ```
 

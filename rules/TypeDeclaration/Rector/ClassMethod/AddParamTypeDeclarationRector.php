@@ -109,11 +109,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, AddParamTypeDeclaration[]> $configuration
+     * @param array<string, AddParamTypeDeclaration[]>|AddParamTypeDeclaration[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
+        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? $configuration ?: [];
         Assert::allIsInstanceOf($parameterTypehints, AddParamTypeDeclaration::class);
 
         $this->parameterTypehints = $parameterTypehints;
