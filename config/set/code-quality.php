@@ -7,6 +7,7 @@ use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
 use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
+use Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector;
 use Rector\CodeQuality\Rector\BooleanNot\SimplifyDeMorganBinaryRector;
 use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
@@ -83,6 +84,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(CombinedAssignRector::class);
     $services->set(SimplifyEmptyArrayCheckRector::class);
+    $services->set(ReplaceMultipleBooleanNotRector::class);
     $services->set(ForeachToInArrayRector::class);
     $services->set(SimplifyForeachToCoalescingRector::class);
     $services->set(InArrayAndArrayKeysToArrayKeyExistsRector::class);
