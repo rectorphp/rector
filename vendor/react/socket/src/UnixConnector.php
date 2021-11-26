@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20211125\React\Socket;
+namespace RectorPrefix20211126\React\Socket;
 
-use RectorPrefix20211125\React\EventLoop\Loop;
-use RectorPrefix20211125\React\EventLoop\LoopInterface;
-use RectorPrefix20211125\React\Promise;
+use RectorPrefix20211126\React\EventLoop\Loop;
+use RectorPrefix20211126\React\EventLoop\LoopInterface;
+use RectorPrefix20211126\React\Promise;
 use InvalidArgumentException;
 use RuntimeException;
 /**
@@ -13,26 +13,26 @@ use RuntimeException;
  * Unix domain sockets use atomic operations, so we can as well emulate
  * async behavior.
  */
-final class UnixConnector implements \RectorPrefix20211125\React\Socket\ConnectorInterface
+final class UnixConnector implements \RectorPrefix20211126\React\Socket\ConnectorInterface
 {
     private $loop;
-    public function __construct(\RectorPrefix20211125\React\EventLoop\LoopInterface $loop = null)
+    public function __construct(\RectorPrefix20211126\React\EventLoop\LoopInterface $loop = null)
     {
-        $this->loop = $loop ?: \RectorPrefix20211125\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20211126\React\EventLoop\Loop::get();
     }
     public function connect($path)
     {
         if (\strpos($path, '://') === \false) {
             $path = 'unix://' . $path;
         } elseif (\substr($path, 0, 7) !== 'unix://') {
-            return \RectorPrefix20211125\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $path . '" is invalid'));
+            return \RectorPrefix20211126\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $path . '" is invalid'));
         }
         $resource = @\stream_socket_client($path, $errno, $errstr, 1.0);
         if (!$resource) {
-            return \RectorPrefix20211125\React\Promise\reject(new \RuntimeException('Unable to connect to unix domain socket "' . $path . '": ' . $errstr, $errno));
+            return \RectorPrefix20211126\React\Promise\reject(new \RuntimeException('Unable to connect to unix domain socket "' . $path . '": ' . $errstr, $errno));
         }
-        $connection = new \RectorPrefix20211125\React\Socket\Connection($resource, $this->loop);
+        $connection = new \RectorPrefix20211126\React\Socket\Connection($resource, $this->loop);
         $connection->unix = \true;
-        return \RectorPrefix20211125\React\Promise\resolve($connection);
+        return \RectorPrefix20211126\React\Promise\resolve($connection);
     }
 }

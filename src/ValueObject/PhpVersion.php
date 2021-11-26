@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20211125\MyCLabs\Enum\Enum;
-final class PhpVersion extends \RectorPrefix20211125\MyCLabs\Enum\Enum
+use RectorPrefix20211126\MyCLabs\Enum\Enum;
+final class PhpVersion extends \RectorPrefix20211126\MyCLabs\Enum\Enum
 {
     /**
      * @api
@@ -66,6 +66,11 @@ final class PhpVersion extends \RectorPrefix20211125\MyCLabs\Enum\Enum
      * @var int
      */
     public const PHP_81 = 81000;
+    /**
+     * @api
+     * @var int
+     */
+    public const PHP_82 = 82000;
     /**
      * @api
      * @var int

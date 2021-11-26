@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211125\Psr\Http\Message;
+namespace RectorPrefix20211126\Psr\Http\Message;
 
 /**
  * HTTP messages consist of requests from a client to a server and responses

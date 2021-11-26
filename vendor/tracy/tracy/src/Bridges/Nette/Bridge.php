@@ -5,13 +5,13 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211125\Tracy\Bridges\Nette;
+namespace RectorPrefix20211126\Tracy\Bridges\Nette;
 
-use RectorPrefix20211125\Latte;
-use RectorPrefix20211125\Nette;
-use RectorPrefix20211125\Tracy;
-use RectorPrefix20211125\Tracy\BlueScreen;
-use RectorPrefix20211125\Tracy\Helpers;
+use RectorPrefix20211126\Latte;
+use RectorPrefix20211126\Nette;
+use RectorPrefix20211126\Tracy;
+use RectorPrefix20211126\Tracy\BlueScreen;
+use RectorPrefix20211126\Tracy\Helpers;
 /**
  * Bridge for NEON & Latte.
  */
@@ -19,8 +19,8 @@ class Bridge
 {
     public static function initialize() : void
     {
-        $blueScreen = \RectorPrefix20211125\Tracy\Debugger::getBlueScreen();
-        if (!\class_exists(\RectorPrefix20211125\Latte\Bridges\Tracy\BlueScreenPanel::class)) {
+        $blueScreen = \RectorPrefix20211126\Tracy\Debugger::getBlueScreen();
+        if (!\class_exists(\RectorPrefix20211126\Latte\Bridges\Tracy\BlueScreenPanel::class)) {
             $blueScreen->addPanel([self::class, 'renderLatteError']);
             $blueScreen->addAction([self::class, 'renderLatteUnknownMacro']);
         }
@@ -32,15 +32,15 @@ class Bridge
      */
     public static function renderLatteError($e) : ?array
     {
-        if ($e instanceof \RectorPrefix20211125\Latte\CompileException && $e->sourceName) {
-            return ['tab' => 'Template', 'panel' => (\preg_match('#\\n|\\?#', $e->sourceName) ? '' : '<p>' . (@\is_file($e->sourceName) ? '<b>File:</b> ' . \RectorPrefix20211125\Tracy\Helpers::editorLink($e->sourceName, $e->sourceLine) : '<b>' . \htmlspecialchars($e->sourceName . ($e->sourceLine ? ':' . $e->sourceLine : '')) . '</b>') . '</p>') . '<pre class=code><div>' . \RectorPrefix20211125\Tracy\BlueScreen::highlightLine(\htmlspecialchars($e->sourceCode, \ENT_IGNORE, 'UTF-8'), $e->sourceLine) . '</div></pre>'];
+        if ($e instanceof \RectorPrefix20211126\Latte\CompileException && $e->sourceName) {
+            return ['tab' => 'Template', 'panel' => (\preg_match('#\\n|\\?#', $e->sourceName) ? '' : '<p>' . (@\is_file($e->sourceName) ? '<b>File:</b> ' . \RectorPrefix20211126\Tracy\Helpers::editorLink($e->sourceName, $e->sourceLine) : '<b>' . \htmlspecialchars($e->sourceName . ($e->sourceLine ? ':' . $e->sourceLine : '')) . '</b>') . '</p>') . '<pre class=code><div>' . \RectorPrefix20211126\Tracy\BlueScreen::highlightLine(\htmlspecialchars($e->sourceCode, \ENT_IGNORE, 'UTF-8'), $e->sourceLine) . '</div></pre>'];
         } elseif ($e && \strpos($file = $e->getFile(), '.latte--')) {
             $lines = \file($file);
             if (\preg_match('#// source: (\\S+\\.latte)#', $lines[1], $m) && @\is_file($m[1])) {
                 // @ - may trigger error
                 $templateFile = $m[1];
                 $templateLine = $e->getLine() && \preg_match('#/\\* line (\\d+) \\*/#', $lines[$e->getLine() - 1], $m) ? (int) $m[1] : 0;
-                return ['tab' => 'Template', 'panel' => '<p><b>File:</b> ' . \RectorPrefix20211125\Tracy\Helpers::editorLink($templateFile, $templateLine) . '</p>' . ($templateLine === null ? '' : \RectorPrefix20211125\Tracy\BlueScreen::highlightFile($templateFile, $templateLine))];
+                return ['tab' => 'Template', 'panel' => '<p><b>File:</b> ' . \RectorPrefix20211126\Tracy\Helpers::editorLink($templateFile, $templateLine) . '</p>' . ($templateLine === null ? '' : \RectorPrefix20211126\Tracy\BlueScreen::highlightFile($templateFile, $templateLine))];
             }
         }
         return null;
@@ -50,8 +50,8 @@ class Bridge
      */
     public static function renderLatteUnknownMacro($e) : ?array
     {
-        if ($e instanceof \RectorPrefix20211125\Latte\CompileException && $e->sourceName && @\is_file($e->sourceName) && (\preg_match('#Unknown macro (\\{\\w+)\\}, did you mean (\\{\\w+)\\}\\?#A', $e->getMessage(), $m) || \preg_match('#Unknown attribute (n:\\w+), did you mean (n:\\w+)\\?#A', $e->getMessage(), $m))) {
-            return ['link' => \RectorPrefix20211125\Tracy\Helpers::editorUri($e->sourceName, $e->sourceLine, 'fix', $m[1], $m[2]), 'label' => 'fix it'];
+        if ($e instanceof \RectorPrefix20211126\Latte\CompileException && $e->sourceName && @\is_file($e->sourceName) && (\preg_match('#Unknown macro (\\{\\w+)\\}, did you mean (\\{\\w+)\\}\\?#A', $e->getMessage(), $m) || \preg_match('#Unknown attribute (n:\\w+), did you mean (n:\\w+)\\?#A', $e->getMessage(), $m))) {
+            return ['link' => \RectorPrefix20211126\Tracy\Helpers::editorUri($e->sourceName, $e->sourceLine, 'fix', $m[1], $m[2]), 'label' => 'fix it'];
         }
         return null;
     }
@@ -60,15 +60,15 @@ class Bridge
      */
     public static function renderMemberAccessException($e) : ?array
     {
-        if (!$e instanceof \RectorPrefix20211125\Nette\MemberAccessException && !$e instanceof \LogicException) {
+        if (!$e instanceof \RectorPrefix20211126\Nette\MemberAccessException && !$e instanceof \LogicException) {
             return null;
         }
-        $loc = $e->getTrace()[$e instanceof \RectorPrefix20211125\Nette\MemberAccessException ? 1 : 0];
+        $loc = $e->getTrace()[$e instanceof \RectorPrefix20211126\Nette\MemberAccessException ? 1 : 0];
         if (\preg_match('#Cannot (?:read|write to) an undeclared property .+::\\$(\\w+), did you mean \\$(\\w+)\\?#A', $e->getMessage(), $m)) {
-            return ['link' => \RectorPrefix20211125\Tracy\Helpers::editorUri($loc['file'], $loc['line'], 'fix', '->' . $m[1], '->' . $m[2]), 'label' => 'fix it'];
+            return ['link' => \RectorPrefix20211126\Tracy\Helpers::editorUri($loc['file'], $loc['line'], 'fix', '->' . $m[1], '->' . $m[2]), 'label' => 'fix it'];
         } elseif (\preg_match('#Call to undefined (static )?method .+::(\\w+)\\(\\), did you mean (\\w+)\\(\\)?#A', $e->getMessage(), $m)) {
             $operator = $m[1] ? '::' : '->';
-            return ['link' => \RectorPrefix20211125\Tracy\Helpers::editorUri($loc['file'], $loc['line'], 'fix', $operator . $m[2] . '(', $operator . $m[3] . '('), 'label' => 'fix it'];
+            return ['link' => \RectorPrefix20211126\Tracy\Helpers::editorUri($loc['file'], $loc['line'], 'fix', $operator . $m[2] . '(', $operator . $m[3] . '('), 'label' => 'fix it'];
         }
         return null;
     }
@@ -77,11 +77,11 @@ class Bridge
      */
     public static function renderNeonError($e) : ?array
     {
-        if (!$e instanceof \RectorPrefix20211125\Nette\Neon\Exception || !\preg_match('#line (\\d+)#', $e->getMessage(), $m)) {
+        if (!$e instanceof \RectorPrefix20211126\Nette\Neon\Exception || !\preg_match('#line (\\d+)#', $e->getMessage(), $m)) {
             return null;
-        } elseif ($trace = \RectorPrefix20211125\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211125\Nette\Neon\Decoder::class, 'decodeFile']) ?? \RectorPrefix20211125\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211125\Nette\DI\Config\Adapters\NeonAdapter::class, 'load'])) {
-            $panel = '<p><b>File:</b> ' . \RectorPrefix20211125\Tracy\Helpers::editorLink($trace['args'][0], (int) $m[1]) . '</p>' . self::highlightNeon(\file_get_contents($trace['args'][0]), (int) $m[1]);
-        } elseif ($trace = \RectorPrefix20211125\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211125\Nette\Neon\Decoder::class, 'decode'])) {
+        } elseif ($trace = \RectorPrefix20211126\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211126\Nette\Neon\Decoder::class, 'decodeFile']) ?? \RectorPrefix20211126\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211126\Nette\DI\Config\Adapters\NeonAdapter::class, 'load'])) {
+            $panel = '<p><b>File:</b> ' . \RectorPrefix20211126\Tracy\Helpers::editorLink($trace['args'][0], (int) $m[1]) . '</p>' . self::highlightNeon(\file_get_contents($trace['args'][0]), (int) $m[1]);
+        } elseif ($trace = \RectorPrefix20211126\Tracy\Helpers::findTrace($e->getTrace(), [\RectorPrefix20211126\Nette\Neon\Decoder::class, 'decode'])) {
             $panel = self::highlightNeon($trace['args'][0], (int) $m[1]);
         }
         return isset($panel) ? ['tab' => 'NEON', 'panel' => $panel] : null;
@@ -91,6 +91,6 @@ class Bridge
         $code = \htmlspecialchars($code, \ENT_IGNORE, 'UTF-8');
         $code = \str_replace(' ', "<span class='tracy-dump-whitespace'>·</span>", $code);
         $code = \str_replace("\t", "<span class='tracy-dump-whitespace'>→   </span>", $code);
-        return '<pre class=code><div>' . \RectorPrefix20211125\Tracy\BlueScreen::highlightLine($code, $line) . '</div></pre>';
+        return '<pre class=code><div>' . \RectorPrefix20211126\Tracy\BlueScreen::highlightLine($code, $line) . '</div></pre>';
     }
 }

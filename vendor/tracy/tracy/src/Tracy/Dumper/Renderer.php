@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211125\Tracy\Dumper;
+namespace RectorPrefix20211126\Tracy\Dumper;
 
-use RectorPrefix20211125\Tracy\Helpers;
+use RectorPrefix20211126\Tracy\Helpers;
 /**
  * Visualisation of internal representation.
  * @internal
@@ -66,8 +66,8 @@ final class Renderer
         $location = null;
         if ($model->location && $this->sourceLocation) {
             [$file, $line, $code] = $model->location;
-            $uri = \RectorPrefix20211125\Tracy\Helpers::editorUri($file, $line);
-            $location = \RectorPrefix20211125\Tracy\Helpers::formatHtml('<a href="%" class="tracy-dump-location" title="in file % on line %%">', $uri ?? '#', $file, $line, $uri ? "\nClick to open in editor" : '') . \RectorPrefix20211125\Tracy\Helpers::encodeString($code, 50) . " 📍</a\n>";
+            $uri = \RectorPrefix20211126\Tracy\Helpers::editorUri($file, $line);
+            $location = \RectorPrefix20211126\Tracy\Helpers::formatHtml('<a href="%" class="tracy-dump-location" title="in file % on line %%">', $uri ?? '#', $file, $line, $uri ? "\nClick to open in editor" : '') . \RectorPrefix20211126\Tracy\Helpers::encodeString($code, 50) . " 📍</a\n>";
         }
         return '<pre class="tracy-dump' . ($this->theme ? ' tracy-' . \htmlspecialchars($this->theme) : '') . ($json && $this->collapseTop === \true ? ' tracy-collapsed' : '') . '"' . ($snapshot !== null ? " data-tracy-snapshot='" . self::jsonEncode($snapshot) . "'" : '') . ($json ? " data-tracy-dump='" . self::jsonEncode($json) . "'" : '') . ($location || \strlen($html) > 100 ? "\n" : '') . '>' . $location . $html . "</pre>\n";
     }
@@ -107,20 +107,20 @@ final class Renderer
             case \is_string($value):
                 return $this->renderString($value, $depth, $keyType);
             case \is_array($value):
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_ARRAY:
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_ARRAY:
                 return $this->renderArray($value, $depth);
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF:
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF:
                 return $this->renderVar($this->snapshot[$value->value], $depth, $keyType);
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_OBJECT:
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_OBJECT:
                 return $this->renderObject($value, $depth);
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_NUMBER:
-                return '<span class="tracy-dump-number">' . \RectorPrefix20211125\Tracy\Helpers::escapeHtml($value->value) . '</span>';
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_TEXT:
-                return '<span class="tracy-dump-virtual">' . \RectorPrefix20211125\Tracy\Helpers::escapeHtml($value->value) . '</span>';
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_STRING_HTML:
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_BINARY_HTML:
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_NUMBER:
+                return '<span class="tracy-dump-number">' . \RectorPrefix20211126\Tracy\Helpers::escapeHtml($value->value) . '</span>';
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_TEXT:
+                return '<span class="tracy-dump-virtual">' . \RectorPrefix20211126\Tracy\Helpers::escapeHtml($value->value) . '</span>';
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_STRING_HTML:
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_BINARY_HTML:
                 return $this->renderString($value, $depth, $keyType);
-            case $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_RESOURCE:
+            case $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_RESOURCE:
                 return $this->renderResource($value, $depth);
             default:
                 throw new \Exception('Unknown type');
@@ -134,17 +134,17 @@ final class Renderer
     {
         if ($keyType === self::TYPE_ARRAY_KEY) {
             $indent = '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth - 1) . ' </span>';
-            return '<span class="tracy-dump-string">' . "<span class='tracy-dump-lq'>'</span>" . (\is_string($str) ? \RectorPrefix20211125\Tracy\Helpers::escapeHtml($str) : \str_replace("\n", "\n" . $indent, $str->value)) . "<span>'</span>" . '</span>';
+            return '<span class="tracy-dump-string">' . "<span class='tracy-dump-lq'>'</span>" . (\is_string($str) ? \RectorPrefix20211126\Tracy\Helpers::escapeHtml($str) : \str_replace("\n", "\n" . $indent, $str->value)) . "<span>'</span>" . '</span>';
         } elseif ($keyType !== null) {
-            static $classes = [\RectorPrefix20211125\Tracy\Dumper\Value::PROP_PUBLIC => 'tracy-dump-public', \RectorPrefix20211125\Tracy\Dumper\Value::PROP_PROTECTED => 'tracy-dump-protected', \RectorPrefix20211125\Tracy\Dumper\Value::PROP_DYNAMIC => 'tracy-dump-dynamic', \RectorPrefix20211125\Tracy\Dumper\Value::PROP_VIRTUAL => 'tracy-dump-virtual'];
+            static $classes = [\RectorPrefix20211126\Tracy\Dumper\Value::PROP_PUBLIC => 'tracy-dump-public', \RectorPrefix20211126\Tracy\Dumper\Value::PROP_PROTECTED => 'tracy-dump-protected', \RectorPrefix20211126\Tracy\Dumper\Value::PROP_DYNAMIC => 'tracy-dump-dynamic', \RectorPrefix20211126\Tracy\Dumper\Value::PROP_VIRTUAL => 'tracy-dump-virtual'];
             $indent = '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth - 1) . ' </span>';
-            $title = \is_string($keyType) ? ' title="declared in ' . \RectorPrefix20211125\Tracy\Helpers::escapeHtml($keyType) . '"' : null;
-            return '<span class="' . ($title ? 'tracy-dump-private' : $classes[$keyType]) . '"' . $title . '>' . (\is_string($str) ? \RectorPrefix20211125\Tracy\Helpers::escapeHtml($str) : "<span class='tracy-dump-lq'>'</span>" . \str_replace("\n", "\n" . $indent, $str->value) . "<span>'</span>") . '</span>';
+            $title = \is_string($keyType) ? ' title="declared in ' . \RectorPrefix20211126\Tracy\Helpers::escapeHtml($keyType) . '"' : null;
+            return '<span class="' . ($title ? 'tracy-dump-private' : $classes[$keyType]) . '"' . $title . '>' . (\is_string($str) ? \RectorPrefix20211126\Tracy\Helpers::escapeHtml($str) : "<span class='tracy-dump-lq'>'</span>" . \str_replace("\n", "\n" . $indent, $str->value) . "<span>'</span>") . '</span>';
         } elseif (\is_string($str)) {
-            $len = \RectorPrefix20211125\Tracy\Helpers::utf8Length($str);
-            return '<span class="tracy-dump-string"' . ($len > 1 ? ' title="' . $len . ' characters"' : '') . '>' . "<span>'</span>" . \RectorPrefix20211125\Tracy\Helpers::escapeHtml($str) . "<span>'</span>" . '</span>';
+            $len = \RectorPrefix20211126\Tracy\Helpers::utf8Length($str);
+            return '<span class="tracy-dump-string"' . ($len > 1 ? ' title="' . $len . ' characters"' : '') . '>' . "<span>'</span>" . \RectorPrefix20211126\Tracy\Helpers::escapeHtml($str) . "<span>'</span>" . '</span>';
         } else {
-            $unit = $str->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_STRING_HTML ? 'characters' : 'bytes';
+            $unit = $str->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_STRING_HTML ? 'characters' : 'bytes';
             $count = \substr_count($str->value, "\n");
             if ($count) {
                 $collapsed = $indent1 = $toggle = null;
@@ -180,7 +180,7 @@ final class Renderer
                 return $out . ' <i>RECURSION</i>';
             } elseif ($array->id && ($array->depth < $depth || isset($this->above[$array->id]))) {
                 if ($this->lazy !== \false) {
-                    $ref = new \RectorPrefix20211125\Tracy\Dumper\Value(\RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF, $array->id);
+                    $ref = new \RectorPrefix20211126\Tracy\Dumper\Value(\RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF, $array->id);
                     $this->copySnapshot($ref);
                     return '<span class="tracy-toggle tracy-collapsed" data-tracy-dump=\'' . \json_encode($ref) . "'>" . $out . '</span>';
                 }
@@ -193,7 +193,7 @@ final class Renderer
         $collapsed = $depth ? $this->lazy === \false || $depth === 1 ? $count >= $this->collapseSub : \true : (\is_int($this->collapseTop) ? $count >= $this->collapseTop : $this->collapseTop);
         $span = '<span class="tracy-toggle' . ($collapsed ? ' tracy-collapsed' : '') . '"';
         if ($collapsed && $this->lazy !== \false) {
-            $array = isset($array->id) ? new \RectorPrefix20211125\Tracy\Dumper\Value(\RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF, $array->id) : $array;
+            $array = isset($array->id) ? new \RectorPrefix20211126\Tracy\Dumper\Value(\RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF, $array->id) : $array;
             $this->copySnapshot($array);
             return $span . " data-tracy-dump='" . self::jsonEncode($array) . "'>" . $out . '</span>';
         }
@@ -210,13 +210,13 @@ final class Renderer
         unset($this->parents[$array->id ?? null]);
         return $out . '</div>';
     }
-    private function renderObject(\RectorPrefix20211125\Tracy\Dumper\Value $object, int $depth) : string
+    private function renderObject(\RectorPrefix20211126\Tracy\Dumper\Value $object, int $depth) : string
     {
         $editorAttributes = '';
         if ($this->classLocation && $object->editor) {
-            $editorAttributes = \RectorPrefix20211125\Tracy\Helpers::formatHtml(' title="Declared in file % on line %%%" data-tracy-href="%"', $object->editor->file, $object->editor->line, $object->editor->url ? "\nCtrl-Click to open in editor" : '', "\nAlt-Click to expand/collapse all child nodes", $object->editor->url);
+            $editorAttributes = \RectorPrefix20211126\Tracy\Helpers::formatHtml(' title="Declared in file % on line %%%" data-tracy-href="%"', $object->editor->file, $object->editor->line, $object->editor->url ? "\nCtrl-Click to open in editor" : '', "\nAlt-Click to expand/collapse all child nodes", $object->editor->url);
         }
-        $out = '<span class="tracy-dump-object"' . $editorAttributes . '>' . \RectorPrefix20211125\Tracy\Helpers::escapeHtml($object->value) . '</span>' . ($object->id && $this->hash ? ' <span class="tracy-dump-hash">#' . $object->id . '</span>' : '');
+        $out = '<span class="tracy-dump-object"' . $editorAttributes . '>' . \RectorPrefix20211126\Tracy\Helpers::escapeHtml($object->value) . '</span>' . ($object->id && $this->hash ? ' <span class="tracy-dump-hash">#' . $object->id . '</span>' : '');
         if ($object->items === null) {
             return $out . ' …';
         } elseif (!$object->items) {
@@ -225,7 +225,7 @@ final class Renderer
             return $out . ' <i>RECURSION</i>';
         } elseif ($object->id && ($object->depth < $depth || isset($this->above[$object->id]))) {
             if ($this->lazy !== \false) {
-                $ref = new \RectorPrefix20211125\Tracy\Dumper\Value(\RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF, $object->id);
+                $ref = new \RectorPrefix20211126\Tracy\Dumper\Value(\RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF, $object->id);
                 $this->copySnapshot($ref);
                 return '<span class="tracy-toggle tracy-collapsed" data-tracy-dump=\'' . \json_encode($ref) . "'>" . $out . '</span>';
             }
@@ -234,7 +234,7 @@ final class Renderer
         $collapsed = $object->collapsed ?? ($depth ? $this->lazy === \false || $depth === 1 ? \count($object->items) >= $this->collapseSub : \true : (\is_int($this->collapseTop) ? \count($object->items) >= $this->collapseTop : $this->collapseTop));
         $span = '<span class="tracy-toggle' . ($collapsed ? ' tracy-collapsed' : '') . '"';
         if ($collapsed && $this->lazy !== \false) {
-            $value = $object->id ? new \RectorPrefix20211125\Tracy\Dumper\Value(\RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF, $object->id) : $object;
+            $value = $object->id ? new \RectorPrefix20211126\Tracy\Dumper\Value(\RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF, $object->id) : $object;
             $this->copySnapshot($value);
             return $span . " data-tracy-dump='" . self::jsonEncode($value) . "'>" . $out . '</span>';
         }
@@ -242,7 +242,7 @@ final class Renderer
         $indent = '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth) . '</span>';
         $this->parents[$object->id] = $this->above[$object->id] = \true;
         foreach ($object->items as $info) {
-            [$k, $v, $type, $ref] = $info + [2 => \RectorPrefix20211125\Tracy\Dumper\Value::PROP_VIRTUAL, null];
+            [$k, $v, $type, $ref] = $info + [2 => \RectorPrefix20211126\Tracy\Dumper\Value::PROP_VIRTUAL, null];
             $out .= $indent . $this->renderVar($k, $depth + 1, $type) . ': ' . ($ref && $this->hash ? '<span class="tracy-dump-hash">&' . $ref . '</span> ' : '') . ($tmp = $this->renderVar($v, $depth + 1)) . (\substr($tmp, -6) === '</div>' ? '' : "\n");
         }
         if ($object->length > \count($object->items)) {
@@ -251,14 +251,14 @@ final class Renderer
         unset($this->parents[$object->id]);
         return $out . '</div>';
     }
-    private function renderResource(\RectorPrefix20211125\Tracy\Dumper\Value $resource, int $depth) : string
+    private function renderResource(\RectorPrefix20211126\Tracy\Dumper\Value $resource, int $depth) : string
     {
-        $out = '<span class="tracy-dump-resource">' . \RectorPrefix20211125\Tracy\Helpers::escapeHtml($resource->value) . '</span> ' . ($this->hash ? '<span class="tracy-dump-hash">@' . \substr($resource->id, 1) . '</span>' : '');
+        $out = '<span class="tracy-dump-resource">' . \RectorPrefix20211126\Tracy\Helpers::escapeHtml($resource->value) . '</span> ' . ($this->hash ? '<span class="tracy-dump-hash">@' . \substr($resource->id, 1) . '</span>' : '');
         if (!$resource->items) {
             return $out;
         } elseif (isset($this->above[$resource->id])) {
             if ($this->lazy !== \false) {
-                $ref = new \RectorPrefix20211125\Tracy\Dumper\Value(\RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF, $resource->id);
+                $ref = new \RectorPrefix20211126\Tracy\Dumper\Value(\RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF, $resource->id);
                 $this->copySnapshot($ref);
                 return '<span class="tracy-toggle tracy-collapsed" data-tracy-dump=\'' . \json_encode($ref) . "'>" . $out . '</span>';
             }
@@ -267,7 +267,7 @@ final class Renderer
             $this->above[$resource->id] = \true;
             $out = "<span class=\"tracy-toggle tracy-collapsed\">{$out}</span>\n<div class=\"tracy-collapsed\">";
             foreach ($resource->items as [$k, $v]) {
-                $out .= '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth) . '</span>' . $this->renderVar($k, $depth + 1, \RectorPrefix20211125\Tracy\Dumper\Value::PROP_VIRTUAL) . ': ' . ($tmp = $this->renderVar($v, $depth + 1)) . (\substr($tmp, -6) === '</div>' ? '' : "\n");
+                $out .= '<span class="tracy-dump-indent">   ' . \str_repeat('|  ', $depth) . '</span>' . $this->renderVar($k, $depth + 1, \RectorPrefix20211126\Tracy\Dumper\Value::PROP_VIRTUAL) . ': ' . ($tmp = $this->renderVar($v, $depth + 1)) . (\substr($tmp, -6) === '</div>' ? '' : "\n");
             }
             return $out . '</div>';
         }
@@ -284,12 +284,12 @@ final class Renderer
             foreach ($value as [, $v]) {
                 $this->copySnapshot($v);
             }
-        } elseif ($value instanceof \RectorPrefix20211125\Tracy\Dumper\Value && $value->type === \RectorPrefix20211125\Tracy\Dumper\Value::TYPE_REF) {
+        } elseif ($value instanceof \RectorPrefix20211126\Tracy\Dumper\Value && $value->type === \RectorPrefix20211126\Tracy\Dumper\Value::TYPE_REF) {
             if (!isset($this->snapshotSelection[$value->value])) {
                 $ref = $this->snapshotSelection[$value->value] = $this->snapshot[$value->value];
                 $this->copySnapshot($ref);
             }
-        } elseif ($value instanceof \RectorPrefix20211125\Tracy\Dumper\Value && $value->items) {
+        } elseif ($value instanceof \RectorPrefix20211126\Tracy\Dumper\Value && $value->items) {
             foreach ($value->items as [, $v]) {
                 $this->copySnapshot($v);
             }

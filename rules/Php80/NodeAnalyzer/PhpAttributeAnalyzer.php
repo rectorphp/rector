@@ -4,19 +4,32 @@ declare (strict_types=1);
 namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class PhpAttributeAnalyzer
 {
     /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\Core\PhpParser\AstResolver $astResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
+        $this->astResolver = $astResolver;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
@@ -28,6 +41,29 @@ final class PhpAttributeAnalyzer
                 if (!$this->nodeNameResolver->isName($attribute->name, $attributeClass)) {
                     continue;
                 }
+                return \true;
+            }
+        }
+        return \false;
+    }
+    public function hasInheritedPhpAttribute(\PhpParser\Node\Stmt\ClassLike $classLike, string $attributeClass) : bool
+    {
+        $className = (string) $this->nodeNameResolver->getName($classLike);
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $reflectionClass = $this->reflectionProvider->getClass($className);
+        $ancestorClassReflections = $reflectionClass->getAncestors();
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
+            $ancestorClassName = $ancestorClassReflection->getName();
+            if ($ancestorClassName === $className) {
+                continue;
+            }
+            $class = $this->astResolver->resolveClassFromName($ancestorClassName);
+            if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+                continue;
+            }
+            if ($this->hasPhpAttribute($class, $attributeClass)) {
                 return \true;
             }
         }
