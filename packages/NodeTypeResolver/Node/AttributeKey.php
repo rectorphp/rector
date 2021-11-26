@@ -183,4 +183,8 @@ final class AttributeKey
      * @var string
      */
     public const STATEMENT_DEPTH = 'statementDepth';
+    /**
+     * @var string
+     */
+    public const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_type';
 }

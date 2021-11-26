@@ -91,11 +91,11 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, AddParamTypeDeclaration[]> $configuration
+     * @param array<string, AddParamTypeDeclaration[]>|AddParamTypeDeclaration[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? [];
+        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? $configuration ?: [];
         \RectorPrefix20211126\Webmozart\Assert\Assert::allIsInstanceOf($parameterTypehints, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration::class);
         $this->parameterTypehints = $parameterTypehints;
     }
