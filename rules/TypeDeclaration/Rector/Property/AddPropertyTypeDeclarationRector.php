@@ -68,7 +68,7 @@ CODE_SAMPLE
             return null;
         }
         foreach ($this->addPropertyTypeDeclarations as $addPropertyTypeDeclaration) {
-            if (!$classReflection->isSubclassOf($addPropertyTypeDeclaration->getClass())) {
+            if (!$this->isClassReflectionType($classReflection, $addPropertyTypeDeclaration->getClass())) {
                 continue;
             }
             if (!$this->isName($node, $addPropertyTypeDeclaration->getPropertyName())) {
@@ -91,5 +91,12 @@ CODE_SAMPLE
     {
         \RectorPrefix20211126\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration::class);
         $this->addPropertyTypeDeclarations = $configuration;
+    }
+    private function isClassReflectionType(\PHPStan\Reflection\ClassReflection $classReflection, string $type) : bool
+    {
+        if ($classReflection->hasTraitUse($type)) {
+            return \true;
+        }
+        return $classReflection->isSubclassOf($type);
     }
 }
