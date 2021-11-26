@@ -84,5 +84,11 @@ final class PhpVersion extends Enum
      * @api
      * @var int
      */
+    public const PHP_82 = 82000;
+
+    /**
+     * @api
+     * @var int
+     */
     public const PHP_10 = 100000;
 }

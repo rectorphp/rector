@@ -542,4 +542,10 @@ final class PhpVersionFeature
      * @var int
      */
     public const INTERSECTION_TYPES = PhpVersion::PHP_81;
+
+    /**
+     * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
+     * @var int
+     */
+    public const DEPRECATE_DYNAMIC_PROPERTIES = PhpVersion::PHP_82;
 }
