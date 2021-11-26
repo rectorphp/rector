@@ -44,8 +44,8 @@ final class PhpAttributeAnalyzer
             return false;
         }
 
-        $reflectionClass = $this->reflectionProvider->getClass($className);
-        $ancestorClassReflections = $reflectionClass->getAncestors();
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $ancestorClassReflections = $classReflection->getAncestors();
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $ancestorClassName = $ancestorClassReflection->getName();
             if ($ancestorClassName === $className) {
