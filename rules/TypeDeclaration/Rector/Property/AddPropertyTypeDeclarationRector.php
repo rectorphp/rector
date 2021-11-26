@@ -86,7 +86,7 @@ CODE_SAMPLE
         }
 
         foreach ($this->addPropertyTypeDeclarations as $addPropertyTypeDeclaration) {
-            if (! $classReflection->isSubclassOf($addPropertyTypeDeclaration->getClass())) {
+            if (! $this->isClassReflectionType($classReflection, $addPropertyTypeDeclaration->getClass())) {
                 continue;
             }
 
@@ -117,5 +117,14 @@ CODE_SAMPLE
     {
         Assert::allIsAOf($configuration, AddPropertyTypeDeclaration::class);
         $this->addPropertyTypeDeclarations = $configuration;
+    }
+
+    private function isClassReflectionType(ClassReflection $classReflection, string $type): bool
+    {
+        if ($classReflection->hasTraitUse($type)) {
+            return true;
+        }
+
+        return $classReflection->isSubclassOf($type);
     }
 }
