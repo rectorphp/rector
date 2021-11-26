@@ -1450,6 +1450,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => $baseDir . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
     'Rector\\CodeQuality\\Rector\\Assign\\SplitListAssignToSeparateLineRector' => $baseDir . '/rules/CodeQuality/Rector/Assign/SplitListAssignToSeparateLineRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanAnd\\SimplifyEmptyArrayCheckRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanAnd/SimplifyEmptyArrayCheckRector.php',
+    'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceMultipleBooleanNotRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
     'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => $baseDir . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\DateTimeToDateTimeInterfaceRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/DateTimeToDateTimeInterfaceRector.php',
