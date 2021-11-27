@@ -119,7 +119,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? [];
+        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, PseudoNamespaceToNamespace::class);
 
         $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;

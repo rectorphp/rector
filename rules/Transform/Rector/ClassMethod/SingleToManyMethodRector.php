@@ -118,7 +118,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? [];
+        $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($singleToManyMethods, SingleToManyMethod::class);
 
         $this->singleToManyMethods = $singleToManyMethods;

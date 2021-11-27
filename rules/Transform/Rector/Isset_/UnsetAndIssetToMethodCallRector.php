@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? [];
+        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($issetUnsetToMethodCalls, UnsetAndIssetToMethodCall::class);
 
         $this->issetUnsetToMethodCalls = $issetUnsetToMethodCalls;

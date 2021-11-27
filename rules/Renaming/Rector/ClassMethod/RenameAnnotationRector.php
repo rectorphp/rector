@@ -116,7 +116,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? [];
+        $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($renamedAnnotationsInTypes, RenameAnnotation::class);
         $this->renamedAnnotations = $renamedAnnotationsInTypes;
     }

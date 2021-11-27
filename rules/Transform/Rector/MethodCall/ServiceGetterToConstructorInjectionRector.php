@@ -172,7 +172,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? [];
+        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($methodCallToServices, ServiceGetterToConstructorInjection::class);
         $this->methodCallToServices = $methodCallToServices;
     }

@@ -100,7 +100,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? [];
+        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($renameClassConstFetches, RenameClassConstFetchInterface::class);
 
         $this->renameClassConstFetches = $renameClassConstFetches;

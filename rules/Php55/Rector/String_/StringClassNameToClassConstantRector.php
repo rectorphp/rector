@@ -121,7 +121,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? [];
+        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? ($configuration ?: []);
         Assert::allString($classesToSkip);
 
         $this->classesToSkip = $classesToSkip;

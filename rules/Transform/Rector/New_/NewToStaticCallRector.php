@@ -92,7 +92,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? [];
+        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($typeToStaticCalls, NewToStaticCall::class);
         $this->typeToStaticCalls = $typeToStaticCalls;
     }

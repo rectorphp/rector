@@ -109,7 +109,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];
+        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($parentClassToTraits, ParentClassToTraits::class);
         $this->parentClassToTraits = $parentClassToTraits;
     }

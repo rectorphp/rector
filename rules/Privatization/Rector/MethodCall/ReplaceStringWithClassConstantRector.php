@@ -119,7 +119,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->replaceStringWithClassConstants = $configuration[self::REPLACE_STRING_WITH_CLASS_CONSTANT] ?? [];
+        $this->replaceStringWithClassConstants = $configuration[self::REPLACE_STRING_WITH_CLASS_CONSTANT] ?? ($configuration ?: []);
     }
 
     private function matchArg(

@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
@@ -92,6 +93,11 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? [];
+        $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? ($configuration ?: []);
+        Assert::allString($functionsToConstants);
+        Assert::allString(array_keys($functionsToConstants));
+
+        /** @var array<string, string> $functionsToConstants */
+        $this->functionsToConstants = $functionsToConstants;
     }
 }

@@ -105,7 +105,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? [];
+        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? ($configuration ?: []);
         Assert::allString($annotationsToRemove);
 
         $this->annotationsToRemove = $annotationsToRemove;

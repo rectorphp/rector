@@ -98,7 +98,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
+        $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($parentCallToProperties, ReplaceParentCallByPropertyCall::class);
 
         $this->parentCallToProperties = $parentCallToProperties;

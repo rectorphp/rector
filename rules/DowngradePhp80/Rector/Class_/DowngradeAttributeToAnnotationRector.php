@@ -132,7 +132,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? [];
+        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($attributesToAnnotations, DowngradeAttributeToAnnotation::class);
 
         $this->attributesToAnnotations = $attributesToAnnotations;

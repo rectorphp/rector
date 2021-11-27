@@ -90,6 +90,6 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->functionToNew = $configuration[self::FUNCTIONS_TO_NEWS] ?? [];
+        $this->functionToNew = $configuration[self::FUNCTIONS_TO_NEWS] ?? ($configuration ?: []);
     }
 }

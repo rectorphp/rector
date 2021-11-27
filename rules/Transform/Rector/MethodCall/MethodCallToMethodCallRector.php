@@ -138,12 +138,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, MethodCallToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? [];
+        $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? ($configuration ?: []);
         Assert::allIsAOf($methodCallsToMethodsCalls, MethodCallToMethodCall::class);
+
         $this->methodCallsToMethodsCalls = $methodCallsToMethodsCalls;
     }
 

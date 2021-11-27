@@ -80,7 +80,7 @@ final class ClassConstFetchToValueRector extends AbstractRector implements Confi
      */
     public function configure(array $configuration): void
     {
-        $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? [];
+        $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($classConstFetchesToValues, ClassConstFetchToValue::class);
 
         $this->classConstFetchesToValues = $classConstFetchesToValues;

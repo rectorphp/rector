@@ -123,11 +123,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, GenericClassMethodParam[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? [];
+        $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? ($configuration ?: []);
         Assert::allIsAOf($makeClassMethodGenerics, GenericClassMethodParam::class);
 
         $this->genericClassMethodParams = $makeClassMethodGenerics;

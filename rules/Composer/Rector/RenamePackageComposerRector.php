@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? [];
+        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($renamePackages, RenamePackage::class);
         $this->renamePackages = $renamePackages;
     }

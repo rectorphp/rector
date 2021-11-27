@@ -95,7 +95,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? [];
+        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? ($configuration ?: []);
         Assert::allString($groupNamesBySuffix);
 
         $this->groupNamesBySuffix = $groupNamesBySuffix;

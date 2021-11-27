@@ -76,7 +76,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
      */
     public function configure(array $configuration): void
     {
-        $funcCallsToStaticCalls = $configuration[self::FUNC_CALLS_TO_STATIC_CALLS] ?? [];
+        $funcCallsToStaticCalls = $configuration[self::FUNC_CALLS_TO_STATIC_CALLS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($funcCallsToStaticCalls, FuncCallToStaticCall::class);
         $this->funcCallsToStaticCalls = $funcCallsToStaticCalls;
     }

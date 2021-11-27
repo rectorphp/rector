@@ -128,7 +128,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? [];
+        $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($callableInMethodCallToVariable, CallableInMethodCallToVariable::class);
 
         $this->callableInMethodCallToVariable = $callableInMethodCallToVariable;

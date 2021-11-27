@@ -11,6 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * Covers cases like
@@ -94,7 +95,12 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? [];
+        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? ($configuration ?: []);
+
+        Assert::allString(array_keys($oldToNewInterfaces));
+        Assert::allString($oldToNewInterfaces);
+
+        $this->oldToNewInterfaces = $oldToNewInterfaces;
     }
 
     private function makeImplementsUnique(Class_ $class): void

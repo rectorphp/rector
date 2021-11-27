@@ -8,6 +8,7 @@ use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Composer\Rector\RemovePackageComposerRector\RemovePackageComposerRectorTest
@@ -55,10 +56,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->packageNames = $configuration[self::PACKAGE_NAMES] ?? [];
+        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? ($configuration ?: []);
+
+        Assert::isArray($packagesNames);
+        Assert::allString($packagesNames);
+
+        $this->packageNames = $packagesNames;
     }
 }

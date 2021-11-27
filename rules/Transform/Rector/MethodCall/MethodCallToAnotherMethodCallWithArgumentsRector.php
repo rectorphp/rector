@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? [];
+        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf(
             $methodCallRenamesWithAddedArguments,
             MethodCallToAnotherMethodCallWithArguments::class

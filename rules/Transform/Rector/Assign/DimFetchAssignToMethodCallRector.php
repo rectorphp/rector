@@ -118,7 +118,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? [];
+        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
         $this->dimFetchAssignToMethodCalls = $dimFetchAssignToMethodCalls;
     }

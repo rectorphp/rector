@@ -10,6 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveInterfacesRector\RemoveInterfacesRectorTest
@@ -22,7 +23,7 @@ final class RemoveInterfacesRector extends AbstractRector implements Configurabl
     public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';
 
     /**
-     * @var class-string[]
+     * @var string[]
      */
     private array $interfacesToRemove = [];
 
@@ -76,10 +77,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, class-string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? [];
+        $interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? ($configuration ?: []);
+        Assert::allString($interfacesToRemove);
+
+        /** @var string[] $interfacesToRemove */
+        $this->interfacesToRemove = $interfacesToRemove;
     }
 }

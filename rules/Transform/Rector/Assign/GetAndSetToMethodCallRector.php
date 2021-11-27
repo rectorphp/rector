@@ -90,11 +90,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, GetAndSetToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
+        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? ($configuration ?: []);
         Assert::allIsAOf($getAndSetToMethodCalls, GetAndSetToMethodCall::class);
 
         $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;

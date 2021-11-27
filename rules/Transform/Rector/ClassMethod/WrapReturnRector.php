@@ -99,7 +99,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? [];
+        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($typeMethodWraps, WrapReturn::class);
         $this->typeMethodWraps = $typeMethodWraps;
     }

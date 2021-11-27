@@ -92,7 +92,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? [];
+        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($removedArguments, ArgumentRemover::class);
         $this->removedArguments = $removedArguments;
     }

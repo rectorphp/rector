@@ -16,6 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
@@ -113,11 +114,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->methodByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? [];
+        $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? ($configuration ?: []);
+        Assert::allString(array_keys($methodsByParentTypes));
+        Assert::allString($methodsByParentTypes);
+
+        /** @var array<string, string> $methodsByParentTypes */
+        $this->methodByParentTypes = $methodsByParentTypes;
     }
 
     private function shouldSkipMethod(ClassMethod $classMethod, string $method): bool

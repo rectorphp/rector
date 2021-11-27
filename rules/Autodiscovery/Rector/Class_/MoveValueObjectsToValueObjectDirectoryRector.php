@@ -15,6 +15,7 @@ use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * Inspiration @see https://github.com/rectorphp/rector/pull/1865/files#diff-0d18e660cdb626958662641b491623f8
@@ -50,7 +51,7 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     private bool $enableValueObjectGuessing = true;
 
     /**
-     * @var class-string[]
+     * @var string[]
      */
     private array $types = [];
 
@@ -154,9 +155,19 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $this->types = $configuration[self::TYPES] ?? [];
-        $this->suffixes = $configuration[self::SUFFIXES] ?? [];
-        $this->enableValueObjectGuessing = $configuration[self::ENABLE_VALUE_OBJECT_GUESSING] ?? false;
+        $types = $configuration[self::TYPES] ?? [];
+        Assert::isArray($types);
+        Assert::allString($types);
+        $this->types = $types;
+
+        $suffixes = $configuration[self::SUFFIXES] ?? [];
+        Assert::isArray($suffixes);
+        Assert::allString($suffixes);
+        $this->suffixes = $suffixes;
+
+        $enableValueObjectGuessing = $configuration[self::ENABLE_VALUE_OBJECT_GUESSING] ?? false;
+        Assert::boolean($enableValueObjectGuessing);
+        $this->enableValueObjectGuessing = $enableValueObjectGuessing;
     }
 
     private function isValueObjectMatch(Class_ $class): bool

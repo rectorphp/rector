@@ -115,12 +115,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, AttributeKeyToClassConstFetch[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? [];
+        $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? ($configuration ?: []);
         Assert::allIsAOf($attributeKeysToClassConstFetches, AttributeKeyToClassConstFetch::class);
+
         $this->attributeKeysToClassConstFetches = $attributeKeysToClassConstFetches;
     }
 }

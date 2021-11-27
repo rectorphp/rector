@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? [];
+        $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($replacePackagesAndVersions, ReplacePackageAndVersion::class);
 
         $this->versionGuard->validate($replacePackagesAndVersions);

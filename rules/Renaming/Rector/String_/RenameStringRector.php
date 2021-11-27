@@ -91,7 +91,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $stringChanges = $configuration[self::STRING_CHANGES] ?? [];
+        $stringChanges = $configuration[self::STRING_CHANGES] ?? ($configuration ?: []);
         Assert::allString($stringChanges);
         Assert::allString(array_values($stringChanges));
 

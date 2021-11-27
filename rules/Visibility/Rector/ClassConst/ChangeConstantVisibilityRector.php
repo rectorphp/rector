@@ -110,7 +110,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? [];
+        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? ($configuration ?: []);
         Assert::isArray($classConstantVisibilityChanges);
         Assert::allIsInstanceOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
 

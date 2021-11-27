@@ -15,6 +15,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
@@ -112,10 +113,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? [];
+        $reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? ($configuration ?: []);
+
+        Assert::allString(array_keys($reservedNamesToNewOnes));
+        Assert::allString($reservedNamesToNewOnes);
+
+        /** @var array<string, string> $reservedNamesToNewOnes */
+        $this->reservedNamesToNewOnes = $reservedNamesToNewOnes;
     }
 }

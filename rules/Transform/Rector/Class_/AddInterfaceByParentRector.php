@@ -14,6 +14,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByParentRector\AddInterfaceByParentRectorTest
@@ -101,10 +102,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? [];
+        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? ($configuration ?: []);
+
+        Assert::isArray($interfaceByParent);
+        Assert::allString(array_keys($interfaceByParent));
+        Assert::allString($interfaceByParent);
+
+        $this->interfaceByParent = $interfaceByParent;
     }
 }

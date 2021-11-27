@@ -13,6 +13,7 @@ use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveParentRector\RemoveParentRectorTest
@@ -93,10 +94,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, class-string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->parentClassesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? [];
+        $parentTypesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? ($configuration ?: []);
+
+        Assert::isArray($parentTypesToRemove);
+        Assert::allString($parentTypesToRemove);
+
+        $this->parentClassesToRemove = $parentTypesToRemove;
     }
 }

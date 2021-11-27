@@ -152,7 +152,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? [];
+        $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? ($configuration ?: []);
         Assert::isArray($staticCallsToMethodCalls);
         Assert::allIsInstanceOf($staticCallsToMethodCalls, StaticCallToMethodCall::class);
 

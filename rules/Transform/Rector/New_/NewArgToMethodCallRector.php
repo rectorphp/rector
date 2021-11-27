@@ -108,7 +108,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? [];
+        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($newArgsToMethodCalls, NewArgToMethodCall::class);
         $this->newArgsToMethodCalls = $newArgsToMethodCalls;
     }

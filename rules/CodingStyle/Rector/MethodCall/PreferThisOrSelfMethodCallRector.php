@@ -102,11 +102,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, PreferenceSelfThis[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
+        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? ($configuration ?: []);
         Assert::allIsAOf($typeToPreference, PreferenceSelfThis::class);
 
         $this->typeToPreference = $typeToPreference;

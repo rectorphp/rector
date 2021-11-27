@@ -15,6 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://wiki.php.net/rfc/object-typehint https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
@@ -88,11 +89,17 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? [];
+        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? ($configuration ?: []);
+
+        Assert::isArray($reservedKeywordsToReplacements);
+        Assert::allString(array_keys($reservedKeywordsToReplacements));
+        Assert::allString($reservedKeywordsToReplacements);
+
+        $this->reservedKeywordsToReplacements = $reservedKeywordsToReplacements;
     }
 
     private function processIdentifier(Identifier $identifier): Identifier

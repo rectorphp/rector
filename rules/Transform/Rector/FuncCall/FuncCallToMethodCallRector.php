@@ -132,7 +132,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
+        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? ($configuration ?: []);
         Assert::isArray($funcCallsToClassMethodCalls);
         Assert::allIsInstanceOf($funcCallsToClassMethodCalls, FuncCallToMethodCall::class);
 

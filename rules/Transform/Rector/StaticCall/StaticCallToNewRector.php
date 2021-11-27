@@ -97,11 +97,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, StaticCallToNew[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? [];
+        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? ($configuration ?: []);
         Assert::allIsAOf($staticCallsToNews, StaticCallToNew::class);
 
         $this->staticCallsToNews = $staticCallsToNews;

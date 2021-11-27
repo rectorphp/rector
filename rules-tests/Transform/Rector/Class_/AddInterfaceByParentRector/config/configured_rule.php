@@ -10,9 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(AddInterfaceByParentRector::class)
-        ->call('configure', [[
-            AddInterfaceByParentRector::INTERFACE_BY_PARENT => [
-                SomeParent::class => SomeInterface::class,
-            ],
-        ]]);
+        ->configure([
+            SomeParent::class => SomeInterface::class,
+        ]);
 };

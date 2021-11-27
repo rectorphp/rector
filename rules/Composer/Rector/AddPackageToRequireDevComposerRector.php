@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
+        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($packagesAndVersions, PackageAndVersion::class);
 
         $this->versionGuard->validate($packagesAndVersions);

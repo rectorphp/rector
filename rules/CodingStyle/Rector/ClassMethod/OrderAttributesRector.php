@@ -112,7 +112,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? [];
+        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? ($configuration ?: []);
         Assert::isArray($attributesOrder);
         Assert::allString($attributesOrder);
 

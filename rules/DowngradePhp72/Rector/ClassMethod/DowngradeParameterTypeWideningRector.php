@@ -143,12 +143,12 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
+        $safeTypes = $configuration[self::SAFE_TYPES] ?? ($configuration ?: []);
         Assert::isArray($safeTypes);
         Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
 
-        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
+        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? ($configuration ?: []);
         Assert::isArray($safeTypesToMethods);
         foreach ($safeTypesToMethods as $key => $value) {
             Assert::string($key);

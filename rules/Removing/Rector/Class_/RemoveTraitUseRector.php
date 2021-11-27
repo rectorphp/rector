@@ -12,6 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveTraitUseRector\RemoveTraitUseRectorTest
@@ -90,10 +91,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? [];
+        $traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? ($configuration ?: []);
+        Assert::allString($traitsToRemove);
+
+        /** @var string[] $traitsToRemove */
+        $this->traitsToRemove = $traitsToRemove;
     }
 }

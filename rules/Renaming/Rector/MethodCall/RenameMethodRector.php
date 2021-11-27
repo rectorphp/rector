@@ -122,7 +122,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? [];
+        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($methodCallRenames, MethodCallRenameInterface::class);
 
         $this->methodCallRenames = $methodCallRenames;

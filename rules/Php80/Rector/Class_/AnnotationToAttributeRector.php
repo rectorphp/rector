@@ -144,7 +144,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? [];
+        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($annotationsToAttributes, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
     }

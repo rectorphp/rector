@@ -110,7 +110,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
+        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($functionArgumentSwaps, SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
     }

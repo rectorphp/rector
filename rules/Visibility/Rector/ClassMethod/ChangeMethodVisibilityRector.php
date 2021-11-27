@@ -132,7 +132,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? [];
+        $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? ($configuration ?: []);
         Assert::allIsInstanceOf($methodVisibilities, ChangeMethodVisibility::class);
 
         $this->methodVisibilities = $methodVisibilities;
