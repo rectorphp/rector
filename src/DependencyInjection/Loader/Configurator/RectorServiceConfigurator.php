@@ -14,7 +14,7 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 final class RectorServiceConfigurator extends \RectorPrefix20211127\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
 {
     /**
-     * @param array<string, string|bool|object|string[]|object[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure($configuration) : self
     {
