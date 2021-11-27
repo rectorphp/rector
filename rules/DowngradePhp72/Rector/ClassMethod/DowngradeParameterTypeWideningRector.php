@@ -141,11 +141,11 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
+        $safeTypes = $configuration[self::SAFE_TYPES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::isArray($safeTypes);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
-        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
+        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::isArray($safeTypesToMethods);
         foreach ($safeTypesToMethods as $key => $value) {
             \RectorPrefix20211127\Webmozart\Assert\Assert::string($key);

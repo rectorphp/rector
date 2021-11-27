@@ -98,7 +98,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? [];
+        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($methodCallRenames, \Rector\Renaming\Contract\MethodCallRenameInterface::class);
         $this->methodCallRenames = $methodCallRenames;
         $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);

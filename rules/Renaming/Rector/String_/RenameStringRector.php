@@ -72,7 +72,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $stringChanges = $configuration[self::STRING_CHANGES] ?? [];
+        $stringChanges = $configuration[self::STRING_CHANGES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allString($stringChanges);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allString(\array_values($stringChanges));
         $this->stringChanges = $stringChanges;

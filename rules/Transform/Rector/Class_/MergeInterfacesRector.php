@@ -10,6 +10,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211127\Webmozart\Assert\Assert;
 /**
  * Covers cases like
  * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/a1cdb4d2dd8f45d731244eed406e1d537218cc66
@@ -73,7 +74,10 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? [];
+        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? ($configuration ?: []);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString(\array_keys($oldToNewInterfaces));
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString($oldToNewInterfaces);
+        $this->oldToNewInterfaces = $oldToNewInterfaces;
     }
     private function makeImplementsUnique(\PhpParser\Node\Stmt\Class_ $class) : void
     {

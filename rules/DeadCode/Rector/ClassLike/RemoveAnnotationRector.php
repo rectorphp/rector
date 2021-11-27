@@ -88,7 +88,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? [];
+        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allString($annotationsToRemove);
         $this->annotationsToRemove = $annotationsToRemove;
     }

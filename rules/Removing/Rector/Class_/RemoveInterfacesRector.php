@@ -9,6 +9,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211127\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveInterfacesRector\RemoveInterfacesRectorTest
  */
@@ -19,7 +20,7 @@ final class RemoveInterfacesRector extends \Rector\Core\Rector\AbstractRector im
      */
     public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';
     /**
-     * @var class-string[]
+     * @var string[]
      */
     private $interfacesToRemove = [];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -59,10 +60,13 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, class-string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? [];
+        $interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? ($configuration ?: []);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString($interfacesToRemove);
+        /** @var string[] $interfacesToRemove */
+        $this->interfacesToRemove = $interfacesToRemove;
     }
 }

@@ -87,7 +87,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? [];
+        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($newArgsToMethodCalls, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
         $this->newArgsToMethodCalls = $newArgsToMethodCalls;
     }

@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? [];
+        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::isArray($attributesOrder);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allString($attributesOrder);
         $this->attributesOrderByName = \array_flip($attributesOrder);

@@ -78,11 +78,11 @@ CODE_SAMPLE
         return $this->processPropertyFetch($node);
     }
     /**
-     * @param array<string, GetAndSetToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? [];
+        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsAOf($getAndSetToMethodCalls, \Rector\Transform\ValueObject\GetAndSetToMethodCall::class);
         $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;
     }

@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? [];
+        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($typeMethodWraps, \Rector\Transform\ValueObject\WrapReturn::class);
         $this->typeMethodWraps = $typeMethodWraps;
     }

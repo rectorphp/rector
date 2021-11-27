@@ -58,7 +58,7 @@ final class ClassConstFetchToValueRector extends \Rector\Core\Rector\AbstractRec
      */
     public function configure(array $configuration) : void
     {
-        $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? [];
+        $classConstFetchesToValues = $configuration[self::CLASS_CONST_FETCHES_TO_VALUES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($classConstFetchesToValues, \Rector\Transform\ValueObject\ClassConstFetchToValue::class);
         $this->classConstFetchesToValues = $classConstFetchesToValues;
     }

@@ -15,6 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211127\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
@@ -86,11 +87,15 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->methodByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? [];
+        $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? ($configuration ?: []);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString(\array_keys($methodsByParentTypes));
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString($methodsByParentTypes);
+        /** @var array<string, string> $methodsByParentTypes */
+        $this->methodByParentTypes = $methodsByParentTypes;
     }
     private function shouldSkipMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $method) : bool
     {

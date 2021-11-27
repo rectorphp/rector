@@ -112,7 +112,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? [];
+        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($methodsToYields, \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield::class);
         $this->methodsToYields = $methodsToYields;
     }

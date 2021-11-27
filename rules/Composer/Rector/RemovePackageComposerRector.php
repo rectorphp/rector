@@ -7,6 +7,7 @@ use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use RectorPrefix20211127\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211127\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\RemovePackageComposerRector\RemovePackageComposerRectorTest
  */
@@ -42,10 +43,13 @@ CODE_SAMPLE
 , [self::PACKAGE_NAMES => ['symfony/console']])]);
     }
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->packageNames = $configuration[self::PACKAGE_NAMES] ?? [];
+        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? ($configuration ?: []);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::isArray($packagesNames);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString($packagesNames);
+        $this->packageNames = $packagesNames;
     }
 }

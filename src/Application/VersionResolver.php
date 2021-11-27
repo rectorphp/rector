@@ -16,11 +16,11 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = '373ac3068dc911ebfa68fe4a29b1852cf8b26d7a';
+    public const PACKAGE_VERSION = '3844627c63712742b218035ae9140603b5537d21';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2021-11-27 15:08:55';
+    public const RELEASE_DATE = '2021-11-27 13:26:22';
     public static function resolvePackageVersion() : string
     {
         $process = new \RectorPrefix20211127\Symfony\Component\Process\Process(['git', 'log', '--pretty="%H"', '-n1', 'HEAD'], __DIR__);

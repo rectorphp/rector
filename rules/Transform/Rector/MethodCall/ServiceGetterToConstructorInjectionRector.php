@@ -158,7 +158,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? [];
+        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($methodCallToServices, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
         $this->methodCallToServices = $methodCallToServices;
     }

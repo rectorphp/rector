@@ -73,7 +73,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? [];
+        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($renameClassConstFetches, \Rector\Renaming\Contract\RenameClassConstFetchInterface::class);
         $this->renameClassConstFetches = $renameClassConstFetches;
     }

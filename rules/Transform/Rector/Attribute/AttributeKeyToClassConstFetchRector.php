@@ -86,11 +86,11 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, AttributeKeyToClassConstFetch[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? [];
+        $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsAOf($attributeKeysToClassConstFetches, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);
         $this->attributeKeysToClassConstFetches = $attributeKeysToClassConstFetches;
     }

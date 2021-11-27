@@ -78,11 +78,11 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, StaticCallToNew[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? [];
+        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
         $this->staticCallsToNews = $staticCallsToNews;
     }

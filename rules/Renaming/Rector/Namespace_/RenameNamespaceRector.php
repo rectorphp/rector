@@ -18,6 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211127\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
@@ -95,11 +96,15 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
         return null;
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? [];
+        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? ($configuration ?: []);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
+        /** @var array<string, string> $oldToNewNamespaces */
+        $this->oldToNewNamespaces = $oldToNewNamespaces;
     }
     private function processFullyQualified(\PhpParser\Node\Name $name, \Rector\Renaming\ValueObject\RenamedNamespace $renamedNamespace) : ?\PhpParser\Node\Name\FullyQualified
     {

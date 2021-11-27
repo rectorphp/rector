@@ -9,6 +9,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211127\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToPropertyFetchRector\MethodCallToPropertyFetchRectorTest
  */
@@ -66,10 +67,14 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? [];
+        $methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? ($configuration ?: []);
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString(\array_keys($methodCallToPropertyFetchCollection));
+        \RectorPrefix20211127\Webmozart\Assert\Assert::allString($methodCallToPropertyFetchCollection);
+        /** @var array<string, string> $methodCallToPropertyFetchCollection */
+        $this->methodCallToPropertyFetchCollection = $methodCallToPropertyFetchCollection;
     }
 }

@@ -104,7 +104,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? [];
+        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::isArray($funcCallsToClassMethodCalls);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($funcCallsToClassMethodCalls, \Rector\Transform\ValueObject\FuncCallToMethodCall::class);
         $this->funcNameToMethodCallNames = $funcCallsToClassMethodCalls;

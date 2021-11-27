@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? [];
+        $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($replacePackagesAndVersions, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
         $this->versionGuard->validate($replacePackagesAndVersions);
         $this->replacePackagesAndVersions = $replacePackagesAndVersions;

@@ -76,7 +76,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? [];
+        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($replacedArguments, \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue::class);
         $this->replacedArguments = $replacedArguments;
     }

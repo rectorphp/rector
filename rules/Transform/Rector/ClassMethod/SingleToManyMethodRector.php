@@ -100,7 +100,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? [];
+        $singleToManyMethods = $configuration[self::SINGLES_TO_MANY_METHODS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($singleToManyMethods, \Rector\Transform\ValueObject\SingleToManyMethod::class);
         $this->singleToManyMethods = $singleToManyMethods;
     }

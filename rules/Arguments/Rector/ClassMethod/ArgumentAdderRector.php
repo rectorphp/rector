@@ -117,7 +117,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? [];
+        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($addedArguments, \Rector\Arguments\ValueObject\ArgumentAdder::class);
         $this->addedArguments = $addedArguments;
     }

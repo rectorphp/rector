@@ -88,7 +88,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? [];
+        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($functionArgumentSwaps, \Rector\Arguments\ValueObject\SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
     }

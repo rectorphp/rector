@@ -57,7 +57,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? [];
+        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($packagesAndVersions, \Rector\Composer\ValueObject\PackageAndVersion::class);
         $this->versionGuard->validate($packagesAndVersions);
         $this->packageAndVersions = $packagesAndVersions;

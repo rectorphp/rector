@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? [];
+        $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($stringToClassConstants, \Rector\Transform\ValueObject\StringToClassConstant::class);
         $this->stringsToClassConstants = $stringToClassConstants;
     }

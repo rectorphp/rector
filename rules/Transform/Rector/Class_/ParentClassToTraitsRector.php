@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? [];
+        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
         $this->parentClassToTraits = $parentClassToTraits;
     }

@@ -108,7 +108,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? [];
+        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $attributesToAnnotations;
     }

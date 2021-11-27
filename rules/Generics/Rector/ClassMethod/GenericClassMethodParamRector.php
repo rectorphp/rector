@@ -112,11 +112,11 @@ CODE_SAMPLE
 , [self::GENERIC_CLASS_METHOD_PARAMS => [new \Rector\Generics\ValueObject\GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface')]])]);
     }
     /**
-     * @param array<string, GenericClassMethodParam[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? [];
+        $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsAOf($makeClassMethodGenerics, \Rector\Generics\ValueObject\GenericClassMethodParam::class);
         $this->genericClassMethodParams = $makeClassMethodGenerics;
     }

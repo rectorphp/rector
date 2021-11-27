@@ -57,7 +57,7 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
      */
     public function configure(array $configuration) : void
     {
-        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? [];
+        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }

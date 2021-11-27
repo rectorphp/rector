@@ -75,7 +75,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? [];
+        $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($parentCallToProperties, \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall::class);
         $this->parentCallToProperties = $parentCallToProperties;
     }

@@ -85,7 +85,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? [];
+        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($useImportsToRestore, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation::class);
         $default = [new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM'), new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('Symfony\\Component\\Validator\\Constraints', 'Assert'), new \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation('JMS\\Serializer\\Annotation', 'Serializer')];
         $this->useImportsToRestore = \array_merge($useImportsToRestore, $default);

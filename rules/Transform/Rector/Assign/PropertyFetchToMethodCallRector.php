@@ -72,7 +72,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? [];
+        $propertiesToMethodCalls = $configuration[self::PROPERTIES_TO_METHOD_CALLS] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsInstanceOf($propertiesToMethodCalls, \Rector\Transform\ValueObject\PropertyFetchToMethodCall::class);
         $this->propertiesToMethodCalls = $propertiesToMethodCalls;
     }

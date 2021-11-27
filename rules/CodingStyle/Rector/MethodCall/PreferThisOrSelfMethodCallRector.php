@@ -85,11 +85,11 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, PreferenceSelfThis[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? [];
+        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? ($configuration ?: []);
         \RectorPrefix20211127\Webmozart\Assert\Assert::allIsAOf($typeToPreference, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
         $this->typeToPreference = $typeToPreference;
     }
