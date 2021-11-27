@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211126\Symplify\ConsoleColorDiff\Console\Output;
+namespace RectorPrefix20211127\Symplify\ConsoleColorDiff\Console\Output;
 
-use RectorPrefix20211126\SebastianBergmann\Diff\Differ;
-use RectorPrefix20211126\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
+use RectorPrefix20211127\SebastianBergmann\Diff\Differ;
+use RectorPrefix20211127\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
 /**
  * @api
  */
@@ -18,7 +18,7 @@ final class ConsoleDiffer
      * @var \Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter
      */
     private $colorConsoleDiffFormatter;
-    public function __construct(\RectorPrefix20211126\SebastianBergmann\Diff\Differ $differ, \RectorPrefix20211126\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
+    public function __construct(\RectorPrefix20211127\SebastianBergmann\Diff\Differ $differ, \RectorPrefix20211127\Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
     {
         $this->differ = $differ;
         $this->colorConsoleDiffFormatter = $colorConsoleDiffFormatter;

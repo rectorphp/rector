@@ -62,7 +62,7 @@ CODE_SAMPLE
             if ($count < 2) {
                 continue;
             }
-            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catchKeys);
+            $collectedTypes = $this->collectTypesFromCatchedByIds($catchKeys);
             /** @var Catch_ $firstCatch */
             $firstCatch = \array_shift($catchKeys);
             $firstCatch->types = $collectedTypes;
@@ -92,7 +92,7 @@ CODE_SAMPLE
      * @param Catch_[] $catches
      * @return Name[]
      */
-    private function collectTypesFromCatchedByIds(\PhpParser\Node\Stmt\TryCatch $tryCatch, array $catches) : array
+    private function collectTypesFromCatchedByIds(array $catches) : array
     {
         $collectedTypes = [];
         foreach ($catches as $catch) {

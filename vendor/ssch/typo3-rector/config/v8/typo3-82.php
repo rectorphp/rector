@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211126;
+namespace RectorPrefix20211127;
 
 use Ssch\TYPO3Rector\Rector\v8\v2\UseHtmlSpecialCharsDirectlyForTranslationRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

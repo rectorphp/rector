@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211126\React\Socket;
+namespace RectorPrefix20211127\React\Socket;
 
-use RectorPrefix20211126\Evenement\EventEmitter;
+use RectorPrefix20211127\Evenement\EventEmitter;
 use Exception;
 use OverflowException;
 /**
@@ -32,7 +32,7 @@ use OverflowException;
  * @see ServerInterface
  * @see ConnectionInterface
  */
-class LimitingServer extends \RectorPrefix20211126\Evenement\EventEmitter implements \RectorPrefix20211126\React\Socket\ServerInterface
+class LimitingServer extends \RectorPrefix20211127\Evenement\EventEmitter implements \RectorPrefix20211127\React\Socket\ServerInterface
 {
     private $connections = array();
     private $server;
@@ -89,7 +89,7 @@ class LimitingServer extends \RectorPrefix20211126\Evenement\EventEmitter implem
      * @param int|null        $connectionLimit
      * @param bool            $pauseOnLimit
      */
-    public function __construct(\RectorPrefix20211126\React\Socket\ServerInterface $server, $connectionLimit, $pauseOnLimit = \false)
+    public function __construct(\RectorPrefix20211127\React\Socket\ServerInterface $server, $connectionLimit, $pauseOnLimit = \false)
     {
         $this->server = $server;
         $this->limit = $connectionLimit;
