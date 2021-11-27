@@ -75,7 +75,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            $collectedTypes = $this->collectTypesFromCatchedByIds($node, $catchKeys);
+            $collectedTypes = $this->collectTypesFromCatchedByIds($catchKeys);
 
             /** @var Catch_ $firstCatch */
             $firstCatch = array_shift($catchKeys);
@@ -112,7 +112,7 @@ CODE_SAMPLE
      * @param Catch_[] $catches
      * @return Name[]
      */
-    private function collectTypesFromCatchedByIds(TryCatch $tryCatch, array $catches): array
+    private function collectTypesFromCatchedByIds(array $catches): array
     {
         $collectedTypes = [];
 

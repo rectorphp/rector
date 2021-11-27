@@ -85,7 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $this->processGroupNamesBySuffix($this->file->getSmartFileInfo(), $this->file, $this->groupNamesBySuffix);
+        $this->processGroupNamesBySuffix($this->file->getSmartFileInfo(), $this->groupNamesBySuffix);
 
         return null;
     }
@@ -110,11 +110,8 @@ CODE_SAMPLE
      *
      * @param string[] $groupNamesBySuffix
      */
-    private function processGroupNamesBySuffix(
-        SmartFileInfo $smartFileInfo,
-        File $file,
-        array $groupNamesBySuffix
-    ): void {
+    private function processGroupNamesBySuffix(SmartFileInfo $smartFileInfo, array $groupNamesBySuffix): void
+    {
         foreach ($groupNamesBySuffix as $groupNames) {
             // has class suffix
             $suffixPattern = '\w+' . $groupNames . '(Test)?\.php$';

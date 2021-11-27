@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -81,8 +84,77 @@ CODE_SAMPLE
 
         $this->removeNodes($unusedParameters);
         $this->clearPhpDocInfo($node, $unusedParameters);
+        $this->removeCallerArgs($node, $unusedParameters);
 
         return $node;
+    }
+
+    /**
+     * @param Param[] $unusedParameters
+     */
+    private function removeCallerArgs(ClassMethod $classMethod, array $unusedParameters): void
+    {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
+        if (! $classLike instanceof ClassLike) {
+            return;
+        }
+
+        $methods = $classLike->getMethods();
+        if ($methods === []) {
+            return;
+        }
+
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+        $keysArg = array_keys($unusedParameters);
+
+        foreach ($methods as $method) {
+            /** @var MethodCall[] $callers */
+            $callers = $this->resolveCallers($method, $methodName);
+            if ($callers === []) {
+                continue;
+            }
+
+            foreach ($callers as $caller) {
+                $this->cleanupArgs($caller, $keysArg);
+            }
+        }
+    }
+
+    /**
+     * @param int[] $keysArg
+     */
+    private function cleanupArgs(MethodCall $methodCall, array $keysArg): void
+    {
+        $args = $methodCall->getArgs();
+        foreach (array_keys($args) as $key) {
+            if (in_array($key, $keysArg, true)) {
+                unset($args[$key]);
+            }
+        }
+
+        $methodCall->args = $args;
+    }
+
+    /**
+     * @return MethodCall[]
+     */
+    private function resolveCallers(ClassMethod $classMethod, string $methodName): array
+    {
+        return $this->betterNodeFinder->find($classMethod, function (Node $subNode) use ($methodName): bool {
+            if (! $subNode instanceof MethodCall) {
+                return false;
+            }
+
+            if (! $subNode->var instanceof Variable) {
+                return false;
+            }
+
+            if (! $this->nodeNameResolver->isName($subNode->var, 'this')) {
+                return false;
+            }
+
+            return $this->nodeNameResolver->isName($subNode->name, $methodName);
+        });
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool

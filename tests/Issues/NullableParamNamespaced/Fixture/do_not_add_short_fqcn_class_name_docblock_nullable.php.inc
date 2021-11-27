@@ -37,7 +37,7 @@ class DoNotAddShortFQCNClassNameDocblockNullable
             return false;
         }
 
-        return $this->callPrivateMethod($classLike, true);
+        return $this->callPrivateMethod($classLike);
     }
 
     private function callPrivateMethod(ClassLike $classLike)
