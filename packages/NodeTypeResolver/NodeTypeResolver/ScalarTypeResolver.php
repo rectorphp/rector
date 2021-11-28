@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Encapsed;
@@ -17,10 +18,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+/**
+ * @implements NodeTypeResolverInterface<Scalar>
+ */
 final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @return array<class-string<Node>>
+     * @return array<class-string<Expr>>
      */
     public function getNodeClasses() : array
     {
@@ -32,13 +36,13 @@ final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     public function resolve($node) : \PHPStan\Type\Type
     {
         if ($node instanceof \PhpParser\Node\Scalar\DNumber) {
-            return new \PHPStan\Type\Constant\ConstantFloatType((float) $node->value);
+            return new \PHPStan\Type\Constant\ConstantFloatType($node->value);
         }
         if ($node instanceof \PhpParser\Node\Scalar\String_) {
-            return new \PHPStan\Type\Constant\ConstantStringType((string) $node->value);
+            return new \PHPStan\Type\Constant\ConstantStringType($node->value);
         }
         if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
-            return new \PHPStan\Type\Constant\ConstantIntegerType((int) $node->value);
+            return new \PHPStan\Type\Constant\ConstantIntegerType($node->value);
         }
         if ($node instanceof \PhpParser\Node\Scalar\MagicConst) {
             return new \PHPStan\Type\Constant\ConstantStringType($node->getName());

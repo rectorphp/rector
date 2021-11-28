@@ -75,8 +75,8 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
         // reorder instantiation + expected exception
         $previousStmt = null;
         foreach ((array) $classMethod->stmts as $key => $stmt) {
-            $printedStmt = $this->print($stmt);
-            if ($previousStmt && \strpos($printedStmt, 'duringInstantiation') !== \false) {
+            $printedStmtContent = $this->print($stmt);
+            if (\strpos($printedStmtContent, 'duringInstantiation') !== \false) {
                 $printedPreviousStmt = $this->print($previousStmt);
                 if (\strpos($printedPreviousStmt, 'beConstructedThrough') !== \false) {
                     $classMethod->stmts[$key - 1] = $stmt;

@@ -13,6 +13,8 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver\TraitTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<Trait_>
  */
 final class TraitTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {

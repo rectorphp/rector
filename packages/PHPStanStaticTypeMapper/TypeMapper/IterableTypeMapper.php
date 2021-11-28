@@ -28,7 +28,7 @@ final class IterableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @required
      */
-    public function autowireIterableTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

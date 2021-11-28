@@ -38,7 +38,7 @@ final class CallAnalyzer
     /**
      * @required
      */
-    public function autowireCallAnalyzer(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
+    public function autowire(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }

@@ -10,6 +10,9 @@ use PHPStan\Type\VoidType;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements NodeTypeResolverInterface<Return_>
+ */
 final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
@@ -19,7 +22,7 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     /**
      * @required
      */
-    public function autowireReturnTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

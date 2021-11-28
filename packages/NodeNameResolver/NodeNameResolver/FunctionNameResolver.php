@@ -8,11 +8,11 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @implements NodeNameResolverInterface<Function_>
+ */
 final class FunctionNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
-    /**
-     * @return class-string<Node>
-     */
     public function getNode() : string
     {
         return \PhpParser\Node\Stmt\Function_::class;
@@ -28,7 +28,7 @@ final class FunctionNameResolver implements \Rector\NodeNameResolver\Contract\No
             return $bareName;
         }
         $namespaceName = $scope->getNamespace();
-        if ($namespaceName) {
+        if ($namespaceName !== null) {
             return $namespaceName . '\\' . $bareName;
         }
         return $bareName;

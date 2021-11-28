@@ -40,7 +40,7 @@ final class ParentAttributeSourceLocator implements \PHPStan\BetterReflection\So
     /**
      * @required
      */
-    public function autowireParentAttributeSourceLocator(\Rector\Core\PhpParser\AstResolver $astResolver) : void
+    public function autowire(\Rector\Core\PhpParser\AstResolver $astResolver) : void
     {
         $this->astResolver = $astResolver;
     }

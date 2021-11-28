@@ -84,7 +84,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
             if ($fileDiff->getRectorChanges() !== []) {
                 $this->outputStyle->writeln('<options=underscore>Applied rules:</>');
                 $this->outputStyle->listing($rectorsChangelogsLines);
-                $this->outputStyle->newLine();
+                $this->outputStyle->newline();
             }
         }
     }
@@ -96,8 +96,8 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         foreach ($errors as $error) {
             $errorMessage = $error->getMessage();
             $errorMessage = $this->normalizePathsToRelativeWithLine($errorMessage);
-            $message = \sprintf('Could not process "%s" file%s, due to: %s"%s".', $error->getRelativeFilePath(), $error->getRectorClass() ? ' by "' . $error->getRectorClass() . '"' : '', \PHP_EOL, $errorMessage);
-            if ($error->getLine()) {
+            $message = \sprintf('Could not process "%s" file%s, due to: %s"%s".', $error->getRelativeFilePath(), $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '', \PHP_EOL, $errorMessage);
+            if ($error->getLine() !== null) {
                 $message .= ' On line: ' . $error->getLine();
             }
             $this->outputStyle->error($message);

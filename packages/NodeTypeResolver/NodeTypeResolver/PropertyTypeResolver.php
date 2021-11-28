@@ -14,6 +14,8 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver\PropertyTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<Property>
  */
 final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
@@ -24,7 +26,7 @@ final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\No
     /**
      * @required
      */
-    public function autowirePropertyTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

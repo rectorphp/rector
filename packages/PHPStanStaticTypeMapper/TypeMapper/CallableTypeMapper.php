@@ -27,7 +27,7 @@ final class CallableTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contra
     /**
      * @required
      */
-    public function autowireCallableTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

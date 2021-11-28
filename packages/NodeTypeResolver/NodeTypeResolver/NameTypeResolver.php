@@ -21,6 +21,8 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<Name|FullyQualified>
  */
 final class NameTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {

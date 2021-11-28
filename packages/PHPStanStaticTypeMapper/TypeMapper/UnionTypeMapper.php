@@ -81,7 +81,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
     /**
      * @required
      */
-    public function autowireUnionTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

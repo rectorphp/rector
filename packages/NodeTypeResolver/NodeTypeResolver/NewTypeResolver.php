@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
@@ -19,6 +20,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+/**
+ * @implements NodeTypeResolverInterface<New_>
+ */
 final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
@@ -35,7 +39,7 @@ final class NewTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTyp
         $this->classAnalyzer = $classAnalyzer;
     }
     /**
-     * @return array<class-string<Node>>
+     * @return array<class-string<Expr>>
      */
     public function getNodeClasses() : array
     {

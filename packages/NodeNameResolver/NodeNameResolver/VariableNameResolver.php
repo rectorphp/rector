@@ -9,11 +9,11 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @implements NodeNameResolverInterface<Variable>
+ */
 final class VariableNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
-    /**
-     * @return class-string<Node>
-     */
     public function getNode() : string
     {
         return \PhpParser\Node\Expr\Variable::class;

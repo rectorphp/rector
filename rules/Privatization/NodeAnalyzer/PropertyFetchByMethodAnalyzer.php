@@ -116,7 +116,7 @@ final class PropertyFetchByMethodAnalyzer
             if (!$this->isScopeChangingNode($node)) {
                 return null;
             }
-            $isPropertyReadInIf = $this->verifyPropertyReadInIf($isPropertyReadInIf, $node, $propertyName);
+            $isPropertyReadInIf = $this->isPropertyReadInNode($isPropertyReadInIf, $node, $propertyName);
             $isPropertyChanging = $this->isPropertyChanging($node, $propertyName);
             if (!$isPropertyChanging) {
                 return null;
@@ -125,10 +125,10 @@ final class PropertyFetchByMethodAnalyzer
         });
         return $isPropertyChanging || $isIfFollowedByAssign || $isPropertyReadInIf;
     }
-    private function verifyPropertyReadInIf(?bool $isPropertyReadInIf, \PhpParser\Node $node, string $propertyName) : ?bool
+    private function isPropertyReadInNode(bool $isPropertyReadInIf, \PhpParser\Node $node, string $propertyName) : bool
     {
         if ($node instanceof \PhpParser\Node\Stmt\If_) {
-            return $this->refactorIf($node, $propertyName);
+            return $this->isPropertyReadInIf($node, $propertyName);
         }
         return $isPropertyReadInIf;
     }
@@ -141,10 +141,11 @@ final class PropertyFetchByMethodAnalyzer
         }
         return \false;
     }
-    private function refactorIf(\PhpParser\Node\Stmt\If_ $if, string $privatePropertyName) : ?bool
+    private function isPropertyReadInIf(\PhpParser\Node\Stmt\If_ $if, string $propertyName) : bool
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($if->cond, function (\PhpParser\Node $node) use($privatePropertyName, &$isPropertyReadInIf) : ?int {
-            if (!$this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+        $isPropertyReadInIf = \false;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($if->cond, function (\PhpParser\Node $node) use($propertyName, &$isPropertyReadInIf) : ?int {
+            if (!$this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$propertyName])) {
                 return null;
             }
             $isPropertyReadInIf = \true;

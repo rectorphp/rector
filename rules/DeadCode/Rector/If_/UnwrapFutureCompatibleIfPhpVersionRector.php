@@ -73,7 +73,10 @@ CODE_SAMPLE
             return null;
         }
         // if is skipped
-        if ($result) {
+        if ($result === \true) {
+            return $this->refactorIsMatch($node);
+        }
+        if ($result > 0) {
             return $this->refactorIsMatch($node);
         }
         return $this->refactorIsNotMatch($node);

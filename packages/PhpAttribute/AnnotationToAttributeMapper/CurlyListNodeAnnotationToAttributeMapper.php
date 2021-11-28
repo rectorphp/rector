@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
+use PhpParser\Node\Expr;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
@@ -33,9 +34,9 @@ final class CurlyListNodeAnnotationToAttributeMapper implements \Rector\PhpAttri
     }
     /**
      * @param CurlyListNode $value
-     * @return mixed[]
+     * @return mixed[]|\PhpParser\Node\Expr
      */
-    public function map($value) : array
+    public function map($value)
     {
         return \array_map(function ($node) {
             return $this->annotationToAttributeMapper->map($node);

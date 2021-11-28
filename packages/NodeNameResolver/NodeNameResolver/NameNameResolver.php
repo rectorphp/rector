@@ -9,6 +9,9 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @implements NodeNameResolverInterface<Name>
+ */
 final class NameNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
@@ -19,9 +22,6 @@ final class NameNameResolver implements \Rector\NodeNameResolver\Contract\NodeNa
     {
         $this->funcCallNameResolver = $funcCallNameResolver;
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNode() : string
     {
         return \PhpParser\Node\Name::class;

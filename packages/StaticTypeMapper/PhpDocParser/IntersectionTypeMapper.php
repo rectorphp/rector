@@ -28,7 +28,7 @@ final class IntersectionTypeMapper implements \Rector\StaticTypeMapper\Contract\
     /**
      * @required
      */
-    public function autowireUnionTypeMapper(\Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper) : void
+    public function autowire(\Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper) : void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }

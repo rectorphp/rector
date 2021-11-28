@@ -3,11 +3,12 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
+use PhpParser\Node\Expr;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
 /**
- * @implements AnnotationToAttributeMapperInterface<array>
+ * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */
 final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface
 {
@@ -32,9 +33,9 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
     }
     /**
      * @param mixed[] $value
-     * @return mixed[]
+     * @return mixed[]|\PhpParser\Node\Expr
      */
-    public function map($value) : array
+    public function map($value)
     {
         return \array_map(function ($item) {
             return $this->annotationToAttributeMapper->map($item);

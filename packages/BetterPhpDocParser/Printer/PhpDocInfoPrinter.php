@@ -164,7 +164,7 @@ final class PhpDocInfoPrinter
         }
         $output = $this->printEnd($output);
         // fix missing start
-        if (!\Rector\Core\Util\StringUtils::isMatch($output, self::DOCBLOCK_START_REGEX) && $output) {
+        if (!\Rector\Core\Util\StringUtils::isMatch($output, self::DOCBLOCK_START_REGEX) && $output !== '') {
             $output = '/**' . $output;
         }
         // fix missing end

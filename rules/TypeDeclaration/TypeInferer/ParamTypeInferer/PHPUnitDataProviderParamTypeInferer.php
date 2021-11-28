@@ -59,7 +59,7 @@ final class PHPUnitDataProviderParamTypeInferer implements \Rector\TypeDeclarati
     /**
      * @required
      */
-    public function autowirePHPUnitDataProviderParamTypeInferer(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

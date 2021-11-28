@@ -17,6 +17,9 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements NodeTypeResolverInterface<StaticCall|MethodCall>
+ */
 final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
@@ -39,12 +42,12 @@ final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver
     /**
      * @required
      */
-    public function autowireStaticCallMethodCallTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @return array<class-string<Node>>
+     * @return class-string[]
      */
     public function getNodeClasses() : array
     {

@@ -42,7 +42,7 @@ final class StatementNodeVisitor extends \PhpParser\NodeVisitorAbstract
             }
         }
         $currentStmt = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
-        if ($parent && !$currentStmt) {
+        if ($parent instanceof \PhpParser\Node && !$currentStmt instanceof \PhpParser\Node) {
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT, $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_STATEMENT));
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT, $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT));
         }

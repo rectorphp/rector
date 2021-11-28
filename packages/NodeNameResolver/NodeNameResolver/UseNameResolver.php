@@ -8,6 +8,9 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements NodeNameResolverInterface<Use_>
+ */
 final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
@@ -17,13 +20,10 @@ final class UseNameResolver implements \Rector\NodeNameResolver\Contract\NodeNam
     /**
      * @required
      */
-    public function autowireUseNameResolver(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
+    public function autowire(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNode() : string
     {
         return \PhpParser\Node\Stmt\Use_::class;

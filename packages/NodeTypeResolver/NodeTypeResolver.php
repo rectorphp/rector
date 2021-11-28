@@ -180,8 +180,8 @@ final class NodeTypeResolver
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            if ($node instanceof \PhpParser\Node\Expr\ConstFetch && $node->name instanceof \PhpParser\Node\Name) {
-                $name = (string) $node->name;
+            if ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
+                $name = $node->name->toString();
                 if (\strtolower($name) === 'null') {
                     return new \PHPStan\Type\NullType();
                 }

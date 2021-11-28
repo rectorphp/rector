@@ -14,6 +14,9 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements NodeTypeResolverInterface<ClassMethod|ClassConst>
+ */
 final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
@@ -31,12 +34,12 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
     /**
      * @required
      */
-    public function autowireClassMethodOrClassConstTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @return array<class-string<Node>>
+     * @return class-string[]
      */
     public function getNodeClasses() : array
     {

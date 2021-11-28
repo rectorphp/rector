@@ -38,7 +38,7 @@ final class NameScopeFactory
     /**
      * @required
      */
-    public function autowireNameScopeFactory(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
+    public function autowire(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;

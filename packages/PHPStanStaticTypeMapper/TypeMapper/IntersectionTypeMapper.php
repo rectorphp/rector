@@ -36,7 +36,7 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
     /**
      * @required
      */
-    public function autowireIntersectionTypeMapper(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

@@ -44,7 +44,7 @@ final class PlainValueParser
     /**
      * @required
      */
-    public function autowirePlainValueParser(\Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser $arrayParser) : void
+    public function autowire(\Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser $arrayParser) : void
     {
         $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
         $this->arrayParser = $arrayParser;

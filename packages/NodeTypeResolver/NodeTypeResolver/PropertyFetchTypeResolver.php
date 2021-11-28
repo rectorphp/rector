@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
@@ -19,6 +20,8 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyFetchTypeResolver\PropertyFetchTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<PropertyFetch>
  */
 final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
@@ -47,12 +50,12 @@ final class PropertyFetchTypeResolver implements \Rector\NodeTypeResolver\Contra
     /**
      * @required
      */
-    public function autowirePropertyFetchTypeResolver(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @return array<class-string<Node>>
+     * @return array<class-string<Expr>>
      */
     public function getNodeClasses() : array
     {

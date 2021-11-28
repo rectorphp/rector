@@ -10,6 +10,9 @@ use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @implements NodeNameResolverInterface<FuncCall>
+ */
 final class FuncCallNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
@@ -20,9 +23,6 @@ final class FuncCallNameResolver implements \Rector\NodeNameResolver\Contract\No
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNode() : string
     {
         return \PhpParser\Node\Expr\FuncCall::class;

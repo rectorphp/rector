@@ -121,7 +121,7 @@ final class PhpDocTypeChanger
     public function copyPropertyDocToParam(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
     {
         $phpDocInfo = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
-        if (!$phpDocInfo) {
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return;
         }
         $varTag = $phpDocInfo->getVarTagValueNode();
