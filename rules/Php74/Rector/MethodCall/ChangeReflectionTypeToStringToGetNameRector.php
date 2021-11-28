@@ -192,7 +192,7 @@ CODE_SAMPLE
                 return;
             }
 
-            if (! $methodName) {
+            if (! is_string($methodName)) {
                 return;
             }
 

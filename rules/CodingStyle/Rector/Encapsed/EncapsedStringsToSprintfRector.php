@@ -96,7 +96,7 @@ CODE_SAMPLE
         foreach ($node->parts as $part) {
             if ($part instanceof EncapsedStringPart) {
                 $this->collectEncapsedStringPart($part);
-            } elseif ($part instanceof Expr) {
+            } else {
                 $this->collectExpr($part);
             }
         }

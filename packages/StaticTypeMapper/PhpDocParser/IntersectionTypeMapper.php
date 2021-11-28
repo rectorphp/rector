@@ -14,13 +14,13 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
+ */
 final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
 {
     private PhpDocTypeMapper $phpDocTypeMapper;
 
-    /**
-     * @return class-string<TypeNode>
-     */
     public function getNodeType(): string
     {
         return IntersectionTypeNode::class;

@@ -50,7 +50,7 @@ final class InflectorSingularResolver
     public function resolve(string $currentName): string
     {
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
-        if ($matchBy) {
+        if ($matchBy !== null) {
             return Strings::substring($currentName, 0, -strlen($matchBy['by']));
         }
 

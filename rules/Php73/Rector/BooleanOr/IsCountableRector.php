@@ -61,7 +61,7 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable') ?: $node;
+        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Countable', 'is_countable');
     }
 
     public function provideMinPhpVersion(): int

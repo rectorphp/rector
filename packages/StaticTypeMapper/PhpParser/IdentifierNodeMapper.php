@@ -20,9 +20,6 @@ final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
     ) {
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType(): string
     {
         return Identifier::class;

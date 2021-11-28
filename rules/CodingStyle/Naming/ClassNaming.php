@@ -43,7 +43,12 @@ final class ClassNaming
 
         $name = trim($name, '\\');
 
-        return Strings::after($name, '\\', -1) ?: $name;
+        $shortName = Strings::after($name, '\\', -1);
+        if (is_string($shortName)) {
+            return $shortName;
+        }
+
+        return $name;
     }
 
     public function getNamespace(string $fullyQualifiedName): ?string

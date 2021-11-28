@@ -177,7 +177,7 @@ final class PhpDocInfoPrinter
         if (StringUtils::isMatch(
             $output,
             self::OPENING_DOCBLOCK_REGEX
-        ) && $output && ! StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
+        ) && ! StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
 
@@ -247,7 +247,12 @@ final class PhpDocInfoPrinter
     {
         $lastTokenPosition = $this->getCurrentPhpDocInfo()
             ->getPhpDocNode()
-            ->getAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION) ?: $this->currentTokenPosition;
+            ->getAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION);
+
+        if ($lastTokenPosition === null) {
+            $lastTokenPosition = $this->currentTokenPosition;
+        }
+
         if ($lastTokenPosition === 0) {
             $lastTokenPosition = 1;
         }

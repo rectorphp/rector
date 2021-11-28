@@ -14,6 +14,9 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements PhpDocTypeMapperInterface<UnionTypeNode>
+ */
 final class UnionTypeMapper implements PhpDocTypeMapperInterface
 {
     private PhpDocTypeMapper $phpDocTypeMapper;
@@ -23,9 +26,6 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
     ) {
     }
 
-    /**
-     * @return class-string<TypeNode>
-     */
     public function getNodeType(): string
     {
         return UnionTypeNode::class;

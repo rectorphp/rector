@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Rector\ReadWrite\ReadNodeAnalyzer;
 
-use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 
+/**
+ * @implements ReadNodeAnalyzerInterface<Variable>
+ */
 final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     public function __construct(
@@ -19,22 +22,22 @@ final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(Expr $expr): bool
     {
-        return $node instanceof Variable;
+        return $expr instanceof Variable;
     }
 
     /**
-     * @param Variable $node
+     * @param Variable $expr
      */
-    public function isRead(Node $node): bool
+    public function isRead(Expr $expr): bool
     {
-        $parentScope = $this->parentScopeFinder->find($node);
+        $parentScope = $this->parentScopeFinder->find($expr);
         if ($parentScope === null) {
             return false;
         }
 
-        $variableUsages = $this->nodeUsageFinder->findVariableUsages((array) $parentScope->stmts, $node);
+        $variableUsages = $this->nodeUsageFinder->findVariableUsages((array) $parentScope->stmts, $expr);
         foreach ($variableUsages as $variableUsage) {
             if ($this->justReadExprAnalyzer->isReadContext($variableUsage)) {
                 return true;

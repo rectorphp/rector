@@ -14,7 +14,6 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -96,15 +95,10 @@ final class NameScopeFactory
                 $aliasName = $useUse->getAlias()
                     ->name;
 
-                $useName = $useUse->name->toString();
-                if (! is_string($useName)) {
-                    throw new ShouldNotHappenException();
-                }
-
                 // uses must be lowercase, as PHPStan lowercases it
                 $lowercasedAliasName = strtolower($aliasName);
 
-                $useNamesByAlias[$lowercasedAliasName] = $useName;
+                $useNamesByAlias[$lowercasedAliasName] = $useUse->name->toString();
             }
         }
 

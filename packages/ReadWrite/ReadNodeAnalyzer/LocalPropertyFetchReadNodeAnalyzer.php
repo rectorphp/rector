@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\ReadWrite\ReadNodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
@@ -13,6 +14,9 @@ use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 
+/**
+ * @implements ReadNodeAnalyzerInterface<PropertyFetch|StaticPropertyFetch>
+ */
 final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     public function __construct(
@@ -23,23 +27,20 @@ final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterf
     ) {
     }
 
-    public function supports(Node $node): bool
+    public function supports(Expr $expr): bool
     {
-        return $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch;
+        return $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch;
     }
 
-    /**
-     * @param PropertyFetch $node
-     */
-    public function isRead(Node $node): bool
+    public function isRead(Expr $expr): bool
     {
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        $class = $this->betterNodeFinder->findParentType($expr, Class_::class);
         if (! $class instanceof Class_) {
             // assume worse to keep node protected
             return true;
         }
 
-        $propertyName = $this->nodeNameResolver->getName($node->name);
+        $propertyName = $this->nodeNameResolver->getName($expr->name);
         if ($propertyName === null) {
             // assume worse to keep node protected
             return true;

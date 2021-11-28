@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?FuncCall
     {
-        $isJustSwapped = $node->getAttribute(self::JUST_SWAPPED);
+        $isJustSwapped = (bool) $node->getAttribute(self::JUST_SWAPPED, false);
         if ($isJustSwapped) {
             return null;
         }

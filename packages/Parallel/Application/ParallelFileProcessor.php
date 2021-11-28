@@ -179,10 +179,7 @@ final class ParallelFileProcessor
                         $fileDiffs[] = FileDiff::decode($jsonError);
                     }
 
-                    // @todo why there is a null check?
-                    if ($postFileCallback !== null) {
-                        $postFileCallback($json[Bridge::FILES_COUNT]);
-                    }
+                    $postFileCallback($json[Bridge::FILES_COUNT]);
 
                     $systemErrorsCount += $json[Bridge::SYSTEM_ERRORS_COUNT];
                     if ($systemErrorsCount >= self::SYSTEM_ERROR_COUNT_LIMIT) {

@@ -27,6 +27,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 
+/**
+ * @implements PhpDocTypeMapperInterface<IdentifierTypeNode>
+ */
 final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 {
     public function __construct(
@@ -38,9 +41,6 @@ final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
     ) {
     }
 
-    /**
-     * @return class-string<TypeNode>
-     */
     public function getNodeType(): string
     {
         return IdentifierTypeNode::class;

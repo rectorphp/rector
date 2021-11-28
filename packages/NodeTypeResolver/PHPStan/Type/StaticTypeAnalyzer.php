@@ -86,6 +86,10 @@ final class StaticTypeAnalyzer
     private function isAlwaysTruableArrayType(ArrayType $arrayType): bool
     {
         $itemType = $arrayType->getItemType();
-        return $itemType instanceof ConstantScalarType && $itemType->getValue();
+        if (! $itemType instanceof ConstantScalarType) {
+            return false;
+        }
+
+        return (bool) $itemType->getValue();
     }
 }

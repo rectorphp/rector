@@ -340,7 +340,7 @@ final class ClassRenamer
 
         $classLike->implements = array_unique($classLike->implements);
         foreach ($classLike->implements as $key => $implementName) {
-            $virtualNode = $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);
+            $virtualNode = (bool) $implementName->getAttribute(AttributeKey::VIRTUAL_NODE, false);
             if (! $virtualNode) {
                 continue;
             }

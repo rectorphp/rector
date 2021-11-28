@@ -52,7 +52,7 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
         // do not cache for PHPUnit, as in test every fixture is different
         $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
 
-        if ($this->aggregateSourceLocator && ! $isPHPUnitRun) {
+        if ($this->aggregateSourceLocator instanceof AggregateSourceLocator && ! $isPHPUnitRun) {
             return $this->aggregateSourceLocator;
         }
 

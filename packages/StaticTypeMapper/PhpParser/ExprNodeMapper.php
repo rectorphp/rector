@@ -17,9 +17,6 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
  */
 final class ExprNodeMapper implements PhpParserNodeMapperInterface
 {
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType(): string
     {
         return Expr::class;
