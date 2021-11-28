@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Privatization\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
@@ -52,7 +53,7 @@ final class PropertyFetchByMethodAnalyzer
     {
         $propertyUsageByMethods = [];
         foreach ($propertyNames as $propertyName) {
-            if ($this->isPropertyHasDefaultValue($class, $propertyName)) {
+            if ($this->isPropertyWithDefaultValue($class, $propertyName)) {
                 continue;
             }
             foreach ($class->getMethods() as $classMethod) {
@@ -79,10 +80,13 @@ final class PropertyFetchByMethodAnalyzer
         }
         return $this->isPropertyChangingInMultipleMethodCalls($classMethod, $propertyName);
     }
-    private function isPropertyHasDefaultValue(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
+    private function isPropertyWithDefaultValue(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
     {
         $property = $class->getProperty($propertyName);
-        return $property instanceof \PhpParser\Node\Stmt\Property && $property->props[0]->default;
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            return \false;
+        }
+        return $property->props[0]->default instanceof \PhpParser\Node\Expr;
     }
     private function isInConstructWithPropertyChanging(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : bool
     {
@@ -124,7 +128,7 @@ final class PropertyFetchByMethodAnalyzer
     private function verifyPropertyReadInIf(?bool $isPropertyReadInIf, \PhpParser\Node $node, string $propertyName) : ?bool
     {
         if ($node instanceof \PhpParser\Node\Stmt\If_) {
-            $isPropertyReadInIf = $this->refactorIf($node, $propertyName);
+            return $this->refactorIf($node, $propertyName);
         }
         return $isPropertyReadInIf;
     }

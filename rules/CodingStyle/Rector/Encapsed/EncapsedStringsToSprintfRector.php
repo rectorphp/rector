@@ -77,7 +77,7 @@ CODE_SAMPLE
         foreach ($node->parts as $part) {
             if ($part instanceof \PhpParser\Node\Scalar\EncapsedStringPart) {
                 $this->collectEncapsedStringPart($part);
-            } elseif ($part instanceof \PhpParser\Node\Expr) {
+            } else {
                 $this->collectExpr($part);
             }
         }

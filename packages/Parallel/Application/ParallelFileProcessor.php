@@ -126,10 +126,7 @@ final class ParallelFileProcessor
                     foreach ($json[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] as $jsonError) {
                         $fileDiffs[] = \Rector\Core\ValueObject\Reporting\FileDiff::decode($jsonError);
                     }
-                    // @todo why there is a null check?
-                    if ($postFileCallback !== null) {
-                        $postFileCallback($json[\Rector\Parallel\ValueObject\Bridge::FILES_COUNT]);
-                    }
+                    $postFileCallback($json[\Rector\Parallel\ValueObject\Bridge::FILES_COUNT]);
                     $systemErrorsCount += $json[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT];
                     if ($systemErrorsCount >= self::SYSTEM_ERROR_COUNT_LIMIT) {
                         $reachedInternalErrorsCountLimit = \true;

@@ -126,7 +126,7 @@ final class UseImportsAdder
     private function isCurrentNamespace(string $namespaceName, \PHPStan\Type\ObjectType $objectType) : bool
     {
         $afterCurrentNamespace = \RectorPrefix20211128\Nette\Utils\Strings::after($objectType->getClassName(), $namespaceName . '\\');
-        if (!$afterCurrentNamespace) {
+        if ($afterCurrentNamespace === null) {
             return \false;
         }
         return \strpos($afterCurrentNamespace, '\\') === \false;

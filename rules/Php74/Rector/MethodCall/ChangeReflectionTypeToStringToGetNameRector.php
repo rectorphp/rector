@@ -159,7 +159,7 @@ CODE_SAMPLE
             if (!\is_string($variableName)) {
                 return;
             }
-            if (!$methodName) {
+            if (!\is_string($methodName)) {
                 return;
             }
             $this->callsByVariable[$variableName][] = $methodName;

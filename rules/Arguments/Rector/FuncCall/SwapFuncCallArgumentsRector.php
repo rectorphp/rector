@@ -63,7 +63,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
-        $isJustSwapped = $node->getAttribute(self::JUST_SWAPPED);
+        $isJustSwapped = (bool) $node->getAttribute(self::JUST_SWAPPED, \false);
         if ($isJustSwapped) {
             return null;
         }

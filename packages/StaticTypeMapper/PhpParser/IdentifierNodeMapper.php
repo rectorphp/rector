@@ -21,9 +21,6 @@ final class IdentifierNodeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     {
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType() : string
     {
         return \PhpParser\Node\Identifier::class;

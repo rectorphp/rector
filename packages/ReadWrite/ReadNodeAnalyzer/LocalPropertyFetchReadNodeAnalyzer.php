@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\ReadWrite\ReadNodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\Class_;
@@ -11,6 +12,9 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
+/**
+ * @implements ReadNodeAnalyzerInterface<PropertyFetch|StaticPropertyFetch>
+ */
 final class LocalPropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface
 {
     /**
@@ -37,23 +41,23 @@ final class LocalPropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Cont
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \PhpParser\Node\Expr $expr
      */
-    public function supports($node) : bool
+    public function supports($expr) : bool
     {
-        return $node instanceof \PhpParser\Node\Expr\PropertyFetch || $node instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
+        return $expr instanceof \PhpParser\Node\Expr\PropertyFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param \PhpParser\Node\Expr $expr
      */
-    public function isRead($node) : bool
+    public function isRead($expr) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        $class = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             // assume worse to keep node protected
             return \true;
         }
-        $propertyName = $this->nodeNameResolver->getName($node->name);
+        $propertyName = $this->nodeNameResolver->getName($expr->name);
         if ($propertyName === null) {
             // assume worse to keep node protected
             return \true;

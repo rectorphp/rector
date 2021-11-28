@@ -201,10 +201,13 @@ final class ShortNameResolver
     {
         $shortNamesToFullyQualifiedNames = [];
         foreach ($shortNames as $shortName) {
+            $stmtsMatchedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts);
             if ($reflectionClass instanceof \ReflectionClass) {
                 $fullyQualifiedName = \RectorPrefix20211128\Nette\Utils\Reflection::expandClassName($shortName, $reflectionClass);
+            } elseif (\is_string($stmtsMatchedName)) {
+                $fullyQualifiedName = $stmtsMatchedName;
             } else {
-                $fullyQualifiedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts) ?: $shortName;
+                $fullyQualifiedName = $shortName;
             }
             $shortNamesToFullyQualifiedNames[$shortName] = $fullyQualifiedName;
         }

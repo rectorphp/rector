@@ -7,10 +7,13 @@ use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
+/**
+ * @template TTypeNode as TypeNode
+ */
 interface PhpDocTypeMapperInterface
 {
     /**
-     * @return class-string<TypeNode>
+     * @return class-string<TTypeNode>
      */
     public function getNodeType() : string;
     /**

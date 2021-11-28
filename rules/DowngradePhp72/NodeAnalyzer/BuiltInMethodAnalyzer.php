@@ -32,7 +32,7 @@ final class BuiltInMethodAnalyzer
             return \false;
         }
         foreach ($classReflection->getInterfaces() as $interfaceReflection) {
-            if (!$interfaceReflection->isBuiltIn()) {
+            if (!$interfaceReflection->isBuiltin()) {
                 continue;
             }
             if (!$interfaceReflection->hasMethod($methodName)) {

@@ -12,6 +12,9 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements PhpDocTypeMapperInterface<UnionTypeNode>
+ */
 final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
@@ -26,9 +29,6 @@ final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocP
     {
         $this->typeFactory = $typeFactory;
     }
-    /**
-     * @return class-string<TypeNode>
-     */
     public function getNodeType() : string
     {
         return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode::class;

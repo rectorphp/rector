@@ -13,6 +13,9 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
+/**
+ * @implements PhpDocTypeMapperInterface<NullableTypeNode>
+ */
 final class NullableTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
@@ -28,9 +31,6 @@ final class NullableTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpD
         $this->identifierTypeMapper = $identifierTypeMapper;
         $this->typeNodeResolver = $typeNodeResolver;
     }
-    /**
-     * @return class-string<TypeNode>
-     */
     public function getNodeType() : string
     {
         return \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode::class;

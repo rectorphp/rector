@@ -41,7 +41,11 @@ final class ClassNaming
             $name = $name->toString();
         }
         $name = \trim($name, '\\');
-        return \RectorPrefix20211128\Nette\Utils\Strings::after($name, '\\', -1) ?: $name;
+        $shortName = \RectorPrefix20211128\Nette\Utils\Strings::after($name, '\\', -1);
+        if (\is_string($shortName)) {
+            return $shortName;
+        }
+        return $name;
     }
     public function getNamespace(string $fullyQualifiedName) : ?string
     {

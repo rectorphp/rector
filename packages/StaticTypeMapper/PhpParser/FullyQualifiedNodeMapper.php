@@ -33,9 +33,6 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         $this->currentFileProvider = $currentFileProvider;
         $this->usedImportsResolver = $usedImportsResolver;
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType() : string
     {
         return \PhpParser\Node\Name\FullyQualified::class;

@@ -105,8 +105,8 @@ final class NameImporter
         }
         // Importing root namespace classes (like \DateTime) is optional
         if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES)) {
-            $name = $this->nodeNameResolver->getName($name);
-            if ($name !== null && \substr_count($name, '\\') === 0) {
+            $stringName = $this->nodeNameResolver->getName($name);
+            if ($stringName !== null && \substr_count($stringName, '\\') === 0) {
                 return \true;
             }
         }
@@ -153,7 +153,7 @@ final class NameImporter
     {
         $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         $fullName = $name->toString();
-        $autoImportNames = $this->parameterProvider->provideParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
+        $autoImportNames = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
         if ($autoImportNames && !$parentNode instanceof \PhpParser\Node && \strpos($fullName, '\\') === \false && $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($fullName), null)) {
             return \true;
         }

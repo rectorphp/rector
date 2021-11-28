@@ -44,7 +44,7 @@ final class InflectorSingularResolver
     public function resolve(string $currentName) : string
     {
         $matchBy = \RectorPrefix20211128\Nette\Utils\Strings::match($currentName, self::BY_MIDDLE_REGEX);
-        if ($matchBy) {
+        if ($matchBy !== null) {
             return \RectorPrefix20211128\Nette\Utils\Strings::substring($currentName, 0, -\strlen($matchBy['by']));
         }
         $resolvedValue = $this->resolveSingularizeMap($currentName);

@@ -42,7 +42,7 @@ final class FileHashComputer
         $fileLoaders = [new \RectorPrefix20211128\Symfony\Component\DependencyInjection\Loader\GlobFileLoader($containerBuilder, $fileLocator), new \RectorPrefix20211128\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, $fileLocator)];
         $loaderResolver = new \RectorPrefix20211128\Symfony\Component\Config\Loader\LoaderResolver($fileLoaders);
         $loader = $loaderResolver->resolve($filePath);
-        if (!$loader) {
+        if ($loader === \false) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $loader;

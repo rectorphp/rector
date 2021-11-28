@@ -12,15 +12,15 @@ use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
+/**
+ * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
+ */
 final class IntersectionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
      */
     private $phpDocTypeMapper;
-    /**
-     * @return class-string<TypeNode>
-     */
     public function getNodeType() : string
     {
         return \PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode::class;

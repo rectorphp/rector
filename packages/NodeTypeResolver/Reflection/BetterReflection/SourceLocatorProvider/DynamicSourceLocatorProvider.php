@@ -57,7 +57,7 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
     {
         // do not cache for PHPUnit, as in test every fixture is different
         $isPHPUnitRun = \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
-        if ($this->aggregateSourceLocator && !$isPHPUnitRun) {
+        if ($this->aggregateSourceLocator instanceof \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator && !$isPHPUnitRun) {
             return $this->aggregateSourceLocator;
         }
         $sourceLocators = [];

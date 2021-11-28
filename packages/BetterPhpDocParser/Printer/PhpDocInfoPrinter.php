@@ -168,7 +168,7 @@ final class PhpDocInfoPrinter
             $output = '/**' . $output;
         }
         // fix missing end
-        if (\Rector\Core\Util\StringUtils::isMatch($output, self::OPENING_DOCBLOCK_REGEX) && $output && !\Rector\Core\Util\StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
+        if (\Rector\Core\Util\StringUtils::isMatch($output, self::OPENING_DOCBLOCK_REGEX) && !\Rector\Core\Util\StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
         return $output;
@@ -212,7 +212,10 @@ final class PhpDocInfoPrinter
     }
     private function printEnd(string $output) : string
     {
-        $lastTokenPosition = $this->getCurrentPhpDocInfo()->getPhpDocNode()->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION) ?: $this->currentTokenPosition;
+        $lastTokenPosition = $this->getCurrentPhpDocInfo()->getPhpDocNode()->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION);
+        if ($lastTokenPosition === null) {
+            $lastTokenPosition = $this->currentTokenPosition;
+        }
         if ($lastTokenPosition === 0) {
             $lastTokenPosition = 1;
         }
