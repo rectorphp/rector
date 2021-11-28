@@ -65,6 +65,7 @@
         "nategood/httpful": "^0.3.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^1.0",
+        "phpstan/phpstan-strict-rules": "^1.1",
         "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.4.15",

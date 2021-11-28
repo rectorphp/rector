@@ -590,3 +590,10 @@ parameters:
         - '#Method Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface\:\:map\(\) return type has no value type specified in iterable type array#'
         - '#Method Rector\\PhpAttribute\\AnnotationToAttributeMapper\\(.*?)AnnotationToAttributeMapper\:\:map\(\) return type has no value type specified in iterable type array#'
 
+        # confused generics
+        - '#Return type \(array<class\-string<PhpParser\\Node\>\>\) of method Rector\\NodeTypeResolver\\NodeTypeResolver\\(.*?)TypeResolver\:\:getNodeClasses\(\) should be covariant with return type \(array<class\-string<PhpParser\\Node\\(.*?)\>\>\) of method Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface<PhpParser\\Node\\(.*?)\>\:\:getNodeClasses\(\)#'
+
+        # confused from while re-type
+        -
+            message: '#Instanceof between PhpParser\\Node\\Expr\\BinaryOp\\BooleanAnd and PhpParser\\Node\\Expr\\BinaryOp will always evaluate to true#'
+            path: packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php

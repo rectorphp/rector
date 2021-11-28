@@ -39,7 +39,7 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
     }
 
     /**
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {

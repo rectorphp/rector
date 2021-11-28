@@ -24,7 +24,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses(): array
     {
