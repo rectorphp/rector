@@ -65,12 +65,12 @@ final class PhpVersion extends \RectorPrefix20211128\MyCLabs\Enum\Enum
      * @api
      * @var int
      */
-    public const PHP_81 = 81000;
+    public const PHP_81 = 80100;
     /**
      * @api
      * @var int
      */
-    public const PHP_82 = 82000;
+    public const PHP_82 = 80200;
     /**
      * @api
      * @var int
