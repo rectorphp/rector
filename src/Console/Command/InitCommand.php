@@ -3,9 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
+use RectorPrefix20211128\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Template\TemplateResolverInterface;
 use Rector\Core\Exception\Template\TemplateTypeNotFoundException;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Template\DefaultResolver;
 use Stringable;
 use RectorPrefix20211128\Symfony\Component\Console\Command\Command;
@@ -34,14 +36,19 @@ final class InitCommand extends \RectorPrefix20211128\Symfony\Component\Console\
      */
     private $templateResolvers;
     /**
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    /**
      * @param TemplateResolverInterface[] $templateResolvers
      */
-    public function __construct(\RectorPrefix20211128\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20211128\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20211128\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $templateResolvers)
+    public function __construct(\RectorPrefix20211128\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20211128\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20211128\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $templateResolvers, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->smartFileSystem = $smartFileSystem;
         $this->symfonyStyle = $symfonyStyle;
         $this->templateResolvers = $templateResolvers;
+        $this->phpVersionProvider = $phpVersionProvider;
         parent::__construct();
     }
     protected function configure() : void
@@ -64,6 +71,11 @@ final class InitCommand extends \RectorPrefix20211128\Symfony\Component\Console\
             $this->symfonyStyle->warning('Config file "rector.php" already exists');
         } else {
             $this->smartFileSystem->copy($rectorTemplateFilePath, $rectorRootFilePath);
+            $fullPHPVersion = (string) $this->phpVersionProvider->provide();
+            $phpVersion = \RectorPrefix20211128\Nette\Utils\Strings::substring($fullPHPVersion, 0, 1) . \RectorPrefix20211128\Nette\Utils\Strings::substring($fullPHPVersion, 2, 1);
+            $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
+            $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', \sprintf('LevelSetList::UP_TO_PHP_%d', $phpVersion), $fileContent);
+            $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
             $this->symfonyStyle->success('"rector.php" config file was added');
         }
         return \RectorPrefix20211128\Symfony\Component\Console\Command\Command::SUCCESS;
