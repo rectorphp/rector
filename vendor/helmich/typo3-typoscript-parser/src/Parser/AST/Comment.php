@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211127\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20211128\Helmich\TypoScriptParser\Parser\AST;
 
 final class Comment extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {

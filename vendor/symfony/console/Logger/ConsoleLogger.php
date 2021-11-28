@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211127\Symfony\Component\Console\Logger;
+namespace RectorPrefix20211128\Symfony\Component\Console\Logger;
 
-use RectorPrefix20211127\Psr\Log\AbstractLogger;
-use RectorPrefix20211127\Psr\Log\InvalidArgumentException;
-use RectorPrefix20211127\Psr\Log\LogLevel;
-use RectorPrefix20211127\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface;
-if ((new \ReflectionMethod(\RectorPrefix20211127\Psr\Log\AbstractLogger::class, 'log'))->hasReturnType()) {
-    throw new \RuntimeException(\sprintf('The "%s" logger is not compatible with psr/log >= 3.0. Try running "composer require psr/log:^2.".', \RectorPrefix20211127\Symfony\Component\Console\Logger\ConsoleLogger::class));
+use RectorPrefix20211128\Psr\Log\AbstractLogger;
+use RectorPrefix20211128\Psr\Log\InvalidArgumentException;
+use RectorPrefix20211128\Psr\Log\LogLevel;
+use RectorPrefix20211128\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface;
+if ((new \ReflectionMethod(\RectorPrefix20211128\Psr\Log\AbstractLogger::class, 'log'))->hasReturnType()) {
+    throw new \RuntimeException(\sprintf('The "%s" logger is not compatible with psr/log >= 3.0. Try running "composer require psr/log:^2.".', \RectorPrefix20211128\Symfony\Component\Console\Logger\ConsoleLogger::class));
 }
 /**
  * PSR-3 compliant console logger.
@@ -25,15 +25,15 @@ if ((new \ReflectionMethod(\RectorPrefix20211127\Psr\Log\AbstractLogger::class, 
  *
  * @see https://www.php-fig.org/psr/psr-3/
  */
-class ConsoleLogger extends \RectorPrefix20211127\Psr\Log\AbstractLogger
+class ConsoleLogger extends \RectorPrefix20211128\Psr\Log\AbstractLogger
 {
     public const INFO = 'info';
     public const ERROR = 'error';
     private $output;
-    private $verbosityLevelMap = [\RectorPrefix20211127\Psr\Log\LogLevel::EMERGENCY => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211127\Psr\Log\LogLevel::ALERT => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211127\Psr\Log\LogLevel::CRITICAL => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211127\Psr\Log\LogLevel::ERROR => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211127\Psr\Log\LogLevel::WARNING => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211127\Psr\Log\LogLevel::NOTICE => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE, \RectorPrefix20211127\Psr\Log\LogLevel::INFO => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE, \RectorPrefix20211127\Psr\Log\LogLevel::DEBUG => \RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG];
-    private $formatLevelMap = [\RectorPrefix20211127\Psr\Log\LogLevel::EMERGENCY => self::ERROR, \RectorPrefix20211127\Psr\Log\LogLevel::ALERT => self::ERROR, \RectorPrefix20211127\Psr\Log\LogLevel::CRITICAL => self::ERROR, \RectorPrefix20211127\Psr\Log\LogLevel::ERROR => self::ERROR, \RectorPrefix20211127\Psr\Log\LogLevel::WARNING => self::INFO, \RectorPrefix20211127\Psr\Log\LogLevel::NOTICE => self::INFO, \RectorPrefix20211127\Psr\Log\LogLevel::INFO => self::INFO, \RectorPrefix20211127\Psr\Log\LogLevel::DEBUG => self::INFO];
+    private $verbosityLevelMap = [\RectorPrefix20211128\Psr\Log\LogLevel::EMERGENCY => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211128\Psr\Log\LogLevel::ALERT => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211128\Psr\Log\LogLevel::CRITICAL => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211128\Psr\Log\LogLevel::ERROR => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211128\Psr\Log\LogLevel::WARNING => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_NORMAL, \RectorPrefix20211128\Psr\Log\LogLevel::NOTICE => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE, \RectorPrefix20211128\Psr\Log\LogLevel::INFO => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE, \RectorPrefix20211128\Psr\Log\LogLevel::DEBUG => \RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG];
+    private $formatLevelMap = [\RectorPrefix20211128\Psr\Log\LogLevel::EMERGENCY => self::ERROR, \RectorPrefix20211128\Psr\Log\LogLevel::ALERT => self::ERROR, \RectorPrefix20211128\Psr\Log\LogLevel::CRITICAL => self::ERROR, \RectorPrefix20211128\Psr\Log\LogLevel::ERROR => self::ERROR, \RectorPrefix20211128\Psr\Log\LogLevel::WARNING => self::INFO, \RectorPrefix20211128\Psr\Log\LogLevel::NOTICE => self::INFO, \RectorPrefix20211128\Psr\Log\LogLevel::INFO => self::INFO, \RectorPrefix20211128\Psr\Log\LogLevel::DEBUG => self::INFO];
     private $errored = \false;
-    public function __construct(\RectorPrefix20211127\Symfony\Component\Console\Output\OutputInterface $output, array $verbosityLevelMap = [], array $formatLevelMap = [])
+    public function __construct(\RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface $output, array $verbosityLevelMap = [], array $formatLevelMap = [])
     {
         $this->output = $output;
         $this->verbosityLevelMap = $verbosityLevelMap + $this->verbosityLevelMap;
@@ -47,12 +47,12 @@ class ConsoleLogger extends \RectorPrefix20211127\Psr\Log\AbstractLogger
     public function log($level, $message, array $context = [])
     {
         if (!isset($this->verbosityLevelMap[$level])) {
-            throw new \RectorPrefix20211127\Psr\Log\InvalidArgumentException(\sprintf('The log level "%s" does not exist.', $level));
+            throw new \RectorPrefix20211128\Psr\Log\InvalidArgumentException(\sprintf('The log level "%s" does not exist.', $level));
         }
         $output = $this->output;
         // Write to the error output if necessary and available
         if (self::ERROR === $this->formatLevelMap[$level]) {
-            if ($this->output instanceof \RectorPrefix20211127\Symfony\Component\Console\Output\ConsoleOutputInterface) {
+            if ($this->output instanceof \RectorPrefix20211128\Symfony\Component\Console\Output\ConsoleOutputInterface) {
                 $output = $output->getErrorOutput();
             }
             $this->errored = \true;

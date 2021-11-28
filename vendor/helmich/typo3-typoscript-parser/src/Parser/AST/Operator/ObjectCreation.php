@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211127\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20211128\Helmich\TypoScriptParser\Parser\AST\Operator;
 
 /**
  * Object creation statement.
@@ -13,6 +13,6 @@ namespace RectorPrefix20211127\Helmich\TypoScriptParser\Parser\AST\Operator;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class ObjectCreation extends \RectorPrefix20211127\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment
+class ObjectCreation extends \RectorPrefix20211128\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment
 {
 }

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211127\Tracy;
+namespace RectorPrefix20211128\Tracy;
 
 /**
  * FireLogger console logger.
@@ -13,7 +13,7 @@ namespace RectorPrefix20211127\Tracy;
  * @see http://firelogger.binaryage.com
  * @see https://chrome.google.com/webstore/detail/firelogger-for-chrome/hmagilfopmdjkeomnjpchokglfdfjfeh
  */
-class FireLogger implements \RectorPrefix20211127\Tracy\ILogger
+class FireLogger implements \RectorPrefix20211128\Tracy\ILogger
 {
     /** @var int  */
     public $maxDepth = 3;
@@ -30,7 +30,7 @@ class FireLogger implements \RectorPrefix20211127\Tracy\ILogger
         if (!isset($_SERVER['HTTP_X_FIRELOGGER']) || \headers_sent()) {
             return \false;
         }
-        $item = ['name' => 'PHP', 'level' => $level, 'order' => \count($this->payload['logs']), 'time' => \str_pad(\number_format((\microtime(\true) - \RectorPrefix20211127\Tracy\Debugger::$time) * 1000, 1, '.', ' '), 8, '0', \STR_PAD_LEFT) . ' ms', 'template' => '', 'message' => '', 'style' => 'background:#767ab6'];
+        $item = ['name' => 'PHP', 'level' => $level, 'order' => \count($this->payload['logs']), 'time' => \str_pad(\number_format((\microtime(\true) - \RectorPrefix20211128\Tracy\Debugger::$time) * 1000, 1, '.', ' '), 8, '0', \STR_PAD_LEFT) . ' ms', 'template' => '', 'message' => '', 'style' => 'background:#767ab6'];
         $args = \func_get_args();
         if (isset($args[0]) && \is_string($args[0])) {
             $item['template'] = \array_shift($args);
@@ -38,16 +38,16 @@ class FireLogger implements \RectorPrefix20211127\Tracy\ILogger
         if (isset($args[0]) && $args[0] instanceof \Throwable) {
             $e = \array_shift($args);
             $trace = $e->getTrace();
-            if (isset($trace[0]['class']) && $trace[0]['class'] === \RectorPrefix20211127\Tracy\Debugger::class && ($trace[0]['function'] === 'shutdownHandler' || $trace[0]['function'] === 'errorHandler')) {
+            if (isset($trace[0]['class']) && $trace[0]['class'] === \RectorPrefix20211128\Tracy\Debugger::class && ($trace[0]['function'] === 'shutdownHandler' || $trace[0]['function'] === 'errorHandler')) {
                 unset($trace[0]);
             }
             $file = \str_replace(\dirname($e->getFile(), 3), "…", $e->getFile());
-            $item['template'] = ($e instanceof \ErrorException ? '' : \RectorPrefix20211127\Tracy\Helpers::getClass($e) . ': ') . $e->getMessage() . ($e->getCode() ? ' #' . $e->getCode() : '') . ' in ' . $file . ':' . $e->getLine();
+            $item['template'] = ($e instanceof \ErrorException ? '' : \RectorPrefix20211128\Tracy\Helpers::getClass($e) . ': ') . $e->getMessage() . ($e->getCode() ? ' #' . $e->getCode() : '') . ' in ' . $file . ':' . $e->getLine();
             $item['pathname'] = $e->getFile();
             $item['lineno'] = $e->getLine();
         } else {
             $trace = \debug_backtrace();
-            if (isset($trace[1]['class']) && $trace[1]['class'] === \RectorPrefix20211127\Tracy\Debugger::class && $trace[1]['function'] === 'fireLog') {
+            if (isset($trace[1]['class']) && $trace[1]['class'] === \RectorPrefix20211128\Tracy\Debugger::class && $trace[1]['function'] === 'fireLog') {
                 unset($trace[0]);
             }
             foreach ($trace as $frame) {
@@ -85,7 +85,7 @@ class FireLogger implements \RectorPrefix20211127\Tracy\ILogger
         if (\is_bool($var) || $var === null || \is_int($var) || \is_float($var)) {
             return $var;
         } elseif (\is_string($var)) {
-            $var = \RectorPrefix20211127\Tracy\Helpers::encodeString($var, $this->maxLength);
+            $var = \RectorPrefix20211128\Tracy\Helpers::encodeString($var, $this->maxLength);
             return \htmlspecialchars_decode(\strip_tags($var));
         } elseif (\is_array($var)) {
             static $marker;
@@ -114,7 +114,7 @@ class FireLogger implements \RectorPrefix20211127\Tracy\ILogger
                 return "…RECURSION…";
             } elseif ($level < $this->maxDepth || !$this->maxDepth) {
                 $list[] = $var;
-                $res = ["\0" => '(object) ' . \RectorPrefix20211127\Tracy\Helpers::getClass($var)];
+                $res = ["\0" => '(object) ' . \RectorPrefix20211128\Tracy\Helpers::getClass($var)];
                 foreach ($arr as $k => &$v) {
                     if (isset($k[0]) && $k[0] === "\0") {
                         $k = \substr($k, \strrpos($k, "\0") + 1);

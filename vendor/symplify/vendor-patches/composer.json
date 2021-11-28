@@ -20,12 +20,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211127\\Symplify\\VendorPatches\\": "src"
+            "RectorPrefix20211128\\Symplify\\VendorPatches\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211127\\Symplify\\VendorPatches\\Tests\\": "tests"
+            "RectorPrefix20211128\\Symplify\\VendorPatches\\Tests\\": "tests"
         }
     },
     "extra": {

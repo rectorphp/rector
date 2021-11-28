@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211127\Tracy;
+namespace RectorPrefix20211128\Tracy;
 
 /**
  * Rendering helpers for Debugger.
@@ -19,7 +19,7 @@ class Helpers
      */
     public static function editorLink($file, $line = null) : string
     {
-        $file = \strtr($origFile = $file, \RectorPrefix20211127\Tracy\Debugger::$editorMapping);
+        $file = \strtr($origFile = $file, \RectorPrefix20211128\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
             $parts = \explode('/', \strtr($file, '\\', '/'));
             $file = \array_pop($parts);
@@ -43,10 +43,10 @@ class Helpers
      */
     public static function editorUri($file, $line = null, $action = 'open', $search = '', $replace = '') : ?string
     {
-        if (\RectorPrefix20211127\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
+        if (\RectorPrefix20211128\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
-            $file = \strtr($file, \RectorPrefix20211127\Tracy\Debugger::$editorMapping);
-            return \strtr(\RectorPrefix20211127\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
+            $file = \strtr($file, \RectorPrefix20211128\Tracy\Debugger::$editorMapping);
+            return \strtr(\RectorPrefix20211128\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
         }
         return null;
     }
@@ -129,7 +129,7 @@ class Helpers
     public static function improveException($e) : void
     {
         $message = $e->getMessage();
-        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211127\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
+        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211128\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
             // do nothing
         } elseif (\preg_match('#^Call to undefined function (\\S+\\\\)?(\\w+)\\(#', $message, $m)) {
             $funcs = \array_merge(\get_defined_functions()['internal'], \get_defined_functions()['user']);

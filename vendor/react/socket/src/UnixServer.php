@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20211127\React\Socket;
+namespace RectorPrefix20211128\React\Socket;
 
-use RectorPrefix20211127\Evenement\EventEmitter;
-use RectorPrefix20211127\React\EventLoop\Loop;
-use RectorPrefix20211127\React\EventLoop\LoopInterface;
+use RectorPrefix20211128\Evenement\EventEmitter;
+use RectorPrefix20211128\React\EventLoop\Loop;
+use RectorPrefix20211128\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
 use RuntimeException;
 /**
@@ -20,7 +20,7 @@ use RuntimeException;
  * @see ServerInterface
  * @see ConnectionInterface
  */
-final class UnixServer extends \RectorPrefix20211127\Evenement\EventEmitter implements \RectorPrefix20211127\React\Socket\ServerInterface
+final class UnixServer extends \RectorPrefix20211128\Evenement\EventEmitter implements \RectorPrefix20211128\React\Socket\ServerInterface
 {
     private $master;
     private $loop;
@@ -48,9 +48,9 @@ final class UnixServer extends \RectorPrefix20211127\Evenement\EventEmitter impl
      * @throws InvalidArgumentException if the listening address is invalid
      * @throws RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($path, \RectorPrefix20211127\React\EventLoop\LoopInterface $loop = null, array $context = array())
+    public function __construct($path, \RectorPrefix20211128\React\EventLoop\LoopInterface $loop = null, array $context = array())
     {
-        $this->loop = $loop ?: \RectorPrefix20211127\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20211128\React\EventLoop\Loop::get();
         if (\strpos($path, '://') === \false) {
             $path = 'unix://' . $path;
         } elseif (\substr($path, 0, 7) !== 'unix://') {
@@ -116,7 +116,7 @@ final class UnixServer extends \RectorPrefix20211127\Evenement\EventEmitter impl
     /** @internal */
     public function handleConnection($socket)
     {
-        $connection = new \RectorPrefix20211127\React\Socket\Connection($socket, $this->loop);
+        $connection = new \RectorPrefix20211128\React\Socket\Connection($socket, $this->loop);
         $connection->unix = \true;
         $this->emit('connection', array($connection));
     }

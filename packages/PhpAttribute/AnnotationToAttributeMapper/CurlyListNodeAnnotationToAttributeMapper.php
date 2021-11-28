@@ -6,7 +6,7 @@ namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use RectorPrefix20211127\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211128\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */

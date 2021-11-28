@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\ValueObject\Application;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20211127\Symplify\EasyParallel\Contract\SerializableInterface;
-final class RectorError implements \RectorPrefix20211127\Symplify\EasyParallel\Contract\SerializableInterface
+use RectorPrefix20211128\Symplify\EasyParallel\Contract\SerializableInterface;
+final class RectorError implements \RectorPrefix20211128\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @var string
@@ -55,7 +55,7 @@ final class RectorError implements \RectorPrefix20211127\Symplify\EasyParallel\C
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode($json) : \RectorPrefix20211127\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode($json) : \RectorPrefix20211128\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json['message'], $json['relative_file_path'], $json['line'], $json['rector_class']);
     }

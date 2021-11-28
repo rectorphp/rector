@@ -51,7 +51,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211127\\Symfony\\Contracts\\": ""
+            "RectorPrefix20211128\\Symfony\\Contracts\\": ""
         },
         "files": [
             "Deprecation\/function.php"

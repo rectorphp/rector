@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20211127\Nette\Utils\Strings;
+use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -100,7 +100,7 @@ final class DoctrineAnnotationDecorator
                     break;
                 }
                 $nextPhpDocChildNode = $phpDocNode->children[$key];
-                if ($nextPhpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode && \RectorPrefix20211127\Nette\Utils\Strings::match($nextPhpDocChildNode->text, self::NESTED_ANNOTATION_END_REGEX)) {
+                if ($nextPhpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode && \RectorPrefix20211128\Nette\Utils\Strings::match($nextPhpDocChildNode->text, self::NESTED_ANNOTATION_END_REGEX)) {
                     // @todo how to detect previously opened brackets?
                     // probably local property with holding count of opened brackets
                     $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->text;
@@ -224,7 +224,7 @@ final class DoctrineAnnotationDecorator
     }
     private function resolveFqnAnnotationSpacelessPhpDocTagNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode $phpDocTextNode) : ?\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
     {
-        $match = \RectorPrefix20211127\Nette\Utils\Strings::match($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
+        $match = \RectorPrefix20211128\Nette\Utils\Strings::match($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
         $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
         if ($fullyQualifiedAnnotationClass === null) {
             return null;

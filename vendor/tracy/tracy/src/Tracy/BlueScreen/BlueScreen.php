@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211127\Tracy;
+namespace RectorPrefix20211128\Tracy;
 
 /**
  * Red BlueScreen.
@@ -65,8 +65,8 @@ class BlueScreen
      */
     public function render($exception) : void
     {
-        if (\RectorPrefix20211127\Tracy\Helpers::isAjax() && \session_status() === \PHP_SESSION_ACTIVE) {
-            $_SESSION['_tracy']['bluescreen'][$_SERVER['HTTP_X_TRACY_AJAX']] = ['content' => \RectorPrefix20211127\Tracy\Helpers::capture(function () use($exception) {
+        if (\RectorPrefix20211128\Tracy\Helpers::isAjax() && \session_status() === \PHP_SESSION_ACTIVE) {
+            $_SESSION['_tracy']['bluescreen'][$_SERVER['HTTP_X_TRACY_AJAX']] = ['content' => \RectorPrefix20211128\Tracy\Helpers::capture(function () use($exception) {
                 $this->renderTemplate($exception, __DIR__ . '/assets/content.phtml');
             }), 'time' => \time()];
         } else {
@@ -100,11 +100,11 @@ class BlueScreen
     private function renderTemplate(\Throwable $exception, string $template, $toScreen = \true) : void
     {
         $headersSent = \headers_sent($headersFile, $headersLine);
-        $obStatus = \RectorPrefix20211127\Tracy\Debugger::$obStatus;
+        $obStatus = \RectorPrefix20211128\Tracy\Debugger::$obStatus;
         $showEnvironment = $this->showEnvironment && \strpos($exception->getMessage(), 'Allowed memory size') === \false;
         $info = \array_filter($this->info);
-        $source = \RectorPrefix20211127\Tracy\Helpers::getSource();
-        $title = $exception instanceof \ErrorException ? \RectorPrefix20211127\Tracy\Helpers::errorTypeToString($exception->getSeverity()) : \RectorPrefix20211127\Tracy\Helpers::getClass($exception);
+        $source = \RectorPrefix20211128\Tracy\Helpers::getSource();
+        $title = $exception instanceof \ErrorException ? \RectorPrefix20211128\Tracy\Helpers::errorTypeToString($exception->getSeverity()) : \RectorPrefix20211128\Tracy\Helpers::getClass($exception);
         $lastError = $exception instanceof \ErrorException || $exception instanceof \Error ? null : \error_get_last();
         if (\function_exists('apache_request_headers')) {
             $httpHeaders = \apache_request_headers();
@@ -119,9 +119,9 @@ class BlueScreen
         $snapshot =& $this->snapshot;
         $snapshot = [];
         $dump = $this->getDumper();
-        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/assets/bluescreen.css', __DIR__ . '/../Toggle/toggle.css', __DIR__ . '/../TableSort/table-sort.css', __DIR__ . '/../Dumper/assets/dumper-light.css'], \RectorPrefix20211127\Tracy\Debugger::$customCssFiles));
-        $css = \RectorPrefix20211127\Tracy\Helpers::minifyCss(\implode($css));
-        $nonce = $toScreen ? \RectorPrefix20211127\Tracy\Helpers::getNonce() : null;
+        $css = \array_map('file_get_contents', \array_merge([__DIR__ . '/assets/bluescreen.css', __DIR__ . '/../Toggle/toggle.css', __DIR__ . '/../TableSort/table-sort.css', __DIR__ . '/../Dumper/assets/dumper-light.css'], \RectorPrefix20211128\Tracy\Debugger::$customCssFiles));
+        $css = \RectorPrefix20211128\Tracy\Helpers::minifyCss(\implode($css));
+        $nonce = $toScreen ? \RectorPrefix20211128\Tracy\Helpers::getNonce() : null;
         $actions = $toScreen ? $this->renderActions($exception) : [];
         require $template;
     }
@@ -147,7 +147,7 @@ class BlueScreen
                 \ob_end_clean();
             }
             \is_callable($callback, \true, $name);
-            $res[] = (object) ['tab' => "Error in panel {$name}", 'panel' => \nl2br(\RectorPrefix20211127\Tracy\Helpers::escapeHtml($e))];
+            $res[] = (object) ['tab' => "Error in panel {$name}", 'panel' => \nl2br(\RectorPrefix20211128\Tracy\Helpers::escapeHtml($e))];
         }
         return $res;
     }
@@ -168,17 +168,17 @@ class BlueScreen
         }
         if (\preg_match('# ([\'"])(\\w{3,}(?:\\\\\\w{3,})+)\\1#i', $ex->getMessage(), $m)) {
             $class = $m[2];
-            if (!\class_exists($class, \false) && !\interface_exists($class, \false) && !\trait_exists($class, \false) && ($file = \RectorPrefix20211127\Tracy\Helpers::guessClassFile($class)) && !\is_file($file)) {
-                $actions[] = ['link' => \RectorPrefix20211127\Tracy\Helpers::editorUri($file, 1, 'create'), 'label' => 'create class'];
+            if (!\class_exists($class, \false) && !\interface_exists($class, \false) && !\trait_exists($class, \false) && ($file = \RectorPrefix20211128\Tracy\Helpers::guessClassFile($class)) && !\is_file($file)) {
+                $actions[] = ['link' => \RectorPrefix20211128\Tracy\Helpers::editorUri($file, 1, 'create'), 'label' => 'create class'];
             }
         }
         if (\preg_match('# ([\'"])((?:/|[a-z]:[/\\\\])\\w[^\'"]+\\.\\w{2,5})\\1#i', $ex->getMessage(), $m)) {
             $file = $m[2];
-            $actions[] = ['link' => \RectorPrefix20211127\Tracy\Helpers::editorUri($file, 1, $label = \is_file($file) ? 'open' : 'create'), 'label' => $label . ' file'];
+            $actions[] = ['link' => \RectorPrefix20211128\Tracy\Helpers::editorUri($file, 1, $label = \is_file($file) ? 'open' : 'create'), 'label' => $label . ' file'];
         }
-        $query = ($ex instanceof \ErrorException ? '' : \RectorPrefix20211127\Tracy\Helpers::getClass($ex) . ' ') . \preg_replace('#\'.*\'|".*"#Us', '', $ex->getMessage());
+        $query = ($ex instanceof \ErrorException ? '' : \RectorPrefix20211128\Tracy\Helpers::getClass($ex) . ' ') . \preg_replace('#\'.*\'|".*"#Us', '', $ex->getMessage());
         $actions[] = ['link' => 'https://www.google.com/search?sourceid=tracy&q=' . \urlencode($query), 'label' => 'search', 'external' => \true];
-        if ($ex instanceof \ErrorException && !empty($ex->skippable) && \preg_match('#^https?://#', $source = \RectorPrefix20211127\Tracy\Helpers::getSource())) {
+        if ($ex instanceof \ErrorException && !empty($ex->skippable) && \preg_match('#^https?://#', $source = \RectorPrefix20211128\Tracy\Helpers::getSource())) {
             $actions[] = ['link' => $source . (\strpos($source, '?') ? '&' : '?') . '_tracy_skip_error', 'label' => 'skip error'];
         }
         return $actions;
@@ -197,8 +197,8 @@ class BlueScreen
             return null;
         }
         $source = static::highlightPhp($source, $line, $lines);
-        if ($editor = \RectorPrefix20211127\Tracy\Helpers::editorUri($file, $line)) {
-            $source = \substr_replace($source, ' title="Ctrl-Click to open in editor" data-tracy-href="' . \RectorPrefix20211127\Tracy\Helpers::escapeHtml($editor) . '"', 4, 0);
+        if ($editor = \RectorPrefix20211128\Tracy\Helpers::editorUri($file, $line)) {
+            $source = \substr_replace($source, ' title="Ctrl-Click to open in editor" data-tracy-href="' . \RectorPrefix20211128\Tracy\Helpers::escapeHtml($editor) . '"', 4, 0);
         }
         return $source;
     }
@@ -312,7 +312,7 @@ class BlueScreen
     public function getDumper() : \Closure
     {
         return function ($v, $k = null) : string {
-            return \RectorPrefix20211127\Tracy\Dumper::toHtml($v, [\RectorPrefix20211127\Tracy\Dumper::DEPTH => $this->maxDepth, \RectorPrefix20211127\Tracy\Dumper::TRUNCATE => $this->maxLength, \RectorPrefix20211127\Tracy\Dumper::SNAPSHOT => &$this->snapshot, \RectorPrefix20211127\Tracy\Dumper::LOCATION => \RectorPrefix20211127\Tracy\Dumper::LOCATION_CLASS, \RectorPrefix20211127\Tracy\Dumper::SCRUBBER => $this->scrubber, \RectorPrefix20211127\Tracy\Dumper::KEYS_TO_HIDE => $this->keysToHide], $k);
+            return \RectorPrefix20211128\Tracy\Dumper::toHtml($v, [\RectorPrefix20211128\Tracy\Dumper::DEPTH => $this->maxDepth, \RectorPrefix20211128\Tracy\Dumper::TRUNCATE => $this->maxLength, \RectorPrefix20211128\Tracy\Dumper::SNAPSHOT => &$this->snapshot, \RectorPrefix20211128\Tracy\Dumper::LOCATION => \RectorPrefix20211128\Tracy\Dumper::LOCATION_CLASS, \RectorPrefix20211128\Tracy\Dumper::SCRUBBER => $this->scrubber, \RectorPrefix20211128\Tracy\Dumper::KEYS_TO_HIDE => $this->keysToHide], $k);
         };
     }
     /**
@@ -320,7 +320,7 @@ class BlueScreen
      */
     public function formatMessage($exception) : string
     {
-        $msg = \RectorPrefix20211127\Tracy\Helpers::encodeString(\trim((string) $exception->getMessage()), self::MAX_MESSAGE_LENGTH, \false);
+        $msg = \RectorPrefix20211128\Tracy\Helpers::encodeString(\trim((string) $exception->getMessage()), self::MAX_MESSAGE_LENGTH, \false);
         // highlight 'string'
         $msg = \preg_replace('#\'\\S(?:[^\']|\\\\\')*\\S\'|"\\S(?:[^"]|\\\\")*\\S"#', '<i>$0</i>', $msg);
         // clickable class & methods
@@ -333,11 +333,11 @@ class BlueScreen
             if (empty($r) || !$r->getFileName()) {
                 return $m[0];
             }
-            return '<a href="' . \RectorPrefix20211127\Tracy\Helpers::escapeHtml(\RectorPrefix20211127\Tracy\Helpers::editorUri($r->getFileName(), $r->getStartLine())) . '" class="tracy-editor">' . $m[0] . '</a>';
+            return '<a href="' . \RectorPrefix20211128\Tracy\Helpers::escapeHtml(\RectorPrefix20211128\Tracy\Helpers::editorUri($r->getFileName(), $r->getStartLine())) . '" class="tracy-editor">' . $m[0] . '</a>';
         }, $msg);
         // clickable file name
         $msg = \preg_replace_callback('#([\\w\\\\/.:-]+\\.(?:php|phpt|phtml|latte|neon))(?|:(\\d+)| on line (\\d+))?#', function ($m) {
-            return @\is_file($m[1]) ? '<a href="' . \RectorPrefix20211127\Tracy\Helpers::escapeHtml(\RectorPrefix20211127\Tracy\Helpers::editorUri($m[1], isset($m[2]) ? (int) $m[2] : null)) . '" class="tracy-editor">' . $m[0] . '</a>' : $m[0];
+            return @\is_file($m[1]) ? '<a href="' . \RectorPrefix20211128\Tracy\Helpers::escapeHtml(\RectorPrefix20211128\Tracy\Helpers::editorUri($m[1], isset($m[2]) ? (int) $m[2] : null)) . '" class="tracy-editor">' . $m[0] . '</a>' : $m[0];
         }, $msg);
         return $msg;
     }
@@ -352,7 +352,7 @@ class BlueScreen
         // @ phpinfo may be disabled
         $info = \ob_get_clean();
         if (\strpos($license, '<body') === \false) {
-            echo '<pre class="tracy-dump tracy-light">', \RectorPrefix20211127\Tracy\Helpers::escapeHtml($info), '</pre>';
+            echo '<pre class="tracy-dump tracy-light">', \RectorPrefix20211128\Tracy\Helpers::escapeHtml($info), '</pre>';
         } else {
             $info = \str_replace('<table', '<table class="tracy-sortable"', $info);
             echo \preg_replace('#^.+<body>|</body>.+\\z#s', '', $info);
