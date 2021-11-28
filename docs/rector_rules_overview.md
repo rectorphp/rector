@@ -18,7 +18,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (49)
+- [DeadCode](#deadcode) (50)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -98,7 +98,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (36)
+- [Transform](#transform) (35)
 
 - [TypeDeclaration](#typedeclaration) (22)
 
@@ -3099,6 +3099,21 @@ Remove empty constructor
 -    public function __construct()
 -    {
 -    }
+ }
+```
+
+<br>
+
+### RemoveDeadContinueRector
+
+Remove useless continue at the end of loops
+
+- class: [`Rector\DeadCode\Rector\For_\RemoveDeadContinueRector`](../rules/DeadCode/Rector/For_/RemoveDeadContinueRector.php)
+
+```diff
+ while ($i < 10) {
+     ++$i;
+-    continue;
  }
 ```
 
@@ -10451,41 +10466,6 @@ Change singleton class to normal class that can be registered as a service
 
 <br>
 
-### ClassConstFetchToValueRector
-
-Replaces constant by value
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector`](../rules/Transform/Rector/ClassConstFetch/ClassConstFetchToValueRector.php)
-
-```php
-use Rector\Transform\Rector\ClassConstFetch\ClassConstFetchToValueRector;
-use Rector\Transform\ValueObject\ClassConstFetchToValue;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ClassConstFetchToValueRector::class)
-        ->call('configure', [[
-            ClassConstFetchToValueRector::CLASS_CONST_FETCHES_TO_VALUES => ValueObjectInliner::inline([
-                new ClassConstFetchToValue('Nette\Configurator', 'PRODUCTION', 'production'),
-            ]),
-        ]]);
-};
-```
-
-↓
-
-```diff
--$value === Nette\Configurator::DEVELOPMENT
-+$value === "development"
-```
-
-<br>
-
 ### DimFetchAssignToMethodCallRector
 
 Change magic array access add to `$list[],` to explicit `$list->addMethod(...)`
@@ -11543,8 +11523,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
  {
      public function run()
      {
--        $dotenv = JsonResponse::create(true);
-+        $dotenv = new JsonResponse();
+-        $dotenv = JsonResponse::create(['foo' => 'bar'], Response::HTTP_OK);
++        $dotenv = new JsonResponse(['foo' => 'bar'], Response::HTTP_OK);
      }
  }
 ```
