@@ -178,7 +178,7 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
         }
 
         $fullyQualifiedName = $this->nodeNameResolver->getName($param->type);
-        if (! $fullyQualifiedName) {
+        if (! is_string($fullyQualifiedName)) {
             return null;
         }
 

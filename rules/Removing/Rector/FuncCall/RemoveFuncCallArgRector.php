@@ -83,12 +83,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, RemoveFuncCallArg[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $removedFunctionArguments = $configuration[self::REMOVED_FUNCTION_ARGUMENTS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($removedFunctionArguments, RemoveFuncCallArg::class);
+        $removedFunctionArguments = $configuration[self::REMOVED_FUNCTION_ARGUMENTS] ?? $configuration;
+        Assert::allIsAOf($removedFunctionArguments, RemoveFuncCallArg::class);
         $this->removedFunctionArguments = $removedFunctionArguments;
     }
 }

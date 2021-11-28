@@ -148,13 +148,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, StaticCallToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? ($configuration ?: []);
+        $staticCallsToMethodCalls = $configuration[self::STATIC_CALLS_TO_METHOD_CALLS] ?? $configuration;
         Assert::isArray($staticCallsToMethodCalls);
-        Assert::allIsInstanceOf($staticCallsToMethodCalls, StaticCallToMethodCall::class);
+        Assert::allIsAOf($staticCallsToMethodCalls, StaticCallToMethodCall::class);
 
         $this->staticCallsToMethodCalls = $staticCallsToMethodCalls;
     }

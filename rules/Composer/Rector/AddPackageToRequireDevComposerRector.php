@@ -66,12 +66,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, PackageAndVersion[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($packagesAndVersions, PackageAndVersion::class);
+        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? $configuration;
+        Assert::allIsAOf($packagesAndVersions, PackageAndVersion::class);
 
         $this->versionGuard->validate($packagesAndVersions);
         $this->packageAndVersions = $packagesAndVersions;

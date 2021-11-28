@@ -97,11 +97,11 @@ CODE_SAMPLE
 
     /**
      * @todo complex configuration, introduce value object!
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $interfaceByTrait = $configuration[self::INTERFACE_BY_TRAIT] ?? ($configuration ?: []);
+        $interfaceByTrait = $configuration[self::INTERFACE_BY_TRAIT] ?? $configuration;
 
         Assert::isArray($interfaceByTrait);
         Assert::allString(array_keys($interfaceByTrait));

@@ -98,7 +98,7 @@ CODE_SAMPLE
             $node->stmts = $stmts;
 
             // add a new namespace?
-            if ($this->newNamespace) {
+            if ($this->newNamespace !== null) {
                 $namespace = new Namespace_(new Name($this->newNamespace));
                 $namespace->stmts = $stmts;
 
@@ -115,12 +115,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, PseudoNamespaceToNamespace[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, PseudoNamespaceToNamespace::class);
+        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? $configuration;
+        Assert::allIsAOf($namespacePrefixesWithExcludedClasses, PseudoNamespaceToNamespace::class);
 
         $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
     }
@@ -170,7 +170,7 @@ CODE_SAMPLE
             }
 
             $excludedClasses = $pseudoNamespaceToNamespace->getExcludedClasses();
-            if (is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+            if ($excludedClasses !== [] && $this->isNames($node, $excludedClasses)) {
                 return null;
             }
 
@@ -187,10 +187,7 @@ CODE_SAMPLE
     private function processName(Name $name): Name
     {
         $nodeName = $this->getName($name);
-
-        if ($nodeName !== null) {
-            $name->parts = explode('_', $nodeName);
-        }
+        $name->parts = explode('_', $nodeName);
 
         return $name;
     }

@@ -114,12 +114,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, DimFetchAssignToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
+        $dimFetchAssignToMethodCalls = $configuration[self::DIM_FETCH_ASSIGN_TO_METHOD_CALL] ?? $configuration;
+        Assert::allIsAOf($dimFetchAssignToMethodCalls, DimFetchAssignToMethodCall::class);
         $this->dimFetchAssignToMethodCalls = $dimFetchAssignToMethodCalls;
     }
 

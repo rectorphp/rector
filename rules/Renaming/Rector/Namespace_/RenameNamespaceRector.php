@@ -125,7 +125,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
      */
     public function configure(array $configuration): void
     {
-        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? ($configuration ?: []);
+        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
         Assert::allString(array_keys($oldToNewNamespaces));
         Assert::allString($oldToNewNamespaces);
 

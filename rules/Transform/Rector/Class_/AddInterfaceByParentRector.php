@@ -106,7 +106,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? ($configuration ?: []);
+        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? $configuration;
 
         Assert::isArray($interfaceByParent);
         Assert::allString(array_keys($interfaceByParent));

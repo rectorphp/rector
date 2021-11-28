@@ -89,12 +89,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, UnsetAndIssetToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($issetUnsetToMethodCalls, UnsetAndIssetToMethodCall::class);
+        $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? $configuration;
+        Assert::isArray($issetUnsetToMethodCalls);
+        Assert::allIsAOf($issetUnsetToMethodCalls, UnsetAndIssetToMethodCall::class);
 
         $this->issetUnsetToMethodCalls = $issetUnsetToMethodCalls;
     }

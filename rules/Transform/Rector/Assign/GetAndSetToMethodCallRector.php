@@ -94,7 +94,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? ($configuration ?: []);
+        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? $configuration;
         Assert::allIsAOf($getAndSetToMethodCalls, GetAndSetToMethodCall::class);
 
         $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;

@@ -88,12 +88,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, NewToStaticCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($typeToStaticCalls, NewToStaticCall::class);
+        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? $configuration;
+        Assert::isArray($typeToStaticCalls);
+        Assert::allIsAOf($typeToStaticCalls, NewToStaticCall::class);
+
         $this->typeToStaticCalls = $typeToStaticCalls;
     }
 }

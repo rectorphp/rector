@@ -77,7 +77,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $functionName = $this->getName($node);
-        if (! $functionName) {
+        if (! is_string($functionName)) {
             return null;
         }
 
@@ -89,11 +89,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? ($configuration ?: []);
+        $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? $configuration;
+        Assert::isArray($functionsToConstants);
         Assert::allString($functionsToConstants);
         Assert::allString(array_keys($functionsToConstants));
 

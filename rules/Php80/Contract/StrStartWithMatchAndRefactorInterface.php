@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Rector\Php80\Contract;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Php80\ValueObject\StrStartsWith;
 
 interface StrStartWithMatchAndRefactorInterface
 {
-    public function match(BinaryOp $binaryOp): ?StrStartsWith;
+    public function match(Identical|NotIdentical $binaryOp): ?StrStartsWith;
 
     /**
      * @return FuncCall|BooleanNot|null

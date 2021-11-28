@@ -84,7 +84,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if (! $node->stmts) {
+            if ($node->stmts === null) {
                 continue;
             }
 
@@ -95,12 +95,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, WrapReturn[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($typeMethodWraps, WrapReturn::class);
+        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? $configuration;
+        Assert::allIsAOf($typeMethodWraps, WrapReturn::class);
         $this->typeMethodWraps = $typeMethodWraps;
     }
 

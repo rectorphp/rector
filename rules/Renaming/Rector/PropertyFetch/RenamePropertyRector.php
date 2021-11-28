@@ -71,12 +71,12 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     }
 
     /**
-     * @param array<string, RenameProperty[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($renamedProperties, RenameProperty::class);
+        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? $configuration;
+        Assert::allIsAOf($renamedProperties, RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }
 

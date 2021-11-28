@@ -114,7 +114,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
@@ -132,7 +132,7 @@ CODE_SAMPLE
     private function processCleanUpUse(Use_ $use, array $oldToNewClasses): ?Use_
     {
         foreach ($use->uses as $useUse) {
-            if ($useUse->name instanceof Name && ! $useUse->alias instanceof Identifier && isset($oldToNewClasses[$useUse->name->toString()])) {
+            if (! $useUse->alias instanceof Identifier && isset($oldToNewClasses[$useUse->name->toString()])) {
                 $this->removeNode($use);
                 return $use;
             }
@@ -142,7 +142,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, string> $oldToNewClasses
+     * @param mixed[] $oldToNewClasses
      */
     private function addOldToNewClasses(array $oldToNewClasses): void
     {

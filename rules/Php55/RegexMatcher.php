@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 
 final class RegexMatcher
@@ -40,9 +39,6 @@ final class RegexMatcher
             }
 
             $delimiter = $pattern[0];
-            if (! is_string($delimiter)) {
-                throw new ShouldNotHappenException();
-            }
 
             /** @var string $modifiers */
             $modifiers = Strings::after($pattern, $delimiter, -1);

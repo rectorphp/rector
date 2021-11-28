@@ -91,11 +91,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? ($configuration ?: []);
+        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? $configuration;
+        Assert::isArray($groupNamesBySuffix);
         Assert::allString($groupNamesBySuffix);
 
         $this->groupNamesBySuffix = $groupNamesBySuffix;

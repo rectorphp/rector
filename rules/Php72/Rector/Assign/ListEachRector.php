@@ -80,13 +80,13 @@ CODE_SAMPLE
         $eachFuncCall = $node->expr;
 
         // only key: list($key, ) = each($values);
-        if ($listNode->items[0] && $listNode->items[1] === null) {
+        if ($listNode->items[0] instanceof ArrayItem && $listNode->items[1] === null) {
             $keyFuncCall = $this->nodeFactory->createFuncCall('key', $eachFuncCall->args);
             return new Assign($listNode->items[0]->value, $keyFuncCall);
         }
 
         // only value: list(, $value) = each($values);
-        if ($listNode->items[1] && $listNode->items[0] === null) {
+        if ($listNode->items[1] instanceof ArrayItem && $listNode->items[0] === null) {
             $nextFuncCall = $this->nodeFactory->createFuncCall('next', $eachFuncCall->args);
             $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
 

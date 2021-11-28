@@ -188,7 +188,7 @@ CODE_SAMPLE
         if ($methodCall->var instanceof Variable) {
             $variableName = $this->getName($methodCall->var);
             $methodName = $this->getName($methodCall->name);
-            if (! $variableName) {
+            if (! is_string($variableName)) {
                 return;
             }
 

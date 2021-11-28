@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? ($configuration ?: []);
+        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? $configuration;
 
         Assert::isArray($reservedKeywordsToReplacements);
         Assert::allString(array_keys($reservedKeywordsToReplacements));

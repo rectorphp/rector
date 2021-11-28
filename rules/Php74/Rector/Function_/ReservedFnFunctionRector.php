@@ -117,7 +117,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? ($configuration ?: []);
+        $reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? $configuration;
 
         Assert::allString(array_keys($reservedNamesToNewOnes));
         Assert::allString($reservedNamesToNewOnes);

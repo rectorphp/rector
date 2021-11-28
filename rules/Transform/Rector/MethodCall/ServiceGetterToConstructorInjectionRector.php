@@ -168,12 +168,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ServiceGetterToConstructorInjection[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($methodCallToServices, ServiceGetterToConstructorInjection::class);
+        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? $configuration;
+        Assert::isArray($methodCallToServices);
+        Assert::allIsAOf($methodCallToServices, ServiceGetterToConstructorInjection::class);
+
         $this->methodCallToServices = $methodCallToServices;
     }
 }

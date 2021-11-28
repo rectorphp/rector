@@ -13,6 +13,9 @@ use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 
+/**
+ * @implements ConflictingNameGuardInterface<PropertyRename>
+ */
 final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInterface
 {
     /**

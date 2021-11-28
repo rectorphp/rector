@@ -128,13 +128,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, FuncCallToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? ($configuration ?: []);
+        $funcCallsToClassMethodCalls = $configuration[self::FUNC_CALL_TO_CLASS_METHOD_CALL] ?? $configuration;
         Assert::isArray($funcCallsToClassMethodCalls);
-        Assert::allIsInstanceOf($funcCallsToClassMethodCalls, FuncCallToMethodCall::class);
+        Assert::allIsAOf($funcCallsToClassMethodCalls, FuncCallToMethodCall::class);
 
         $this->funcNameToMethodCallNames = $funcCallsToClassMethodCalls;
     }

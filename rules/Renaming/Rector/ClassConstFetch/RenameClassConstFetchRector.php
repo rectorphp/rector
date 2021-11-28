@@ -96,12 +96,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, RenameClassConstFetchInterface[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($renameClassConstFetches, RenameClassConstFetchInterface::class);
+        $renameClassConstFetches = $configuration[self::CLASS_CONSTANT_RENAME] ?? $configuration;
+        Assert::allIsAOf($renameClassConstFetches, RenameClassConstFetchInterface::class);
 
         $this->renameClassConstFetches = $renameClassConstFetches;
     }

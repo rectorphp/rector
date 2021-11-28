@@ -95,12 +95,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, PropertyAssignToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $propertyAssignsToMethodCalls = $configuration[self::PROPERTY_ASSIGNS_TO_METHODS_CALLS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($propertyAssignsToMethodCalls, PropertyAssignToMethodCall::class);
+        $propertyAssignsToMethodCalls = $configuration[self::PROPERTY_ASSIGNS_TO_METHODS_CALLS] ?? $configuration;
+        Assert::allIsAOf($propertyAssignsToMethodCalls, PropertyAssignToMethodCall::class);
         $this->propertyAssignsToMethodCalls = $propertyAssignsToMethodCalls;
     }
 }

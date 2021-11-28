@@ -10,6 +10,9 @@ use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
+/**
+ * @implements ConflictingNameGuardInterface<PropertyRename>
+ */
 final class RamseyUuidInterfaceGuard implements ConflictingNameGuardInterface
 {
     public function __construct(

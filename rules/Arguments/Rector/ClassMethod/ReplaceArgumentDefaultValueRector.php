@@ -100,12 +100,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ReplaceArgumentDefaultValue[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($replacedArguments, ReplaceArgumentDefaultValue::class);
+        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? $configuration;
+        Assert::allIsAOf($replacedArguments, ReplaceArgumentDefaultValue::class);
         $this->replacedArguments = $replacedArguments;
     }
 }

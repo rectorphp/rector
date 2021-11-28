@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? ($configuration ?: []);
+        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? $configuration;
 
         Assert::isArray($packagesNames);
         Assert::allString($packagesNames);

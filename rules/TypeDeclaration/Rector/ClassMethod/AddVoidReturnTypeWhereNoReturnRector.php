@@ -120,12 +120,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
         $usePhpdoc = $configuration[self::USE_PHPDOC] ?? false;
         Assert::boolean($usePhpdoc);
+
         $this->usePhpdoc = $usePhpdoc;
     }
 }

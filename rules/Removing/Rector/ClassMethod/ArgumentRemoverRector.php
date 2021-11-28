@@ -88,12 +88,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ArgumentRemover[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($removedArguments, ArgumentRemover::class);
+        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? $configuration;
+        Assert::allIsAOf($removedArguments, ArgumentRemover::class);
         $this->removedArguments = $removedArguments;
     }
 

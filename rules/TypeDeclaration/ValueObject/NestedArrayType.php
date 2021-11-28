@@ -28,6 +28,10 @@ final class NestedArrayType
 
     public function getKeyType(): Type
     {
-        return $this->keyType ?: new MixedType();
+        if ($this->keyType instanceof Type) {
+            return $this->keyType;
+        }
+
+        return new MixedType();
     }
 }

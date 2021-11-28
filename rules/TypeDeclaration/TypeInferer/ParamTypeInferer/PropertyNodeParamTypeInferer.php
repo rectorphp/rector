@@ -58,11 +58,7 @@ final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
                 return null;
             }
 
-            $staticType = $this->nodeTypeResolver->getType($node->var);
-
-            if ($staticType !== null) {
-                $propertyStaticTypes[] = $staticType;
-            }
+            $propertyStaticTypes[] = $this->nodeTypeResolver->getType($node->var);
 
             return null;
         });

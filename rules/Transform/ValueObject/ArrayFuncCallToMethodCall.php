@@ -6,6 +6,12 @@ namespace Rector\Transform\ValueObject;
 
 final class ArrayFuncCallToMethodCall
 {
+    /**
+     * @param non-empty-string $function
+     * @param non-empty-string $class
+     * @param non-empty-string $arrayMethod
+     * @param non-empty-string $nonArrayMethod
+     */
     public function __construct(
         private string $function,
         private string $class,

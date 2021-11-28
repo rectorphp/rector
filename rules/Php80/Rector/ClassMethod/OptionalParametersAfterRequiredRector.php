@@ -84,7 +84,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $isAlreadySorted = $node->getAttribute(self::ALREADY_SORTED);
+        $isAlreadySorted = (bool) $node->getAttribute(self::ALREADY_SORTED, false);
         if ($isAlreadySorted) {
             return null;
         }

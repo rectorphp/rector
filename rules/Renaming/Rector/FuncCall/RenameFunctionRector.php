@@ -64,7 +64,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
             }
 
             // not to refactor here
-            $isVirtual = $node->name->getAttribute(AttributeKey::VIRTUAL_NODE);
+            $isVirtual = (bool) $node->name->getAttribute(AttributeKey::VIRTUAL_NODE, false);
             if ($isVirtual) {
                 continue;
             }
@@ -77,13 +77,15 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     }
 
     /**
-     * @param array<string, mixed[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration ?: [];
-        Assert::allString($oldFunctionToNewFunction);
+        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration;
+
+        Assert::isArray($oldFunctionToNewFunction);
         Assert::allString(array_values($oldFunctionToNewFunction));
+        Assert::allString($oldFunctionToNewFunction);
 
         $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
     }

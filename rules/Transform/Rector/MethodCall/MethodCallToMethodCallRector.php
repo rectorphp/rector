@@ -142,7 +142,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? ($configuration ?: []);
+        $methodCallsToMethodsCalls = $configuration[self::METHOD_CALLS_TO_METHOD_CALLS] ?? $configuration;
         Assert::allIsAOf($methodCallsToMethodsCalls, MethodCallToMethodCall::class);
 
         $this->methodCallsToMethodsCalls = $methodCallsToMethodsCalls;

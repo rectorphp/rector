@@ -106,12 +106,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, SwapFuncCallArguments[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($functionArgumentSwaps, SwapFuncCallArguments::class);
+        $functionArgumentSwaps = $configuration[self::FUNCTION_ARGUMENT_SWAPS] ?? $configuration;
+        Assert::allIsAOf($functionArgumentSwaps, SwapFuncCallArguments::class);
         $this->functionArgumentSwaps = $functionArgumentSwaps;
     }
 

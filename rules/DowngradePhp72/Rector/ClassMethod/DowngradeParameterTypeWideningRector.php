@@ -139,16 +139,16 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $safeTypes = $configuration[self::SAFE_TYPES] ?? ($configuration ?: []);
+        $safeTypes = $configuration[self::SAFE_TYPES] ?? $configuration;
         Assert::isArray($safeTypes);
         Assert::allString($safeTypes);
         $this->safeTypes = $safeTypes;
 
-        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? ($configuration ?: []);
+        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? $configuration;
         Assert::isArray($safeTypesToMethods);
         foreach ($safeTypesToMethods as $key => $value) {
             Assert::string($key);

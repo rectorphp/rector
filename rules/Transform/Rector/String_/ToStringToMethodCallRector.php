@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? ($configuration ?: []);
+        $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? $configuration;
 
         Assert::allString(array_keys($methodNamesByType));
         Assert::allString($methodNamesByType);

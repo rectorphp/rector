@@ -106,7 +106,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? ($configuration ?: []);
+        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? $configuration;
         Assert::allIsAOf($typeToPreference, PreferenceSelfThis::class);
 
         $this->typeToPreference = $typeToPreference;

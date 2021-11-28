@@ -38,7 +38,7 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector implements Conf
     }
 
     /**
-     * @param array<string, int|string> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {

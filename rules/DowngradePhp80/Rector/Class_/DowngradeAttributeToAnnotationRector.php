@@ -128,12 +128,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, DowngradeAttributeToAnnotation[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($attributesToAnnotations, DowngradeAttributeToAnnotation::class);
+        $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? $configuration;
+        Assert::allIsAOf($attributesToAnnotations, DowngradeAttributeToAnnotation::class);
 
         $this->attributesToAnnotations = $attributesToAnnotations;
     }

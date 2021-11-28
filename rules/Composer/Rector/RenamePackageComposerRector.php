@@ -76,12 +76,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, RenamePackage[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($renamePackages, RenamePackage::class);
+        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? $configuration;
+        Assert::allIsAOf($renamePackages, RenamePackage::class);
         $this->renamePackages = $renamePackages;
     }
 }

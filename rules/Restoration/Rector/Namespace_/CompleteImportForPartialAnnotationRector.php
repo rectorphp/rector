@@ -102,12 +102,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, CompleteImportForPartialAnnotation[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($useImportsToRestore, CompleteImportForPartialAnnotation::class);
+        $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? $configuration;
+        Assert::allIsAOf($useImportsToRestore, CompleteImportForPartialAnnotation::class);
 
         $default = [
             new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),

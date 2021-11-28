@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? ($configuration ?: []);
+        $interfacesToRemove = $configuration[self::INTERFACES_TO_REMOVE] ?? $configuration;
         Assert::allString($interfacesToRemove);
 
         /** @var string[] $interfacesToRemove */

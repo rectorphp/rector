@@ -117,11 +117,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? ($configuration ?: []);
+        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? $configuration;
+
+        Assert::isArray($classesToSkip);
         Assert::allString($classesToSkip);
 
         $this->classesToSkip = $classesToSkip;

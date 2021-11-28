@@ -101,12 +101,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, AddReturnTypeDeclaration[]>|AddReturnTypeDeclaration[] $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($methodReturnTypes, AddReturnTypeDeclaration::class);
+        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? $configuration;
+        Assert::isArray($methodReturnTypes);
+        Assert::allIsAOf($methodReturnTypes, AddReturnTypeDeclaration::class);
 
         $this->methodReturnTypes = $methodReturnTypes;
     }

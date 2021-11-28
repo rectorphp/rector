@@ -124,12 +124,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, CallableInMethodCallToVariable[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($callableInMethodCallToVariable, CallableInMethodCallToVariable::class);
+        $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? $configuration;
+        Assert::isArray($callableInMethodCallToVariable);
+        Assert::allIsAOf($callableInMethodCallToVariable, CallableInMethodCallToVariable::class);
 
         $this->callableInMethodCallToVariable = $callableInMethodCallToVariable;
     }

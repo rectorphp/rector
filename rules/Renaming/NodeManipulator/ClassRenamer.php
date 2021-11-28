@@ -132,7 +132,7 @@ final class ClassRenamer
         $stringName = $this->nodeNameResolver->getName($name);
 
         $newName = $oldToNewClasses[$stringName] ?? null;
-        if (! $newName) {
+        if ($newName === null) {
             return null;
         }
 
@@ -236,7 +236,7 @@ final class ClassRenamer
         $className = (string) $this->nodeNameResolver->getName($classLike);
 
         $newName = $oldToNewClasses[$className] ?? null;
-        if (! $newName) {
+        if ($newName === null) {
             return null;
         }
 
@@ -258,7 +258,7 @@ final class ClassRenamer
         $classNamingGetNamespace = $this->classNaming->getNamespace($className);
 
         // Old class did not have any namespace, we need to wrap class with Namespace_ node
-        if ($newNamespacePart && ! $classNamingGetNamespace) {
+        if ($newNamespacePart !== null && $classNamingGetNamespace === null) {
             $this->changeNameToFullyQualifiedName($classLike);
 
             $name = new Name($newNamespacePart);

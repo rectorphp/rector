@@ -29,10 +29,7 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     ) {
     }
 
-    /**
-     * @param Identical|NotIdentical $binaryOp
-     */
-    public function match(BinaryOp $binaryOp): ?StrStartsWith
+    public function match(Identical|NotIdentical $binaryOp): ?StrStartsWith
     {
         $isPositive = $binaryOp instanceof Identical;
 

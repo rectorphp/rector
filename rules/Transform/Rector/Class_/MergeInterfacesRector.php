@@ -91,12 +91,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? ($configuration ?: []);
+        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? $configuration;
 
+        Assert::isArray($oldToNewInterfaces);
         Assert::allString(array_keys($oldToNewInterfaces));
         Assert::allString($oldToNewInterfaces);
 

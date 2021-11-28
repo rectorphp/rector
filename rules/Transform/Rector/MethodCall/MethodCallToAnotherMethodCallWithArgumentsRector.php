@@ -89,15 +89,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, MethodCallToAnotherMethodCallWithArguments[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf(
-            $methodCallRenamesWithAddedArguments,
-            MethodCallToAnotherMethodCallWithArguments::class
-        );
+        $methodCallRenamesWithAddedArguments = $configuration[self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS] ?? $configuration;
+
+        Assert::isArray($methodCallRenamesWithAddedArguments);
+        Assert::allIsAOf($methodCallRenamesWithAddedArguments, MethodCallToAnotherMethodCallWithArguments::class);
+
         $this->methodCallRenamesWithAddedArguments = $methodCallRenamesWithAddedArguments;
     }
 }

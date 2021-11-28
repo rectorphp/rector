@@ -125,7 +125,7 @@ final class GenericClassStringTypeNormalizer
     private function resolveStringType(string $value): GenericClassStringType | StringType
     {
         $classReflection = $this->reflectionProvider->getClass($value);
-        if ($classReflection->isBuiltIn()) {
+        if ($classReflection->isBuiltin()) {
             return new GenericClassStringType(new ObjectType($value));
         }
 

@@ -105,12 +105,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ParentClassToTraits[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($parentClassToTraits, ParentClassToTraits::class);
+        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? $configuration;
+        Assert::allIsAOf($parentClassToTraits, ParentClassToTraits::class);
         $this->parentClassToTraits = $parentClassToTraits;
     }
 

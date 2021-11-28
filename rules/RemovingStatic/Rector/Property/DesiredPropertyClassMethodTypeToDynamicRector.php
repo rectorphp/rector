@@ -68,7 +68,7 @@ CODE_SAMPLE
     }
 
     /**
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeTypes(): array
     {

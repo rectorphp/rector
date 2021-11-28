@@ -104,12 +104,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, NewArgToMethodCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($newArgsToMethodCalls, NewArgToMethodCall::class);
+        $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? $configuration;
+        Assert::isArray($newArgsToMethodCalls);
+        Assert::allIsAOf($newArgsToMethodCalls, NewArgToMethodCall::class);
+
         $this->newArgsToMethodCalls = $newArgsToMethodCalls;
     }
 }

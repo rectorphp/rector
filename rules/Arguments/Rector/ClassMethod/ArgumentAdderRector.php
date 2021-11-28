@@ -130,12 +130,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ArgumentAdder[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($addedArguments, ArgumentAdder::class);
+        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
+        Assert::allIsAOf($addedArguments, ArgumentAdder::class);
         $this->addedArguments = $addedArguments;
     }
 

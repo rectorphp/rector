@@ -112,7 +112,7 @@ CODE_SAMPLE
     {
         $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? $configuration;
         Assert::isArray($classConstantVisibilityChanges);
-        Assert::allIsInstanceOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
+        Assert::allIsAOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
 
         $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
     }

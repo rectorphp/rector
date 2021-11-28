@@ -583,3 +583,10 @@ parameters:
 
         # skip === false compare
         - '#Do not compare call directly, use a variable assign#'
+
+        # strict - resolve later
+        - '#Foreach overwrites \$(.*?) with its value variable#'
+
+        -
+            message: '#Strict comparison using \!\=\= between null and null will always evaluate to false#'
+            path: rules/Renaming/Rector/FileWithoutNamespace/PseudoNamespaceToNamespaceRector.php

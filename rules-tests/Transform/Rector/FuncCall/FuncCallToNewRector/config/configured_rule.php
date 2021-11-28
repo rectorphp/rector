@@ -8,9 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(FuncCallToNewRector::class)
-        ->call('configure', [[
-            FuncCallToNewRector::FUNCTIONS_TO_NEWS => [
-                'collection' => ['Collection'],
-            ],
-        ]]);
+        ->configure([
+            'collection' => 'Collection',
+        ]);
 };

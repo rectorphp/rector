@@ -108,11 +108,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? ($configuration ?: []);
+        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? $configuration;
         Assert::isArray($attributesOrder);
         Assert::allString($attributesOrder);
 

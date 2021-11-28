@@ -124,12 +124,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ReturnArrayClassMethodToYield[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($methodsToYields, ReturnArrayClassMethodToYield::class);
+        $methodsToYields = $configuration[self::METHODS_TO_YIELDS] ?? $configuration;
+        Assert::allIsAOf($methodsToYields, ReturnArrayClassMethodToYield::class);
         $this->methodsToYields = $methodsToYields;
     }
 

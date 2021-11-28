@@ -127,7 +127,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? ($configuration ?: []);
+        $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? $configuration;
         Assert::allIsAOf($makeClassMethodGenerics, GenericClassMethodParam::class);
 
         $this->genericClassMethodParams = $makeClassMethodGenerics;

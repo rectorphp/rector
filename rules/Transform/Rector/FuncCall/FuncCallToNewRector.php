@@ -12,6 +12,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Webmozart\Assert\Assert;
 
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
@@ -86,10 +87,15 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $this->functionToNew = $configuration[self::FUNCTIONS_TO_NEWS] ?? ($configuration ?: []);
+        $functionsToNews = $configuration[self::FUNCTIONS_TO_NEWS] ?? $configuration;
+
+        Assert::isArray($functionsToNews);
+        Assert::allString($functionsToNews);
+
+        $this->functionToNew = $functionsToNews;
     }
 }

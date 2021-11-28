@@ -140,12 +140,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, AnnotationToAttribute[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($annotationsToAttributes, AnnotationToAttribute::class);
+        $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? $configuration;
+        Assert::allIsAOf($annotationsToAttributes, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
     }
 

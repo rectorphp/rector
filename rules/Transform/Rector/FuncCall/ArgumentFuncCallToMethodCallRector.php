@@ -143,17 +143,17 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, array<ArgumentFuncCallToMethodCall|ArrayFuncCallToMethodCall>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($functionToMethodCalls, ArgumentFuncCallToMethodCall::class);
+        $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? $configuration;
+        Assert::allIsAOf($functionToMethodCalls, ArgumentFuncCallToMethodCall::class);
 
         $this->argumentFuncCallToMethodCalls = $functionToMethodCalls;
 
-        $arrayFunctionsToMethodCalls = $configuration[self::ARRAY_FUNCTIONS_TO_METHOD_CALLS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($arrayFunctionsToMethodCalls, ArrayFuncCallToMethodCall::class);
+        $arrayFunctionsToMethodCalls = $configuration[self::ARRAY_FUNCTIONS_TO_METHOD_CALLS] ?? $configuration;
+        Assert::allIsAOf($arrayFunctionsToMethodCalls, ArrayFuncCallToMethodCall::class);
 
         $this->arrayFunctionsToMethodCalls = $arrayFunctionsToMethodCalls;
     }
@@ -237,12 +237,8 @@ CODE_SAMPLE
         ArgumentFuncCallToMethodCall $argumentFuncCallToMethodCall,
         PropertyFetch $propertyFetch
     ): MethodCall | PropertyFetch {
-        if ($argumentFuncCallToMethodCall->getMethodIfNoArgs()) {
+        if ($argumentFuncCallToMethodCall->getMethodIfNoArgs() !== null) {
             $methodName = $argumentFuncCallToMethodCall->getMethodIfNoArgs();
-            if (! is_string($methodName)) {
-                throw new ShouldNotHappenException();
-            }
-
             return new MethodCall($propertyFetch, $methodName);
         }
 
@@ -276,17 +272,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($arrayFuncCallToMethodCall->getArrayMethod() && $this->arrayTypeAnalyzer->isArrayType(
-            $funcCall->args[0]->value
-        )) {
+        if ($this->arrayTypeAnalyzer->isArrayType($funcCall->args[0]->value)) {
             return new MethodCall($propertyFetch, $arrayFuncCallToMethodCall->getArrayMethod(), $funcCall->args);
         }
 
         if ($arrayFuncCallToMethodCall->getNonArrayMethod() === '') {
-            return null;
-        }
-
-        if ($this->arrayTypeAnalyzer->isArrayType($funcCall->args[0]->value)) {
             return null;
         }
 

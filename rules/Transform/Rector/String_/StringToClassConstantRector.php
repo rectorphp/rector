@@ -89,12 +89,14 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, StringToClassConstant[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($stringToClassConstants, StringToClassConstant::class);
+        $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? $configuration;
+        Assert::isArray($stringToClassConstants);
+        Assert::allIsAOf($stringToClassConstants, StringToClassConstant::class);
+
         $this->stringsToClassConstants = $stringToClassConstants;
     }
 }

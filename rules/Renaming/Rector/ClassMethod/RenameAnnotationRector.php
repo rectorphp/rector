@@ -112,12 +112,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, RenameAnnotation[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($renamedAnnotationsInTypes, RenameAnnotation::class);
+        $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? $configuration;
+        Assert::allIsAOf($renamedAnnotationsInTypes, RenameAnnotation::class);
         $this->renamedAnnotations = $renamedAnnotationsInTypes;
     }
 }

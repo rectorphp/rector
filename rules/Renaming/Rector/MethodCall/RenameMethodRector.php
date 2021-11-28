@@ -118,12 +118,12 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, MethodCallRenameInterface[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? ($configuration ?: []);
-        Assert::allIsInstanceOf($methodCallRenames, MethodCallRenameInterface::class);
+        $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? $configuration;
+        Assert::allIsAOf($methodCallRenames, MethodCallRenameInterface::class);
 
         $this->methodCallRenames = $methodCallRenames;
         $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);

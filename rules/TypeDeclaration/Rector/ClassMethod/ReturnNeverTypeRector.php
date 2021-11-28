@@ -121,7 +121,11 @@ CODE_SAMPLE
             return true;
         }
 
-        return $node->returnType && $this->isName($node->returnType, 'never');
+        if (! $node->returnType instanceof Node) {
+            return false;
+        }
+
+        return $this->isName($node->returnType, 'never');
     }
 
     private function hasNeverFuncCall(ClassMethod | Function_ $functionLike): bool
