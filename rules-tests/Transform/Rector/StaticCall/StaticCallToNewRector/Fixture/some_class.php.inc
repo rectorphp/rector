@@ -8,7 +8,7 @@ class SomeClass
 {
     public function run()
     {
-        $dotenv = SomeJsonResponse::create(true);
+        $dotenv = SomeJsonResponse::create(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 
@@ -24,7 +24,7 @@ class SomeClass
 {
     public function run()
     {
-        $dotenv = new \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse();
+        $dotenv = new \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Source\SomeJsonResponse(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 

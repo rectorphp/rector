@@ -41,7 +41,7 @@ class SomeClass
 {
     public function run()
     {
-        $dotenv = JsonResponse::create(true);
+        $dotenv = JsonResponse::create(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 CODE_SAMPLE
@@ -51,7 +51,7 @@ class SomeClass
 {
     public function run()
     {
-        $dotenv = new JsonResponse();
+        $dotenv = new JsonResponse(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 CODE_SAMPLE
@@ -90,7 +90,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            return new New_(new FullyQualified($class));
+            return new New_(new FullyQualified($class), $node->args);
         }
 
         return $node;
