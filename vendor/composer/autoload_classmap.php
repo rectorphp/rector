@@ -1827,6 +1827,7 @@ return array(
     'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => $baseDir . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
     'Rector\\DeadCode\\Rector\\Expression\\RemoveDeadStmtRector' => $baseDir . '/rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php',
     'Rector\\DeadCode\\Rector\\Expression\\SimplifyMirrorAssignRector' => $baseDir . '/rules/DeadCode/Rector/Expression/SimplifyMirrorAssignRector.php',
+    'Rector\\DeadCode\\Rector\\For_\\RemoveDeadContinueRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadContinueRector.php',
     'Rector\\DeadCode\\Rector\\For_\\RemoveDeadIfForeachForRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadIfForeachForRector.php',
     'Rector\\DeadCode\\Rector\\For_\\RemoveDeadLoopRector' => $baseDir . '/rules/DeadCode/Rector/For_/RemoveDeadLoopRector.php',
     'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => $baseDir . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',

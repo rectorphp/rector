@@ -25,6 +25,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector;
 use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector;
+use Rector\DeadCode\Rector\For_\RemoveDeadContinueRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
@@ -68,6 +69,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DeadCode\Rector\FunctionLike\RemoveCodeAfterReturnRector::class);
     $services->set(\Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector::class);
     $services->set(\Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector::class);
+    $services->set(\Rector\DeadCode\Rector\For_\RemoveDeadContinueRector::class);
     $services->set(\Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector::class);
     $services->set(\Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector::class);
     $services->set(\Rector\DeadCode\Rector\Concat\RemoveConcatAutocastRector::class);

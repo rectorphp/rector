@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5f31527ca00710bb622f113bf7d92447
+class ComposerStaticInit1ce97d352017e6e73b3a56c72f10da86
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2224,6 +2224,7 @@ class ComposerStaticInit5f31527ca00710bb622f113bf7d92447
         'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
         'Rector\\DeadCode\\Rector\\Expression\\RemoveDeadStmtRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php',
         'Rector\\DeadCode\\Rector\\Expression\\SimplifyMirrorAssignRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Expression/SimplifyMirrorAssignRector.php',
+        'Rector\\DeadCode\\Rector\\For_\\RemoveDeadContinueRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadContinueRector.php',
         'Rector\\DeadCode\\Rector\\For_\\RemoveDeadIfForeachForRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadIfForeachForRector.php',
         'Rector\\DeadCode\\Rector\\For_\\RemoveDeadLoopRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/For_/RemoveDeadLoopRector.php',
         'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',
@@ -3769,9 +3770,9 @@ class ComposerStaticInit5f31527ca00710bb622f113bf7d92447
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5f31527ca00710bb622f113bf7d92447::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5f31527ca00710bb622f113bf7d92447::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5f31527ca00710bb622f113bf7d92447::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1ce97d352017e6e73b3a56c72f10da86::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1ce97d352017e6e73b3a56c72f10da86::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1ce97d352017e6e73b3a56c72f10da86::$classMap;
 
         }, null, ClassLoader::class);
     }
