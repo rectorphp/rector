@@ -20,7 +20,7 @@ final class ClassChildAnalyzer
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
 
         foreach ($childrenClassReflections as $childClassReflection) {
-            if (! $childClassReflection->hasMethod($methodName)) {
+            if (! $childClassReflection->hasNativeMethod($methodName)) {
                 continue;
             }
 
