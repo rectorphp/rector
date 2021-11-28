@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
+use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
@@ -27,7 +28,8 @@ final class DeadParamTagValueNodeAnalyzer
 {
     public function __construct(
         private NodeNameResolver $nodeNameResolver,
-        private TypeComparator $typeComparator
+        private TypeComparator $typeComparator,
+        private GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
     ) {
     }
 
@@ -65,7 +67,7 @@ final class DeadParamTagValueNodeAnalyzer
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
 
-        if (! $this->hasGenericType($paramTagValueNode->type)) {
+        if (! $this->genericTypeNodeAnalyzer->hasGenericType($paramTagValueNode->type)) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
 
@@ -134,23 +136,6 @@ final class DeadParamTagValueNodeAnalyzer
         }
 
         return true;
-    }
-
-    private function hasGenericType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
-    {
-        $types = $bracketsAwareUnionTypeNode->types;
-
-        foreach ($types as $type) {
-            if ($type instanceof GenericTypeNode) {
-                if ($type->type instanceof IdentifierTypeNode && $type->type->name === 'array') {
-                    continue;
-                }
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     private function matchParamByName(string $desiredParamName, FunctionLike $functionLike): ?Param

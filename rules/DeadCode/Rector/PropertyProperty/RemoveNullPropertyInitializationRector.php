@@ -61,7 +61,7 @@ CODE_SAMPLE
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         // skip typed properties
-        if ($parent instanceof Property && $parent->type) {
+        if ($parent instanceof Property && $parent->type !== null) {
             return null;
         }
 

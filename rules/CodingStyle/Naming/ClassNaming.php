@@ -50,7 +50,7 @@ final class ClassNaming
     {
         $fullyQualifiedName = trim($fullyQualifiedName, '\\');
 
-        return Strings::before($fullyQualifiedName, '\\', -1) ?: null;
+        return Strings::before($fullyQualifiedName, '\\', -1);
     }
 
     public function getNameFromFileInfo(SmartFileInfo $smartFileInfo): string

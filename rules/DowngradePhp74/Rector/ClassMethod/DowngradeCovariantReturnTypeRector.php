@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $isAlreadyDowngraded = $node->getAttribute(self::ALREADY_DOWNGRADED);
+        $isAlreadyDowngraded = (bool) $node->getAttribute(self::ALREADY_DOWNGRADED, false);
         if ($isAlreadyDowngraded) {
             return null;
         }

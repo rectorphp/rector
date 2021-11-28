@@ -85,7 +85,7 @@ CODE_SAMPLE
         /** @var Case_|null $previousCase */
         $previousCase = null;
         foreach ($node->cases as $case) {
-            if ($previousCase && $this->areSwitchStmtsEqualsAndWithBreak($case, $previousCase)) {
+            if ($previousCase instanceof Case_ && $this->areSwitchStmtsEqualsAndWithBreak($case, $previousCase)) {
                 $previousCase->stmts = [];
             }
 

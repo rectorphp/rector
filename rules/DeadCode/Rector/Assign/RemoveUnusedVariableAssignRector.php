@@ -125,7 +125,11 @@ CODE_SAMPLE
             return true;
         }
 
-        return $variable->name instanceof Variable && $this->betterNodeFinder->findFirstNext(
+        if (! $variable->name instanceof Variable) {
+            return false;
+        }
+
+        return (bool) $this->betterNodeFinder->findFirstNext(
             $assign,
             fn (Node $node): bool => $node instanceof Variable
         );

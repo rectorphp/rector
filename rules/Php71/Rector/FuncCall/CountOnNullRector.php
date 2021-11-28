@@ -175,7 +175,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $alreadyChangedOnCount = $funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT);
+        $alreadyChangedOnCount = (bool) $funcCall->getAttribute(self::ALREADY_CHANGED_ON_COUNT, false);
 
         // check if it has some condition before already, if so, probably it's already handled
         if ($alreadyChangedOnCount) {

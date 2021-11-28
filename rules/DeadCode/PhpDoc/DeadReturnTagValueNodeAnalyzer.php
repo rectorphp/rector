@@ -9,11 +9,11 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 
 final class DeadReturnTagValueNodeAnalyzer
@@ -21,6 +21,7 @@ final class DeadReturnTagValueNodeAnalyzer
     public function __construct(
         private TypeComparator $typeComparator,
         private BetterNodeFinder $betterNodeFinder,
+        private GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
     ) {
     }
 
@@ -55,25 +56,8 @@ final class DeadReturnTagValueNodeAnalyzer
             return $returnTagValueNode->description === '';
         }
 
-        if (! $this->hasGenericType($returnTagValueNode->type)) {
+        if (! $this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
             return $returnTagValueNode->description === '';
-        }
-
-        return false;
-    }
-
-    private function hasGenericType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool
-    {
-        $types = $bracketsAwareUnionTypeNode->types;
-
-        foreach ($types as $type) {
-            if ($type instanceof GenericTypeNode) {
-                if ($type->type instanceof IdentifierTypeNode && $type->type->name === 'array') {
-                    continue;
-                }
-
-                return true;
-            }
         }
 
         return false;

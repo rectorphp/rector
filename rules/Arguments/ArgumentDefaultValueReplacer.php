@@ -102,7 +102,7 @@ final class ArgumentDefaultValueReplacer
         } elseif (is_array($replaceArgumentDefaultValue->getValueBefore())) {
             $newArgs = $this->processArrayReplacement($expr->args, $replaceArgumentDefaultValue);
 
-            if ($newArgs) {
+            if (is_array($newArgs)) {
                 $expr->args = $newArgs;
             }
         }

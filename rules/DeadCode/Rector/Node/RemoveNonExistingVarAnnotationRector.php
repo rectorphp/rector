@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\DeadCode\Rector\Node;
 
-use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
@@ -121,7 +120,7 @@ CODE_SAMPLE
         }
 
         $comments = $node->getComments();
-        if (isset($comments[1]) && $comments[1] instanceof Comment) {
+        if (isset($comments[1])) {
             $this->commentRemover->rollbackComments($node, $comments[1]);
             return $node;
         }

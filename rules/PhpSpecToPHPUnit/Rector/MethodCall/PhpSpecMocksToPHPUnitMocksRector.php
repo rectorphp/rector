@@ -234,7 +234,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRec
 
     private function createMockVarDoc(Param $param, Name $name): string
     {
-        $paramType = (string) ($name->getAttribute(AttributeKey::ORIGINAL_NAME) ?: $name);
+        $paramType = (string) $name->getAttribute(AttributeKey::ORIGINAL_NAME, $name);
         $variableName = $this->getName($param->var);
 
         if ($variableName === null) {

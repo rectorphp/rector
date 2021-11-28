@@ -129,7 +129,7 @@ CODE_SAMPLE
         });
     }
 
-    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return): ?Node
+    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return): Return_|null
     {
         if (! $this->nodeComparator->areNodesEqual($foreach->valueVar, $return->expr)) {
             return null;
@@ -160,7 +160,7 @@ CODE_SAMPLE
         $coalesce = new Coalesce(new ArrayDimFetch(
             $foreach->expr,
             $checkedNode
-        ), $this->return && $this->return->expr !== null ? $this->return->expr : $checkedNode);
+        ), $this->return instanceof Return_ && $this->return->expr !== null ? $this->return->expr : $checkedNode);
 
         if ($this->return !== null) {
             return new Return_($coalesce);

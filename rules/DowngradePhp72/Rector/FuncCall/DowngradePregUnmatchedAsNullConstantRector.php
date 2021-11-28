@@ -232,17 +232,9 @@ CODE_SAMPLE
 
     private function assignThirdArgsValue(FuncCall $funcCall, BitwiseOr $bitwiseOr): void
     {
-        if ($bitwiseOr instanceof BitwiseOr && $bitwiseOr->right instanceof ConstFetch && $this->isName(
-            $bitwiseOr->right,
-            self::FLAG
-        )) {
+        if ($bitwiseOr->right instanceof ConstFetch && $this->isName($bitwiseOr->right, self::FLAG)) {
             $bitwiseOr = $bitwiseOr->left;
-        }
-
-        if ($bitwiseOr instanceof BitwiseOr && $bitwiseOr->left instanceof ConstFetch && $this->isName(
-            $bitwiseOr->left,
-            self::FLAG
-        )) {
+        } elseif ($bitwiseOr->left instanceof ConstFetch && $this->isName($bitwiseOr->left, self::FLAG)) {
             $bitwiseOr = $bitwiseOr->right;
         }
 

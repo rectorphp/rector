@@ -216,11 +216,8 @@ CODE_SAMPLE
      * as to invoke it only once and avoid potential bugs,
      * such as a method executing some side-effect
      */
-    private function createVariableFromNonVariable(
-        Array_ $array,
-        ArrayItem $arrayItem,
-        int | string $position
-    ): Variable {
+    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, int $position): Variable
+    {
         /** @var Scope $nodeScope */
         $nodeScope = $array->getAttribute(AttributeKey::SCOPE);
         // The variable name will be item0Unpacked, item1Unpacked, etc,
@@ -277,18 +274,16 @@ CODE_SAMPLE
 
         $iteratorToArrayFuncCall = new FuncCall(new Name('iterator_to_array'), [new Arg($arrayItem)]);
 
-        if ($type !== null) {
-            // If we know it is an array, then print it directly
-            // Otherwise PHPStan throws an error:
-            // "Else branch is unreachable because ternary operator condition is always true."
-            if ($type instanceof ArrayType) {
-                return new Arg($arrayItem);
-            }
+        // If we know it is an array, then print it directly
+        // Otherwise PHPStan throws an error:
+        // "Else branch is unreachable because ternary operator condition is always true."
+        if ($type instanceof ArrayType) {
+            return new Arg($arrayItem);
+        }
 
-            // If it is iterable, then directly return `iterator_to_array`
-            if ($this->isIterableType($type)) {
-                return new Arg($iteratorToArrayFuncCall);
-            }
+        // If it is iterable, then directly return `iterator_to_array`
+        if ($this->isIterableType($type)) {
+            return new Arg($iteratorToArrayFuncCall);
         }
 
         // Print a ternary, handling either an array or an iterator

@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?array
     {
-        if ($node->elseifs) {
+        if ($node->elseifs !== []) {
             return null;
         }
 
@@ -92,7 +92,7 @@ CODE_SAMPLE
      */
     private function refactorIsMatch(If_ $if): ?array
     {
-        if ($if->elseifs) {
+        if ($if->elseifs !== []) {
             return null;
         }
 

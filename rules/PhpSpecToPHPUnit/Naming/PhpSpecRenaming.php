@@ -129,6 +129,10 @@ final class PhpSpecRenaming
             ['it_should_have_', 'it_should_be', 'it_should_', 'it_is_', 'it_', 'is_']
         );
 
-        return $name ?: $originalName;
+        if ($name === '') {
+            return $originalName;
+        }
+
+        return $name;
     }
 }

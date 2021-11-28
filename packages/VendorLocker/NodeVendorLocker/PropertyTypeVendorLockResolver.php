@@ -57,7 +57,7 @@ final class PropertyTypeVendorLockResolver
                 continue;
             }
 
-            if ($parentClassReflection->getfileName() === $fileName) {
+            if ($parentClassReflection->getFileName() === $fileName) {
                 continue;
             }
 

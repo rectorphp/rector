@@ -30,9 +30,6 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType(): string
     {
         return UnionType::class;

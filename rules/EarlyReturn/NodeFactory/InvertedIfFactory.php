@@ -31,7 +31,8 @@ final class InvertedIfFactory
     {
         $ifs = [];
         $ifNextReturn = $this->getIfNextReturn($if);
-        $stmt = $this->contextAnalyzer->isInLoop($if) && ! $ifNextReturn
+
+        $stmt = $this->contextAnalyzer->isInLoop($if) && ! $ifNextReturn instanceof Return_
             ? [new Continue_()]
             : [$return];
 

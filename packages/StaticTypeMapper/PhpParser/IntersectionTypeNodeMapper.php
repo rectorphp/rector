@@ -24,9 +24,6 @@ final class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType(): string
     {
         return Node\IntersectionType::class;

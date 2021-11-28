@@ -87,7 +87,7 @@ CODE_SAMPLE
         }
 
         $oldVariableName = $this->getName($node->var);
-        if (! $oldVariableName) {
+        if (! is_string($oldVariableName)) {
             return null;
         }
 

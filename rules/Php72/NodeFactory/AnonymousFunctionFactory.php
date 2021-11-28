@@ -160,7 +160,7 @@ final class AnonymousFunctionFactory
             }
 
             $match = Strings::match($node->value, self::DIM_FETCH_REGEX);
-            if (! $match) {
+            if ($match === null) {
                 return $node;
             }
 
