@@ -10,6 +10,7 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -168,7 +169,7 @@ CODE_SAMPLE
         }
 
         // e+/e-
-        if (Strings::match($numericValueAsString, '#e#i')) {
+        if (StringUtils::isMatch($numericValueAsString, '#e#i')) {
             return true;
         }
 

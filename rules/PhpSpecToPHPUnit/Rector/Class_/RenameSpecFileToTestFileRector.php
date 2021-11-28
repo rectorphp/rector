@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -65,7 +66,7 @@ CODE_SAMPLE
         $oldPathname = $smartFileInfo->getPathname();
 
         // ends with Spec.php
-        if (! Strings::match($oldPathname, self::SPEC_SUFFIX_REGEX)) {
+        if (! StringUtils::isMatch($oldPathname, self::SPEC_SUFFIX_REGEX)) {
             return null;
         }
 

@@ -128,11 +128,13 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ChangeMethodVisibility[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
         $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? ($configuration ?: []);
+
+        Assert::isArray($methodVisibilities);
         Assert::allIsInstanceOf($methodVisibilities, ChangeMethodVisibility::class);
 
         $this->methodVisibilities = $methodVisibilities;

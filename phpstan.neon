@@ -563,3 +563,23 @@ parameters:
 
         # @todo fix in symplify
         - '#Parameter \#3 \$configuration of class Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample constructor expects array<string, mixed\>, array<int, Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration\> given#'
+
+        # strict rules
+        - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)\(\)#'
+
+        # specific generics
+        - '#Parameter \#1 \$node (.*?) of method Rector\\(.*?)Rector\:\:refactor\(\) should be contravariant with parameter \$node \(PhpParser\\Node\) of method Rector\\Core\\Contract\\Rector\\PhpRectorInterface\:\:refactor\(\)#'
+
+        # only for empty ctor
+        - '#Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
+
+        -
+            message: '#Class has a static method must so must contains "Static" in its name#'
+            path: src/Util/StringUtils.php
+
+        # generics
+        - '#Method Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser\:\:traverse\(\) should return array<TNode of PhpParser\\Node\> but returns array<PhpParser\\Node\>#'
+        - '#Parameter \#1 \$stmts of class Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace constructor expects array<PhpParser\\Node\\Stmt\>, array<TNode of PhpParser\\Node\> given#'
+
+        # skip === false compare
+        - '#Do not compare call directly, use a variable assign#'

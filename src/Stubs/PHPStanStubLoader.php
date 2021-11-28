@@ -39,7 +39,11 @@ final class PHPStanStubLoader
 
         foreach (self::VENDOR_PATHS as $vendorPath) {
             $vendorPath = realpath($vendorPath);
-            if (! $vendorPath) {
+            if ($vendorPath === false) {
+                continue;
+            }
+
+            if ($vendorPath === '') {
                 continue;
             }
 

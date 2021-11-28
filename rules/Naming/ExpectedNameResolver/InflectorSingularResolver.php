@@ -6,6 +6,7 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use Doctrine\Inflector\Inflector;
 use Nette\Utils\Strings;
+use Rector\Core\Util\StringUtils;
 
 /**
  * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
@@ -90,12 +91,12 @@ final class InflectorSingularResolver
                 return $singular;
             }
 
-            if (Strings::match($currentName, '#' . ucfirst($plural) . '#')) {
+            if (StringUtils::isMatch($currentName, '#' . ucfirst($plural) . '#')) {
                 $resolvedValue = Strings::replace($currentName, '#' . ucfirst($plural) . '#', ucfirst($singular));
                 return $this->singularizeCamelParts($resolvedValue);
             }
 
-            if (Strings::match($currentName, '#' . $plural . '#')) {
+            if (StringUtils::isMatch($currentName, '#' . $plural . '#')) {
                 $resolvedValue = Strings::replace($currentName, '#' . $plural . '#', $singular);
                 return $this->singularizeCamelParts($resolvedValue);
             }

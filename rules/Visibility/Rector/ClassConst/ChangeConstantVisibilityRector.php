@@ -106,11 +106,11 @@ CODE_SAMPLE
     }
 
     /**
-     * @param array<string, ChangeConstantVisibility[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration): void
     {
-        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? ($configuration ?: []);
+        $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? $configuration;
         Assert::isArray($classConstantVisibilityChanges);
         Assert::allIsInstanceOf($classConstantVisibilityChanges, ChangeConstantVisibility::class);
 

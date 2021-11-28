@@ -12,6 +12,7 @@ use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StringUtils;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -91,7 +92,7 @@ final class PropertyNaming
         }
 
         foreach (self::EXCLUDED_CLASSES as $excludedClass) {
-            if (Strings::match($className, $excludedClass)) {
+            if (StringUtils::isMatch($className, $excludedClass)) {
                 return null;
             }
         }
@@ -225,7 +226,7 @@ final class PropertyNaming
         }
 
         // starts with "I\W+"?
-        if (Strings::match($shortName, self::I_PREFIX_REGEX)) {
+        if (StringUtils::isMatch($shortName, self::I_PREFIX_REGEX)) {
             return Strings::substring($shortName, 1);
         }
 

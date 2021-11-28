@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\PhpParser\NodeTraverser;
 
-use PhpParser\Node\Stmt;
+use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
@@ -27,8 +27,9 @@ final class RectorNodeTraverser extends NodeTraverser
     }
 
     /**
-     * @param Stmt[] $nodes
-     * @return Stmt[]
+     * @template TNode as Node
+     * @param TNode[] $nodes
+     * @return TNode[]
      */
     public function traverse(array $nodes): array
     {

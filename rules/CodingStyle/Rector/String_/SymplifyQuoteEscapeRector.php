@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\CodingStyle\Rector\String_;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -114,6 +114,6 @@ CODE_SAMPLE
 
     private function isMatchEscapedChars(string $string): bool
     {
-        return (bool) Strings::match($string, self::ESCAPED_CHAR_REGEX);
+        return StringUtils::isMatch($string, self::ESCAPED_CHAR_REGEX);
     }
 }

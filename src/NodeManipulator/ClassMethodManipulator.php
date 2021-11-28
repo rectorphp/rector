@@ -128,12 +128,7 @@ final class ClassMethodManipulator
                 continue;
             }
 
-            $paramName = $this->nodeNameResolver->getName($paramNode);
-            if (! is_string($paramName)) {
-                throw new ShouldNotHappenException();
-            }
-
-            return $paramName;
+            return $this->nodeNameResolver->getName($paramNode);
         }
 
         $paramName = $this->resolveName($classMethod, $possibleNames);

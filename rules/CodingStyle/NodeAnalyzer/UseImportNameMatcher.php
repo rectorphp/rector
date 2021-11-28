@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StringUtils;
 
 final class UseImportNameMatcher
 {
@@ -58,8 +59,7 @@ final class UseImportNameMatcher
         $shortName = $useUse->alias !== null ? $useUse->alias->name : $useUse->name->getLast();
         $shortNamePattern = preg_quote($shortName, '#');
         $pattern = sprintf(self::SHORT_NAME_REGEX, $shortNamePattern);
-
-        return (bool) Strings::match($tag, $pattern);
+        return StringUtils::isMatch($tag, $pattern);
     }
 
     private function resolveName(string $tag, UseUse $useUse): string

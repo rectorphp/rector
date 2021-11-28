@@ -78,7 +78,7 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
         $types = [];
 
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
-        if ($targetEntity) {
+        if (is_string($targetEntity)) {
             $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
             $types[] = new ArrayType(new MixedType(), new FullyQualifiedObjectType($entityFullyQualifiedClass));
         }

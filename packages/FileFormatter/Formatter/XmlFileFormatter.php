@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\FileFormatter\Formatter;
 
 use Nette\Utils\Strings;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
@@ -143,12 +144,12 @@ final class XmlFileFormatter implements FileFormatterInterface
 
     private function isOpeningTag(string $part): bool
     {
-        return (bool) Strings::match($part, self::IS_OPENING_TAG_REGEX);
+        return StringUtils::isMatch($part, self::IS_OPENING_TAG_REGEX);
     }
 
     private function isClosingTag(string $part): bool
     {
-        return (bool) Strings::match($part, self::IS_CLOSING_TAG_REGEX);
+        return StringUtils::isMatch($part, self::IS_CLOSING_TAG_REGEX);
     }
 
     private function isOpeningCdataTag(string $part): bool

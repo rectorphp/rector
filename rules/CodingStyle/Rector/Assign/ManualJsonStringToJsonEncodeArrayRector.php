@@ -24,6 +24,7 @@ use Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory;
 use Rector\CodingStyle\ValueObject\ConcatExpressionJoinData;
 use Rector\CodingStyle\ValueObject\NodeToRemoveAndConcatItem;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -168,7 +169,7 @@ CODE_SAMPLE
 
     private function isJsonString(string $stringValue): bool
     {
-        if (! (bool) Strings::match($stringValue, self::JSON_STRING_REGEX)) {
+        if (! StringUtils::isMatch($stringValue, self::JSON_STRING_REGEX)) {
             return false;
         }
 

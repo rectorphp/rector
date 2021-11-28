@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Core\FileSystem;
 
-use Nette\Utils\Strings;
 use Rector\Caching\UnchangedFilesFilter;
+use Rector\Core\Util\StringUtils;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
@@ -123,7 +123,7 @@ final class FilesFinder
                 // make the path work accross different OSes
                 $excludePath = str_replace('\\', '/', $excludePath);
 
-                if (Strings::match($realPath, '#' . preg_quote($excludePath, '#') . '#')) {
+                if (StringUtils::isMatch($realPath, '#' . preg_quote($excludePath, '#') . '#')) {
                     return false;
                 }
 
@@ -144,12 +144,12 @@ final class FilesFinder
     private function normalizeForFnmatch(string $path): string
     {
         // ends with *
-        if (Strings::match($path, self::ENDS_WITH_ASTERISK_REGEX)) {
+        if (StringUtils::isMatch($path, self::ENDS_WITH_ASTERISK_REGEX)) {
             return '*' . $path;
         }
 
         // starts with *
-        if (Strings::match($path, self::STARTS_WITH_ASTERISK_REGEX)) {
+        if (StringUtils::isMatch($path, self::STARTS_WITH_ASTERISK_REGEX)) {
             return $path . '*';
         }
 

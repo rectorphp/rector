@@ -8,6 +8,7 @@ use Rector\Compiler\PhpScoper\StaticEasyPrefixer;
 use Rector\Compiler\Unprefixer;
 use Rector\Compiler\ValueObject\ScoperOption;
 use Rector\Core\Application\VersionResolver;
+use Rector\Core\Util\StringUtils;
 
 require_once __DIR__ . '/vendor/autoload.php';
 // [BEWARE] this path is relative to the root and location of this file
@@ -189,7 +190,7 @@ return [
         // fixes https://github.com/rectorphp/rector/issues/6010 + test case prefix
         function (string $filePath, string $prefix, string $content): string {
             // @see https://regex101.com/r/bA1nQa/1
-            if (! Strings::match($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#')) {
+            if (! StringUtils::isMatch($filePath, '#vendor/symfony/polyfill-php\d{2}/Resources/stubs#')) {
                 return $content;
             }
 

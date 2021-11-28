@@ -6,12 +6,9 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -31,9 +28,6 @@ final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
     ) {
     }
 
-    /**
-     * @param ClassMethod|Function_|Closure $functionLike
-     */
     public function inferFunctionLike(FunctionLike $functionLike): Type
     {
         $yieldNodes = $this->findCurrentScopeYieldNodes($functionLike);

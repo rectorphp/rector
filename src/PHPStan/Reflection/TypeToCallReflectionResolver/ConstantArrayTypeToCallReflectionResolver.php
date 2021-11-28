@@ -18,6 +18,8 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantArrayType.php#L188
+ *
+ * @implements TypeToCallReflectionResolverInterface<ConstantArrayType>
  */
 final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {

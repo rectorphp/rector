@@ -22,6 +22,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StringUtils;
 
 final class DoctrineAnnotationDecorator
 {
@@ -96,7 +97,7 @@ final class DoctrineAnnotationDecorator
 
                 $nextPhpDocChildNode = $phpDocNode->children[$key];
 
-                if ($nextPhpDocChildNode instanceof PhpDocTextNode && Strings::match(
+                if ($nextPhpDocChildNode instanceof PhpDocTextNode && StringUtils::isMatch(
                     $nextPhpDocChildNode->text,
                     self::NESTED_ANNOTATION_END_REGEX
                 )) {

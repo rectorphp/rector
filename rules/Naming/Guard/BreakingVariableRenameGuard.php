@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
-use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
@@ -18,6 +17,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StringUtils;
 use Rector\Naming\Naming\ConflictingNameResolver;
 use Rector\Naming\Naming\OverridenExistingNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -239,6 +239,6 @@ final class BreakingVariableRenameGuard
 
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
-        return (bool) Strings::match($currentName, self::AT_NAMING_REGEX . '');
+        return StringUtils::isMatch($currentName, self::AT_NAMING_REGEX . '');
     }
 }

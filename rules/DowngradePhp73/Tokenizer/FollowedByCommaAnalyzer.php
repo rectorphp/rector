@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp73\Tokenizer;
 
-use Nette\Utils\Strings;
 use PhpParser\Node;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 
 final class FollowedByCommaAnalyzer
@@ -19,7 +19,7 @@ final class FollowedByCommaAnalyzer
             $currentToken = $oldTokens[$nextTokenPosition];
 
             // only space
-            if (is_array($currentToken) || Strings::match($currentToken, '#\s+#')) {
+            if (is_array($currentToken) || StringUtils::isMatch($currentToken, '#\s+#')) {
                 ++$nextTokenPosition;
                 continue;
             }

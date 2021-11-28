@@ -12,6 +12,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -78,7 +79,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! Strings::match($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
+        if (! StringUtils::isMatch($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
             return null;
         }
 

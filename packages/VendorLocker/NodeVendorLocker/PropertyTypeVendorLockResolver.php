@@ -72,8 +72,6 @@ final class PropertyTypeVendorLockResolver
                 // validate parent not typed yet → it's not ok
                 return true;
             }
-
-            continue;
         }
 
         return false;

@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -100,7 +101,7 @@ CODE_SAMPLE
 
         $varName = '$' . $this->getName($node->var);
         $varPattern = '# ' . preg_quote($varName, '#') . ' #';
-        if (! Strings::match($docContent, $varPattern)) {
+        if (! StringUtils::isMatch($docContent, $varPattern)) {
             return null;
         }
 
@@ -161,7 +162,7 @@ CODE_SAMPLE
         }
 
         // $value is first, instead of type is first
-        if (Strings::match($docContent, self::VAR_ANNOTATION_REGEX)) {
+        if (StringUtils::isMatch($docContent, self::VAR_ANNOTATION_REGEX)) {
             $docContent = Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
         }
 

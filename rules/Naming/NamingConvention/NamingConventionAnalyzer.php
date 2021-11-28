@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Naming\NamingConvention;
 
-use Nette\Utils\Strings;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
 
 final class NamingConventionAnalyzer
@@ -36,6 +36,6 @@ final class NamingConventionAnalyzer
         }
 
         // starts with or ends with
-        return (bool) Strings::match($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
+        return StringUtils::isMatch($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
     }
 }

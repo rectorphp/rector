@@ -13,6 +13,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -180,7 +181,7 @@ CODE_SAMPLE
             &$string
         ): string {
             $printedString = $this->betterStandardPrinter->print($string);
-            if (Strings::match($printedString, self::DOUBLE_QUOTED_REGEX)) {
+            if (StringUtils::isMatch($printedString, self::DOUBLE_QUOTED_REGEX)) {
                 $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, true);
             }
 
