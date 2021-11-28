@@ -11,6 +11,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Neon\RenameMethodNeonRector\RenameMethodNeonRectorTest
+ *
+ * @implements NeonRectorInterface<SetupMethodCall>
  */
 final class RenameMethodNeonRector implements \Rector\Nette\Contract\Rector\NeonRectorInterface
 {
@@ -40,9 +42,6 @@ services:
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType() : string
     {
         return \Rector\Nette\NeonParser\Node\Service_\SetupMethodCall::class;

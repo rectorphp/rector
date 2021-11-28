@@ -39,7 +39,7 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses() : array
     {

@@ -106,7 +106,7 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param array<string, string|string[]>  $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {

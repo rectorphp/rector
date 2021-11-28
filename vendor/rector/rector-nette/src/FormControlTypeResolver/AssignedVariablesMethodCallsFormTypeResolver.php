@@ -27,7 +27,7 @@ final class AssignedVariablesMethodCallsFormTypeResolver implements \Rector\Nett
     /**
      * @required
      */
-    public function autowireAssignedVariablesMethodCallsFormTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

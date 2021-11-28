@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Encapsed;
@@ -24,7 +23,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
-     * @return array<class-string<Expr>>
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses() : array
     {

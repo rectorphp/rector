@@ -24,17 +24,20 @@ final class FormVariableFinder
     }
     public function find(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node\Expr\Variable
     {
-        foreach ($class->getMethods() as $method) {
-            $stmts = $method->stmts ?: [];
-            foreach ($stmts as $stmt) {
-                if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        foreach ($class->getMethods() as $classMethod) {
+            $classMethodStmts = $classMethod->getStmts();
+            if ($classMethodStmts === null) {
+                continue;
+            }
+            foreach ($classMethodStmts as $classMethodStmt) {
+                if (!$classMethodStmt instanceof \PhpParser\Node\Stmt\Expression) {
                     continue;
                 }
-                if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+                if (!$classMethodStmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                     continue;
                 }
-                $var = $stmt->expr->var;
-                $expr = $stmt->expr->expr;
+                $var = $classMethodStmt->expr->var;
+                $expr = $classMethodStmt->expr->expr;
                 if (!$var instanceof \PhpParser\Node\Expr\Variable) {
                     continue;
                 }

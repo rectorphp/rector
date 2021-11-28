@@ -28,7 +28,7 @@ final class ReturnFormControlTypeResolver implements \Rector\Nette\Contract\Form
     /**
      * @required
      */
-    public function autowireReturnFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

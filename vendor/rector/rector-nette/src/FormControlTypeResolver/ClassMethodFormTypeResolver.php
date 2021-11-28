@@ -35,7 +35,7 @@ final class ClassMethodFormTypeResolver implements \Rector\Nette\Contract\FormCo
     /**
      * @required
      */
-    public function autowireClassMethodFormTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

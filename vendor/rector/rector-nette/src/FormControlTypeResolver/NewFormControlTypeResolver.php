@@ -33,7 +33,7 @@ final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormCon
     /**
      * @required
      */
-    public function autowireNewFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

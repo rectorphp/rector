@@ -38,8 +38,12 @@ final class FormFieldsFinder
     public function find(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Variable $form) : array
     {
         $formFields = [];
-        foreach ($class->getMethods() as $method) {
-            foreach ($method->stmts ?: [] as $stmt) {
+        foreach ($class->getMethods() as $classMethod) {
+            $stmts = $classMethod->getStmts();
+            if ($stmts === null) {
+                continue;
+            }
+            foreach ($stmts as $stmt) {
                 if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                     continue;
                 }
@@ -48,7 +52,7 @@ final class FormFieldsFinder
                     continue;
                 }
                 $addFieldMethodCall = $this->findAddFieldMethodCall($methodCall);
-                if (!$addFieldMethodCall) {
+                if (!$addFieldMethodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                     continue;
                 }
                 if (!$this->isFormAddFieldMethodCall($addFieldMethodCall, $form)) {

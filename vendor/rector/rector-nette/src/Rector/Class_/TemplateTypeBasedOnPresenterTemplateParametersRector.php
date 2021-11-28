@@ -103,7 +103,7 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param array<string, string|string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
@@ -131,7 +131,7 @@ CODE_SAMPLE
         }
         $shortClassName = $this->nodeNameResolver->getShortName($node);
         $fullClassName = $this->nodeNameResolver->getName($node);
-        if (!$fullClassName) {
+        if (!\is_string($fullClassName)) {
             return null;
         }
         $presenterName = \str_replace('Presenter', '', $shortClassName);
@@ -157,7 +157,10 @@ CODE_SAMPLE
     private function findVarTypesForAction(\PhpParser\Node\Stmt\ClassMethod $method) : array
     {
         $varTypes = [];
-        $stmts = $method->stmts ?: [];
+        $stmts = $method->getStmts();
+        if ($stmts === null) {
+            return [];
+        }
         foreach ($stmts as $stmt) {
             if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;

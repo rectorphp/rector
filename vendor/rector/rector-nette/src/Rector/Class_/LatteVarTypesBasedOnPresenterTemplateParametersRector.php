@@ -105,7 +105,10 @@ CODE_SAMPLE
     private function findVarTypesForAction(\PhpParser\Node\Stmt\ClassMethod $method) : array
     {
         $varTypes = [];
-        $stmts = $method->stmts ?: [];
+        $stmts = $method->getStmts();
+        if ($stmts === null) {
+            return [];
+        }
         foreach ($stmts as $stmt) {
             if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;

@@ -19,7 +19,7 @@ final class MethodNamesByInputNamesResolver
         $this->formControlTypeResolvers = $formControlTypeResolvers;
     }
     /**
-     * @return array<string, class-string>
+     * @return array<string, string>
      */
     public function resolveExpr(\PhpParser\Node $node) : array
     {

@@ -7,7 +7,7 @@ use PhpParser\Node;
 interface FormControlTypeResolverInterface
 {
     /**
-     * @return array<string, class-string>
+     * @return array<string, string>
      * @param \PhpParser\Node $node
      */
     public function resolve($node) : array;

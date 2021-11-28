@@ -47,7 +47,7 @@ final class StaticCallMethodCallTypeResolver implements \Rector\NodeTypeResolver
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
-     * @return class-string[]
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses() : array
     {

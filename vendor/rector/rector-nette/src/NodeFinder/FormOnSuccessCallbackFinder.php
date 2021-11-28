@@ -15,8 +15,11 @@ final class FormOnSuccessCallbackFinder
 {
     public function find(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Variable $form) : ?\PhpParser\Node\Expr
     {
-        foreach ($class->getMethods() as $method) {
-            $stmts = $method->stmts ?: [];
+        foreach ($class->getMethods() as $classMethod) {
+            $stmts = $classMethod->getStmts();
+            if ($stmts === null) {
+                continue;
+            }
             foreach ($stmts as $stmt) {
                 if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                     continue;

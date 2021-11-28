@@ -2269,17 +2269,17 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.53",
-            "version_normalized": "0.11.53.0",
+            "version": "0.11.54",
+            "version_normalized": "0.11.54.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "3e11f9b607242be25ffb71cba76766a07cc6c00e"
+                "reference": "0b165f270ec8f73b277ba988bb51b70f8a99a01e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/3e11f9b607242be25ffb71cba76766a07cc6c00e",
-                "reference": "3e11f9b607242be25ffb71cba76766a07cc6c00e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/0b165f270ec8f73b277ba988bb51b70f8a99a01e",
+                "reference": "0b165f270ec8f73b277ba988bb51b70f8a99a01e",
                 "shasum": ""
             },
             "require": {
@@ -2298,6 +2298,7 @@
                 "nette\/forms": "3.0.*",
                 "phpstan\/extension-installer": "^1.1",
                 "phpstan\/phpstan-nette": "^1.0",
+                "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.7",
@@ -2308,7 +2309,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0"
             },
-            "time": "2021-11-25T17:09:43+00:00",
+            "time": "2021-11-28T19:04:06+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -2336,7 +2337,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.53"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.54"
             },
             "install-path": "..\/rector\/rector-nette"
         },

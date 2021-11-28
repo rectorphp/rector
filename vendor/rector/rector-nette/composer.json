@@ -24,7 +24,8 @@
         "symplify\/rule-doc-generator": "^10.0",
         "phpstan\/extension-installer": "^1.1",
         "rector\/phpstan-rules": "^0.4.7",
-        "phpstan\/phpstan-webmozart-assert": "^1.0"
+        "phpstan\/phpstan-webmozart-assert": "^1.0",
+        "phpstan\/phpstan-strict-rules": "^1.1"
     },
     "autoload": {
         "psr-4": {

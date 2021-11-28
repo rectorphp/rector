@@ -35,7 +35,7 @@ final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Recto
     /**
      * @required
      */
-    public function autowireThisVariableInAnotherMethodFormControlTypeResolver(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
+    public function autowire(\Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver $methodNamesByInputNamesResolver) : void
     {
         $this->methodNamesByInputNamesResolver = $methodNamesByInputNamesResolver;
     }

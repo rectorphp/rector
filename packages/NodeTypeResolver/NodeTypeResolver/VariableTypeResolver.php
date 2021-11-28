@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PHPStan\Analyser\Scope;
@@ -35,7 +34,7 @@ final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\No
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     /**
-     * @return array<class-string<Expr>>
+     * @return array<class-string<Node>>
      */
     public function getNodeClasses() : array
     {
