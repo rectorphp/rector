@@ -35,7 +35,7 @@ class SomeClass
 {
     public function run()
     {
-        $dotenv = JsonResponse::create(true);
+        $dotenv = JsonResponse::create(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 CODE_SAMPLE
@@ -44,7 +44,7 @@ class SomeClass
 {
     public function run()
     {
-        $dotenv = new JsonResponse();
+        $dotenv = new JsonResponse(['foo' => 'bar'], Response::HTTP_OK);
     }
 }
 CODE_SAMPLE
@@ -73,7 +73,7 @@ CODE_SAMPLE
             if ($class === null) {
                 continue;
             }
-            return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($class));
+            return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($class), $node->args);
         }
         return $node;
     }
