@@ -1,4 +1,4 @@
-# 501 Rules Overview
+# 502 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [Carbon](#carbon) (2)
 
-- [CodeQuality](#codequality) (69)
+- [CodeQuality](#codequality) (70)
 
 - [CodingStyle](#codingstyle) (37)
 
@@ -1243,6 +1243,19 @@ Remove `sprintf()` wrapper if not needed
 +        $value = $welcome;
      }
  }
+```
+
+<br>
+
+### ReplaceMultipleBooleanNotRector
+
+Replace the Double not operator (!!) by type-casting to boolean
+
+- class: [`Rector\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector`](../rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php)
+
+```diff
+-$bool = !!$var;
++$bool = (bool) $var;
 ```
 
 <br>
