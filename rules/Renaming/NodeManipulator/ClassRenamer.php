@@ -215,7 +215,7 @@ final class ClassRenamer
         }
         $newNamespace = $this->classNaming->getNamespace($newClassFullyQualified);
         // Renaming to class without namespace (example MyNamespace\DateTime -> DateTimeImmutable)
-        if (!$newNamespace) {
+        if (!\is_string($newNamespace)) {
             $classLike->name = new \PhpParser\Node\Identifier($newClassFullyQualified);
             return $classLike;
         }

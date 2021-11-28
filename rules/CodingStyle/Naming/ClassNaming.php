@@ -46,7 +46,7 @@ final class ClassNaming
     public function getNamespace(string $fullyQualifiedName) : ?string
     {
         $fullyQualifiedName = \trim($fullyQualifiedName, '\\');
-        return \RectorPrefix20211128\Nette\Utils\Strings::before($fullyQualifiedName, '\\', -1) ?: null;
+        return \RectorPrefix20211128\Nette\Utils\Strings::before($fullyQualifiedName, '\\', -1);
     }
     public function getNameFromFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : string
     {

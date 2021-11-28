@@ -40,7 +40,7 @@ final class InvertedIfFactory
     {
         $ifs = [];
         $ifNextReturn = $this->getIfNextReturn($if);
-        $stmt = $this->contextAnalyzer->isInLoop($if) && !$ifNextReturn ? [new \PhpParser\Node\Stmt\Continue_()] : [$return];
+        $stmt = $this->contextAnalyzer->isInLoop($if) && !$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_ ? [new \PhpParser\Node\Stmt\Continue_()] : [$return];
         if ($ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
             $stmt[0]->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $ifNextReturn->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
         }

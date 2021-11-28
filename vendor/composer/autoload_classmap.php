@@ -1856,6 +1856,7 @@ return array(
     'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => $baseDir . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
     'Rector\\DeadCode\\SideEffect\\PureFunctionDetector' => $baseDir . '/rules/DeadCode/SideEffect/PureFunctionDetector.php',
     'Rector\\DeadCode\\SideEffect\\SideEffectNodeDetector' => $baseDir . '/rules/DeadCode/SideEffect/SideEffectNodeDetector.php',
+    'Rector\\DeadCode\\TypeNodeAnalyzer\\GenericTypeNodeAnalyzer' => $baseDir . '/rules/DeadCode/TypeNodeAnalyzer/GenericTypeNodeAnalyzer.php',
     'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => $baseDir . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
     'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
     'Rector\\DeadCode\\ValueObject\\VariableNodeUse' => $baseDir . '/rules/DeadCode/ValueObject/VariableNodeUse.php',

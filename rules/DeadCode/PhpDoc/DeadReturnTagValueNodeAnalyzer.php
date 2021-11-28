@@ -8,11 +8,11 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadReturnTagValueNodeAnalyzer
 {
@@ -24,10 +24,15 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
+     */
+    private $genericTypeNodeAnalyzer;
+    public function __construct(\Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer)
     {
         $this->typeComparator = $typeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
     }
     public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode $returnTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
@@ -48,21 +53,8 @@ final class DeadReturnTagValueNodeAnalyzer
         if (!$returnTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
             return $returnTagValueNode->description === '';
         }
-        if (!$this->hasGenericType($returnTagValueNode->type)) {
+        if (!$this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
             return $returnTagValueNode->description === '';
-        }
-        return \false;
-    }
-    private function hasGenericType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
-    {
-        $types = $bracketsAwareUnionTypeNode->types;
-        foreach ($types as $type) {
-            if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
-                if ($type->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode && $type->type->name === 'array') {
-                    continue;
-                }
-                return \true;
-            }
         }
         return \false;
     }

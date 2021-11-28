@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $oldVariableName = $this->getName($node->var);
-        if (!$oldVariableName) {
+        if (!\is_string($oldVariableName)) {
             return null;
         }
         $type = $node->types[0];

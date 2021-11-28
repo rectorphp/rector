@@ -194,7 +194,7 @@ final class PhpSpecMocksToPHPUnitMocksRector extends \Rector\PhpSpecToPHPUnit\Re
     }
     private function createMockVarDoc(\PhpParser\Node\Param $param, \PhpParser\Node\Name $name) : string
     {
-        $paramType = (string) ($name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME) ?: $name);
+        $paramType = (string) $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME, $name);
         $variableName = $this->getName($param->var);
         if ($variableName === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();

@@ -142,7 +142,7 @@ CODE_SAMPLE
         $nodeNames = [];
         foreach ($nodes as $node) {
             $nodeName = $this->getName($node);
-            if ($nodeName) {
+            if (\is_string($nodeName)) {
                 $nodeNames[] = $nodeName;
             }
         }

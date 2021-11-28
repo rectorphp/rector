@@ -112,6 +112,9 @@ final class PhpSpecRenaming
     {
         $originalName = $name;
         $name = \Rector\Core\Util\StaticRectorStrings::removePrefixes($name, ['it_should_have_', 'it_should_be', 'it_should_', 'it_is_', 'it_', 'is_']);
-        return $name ?: $originalName;
+        if ($name === '') {
+            return $originalName;
+        }
+        return $name;
     }
 }

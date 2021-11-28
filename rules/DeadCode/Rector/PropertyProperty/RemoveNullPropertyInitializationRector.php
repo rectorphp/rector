@@ -49,7 +49,7 @@ CODE_SAMPLE
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // skip typed properties
-        if ($parent instanceof \PhpParser\Node\Stmt\Property && $parent->type) {
+        if ($parent instanceof \PhpParser\Node\Stmt\Property && $parent->type !== null) {
             return null;
         }
         $defaultValueNode = $node->default;

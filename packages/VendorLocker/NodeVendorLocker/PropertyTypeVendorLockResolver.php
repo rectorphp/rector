@@ -55,7 +55,7 @@ final class PropertyTypeVendorLockResolver
             if (!$parentClassReflection->hasProperty($propertyName)) {
                 continue;
             }
-            if ($parentClassReflection->getfileName() === $fileName) {
+            if ($parentClassReflection->getFileName() === $fileName) {
                 continue;
             }
             $property = $parentClassReflection->getProperty($propertyName, $scope);

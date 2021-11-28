@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
+use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadParamTagValueNodeAnalyzer
@@ -31,10 +32,15 @@ final class DeadParamTagValueNodeAnalyzer
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
+    /**
+     * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
+     */
+    private $genericTypeNodeAnalyzer;
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeComparator = $typeComparator;
+        $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
     }
     public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
@@ -57,7 +63,7 @@ final class DeadParamTagValueNodeAnalyzer
         if (!$paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
-        if (!$this->hasGenericType($paramTagValueNode->type)) {
+        if (!$this->genericTypeNodeAnalyzer->hasGenericType($paramTagValueNode->type)) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
         return \false;
@@ -111,19 +117,6 @@ final class DeadParamTagValueNodeAnalyzer
             }
         }
         return \true;
-    }
-    private function hasGenericType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
-    {
-        $types = $bracketsAwareUnionTypeNode->types;
-        foreach ($types as $type) {
-            if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode) {
-                if ($type->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode && $type->type->name === 'array') {
-                    continue;
-                }
-                return \true;
-            }
-        }
-        return \false;
     }
     private function matchParamByName(string $desiredParamName, \PhpParser\Node\FunctionLike $functionLike) : ?\PhpParser\Node\Param
     {

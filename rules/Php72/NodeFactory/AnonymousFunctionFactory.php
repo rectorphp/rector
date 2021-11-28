@@ -158,7 +158,7 @@ final class AnonymousFunctionFactory
                 return $node;
             }
             $match = \RectorPrefix20211128\Nette\Utils\Strings::match($node->value, self::DIM_FETCH_REGEX);
-            if (!$match) {
+            if ($match === null) {
                 return $node;
             }
             $matchesVariable = new \PhpParser\Node\Expr\Variable('matches');

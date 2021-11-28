@@ -142,14 +142,15 @@ CODE_SAMPLE
      */
     private function matchClassMethodOnlyStmt(\PhpParser\Node\Stmt\ClassMethod $classMethod)
     {
-        if ($classMethod->stmts === null) {
+        $classMethodStmts = $classMethod->stmts;
+        if ($classMethodStmts === null) {
             return null;
         }
-        if (\count((array) $classMethod->stmts) !== 1) {
+        if (\count($classMethodStmts) !== 1) {
             return null;
         }
         // recount empty notes
-        $stmtsValues = \array_values($classMethod->stmts);
+        $stmtsValues = \array_values($classMethodStmts);
         return $this->unwrapExpression($stmtsValues[0]);
     }
 }

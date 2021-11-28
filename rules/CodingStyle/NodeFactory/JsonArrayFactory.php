@@ -62,7 +62,7 @@ final class JsonArrayFactory
                     throw new \Rector\Core\Exception\ShouldNotHappenException();
                 }
                 $placeholderNode = $this->matchPlaceholderNode($onlyItem->value, $placeholderNodes);
-                if ($placeholderNode && $this->implodeAnalyzer->isImplodeToJson($placeholderNode)) {
+                if ($placeholderNode instanceof \PhpParser\Node\Expr && $this->implodeAnalyzer->isImplodeToJson($placeholderNode)) {
                     /**
                      * @var FuncCall $placeholderNode
                      * @var Arg $firstArg

@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?array
     {
-        if ($node->elseifs) {
+        if ($node->elseifs !== []) {
             return null;
         }
         $condition = $this->conditionResolver->resolveFromExpr($node->cond);
@@ -83,7 +83,7 @@ CODE_SAMPLE
      */
     private function refactorIsMatch(\PhpParser\Node\Stmt\If_ $if) : ?array
     {
-        if ($if->elseifs) {
+        if ($if->elseifs !== []) {
             return null;
         }
         return $if->stmts;

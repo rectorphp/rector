@@ -54,7 +54,7 @@ final class IsIterableRector extends \Rector\Core\Rector\AbstractRector implemen
         if ($this->shouldSkip()) {
             return null;
         }
-        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Traversable', 'is_iterable') ?: $node;
+        return $this->isArrayAndDualCheckToAble->processBooleanOr($node, 'Traversable', 'is_iterable');
     }
     private function shouldSkip() : bool
     {

@@ -25,9 +25,6 @@ final class IntersectionTypeNodeMapper implements \Rector\StaticTypeMapper\Contr
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
-    /**
-     * @return class-string<Node>
-     */
     public function getNodeType() : string
     {
         return \PhpParser\Node\IntersectionType::class;

@@ -127,7 +127,10 @@ CODE_SAMPLE
         if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
             return \true;
         }
-        return $variable->name instanceof \PhpParser\Node\Expr\Variable && $this->betterNodeFinder->findFirstNext($assign, function (\PhpParser\Node $node) : bool {
+        if (!$variable->name instanceof \PhpParser\Node\Expr\Variable) {
+            return \false;
+        }
+        return (bool) $this->betterNodeFinder->findFirstNext($assign, function (\PhpParser\Node $node) : bool {
             return $node instanceof \PhpParser\Node\Expr\Variable;
         });
     }

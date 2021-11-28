@@ -88,7 +88,7 @@ final class ArgumentDefaultValueReplacer
             $expr->args[$position] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
         } elseif (\is_array($replaceArgumentDefaultValue->getValueBefore())) {
             $newArgs = $this->processArrayReplacement($expr->args, $replaceArgumentDefaultValue);
-            if ($newArgs) {
+            if (\is_array($newArgs)) {
                 $expr->args = $newArgs;
             }
         }
