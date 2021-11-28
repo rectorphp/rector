@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Autodiscovery\Rector\Class_;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Autodiscovery\FileLocation\ExpectedFileLocationResolver;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
@@ -104,14 +104,14 @@ CODE_SAMPLE
         foreach ($groupNamesBySuffix as $groupNames) {
             // has class suffix
             $suffixPattern = '\\w+' . $groupNames . '(Test)?\\.php$';
-            if (!\RectorPrefix20211128\Nette\Utils\Strings::match($smartFileInfo->getRealPath(), '#' . $suffixPattern . '#')) {
+            if (!\Rector\Core\Util\StringUtils::isMatch($smartFileInfo->getRealPath(), '#' . $suffixPattern . '#')) {
                 continue;
             }
             if ($this->isLocatedInExpectedLocation($groupNames, $suffixPattern, $smartFileInfo)) {
                 continue;
             }
             // file is already in the group
-            if (\RectorPrefix20211128\Nette\Utils\Strings::match($smartFileInfo->getPath(), '#' . $groupNames . '$#')) {
+            if (\Rector\Core\Util\StringUtils::isMatch($smartFileInfo->getPath(), '#' . $groupNames . '$#')) {
                 continue;
             }
             $this->moveFileToGroupName($smartFileInfo, $this->file, $groupNames);
@@ -121,7 +121,7 @@ CODE_SAMPLE
     private function isLocatedInExpectedLocation(string $groupName, string $suffixPattern, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
         $expectedLocationFilePattern = $this->expectedFileLocationResolver->resolve($groupName, $suffixPattern);
-        return (bool) \RectorPrefix20211128\Nette\Utils\Strings::match($smartFileInfo->getRealPath(), $expectedLocationFilePattern);
+        return \Rector\Core\Util\StringUtils::isMatch($smartFileInfo->getRealPath(), $expectedLocationFilePattern);
     }
     private function moveFileToGroupName(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, \Rector\Core\ValueObject\Application\File $file, string $desiredGroupName) : void
     {

@@ -7,6 +7,7 @@ use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -51,7 +52,7 @@ CODE_SAMPLE
         $smartFileInfo = $this->file->getSmartFileInfo();
         $oldPathname = $smartFileInfo->getPathname();
         // ends with Spec.php
-        if (!\RectorPrefix20211128\Nette\Utils\Strings::match($oldPathname, self::SPEC_SUFFIX_REGEX)) {
+        if (!\Rector\Core\Util\StringUtils::isMatch($oldPathname, self::SPEC_SUFFIX_REGEX)) {
             return null;
         }
         $newPathName = $this->createPathName($oldPathname);

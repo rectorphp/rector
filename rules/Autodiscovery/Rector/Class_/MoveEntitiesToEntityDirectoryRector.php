@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Autodiscovery\Rector\Class_;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
@@ -86,7 +86,7 @@ CODE_SAMPLE
         }
         // is entity in expected directory?
         $smartFileInfo = $this->file->getSmartFileInfo();
-        if (\RectorPrefix20211128\Nette\Utils\Strings::match($smartFileInfo->getRealPath(), self::ENTITY_PATH_REGEX)) {
+        if (\Rector\Core\Util\StringUtils::isMatch($smartFileInfo->getRealPath(), self::ENTITY_PATH_REGEX)) {
             return null;
         }
         $addedFileWithNodes = $this->addedFileWithNodesFactory->createWithDesiredGroup($smartFileInfo, $this->file, 'Entity');

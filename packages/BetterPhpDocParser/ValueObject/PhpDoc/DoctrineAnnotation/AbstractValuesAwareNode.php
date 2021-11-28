@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\Core\Util\StringUtils;
 abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
 {
     use NodeAttributes;
@@ -83,11 +84,8 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     public function changeValue(string $key, $value) : void
     {
         // is quoted?
-        if (isset($this->values[$key]) && \is_string($this->values[$key])) {
-            $isQuoted = (bool) \RectorPrefix20211128\Nette\Utils\Strings::match($this->values[$key], self::UNQUOTED_VALUE_REGEX);
-            if ($isQuoted) {
-                $value = '"' . $value . '"';
-            }
+        if (isset($this->values[$key]) && \is_string($this->values[$key]) && \Rector\Core\Util\StringUtils::isMatch($this->values[$key], self::UNQUOTED_VALUE_REGEX)) {
+            $value = '"' . $value . '"';
         }
         $this->values[$key] = $value;
         // invoke reprint
@@ -111,8 +109,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     public function changeSilentValue($value) : void
     {
         // is quoted?
-        $isQuoted = (bool) \RectorPrefix20211128\Nette\Utils\Strings::match($this->values[0], self::UNQUOTED_VALUE_REGEX);
-        if ($isQuoted) {
+        if (\Rector\Core\Util\StringUtils::isMatch($this->values[0], self::UNQUOTED_VALUE_REGEX)) {
             $value = '"' . $value . '"';
         }
         $this->values[0] = $value;

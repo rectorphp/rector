@@ -11,6 +11,7 @@ use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211128\Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonPhpRectorInterface, \Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\PostRector\Contract\Rector\ComplementaryRectorInterface
 {
     /**
@@ -59,11 +60,15 @@ CODE_SAMPLE
         return $this->renameClasses($fileContent, $classRenames);
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->renameClasses = $configuration[self::RENAME_CLASSES] ?? [];
+        $renameClasses = $configuration[self::RENAME_CLASSES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($renameClasses);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($renameClasses));
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allString($renameClasses);
+        $this->renameClasses = $renameClasses;
     }
     /**
      * @param array<string, string> $classRenames

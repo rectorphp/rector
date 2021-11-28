@@ -71,7 +71,7 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
     {
         $types = [];
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
-        if ($targetEntity) {
+        if (\is_string($targetEntity)) {
             $entityFullyQualifiedClass = $this->shortClassExpander->resolveFqnTargetEntity($targetEntity, $property);
             $types[] = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($entityFullyQualifiedClass));
         }

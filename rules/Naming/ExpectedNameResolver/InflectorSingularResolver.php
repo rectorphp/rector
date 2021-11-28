@@ -5,6 +5,7 @@ namespace Rector\Naming\ExpectedNameResolver;
 
 use RectorPrefix20211128\Doctrine\Inflector\Inflector;
 use RectorPrefix20211128\Nette\Utils\Strings;
+use Rector\Core\Util\StringUtils;
 /**
  * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
  */
@@ -76,11 +77,11 @@ final class InflectorSingularResolver
             if ($currentName === $plural) {
                 return $singular;
             }
-            if (\RectorPrefix20211128\Nette\Utils\Strings::match($currentName, '#' . \ucfirst($plural) . '#')) {
+            if (\Rector\Core\Util\StringUtils::isMatch($currentName, '#' . \ucfirst($plural) . '#')) {
                 $resolvedValue = \RectorPrefix20211128\Nette\Utils\Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
                 return $this->singularizeCamelParts($resolvedValue);
             }
-            if (\RectorPrefix20211128\Nette\Utils\Strings::match($currentName, '#' . $plural . '#')) {
+            if (\Rector\Core\Util\StringUtils::isMatch($currentName, '#' . $plural . '#')) {
                 $resolvedValue = \RectorPrefix20211128\Nette\Utils\Strings::replace($currentName, '#' . $plural . '#', $singular);
                 return $this->singularizeCamelParts($resolvedValue);
             }

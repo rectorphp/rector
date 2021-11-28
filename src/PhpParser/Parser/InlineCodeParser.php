@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use RectorPrefix20211128\Symplify\SmartFileSystem\SmartFileSystem;
 final class InlineCodeParser
@@ -72,8 +73,8 @@ final class InlineCodeParser
             $content = $this->smartFileSystem->readFile($content);
         }
         // wrap code so php-parser can interpret it
-        $content = \RectorPrefix20211128\Nette\Utils\Strings::match($content, self::OPEN_PHP_TAG_REGEX) ? $content : '<?php ' . $content;
-        $content = \RectorPrefix20211128\Nette\Utils\Strings::match($content, self::ENDING_SEMI_COLON_REGEX) ? $content : $content . ';';
+        $content = \Rector\Core\Util\StringUtils::isMatch($content, self::OPEN_PHP_TAG_REGEX) ? $content : '<?php ' . $content;
+        $content = \Rector\Core\Util\StringUtils::isMatch($content, self::ENDING_SEMI_COLON_REGEX) ? $content : $content . ';';
         $stmts = $this->simplePhpParser->parseString($content);
         return $this->nodeScopeAndMetadataDecorator->decorateStmtsFromString($stmts);
     }

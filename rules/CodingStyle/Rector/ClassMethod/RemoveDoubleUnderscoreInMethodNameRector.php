@@ -11,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\CodingStyle\ValueObject\ObjectMagicMethods;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -64,7 +65,7 @@ CODE_SAMPLE
         if (\in_array($methodName, \Rector\CodingStyle\ValueObject\ObjectMagicMethods::METHOD_NAMES, \true)) {
             return null;
         }
-        if (!\RectorPrefix20211128\Nette\Utils\Strings::match($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
+        if (!\Rector\Core\Util\StringUtils::isMatch($methodName, self::DOUBLE_UNDERSCORE_START_REGEX)) {
             return null;
         }
         $newName = \RectorPrefix20211128\Nette\Utils\Strings::substring($methodName, 2);

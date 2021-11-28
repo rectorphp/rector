@@ -222,7 +222,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         return parent::beforeTraverse($nodes);
     }
     /**
-     * @return Expression|Node|Node[]|int|null
+     * @return Node|int|null
      */
     public final function enterNode(\PhpParser\Node $node)
     {

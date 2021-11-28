@@ -39,7 +39,7 @@ final class PropertyFetchAssignManipulator
             }
             /** @var Assign $node */
             $propertyName = $this->nodeNameResolver->getName($node->expr);
-            if ($propertyName) {
+            if (\is_string($propertyName)) {
                 $propertyNames[] = $propertyName;
             }
             return null;

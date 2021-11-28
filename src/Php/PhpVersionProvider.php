@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\Php;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\Configuration\InvalidConfigurationException;
 use Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20211128\Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -72,7 +72,7 @@ final class PhpVersionProvider
         if (!\is_int($phpVersionFeatures)) {
             $this->throwInvalidTypeException($phpVersionFeatures);
         }
-        if (\RectorPrefix20211128\Nette\Utils\Strings::match((string) $phpVersionFeatures, self::VALID_PHP_VERSION_REGEX) && $phpVersionFeatures >= \Rector\Core\ValueObject\PhpVersion::PHP_53 - 1) {
+        if (\Rector\Core\Util\StringUtils::isMatch((string) $phpVersionFeatures, self::VALID_PHP_VERSION_REGEX) && $phpVersionFeatures >= \Rector\Core\ValueObject\PhpVersion::PHP_53 - 1) {
             return;
         }
         $this->throwInvalidTypeException($phpVersionFeatures);

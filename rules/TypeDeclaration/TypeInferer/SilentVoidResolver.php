@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\TypeInferer;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -55,18 +56,15 @@ final class SilentVoidResolver
         }
         return \true;
     }
-    /**
-     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    public function hasSilentVoid($functionLike) : bool
+    public function hasSilentVoid(\PhpParser\Node\FunctionLike $functionLike) : bool
     {
         if ($functionLike instanceof \PhpParser\Node\Expr\ArrowFunction) {
             return \false;
         }
-        if ($this->hasStmtsAlwaysReturn((array) $functionLike->stmts)) {
+        if ($this->hasStmtsAlwaysReturn((array) $functionLike->getStmts())) {
             return \false;
         }
-        foreach ((array) $functionLike->stmts as $stmt) {
+        foreach ((array) $functionLike->getStmts() as $stmt) {
             // has switch with always return
             if ($stmt instanceof \PhpParser\Node\Stmt\Switch_ && $this->isSwitchWithAlwaysReturn($stmt)) {
                 return \false;

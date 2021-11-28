@@ -125,11 +125,7 @@ final class ClassMethodManipulator
             if (!$this->nodeTypeResolver->isObjectType($paramNode, $objectType)) {
                 continue;
             }
-            $paramName = $this->nodeNameResolver->getName($paramNode);
-            if (!\is_string($paramName)) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
-            return $paramName;
+            return $this->nodeNameResolver->getName($paramNode);
         }
         $paramName = $this->resolveName($classMethod, $possibleNames);
         $classMethod->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), null, new \PhpParser\Node\Name\FullyQualified($objectType->getClassName()));

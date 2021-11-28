@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -80,7 +81,7 @@ CODE_SAMPLE
         }
         $varName = '$' . $this->getName($node->var);
         $varPattern = '# ' . \preg_quote($varName, '#') . ' #';
-        if (!\RectorPrefix20211128\Nette\Utils\Strings::match($docContent, $varPattern)) {
+        if (!\Rector\Core\Util\StringUtils::isMatch($docContent, $varPattern)) {
             return null;
         }
         // switch docs
@@ -126,7 +127,7 @@ CODE_SAMPLE
             $docContent = \RectorPrefix20211128\Nette\Utils\Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
         // $value is first, instead of type is first
-        if (\RectorPrefix20211128\Nette\Utils\Strings::match($docContent, self::VAR_ANNOTATION_REGEX)) {
+        if (\Rector\Core\Util\StringUtils::isMatch($docContent, self::VAR_ANNOTATION_REGEX)) {
             $docContent = \RectorPrefix20211128\Nette\Utils\Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
         }
         return new \PhpParser\Comment\Doc($docContent);

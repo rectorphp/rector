@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\NodeManipulator;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -21,6 +20,7 @@ use PHPStan\Type\ArrayType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -158,7 +158,7 @@ final class TokenManipulator
             if ($constName === null) {
                 return null;
             }
-            if (!\RectorPrefix20211128\Nette\Utils\Strings::match($constName, '#^T_#')) {
+            if (!\Rector\Core\Util\StringUtils::isMatch($constName, '#^T_#')) {
                 return null;
             }
             return $this->createIsTConstTypeMethodCall($arrayDimFetch, $arrayDimFetchAndConstFetch->getConstFetch());

@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Util\StringUtils;
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
@@ -48,6 +48,6 @@ final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\G
         if (!\is_a($type->getClassName(), \DateTimeInterface::class, \true)) {
             return \false;
         }
-        return (bool) \RectorPrefix20211128\Nette\Utils\Strings::match($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
+        return \Rector\Core\Util\StringUtils::isMatch($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
     }
 }

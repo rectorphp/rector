@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\Exclusion;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Const_;
 use PhpParser\Node\Stmt;
@@ -14,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Core\Tests\Exclusion\ExclusionManagerTest
@@ -95,11 +95,11 @@ final class ExclusionManager
     private function matchesNoRectorComment(\PhpParser\Node $node, string $rectorClass) : bool
     {
         foreach ($node->getComments() as $comment) {
-            if (\RectorPrefix20211128\Nette\Utils\Strings::match($comment->getText(), self::NO_RECTOR_START_REGEX)) {
+            if (\Rector\Core\Util\StringUtils::isMatch($comment->getText(), self::NO_RECTOR_START_REGEX)) {
                 return \true;
             }
             $noRectorWithRule = '#@noRector \\\\?' . \preg_quote($rectorClass, '#') . '$#';
-            if (\RectorPrefix20211128\Nette\Utils\Strings::match($comment->getText(), $noRectorWithRule)) {
+            if (\Rector\Core\Util\StringUtils::isMatch($comment->getText(), $noRectorWithRule)) {
                 return \true;
             }
         }

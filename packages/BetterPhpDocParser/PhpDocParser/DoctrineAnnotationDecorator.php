@@ -21,6 +21,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Util\StringUtils;
 final class DoctrineAnnotationDecorator
 {
     /**
@@ -100,7 +101,7 @@ final class DoctrineAnnotationDecorator
                     break;
                 }
                 $nextPhpDocChildNode = $phpDocNode->children[$key];
-                if ($nextPhpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode && \RectorPrefix20211128\Nette\Utils\Strings::match($nextPhpDocChildNode->text, self::NESTED_ANNOTATION_END_REGEX)) {
+                if ($nextPhpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode && \Rector\Core\Util\StringUtils::isMatch($nextPhpDocChildNode->text, self::NESTED_ANNOTATION_END_REGEX)) {
                     // @todo how to detect previously opened brackets?
                     // probably local property with holding count of opened brackets
                     $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->text;

@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt\Class_;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAnalyzer
@@ -41,6 +41,6 @@ final class ClassAnalyzer
             return \true;
         }
         // match PHPStan pattern for anonymous classes
-        return (bool) \RectorPrefix20211128\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_REGEX);
+        return \Rector\Core\Util\StringUtils::isMatch($className, self::ANONYMOUS_CLASS_REGEX);
     }
 }

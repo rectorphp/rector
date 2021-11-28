@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Restoration\Rector\Namespace_;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -11,6 +10,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
 use RectorPrefix20211128\Symplify\Astral\ValueObject\NodeBuilder\UseBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -73,7 +73,7 @@ CODE_SAMPLE
         $printedClass = $this->print($class);
         foreach ($this->useImportsToRestore as $useImportToRestore) {
             $annotationToSeek = '#\\*\\s+\\@' . $useImportToRestore->getAlias() . '#';
-            if (!\RectorPrefix20211128\Nette\Utils\Strings::match($printedClass, $annotationToSeek)) {
+            if (!\Rector\Core\Util\StringUtils::isMatch($printedClass, $annotationToSeek)) {
                 continue;
             }
             $node = $this->addImportToNamespaceIfMissing($node, $useImportToRestore);

@@ -13,11 +13,6 @@ final class TypeAnalyzer
     private const EXTRA_TYPES = ['object'];
     /**
      * @var string
-     * @see https://regex101.com/r/fKFtfL/1
-     */
-    private const ARRAY_TYPE_REGEX = '#array<(.*?)>#';
-    /**
-     * @var string
      * @see https://regex101.com/r/57HGpC/1
      */
     private const SQUARE_BRACKET_REGEX = '#(\\[\\])+$#';
@@ -44,25 +39,5 @@ final class TypeAnalyzer
             }
         }
         return \false;
-    }
-    public function normalizeType(string $type) : string
-    {
-        $loweredType = \strtolower($type);
-        if ($loweredType === 'boolean') {
-            return 'bool';
-        }
-        if (\in_array($loweredType, ['double', 'real'], \true)) {
-            return 'float';
-        }
-        if ($loweredType === 'integer') {
-            return 'int';
-        }
-        if ($loweredType === 'callback') {
-            return 'callable';
-        }
-        if (\RectorPrefix20211128\Nette\Utils\Strings::match($loweredType, self::ARRAY_TYPE_REGEX)) {
-            return 'array';
-        }
-        return $type;
     }
 }

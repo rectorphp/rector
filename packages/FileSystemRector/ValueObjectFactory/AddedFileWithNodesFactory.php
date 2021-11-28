@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\FileSystemRector\ValueObjectFactory;
 
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -12,6 +11,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use Rector\Autodiscovery\Configuration\CategoryNamespaceProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
@@ -71,7 +71,7 @@ final class AddedFileWithNodesFactory
         if ($oldClassName === $newClassName) {
             return null;
         }
-        if (\RectorPrefix20211128\Nette\Utils\Strings::match($oldClassName, '#\\b' . $desiredGroupName . '\\b#')) {
+        if (\Rector\Core\Util\StringUtils::isMatch($oldClassName, '#\\b' . $desiredGroupName . '\\b#')) {
             return null;
         }
         // 1. rename namespace

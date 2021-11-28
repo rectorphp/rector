@@ -1753,6 +1753,7 @@ return array(
     'Rector\\Core\\Template\\DefaultResolver' => $baseDir . '/src/Template/DefaultResolver.php',
     'Rector\\Core\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',
     'Rector\\Core\\Util\\StaticRectorStrings' => $baseDir . '/src/Util/StaticRectorStrings.php',
+    'Rector\\Core\\Util\\StringUtils' => $baseDir . '/src/Util/StringUtils.php',
     'Rector\\Core\\Validation\\Collector\\EmptyConfigurableRectorCollector' => $baseDir . '/src/Validation/Collector/EmptyConfigurableRectorCollector.php',
     'Rector\\Core\\Validation\\EmptyConfigurableRectorChecker' => $baseDir . '/src/Validation/EmptyConfigurableRectorChecker.php',
     'Rector\\Core\\Validation\\InfiniteLoopValidator' => $baseDir . '/src/Validation/InfiniteLoopValidator.php',

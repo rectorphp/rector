@@ -50,9 +50,6 @@ final class EmptyConfigurableRectorCollector
         $codeSamples = $ruleDefinition->getCodeSamples();
         foreach ($codeSamples as $codeSample) {
             $configuration = $codeSample->getConfiguration();
-            if (!\is_array($configuration)) {
-                continue;
-            }
             foreach (\array_keys($configuration) as $key) {
                 $key = $this->propertyNaming->underscoreToName($key);
                 if (!\property_exists($rector, $key)) {

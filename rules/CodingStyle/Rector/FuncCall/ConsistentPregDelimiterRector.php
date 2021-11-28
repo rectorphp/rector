@@ -12,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -134,7 +135,7 @@ CODE_SAMPLE
         $string = $arg->value;
         $string->value = \RectorPrefix20211128\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
             $printedString = $this->betterStandardPrinter->print($string);
-            if (\RectorPrefix20211128\Nette\Utils\Strings::match($printedString, self::DOUBLE_QUOTED_REGEX)) {
+            if (\Rector\Core\Util\StringUtils::isMatch($printedString, self::DOUBLE_QUOTED_REGEX)) {
                 $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN, \true);
             }
             $innerPattern = $match['content'];

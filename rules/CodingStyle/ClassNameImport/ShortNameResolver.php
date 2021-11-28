@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
 use RectorPrefix20211128\Nette\Utils\Reflection;
-use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -18,6 +17,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -163,7 +163,7 @@ final class ShortNameResolver
             $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$shortNames) {
                 if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                     $shortName = \trim($node->name, '@');
-                    if (\RectorPrefix20211128\Nette\Utils\Strings::match($shortName, self::BIG_LETTER_START_REGEX)) {
+                    if (\Rector\Core\Util\StringUtils::isMatch($shortName, self::BIG_LETTER_START_REGEX)) {
                         $shortNames[] = $shortName;
                     }
                     return null;
