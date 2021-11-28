@@ -72,12 +72,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, RemoveFuncCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $removeFuncCalls = $configuration[self::REMOVE_FUNC_CALLS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($removeFuncCalls, \Rector\Removing\ValueObject\RemoveFuncCall::class);
+        $removeFuncCalls = $configuration[self::REMOVE_FUNC_CALLS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($removeFuncCalls, \Rector\Removing\ValueObject\RemoveFuncCall::class);
         $this->removeFuncCalls = $removeFuncCalls;
     }
     private function refactorFuncCallsWithPositions(\PhpParser\Node\Expr\FuncCall $funcCall, \Rector\Removing\ValueObject\RemoveFuncCall $removeFuncCall) : void

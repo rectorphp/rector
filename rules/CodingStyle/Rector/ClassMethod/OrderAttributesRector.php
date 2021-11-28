@@ -77,11 +77,11 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? ($configuration ?: []);
+        $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($attributesOrder);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($attributesOrder);
         $this->attributesOrderByName = \array_flip($attributesOrder);

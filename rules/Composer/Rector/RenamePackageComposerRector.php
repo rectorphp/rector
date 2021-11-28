@@ -54,12 +54,12 @@ CODE_SAMPLE
 , [self::RENAME_PACKAGES => [new \Rector\Composer\ValueObject\RenamePackage('rector/rector', 'rector/rector-src')]])]);
     }
     /**
-     * @param array<string, RenamePackage[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($renamePackages, \Rector\Composer\ValueObject\RenamePackage::class);
+        $renamePackages = $configuration[self::RENAME_PACKAGES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($renamePackages, \Rector\Composer\ValueObject\RenamePackage::class);
         $this->renamePackages = $renamePackages;
     }
 }

@@ -63,7 +63,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? ($configuration ?: []);
+        $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($methodNamesByType));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($methodNamesByType);
         /** @var array<string, string> $methodNamesByType */

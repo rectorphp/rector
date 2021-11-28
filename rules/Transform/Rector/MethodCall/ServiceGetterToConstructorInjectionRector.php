@@ -154,12 +154,13 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, ServiceGetterToConstructorInjection[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($methodCallToServices, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
+        $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($methodCallToServices);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($methodCallToServices, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
         $this->methodCallToServices = $methodCallToServices;
     }
 }

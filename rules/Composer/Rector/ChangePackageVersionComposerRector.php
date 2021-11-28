@@ -56,12 +56,12 @@ CODE_SAMPLE
 , [self::PACKAGES_AND_VERSIONS => [new \Rector\Composer\ValueObject\PackageAndVersion('symfony/console', '^4.4')]])]);
     }
     /**
-     * @param array<string, PackageAndVersion[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($packagesAndVersions, \Rector\Composer\ValueObject\PackageAndVersion::class);
+        $packagesAndVersions = $configuration[self::PACKAGES_AND_VERSIONS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($packagesAndVersions, \Rector\Composer\ValueObject\PackageAndVersion::class);
         $this->versionGuard->validate($packagesAndVersions);
         $this->packagesAndVersions = $packagesAndVersions;
     }

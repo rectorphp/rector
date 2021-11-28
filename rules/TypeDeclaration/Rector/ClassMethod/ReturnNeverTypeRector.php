@@ -112,7 +112,10 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && !$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($node)) {
             return \true;
         }
-        return $node->returnType && $this->isName($node->returnType, 'never');
+        if (!$node->returnType instanceof \PhpParser\Node) {
+            return \false;
+        }
+        return $this->isName($node->returnType, 'never');
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike

@@ -68,13 +68,14 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $stringChanges = $configuration[self::STRING_CHANGES] ?? ($configuration ?: []);
+        $stringChanges = $configuration[self::STRING_CHANGES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($stringChanges);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($stringChanges));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($stringChanges);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_values($stringChanges));
         $this->stringChanges = $stringChanges;
     }
 }

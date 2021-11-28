@@ -45,7 +45,7 @@ final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\Abstra
      */
     private $limitValue = self::DEFAULT_LIMIT_VALUE;
     /**
-     * @param array<string, int> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {

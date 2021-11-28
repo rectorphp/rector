@@ -81,7 +81,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $parentTypesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? ($configuration ?: []);
+        $parentTypesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($parentTypesToRemove);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($parentTypesToRemove);
         $this->parentClassesToRemove = $parentTypesToRemove;

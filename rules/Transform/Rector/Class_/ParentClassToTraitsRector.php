@@ -89,12 +89,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, ParentClassToTraits[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
+        $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);
         $this->parentClassToTraits = $parentClassToTraits;
     }
     private function removeParentClass(\PhpParser\Node\Stmt\Class_ $class) : void

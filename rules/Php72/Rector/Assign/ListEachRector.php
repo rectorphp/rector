@@ -68,12 +68,12 @@ CODE_SAMPLE
         /** @var FuncCall $eachFuncCall */
         $eachFuncCall = $node->expr;
         // only key: list($key, ) = each($values);
-        if ($listNode->items[0] && $listNode->items[1] === null) {
+        if ($listNode->items[0] instanceof \PhpParser\Node\Expr\ArrayItem && $listNode->items[1] === null) {
             $keyFuncCall = $this->nodeFactory->createFuncCall('key', $eachFuncCall->args);
             return new \PhpParser\Node\Expr\Assign($listNode->items[0]->value, $keyFuncCall);
         }
         // only value: list(, $value) = each($values);
-        if ($listNode->items[1] && $listNode->items[0] === null) {
+        if ($listNode->items[1] instanceof \PhpParser\Node\Expr\ArrayItem && $listNode->items[0] === null) {
             $nextFuncCall = $this->nodeFactory->createFuncCall('next', $eachFuncCall->args);
             $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
             $currentFuncCall = $this->nodeFactory->createFuncCall('current', $eachFuncCall->args);

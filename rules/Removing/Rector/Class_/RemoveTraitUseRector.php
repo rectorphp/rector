@@ -78,7 +78,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? ($configuration ?: []);
+        $traitsToRemove = $configuration[self::TRAITS_TO_REMOVE] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($traitsToRemove);
         /** @var string[] $traitsToRemove */
         $this->traitsToRemove = $traitsToRemove;

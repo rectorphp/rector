@@ -65,12 +65,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, ArgumentRemover[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
+        $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
         $this->removedArguments = $removedArguments;
     }
     /**

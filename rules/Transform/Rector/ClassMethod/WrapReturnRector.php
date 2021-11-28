@@ -68,7 +68,7 @@ CODE_SAMPLE
             if (!$this->isName($node, $typeMethodWrap->getMethod())) {
                 continue;
             }
-            if (!$node->stmts) {
+            if ($node->stmts === null) {
                 continue;
             }
             return $this->wrap($node, $typeMethodWrap->isArrayWrap());
@@ -76,12 +76,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, WrapReturn[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($typeMethodWraps, \Rector\Transform\ValueObject\WrapReturn::class);
+        $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($typeMethodWraps, \Rector\Transform\ValueObject\WrapReturn::class);
         $this->typeMethodWraps = $typeMethodWraps;
     }
     private function wrap(\PhpParser\Node\Stmt\ClassMethod $classMethod, bool $isArrayWrap) : ?\PhpParser\Node\Stmt\ClassMethod

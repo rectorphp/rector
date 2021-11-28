@@ -76,11 +76,11 @@ CODE_SAMPLE
     }
     /**
      * @todo complex configuration, introduce value object!
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $interfaceByTrait = $configuration[self::INTERFACE_BY_TRAIT] ?? ($configuration ?: []);
+        $interfaceByTrait = $configuration[self::INTERFACE_BY_TRAIT] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($interfaceByTrait);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($interfaceByTrait));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($interfaceByTrait);

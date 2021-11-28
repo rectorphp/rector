@@ -111,7 +111,7 @@ CODE_SAMPLE
         return \Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE;
     }
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {

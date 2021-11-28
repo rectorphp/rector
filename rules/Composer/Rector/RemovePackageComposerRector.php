@@ -47,7 +47,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? ($configuration ?: []);
+        $packagesNames = $configuration[self::PACKAGE_NAMES] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($packagesNames);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($packagesNames);
         $this->packageNames = $packagesNames;

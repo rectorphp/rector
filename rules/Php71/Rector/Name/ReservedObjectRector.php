@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? ($configuration ?: []);
+        $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($reservedKeywordsToReplacements);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($reservedKeywordsToReplacements));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($reservedKeywordsToReplacements);

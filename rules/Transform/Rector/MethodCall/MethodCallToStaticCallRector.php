@@ -84,12 +84,13 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, MethodCallToStaticCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($methodCallsToStaticCalls, \Rector\Transform\ValueObject\MethodCallToStaticCall::class);
+        $methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($methodCallsToStaticCalls);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($methodCallsToStaticCalls, \Rector\Transform\ValueObject\MethodCallToStaticCall::class);
         $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
     }
 }

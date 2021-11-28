@@ -39,11 +39,11 @@ final class AssertMethodCallFactory
     {
         $this->isBoolAssert = \false;
         // special case with bool!
-        if ($expected !== null) {
+        if ($expected instanceof \PhpParser\Node\Expr) {
             $name = $this->resolveBoolMethodName($name, $expected);
         }
         $assetMethodCall = $this->nodeFactory->createMethodCall('this', $name);
-        if (!$this->isBoolAssert && $expected) {
+        if (!$this->isBoolAssert && $expected instanceof \PhpParser\Node\Expr) {
             $assetMethodCall->args[] = new \PhpParser\Node\Arg($this->thisToTestedObjectPropertyFetch($expected, $testedObjectPropertyFetch));
         }
         $assetMethodCall->args[] = new \PhpParser\Node\Arg($this->thisToTestedObjectPropertyFetch($value, $testedObjectPropertyFetch));

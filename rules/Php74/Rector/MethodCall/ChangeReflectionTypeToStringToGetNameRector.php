@@ -156,7 +156,7 @@ CODE_SAMPLE
         if ($methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
             $variableName = $this->getName($methodCall->var);
             $methodName = $this->getName($methodCall->name);
-            if (!$variableName) {
+            if (!\is_string($variableName)) {
                 return;
             }
             if (!$methodName) {

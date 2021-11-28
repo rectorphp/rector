@@ -40,7 +40,7 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
         $this->phpVersionFactory = $phpVersionFactory;
     }
     /**
-     * @param array<string, int|string> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {

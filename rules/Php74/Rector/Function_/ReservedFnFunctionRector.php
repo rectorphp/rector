@@ -96,7 +96,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? ($configuration ?: []);
+        $reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($reservedNamesToNewOnes));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($reservedNamesToNewOnes);
         /** @var array<string, string> $reservedNamesToNewOnes */

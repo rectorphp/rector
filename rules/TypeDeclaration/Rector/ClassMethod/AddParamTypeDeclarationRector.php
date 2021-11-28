@@ -91,12 +91,13 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, AddParamTypeDeclaration[]>|AddParamTypeDeclaration[] $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? $configuration ?: [];
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($parameterTypehints, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration::class);
+        $parameterTypehints = $configuration[self::PARAMETER_TYPEHINTS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($parameterTypehints);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($parameterTypehints, \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration::class);
         $this->parameterTypehints = $parameterTypehints;
     }
     private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool

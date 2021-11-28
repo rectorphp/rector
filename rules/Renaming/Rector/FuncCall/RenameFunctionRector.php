@@ -47,7 +47,7 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
                 continue;
             }
             // not to refactor here
-            $isVirtual = $node->name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
+            $isVirtual = (bool) $node->name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE, \false);
             if ($isVirtual) {
                 continue;
             }
@@ -57,13 +57,14 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
         return null;
     }
     /**
-     * @param array<string, mixed[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration ?: [];
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allString($oldFunctionToNewFunction);
+        $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($oldFunctionToNewFunction);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_values($oldFunctionToNewFunction));
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allString($oldFunctionToNewFunction);
         $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
     }
     private function createName(string $newFunction) : \PhpParser\Node\Name

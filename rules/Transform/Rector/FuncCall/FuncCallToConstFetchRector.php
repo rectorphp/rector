@@ -60,7 +60,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $functionName = $this->getName($node);
-        if (!$functionName) {
+        if (!\is_string($functionName)) {
             return null;
         }
         if (!\array_key_exists($functionName, $this->functionsToConstants)) {
@@ -69,11 +69,12 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($this->functionsToConstants[$functionName]));
     }
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? ($configuration ?: []);
+        $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($functionsToConstants);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($functionsToConstants);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($functionsToConstants));
         /** @var array<string, string> $functionsToConstants */

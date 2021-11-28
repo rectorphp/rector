@@ -6,6 +6,9 @@ namespace Rector\Naming\Guard;
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
+/**
+ * @implements ConflictingNameGuardInterface<PropertyRename>
+ */
 final class NotPrivatePropertyGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**

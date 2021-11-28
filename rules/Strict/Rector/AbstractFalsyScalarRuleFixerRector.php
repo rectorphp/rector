@@ -20,7 +20,7 @@ abstract class AbstractFalsyScalarRuleFixerRector extends \Rector\Core\Rector\Ab
      */
     protected $treatAsNonEmpty = \false;
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {

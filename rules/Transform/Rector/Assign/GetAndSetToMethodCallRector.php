@@ -82,7 +82,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? ($configuration ?: []);
+        $getAndSetToMethodCalls = $configuration[self::TYPE_TO_METHOD_CALLS] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($getAndSetToMethodCalls, \Rector\Transform\ValueObject\GetAndSetToMethodCall::class);
         $this->getAndSetToMethodCalls = $getAndSetToMethodCalls;
     }

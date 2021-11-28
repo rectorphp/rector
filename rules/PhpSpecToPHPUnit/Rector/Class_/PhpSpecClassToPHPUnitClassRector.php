@@ -70,7 +70,7 @@ final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Re
         if (!$this->isInPhpSpecBehavior($node)) {
             return null;
         }
-        $isAlreadyRenamedToTest = $node->getAttribute(self::ALREADY_RENAMED_TO_TEST);
+        $isAlreadyRenamedToTest = (bool) $node->getAttribute(self::ALREADY_RENAMED_TO_TEST, \false);
         if ($isAlreadyRenamedToTest) {
             return null;
         }

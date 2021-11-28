@@ -7,7 +7,6 @@ use RectorPrefix20211128\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class RegexMatcher
 {
@@ -37,9 +36,6 @@ final class RegexMatcher
                 return null;
             }
             $delimiter = $pattern[0];
-            if (!\is_string($delimiter)) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
-            }
             /** @var string $modifiers */
             $modifiers = \RectorPrefix20211128\Nette\Utils\Strings::after($pattern, $delimiter, -1);
             if (\strpos($modifiers, 'e') === \false) {

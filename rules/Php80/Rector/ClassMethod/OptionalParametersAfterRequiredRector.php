@@ -88,7 +88,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $isAlreadySorted = $node->getAttribute(self::ALREADY_SORTED);
+        $isAlreadySorted = (bool) $node->getAttribute(self::ALREADY_SORTED, \false);
         if ($isAlreadySorted) {
             return null;
         }

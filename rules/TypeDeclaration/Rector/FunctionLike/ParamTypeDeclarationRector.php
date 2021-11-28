@@ -200,6 +200,7 @@ CODE_SAMPLE
             return \false;
         }
         // already set → skip
-        return !$param->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_NEW_INHERITED_TYPE, \false);
+        $hasNewInheritedType = (bool) $param->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_NEW_INHERITED_TYPE, \false);
+        return !$hasNewInheritedType;
     }
 }

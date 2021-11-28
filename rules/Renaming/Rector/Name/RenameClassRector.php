@@ -93,7 +93,7 @@ CODE_SAMPLE
         return $this->processCleanUpUse($node, $oldToNewClasses);
     }
     /**
-     * @param array<string, mixed[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
@@ -108,7 +108,7 @@ CODE_SAMPLE
     private function processCleanUpUse(\PhpParser\Node\Stmt\Use_ $use, array $oldToNewClasses) : ?\PhpParser\Node\Stmt\Use_
     {
         foreach ($use->uses as $useUse) {
-            if ($useUse->name instanceof \PhpParser\Node\Name && !$useUse->alias instanceof \PhpParser\Node\Identifier && isset($oldToNewClasses[$useUse->name->toString()])) {
+            if (!$useUse->alias instanceof \PhpParser\Node\Identifier && isset($oldToNewClasses[$useUse->name->toString()])) {
                 $this->removeNode($use);
                 return $use;
             }
@@ -116,7 +116,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, string> $oldToNewClasses
+     * @param mixed[] $oldToNewClasses
      */
     private function addOldToNewClasses(array $oldToNewClasses) : void
     {

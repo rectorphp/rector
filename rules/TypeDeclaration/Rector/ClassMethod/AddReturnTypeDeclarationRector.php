@@ -84,12 +84,13 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, AddReturnTypeDeclaration[]>|AddReturnTypeDeclaration[] $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($methodReturnTypes, \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration::class);
+        $methodReturnTypes = $configuration[self::METHOD_RETURN_TYPES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($methodReturnTypes);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($methodReturnTypes, \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration::class);
         $this->methodReturnTypes = $methodReturnTypes;
     }
     private function processClassMethodNodeWithTypehints(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $newType) : void

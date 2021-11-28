@@ -73,10 +73,7 @@ final class PropertyNodeParamTypeInferer implements \Rector\TypeDeclaration\Cont
             if (!$this->propertyFetchAnalyzer->isVariableAssignToThisPropertyFetch($node, $paramName)) {
                 return null;
             }
-            $staticType = $this->nodeTypeResolver->getType($node->var);
-            if ($staticType !== null) {
-                $propertyStaticTypes[] = $staticType;
-            }
+            $propertyStaticTypes[] = $this->nodeTypeResolver->getType($node->var);
             return null;
         });
         return $this->typeFactory->createMixedPassedOrUnionType($propertyStaticTypes);

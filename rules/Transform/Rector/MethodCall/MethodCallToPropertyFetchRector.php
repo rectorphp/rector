@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? ($configuration ?: []);
+        $methodCallToPropertyFetchCollection = $configuration[self::METHOD_CALL_TO_PROPERTY_FETCHES] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($methodCallToPropertyFetchCollection));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($methodCallToPropertyFetchCollection);
         /** @var array<string, string> $methodCallToPropertyFetchCollection */

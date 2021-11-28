@@ -113,9 +113,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? ($configuration ?: []);
+        $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($methodVisibilities);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($methodVisibilities, \Rector\Visibility\ValueObject\ChangeMethodVisibility::class);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($methodVisibilities, \Rector\Visibility\ValueObject\ChangeMethodVisibility::class);
         $this->methodVisibilities = $methodVisibilities;
     }
 }

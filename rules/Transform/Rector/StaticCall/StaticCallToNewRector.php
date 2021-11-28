@@ -82,7 +82,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? ($configuration ?: []);
+        $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
         $this->staticCallsToNews = $staticCallsToNews;
     }

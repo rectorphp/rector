@@ -183,7 +183,7 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
             return null;
         }
         $fullyQualifiedName = $this->nodeNameResolver->getName($param->type);
-        if (!$fullyQualifiedName) {
+        if (!\is_string($fullyQualifiedName)) {
             return null;
         }
         $originalName = $param->type->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);

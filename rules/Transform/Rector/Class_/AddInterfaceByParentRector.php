@@ -83,7 +83,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? ($configuration ?: []);
+        $interfaceByParent = $configuration[self::INTERFACE_BY_PARENT] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($interfaceByParent);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($interfaceByParent));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($interfaceByParent);

@@ -67,12 +67,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, ReplaceFuncCallArgumentDefaultValue[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($replacedArguments, \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue::class);
+        $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($replacedArguments, \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue::class);
         $this->replacedArguments = $replacedArguments;
     }
 }

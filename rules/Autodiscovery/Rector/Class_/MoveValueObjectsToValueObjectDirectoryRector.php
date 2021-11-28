@@ -128,7 +128,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {

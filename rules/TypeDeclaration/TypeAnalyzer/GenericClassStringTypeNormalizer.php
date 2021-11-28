@@ -120,7 +120,7 @@ final class GenericClassStringTypeNormalizer
     private function resolveStringType(string $value)
     {
         $classReflection = $this->reflectionProvider->getClass($value);
-        if ($classReflection->isBuiltIn()) {
+        if ($classReflection->isBuiltin()) {
             return new \PHPStan\Type\Generic\GenericClassStringType(new \PHPStan\Type\ObjectType($value));
         }
         if (\strpos($value, '\\') !== \false) {

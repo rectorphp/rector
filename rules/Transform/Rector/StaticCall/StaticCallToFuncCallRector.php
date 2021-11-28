@@ -61,12 +61,13 @@ final class StaticCallToFuncCallRector extends \Rector\Core\Rector\AbstractRecto
         return null;
     }
     /**
-     * @param array<string, StaticCallToFuncCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $staticCallsToFunctions = $configuration[self::STATIC_CALLS_TO_FUNCTIONS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($staticCallsToFunctions, \Rector\Transform\ValueObject\StaticCallToFuncCall::class);
+        $staticCallsToFunctions = $configuration[self::STATIC_CALLS_TO_FUNCTIONS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($staticCallsToFunctions);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($staticCallsToFunctions, \Rector\Transform\ValueObject\StaticCallToFuncCall::class);
         $this->staticCallsToFunctions = $staticCallsToFunctions;
     }
 }

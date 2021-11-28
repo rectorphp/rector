@@ -102,11 +102,12 @@ CODE_SAMPLE
         return new \PhpParser\Node\Expr\ClassConstFetch($fullyQualified, 'class');
     }
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? ($configuration ?: []);
+        $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($classesToSkip);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($classesToSkip);
         $this->classesToSkip = $classesToSkip;
     }

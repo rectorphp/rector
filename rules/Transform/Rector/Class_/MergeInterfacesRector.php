@@ -70,11 +70,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? ($configuration ?: []);
+        $oldToNewInterfaces = $configuration[self::OLD_TO_NEW_INTERFACES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($oldToNewInterfaces);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($oldToNewInterfaces));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($oldToNewInterfaces);
         $this->oldToNewInterfaces = $oldToNewInterfaces;

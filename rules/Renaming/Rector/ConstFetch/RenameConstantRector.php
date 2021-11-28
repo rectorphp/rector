@@ -72,7 +72,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewConstants = $configuration[self::OLD_TO_NEW_CONSTANTS] ?? ($configuration ?: []);
+        $oldToNewConstants = $configuration[self::OLD_TO_NEW_CONSTANTS] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($oldToNewConstants));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($oldToNewConstants);
         /** @var array<string, string> $oldToNewConstants */

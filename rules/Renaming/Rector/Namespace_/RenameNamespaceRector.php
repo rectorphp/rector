@@ -100,7 +100,7 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? ($configuration ?: []);
+        $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
         /** @var array<string, string> $oldToNewNamespaces */

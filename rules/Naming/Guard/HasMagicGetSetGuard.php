@@ -7,6 +7,9 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\Naming\Contract\RenameValueObjectInterface;
 use Rector\Naming\ValueObject\PropertyRename;
+/**
+ * @implements ConflictingNameGuardInterface<PropertyRename>
+ */
 final class HasMagicGetSetGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**

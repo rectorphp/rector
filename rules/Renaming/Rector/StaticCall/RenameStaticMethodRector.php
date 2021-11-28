@@ -60,12 +60,12 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
         return null;
     }
     /**
-     * @param array<string, RenameStaticMethod[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
         $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES];
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($oldToNewMethodsByClasses, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($oldToNewMethodsByClasses, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
         $this->staticMethodRenames = $oldToNewMethodsByClasses;
     }
     private function rename(\PhpParser\Node\Expr\StaticCall $staticCall, \Rector\Renaming\ValueObject\RenameStaticMethod $renameStaticMethod) : \PhpParser\Node\Expr\StaticCall

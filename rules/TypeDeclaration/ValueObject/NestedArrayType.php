@@ -35,6 +35,9 @@ final class NestedArrayType
     }
     public function getKeyType() : \PHPStan\Type\Type
     {
-        return $this->keyType ?: new \PHPStan\Type\MixedType();
+        if ($this->keyType instanceof \PHPStan\Type\Type) {
+            return $this->keyType;
+        }
+        return new \PHPStan\Type\MixedType();
     }
 }

@@ -84,11 +84,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? ($configuration ?: []);
+        $annotationsToRemove = $configuration[self::ANNOTATIONS_TO_REMOVE] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($annotationsToRemove);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($annotationsToRemove);
         $this->annotationsToRemove = $annotationsToRemove;
     }

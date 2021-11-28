@@ -53,12 +53,12 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
         return $this->processFromPropertyFetch($node);
     }
     /**
-     * @param array<string, RenameProperty[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
+        $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }
     private function processFromClassLike(\PhpParser\Node\Stmt\ClassLike $classLike) : \PhpParser\Node\Stmt\ClassLike

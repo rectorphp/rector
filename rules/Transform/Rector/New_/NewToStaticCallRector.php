@@ -67,12 +67,13 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, NewToStaticCall[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($typeToStaticCalls, \Rector\Transform\ValueObject\NewToStaticCall::class);
+        $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($typeToStaticCalls);
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($typeToStaticCalls, \Rector\Transform\ValueObject\NewToStaticCall::class);
         $this->typeToStaticCalls = $typeToStaticCalls;
     }
 }

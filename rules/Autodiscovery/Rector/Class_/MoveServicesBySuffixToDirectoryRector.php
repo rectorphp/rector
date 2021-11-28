@@ -82,11 +82,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? ($configuration ?: []);
+        $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($groupNamesBySuffix);
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($groupNamesBySuffix);
         $this->groupNamesBySuffix = $groupNamesBySuffix;
     }

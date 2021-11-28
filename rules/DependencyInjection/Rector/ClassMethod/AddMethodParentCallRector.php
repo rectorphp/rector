@@ -91,7 +91,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? ($configuration ?: []);
+        $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($methodsByParentTypes));
         \RectorPrefix20211128\Webmozart\Assert\Assert::allString($methodsByParentTypes);
         /** @var array<string, string> $methodsByParentTypes */

@@ -84,7 +84,7 @@ CODE_SAMPLE
             $stmts = $this->refactorStmts($node->stmts);
             $node->stmts = $stmts;
             // add a new namespace?
-            if ($this->newNamespace) {
+            if ($this->newNamespace !== null) {
                 $namespace = new \PhpParser\Node\Stmt\Namespace_(new \PhpParser\Node\Name($this->newNamespace));
                 $namespace->stmts = $stmts;
                 return $namespace;
@@ -97,12 +97,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, PseudoNamespaceToNamespace[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? ($configuration ?: []);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsInstanceOf($namespacePrefixesWithExcludedClasses, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace::class);
+        $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? $configuration;
+        \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($namespacePrefixesWithExcludedClasses, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace::class);
         $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
     }
     /**
@@ -143,7 +143,7 @@ CODE_SAMPLE
                 continue;
             }
             $excludedClasses = $pseudoNamespaceToNamespace->getExcludedClasses();
-            if (\is_array($excludedClasses) && $this->isNames($node, $excludedClasses)) {
+            if ($excludedClasses !== [] && $this->isNames($node, $excludedClasses)) {
                 return null;
             }
             if ($node instanceof \PhpParser\Node\Name) {
@@ -156,9 +156,7 @@ CODE_SAMPLE
     private function processName(\PhpParser\Node\Name $name) : \PhpParser\Node\Name
     {
         $nodeName = $this->getName($name);
-        if ($nodeName !== null) {
-            $name->parts = \explode('_', $nodeName);
-        }
+        $name->parts = \explode('_', $nodeName);
         return $name;
     }
     private function processIdentifier(\PhpParser\Node\Identifier $identifier) : ?\PhpParser\Node\Identifier

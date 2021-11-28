@@ -89,7 +89,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? ($configuration ?: []);
+        $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? $configuration;
         \RectorPrefix20211128\Webmozart\Assert\Assert::allIsAOf($typeToPreference, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
         $this->typeToPreference = $typeToPreference;
     }
