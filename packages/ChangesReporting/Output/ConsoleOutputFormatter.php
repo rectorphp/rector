@@ -90,7 +90,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             if ($fileDiff->getRectorChanges() !== []) {
                 $this->outputStyle->writeln('<options=underscore>Applied rules:</>');
                 $this->outputStyle->listing($rectorsChangelogsLines);
-                $this->outputStyle->newLine();
+                $this->outputStyle->newline();
             }
         }
     }
@@ -107,12 +107,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $message = sprintf(
                 'Could not process "%s" file%s, due to: %s"%s".',
                 $error->getRelativeFilePath(),
-                $error->getRectorClass() ? ' by "' . $error->getRectorClass() . '"' : '',
+                $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
                 $errorMessage
             );
 
-            if ($error->getLine()) {
+            if ($error->getLine() !== null) {
                 $message .= ' On line: ' . $error->getLine();
             }
 

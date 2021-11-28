@@ -21,10 +21,7 @@ final class ConditionEvaluator
     ) {
     }
 
-    /**
-     * @return bool|int|null
-     */
-    public function evaluate(ConditionInterface $condition)
+    public function evaluate(ConditionInterface $condition): bool|int|null
     {
         if ($condition instanceof VersionCompareCondition) {
             return $this->evaluateVersionCompareCondition($condition);

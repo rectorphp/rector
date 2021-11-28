@@ -9,7 +9,7 @@ class SkipAutowiredMethodAnnotation
     /**
      * @required
      */
-    public function autowireSomeMethod(NodeNameResolver $nodeNameResolver)
+    public function autowire(NodeNameResolver $nodeNameResolver)
     {
     }
 }

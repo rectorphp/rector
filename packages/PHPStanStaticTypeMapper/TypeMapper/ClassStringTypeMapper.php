@@ -64,7 +64,7 @@ final class ClassStringTypeMapper implements TypeMapperInterface
     }
 
     #[Required]
-    public function autowireClassStringTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

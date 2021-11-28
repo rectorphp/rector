@@ -46,7 +46,7 @@ final class InvalidNameNodeReporter
         $backtrace = debug_backtrace();
         $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
 
-        if ($rectorBacktrace) {
+        if ($rectorBacktrace !== null) {
             // issues to find the file in prefixed
             if (file_exists($rectorBacktrace[self::FILE])) {
                 $smartFileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);

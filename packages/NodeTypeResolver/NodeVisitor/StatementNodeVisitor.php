@@ -48,7 +48,7 @@ final class StatementNodeVisitor extends NodeVisitorAbstract
 
         $currentStmt = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
 
-        if ($parent && ! $currentStmt) {
+        if ($parent instanceof Node && ! $currentStmt instanceof Node) {
             $node->setAttribute(
                 AttributeKey::PREVIOUS_STATEMENT,
                 $parent->getAttribute(AttributeKey::PREVIOUS_STATEMENT)

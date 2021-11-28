@@ -10,19 +10,19 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements NodeNameResolverInterface<Property>
+ */
 final class PropertyNameResolver implements NodeNameResolverInterface
 {
     private NodeNameResolver $nodeNameResolver;
 
     #[Required]
-    public function autowirePropertyNameResolver(NodeNameResolver $nodeNameResolver): void
+    public function autowire(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNode(): string
     {
         return Property::class;

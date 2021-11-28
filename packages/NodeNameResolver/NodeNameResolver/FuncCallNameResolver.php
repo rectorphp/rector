@@ -12,6 +12,9 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @implements NodeNameResolverInterface<FuncCall>
+ */
 final class FuncCallNameResolver implements NodeNameResolverInterface
 {
     public function __construct(
@@ -19,9 +22,6 @@ final class FuncCallNameResolver implements NodeNameResolverInterface
     ) {
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNode(): string
     {
         return FuncCall::class;

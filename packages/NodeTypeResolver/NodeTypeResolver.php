@@ -168,8 +168,8 @@ final class NodeTypeResolver
         $scope = $node->getAttribute(AttributeKey::SCOPE);
 
         if (! $scope instanceof Scope) {
-            if ($node instanceof ConstFetch && $node->name instanceof Name) {
-                $name = (string) $node->name;
+            if ($node instanceof ConstFetch) {
+                $name = $node->name->toString();
                 if (strtolower($name) === 'null') {
                     return new NullType();
                 }

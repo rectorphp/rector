@@ -3684,8 +3684,8 @@ Remove unused parameter in required autowire method
      private $visibilityManipulator;
 
      #[Required]
--    public function autowireSomeService(VisibilityManipulator $visibilityManipulator)
-+    public function autowireSomeService()
+-    public function autowire(VisibilityManipulator $visibilityManipulator)
++    public function autowire()
      {
      }
  }

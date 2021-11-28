@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\Encapsed;
@@ -19,10 +20,13 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 
+/**
+ * @implements NodeTypeResolverInterface<Scalar>
+ */
 final class ScalarTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @return array<class-string<Node>>
+     * @return array<class-string<Expr>>
      */
     public function getNodeClasses(): array
     {
@@ -32,15 +36,15 @@ final class ScalarTypeResolver implements NodeTypeResolverInterface
     public function resolve(Node $node): Type
     {
         if ($node instanceof DNumber) {
-            return new ConstantFloatType((float) $node->value);
+            return new ConstantFloatType($node->value);
         }
 
         if ($node instanceof String_) {
-            return new ConstantStringType((string) $node->value);
+            return new ConstantStringType($node->value);
         }
 
         if ($node instanceof LNumber) {
-            return new ConstantIntegerType((int) $node->value);
+            return new ConstantIntegerType($node->value);
         }
 
         if ($node instanceof MagicConst) {

@@ -19,7 +19,7 @@ final class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
     private PhpParserNodeMapper $phpParserNodeMapper;
 
     #[Required]
-    public function autowireUnionTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
+    public function autowire(PhpParserNodeMapper $phpParserNodeMapper): void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }

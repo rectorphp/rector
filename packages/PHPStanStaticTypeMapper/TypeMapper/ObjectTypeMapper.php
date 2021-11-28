@@ -99,7 +99,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
     }
 
     #[Required]
-    public function autowireObjectTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

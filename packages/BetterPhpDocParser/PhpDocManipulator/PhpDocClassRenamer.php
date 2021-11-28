@@ -96,7 +96,7 @@ final class PhpDocClassRenamer
         foreach ($oldToNewClasses as $oldClass => $newClass) {
             $className = $doctrineAnnotationTagValueNode->getSilentValue();
 
-            if ($className) {
+            if (is_string($className)) {
                 if ($className === $oldClass) {
                     $doctrineAnnotationTagValueNode->changeSilentValue($newClass);
                     continue;

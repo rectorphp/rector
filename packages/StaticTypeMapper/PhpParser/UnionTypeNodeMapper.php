@@ -25,7 +25,7 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
     }
 
     #[Required]
-    public function autowireUnionTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
+    public function autowire(PhpParserNodeMapper $phpParserNodeMapper): void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }

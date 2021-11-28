@@ -34,7 +34,7 @@ final class SomeService
     private $visibilityManipulator;
 
     #[Required]
-    public function autowireSomeService(VisibilityManipulator $visibilityManipulator)
+    public function autowire(VisibilityManipulator $visibilityManipulator)
     {
     }
 }
@@ -49,7 +49,7 @@ final class SomeService
     private $visibilityManipulator;
 
     #[Required]
-    public function autowireSomeService()
+    public function autowire()
     {
     }
 }

@@ -11,7 +11,7 @@ use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInterface
 {
     /**
-     * @param Node[] $nodes
+     * @param Node\Stmt[] $nodes
      */
     public function __construct(
         private string $filePath,
@@ -25,7 +25,7 @@ final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInter
     }
 
     /**
-     * @return Node[]
+     * @return Node\Stmt[]
      */
     public function getNodes(): array
     {

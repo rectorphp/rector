@@ -11,6 +11,9 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @implements NodeNameResolverInterface<Name>
+ */
 final class NameNameResolver implements NodeNameResolverInterface
 {
     public function __construct(
@@ -18,9 +21,6 @@ final class NameNameResolver implements NodeNameResolverInterface
     ) {
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNode(): string
     {
         return Name::class;

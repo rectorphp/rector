@@ -26,7 +26,7 @@ final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
     }
 
     #[Required]
-    public function autowireNullableTypeNodeMapper(PhpParserNodeMapper $phpParserNodeMapper): void
+    public function autowire(PhpParserNodeMapper $phpParserNodeMapper): void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }

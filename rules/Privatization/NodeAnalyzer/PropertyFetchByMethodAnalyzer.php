@@ -137,7 +137,7 @@ final class PropertyFetchByMethodAnalyzer
                     return null;
                 }
 
-                $isPropertyReadInIf = $this->verifyPropertyReadInIf($isPropertyReadInIf, $node, $propertyName);
+                $isPropertyReadInIf = $this->isPropertyReadInNode($isPropertyReadInIf, $node, $propertyName);
                 $isPropertyChanging = $this->isPropertyChanging($node, $propertyName);
 
                 if (! $isPropertyChanging) {
@@ -151,10 +151,10 @@ final class PropertyFetchByMethodAnalyzer
         return $isPropertyChanging || $isIfFollowedByAssign || $isPropertyReadInIf;
     }
 
-    private function verifyPropertyReadInIf(?bool $isPropertyReadInIf, Node $node, string $propertyName): ?bool
+    private function isPropertyReadInNode(bool $isPropertyReadInIf, Node $node, string $propertyName): bool
     {
         if ($node instanceof If_) {
-            return $this->refactorIf($node, $propertyName);
+            return $this->isPropertyReadInIf($node, $propertyName);
         }
 
         return $isPropertyReadInIf;
@@ -171,13 +171,15 @@ final class PropertyFetchByMethodAnalyzer
         return false;
     }
 
-    private function refactorIf(If_ $if, string $privatePropertyName): ?bool
+    private function isPropertyReadInIf(If_ $if, string $propertyName): bool
     {
+        $isPropertyReadInIf = false;
+
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($if->cond, function (Node $node) use (
-            $privatePropertyName,
+            $propertyName,
             &$isPropertyReadInIf
         ): ?int {
-            if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$privatePropertyName])) {
+            if (! $this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$propertyName])) {
                 return null;
             }
 

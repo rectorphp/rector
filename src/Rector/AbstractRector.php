@@ -131,7 +131,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     private RectifiedAnalyzer $rectifiedAnalyzer;
 
     #[Required]
-    public function autowireAbstractRector(
+    public function autowire(
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodesToAddCollector $nodesToAddCollector,
         RectorChangeCollector $rectorChangeCollector,

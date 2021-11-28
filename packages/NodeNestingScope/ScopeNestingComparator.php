@@ -82,7 +82,7 @@ final class ScopeNestingComparator
             return false;
         }
 
-        $foundIfNode = $this->betterNodeFinder->find(
+        $foundIfNode = (bool) $this->betterNodeFinder->findFirst(
             $foundParentNode->stmts,
             fn ($node): bool => $this->nodeComparator->areNodesEqual($node, $seekedExpr)
         );
@@ -91,7 +91,7 @@ final class ScopeNestingComparator
             return false;
         }
 
-        $foundElseNode = $this->betterNodeFinder->find(
+        $foundElseNode = (bool) $this->betterNodeFinder->findFirst(
             $foundParentNode->else,
             fn ($node): bool => $this->nodeComparator->areNodesEqual($node, $seekedExpr)
         );

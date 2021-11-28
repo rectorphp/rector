@@ -27,6 +27,8 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ParamTypeResolver\ParamTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<Param>
  */
 final class ParamTypeResolver implements NodeTypeResolverInterface
 {
@@ -43,10 +45,8 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     }
 
     #[Required]
-    public function autowireParamTypeResolver(
-        NodeTypeResolver $nodeTypeResolver,
-        StaticTypeMapper $staticTypeMapper
-    ): void {
+    public function autowire(NodeTypeResolver $nodeTypeResolver, StaticTypeMapper $staticTypeMapper): void
+    {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
     }

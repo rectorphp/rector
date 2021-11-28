@@ -59,7 +59,7 @@ final class ClosureTypeMapper implements TypeMapperInterface
     }
 
     #[Required]
-    public function autowireClosureTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

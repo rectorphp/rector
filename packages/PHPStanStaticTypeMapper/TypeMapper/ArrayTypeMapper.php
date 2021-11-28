@@ -56,7 +56,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
     // To avoid circular dependency
 
     #[Required]
-    public function autowireArrayTypeMapper(
+    public function autowire(
         PHPStanStaticTypeMapper $phpStanStaticTypeMapper,
         UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
         ReflectionProvider $reflectionProvider,

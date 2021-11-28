@@ -16,13 +16,15 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\PropertyTypeResolver\PropertyTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<Property>
  */
 final class PropertyTypeResolver implements NodeTypeResolverInterface
 {
     private NodeTypeResolver $nodeTypeResolver;
 
     #[Required]
-    public function autowirePropertyTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowire(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

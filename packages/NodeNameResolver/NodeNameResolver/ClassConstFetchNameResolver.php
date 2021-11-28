@@ -10,19 +10,19 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements NodeNameResolverInterface<ClassConstFetch>
+ */
 final class ClassConstFetchNameResolver implements NodeNameResolverInterface
 {
     private NodeNameResolver $nodeNameResolver;
 
     #[Required]
-    public function autowireClassConstFetchNameResolver(NodeNameResolver $nodeNameResolver): void
+    public function autowire(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNode(): string
     {
         return ClassConstFetch::class;

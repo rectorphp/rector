@@ -48,7 +48,7 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     // Prevents circular reference
 
     #[Required]
-    public function autowirePHPUnitDataProviderParamTypeInferer(NodeTypeResolver $nodeTypeResolver): void
+    public function autowire(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }

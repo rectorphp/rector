@@ -26,7 +26,7 @@ final class IterableTypeMapper implements TypeMapperInterface
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     #[Required]
-    public function autowireIterableTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

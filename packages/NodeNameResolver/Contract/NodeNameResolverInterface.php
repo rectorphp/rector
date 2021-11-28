@@ -6,12 +6,18 @@ namespace Rector\NodeNameResolver\Contract;
 
 use PhpParser\Node;
 
+/**
+ * @template TNode as Node
+ */
 interface NodeNameResolverInterface
 {
     /**
-     * @return class-string<Node>
+     * @return class-string<TNode>
      */
     public function getNode(): string;
 
+    /**
+     * @param TNode $node
+     */
     public function resolve(Node $node): ?string;
 }

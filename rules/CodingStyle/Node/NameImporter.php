@@ -16,7 +16,6 @@ use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\Application\File;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -33,7 +32,6 @@ final class NameImporter
     public function __construct(
         private AliasUsesResolver $aliasUsesResolver,
         private ClassNameImportSkipper $classNameImportSkipper,
-        private NodeNameResolver $nodeNameResolver,
         private ParameterProvider $parameterProvider,
         private StaticTypeMapper $staticTypeMapper,
         private UseNodesToAddCollector $useNodesToAddCollector,
@@ -70,7 +68,7 @@ final class NameImporter
 
     private function shouldSkipName(Name $name): bool
     {
-        $virtualNode = $name->getAttribute(AttributeKey::VIRTUAL_NODE);
+        $virtualNode = (bool) $name->getAttribute(AttributeKey::VIRTUAL_NODE, false);
         if ($virtualNode) {
             return true;
         }
@@ -92,8 +90,8 @@ final class NameImporter
 
         // Importing root namespace classes (like \DateTime) is optional
         if (! $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES)) {
-            $stringName = $this->nodeNameResolver->getName($name);
-            if ($stringName !== null && substr_count($stringName, '\\') === 0) {
+            $stringName = $name->toString();
+            if (substr_count($stringName, '\\') === 0) {
                 return true;
             }
         }

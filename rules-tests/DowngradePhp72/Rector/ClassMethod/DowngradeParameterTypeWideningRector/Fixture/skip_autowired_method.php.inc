@@ -8,7 +8,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 class SkipAutowiredMethod
 {
     #[Required]
-    public function autowireSomeMethod(NodeNameResolver $nodeNameResolver)
+    public function autowire(NodeNameResolver $nodeNameResolver)
     {
     }
 }

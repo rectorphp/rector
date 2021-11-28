@@ -31,7 +31,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     }
 
     #[Required]
-    public function autowireIntersectionTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

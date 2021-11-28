@@ -23,6 +23,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
+ *
+ * @implements NodeTypeResolverInterface<Name|FullyQualified>
  */
 final class NameTypeResolver implements NodeTypeResolverInterface
 {

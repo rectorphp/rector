@@ -35,7 +35,7 @@ final class XmlFileFormatter implements FileFormatterInterface
      */
     private const IS_CLOSING_TAG_REGEX = '#^\s*<\/#';
 
-    private ?int $depth = null;
+    private int $depth = 0;
 
     private int $indent = 4;
 
@@ -79,7 +79,7 @@ final class XmlFileFormatter implements FileFormatterInterface
         $parts = $this->getXmlParts($xml);
 
         if (str_starts_with($parts[0], '<?xml')) {
-            $output = array_shift($parts) . $editorConfigConfiguration->getNewline();
+            $output = array_shift($parts) . $editorConfigConfiguration->getNewLine();
         }
 
         foreach ($parts as $part) {
@@ -104,10 +104,10 @@ final class XmlFileFormatter implements FileFormatterInterface
         $this->runPre($part);
 
         if ($this->preserveWhitespace) {
-            $output .= $part . $editorConfigConfiguration->getNewline();
+            $output .= $part . $editorConfigConfiguration->getNewLine();
         } else {
             $part = trim($part);
-            $output .= $this->getPaddedString($part) . $editorConfigConfiguration->getNewline();
+            $output .= $this->getPaddedString($part) . $editorConfigConfiguration->getNewLine();
         }
 
         $this->runPost($part);

@@ -33,7 +33,7 @@ final class PlainValueParser
     }
 
     #[Required]
-    public function autowirePlainValueParser(
+    public function autowire(
         StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
         ArrayParser $arrayParser
     ): void {

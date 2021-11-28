@@ -9,7 +9,7 @@ class WithRequiredAttribute
     private $visibilityManipulator;
 
     #[Required]
-    public function autowireSomeService(VisibilityManipulator $visibilityManipulator)
+    public function autowire(VisibilityManipulator $visibilityManipulator)
     {
     }
 }
@@ -27,7 +27,7 @@ class WithRequiredAttribute
     private $visibilityManipulator;
 
     #[Required]
-    public function autowireSomeService()
+    public function autowire()
     {
     }
 }

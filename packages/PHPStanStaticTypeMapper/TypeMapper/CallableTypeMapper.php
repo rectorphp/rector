@@ -25,7 +25,7 @@ final class CallableTypeMapper implements TypeMapperInterface
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     #[Required]
-    public function autowireCallableTypeMapper(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }

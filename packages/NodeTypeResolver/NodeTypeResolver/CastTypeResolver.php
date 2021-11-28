@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\Cast\Bool_;
@@ -23,6 +24,9 @@ use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 
+/**
+ * @implements NodeTypeResolverInterface<Cast>
+ */
 final class CastTypeResolver implements NodeTypeResolverInterface
 {
     /**
@@ -36,7 +40,7 @@ final class CastTypeResolver implements NodeTypeResolverInterface
     ];
 
     /**
-     * @return array<class-string<Node>>
+     * @return array<class-string<Expr>>
      */
     public function getNodeClasses(): array
     {

@@ -7,7 +7,7 @@ class WithRequiredAnnotation
     private $visibilityManipulator;
 
     /** @required */
-    public function autowireSomeService(VisibilityManipulator $visibilityManipulator)
+    public function autowire(VisibilityManipulator $visibilityManipulator)
     {
     }
 }
@@ -23,7 +23,7 @@ class WithRequiredAnnotation
     private $visibilityManipulator;
 
     /** @required */
-    public function autowireSomeService()
+    public function autowire()
     {
     }
 }

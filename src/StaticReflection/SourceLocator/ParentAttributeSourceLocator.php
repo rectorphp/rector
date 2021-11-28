@@ -35,7 +35,7 @@ final class ParentAttributeSourceLocator implements SourceLocator
     }
 
     #[Required]
-    public function autowireParentAttributeSourceLocator(AstResolver $astResolver): void
+    public function autowire(AstResolver $astResolver): void
     {
         $this->astResolver = $astResolver;
     }

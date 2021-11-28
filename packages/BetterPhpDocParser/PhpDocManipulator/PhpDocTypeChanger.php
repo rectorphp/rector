@@ -133,7 +133,7 @@ final class PhpDocTypeChanger
     public function copyPropertyDocToParam(Property $property, Param $param): void
     {
         $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if (! $phpDocInfo) {
+        if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
 

@@ -5,32 +5,31 @@ declare(strict_types=1);
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements NodeNameResolverInterface<ClassLike>
+ */
 final class ClassNameResolver implements NodeNameResolverInterface
 {
     private NodeNameResolver $nodeNameResolver;
 
     #[Required]
-    public function autowireClassNameResolver(NodeNameResolver $nodeNameResolver): void
+    public function autowire(NodeNameResolver $nodeNameResolver): void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
 
-    /**
-     * @return class-string<Node>
-     */
     public function getNode(): string
     {
         return ClassLike::class;
     }
 
     /**
-     * @param Class_ $node
+     * @param ClassLike $node
      */
     public function resolve(Node $node): ?string
     {

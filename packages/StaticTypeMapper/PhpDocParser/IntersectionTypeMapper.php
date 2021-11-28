@@ -27,7 +27,7 @@ final class IntersectionTypeMapper implements PhpDocTypeMapperInterface
     }
 
     #[Required]
-    public function autowireUnionTypeMapper(PhpDocTypeMapper $phpDocTypeMapper): void
+    public function autowire(PhpDocTypeMapper $phpDocTypeMapper): void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }

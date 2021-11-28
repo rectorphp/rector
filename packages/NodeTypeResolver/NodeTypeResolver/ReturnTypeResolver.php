@@ -12,12 +12,15 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symfony\Contracts\Service\Attribute\Required;
 
+/**
+ * @implements NodeTypeResolverInterface<Return_>
+ */
 final class ReturnTypeResolver implements NodeTypeResolverInterface
 {
     private NodeTypeResolver $nodeTypeResolver;
 
     #[Required]
-    public function autowireReturnTypeResolver(NodeTypeResolver $nodeTypeResolver): void
+    public function autowire(NodeTypeResolver $nodeTypeResolver): void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
