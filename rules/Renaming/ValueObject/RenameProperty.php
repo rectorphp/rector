@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class RenameProperty
 {
@@ -13,6 +14,7 @@ final class RenameProperty
         private string $oldProperty,
         private string $newProperty
     ) {
+        RectorAssert::className($type);
     }
 
     public function getObjectType(): ObjectType

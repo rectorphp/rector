@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class NewToStaticCall
 {
@@ -13,6 +14,8 @@ final class NewToStaticCall
         private string $staticCallClass,
         private string $staticCallMethod
     ) {
+        RectorAssert::className($type);
+        RectorAssert::className($staticCallClass);
     }
 
     public function getObjectType(): ObjectType
