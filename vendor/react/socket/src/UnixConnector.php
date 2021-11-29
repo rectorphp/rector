@@ -25,11 +25,11 @@ final class UnixConnector implements \RectorPrefix20211129\React\Socket\Connecto
         if (\strpos($path, '://') === \false) {
             $path = 'unix://' . $path;
         } elseif (\substr($path, 0, 7) !== 'unix://') {
-            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $path . '" is invalid'));
+            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $path . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         $resource = @\stream_socket_client($path, $errno, $errstr, 1.0);
         if (!$resource) {
-            return \RectorPrefix20211129\React\Promise\reject(new \RuntimeException('Unable to connect to unix domain socket "' . $path . '": ' . $errstr, $errno));
+            return \RectorPrefix20211129\React\Promise\reject(new \RuntimeException('Unable to connect to unix domain socket "' . $path . '": ' . $errstr . \RectorPrefix20211129\React\Socket\SocketServer::errconst($errno), $errno));
         }
         $connection = new \RectorPrefix20211129\React\Socket\Connection($resource, $this->loop);
         $connection->unix = \true;

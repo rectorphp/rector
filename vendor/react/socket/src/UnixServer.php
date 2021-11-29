@@ -54,7 +54,7 @@ final class UnixServer extends \RectorPrefix20211129\Evenement\EventEmitter impl
         if (\strpos($path, '://') === \false) {
             $path = 'unix://' . $path;
         } elseif (\substr($path, 0, 7) !== 'unix://') {
-            throw new \InvalidArgumentException('Given URI "' . $path . '" is invalid');
+            throw new \InvalidArgumentException('Given URI "' . $path . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
         $this->master = @\stream_socket_server($path, $errno, $errstr, \STREAM_SERVER_BIND | \STREAM_SERVER_LISTEN, \stream_context_create(array('socket' => $context)));
         if (\false === $this->master) {
@@ -68,7 +68,7 @@ final class UnixServer extends \RectorPrefix20211129\Evenement\EventEmitter impl
                     $errno = isset($match[2]) ? (int) $match[2] : 0;
                 }
             }
-            throw new \RuntimeException('Failed to listen on Unix domain socket "' . $path . '": ' . $errstr, $errno);
+            throw new \RuntimeException('Failed to listen on Unix domain socket "' . $path . '": ' . $errstr . \RectorPrefix20211129\React\Socket\SocketServer::errconst($errno), $errno);
         }
         \stream_set_blocking($this->master, 0);
         $this->resume();
@@ -95,9 +95,10 @@ final class UnixServer extends \RectorPrefix20211129\Evenement\EventEmitter impl
         }
         $that = $this;
         $this->loop->addReadStream($this->master, function ($master) use($that) {
-            $newSocket = @\stream_socket_accept($master, 0);
-            if (\false === $newSocket) {
-                $that->emit('error', array(new \RuntimeException('Error accepting new connection')));
+            try {
+                $newSocket = \RectorPrefix20211129\React\Socket\SocketServer::accept($master);
+            } catch (\RuntimeException $e) {
+                $that->emit('error', array($e));
                 return;
             }
             $that->handleConnection($newSocket);

@@ -610,6 +610,7 @@ return array(
     'RectorPrefix20211129\\React\\Socket\\Connector' => $vendorDir . '/react/socket/src/Connector.php',
     'RectorPrefix20211129\\React\\Socket\\ConnectorInterface' => $vendorDir . '/react/socket/src/ConnectorInterface.php',
     'RectorPrefix20211129\\React\\Socket\\DnsConnector' => $vendorDir . '/react/socket/src/DnsConnector.php',
+    'RectorPrefix20211129\\React\\Socket\\FdServer' => $vendorDir . '/react/socket/src/FdServer.php',
     'RectorPrefix20211129\\React\\Socket\\FixedUriConnector' => $vendorDir . '/react/socket/src/FixedUriConnector.php',
     'RectorPrefix20211129\\React\\Socket\\HappyEyeBallsConnectionBuilder' => $vendorDir . '/react/socket/src/HappyEyeBallsConnectionBuilder.php',
     'RectorPrefix20211129\\React\\Socket\\HappyEyeBallsConnector' => $vendorDir . '/react/socket/src/HappyEyeBallsConnector.php',

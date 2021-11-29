@@ -148,14 +148,19 @@ final class TcpServer extends \RectorPrefix20211129\Evenement\EventEmitter imple
         }
         // ensure URI contains TCP scheme, host and port
         if (!$parts || !isset($parts['scheme'], $parts['host'], $parts['port']) || $parts['scheme'] !== 'tcp') {
-            throw new \InvalidArgumentException('Invalid URI "' . $uri . '" given');
+            throw new \InvalidArgumentException('Invalid URI "' . $uri . '" given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
         if (\false === \filter_var(\trim($parts['host'], '[]'), \FILTER_VALIDATE_IP)) {
-            throw new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP');
+            throw new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
         $this->master = @\stream_socket_server($uri, $errno, $errstr, \STREAM_SERVER_BIND | \STREAM_SERVER_LISTEN, \stream_context_create(array('socket' => $context + array('backlog' => 511))));
         if (\false === $this->master) {
-            throw new \RuntimeException('Failed to listen on "' . $uri . '": ' . $errstr, $errno);
+            if ($errno === 0) {
+                // PHP does not seem to report errno, so match errno from errstr
+                // @link https://3v4l.org/3qOBl
+                $errno = \RectorPrefix20211129\React\Socket\SocketServer::errno($errstr);
+            }
+            throw new \RuntimeException('Failed to listen on "' . $uri . '": ' . $errstr . \RectorPrefix20211129\React\Socket\SocketServer::errconst($errno), $errno);
         }
         \stream_set_blocking($this->master, \false);
         $this->resume();
@@ -189,9 +194,10 @@ final class TcpServer extends \RectorPrefix20211129\Evenement\EventEmitter imple
         }
         $that = $this;
         $this->loop->addReadStream($this->master, function ($master) use($that) {
-            $newSocket = @\stream_socket_accept($master, 0);
-            if (\false === $newSocket) {
-                $that->emit('error', array(new \RuntimeException('Error accepting new connection')));
+            try {
+                $newSocket = \RectorPrefix20211129\React\Socket\SocketServer::accept($master);
+            } catch (\RuntimeException $e) {
+                $that->emit('error', array($e));
                 return;
             }
             $that->handleConnection($newSocket);

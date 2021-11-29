@@ -88,7 +88,7 @@ final class HappyEyeBallsConnectionBuilder
                 return $deferred->promise();
             })->then($lookupResolve(\RectorPrefix20211129\React\Dns\Model\Message::TYPE_A));
         }, function ($_, $reject) use($that, &$timer) {
-            $reject(new \RuntimeException('Connection to ' . $that->uri . ' cancelled' . (!$that->connectionPromises ? ' during DNS lookup' : '')));
+            $reject(new \RuntimeException('Connection to ' . $that->uri . ' cancelled' . (!$that->connectionPromises ? ' during DNS lookup' : '') . ' (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103));
             $_ = $reject = null;
             $that->cleanUp();
             if ($timer instanceof \RectorPrefix20211129\React\EventLoop\TimerInterface) {
@@ -123,7 +123,7 @@ final class HappyEyeBallsConnectionBuilder
                 $that->nextAttemptTimer = null;
             }
             if ($that->hasBeenResolved() && $that->ipsCount === 0) {
-                $reject(new \RuntimeException($that->error()));
+                $reject(new \RuntimeException($that->error(), 0, $e));
             }
             // Exception already handled above, so don't throw an unhandled rejection here
             return array();
@@ -147,11 +147,12 @@ final class HappyEyeBallsConnectionBuilder
         }, function (\Exception $e) use($that, $index, $ip, $resolve, $reject) {
             unset($that->connectionPromises[$index]);
             $that->failureCount++;
+            $message = \preg_replace('/^(Connection to [^ ]+)[&?]hostname=[^ &]+/', '$1', $e->getMessage());
             if (\strpos($ip, ':') === \false) {
-                $that->lastError4 = $e->getMessage();
+                $that->lastError4 = $message;
                 $that->lastErrorFamily = 4;
             } else {
-                $that->lastError6 = $e->getMessage();
+                $that->lastError6 = $message;
                 $that->lastErrorFamily = 6;
             }
             // start next connection attempt immediately on error
@@ -167,7 +168,7 @@ final class HappyEyeBallsConnectionBuilder
             }
             if ($that->ipsCount === $that->failureCount) {
                 $that->cleanUp();
-                $reject(new \RuntimeException($that->error()));
+                $reject(new \RuntimeException($that->error(), $e->getCode(), $e));
             }
         });
         // Allow next connection attempt in 100ms: https://tools.ietf.org/html/rfc8305#section-5
@@ -186,40 +187,7 @@ final class HappyEyeBallsConnectionBuilder
      */
     public function attemptConnection($ip)
     {
-        $uri = '';
-        // prepend original scheme if known
-        if (isset($this->parts['scheme'])) {
-            $uri .= $this->parts['scheme'] . '://';
-        }
-        if (\strpos($ip, ':') !== \false) {
-            // enclose IPv6 addresses in square brackets before appending port
-            $uri .= '[' . $ip . ']';
-        } else {
-            $uri .= $ip;
-        }
-        // append original port if known
-        if (isset($this->parts['port'])) {
-            $uri .= ':' . $this->parts['port'];
-        }
-        // append orignal path if known
-        if (isset($this->parts['path'])) {
-            $uri .= $this->parts['path'];
-        }
-        // append original query if known
-        if (isset($this->parts['query'])) {
-            $uri .= '?' . $this->parts['query'];
-        }
-        // append original hostname as query if resolved via DNS and if
-        // destination URI does not contain "hostname" query param already
-        $args = array();
-        \parse_str(isset($this->parts['query']) ? $this->parts['query'] : '', $args);
-        if ($this->host !== $ip && !isset($args['hostname'])) {
-            $uri .= (isset($this->parts['query']) ? '&' : '?') . 'hostname=' . \rawurlencode($this->host);
-        }
-        // append original fragment if known
-        if (isset($this->parts['fragment'])) {
-            $uri .= '#' . $this->parts['fragment'];
-        }
+        $uri = \RectorPrefix20211129\React\Socket\Connector::uri($this->parts, $this->host, $ip);
         return $this->connector->connect($uri);
     }
     /**

@@ -30,13 +30,12 @@ final class SecureConnector implements \RectorPrefix20211129\React\Socket\Connec
         }
         $parts = \parse_url($uri);
         if (!$parts || !isset($parts['scheme']) || $parts['scheme'] !== 'tls') {
-            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid'));
+            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
-        $uri = \str_replace('tls://', '', $uri);
         $context = $this->context;
         $encryption = $this->streamEncryption;
         $connected = \false;
-        $promise = $this->connector->connect($uri)->then(function (\RectorPrefix20211129\React\Socket\ConnectionInterface $connection) use($context, $encryption, $uri, &$promise, &$connected) {
+        $promise = $this->connector->connect(\str_replace('tls://', '', $uri))->then(function (\RectorPrefix20211129\React\Socket\ConnectionInterface $connection) use($context, $encryption, $uri, &$promise, &$connected) {
             // (unencrypted) TCP/IP connection succeeded
             $connected = \true;
             if (!$connection instanceof \RectorPrefix20211129\React\Socket\Connection) {
@@ -53,12 +52,36 @@ final class SecureConnector implements \RectorPrefix20211129\React\Socket\Connec
                 $connection->close();
                 throw new \RuntimeException('Connection to ' . $uri . ' failed during TLS handshake: ' . $error->getMessage(), $error->getCode());
             });
+        }, function (\Exception $e) use($uri) {
+            if ($e instanceof \RuntimeException) {
+                $message = \preg_replace('/^Connection to [^ ]+/', '', $e->getMessage());
+                $e = new \RuntimeException('Connection to ' . $uri . $message, $e->getCode(), $e);
+                // avoid garbage references by replacing all closures in call stack.
+                // what a lovely piece of code!
+                $r = new \ReflectionProperty('Exception', 'trace');
+                $r->setAccessible(\true);
+                $trace = $r->getValue($e);
+                // Exception trace arguments are not available on some PHP 7.4 installs
+                // @codeCoverageIgnoreStart
+                foreach ($trace as &$one) {
+                    if (isset($one['args'])) {
+                        foreach ($one['args'] as &$arg) {
+                            if ($arg instanceof \Closure) {
+                                $arg = 'Object(' . \get_class($arg) . ')';
+                            }
+                        }
+                    }
+                }
+                // @codeCoverageIgnoreEnd
+                $r->setValue($e, $trace);
+            }
+            throw $e;
         });
         return new \RectorPrefix20211129\React\Promise\Promise(function ($resolve, $reject) use($promise) {
             $promise->then($resolve, $reject);
         }, function ($_, $reject) use(&$promise, $uri, &$connected) {
             if ($connected) {
-                $reject(new \RuntimeException('Connection to ' . $uri . ' cancelled during TLS handshake'));
+                $reject(new \RuntimeException('Connection to ' . $uri . ' cancelled during TLS handshake (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103));
             }
             $promise->cancel();
             $promise = null;

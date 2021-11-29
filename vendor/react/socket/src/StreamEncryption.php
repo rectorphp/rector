@@ -112,10 +112,10 @@ class StreamEncryption
                 $deferred = null;
                 if (\feof($socket) || $error === null) {
                     // EOF or failed without error => connection closed during handshake
-                    $d->reject(new \UnexpectedValueException('Connection lost during TLS handshake', \defined('SOCKET_ECONNRESET') ? \SOCKET_ECONNRESET : 0));
+                    $d->reject(new \UnexpectedValueException('Connection lost during TLS handshake (ECONNRESET)', \defined('SOCKET_ECONNRESET') ? \SOCKET_ECONNRESET : 104));
                 } else {
                     // handshake failed with error message
-                    $d->reject(new \UnexpectedValueException('Unable to complete TLS handshake: ' . $error));
+                    $d->reject(new \UnexpectedValueException($error));
                 }
             } else {
                 // need more data, will retry

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a
+class ComposerStaticInit4d80d9a59aae73fb5da76c257c2aa6d7
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1007,6 +1007,7 @@ class ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a
         'RectorPrefix20211129\\React\\Socket\\Connector' => __DIR__ . '/..' . '/react/socket/src/Connector.php',
         'RectorPrefix20211129\\React\\Socket\\ConnectorInterface' => __DIR__ . '/..' . '/react/socket/src/ConnectorInterface.php',
         'RectorPrefix20211129\\React\\Socket\\DnsConnector' => __DIR__ . '/..' . '/react/socket/src/DnsConnector.php',
+        'RectorPrefix20211129\\React\\Socket\\FdServer' => __DIR__ . '/..' . '/react/socket/src/FdServer.php',
         'RectorPrefix20211129\\React\\Socket\\FixedUriConnector' => __DIR__ . '/..' . '/react/socket/src/FixedUriConnector.php',
         'RectorPrefix20211129\\React\\Socket\\HappyEyeBallsConnectionBuilder' => __DIR__ . '/..' . '/react/socket/src/HappyEyeBallsConnectionBuilder.php',
         'RectorPrefix20211129\\React\\Socket\\HappyEyeBallsConnector' => __DIR__ . '/..' . '/react/socket/src/HappyEyeBallsConnector.php',
@@ -3774,9 +3775,9 @@ class ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4d80d9a59aae73fb5da76c257c2aa6d7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4d80d9a59aae73fb5da76c257c2aa6d7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4d80d9a59aae73fb5da76c257c2aa6d7::$classMap;
 
         }, null, ClassLoader::class);
     }

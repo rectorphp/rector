@@ -82,6 +82,8 @@ $connector = new React\Socket\Connector();
 $connector->connect('127.0.0.1:8080')->then(function (React\Socket\ConnectionInterface $connection) {
     $connection->pipe(new React\Stream\WritableResourceStream(STDOUT));
     $connection->write("Hello World!\n");
+}, function (Exception $e) {
+    echo 'Error: ' . $e->getMessage() . PHP_EOL;
 });
 ```
 
@@ -236,7 +238,6 @@ $socket->on('error', function (Exception $e) {
 Note that this is not a fatal error event, i.e. the server keeps listening for
 new connections even after this event.
 
-
 #### getAddress()
 
 The `getAddress(): ?string` method can be used to
@@ -378,6 +379,13 @@ To listen on a Unix domain socket (UDS) path, you MUST prefix the URI with the
 
 ```php
 $socket = new React\Socket\SocketServer('unix:///tmp/server.sock');
+```
+
+In order to listen on an existing file descriptor (FD) number, you MUST prefix
+the URI with `php://fd/` like this:
+
+```php
+$socket = new React\Socket\SocketServer('php://fd/3');
 ```
 
 If the given URI is invalid, does not contain a port, any other scheme or if it
@@ -898,6 +906,8 @@ $connector = new React\Socket\Connector();
 $connector->connect($uri)->then(function (React\Socket\ConnectionInterface $connection) {
     $connection->write('...');
     $connection->end();
+}, function (Exception $e) {
+    echo 'Error: ' . $e->getMessage() . PHP_EOL;
 });
 ```
 
@@ -1476,23 +1486,23 @@ $promise = $connector->connect('localhost:80');
 
 ## Install
 
-The recommended way to install this library is [through Composer](https://getcomposer.org).
+The recommended way to install this library is [through Composer](https://getcomposer.org/).
 [New to Composer?](https://getcomposer.org/doc/00-intro.md)
 
 This project follows [SemVer](https://semver.org/).
 This will install the latest supported version:
 
 ```bash
-$ composer require react/socket:^1.9
+$ composer require react/socket:^1.10
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
 
 This project aims to run on any platform and thus does not require any PHP
 extensions and supports running on legacy PHP 5.3 through current PHP 8+ and HHVM.
-It's *highly recommended to use PHP 7+* for this project, partly due to its vast
-performance improvements and partly because legacy PHP versions require several
-workarounds as described below.
+It's *highly recommended to use the latest supported PHP version* for this project,
+partly due to its vast performance improvements and partly because legacy PHP
+versions require several workarounds as described below.
 
 Secure TLS connections received some major upgrades starting with PHP 5.6, with
 the defaults now being more secure, while older versions required explicit
@@ -1528,7 +1538,7 @@ on affected versions.
 ## Tests
 
 To run the test suite, you first need to clone this repo and then install all
-dependencies [through Composer](https://getcomposer.org):
+dependencies [through Composer](https://getcomposer.org/):
 
 ```bash
 $ composer install
@@ -1537,7 +1547,7 @@ $ composer install
 To run the test suite, go to the project root and run:
 
 ```bash
-$ php vendor/bin/phpunit
+$ vendor/bin/phpunit
 ```
 
 The test suite also contains a number of functional integration tests that rely
@@ -1545,7 +1555,7 @@ on a stable internet connection.
 If you do not want to run these, they can simply be skipped like this:
 
 ```bash
-$ php vendor/bin/phpunit --exclude-group internet
+$ vendor/bin/phpunit --exclude-group internet
 ```
 
 ## License

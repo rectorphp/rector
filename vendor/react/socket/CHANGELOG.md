@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.10.0 (2021-09-13)
+
+*   Feature: Support listening on existing file descriptors (FDs) with `SocketServer`.
+    (#269 by @clue)
+
+    ```php
+    $socket = new React\Socket\SocketSever('php://fd/3');
+    ```
+
+    This is particularly useful when using
+    [systemd socket activation](https://www.freedesktop.org/software/systemd/man/systemd.socket.html)
+    like this:
+
+    ```bash
+    $ systemd-socket-activate -l 8000 php examples/03-http-server.php php://fd/3
+    ```
+
+*   Feature: Improve error messages for failed connection attempts with `errno` and `errstr`.
+    (#265, #266, #267, #270 and #271 by @clue and #268 by @SimonFrings)
+
+    All error messages now always include the appropriate `errno` and `errstr` to
+    give more details about the error reason when available. Along with these
+    error details exposed by the underlying system functions, it will also
+    include the appropriate error constant name (such as `ECONNREFUSED`) when
+    available. Accordingly, failed TCP/IP connections will now report the actual
+    underlying error condition instead of a generic "Connection refused" error.
+    Higher-level error messages will now consistently report the connection URI
+    scheme and hostname used in all error messages.
+
+    For most common use cases this means that simply reporting the `Exception`
+    message should give the most relevant details for any connection issues:
+
+    ```php
+    $connector = new React\Socket\Connector();
+    $connector->connect($uri)->then(function (React\Socket\ConnectionInterface $conn) {
+        // …
+    }, function (Exception $e) {
+        echo 'Error:' . $e->getMessage() . PHP_EOL;
+    });
+    ```
+
+*   Improve test suite, test against PHP 8.1 release.
+    (#274 by @SimonFrings)
+
 ## 1.9.0 (2021-08-03)
 
 *   Feature: Add new `SocketServer` and deprecate `Server` to avoid class name collisions.

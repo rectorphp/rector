@@ -23,11 +23,11 @@ final class TcpConnector implements \RectorPrefix20211129\React\Socket\Connector
         }
         $parts = \parse_url($uri);
         if (!$parts || !isset($parts['scheme'], $parts['host'], $parts['port']) || $parts['scheme'] !== 'tcp') {
-            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid'));
+            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         $ip = \trim($parts['host'], '[]');
         if (\false === \filter_var($ip, \FILTER_VALIDATE_IP)) {
-            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $ip . '" does not contain a valid host IP'));
+            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         // use context given in constructor
         $context = array('socket' => $this->context);
@@ -57,7 +57,7 @@ final class TcpConnector implements \RectorPrefix20211129\React\Socket\Connector
         $remote = 'tcp://' . $parts['host'] . ':' . $parts['port'];
         $stream = @\stream_socket_client($remote, $errno, $errstr, 0, \STREAM_CLIENT_CONNECT | \STREAM_CLIENT_ASYNC_CONNECT, \stream_context_create($context));
         if (\false === $stream) {
-            return \RectorPrefix20211129\React\Promise\reject(new \RuntimeException(\sprintf("Connection to %s failed: %s", $uri, $errstr), $errno));
+            return \RectorPrefix20211129\React\Promise\reject(new \RuntimeException('Connection to ' . $uri . ' failed: ' . $errstr . \RectorPrefix20211129\React\Socket\SocketServer::errconst($errno), $errno));
         }
         // wait for connection
         $loop = $this->loop;
@@ -67,8 +67,31 @@ final class TcpConnector implements \RectorPrefix20211129\React\Socket\Connector
                 // The following hack looks like the only way to
                 // detect connection refused errors with PHP's stream sockets.
                 if (\false === \stream_socket_get_name($stream, \true)) {
+                    // If we reach this point, we know the connection is dead, but we don't know the underlying error condition.
+                    // @codeCoverageIgnoreStart
+                    if (\function_exists('socket_import_stream')) {
+                        // actual socket errno and errstr can be retrieved with ext-sockets on PHP 5.4+
+                        $socket = \socket_import_stream($stream);
+                        $errno = \socket_get_option($socket, \SOL_SOCKET, \SO_ERROR);
+                        $errstr = \socket_strerror($errno);
+                    } elseif (\PHP_OS === 'Linux') {
+                        // Linux reports socket errno and errstr again when trying to write to the dead socket.
+                        // Suppress error reporting to get error message below and close dead socket before rejecting.
+                        // This is only known to work on Linux, Mac and Windows are known to not support this.
+                        @\fwrite($stream, \PHP_EOL);
+                        $error = \error_get_last();
+                        // fwrite(): send of 2 bytes failed with errno=111 Connection refused
+                        \preg_match('/errno=(\\d+) (.+)/', $error['message'], $m);
+                        $errno = isset($m[1]) ? (int) $m[1] : 0;
+                        $errstr = isset($m[2]) ? $m[2] : $error['message'];
+                    } else {
+                        // Not on Linux and ext-sockets not available? Too bad.
+                        $errno = \defined('SOCKET_ECONNREFUSED') ? \SOCKET_ECONNREFUSED : 111;
+                        $errstr = 'Connection refused?';
+                    }
+                    // @codeCoverageIgnoreEnd
                     \fclose($stream);
-                    $reject(new \RuntimeException('Connection to ' . $uri . ' failed: Connection refused'));
+                    $reject(new \RuntimeException('Connection to ' . $uri . ' failed: ' . $errstr . \RectorPrefix20211129\React\Socket\SocketServer::errconst($errno), $errno));
                 } else {
                     $resolve(new \RectorPrefix20211129\React\Socket\Connection($stream, $loop));
                 }
@@ -82,7 +105,7 @@ final class TcpConnector implements \RectorPrefix20211129\React\Socket\Connector
                 \fclose($stream);
             }
             // @codeCoverageIgnoreEnd
-            throw new \RuntimeException('Connection to ' . $uri . ' cancelled during TCP/IP handshake');
+            throw new \RuntimeException('Connection to ' . $uri . ' cancelled during TCP/IP handshake (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103);
         });
     }
 }

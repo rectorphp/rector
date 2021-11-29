@@ -35,7 +35,7 @@ final class TimeoutConnector implements \RectorPrefix20211129\React\Socket\Conne
     {
         return function (\Exception $e) use($uri) {
             if ($e instanceof \RectorPrefix20211129\React\Promise\Timer\TimeoutException) {
-                throw new \RuntimeException('Connection to ' . $uri . ' timed out after ' . $e->getTimeout() . ' seconds', \defined('SOCKET_ETIMEDOUT') ? \SOCKET_ETIMEDOUT : 0);
+                throw new \RuntimeException('Connection to ' . $uri . ' timed out after ' . $e->getTimeout() . ' seconds (ETIMEDOUT)', \defined('SOCKET_ETIMEDOUT') ? \SOCKET_ETIMEDOUT : 110);
             }
             throw $e;
         };

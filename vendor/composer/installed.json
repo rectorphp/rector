@@ -1853,17 +1853,17 @@
         },
         {
             "name": "react\/socket",
-            "version": "v1.9.0",
-            "version_normalized": "1.9.0.0",
+            "version": "v1.10.0",
+            "version_normalized": "1.10.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/socket.git",
-                "reference": "aa6e3f8ebcd6dec3ad1ee92a449b4cc341994001"
+                "reference": "d132fde589ea97f4165f2d94b5296499eac125ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/aa6e3f8ebcd6dec3ad1ee92a449b4cc341994001",
-                "reference": "aa6e3f8ebcd6dec3ad1ee92a449b4cc341994001",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/d132fde589ea97f4165f2d94b5296499eac125ec",
+                "reference": "d132fde589ea97f4165f2d94b5296499eac125ec",
                 "shasum": ""
             },
             "require": {
@@ -1880,7 +1880,7 @@
                 "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35",
                 "react\/promise-stream": "^1.2"
             },
-            "time": "2021-08-03T12:37:06+00:00",
+            "time": "2021-11-29T10:08:24+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1924,7 +1924,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/socket\/issues",
-                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.9.0"
+                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.10.0"
             },
             "funding": [
                 {
