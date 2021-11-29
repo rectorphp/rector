@@ -172,7 +172,7 @@ CODE_SAMPLE
     private function isSuccessfulRefactorTernaryReturn(\PhpParser\Node\Expr\Ternary $ternary) : bool
     {
         $hasChanged = \false;
-        if ($ternary->if && $this->valueResolver->isNull($ternary->if)) {
+        if ($ternary->if instanceof \PhpParser\Node\Expr && $this->valueResolver->isNull($ternary->if)) {
             $ternary->if = new \PhpParser\Node\Scalar\LNumber(0);
             $hasChanged = \true;
         }

@@ -93,9 +93,10 @@ CODE_SAMPLE
         }
         // type analyzer
         $activeValueType = $this->getType($activeArgValue);
-        if ($activeValueType instanceof \PHPStan\Type\StringType) {
-            $this->processStringType($node, $argumentPosition, $activeArgValue);
+        if (!$activeValueType instanceof \PHPStan\Type\StringType) {
+            return null;
         }
+        $this->processStringType($node, $argumentPosition, $activeArgValue);
         return $node;
     }
     private function shouldSkipProcessMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
@@ -110,9 +111,7 @@ CODE_SAMPLE
     {
         if ($firstArgumentExpr instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
             $arrayNode = $this->nodeTransformer->transformConcatToStringArray($firstArgumentExpr);
-            if ($arrayNode !== null) {
-                $expr->args[$argumentPosition] = new \PhpParser\Node\Arg($arrayNode);
-            }
+            $expr->args[$argumentPosition] = new \PhpParser\Node\Arg($arrayNode);
             return;
         }
         if ($firstArgumentExpr instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($firstArgumentExpr, 'sprintf')) {

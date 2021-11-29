@@ -96,10 +96,7 @@ CODE_SAMPLE
     }
     private function resolveServiceType(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
-        $serviceType = new \PHPStan\Type\MixedType();
-        if ($doctrineAnnotationTagValueNode !== null) {
-            $serviceType = $phpDocInfo->getVarType();
-        }
+        $serviceType = $phpDocInfo->getVarType();
         if (!$serviceType instanceof \PHPStan\Type\MixedType) {
             return $serviceType;
         }

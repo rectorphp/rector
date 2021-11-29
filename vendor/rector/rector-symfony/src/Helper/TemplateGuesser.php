@@ -101,7 +101,7 @@ final class TemplateGuesser
     private function resolveController(string $class) : string
     {
         $match = \RectorPrefix20211129\Nette\Utils\Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
-        if (!$match) {
+        if ($match === null) {
             return '';
         }
         $controller = \RectorPrefix20211129\Nette\Utils\Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');

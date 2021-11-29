@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,9 +33,14 @@ final class GetRequestRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
     private $controllerMethodAnalyzer;
-    public function __construct(\Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer $controllerMethodAnalyzer)
+    /**
+     * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
+     */
+    private $controllerAnalyzer;
+    public function __construct(\Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer $controllerMethodAnalyzer, \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer)
     {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;
+        $this->controllerAnalyzer = $controllerAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -72,13 +78,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if (!$this->controllerAnalyzer->detect($node)) {
+            return null;
+        }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
-            $this->requestVariableAndParamName = $this->resolveUniqueName($node, 'request');
-            if ($this->isActionWithGetRequestInBody($node)) {
-                $fullyQualified = new \PhpParser\Node\Name\FullyQualified(self::REQUEST_CLASS);
-                $node->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($this->getRequestVariableAndParamName()), null, $fullyQualified);
-                return $node;
-            }
+            return $this->refactorClassMethod($node);
         }
         if ($this->isGetRequestInAction($node)) {
             return new \PhpParser\Node\Expr\Variable($this->getRequestVariableAndParamName());
@@ -124,25 +128,19 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isGetRequestInAction(\PhpParser\Node $node) : bool
+    private function isGetRequestInAction(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \false;
-        }
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
-            return \false;
-        }
         // must be $this->getRequest() in controller
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($node->var, 'this')) {
+        if (!$this->nodeNameResolver->isName($methodCall->var, 'this')) {
             return \false;
         }
-        if (!$this->isName($node->name, 'getRequest') && !$this->isGetMethodCallWithRequestParameters($node)) {
+        if (!$this->isName($methodCall->name, 'getRequest') && !$this->isGetMethodCallWithRequestParameters($methodCall)) {
             return \false;
         }
-        $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+        $classMethod = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
@@ -184,5 +182,18 @@ CODE_SAMPLE
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $this->requestVariableAndParamName;
+    }
+    /**
+     * @return \PhpParser\Node\Stmt\ClassMethod|null
+     */
+    private function refactorClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod)
+    {
+        $this->requestVariableAndParamName = $this->resolveUniqueName($classMethod, 'request');
+        if (!$this->isActionWithGetRequestInBody($classMethod)) {
+            return null;
+        }
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified(self::REQUEST_CLASS);
+        $classMethod->params[] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($this->getRequestVariableAndParamName()), null, $fullyQualified);
+        return $classMethod;
     }
 }

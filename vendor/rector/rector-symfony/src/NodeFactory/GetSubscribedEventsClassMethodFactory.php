@@ -93,9 +93,9 @@ final class GetSubscribedEventsClassMethodFactory
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
             $eventNameExpr = $this->eventReferenceFactory->createEventName($eventName, $eventNamesToClassConstants);
             // just method name, without a priority
-            if (!\is_array($methodNamesWithPriorities)) {
-                $methodNamesWithPriorities = [$methodNamesWithPriorities];
-            }
+            //            if (! is_array($methodNamesWithPriorities)) {
+            //                $methodNamesWithPriorities = [$methodNamesWithPriorities];
+            //            }
             if (\count($methodNamesWithPriorities) === 1) {
                 $this->createSingleMethod($methodNamesWithPriorities, $eventName, $eventNameExpr, $eventsToMethodsArray);
             } else {
@@ -117,7 +117,7 @@ final class GetSubscribedEventsClassMethodFactory
         if ($priority !== null && $priority !== 0) {
             $methodNameWithPriorityArray = new \PhpParser\Node\Expr\Array_();
             $methodNameWithPriorityArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($methodName));
-            $methodNameWithPriorityArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\LNumber((int) $priority));
+            $methodNameWithPriorityArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\LNumber($priority));
             return new \PhpParser\Node\Expr\ArrayItem($methodNameWithPriorityArray, $expr);
         }
         return new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($methodName), $expr);

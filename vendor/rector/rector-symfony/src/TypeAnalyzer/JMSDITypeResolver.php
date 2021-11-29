@@ -50,12 +50,10 @@ final class JMSDITypeResolver
     public function resolve(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : \PHPStan\Type\Type
     {
         $serviceMap = $this->serviceMapProvider->provide();
-        $serviceName = ($doctrineAnnotationTagValueNode->getValueWithoutQuotes('serviceName') ?: $doctrineAnnotationTagValueNode->getSilentValue()) ?: $this->nodeNameResolver->getName($property);
-        if ($serviceName) {
-            $serviceType = $this->resolveFromServiceName($serviceName, $serviceMap);
-            if (!$serviceType instanceof \PHPStan\Type\MixedType) {
-                return $serviceType;
-            }
+        $serviceName = $this->resolveServiceName($doctrineAnnotationTagValueNode, $property);
+        $serviceType = $this->resolveFromServiceName($serviceName, $serviceMap);
+        if (!$serviceType instanceof \PHPStan\Type\MixedType) {
+            return $serviceType;
         }
         // 3. service is in @var annotation
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
@@ -95,5 +93,17 @@ final class JMSDITypeResolver
             }
         }
         return new \PHPStan\Type\MixedType();
+    }
+    private function resolveServiceName(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \PhpParser\Node\Stmt\Property $property) : string
+    {
+        $serviceNameParameter = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('serviceName');
+        if (\is_string($serviceNameParameter)) {
+            return $serviceNameParameter;
+        }
+        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
+        if (\is_string($silentValue)) {
+            return $silentValue;
+        }
+        return $this->nodeNameResolver->getName($property);
     }
 }

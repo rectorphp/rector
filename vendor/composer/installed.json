@@ -2468,17 +2468,17 @@
         },
         {
             "name": "rector\/rector-symfony",
-            "version": "0.11.42",
-            "version_normalized": "0.11.42.0",
+            "version": "0.11.43",
+            "version_normalized": "0.11.43.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "0c9c7fccf62f4150ceb94f9c344322cdd6bac62a"
+                "reference": "cb0a0d27190878e63d4851d257e1d97f0b78cae1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0c9c7fccf62f4150ceb94f9c344322cdd6bac62a",
-                "reference": "0c9c7fccf62f4150ceb94f9c344322cdd6bac62a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/cb0a0d27190878e63d4851d257e1d97f0b78cae1",
+                "reference": "cb0a0d27190878e63d4851d257e1d97f0b78cae1",
                 "shasum": ""
             },
             "require": {
@@ -2492,6 +2492,8 @@
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
                 "phpstan\/phpstan": "^1.1",
+                "phpstan\/phpstan-strict-rules": "^1.1",
+                "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.4.4",
                 "rector\/rector-src": "dev-main",
@@ -2503,7 +2505,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0"
             },
-            "time": "2021-11-23T11:15:50+00:00",
+            "time": "2021-11-29T00:04:04+00:00",
             "type": "rector-extension",
             "extra": {
                 "branch-alias": {
@@ -2528,7 +2530,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.42"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.43"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

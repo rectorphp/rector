@@ -31,7 +31,7 @@ final class ServiceMapFactory
         $fileContents = $this->smartFileSystem->readFile($configFilePath);
         // "@" intentionally
         $xml = @\simplexml_load_string($fileContents);
-        if (!$xml) {
+        if ($xml === \false) {
             throw new \Rector\Symfony\Exception\XmlContainerNotExistsException(\sprintf('Container "%s" cannot be parsed', $configFilePath));
         }
         /** @var ServiceDefinition[] $services */

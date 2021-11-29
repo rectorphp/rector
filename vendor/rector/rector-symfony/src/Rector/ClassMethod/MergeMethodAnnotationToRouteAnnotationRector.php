@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
+use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -93,7 +94,7 @@ CODE_SAMPLE
         if (!$symfonyDoctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $methods = $sensioDoctrineAnnotationTagValueNode->getValue('methods') ?: $sensioDoctrineAnnotationTagValueNode->getSilentValue();
+        $methods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
         if ($methods === null) {
             return null;
         }
@@ -101,5 +102,26 @@ CODE_SAMPLE
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
         $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         return $node;
+    }
+    /**
+     * @return mixed[]|\Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode|null
+     */
+    private function resolveMethods(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    {
+        $methodsParameter = $doctrineAnnotationTagValueNode->getValue('methods');
+        if (\is_array($methodsParameter)) {
+            return $methodsParameter;
+        }
+        if ($methodsParameter instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+            return $methodsParameter;
+        }
+        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
+        if (\is_array($silentValue)) {
+            return $silentValue;
+        }
+        if ($silentValue instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+            return $silentValue;
+        }
+        return null;
     }
 }

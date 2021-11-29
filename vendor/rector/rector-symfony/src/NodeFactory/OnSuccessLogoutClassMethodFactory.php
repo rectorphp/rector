@@ -7,12 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20211129\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class OnSuccessLogoutClassMethodFactory
 {
@@ -79,6 +81,10 @@ final class OnSuccessLogoutClassMethodFactory
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node, 'request')) {
+                return null;
+            }
+            $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if ($parent instanceof \PhpParser\Node\Param) {
                 return null;
             }
             return new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::LOGOUT_EVENT), 'getRequest');

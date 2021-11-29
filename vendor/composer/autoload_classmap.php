@@ -2886,6 +2886,7 @@ return array(
     'Rector\\Symfony\\Set\\TwigSetList' => $vendorDir . '/rector/rector-symfony/src/Set/TwigSetList.php',
     'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
     'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
+    'Rector\\Symfony\\TypeAnalyzer\\ControllerAnalyzer' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/ControllerAnalyzer.php',
     'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => $vendorDir . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
     'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => $vendorDir . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
     'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => $vendorDir . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',

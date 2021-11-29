@@ -70,8 +70,8 @@ final class ThisRenderFactory
     }
     private function resolveTemplateName(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode) : string
     {
-        $template = $templateDoctrineAnnotationTagValueNode->getValue('template') ?: $templateDoctrineAnnotationTagValueNode->getSilentValue();
-        if ($template !== null) {
+        $template = $this->resolveTemplate($templateDoctrineAnnotationTagValueNode);
+        if (\is_string($template)) {
             return $template;
         }
         return $this->templateGuesser->resolveFromClassMethodNode($classMethod);
@@ -88,7 +88,7 @@ final class ThisRenderFactory
         if ($return === null) {
             return null;
         }
-        if ($return->expr instanceof \PhpParser\Node\Expr\Array_ && \count($return->expr->items)) {
+        if ($return->expr instanceof \PhpParser\Node\Expr\Array_ && $return->expr->items !== []) {
             return $return->expr;
         }
         if ($return->expr instanceof \PhpParser\Node\Expr\MethodCall) {
@@ -116,6 +116,21 @@ final class ThisRenderFactory
         $returnStaticType = $this->nodeTypeResolver->getType($methodCall);
         if ($returnStaticType instanceof \PHPStan\Type\ArrayType) {
             return $methodCall;
+        }
+        return null;
+    }
+    /**
+     * @return string|null
+     */
+    private function resolveTemplate(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    {
+        $templateParameter = $doctrineAnnotationTagValueNode->getValue('template');
+        if (\is_string($templateParameter)) {
+            return $templateParameter;
+        }
+        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
+        if (\is_string($silentValue)) {
+            return $silentValue;
         }
         return null;
     }

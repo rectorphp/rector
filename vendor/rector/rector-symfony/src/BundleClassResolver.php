@@ -42,7 +42,7 @@ final class BundleClassResolver
         $classReflection = $this->reflectionProvider->getClass($class);
         // resolve bundle from existing ones
         $fileName = $classReflection->getFileName();
-        if (!$fileName) {
+        if ($fileName === null) {
             return null;
         }
         $controllerDirectory = \dirname($fileName);
