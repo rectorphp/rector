@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -90,6 +91,20 @@ final class UseImportsAdder
         );
 
         $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, $namespaceName);
+
+        if ($namespace->stmts[0] instanceof Use_ && $newUses !== []) {
+            $comments = (array) $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS);
+
+            if ($comments !== []) {
+                $newUses[0]->setAttribute(
+                    AttributeKey::COMMENTS,
+                    $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS)
+                );
+
+                $namespace->stmts[0]->setAttribute(AttributeKey::COMMENTS, null);
+            }
+        }
+
         $namespace->stmts = array_merge($newUses, $namespace->stmts);
     }
 
