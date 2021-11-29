@@ -6,6 +6,7 @@ namespace Rector\Core\Console\Command;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
@@ -27,6 +28,7 @@ use RectorPrefix20211129\Symfony\Component\Console\Command\Command;
 use RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20211129\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211129\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
@@ -78,13 +80,17 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      */
     private $outputFormatterCollector;
     /**
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
+    /**
      * @var \Rector\Core\Contract\Rector\RectorInterface[]
      */
     private $rectors;
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, array $rectors)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \RectorPrefix20211129\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $rectors)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -98,6 +104,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->missedRectorDueVersionChecker = $missedRectorDueVersionChecker;
         $this->emptyConfigurableRectorChecker = $emptyConfigurableRectorChecker;
         $this->outputFormatterCollector = $outputFormatterCollector;
+        $this->symfonyStyle = $symfonyStyle;
         $this->rectors = $rectors;
         parent::__construct();
     }
@@ -120,6 +127,10 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
             return $exitCode;
         }
         $configuration = $this->configurationFactory->createFromInput($input);
+        // disable console output in case of json output formatter
+        if ($configuration->getOutputFormat() === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
+            $this->symfonyStyle->setVerbosity(\RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+        }
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
         $this->additionalAutoloader->autoloadInput($input);
