@@ -20,6 +20,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector;
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;
+use Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
@@ -63,6 +64,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeStrContainsRector::class);
     $services->set(DowngradeMatchToSwitchRector::class);
     $services->set(DowngradeClassOnObjectToGetClassRector::class);
+    $services->set(DowngradeArbitraryExpressionsSupportRector::class);
     $services->set(DowngradeNullsafeToTernaryOperatorRector::class);
     $services->set(DowngradeTrailingCommasInParamUseRector::class);
     $services->set(DowngradeStrStartsWithRector::class);
