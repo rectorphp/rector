@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211128\Psr\EventDispatcher;
+namespace RectorPrefix20211129\Psr\EventDispatcher;
 
 /**
  * An Event whose processing may be interrupted when the event has been handled.

@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix20211128\React\Dns\Query;
+namespace RectorPrefix20211129\React\Dns\Query;
 
-use RectorPrefix20211128\React\Promise\Promise;
-final class FallbackExecutor implements \RectorPrefix20211128\React\Dns\Query\ExecutorInterface
+use RectorPrefix20211129\React\Promise\Promise;
+final class FallbackExecutor implements \RectorPrefix20211129\React\Dns\Query\ExecutorInterface
 {
     private $executor;
     private $fallback;
-    public function __construct(\RectorPrefix20211128\React\Dns\Query\ExecutorInterface $executor, \RectorPrefix20211128\React\Dns\Query\ExecutorInterface $fallback)
+    public function __construct(\RectorPrefix20211129\React\Dns\Query\ExecutorInterface $executor, \RectorPrefix20211129\React\Dns\Query\ExecutorInterface $fallback)
     {
         $this->executor = $executor;
         $this->fallback = $fallback;
@@ -20,7 +20,7 @@ final class FallbackExecutor implements \RectorPrefix20211128\React\Dns\Query\Ex
         $cancelled = \false;
         $fallback = $this->fallback;
         $promise = $this->executor->query($query);
-        return new \RectorPrefix20211128\React\Promise\Promise(function ($resolve, $reject) use(&$promise, $fallback, $query, &$cancelled) {
+        return new \RectorPrefix20211129\React\Promise\Promise(function ($resolve, $reject) use(&$promise, $fallback, $query, &$cancelled) {
             $promise->then($resolve, function (\Exception $e1) use($fallback, $query, $resolve, $reject, &$cancelled, &$promise) {
                 // reject if primary resolution rejected due to cancellation
                 if ($cancelled) {

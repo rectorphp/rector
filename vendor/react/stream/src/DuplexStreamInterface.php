@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211128\React\Stream;
+namespace RectorPrefix20211129\React\Stream;
 
 /**
  * The `DuplexStreamInterface` is responsible for providing an interface for
@@ -34,6 +34,6 @@ namespace RectorPrefix20211128\React\Stream;
  * @see ReadableStreamInterface
  * @see WritableStreamInterface
  */
-interface DuplexStreamInterface extends \RectorPrefix20211128\React\Stream\ReadableStreamInterface, \RectorPrefix20211128\React\Stream\WritableStreamInterface
+interface DuplexStreamInterface extends \RectorPrefix20211129\React\Stream\ReadableStreamInterface, \RectorPrefix20211129\React\Stream\WritableStreamInterface
 {
 }

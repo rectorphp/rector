@@ -113,6 +113,10 @@ CODE_SAMPLE
             // already correct
             return null;
         }
+        // default value on nullable property
+        if ($this->valueResolver->isNull($defaultExpr)) {
+            return null;
+        }
         throw new \Rector\Core\Exception\NotImplementedYetException();
     }
 }

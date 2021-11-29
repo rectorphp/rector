@@ -16,7 +16,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211128\Webmozart\Assert\Assert;
+use RectorPrefix20211129\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\OrderAttributesRectorTest
  */
@@ -82,8 +82,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $attributesOrder = $configuration[self::ATTRIBUTES_ORDER] ?? $configuration;
-        \RectorPrefix20211128\Webmozart\Assert\Assert::isArray($attributesOrder);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allString($attributesOrder);
+        \RectorPrefix20211129\Webmozart\Assert\Assert::isArray($attributesOrder);
+        \RectorPrefix20211129\Webmozart\Assert\Assert::allString($attributesOrder);
         $this->attributesOrderByName = \array_flip($attributesOrder);
     }
     private function resolveAttributeGroupPosition(\PhpParser\Node\AttributeGroup $attributeGroup) : int

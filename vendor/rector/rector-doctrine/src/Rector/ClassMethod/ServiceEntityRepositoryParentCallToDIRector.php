@@ -122,7 +122,7 @@ CODE_SAMPLE
         }
         // 1. remove parent::__construct()
         $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($node);
-        if ($entityReferenceExpr === null) {
+        if (!$entityReferenceExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
         // 2. remove params

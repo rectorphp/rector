@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211128\Symplify\Astral\NodeTraverser;
+namespace RectorPrefix20211129\Symplify\Astral\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use RectorPrefix20211128\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
+use RectorPrefix20211129\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
 /**
  * @api
  */
@@ -26,7 +26,7 @@ final class SimpleCallableNodeTraverser
             $nodes = [$nodes];
         }
         $nodeTraverser = new \PhpParser\NodeTraverser();
-        $callableNodeVisitor = new \RectorPrefix20211128\Symplify\Astral\NodeVisitor\CallableNodeVisitor($callable);
+        $callableNodeVisitor = new \RectorPrefix20211129\Symplify\Astral\NodeVisitor\CallableNodeVisitor($callable);
         $nodeTraverser->addVisitor($callableNodeVisitor);
         $nodeTraverser->traverse($nodes);
     }

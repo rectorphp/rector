@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211128;
+namespace RectorPrefix20211129;
 
 use Rector\Core\Configuration\Option;
+use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
@@ -17,7 +19,9 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         '*/Source/*',
         '*/Fixture/*',
     ]);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_80);
-    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::PHP_74);
+    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
+    $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
+    $services = $containerConfigurator->services();
+    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->call('configure', [[\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::CLASSES_TO_SKIP => ['Doctrine\\*', 'Gedmo\\*', 'Knp\\*', 'DateTime', 'DateTimeInterface']]]);
 };

@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20211128\Symfony\Contracts\Tests\Fixtures;
+namespace RectorPrefix20211129\Symfony\Contracts\Tests\Fixtures;
 
-use RectorPrefix20211128\Symfony\Contracts\Service\ServiceSubscriberTrait;
+use RectorPrefix20211129\Symfony\Contracts\Service\ServiceSubscriberTrait;
 class TestServiceSubscriberUnion
 {
     use ServiceSubscriberTrait;
-    private function method1() : \RectorPrefix20211128\Symfony\Contracts\Tests\Fixtures\Service1
+    private function method1() : \RectorPrefix20211129\Symfony\Contracts\Tests\Fixtures\Service1
     {
         return $this->container->get(__METHOD__);
     }

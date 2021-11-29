@@ -18,7 +18,9 @@
         "rector\/rector-src": "dev-main",
         "doctrine\/orm": "^2.9",
         "rector\/rector-generator": "^0.4.3",
-        "symplify\/monorepo-builder": "^10.0"
+        "symplify\/monorepo-builder": "^10.0",
+        "phpstan\/phpstan-webmozart-assert": "^1.0",
+        "phpstan\/phpstan-strict-rules": "^1.1"
     },
     "autoload": {
         "psr-4": {

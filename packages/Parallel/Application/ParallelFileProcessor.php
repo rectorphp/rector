@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Rector\Parallel\Application;
 
 use Closure;
-use RectorPrefix20211128\Clue\React\NDJson\Decoder;
-use RectorPrefix20211128\Clue\React\NDJson\Encoder;
-use RectorPrefix20211128\Nette\Utils\Random;
-use RectorPrefix20211128\React\EventLoop\StreamSelectLoop;
-use RectorPrefix20211128\React\Socket\ConnectionInterface;
-use RectorPrefix20211128\React\Socket\TcpServer;
+use RectorPrefix20211129\Clue\React\NDJson\Decoder;
+use RectorPrefix20211129\Clue\React\NDJson\Encoder;
+use RectorPrefix20211129\Nette\Utils\Random;
+use RectorPrefix20211129\React\EventLoop\StreamSelectLoop;
+use RectorPrefix20211129\React\Socket\ConnectionInterface;
+use RectorPrefix20211129\React\Socket\TcpServer;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\Console\Command\WorkerCommand;
@@ -17,16 +17,16 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\Command\WorkerCommandLineFactory;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20211128\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211128\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211128\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix20211128\Symplify\EasyParallel\Enum\Content;
-use RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix20211128\Symplify\EasyParallel\ValueObject\ParallelProcess;
-use RectorPrefix20211128\Symplify\EasyParallel\ValueObject\ProcessPool;
-use RectorPrefix20211128\Symplify\EasyParallel\ValueObject\Schedule;
-use RectorPrefix20211128\Symplify\PackageBuilder\Console\Command\CommandNaming;
+use RectorPrefix20211129\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211129\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix20211129\Symplify\EasyParallel\Enum\Content;
+use RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix20211129\Symplify\EasyParallel\ValueObject\ParallelProcess;
+use RectorPrefix20211129\Symplify\EasyParallel\ValueObject\ProcessPool;
+use RectorPrefix20211129\Symplify\EasyParallel\ValueObject\Schedule;
+use RectorPrefix20211129\Symplify\PackageBuilder\Console\Command\CommandNaming;
 use Throwable;
 /**
  * Inspired from @see
@@ -62,23 +62,23 @@ final class ParallelFileProcessor
      * @param Closure(int): void|null $postFileCallback Used for progress bar jump
      * @return mixed[]
      */
-    public function check(\RectorPrefix20211128\Symplify\EasyParallel\ValueObject\Schedule $schedule, string $mainScript, \Closure $postFileCallback, ?string $projectConfigFile, \RectorPrefix20211128\Symfony\Component\Console\Input\InputInterface $input) : array
+    public function check(\RectorPrefix20211129\Symplify\EasyParallel\ValueObject\Schedule $schedule, string $mainScript, \Closure $postFileCallback, ?string $projectConfigFile, \RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface $input) : array
     {
         $jobs = \array_reverse($schedule->getJobs());
-        $streamSelectLoop = new \RectorPrefix20211128\React\EventLoop\StreamSelectLoop();
+        $streamSelectLoop = new \RectorPrefix20211129\React\EventLoop\StreamSelectLoop();
         // basic properties setup
         $numberOfProcesses = $schedule->getNumberOfProcesses();
         // initial counters
         $fileDiffs = [];
         $systemErrors = [];
-        $tcpServer = new \RectorPrefix20211128\React\Socket\TcpServer('127.0.0.1:0', $streamSelectLoop);
-        $this->processPool = new \RectorPrefix20211128\Symplify\EasyParallel\ValueObject\ProcessPool($tcpServer);
-        $tcpServer->on(\RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactEvent::CONNECTION, function (\RectorPrefix20211128\React\Socket\ConnectionInterface $connection) use(&$jobs) : void {
-            $inDecoder = new \RectorPrefix20211128\Clue\React\NDJson\Decoder($connection, \true, 512, 0, 4 * 1024 * 1024);
-            $outEncoder = new \RectorPrefix20211128\Clue\React\NDJson\Encoder($connection);
-            $inDecoder->on(\RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactEvent::DATA, function (array $data) use(&$jobs, $inDecoder, $outEncoder) : void {
-                $action = $data[\RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactCommand::ACTION];
-                if ($action !== \RectorPrefix20211128\Symplify\EasyParallel\Enum\Action::HELLO) {
+        $tcpServer = new \RectorPrefix20211129\React\Socket\TcpServer('127.0.0.1:0', $streamSelectLoop);
+        $this->processPool = new \RectorPrefix20211129\Symplify\EasyParallel\ValueObject\ProcessPool($tcpServer);
+        $tcpServer->on(\RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactEvent::CONNECTION, function (\RectorPrefix20211129\React\Socket\ConnectionInterface $connection) use(&$jobs) : void {
+            $inDecoder = new \RectorPrefix20211129\Clue\React\NDJson\Decoder($connection, \true, 512, 0, 4 * 1024 * 1024);
+            $outEncoder = new \RectorPrefix20211129\Clue\React\NDJson\Encoder($connection);
+            $inDecoder->on(\RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactEvent::DATA, function (array $data) use(&$jobs, $inDecoder, $outEncoder) : void {
+                $action = $data[\RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactCommand::ACTION];
+                if ($action !== \RectorPrefix20211129\Symplify\EasyParallel\Enum\Action::HELLO) {
                     return;
                 }
                 $processIdentifier = $data[\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER];
@@ -89,7 +89,7 @@ final class ParallelFileProcessor
                     return;
                 }
                 $job = \array_pop($jobs);
-                $parallelProcess->request([\RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20211128\Symplify\EasyParallel\Enum\Action::MAIN, \RectorPrefix20211128\Symplify\EasyParallel\Enum\Content::FILES => $job]);
+                $parallelProcess->request([\RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20211129\Symplify\EasyParallel\Enum\Action::MAIN, \RectorPrefix20211129\Symplify\EasyParallel\Enum\Content::FILES => $job]);
             });
         });
         /** @var string $serverAddress */
@@ -109,9 +109,9 @@ final class ParallelFileProcessor
             if ($jobs === []) {
                 break;
             }
-            $processIdentifier = \RectorPrefix20211128\Nette\Utils\Random::generate();
-            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \RectorPrefix20211128\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\ProcessCommand::class), \RectorPrefix20211128\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\WorkerCommand::class), $projectConfigFile, $input, $processIdentifier, $serverPort);
-            $parallelProcess = new \RectorPrefix20211128\Symplify\EasyParallel\ValueObject\ParallelProcess($workerCommandLine, $streamSelectLoop, self::TIMEOUT_IN_SECONDS);
+            $processIdentifier = \RectorPrefix20211129\Nette\Utils\Random::generate();
+            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \RectorPrefix20211129\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\ProcessCommand::class), \RectorPrefix20211129\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\WorkerCommand::class), $projectConfigFile, $input, $processIdentifier, $serverPort);
+            $parallelProcess = new \RectorPrefix20211129\Symplify\EasyParallel\ValueObject\ParallelProcess($workerCommandLine, $streamSelectLoop, self::TIMEOUT_IN_SECONDS);
             $parallelProcess->start(
                 // 1. callable on data
                 function (array $json) use($parallelProcess, &$systemErrors, &$fileDiffs, &$jobs, $postFileCallback, &$systemErrorsCount, &$reachedInternalErrorsCountLimit, $processIdentifier) : void {
@@ -137,14 +137,14 @@ final class ParallelFileProcessor
                         return;
                     }
                     $job = \array_pop($jobs);
-                    $parallelProcess->request([\RectorPrefix20211128\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20211128\Symplify\EasyParallel\Enum\Action::MAIN, \RectorPrefix20211128\Symplify\EasyParallel\Enum\Content::FILES => $job]);
+                    $parallelProcess->request([\RectorPrefix20211129\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20211129\Symplify\EasyParallel\Enum\Action::MAIN, \RectorPrefix20211129\Symplify\EasyParallel\Enum\Content::FILES => $job]);
                 },
                 // 2. callable on error
                 $handleErrorCallable,
                 // 3. callable on exit
                 function ($exitCode, string $stdErr) use(&$systemErrors, $processIdentifier) : void {
                     $this->processPool->tryQuitProcess($processIdentifier);
-                    if ($exitCode === \RectorPrefix20211128\Symfony\Component\Console\Command\Command::SUCCESS) {
+                    if ($exitCode === \RectorPrefix20211129\Symfony\Component\Console\Command\Command::SUCCESS) {
                         return;
                     }
                     if ($exitCode === null) {

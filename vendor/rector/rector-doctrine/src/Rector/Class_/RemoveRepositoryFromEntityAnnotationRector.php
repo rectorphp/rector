@@ -56,7 +56,7 @@ CODE_SAMPLE
             return null;
         }
         $repositoryClass = $doctrineAnnotationTagValueNode->getValue('repositoryClass');
-        if (!$repositoryClass) {
+        if (!\is_string($repositoryClass)) {
             return null;
         }
         $doctrineAnnotationTagValueNode->removeValue('repositoryClass');

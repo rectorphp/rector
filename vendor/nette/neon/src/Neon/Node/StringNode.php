@@ -5,12 +5,12 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211128\Nette\Neon\Node;
+namespace RectorPrefix20211129\Nette\Neon\Node;
 
-use RectorPrefix20211128\Nette;
-use RectorPrefix20211128\Nette\Neon\Node;
+use RectorPrefix20211129\Nette;
+use RectorPrefix20211129\Nette\Neon\Node;
 /** @internal */
-final class StringNode extends \RectorPrefix20211128\Nette\Neon\Node
+final class StringNode extends \RectorPrefix20211129\Nette\Neon\Node
 {
     private const ESCAPE_SEQUENCES = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\10", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
     /** @var string */
@@ -51,12 +51,12 @@ final class StringNode extends \RectorPrefix20211128\Nette\Neon\Node
                 if (($res = \json_decode('"' . $sq . '"')) !== null) {
                     return $res;
                 }
-                throw new \RectorPrefix20211128\Nette\Neon\Exception("Invalid UTF-8 sequence {$sq}");
+                throw new \RectorPrefix20211129\Nette\Neon\Exception("Invalid UTF-8 sequence {$sq}");
             } elseif ($sq[1] === 'x' && \strlen($sq) === 4) {
                 \trigger_error("Neon: '{$sq}' is deprecated, use '\\uXXXX' instead.", \E_USER_DEPRECATED);
                 return \chr(\hexdec(\substr($sq, 2)));
             } else {
-                throw new \RectorPrefix20211128\Nette\Neon\Exception("Invalid escaping sequence {$sq}");
+                throw new \RectorPrefix20211129\Nette\Neon\Exception("Invalid escaping sequence {$sq}");
             }
         }, $res);
     }
@@ -64,7 +64,7 @@ final class StringNode extends \RectorPrefix20211128\Nette\Neon\Node
     {
         $res = \json_encode($this->value, \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
         if ($res === \false) {
-            throw new \RectorPrefix20211128\Nette\Neon\Exception('Invalid UTF-8 sequence: ' . $this->value);
+            throw new \RectorPrefix20211129\Nette\Neon\Exception('Invalid UTF-8 sequence: ' . $this->value);
         }
         if (\strpos($this->value, "\n") !== \false) {
             $res = \preg_replace_callback('#[^\\\\]|\\\\(.)#s', function ($m) {

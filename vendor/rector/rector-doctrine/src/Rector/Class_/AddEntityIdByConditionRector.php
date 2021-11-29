@@ -13,6 +13,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeFactory\EntityIdNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211129\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Class_\AddEntityIdByConditionRector\AddEntityIdByConditionRectorTest
  */
@@ -99,11 +100,14 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, string[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $this->detectedTraits = $configuration[self::DETECTED_TRAITS] ?? [];
+        $detectTraits = $configuration[self::DETECTED_TRAITS] ?? [];
+        \RectorPrefix20211129\Webmozart\Assert\Assert::isArray($detectTraits);
+        \RectorPrefix20211129\Webmozart\Assert\Assert::allString($detectTraits);
+        $this->detectedTraits = $detectTraits;
     }
     private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {

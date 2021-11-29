@@ -36,10 +36,8 @@ final class DoctrineItemDefaultValueManipulator
         if ($defaultValue === \true) {
             return $currentValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
         }
-        if (\is_int($defaultValue)) {
-            if ($currentValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode) {
-                $currentValue = (int) $currentValue->value;
-            }
+        if (\is_int($defaultValue) && $currentValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode) {
+            $currentValue = (int) $currentValue->value;
         }
         return $currentValue === $defaultValue;
     }

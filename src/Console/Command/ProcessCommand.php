@@ -22,11 +22,11 @@ use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
-use RectorPrefix20211128\Symfony\Component\Console\Application;
-use RectorPrefix20211128\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211128\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211128\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20211128\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211129\Symfony\Component\Console\Application;
+use RectorPrefix20211129\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211129\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
@@ -106,7 +106,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->setDescription('Upgrades or refactors source code with provided rectors');
         $names = $this->outputFormatterCollector->getNames();
         $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
-        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, \Rector\Core\Configuration\Option::OUTPUT_FORMAT_SHORT, \RectorPrefix20211128\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
+        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, \Rector\Core\Configuration\Option::OUTPUT_FORMAT_SHORT, \RectorPrefix20211129\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
         parent::configure();
     }
     /**
@@ -156,7 +156,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     protected function initialize($input, $output) : void
     {
         $application = $this->getApplication();
-        if (!$application instanceof \RectorPrefix20211128\Symfony\Component\Console\Application) {
+        if (!$application instanceof \RectorPrefix20211129\Symfony\Component\Console\Application) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $optionDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::DEBUG);
@@ -179,13 +179,13 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return \RectorPrefix20211128\Symfony\Component\Console\Command\Command::FAILURE;
+            return \RectorPrefix20211129\Symfony\Component\Console\Command\Command::FAILURE;
         }
         // inverse error code for CI dry-run
         if (!$configuration->isDryRun()) {
-            return \RectorPrefix20211128\Symfony\Component\Console\Command\Command::SUCCESS;
+            return \RectorPrefix20211129\Symfony\Component\Console\Command\Command::SUCCESS;
         }
-        return $processResult->getFileDiffs() === [] ? \RectorPrefix20211128\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20211128\Symfony\Component\Console\Command\Command::FAILURE;
+        return $processResult->getFileDiffs() === [] ? \RectorPrefix20211129\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20211129\Symfony\Component\Console\Command\Command::FAILURE;
     }
     /**
      * @param File[] $files

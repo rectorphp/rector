@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211128\Webmozart\Assert\Assert;
+use RectorPrefix20211129\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Doctrine\Tests\Rector\MethodCall\EntityAliasToClassConstantReferenceRector\EntityAliasToClassConstantReferenceRectorTest
  */
@@ -79,13 +79,14 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $aliasesToNamespaces = $configuration[self::ALIASES_TO_NAMESPACES] ?? [];
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allString($aliasesToNamespaces);
-        \RectorPrefix20211128\Webmozart\Assert\Assert::allString(\array_keys($aliasesToNamespaces));
+        $aliasesToNamespaces = $configuration[self::ALIASES_TO_NAMESPACES] ?? $configuration;
+        \RectorPrefix20211129\Webmozart\Assert\Assert::isArray($aliasesToNamespaces);
+        \RectorPrefix20211129\Webmozart\Assert\Assert::allString(\array_keys($aliasesToNamespaces));
+        \RectorPrefix20211129\Webmozart\Assert\Assert::allString($aliasesToNamespaces);
         $this->aliasesToNamespaces = $aliasesToNamespaces;
     }
     private function isAliasWithConfiguredEntity(string $name) : bool

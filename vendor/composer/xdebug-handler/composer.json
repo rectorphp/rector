@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211128\\Composer\\XdebugHandler\\": "src"
+            "RectorPrefix20211129\\Composer\\XdebugHandler\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211128\\Composer\\XdebugHandler\\": "tests"
+            "RectorPrefix20211129\\Composer\\XdebugHandler\\": "tests"
         }
     },
     "scripts": {

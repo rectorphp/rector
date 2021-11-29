@@ -117,7 +117,7 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($phpDocInfo === null) {
+        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
         if ($this->shouldSkipPhpDocInfo($phpDocInfo)) {
@@ -161,7 +161,7 @@ CODE_SAMPLE
         }
         $onlyParam = $classMethod->params[0];
         // change array to properites
-        if (!$onlyParam->type) {
+        if (!$onlyParam->type instanceof \PhpParser\Node) {
             return \false;
         }
         $paramType = $this->nodeTypeResolver->getType($onlyParam);
@@ -185,7 +185,7 @@ CODE_SAMPLE
     {
         // complete public properties
         $constructClassMethod = $this->constructClassMethodFactory->createFromPublicClassProperties($class);
-        if ($constructClassMethod === null) {
+        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);

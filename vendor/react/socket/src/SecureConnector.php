@@ -1,28 +1,28 @@
 <?php
 
-namespace RectorPrefix20211128\React\Socket;
+namespace RectorPrefix20211129\React\Socket;
 
-use RectorPrefix20211128\React\EventLoop\Loop;
-use RectorPrefix20211128\React\EventLoop\LoopInterface;
-use RectorPrefix20211128\React\Promise;
+use RectorPrefix20211129\React\EventLoop\Loop;
+use RectorPrefix20211129\React\EventLoop\LoopInterface;
+use RectorPrefix20211129\React\Promise;
 use BadMethodCallException;
 use InvalidArgumentException;
 use UnexpectedValueException;
-final class SecureConnector implements \RectorPrefix20211128\React\Socket\ConnectorInterface
+final class SecureConnector implements \RectorPrefix20211129\React\Socket\ConnectorInterface
 {
     private $connector;
     private $streamEncryption;
     private $context;
-    public function __construct(\RectorPrefix20211128\React\Socket\ConnectorInterface $connector, \RectorPrefix20211128\React\EventLoop\LoopInterface $loop = null, array $context = array())
+    public function __construct(\RectorPrefix20211129\React\Socket\ConnectorInterface $connector, \RectorPrefix20211129\React\EventLoop\LoopInterface $loop = null, array $context = array())
     {
         $this->connector = $connector;
-        $this->streamEncryption = new \RectorPrefix20211128\React\Socket\StreamEncryption($loop ?: \RectorPrefix20211128\React\EventLoop\Loop::get(), \false);
+        $this->streamEncryption = new \RectorPrefix20211129\React\Socket\StreamEncryption($loop ?: \RectorPrefix20211129\React\EventLoop\Loop::get(), \false);
         $this->context = $context;
     }
     public function connect($uri)
     {
         if (!\function_exists('stream_socket_enable_crypto')) {
-            return \RectorPrefix20211128\React\Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)'));
+            return \RectorPrefix20211129\React\Promise\reject(new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)'));
             // @codeCoverageIgnore
         }
         if (\strpos($uri, '://') === \false) {
@@ -30,16 +30,16 @@ final class SecureConnector implements \RectorPrefix20211128\React\Socket\Connec
         }
         $parts = \parse_url($uri);
         if (!$parts || !isset($parts['scheme']) || $parts['scheme'] !== 'tls') {
-            return \RectorPrefix20211128\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid'));
+            return \RectorPrefix20211129\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid'));
         }
         $uri = \str_replace('tls://', '', $uri);
         $context = $this->context;
         $encryption = $this->streamEncryption;
         $connected = \false;
-        $promise = $this->connector->connect($uri)->then(function (\RectorPrefix20211128\React\Socket\ConnectionInterface $connection) use($context, $encryption, $uri, &$promise, &$connected) {
+        $promise = $this->connector->connect($uri)->then(function (\RectorPrefix20211129\React\Socket\ConnectionInterface $connection) use($context, $encryption, $uri, &$promise, &$connected) {
             // (unencrypted) TCP/IP connection succeeded
             $connected = \true;
-            if (!$connection instanceof \RectorPrefix20211128\React\Socket\Connection) {
+            if (!$connection instanceof \RectorPrefix20211129\React\Socket\Connection) {
                 $connection->close();
                 throw new \UnexpectedValueException('Base connector does not use internal Connection class exposing stream resource');
             }
@@ -54,7 +54,7 @@ final class SecureConnector implements \RectorPrefix20211128\React\Socket\Connec
                 throw new \RuntimeException('Connection to ' . $uri . ' failed during TLS handshake: ' . $error->getMessage(), $error->getCode());
             });
         });
-        return new \RectorPrefix20211128\React\Promise\Promise(function ($resolve, $reject) use($promise) {
+        return new \RectorPrefix20211129\React\Promise\Promise(function ($resolve, $reject) use($promise) {
             $promise->then($resolve, $reject);
         }, function ($_, $reject) use(&$promise, $uri, &$connected) {
             if ($connected) {

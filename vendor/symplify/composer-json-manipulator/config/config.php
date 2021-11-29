@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211128;
+namespace RectorPrefix20211129;
 
-use RectorPrefix20211128\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20211128\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20211129\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211129\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211128\Symplify\ComposerJsonManipulator\ValueObject\Option;
-use RectorPrefix20211128\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20211128\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20211128\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use RectorPrefix20211128\Symplify\SmartFileSystem\SmartFileSystem;
-use function RectorPrefix20211128\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20211129\Symplify\ComposerJsonManipulator\ValueObject\Option;
+use RectorPrefix20211129\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20211129\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211129\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20211129\Symplify\SmartFileSystem\SmartFileSystem;
+use function RectorPrefix20211129\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(\RectorPrefix20211128\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS, ['keywords']);
+    $parameters->set(\RectorPrefix20211129\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS, ['keywords']);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20211128\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src');
-    $services->set(\RectorPrefix20211128\Symplify\SmartFileSystem\SmartFileSystem::class);
-    $services->set(\RectorPrefix20211128\Symplify\PackageBuilder\Reflection\PrivatesCaller::class);
-    $services->set(\RectorPrefix20211128\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20211128\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211128\Symfony\Component\DependencyInjection\ContainerInterface::class)]);
-    $services->set(\RectorPrefix20211128\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
-    $services->set(\RectorPrefix20211128\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20211128\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211128\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
+    $services->load('RectorPrefix20211129\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src');
+    $services->set(\RectorPrefix20211129\Symplify\SmartFileSystem\SmartFileSystem::class);
+    $services->set(\RectorPrefix20211129\Symplify\PackageBuilder\Reflection\PrivatesCaller::class);
+    $services->set(\RectorPrefix20211129\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20211129\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211129\Symfony\Component\DependencyInjection\ContainerInterface::class)]);
+    $services->set(\RectorPrefix20211129\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
+    $services->set(\RectorPrefix20211129\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20211129\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211129\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
 };
