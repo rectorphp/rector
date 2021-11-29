@@ -7,6 +7,7 @@ namespace Rector\Core\Console\Command;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
@@ -28,6 +29,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class ProcessCommand extends AbstractProcessCommand
 {
@@ -47,6 +49,7 @@ final class ProcessCommand extends AbstractProcessCommand
         private MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
         private EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
         private OutputFormatterCollector $outputFormatterCollector,
+        private SymfonyStyle $symfonyStyle,
         private array $rectors
     ) {
         parent::__construct();
@@ -78,6 +81,11 @@ final class ProcessCommand extends AbstractProcessCommand
         }
 
         $configuration = $this->configurationFactory->createFromInput($input);
+
+        // disable console output in case of json output formatter
+        if ($configuration->getOutputFormat() === JsonOutputFormatter::NAME) {
+            $this->symfonyStyle->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        }
 
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
