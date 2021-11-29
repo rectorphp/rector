@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 final class ServiceGetterToConstructorInjection
 {
     /**
@@ -23,6 +24,8 @@ final class ServiceGetterToConstructorInjection
         $this->oldType = $oldType;
         $this->oldMethod = $oldMethod;
         $this->serviceType = $serviceType;
+        \Rector\Core\Validation\RectorAssert::className($oldType);
+        \Rector\Core\Validation\RectorAssert::className($serviceType);
     }
     public function getOldObjectType() : \PHPStan\Type\ObjectType
     {

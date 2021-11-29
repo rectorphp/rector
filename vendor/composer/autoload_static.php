@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9a0804c2fa2b16f124e30b25ead868d5
+class ComposerStaticInit855958c43fb6380deae0dc1449c0f846
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2154,6 +2154,7 @@ class ComposerStaticInit9a0804c2fa2b16f124e30b25ead868d5
         'Rector\\Core\\Validation\\Collector\\EmptyConfigurableRectorCollector' => __DIR__ . '/../..' . '/src/Validation/Collector/EmptyConfigurableRectorCollector.php',
         'Rector\\Core\\Validation\\EmptyConfigurableRectorChecker' => __DIR__ . '/../..' . '/src/Validation/EmptyConfigurableRectorChecker.php',
         'Rector\\Core\\Validation\\InfiniteLoopValidator' => __DIR__ . '/../..' . '/src/Validation/InfiniteLoopValidator.php',
+        'Rector\\Core\\Validation\\RectorAssert' => __DIR__ . '/../..' . '/src/Validation/RectorAssert.php',
         'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/Application/FileFactory.php',
         'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/ProcessResultFactory.php',
         'Rector\\Core\\ValueObject\\Application\\File' => __DIR__ . '/../..' . '/src/ValueObject/Application/File.php',
@@ -3771,9 +3772,9 @@ class ComposerStaticInit9a0804c2fa2b16f124e30b25ead868d5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9a0804c2fa2b16f124e30b25ead868d5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9a0804c2fa2b16f124e30b25ead868d5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9a0804c2fa2b16f124e30b25ead868d5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit855958c43fb6380deae0dc1449c0f846::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit855958c43fb6380deae0dc1449c0f846::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit855958c43fb6380deae0dc1449c0f846::$classMap;
 
         }, null, ClassLoader::class);
     }

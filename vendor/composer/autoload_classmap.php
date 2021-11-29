@@ -1757,6 +1757,7 @@ return array(
     'Rector\\Core\\Validation\\Collector\\EmptyConfigurableRectorCollector' => $baseDir . '/src/Validation/Collector/EmptyConfigurableRectorCollector.php',
     'Rector\\Core\\Validation\\EmptyConfigurableRectorChecker' => $baseDir . '/src/Validation/EmptyConfigurableRectorChecker.php',
     'Rector\\Core\\Validation\\InfiniteLoopValidator' => $baseDir . '/src/Validation/InfiniteLoopValidator.php',
+    'Rector\\Core\\Validation\\RectorAssert' => $baseDir . '/src/Validation/RectorAssert.php',
     'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => $baseDir . '/src/ValueObjectFactory/Application/FileFactory.php',
     'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => $baseDir . '/src/ValueObjectFactory/ProcessResultFactory.php',
     'Rector\\Core\\ValueObject\\Application\\File' => $baseDir . '/src/ValueObject/Application/File.php',
