@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
-use Rector\Core\Validation\RectorAssert;
 final class UnsetAndIssetToMethodCall
 {
     /**
@@ -24,7 +23,6 @@ final class UnsetAndIssetToMethodCall
         $this->type = $type;
         $this->issetMethodCall = $issetMethodCall;
         $this->unsedMethodCall = $unsedMethodCall;
-        \Rector\Core\Validation\RectorAssert::className($type);
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {
