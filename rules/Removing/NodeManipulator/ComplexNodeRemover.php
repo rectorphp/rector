@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -153,6 +154,9 @@ final class ComplexNodeRemover
 
         $params = $constructClassMethod->getParams();
         $paramKeysToBeRemoved = [];
+
+        /** @var Variable[] $variables */
+        $variables = $this->resolveVariables($constructClassMethod);
         foreach ($params as $key => $param) {
             $variable = $this->betterNodeFinder->findFirst(
                 (array) $constructClassMethod->stmts,
@@ -171,10 +175,45 @@ final class ComplexNodeRemover
                 continue;
             }
 
+            if ($this->isInVariables($variables, $assign)) {
+                continue;
+            }
+
             $paramKeysToBeRemoved[] = $key;
         }
 
         $this->processRemoveParamWithKeys($params, $paramKeysToBeRemoved);
+    }
+
+    /**
+     * @return Variable[]
+     */
+    private function resolveVariables(ClassMethod $classMethod): array
+    {
+        return $this->betterNodeFinder->find(
+            (array) $classMethod->stmts,
+            function (Node $subNode): bool {
+                if (! $subNode instanceof Variable) {
+                    return false;
+                }
+
+                return $this->isExpressionVariableNotAssign($subNode);
+            }
+        );
+    }
+
+    /**
+     * @param Variable[] $variables
+     */
+    private function isInVariables(array $variables, Assign $assign): bool
+    {
+        foreach ($variables as $variable) {
+            if ($this->nodeComparator->areNodesEqual($assign->expr, $variable)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
