@@ -607,3 +607,5 @@ parameters:
             message: '#Class has a static method must so must contains "Static" in its name#'
             path: src/Validation/RectorAssert.php
 
+        # fixed in symplify dev-main
+        - '#Parameter \#3 \$configuration of class Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample constructor expects array<string, mixed\>, array<int, Rector\\Renaming\\ValueObject\\RenameAnnotationByType\> given#'
