@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf
+class ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3132,6 +3132,7 @@ class ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf
         'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
         'Rector\\Renaming\\Collector\\MethodCallRenameCollector' => __DIR__ . '/../..' . '/rules/Renaming/Collector/MethodCallRenameCollector.php',
         'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
+        'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
         'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',
         'Rector\\Renaming\\NodeManipulator\\ClassRenamer' => __DIR__ . '/../..' . '/rules/Renaming/NodeManipulator/ClassRenamer.php',
         'Rector\\Renaming\\NodeManipulator\\SwitchManipulator' => __DIR__ . '/../..' . '/rules/Renaming/NodeManipulator/SwitchManipulator.php',
@@ -3150,6 +3151,7 @@ class ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf
         'Rector\\Renaming\\ValueObject\\MethodCallRenameWithArrayKey' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/MethodCallRenameWithArrayKey.php',
         'Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/PseudoNamespaceToNamespace.php',
         'Rector\\Renaming\\ValueObject\\RenameAnnotation' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameAnnotation.php',
+        'Rector\\Renaming\\ValueObject\\RenameAnnotationByType' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameAnnotationByType.php',
         'Rector\\Renaming\\ValueObject\\RenameClassAndConstFetch' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameClassAndConstFetch.php',
         'Rector\\Renaming\\ValueObject\\RenameClassConstFetch' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameClassConstFetch.php',
         'Rector\\Renaming\\ValueObject\\RenameProperty' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameProperty.php',
@@ -3772,9 +3774,9 @@ class ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit540d91814d945bddf2434b3b27e6cdcf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit25b11574a2a1e5aadc7bc926a638a05a::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -6,11 +6,13 @@ namespace Rector\Renaming\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
-use Rector\Renaming\ValueObject\RenameAnnotation;
+use Rector\Renaming\Contract\RenameAnnotationInterface;
+use Rector\Renaming\ValueObject\RenameAnnotationByType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20211129\Webmozart\Assert\Assert;
@@ -22,11 +24,11 @@ final class RenameAnnotationRector extends \Rector\Core\Rector\AbstractRector im
     /**
      * @var string
      */
-    public const RENAMED_ANNOTATIONS_IN_TYPES = 'renamed_annotations_in_types';
+    public const RENAMED_ANNOTATIONS = 'renamed_annotations';
     /**
-     * @var RenameAnnotation[]
+     * @var RenameAnnotationInterface[]
      */
-    private $renamedAnnotations = [];
+    private $renameAnnotations = [];
     /**
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
@@ -38,7 +40,9 @@ final class RenameAnnotationRector extends \Rector\Core\Rector\AbstractRector im
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns defined annotations above properties and methods to their new values.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-class SomeTest extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
 {
     /**
      * @test
@@ -49,7 +53,9 @@ class SomeTest extends PHPUnit\Framework\TestCase
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeTest extends PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
 {
     /**
      * @scenario
@@ -59,14 +65,14 @@ class SomeTest extends PHPUnit\Framework\TestCase
     }
 }
 CODE_SAMPLE
-, [self::RENAMED_ANNOTATIONS_IN_TYPES => [new \Rector\Renaming\ValueObject\RenameAnnotation('PHPUnit\\Framework\\TestCase', 'test', 'scenario')]])]);
+, [new \Rector\Renaming\ValueObject\RenameAnnotationByType('PHPUnit\\Framework\\TestCase', 'test', 'scenario')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\Expression::class];
     }
     /**
      * @param ClassMethod|Property $node
@@ -78,11 +84,11 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        foreach ($this->renamedAnnotations as $renamedAnnotation) {
-            if (!$this->isObjectType($classLike, $renamedAnnotation->getObjectType())) {
+        foreach ($this->renameAnnotations as $renameAnnotation) {
+            if ($renameAnnotation instanceof \Rector\Renaming\ValueObject\RenameAnnotationByType && !$this->isObjectType($classLike, $renameAnnotation->getObjectType())) {
                 continue;
             }
-            $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renamedAnnotation->getOldAnnotation(), $renamedAnnotation->getNewAnnotation());
+            $this->docBlockTagReplacer->replaceTagByAnother($phpDocInfo, $renameAnnotation->getOldAnnotation(), $renameAnnotation->getNewAnnotation());
         }
         return $node;
     }
@@ -91,8 +97,9 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $renamedAnnotationsInTypes = $configuration[self::RENAMED_ANNOTATIONS_IN_TYPES] ?? $configuration;
-        \RectorPrefix20211129\Webmozart\Assert\Assert::allIsAOf($renamedAnnotationsInTypes, \Rector\Renaming\ValueObject\RenameAnnotation::class);
-        $this->renamedAnnotations = $renamedAnnotationsInTypes;
+        $renamedAnnotations = $configuration[self::RENAMED_ANNOTATIONS] ?? $configuration;
+        \RectorPrefix20211129\Webmozart\Assert\Assert::isArray($renamedAnnotations);
+        \RectorPrefix20211129\Webmozart\Assert\Assert::allIsAOf($renamedAnnotations, \Rector\Renaming\Contract\RenameAnnotationInterface::class);
+        $this->renameAnnotations = $renamedAnnotations;
     }
 }

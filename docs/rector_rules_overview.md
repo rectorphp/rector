@@ -9495,7 +9495,7 @@ Turns defined annotations above properties and methods to their new values.
 
 ```php
 use Rector\Renaming\Rector\ClassMethod\RenameAnnotationRector;
-use Rector\Renaming\ValueObject\RenameAnnotation;
+use Rector\Renaming\ValueObject\RenameAnnotationByType;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
@@ -9504,8 +9504,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(RenameAnnotationRector::class)
         ->call('configure', [[
-            RenameAnnotationRector::RENAMED_ANNOTATIONS_IN_TYPES => ValueObjectInliner::inline([
-                new RenameAnnotation('PHPUnit\Framework\TestCase', 'test', 'scenario'),
+            RenameAnnotationRector::RENAMED_ANNOTATIONS => ValueObjectInliner::inline([
+                new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario'),
             ]),
         ]]);
 };
