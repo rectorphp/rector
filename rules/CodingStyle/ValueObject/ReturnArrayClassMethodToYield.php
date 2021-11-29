@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\CodingStyle\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class ReturnArrayClassMethodToYield
 {
@@ -12,6 +13,7 @@ final class ReturnArrayClassMethodToYield
         private string $type,
         private string $method
     ) {
+        RectorAssert::className($type);
     }
 
     public function getObjectType(): ObjectType

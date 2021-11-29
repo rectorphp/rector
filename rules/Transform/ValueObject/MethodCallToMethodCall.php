@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
+use Rector\Core\Validation\RectorAssert;
+
 final class MethodCallToMethodCall
 {
     /**
@@ -16,6 +18,8 @@ final class MethodCallToMethodCall
         private string $newType,
         private string $newMethod,
     ) {
+        RectorAssert::className($oldType);
+        RectorAssert::className($newType);
     }
 
     public function getOldType(): string

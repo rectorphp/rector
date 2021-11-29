@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\Validation\RectorAssert;
 
 final class AddParamTypeDeclaration
 {
@@ -15,6 +16,7 @@ final class AddParamTypeDeclaration
         private int $position,
         private Type $paramType
     ) {
+        RectorAssert::className($className);
     }
 
     public function getObjectType(): ObjectType

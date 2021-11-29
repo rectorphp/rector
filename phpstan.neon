@@ -597,3 +597,13 @@ parameters:
         -
             message: '#Instanceof between PhpParser\\Node\\Expr\\BinaryOp\\BooleanAnd and PhpParser\\Node\\Expr\\BinaryOp will always evaluate to true#'
             path: packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php
+
+        # respect webmozzart naming convention to make eaiser to discovery
+        -
+            message: '#Method name should be different to its parameter name, in a verb form#'
+            path: src/Validation/RectorAssert.php
+
+        -
+            message: '#Class has a static method must so must contains "Static" in its name#'
+            path: src/Validation/RectorAssert.php
+

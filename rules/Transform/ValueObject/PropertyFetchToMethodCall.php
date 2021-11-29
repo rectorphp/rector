@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class PropertyFetchToMethodCall
 {
@@ -18,6 +19,7 @@ final class PropertyFetchToMethodCall
         private ?string $newSetMethod = null,
         private array $newGetArguments = []
     ) {
+        RectorAssert::className($oldType);
     }
 
     public function getOldObjectType(): ObjectType

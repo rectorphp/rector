@@ -7,6 +7,7 @@ namespace Rector\DeadCode\ValueObject;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Validation\RectorAssert;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class VariableNodeUse
@@ -28,6 +29,7 @@ final class VariableNodeUse
         private Variable $variable,
         private ?string $nestingHash = null
     ) {
+        RectorAssert::className($type);
     }
 
     public function isName(string $name): bool

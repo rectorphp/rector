@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class RenameAnnotation
 {
@@ -13,6 +14,7 @@ final class RenameAnnotation
         private string $oldAnnotation,
         private string $newAnnotation
     ) {
+        RectorAssert::className($type);
     }
 
     public function getObjectType(): ObjectType
