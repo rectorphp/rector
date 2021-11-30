@@ -8,17 +8,14 @@ use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Tests\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\EventSubscriberInterface;
 use Rector\Tests\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\Source\ParentTestCase;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->call('configure', [[
-            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => ValueObjectInliner::inline([
-                new ReturnArrayClassMethodToYield(EventSubscriberInterface::class, 'getSubscribedEvents'),
-                new ReturnArrayClassMethodToYield(ParentTestCase::class, 'provide*'),
-                new ReturnArrayClassMethodToYield(ParentTestCase::class, 'dataProvider*'),
-                new ReturnArrayClassMethodToYield(TestCase::class, 'provideData'),
-            ]),
-        ]]);
+        ->configure([
+            new ReturnArrayClassMethodToYield(EventSubscriberInterface::class, 'getSubscribedEvents'),
+            new ReturnArrayClassMethodToYield(ParentTestCase::class, 'provide*'),
+            new ReturnArrayClassMethodToYield(ParentTestCase::class, 'dataProvider*'),
+            new ReturnArrayClassMethodToYield(TestCase::class, 'provideData'),
+        ]);
 };

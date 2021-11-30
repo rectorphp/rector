@@ -107,6 +107,8 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? $configuration;
+        Assert::isArray($typeToPreference);
+        Assert::allString(array_keys($typeToPreference));
         Assert::allIsAOf($typeToPreference, PreferenceSelfThis::class);
 
         $this->typeToPreference = $typeToPreference;

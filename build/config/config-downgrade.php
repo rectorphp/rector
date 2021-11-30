@@ -38,7 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(DowngradeParameterTypeWideningRector::class)
-        ->call('configure', [[
+        ->configure([
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [
                 // phsptan
                 Type::class,
@@ -83,7 +83,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'hasParameter',
                 ],
             ],
-        ]]);
+        ]);
 };
 
 /**

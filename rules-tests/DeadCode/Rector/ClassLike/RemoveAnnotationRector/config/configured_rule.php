@@ -8,10 +8,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RemoveAnnotationRector::class)
-        ->call('configure', [[
-            RemoveAnnotationRector::ANNOTATIONS_TO_REMOVE => [
-                'method',
-                'JMS\DiExtraBundle\Annotation\InjectParams',
-            ],
-        ]]);
+        ->configure(['method', 'JMS\DiExtraBundle\Annotation\InjectParams']);
 };

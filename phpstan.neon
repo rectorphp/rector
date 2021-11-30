@@ -41,6 +41,9 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludePaths:
+        # temp rule
+        - src/Rector/ConfigureRector.php
+
         # temporary stinrgable migration from template type provider
         - src/Console/Command/InitCommand.php
         - bin/generate-changelog.php

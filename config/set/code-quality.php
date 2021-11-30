@@ -140,33 +140,31 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ArrayThisCallToThisMethodCallRector::class);
     $services->set(CommonNotEqualRector::class);
     $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                'split' => 'explode',
-                'join' => 'implode',
-                'sizeof' => 'count',
-                # https://www.php.net/manual/en/aliases.php
-                'chop' => 'rtrim',
-                'doubleval' => 'floatval',
-                'gzputs' => 'gzwrites',
-                'fputs' => 'fwrite',
-                'ini_alter' => 'ini_set',
-                'is_double' => 'is_float',
-                'is_integer' => 'is_int',
-                'is_long' => 'is_int',
-                'is_real' => 'is_float',
-                'is_writeable' => 'is_writable',
-                'key_exists' => 'array_key_exists',
-                'pos' => 'current',
-                'strchr' => 'strstr',
-                # mb
-                'mbstrcut' => 'mb_strcut',
-                'mbstrlen' => 'mb_strlen',
-                'mbstrpos' => 'mb_strpos',
-                'mbstrrpos' => 'mb_strrpos',
-                'mbsubstr' => 'mb_substr',
-            ],
-        ]]);
+        ->configure([
+            'split' => 'explode',
+            'join' => 'implode',
+            'sizeof' => 'count',
+            # https://www.php.net/manual/en/aliases.php
+            'chop' => 'rtrim',
+            'doubleval' => 'floatval',
+            'gzputs' => 'gzwrites',
+            'fputs' => 'fwrite',
+            'ini_alter' => 'ini_set',
+            'is_double' => 'is_float',
+            'is_integer' => 'is_int',
+            'is_long' => 'is_int',
+            'is_real' => 'is_float',
+            'is_writeable' => 'is_writable',
+            'key_exists' => 'array_key_exists',
+            'pos' => 'current',
+            'strchr' => 'strstr',
+            # mb
+            'mbstrcut' => 'mb_strcut',
+            'mbstrlen' => 'mb_strlen',
+            'mbstrpos' => 'mb_strpos',
+            'mbstrrpos' => 'mb_strrpos',
+            'mbsubstr' => 'mb_substr',
+        ]);
     $services->set(SetTypeToCastRector::class);
     $services->set(LogicalToBooleanRector::class);
     $services->set(VarToPublicPropertyRector::class);

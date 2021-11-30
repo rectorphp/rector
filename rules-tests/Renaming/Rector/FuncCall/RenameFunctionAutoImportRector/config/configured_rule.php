@@ -12,9 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                'service' => 'Symfony\Component\DependencyInjection\Loader\Configurator\service',
-            ],
-        ]]);
+        ->configure([
+            'service' => 'Symfony\Component\DependencyInjection\Loader\Configurator\service',
+        ]);
 };

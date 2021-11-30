@@ -21,26 +21,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
 
     // include sets
-    $containerConfigurator->import(SetList::CODING_STYLE);
-    $containerConfigurator->import(SetList::CODING_STYLE_ADVANCED);
-    $containerConfigurator->import(SetList::CODE_QUALITY);
-    $containerConfigurator->import(SetList::DEAD_CODE);
-    $containerConfigurator->import(SetList::PRIVATIZATION);
-    $containerConfigurator->import(SetList::NAMING);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION);
-    $containerConfigurator->import(SetList::EARLY_RETURN);
-    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
-    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
-    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
+//    $containerConfigurator->import(SetList::CODING_STYLE);
+//    $containerConfigurator->import(SetList::CODING_STYLE_ADVANCED);
+//    $containerConfigurator->import(SetList::CODE_QUALITY);
+//    $containerConfigurator->import(SetList::DEAD_CODE);
+//    $containerConfigurator->import(SetList::PRIVATIZATION);
+//    $containerConfigurator->import(SetList::NAMING);
+//    $containerConfigurator->import(SetList::TYPE_DECLARATION);
+//    $containerConfigurator->import(SetList::EARLY_RETURN);
+//    $containerConfigurator->import(SetList::TYPE_DECLARATION_STRICT);
+//    $containerConfigurator->import(NetteSetList::NETTE_UTILS_CODE_QUALITY);
+//    $containerConfigurator->import(PHPUnitSetList::PHPUNIT_CODE_QUALITY);
 
     $services = $containerConfigurator->services();
 
     // phpunit
     $services->set(PreferThisOrSelfMethodCallRector::class)
         ->configure([
-            PreferThisOrSelfMethodCallRector::TYPE_TO_PREFERENCE => [
-                TestCase::class => PreferenceSelfThis::PREFER_THIS(),
-            ],
+            TestCase::class => PreferenceSelfThis::PREFER_THIS(),
         ]);
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)

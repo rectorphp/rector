@@ -8,10 +8,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ReservedObjectRector::class)
-        ->call('configure', [[
-            ReservedObjectRector::RESERVED_KEYWORDS_TO_REPLACEMENTS => [
-                'ReservedObject' => 'SmartObject',
-                'Object' => 'AnotherSmartObject',
-            ],
-        ]]);
+        ->configure([
+            'ReservedObject' => 'SmartObject',
+            'Object' => 'AnotherSmartObject',
+        ]);
 };

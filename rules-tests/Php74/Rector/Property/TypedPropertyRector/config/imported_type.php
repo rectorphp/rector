@@ -12,7 +12,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(TypedPropertyRector::class)
-        ->call('configure', [[
+        ->configure([
             TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => true,
-        ]]);
+        ]);
 };

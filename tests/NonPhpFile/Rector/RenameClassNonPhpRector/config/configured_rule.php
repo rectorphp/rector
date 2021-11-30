@@ -11,13 +11,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassNonPhpRector::class)
-        ->call('configure', [[
-            RenameClassNonPhpRector::RENAME_CLASSES => [
-                'Session' => 'Illuminate\Support\Facades\Session',
-                OldClass::class => NewClass::class,
-                // Laravel
-                'Form' => 'Collective\Html\FormFacade',
-                'Html' => 'Collective\Html\HtmlFacade',
-            ],
-        ]]);
+        ->configure([
+            'Session' => 'Illuminate\Support\Facades\Session',
+            OldClass::class => NewClass::class,
+            // Laravel
+            'Form' => 'Collective\Html\FormFacade',
+            'Html' => 'Collective\Html\HtmlFacade',
+        ]);
 };

@@ -96,7 +96,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
      */
     public function configure(array $configuration): void
     {
-        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES];
+        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? $configuration;
         Assert::allIsAOf($oldToNewMethodsByClasses, RenameStaticMethod::class);
         $this->staticMethodRenames = $oldToNewMethodsByClasses;
     }

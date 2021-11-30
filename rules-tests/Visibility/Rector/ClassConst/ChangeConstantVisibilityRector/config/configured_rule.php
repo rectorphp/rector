@@ -7,25 +7,18 @@ use Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\Sou
 use Rector\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector;
 use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ChangeConstantVisibilityRector::class)
-        ->call('configure', [[
-            ChangeConstantVisibilityRector::CLASS_CONSTANT_VISIBILITY_CHANGES => ValueObjectInliner::inline([
-                new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', Visibility::PUBLIC),
-                new ChangeConstantVisibility(
-                    ParentObject::class,
-                    'TO_BE_PROTECTED_CONSTANT',
-                    Visibility::PROTECTED
-                ),
-                new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', Visibility::PRIVATE),
-                new ChangeConstantVisibility(
-                    'Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
-                    'TO_BE_PRIVATE_CONSTANT',
-                    Visibility::PRIVATE
-                ),
-            ]),
-        ]]);
+        ->configure([
+            new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PUBLIC_CONSTANT', Visibility::PUBLIC),
+            new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PROTECTED_CONSTANT', Visibility::PROTECTED),
+            new ChangeConstantVisibility(ParentObject::class, 'TO_BE_PRIVATE_CONSTANT', Visibility::PRIVATE),
+            new ChangeConstantVisibility(
+                'Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\Fixture\Fixture2',
+                'TO_BE_PRIVATE_CONSTANT',
+                Visibility::PRIVATE
+            ),
+        ]);
 };

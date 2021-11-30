@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Rector\Transform\ValueObject;
 
-final class ArgumentFuncCallToMethodCall
+use Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface;
+
+final class ArgumentFuncCallToMethodCall implements ArgumentFuncCallToMethodCallInterface
 {
     public function __construct(
         private string $function,

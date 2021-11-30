@@ -26,19 +26,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UnsetCastRector::class);
 
     $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                # and imagewbmp
-                'jpeg2wbmp' => 'imagecreatefromjpeg',
-                # or imagewbmp
-                'png2wbmp' => 'imagecreatefrompng',
-                #migration72.deprecated.gmp_random-function
-                # http://php.net/manual/en/migration72.deprecated.php
-                # or gmp_random_range
-                'gmp_random' => 'gmp_random_bits',
-                'read_exif_data' => 'exif_read_data',
-            ],
-        ]]);
+        ->configure([
+            # and imagewbmp
+            'jpeg2wbmp' => 'imagecreatefromjpeg',
+            # or imagewbmp
+            'png2wbmp' => 'imagecreatefrompng',
+            #migration72.deprecated.gmp_random-function
+            # http://php.net/manual/en/migration72.deprecated.php
+            # or gmp_random_range
+            'gmp_random' => 'gmp_random_bits',
+            'read_exif_data' => 'exif_read_data',
+        ]);
 
     $services->set(GetClassOnNullRector::class);
 

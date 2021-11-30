@@ -9,9 +9,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(AddMethodParentCallRector::class)
-        ->call('configure', [[
-            AddMethodParentCallRector::METHODS_BY_PARENT_TYPES => [
-                ParentClassWithNewConstructor::class => '__construct',
-            ],
-        ]]);
+        ->configure([
+            ParentClassWithNewConstructor::class => '__construct',
+        ]);
 };

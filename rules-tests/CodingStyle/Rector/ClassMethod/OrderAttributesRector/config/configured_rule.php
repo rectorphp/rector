@@ -10,7 +10,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(OrderAttributesRector::class)
-        ->call('configure', [[
-            OrderAttributesRector::ATTRIBUTES_ORDER => [FirstAttribute::class, SecondAttribute::class],
-        ]]);
+        ->configure([FirstAttribute::class, SecondAttribute::class]);
 };

@@ -25,17 +25,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TypedPropertyRector::class);
 
     $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                #the_real_type
-                # https://wiki.php.net/rfc/deprecations_php_7_4
-                'is_real' => 'is_float',
-                #apache_request_headers_function
-                # https://wiki.php.net/rfc/deprecations_php_7_4
-                'apache_request_headers' => 'getallheaders',
-                //'hebrevc' => ['nl2br', 'hebrev'],
-            ],
-        ]]);
+        ->configure([
+            #the_real_type
+            # https://wiki.php.net/rfc/deprecations_php_7_4
+            'is_real' => 'is_float',
+            #apache_request_headers_function
+            # https://wiki.php.net/rfc/deprecations_php_7_4
+            'apache_request_headers' => 'getallheaders',
+            //'hebrevc' => ['nl2br', 'hebrev'],
+        ]);
 
     $services->set(ArrayKeyExistsOnPropertyRector::class);
 

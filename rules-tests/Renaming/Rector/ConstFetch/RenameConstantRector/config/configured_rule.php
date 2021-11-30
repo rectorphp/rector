@@ -8,10 +8,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RenameConstantRector::class)
-        ->call('configure', [[
-            RenameConstantRector::OLD_TO_NEW_CONSTANTS => [
-                'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-                'OLD_CONSTANT' => 'NEW_CONSTANT',
-            ],
-        ]]);
+        ->configure([
+            'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
+            'OLD_CONSTANT' => 'NEW_CONSTANT',
+        ]);
 };

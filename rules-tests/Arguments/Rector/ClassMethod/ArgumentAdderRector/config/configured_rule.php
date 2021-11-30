@@ -13,7 +13,6 @@ use Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Source\SomeCla
 use Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Source\SomeContainerBuilder;
 use Rector\Tests\Arguments\Rector\ClassMethod\ArgumentAdderRector\Source\SomeParentClient;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -21,46 +20,37 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $arrayType = new ArrayType(new MixedType(), new MixedType());
 
     $services->set(ArgumentAdderRector::class)
-        ->call('configure', [[
-            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                // covers https://github.com/rectorphp/rector/issues/4267
-                new ArgumentAdder(
-                    SomeContainerBuilder::class,
-                    'sendResetLinkResponse',
-                    0,
-                    'request',
-                    null,
-                    new ObjectType('Illuminate\Http\Illuminate\Http')
-                ),
-                new ArgumentAdder(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
-                new ArgumentAdder(
-                    SomeContainerBuilder::class,
-                    'addCompilerPass',
-                    2,
-                    'priority',
-                    0,
-                    new IntegerType()
-                ),
-                // scoped
-                new ArgumentAdder(
-                    SomeParentClient::class,
-                    'submit',
-                    2,
-                    'serverParameters',
-                    [],
-                    $arrayType,
-                    ArgumentAddingScope::SCOPE_PARENT_CALL
-                ),
-                new ArgumentAdder(
-                    SomeParentClient::class,
-                    'submit',
-                    2,
-                    'serverParameters',
-                    [],
-                    $arrayType,
-                    ArgumentAddingScope::SCOPE_CLASS_METHOD
-                ),
-                new ArgumentAdder(SomeClass::class, 'withoutTypeOrDefaultValue', 0, 'arguments', [], $arrayType),
-            ]),
-        ]]);
+        ->configure([
+            // covers https://github.com/rectorphp/rector/issues/4267
+            new ArgumentAdder(
+                SomeContainerBuilder::class,
+                'sendResetLinkResponse',
+                0,
+                'request',
+                null,
+                new ObjectType('Illuminate\Http\Illuminate\Http')
+            ),
+            new ArgumentAdder(SomeContainerBuilder::class, 'compile', 0, 'isCompiled', false),
+            new ArgumentAdder(SomeContainerBuilder::class, 'addCompilerPass', 2, 'priority', 0, new IntegerType()),
+            // scoped
+            new ArgumentAdder(
+                SomeParentClient::class,
+                'submit',
+                2,
+                'serverParameters',
+                [],
+                $arrayType,
+                ArgumentAddingScope::SCOPE_PARENT_CALL
+            ),
+            new ArgumentAdder(
+                SomeParentClient::class,
+                'submit',
+                2,
+                'serverParameters',
+                [],
+                $arrayType,
+                ArgumentAddingScope::SCOPE_CLASS_METHOD
+            ),
+            new ArgumentAdder(SomeClass::class, 'withoutTypeOrDefaultValue', 0, 'arguments', [], $arrayType),
+        ]);
 };

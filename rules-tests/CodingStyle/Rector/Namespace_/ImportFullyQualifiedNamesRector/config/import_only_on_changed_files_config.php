@@ -18,9 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassRector::class)
-        ->call('configure', [[
-            RenameClassRector::OLD_TO_NEW_CLASSES => [
-                NormalParamClass::class => NormalReturnClass::class,
-            ],
-        ]]);
+        ->configure([
+            NormalParamClass::class => NormalReturnClass::class,
+        ]);
 };

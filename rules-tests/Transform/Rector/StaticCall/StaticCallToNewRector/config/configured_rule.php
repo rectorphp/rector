@@ -6,14 +6,9 @@ use Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\Source\SomeJs
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(StaticCallToNewRector::class)
-        ->call('configure', [[
-            StaticCallToNewRector::STATIC_CALLS_TO_NEWS => ValueObjectInliner::inline([
-                new StaticCallToNew(SomeJsonResponse::class, 'create'),
-            ]),
-        ]]);
+        ->configure([new StaticCallToNew(SomeJsonResponse::class, 'create')]);
 };

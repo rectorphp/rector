@@ -10,9 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(AddInterfaceByTraitRector::class)
-        ->call('configure', [[
-            AddInterfaceByTraitRector::INTERFACE_BY_TRAIT => [
-                SomeTrait::class => SomeInterface::class,
-            ],
-        ]]);
+        ->configure([
+            SomeTrait::class => SomeInterface::class,
+        ]);
 };

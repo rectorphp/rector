@@ -10,20 +10,17 @@ use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\CustomType
 use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\Foo;
 use Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\Source\SomeSubscriber;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RenameMethodRector::class)
-        ->call('configure', [[
-            RenameMethodRector::METHOD_CALL_RENAMES => ValueObjectInliner::inline([
-                new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
-                new MethodCallRename('Nette\Utils\Html', 'add', 'addHtml'),
-                new MethodCallRename(CustomType::class, 'notify', '__invoke'),
-                new MethodCallRename(SomeSubscriber::class, 'old', 'new'),
-                new MethodCallRename(Foo::class, 'old', 'new'),
-                // with array key
-                new MethodCallRenameWithArrayKey('Nette\Utils\Html', 'addToArray', 'addToHtmlArray', 'hey'),
-            ]),
-        ]]);
+        ->configure([
+            new MethodCallRename(AbstractType::class, 'setDefaultOptions', 'configureOptions'),
+            new MethodCallRename('Nette\Utils\Html', 'add', 'addHtml'),
+            new MethodCallRename(CustomType::class, 'notify', '__invoke'),
+            new MethodCallRename(SomeSubscriber::class, 'old', 'new'),
+            new MethodCallRename(Foo::class, 'old', 'new'),
+            // with array key
+            new MethodCallRenameWithArrayKey('Nette\Utils\Html', 'addToArray', 'addToHtmlArray', 'hey'),
+        ]);
 };

@@ -10,11 +10,9 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                'mysqli_param_count' => 'mysqli_stmt_param_count',
-            ],
-        ]]);
+        ->configure([
+            'mysqli_param_count' => 'mysqli_stmt_param_count',
+        ]);
 
     $services->set(RemoveReferenceFromCallRector::class);
 

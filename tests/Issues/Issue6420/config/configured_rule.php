@@ -8,11 +8,11 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
     $services->set(RemoveDeadStmtRector::class);
+
     $services->set(RenameFunctionRector::class)
-        ->call('configure', [[
-            RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
-                'preg_replace' => 'Safe\preg_replace',
-            ],
-        ]]);
+        ->configure([
+            'preg_replace' => 'Safe\preg_replace',
+        ]);
 };

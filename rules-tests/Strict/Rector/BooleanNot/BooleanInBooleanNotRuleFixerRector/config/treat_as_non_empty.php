@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(BooleanInBooleanNotRuleFixerRector::class)
-        ->call('configure', [[
+        ->configure([
             BooleanInBooleanNotRuleFixerRector::TREAT_AS_NON_EMPTY => true,
-        ]]);
+        ]);
 };

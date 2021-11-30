@@ -27,7 +27,6 @@ use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\Removing\Rector\Class_\RemoveInterfacesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
@@ -35,24 +34,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(RemoveInterfacesRector::class)
-        ->call('configure', [[
-            RemoveInterfacesRector::INTERFACES_TO_REMOVE => [
-                // @see https://wiki.php.net/rfc/stringable
-                'Stringable',
-            ],
-        ]]);
+        ->configure([
+            // @see https://wiki.php.net/rfc/stringable
+            'Stringable',
+        ]);
 
     $services->set(DowngradeNamedArgumentRector::class);
 
     $services->set(DowngradeAttributeToAnnotationRector::class)
-        ->call('configure', [[
-            DowngradeAttributeToAnnotationRector::ATTRIBUTE_TO_ANNOTATION => ValueObjectInliner::inline([
-                // Symfony
-                new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
-                // Nette
-                new DowngradeAttributeToAnnotation('Nette\DI\Attributes\Inject', 'inject'),
-            ]),
-        ]]);
+        ->configure([
+            // Symfony
+            new DowngradeAttributeToAnnotation('Symfony\Contracts\Service\Attribute\Required', 'required'),
+            // Nette
+            new DowngradeAttributeToAnnotation('Nette\DI\Attributes\Inject', 'inject'),
+        ]);
 
     $services->set(DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(DowngradeUnionTypeDeclarationRector::class);
