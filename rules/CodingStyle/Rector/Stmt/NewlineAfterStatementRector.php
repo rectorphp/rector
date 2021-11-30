@@ -111,6 +111,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->nodesToRemoveCollector->isActive()) {
+            return null;
+        }
+
         $node = $this->resolveCurrentStatement($node);
 
         if (! in_array($node::class, self::STMTS_TO_HAVE_NEXT_NEWLINE, true)) {
