@@ -107,7 +107,6 @@ final class DowngradeRectorConfig
         // loaded with "require-dev" so it'd throw an error
 
         // use relative paths, so files are excluded on nested directory too
-        'vendor/symfony/string/Slugger/AsciiSlugger.php',
         'vendor/symfony/cache/*',
         // no event-dispatcher used
         'vendor/symfony/console/Event/*',

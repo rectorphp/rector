@@ -130,11 +130,13 @@ CODE_SAMPLE
             $token = $oldTokens[$previousTokenPos] ?? null;
             --$previousTokenPos;
 
-            if (isset($token[0]) && in_array($token[0], [\T_COMMENT, \T_WHITESPACE], true)) {
-                continue;
+            if (! isset($token[0])) {
+                return $token === '(';
             }
 
-            return $token === '(';
+            if (! in_array($token[0], [\T_COMMENT, \T_WHITESPACE], true)) {
+                return $token === '(';
+            }
         }
 
         return false;
