@@ -513,9 +513,6 @@ parameters:
             message: '#Instead of abstract class, use specific service with composition#'
             path: src/Console/Command/AbstractProcessCommand.php
 
-        # parallel run
-        - '#popen(.*?) is forbidden to use#'
-
         # json for paralell serialization
         -
             message: '#Use value object over return of values#'
@@ -576,9 +573,6 @@ parameters:
         # on purpose, allows empty tokens
         - '#Rector\\BetterPhpDocParser\\ValueObject\\Parser\\BetterTokenIterator\:\:__construct\(\) does not call parent constructor from PHPStan\\PhpDocParser\\Parser\\TokenIterator#'
         - '#Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser\:\:__construct\(\) does not call parent constructor from PhpParser\\NodeTraverser#'
-
-        # resolve later
-        - '#Method Rector\\PhpAttribute\\AnnotationToAttributeMapper\\CurlyListNodeAnnotationToAttributeMapper\:\:map\(\) should return array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr but returns array<int\|string, array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\>#'
 
         # always Expr or mixed nested array
         - '#Method Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface\:\:map\(\) return type has no value type specified in iterable type array#'
