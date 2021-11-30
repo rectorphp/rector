@@ -88,6 +88,9 @@ CODE_SAMPLE
         if ($node->isReadonly() || $node->props[0]->default instanceof \PhpParser\Node\Expr) {
             return null;
         }
+        if ($node->type === null) {
+            return null;
+        }
         $this->visibilityManipulator->makeReadonly($node);
         return $node;
     }
