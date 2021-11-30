@@ -4654,12 +4654,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "ad8ad6b333a5ac0e056c71c53cfb4986d4c6a548"
+                "reference": "1ad2ff367023288a7d769bf39d936415bb2aba83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/ad8ad6b333a5ac0e056c71c53cfb4986d4c6a548",
-                "reference": "ad8ad6b333a5ac0e056c71c53cfb4986d4c6a548",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/1ad2ff367023288a7d769bf39d936415bb2aba83",
+                "reference": "1ad2ff367023288a7d769bf39d936415bb2aba83",
                 "shasum": ""
             },
             "require": {
@@ -4707,7 +4707,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2021-11-25T17:08:43+00:00",
+            "time": "2021-11-30T19:27:53+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
