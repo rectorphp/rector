@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeManipulator\PropertyManipulator;
@@ -84,7 +85,7 @@ CODE_SAMPLE
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($node)) {
             return null;
         }
-        if ($node->isReadonly()) {
+        if ($node->isReadonly() || $node->props[0]->default instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($node);
