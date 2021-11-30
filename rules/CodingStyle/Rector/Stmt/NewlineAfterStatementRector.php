@@ -82,6 +82,9 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        if ($this->nodesToRemoveCollector->isActive()) {
+            return null;
+        }
         $node = $this->resolveCurrentStatement($node);
         if (!\in_array(\get_class($node), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true)) {
             return null;
