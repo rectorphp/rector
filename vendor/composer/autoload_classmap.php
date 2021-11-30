@@ -1160,6 +1160,7 @@ return array(
     'RectorPrefix20211130\\Symplify\\Astral\\NodeVisitor\\CallableNodeVisitor' => $vendorDir . '/symplify/astral/src/NodeVisitor/CallableNodeVisitor.php',
     'RectorPrefix20211130\\Symplify\\Astral\\PhpParser\\SmartPhpParser' => $vendorDir . '/symplify/astral/src/PhpParser/SmartPhpParser.php',
     'RectorPrefix20211130\\Symplify\\Astral\\PhpParser\\SmartPhpParserFactory' => $vendorDir . '/symplify/astral/src/PhpParser/SmartPhpParserFactory.php',
+    'RectorPrefix20211130\\Symplify\\Astral\\Reflection\\MethodCallParser' => $vendorDir . '/symplify/astral/src/Reflection/MethodCallParser.php',
     'RectorPrefix20211130\\Symplify\\Astral\\Reflection\\ReflectionParser' => $vendorDir . '/symplify/astral/src/Reflection/ReflectionParser.php',
     'RectorPrefix20211130\\Symplify\\Astral\\StaticFactory\\NodeValueResolverStaticFactory' => $vendorDir . '/symplify/astral/src/StaticFactory/NodeValueResolverStaticFactory.php',
     'RectorPrefix20211130\\Symplify\\Astral\\StaticFactory\\SimpleNameResolverStaticFactory' => $vendorDir . '/symplify/astral/src/StaticFactory/SimpleNameResolverStaticFactory.php',

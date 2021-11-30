@@ -5,6 +5,7 @@ services:
     - Symplify\SmartFileSystem\Finder\FinderSanitizer
 
     - Symplify\Astral\Reflection\ReflectionParser
+    - Symplify\Astral\Reflection\MethodCallParser
 
     - Symplify\Astral\PhpParser\SmartPhpParserFactory
     -

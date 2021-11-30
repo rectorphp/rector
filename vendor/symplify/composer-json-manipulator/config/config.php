@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20211130;
 
 use RectorPrefix20211130\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20211130\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20211130\Symplify\ComposerJsonManipulator\ValueObject\Option;
 use RectorPrefix20211130\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -20,7 +19,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->load('RectorPrefix20211130\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src');
     $services->set(\RectorPrefix20211130\Symplify\SmartFileSystem\SmartFileSystem::class);
     $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Reflection\PrivatesCaller::class);
-    $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20211130\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211130\Symfony\Component\DependencyInjection\ContainerInterface::class)]);
+    $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20211130\Symfony\Component\DependencyInjection\Loader\Configurator\service('service_container')]);
     $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
     $services->set(\RectorPrefix20211130\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20211130\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211130\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
 };

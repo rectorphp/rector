@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20211130;
 
 use RectorPrefix20211130\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20211130\Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20211130\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix20211130\Symplify\PackageBuilder\Parameter\ParameterProvider;
@@ -27,6 +26,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\RectorPrefix20211130\Symplify\SmartFileSystem\Finder\SmartFinder::class);
     $services->set(\RectorPrefix20211130\Symplify\SmartFileSystem\FileSystemGuard::class);
     $services->set(\RectorPrefix20211130\Symplify\SmartFileSystem\FileSystemFilter::class);
-    $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20211130\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211130\Symfony\Component\DependencyInjection\ContainerInterface::class)]);
+    $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20211130\Symfony\Component\DependencyInjection\Loader\Configurator\service('service_container')]);
     $services->set(\RectorPrefix20211130\Symplify\PackageBuilder\Reflection\PrivatesAccessor::class);
 };

@@ -9,11 +9,11 @@ use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
 final class ConfiguredCodeSample extends \Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample implements \Symplify\RuleDocGenerator\Contract\CodeSampleInterface
 {
     /**
-     * @var array<string, mixed>
+     * @var mixed[]
      */
     private $configuration = [];
     /**
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function __construct(string $badCode, string $goodCode, array $configuration)
     {
@@ -25,7 +25,7 @@ final class ConfiguredCodeSample extends \Symplify\RuleDocGenerator\ValueObject\
         parent::__construct($badCode, $goodCode);
     }
     /**
-     * @return array<string, mixed>
+     * @return mixed[]
      */
     public function getConfiguration() : array
     {
