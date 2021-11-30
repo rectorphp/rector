@@ -14,6 +14,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
@@ -84,6 +85,6 @@ CODE_SAMPLE
     }
     private function createClosureFromCallableCall(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\StaticCall
     {
-        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name('\\Closure'), 'fromCallable', [new \PhpParser\Node\Arg($expr)]);
+        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name\FullyQualified('Closure'), 'fromCallable', [new \PhpParser\Node\Arg($expr)]);
     }
 }
