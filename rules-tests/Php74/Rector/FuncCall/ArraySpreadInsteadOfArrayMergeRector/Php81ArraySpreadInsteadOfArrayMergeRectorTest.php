@@ -8,7 +8,7 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ArraySpreadInsteadOfArrayMergeRectorTest extends AbstractRectorTestCase
+final class Php81ArraySpreadInsteadOfArrayMergeRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -23,11 +23,11 @@ final class ArraySpreadInsteadOfArrayMergeRectorTest extends AbstractRectorTestC
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp81');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/configured_rule.php';
+        return __DIR__ . '/config/configured_rule_php81.php';
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Fixture;
+namespace Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\FixturePhp81;
 
 class IntegerKeys
 {
@@ -17,7 +17,7 @@ class IntegerKeys
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Fixture;
+namespace Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\FixturePhp81;
 
 class IntegerKeys
 {
