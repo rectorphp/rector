@@ -48,6 +48,9 @@ CODE_SAMPLE
             $this->refactorUse($node);
             return null;
         }
+        if ($this->isAlreadyFullyQualified($node)) {
+            return null;
+        }
         $name = $this->getFullyQualifiedName($node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::USE_NODES), $node);
         if ($name === null) {
             return null;
@@ -60,6 +63,19 @@ CODE_SAMPLE
         if ($use->type === \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION || $use->type === \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT) {
             $this->removeNode($use);
         }
+    }
+    /**
+     * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\FuncCall $node
+     */
+    private function isAlreadyFullyQualified($node) : bool
+    {
+        $oldTokens = $this->file->getOldTokens();
+        $startTokenPos = $node->getStartTokenPos();
+        $name = $oldTokens[$startTokenPos][1] ?? null;
+        if (!\is_string($name)) {
+            return \false;
+        }
+        return \strncmp($name, '\\', \strlen('\\')) === 0;
     }
     /**
      * @param Use_[] $useNodes
