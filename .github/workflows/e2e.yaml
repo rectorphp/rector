@@ -11,6 +11,10 @@ on:
         branches:
             - main
 
+env:
+    # see https://github.com/composer/composer/issues/9368#issuecomment-718112361
+    COMPOSER_ROOT_VERSION: "dev-main"
+
 jobs:
     end_to_end:
         runs-on: ubuntu-latest
@@ -31,10 +35,14 @@ jobs:
                     php-version: ${{ matrix.php_version }}
                     coverage: none
 
+            # run in root rector-src
+            -   run: composer install --ansi
+
+            # run in e2e subdir
             -
                 run: composer install --ansi
                 working-directory: ${{ matrix.directory }}
 
             -
-                run: vendor/bin/rector process src --dry-run --ansi
+                run: ./../../bin/rector process src --dry-run --ansi -a vendor/autoload.php
                 working-directory: ${{ matrix.directory }}
