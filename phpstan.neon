@@ -535,16 +535,7 @@ parameters:
         # parallel complexity
         - '#Cognitive complexity for "Rector\\Parallel\\Application\\ParallelFileProcessor\:\:check\(\)" is \d+, keep it under 10#'
 
-        # false postivie on command option/attribute check in symplify - @todo fix there later
         - '#Argument and options "debug", "clear\-cache" got confused#'
-
-        # false positive - @todo fix in symplify
-        -
-            path: rules/Php80/NodeManipulator/TokenManipulator.php
-            message: '#Property set "\$node\-\>expr" is overridden#'
-
-        # @todo fix in symplify
-        - '#Parameter \#3 \$configuration of class Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample constructor expects array<string, mixed\>, array<int, Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration\> given#'
 
         # strict rules
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)\(\)#'
@@ -609,6 +600,3 @@ parameters:
         -
             message: '#Class has a static method must so must contains "Static" in its name#'
             path: src/Validation/RectorAssert.php
-
-        # fixed in symplify dev-main
-        - '#Parameter \#3 \$configuration of class Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample constructor expects array<string, mixed\>, array<int, Rector\\Renaming\\ValueObject\\RenameAnnotationByType\> given#'
