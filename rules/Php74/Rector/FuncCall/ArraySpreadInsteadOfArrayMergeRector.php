@@ -12,10 +12,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\IntegerType;
-use PHPStan\Type\Type;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
@@ -25,7 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/spread_operator_for_array
  *
- * @see \Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\ArraySpreadInsteadOfArrayMergeRectorTest
+ * @see \Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Php74ArraySpreadInsteadOfArrayMergeRectorTest
+ * @see \Rector\Tests\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Php81ArraySpreadInsteadOfArrayMergeRectorTest
  */
 final class ArraySpreadInsteadOfArrayMergeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
@@ -39,7 +38,7 @@ final class ArraySpreadInsteadOfArrayMergeRector extends \Rector\Core\Rector\Abs
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_merge() to spread operator, except values with possible string key values', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_merge() to spread operator', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
@@ -116,14 +115,23 @@ CODE_SAMPLE
             return \true;
         }
         $arrayStaticType = $this->getType($expr);
-        if ($this->isConstantArrayTypeWithStringKeyType($arrayStaticType)) {
-            return \true;
-        }
         if (!$arrayStaticType instanceof \PHPStan\Type\ArrayType) {
             return \true;
         }
-        // integer key type is required, @see https://twitter.com/nikita_ppv/status/1126470222838366209
-        return !$arrayStaticType->getKeyType() instanceof \PHPStan\Type\IntegerType;
+        return !$this->isArrayKeyTypeAllowed($arrayStaticType);
+    }
+    private function isArrayKeyTypeAllowed(\PHPStan\Type\ArrayType $arrayStaticType) : bool
+    {
+        $allowedKeyTypes = [\PHPStan\Type\IntegerType::class];
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARRAY_SPREAD_STRING_KEYS)) {
+            $allowedKeyTypes[] = \PHPStan\Type\StringType::class;
+        }
+        foreach ($allowedKeyTypes as $allowedKeyType) {
+            if ($arrayStaticType->getKeyType() instanceof $allowedKeyType) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function resolveValue(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
@@ -150,19 +158,6 @@ CODE_SAMPLE
     private function createUnpackedArrayItem(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\ArrayItem
     {
         return new \PhpParser\Node\Expr\ArrayItem($expr, null, \false, [], \true);
-    }
-    private function isConstantArrayTypeWithStringKeyType(\PHPStan\Type\Type $type) : bool
-    {
-        if (!$type instanceof \PHPStan\Type\Constant\ConstantArrayType) {
-            return \false;
-        }
-        foreach ($type->getKeyTypes() as $keyType) {
-            // key cannot be string
-            if ($keyType instanceof \PHPStan\Type\Constant\ConstantStringType) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function isIteratorToArrayFuncCall(\PhpParser\Node\Expr $expr) : bool
     {

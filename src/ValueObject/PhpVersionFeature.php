@@ -439,6 +439,11 @@ final class PhpVersionFeature
      */
     public const INTERSECTION_TYPES = \Rector\Core\ValueObject\PhpVersion::PHP_81;
     /**
+     * @see https://wiki.php.net/rfc/array_unpacking_string_keys
+     * @var int
+     */
+    public const ARRAY_SPREAD_STRING_KEYS = \Rector\Core\ValueObject\PhpVersion::PHP_81;
+    /**
      * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
      * @var int
      */
