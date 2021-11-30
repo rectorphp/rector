@@ -15,9 +15,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\Application\File;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -31,7 +29,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
 {
     public function __construct(
-        private CurrentFileProvider $currentFileProvider,
         private VariableNaming $variableNaming
     ) {
     }
@@ -116,14 +113,9 @@ CODE_SAMPLE
         return $expr instanceof Assign || $expr instanceof AssignRef || $expr instanceof AssignOp;
     }
 
-    private function isBetweenParentheses(Node $node): ?bool
+    private function isBetweenParentheses(Node $node): bool
     {
-        $file = $this->currentFileProvider->getFile();
-        if (! $file instanceof File) {
-            return null;
-        }
-
-        $oldTokens = $file->getOldTokens();
+        $oldTokens = $this->file->getOldTokens();
         $previousTokenPos = $node->getStartTokenPos() - 1;
 
         while ($previousTokenPos >= 0) {

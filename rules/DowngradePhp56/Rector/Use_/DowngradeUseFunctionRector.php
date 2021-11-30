@@ -60,6 +60,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isAlreadyFullyQualified($node)) {
+            return null;
+        }
+
         $name = $this->getFullyQualifiedName($node->getAttribute(AttributeKey::USE_NODES), $node);
         if ($name === null) {
             return null;
@@ -74,6 +78,19 @@ CODE_SAMPLE
         if ($use->type === Use_::TYPE_FUNCTION || $use->type === Use_::TYPE_CONSTANT) {
             $this->removeNode($use);
         }
+    }
+
+    private function isAlreadyFullyQualified(ConstFetch|FuncCall $node): bool
+    {
+        $oldTokens = $this->file->getOldTokens();
+        $startTokenPos = $node->getStartTokenPos();
+        $name = $oldTokens[$startTokenPos][1] ?? null;
+
+        if (! is_string($name)) {
+            return false;
+        }
+
+        return str_starts_with($name, '\\');
     }
 
     /**
