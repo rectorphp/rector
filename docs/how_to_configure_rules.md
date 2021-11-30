@@ -17,11 +17,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(RenameClassRector::class)
-        ->call('configure', [[
-            // we use constant for keys to save you from typos
-            RenameClassRector::OLD_TO_NEW_CLASSES => [
-                'App\SomeOldClass' => 'App\SomeNewClass',
-            ],
-        ]]);
+        ->configure([
+            'App\SomeOldClass' => 'App\SomeNewClass',
+        ]);
 };
 ```

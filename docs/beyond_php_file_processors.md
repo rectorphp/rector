@@ -17,9 +17,7 @@ Let´s say you want to define a custom configuration where you want to update th
 All you have to do is using the ChangePackageVersionComposerRector:
 
 ```php
-<?php
 // rector.php
-declare(strict_types=1);
 
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
@@ -29,21 +27,16 @@ use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(ChangePackageVersionComposerRector::class)
-        ->call('configure', [[
-            // we use constant for keys to save you from typos
-            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS  => ValueObjectInliner::inline([
-                new PackageAndVersion('symfony/yaml', '^5.0'),
-            ]),
-        ]]);
+        ->configure([
+            new PackageAndVersion('symfony/yaml', '^5.0'),
+        ]);
 };
 ```
 
 There are some more rules related to manipulate your composer.json files. Let´s see them in action:
 
 ```php
-<?php
 // rector.php
-declare(strict_types=1);
 
 use Rector\Composer\Rector\AddPackageToRequireComposerRector;
 use Rector\Composer\Rector\AddPackageToRequireDevComposerRector;
@@ -59,37 +52,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // Add a package to the require section of your composer.json
     $services->set(AddPackageToRequireComposerRector::class)
-        ->call('configure', [[
-            // we use constant for keys to save you from typos
-            AddPackageToRequireComposerRector::PACKAGES_AND_VERSIONS  => ValueObjectInliner::inline([
-                new PackageAndVersion('symfony/yaml', '^5.0'),
-            ]),
-        ]]);
+        ->configure([
+            new PackageAndVersion('symfony/yaml', '^5.0'),
+        ]);
 
     // Add a package to the require dev section of your composer.json
     $services->set(AddPackageToRequireDevComposerRector::class)
-        ->call('configure', [[
-            // we use constant for keys to save you from typos
-            AddPackageToRequireDevComposerRector::PACKAGES_AND_VERSIONS  => ValueObjectInliner::inline([
-                new PackageAndVersion('phpunit/phpunit', '^9.0'),
-            ]),
-        ]]);
+        ->configure([
+            new PackageAndVersion('phpunit/phpunit', '^9.0'),
+        ]);
 
     // Remove a package from composer.json
     $services->set(RemovePackageComposerRector::class)
-        ->call('configure', [[
-            // we use constant for keys to save you from typos
-            RemovePackageComposerRector::PACKAGE_NAMES  => ['symfony/console']
-        ]]);
+        ->configure([
+            'symfony/console'
+        ]);
 
         // Replace a package in the composer.json
     $services->set(ReplacePackageAndVersionComposerRector::class)
-        ->call('configure', [[
-            // we use constant for keys to save you from typos
-             ReplacePackageAndVersionComposerRector::REPLACE_PACKAGES_AND_VERSIONS => ValueObjectInliner::inline([
-                new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0'),
-            ]),
-        ]]);
+        ->configure([
+            new ReplacePackageAndVersion('vendor1/package2', 'vendor2/package1', '^3.0'),
+        ]);
 };
 ```
 

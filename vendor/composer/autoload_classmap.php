@@ -2922,6 +2922,7 @@ return array(
     'Rector\\Testing\\PHPUnit\\Behavior\\MultipleFilesChangedTrait' => $baseDir . '/packages/Testing/PHPUnit/Behavior/MultipleFilesChangedTrait.php',
     'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => $baseDir . '/packages/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
     'Rector\\Testing\\TestingParser\\TestingParser' => $baseDir . '/packages/Testing/TestingParser/TestingParser.php',
+    'Rector\\Transform\\Contract\\ValueObject\\ArgumentFuncCallToMethodCallInterface' => $baseDir . '/rules/Transform/Contract/ValueObject/ArgumentFuncCallToMethodCallInterface.php',
     'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => $baseDir . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
     'Rector\\Transform\\NodeAnalyzer\\SingletonClassMethodAnalyzer' => $baseDir . '/rules/Transform/NodeAnalyzer/SingletonClassMethodAnalyzer.php',
     'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => $baseDir . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',

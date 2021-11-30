@@ -23,14 +23,14 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php74\Rector\Property\TypedPropertyRector::class);
-    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->call('configure', [[\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
+    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->configure([
         #the_real_type
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'is_real' => 'is_float',
         #apache_request_headers_function
         # https://wiki.php.net/rfc/deprecations_php_7_4
         'apache_request_headers' => 'getallheaders',
-    ]]]);
+    ]);
     $services->set(\Rector\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector::class);
     $services->set(\Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector::class);
     $services->set(\Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector::class);

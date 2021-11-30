@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     private function shouldSkip($node) : bool
     {
-        if (\count($node->args) !== 1) {
+        if (\count($node->getRawArgs()) !== 1) {
             return \true;
         }
         return !$node->args[0] instanceof \PhpParser\Node\VariadicPlaceholder;

@@ -19,6 +19,7 @@ use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface;
 use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -34,17 +35,9 @@ final class ArgumentFuncCallToMethodCallRector extends \Rector\Core\Rector\Abstr
      */
     public const FUNCTIONS_TO_METHOD_CALLS = 'functions_to_method_calls';
     /**
-     * @var string
-     */
-    public const ARRAY_FUNCTIONS_TO_METHOD_CALLS = 'array_functions_to_method_calls';
-    /**
-     * @var ArgumentFuncCallToMethodCall[]
+     * @var ArgumentFuncCallToMethodCallInterface[]
      */
     private $argumentFuncCallToMethodCalls = [];
-    /**
-     * @var ArrayFuncCallToMethodCall[]
-     */
-    private $arrayFunctionsToMethodCalls = [];
     /**
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
@@ -118,13 +111,11 @@ CODE_SAMPLE
             if (!$this->isName($node, $argumentFuncCallToMethodCall->getFunction())) {
                 continue;
             }
-            return $this->refactorFuncCallToMethodCall($argumentFuncCallToMethodCall, $classLike, $node);
-        }
-        foreach ($this->arrayFunctionsToMethodCalls as $arrayFunctionToMethodCall) {
-            if (!$this->isName($node, $arrayFunctionToMethodCall->getFunction())) {
-                continue;
+            if ($argumentFuncCallToMethodCall instanceof \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall) {
+                return $this->refactorFuncCallToMethodCall($argumentFuncCallToMethodCall, $classLike, $node);
+            } elseif ($argumentFuncCallToMethodCall instanceof \Rector\Transform\ValueObject\ArrayFuncCallToMethodCall) {
+                return $this->refactorArrayFunctionToMethodCall($argumentFuncCallToMethodCall, $node, $classLike);
             }
-            return $this->refactorArrayFunctionToMethodCall($arrayFunctionToMethodCall, $node, $classLike);
         }
         return null;
     }
@@ -134,11 +125,9 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20211130\Webmozart\Assert\Assert::allIsAOf($functionToMethodCalls, \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall::class);
+        \RectorPrefix20211130\Webmozart\Assert\Assert::isArray($functionToMethodCalls);
+        \RectorPrefix20211130\Webmozart\Assert\Assert::allIsAOf($functionToMethodCalls, \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface::class);
         $this->argumentFuncCallToMethodCalls = $functionToMethodCalls;
-        $arrayFunctionsToMethodCalls = $configuration[self::ARRAY_FUNCTIONS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20211130\Webmozart\Assert\Assert::allIsAOf($arrayFunctionsToMethodCalls, \Rector\Transform\ValueObject\ArrayFuncCallToMethodCall::class);
-        $this->arrayFunctionsToMethodCalls = $arrayFunctionsToMethodCalls;
     }
     private function shouldSkipFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {

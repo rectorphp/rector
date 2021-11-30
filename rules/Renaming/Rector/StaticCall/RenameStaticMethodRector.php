@@ -64,7 +64,7 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
      */
     public function configure(array $configuration) : void
     {
-        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES];
+        $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? $configuration;
         \RectorPrefix20211130\Webmozart\Assert\Assert::allIsAOf($oldToNewMethodsByClasses, \Rector\Renaming\ValueObject\RenameStaticMethod::class);
         $this->staticMethodRenames = $oldToNewMethodsByClasses;
     }

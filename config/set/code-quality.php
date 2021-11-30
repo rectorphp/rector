@@ -139,7 +139,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector::class);
     $services->set(\Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector::class);
     $services->set(\Rector\CodeQuality\Rector\NotEqual\CommonNotEqualRector::class);
-    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->call('configure', [[\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
+    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->configure([
         'split' => 'explode',
         'join' => 'implode',
         'sizeof' => 'count',
@@ -163,7 +163,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         'mbstrpos' => 'mb_strpos',
         'mbstrrpos' => 'mb_strrpos',
         'mbsubstr' => 'mb_substr',
-    ]]]);
+    ]);
     $services->set(\Rector\CodeQuality\Rector\FuncCall\SetTypeToCastRector::class);
     $services->set(\Rector\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector::class);
     $services->set(\Rector\Php52\Rector\Property\VarToPublicPropertyRector::class);

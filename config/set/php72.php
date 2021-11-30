@@ -21,7 +21,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\Php72\Rector\Assign\ListEachRector::class);
     $services->set(\Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector::class);
     $services->set(\Rector\Php72\Rector\Unset_\UnsetCastRector::class);
-    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->call('configure', [[\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::OLD_FUNCTION_TO_NEW_FUNCTION => [
+    $services->set(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class)->configure([
         # and imagewbmp
         'jpeg2wbmp' => 'imagecreatefromjpeg',
         # or imagewbmp
@@ -31,7 +31,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         # or gmp_random_range
         'gmp_random' => 'gmp_random_bits',
         'read_exif_data' => 'exif_read_data',
-    ]]]);
+    ]);
     $services->set(\Rector\Php72\Rector\FuncCall\GetClassOnNullRector::class);
     $services->set(\Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector::class);
     $services->set(\Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector::class);

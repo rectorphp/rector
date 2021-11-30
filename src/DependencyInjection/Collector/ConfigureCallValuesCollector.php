@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\Collector;
 
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use RectorPrefix20211130\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20211130\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
@@ -26,6 +27,9 @@ final class ConfigureCallValuesCollector
     {
         return $this->configureCallValuesByRectorClass[$rectorClass] ?? [];
     }
+    /**
+     * @param class-string<ConfigurableRectorInterface> $className
+     */
     public function collectFromServiceAndClassName(string $className, \RectorPrefix20211130\Symfony\Component\DependencyInjection\Definition $definition) : void
     {
         foreach ($definition->getMethodCalls() as $methodCall) {
@@ -36,11 +40,20 @@ final class ConfigureCallValuesCollector
         }
     }
     /**
+     * @param class-string<ConfigurableRectorInterface> $rectorClass
      * @param mixed[] $configureValues
      */
     private function addConfigureCallValues(string $rectorClass, array $configureValues) : void
     {
         foreach ($configureValues as $configureValue) {
+            // is nested or unnested value?
+            if (\is_array($configureValue) && \count($configureValue) === 1) {
+                \reset($configureValue);
+                $firstKey = \key($configureValue);
+                if (\is_array($configureValue[$firstKey])) {
+                    $configureValue = $configureValue[$firstKey];
+                }
+            }
             if (!isset($this->configureCallValuesByRectorClass[$rectorClass])) {
                 $this->configureCallValuesByRectorClass[$rectorClass] = $configureValue;
             } else {
