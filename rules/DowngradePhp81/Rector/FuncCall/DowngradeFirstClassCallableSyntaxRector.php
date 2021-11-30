@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
@@ -96,6 +97,6 @@ CODE_SAMPLE
 
     private function createClosureFromCallableCall(Expr $expr): StaticCall
     {
-        return new StaticCall(new Name('\\Closure'), 'fromCallable', [new Arg($expr)]);
+        return new StaticCall(new FullyQualified('Closure'), 'fromCallable', [new Arg($expr)]);
     }
 }
