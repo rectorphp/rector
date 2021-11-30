@@ -93,6 +93,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->type === null) {
+            return null;
+        }
+
         $this->visibilityManipulator->makeReadonly($node);
         return $node;
     }
