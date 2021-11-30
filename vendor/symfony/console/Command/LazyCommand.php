@@ -8,17 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Command;
+namespace RectorPrefix20211130\Symfony\Component\Console\Command;
 
-use RectorPrefix20211129\Symfony\Component\Console\Application;
-use RectorPrefix20211129\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix20211129\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211130\Symfony\Component\Console\Application;
+use RectorPrefix20211130\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix20211130\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20211130\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix20211130\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20211130\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class LazyCommand extends \RectorPrefix20211129\Symfony\Component\Console\Command\Command
+final class LazyCommand extends \RectorPrefix20211130\Symfony\Component\Console\Command\Command
 {
     private $command;
     private $isEnabled;
@@ -65,6 +67,14 @@ final class LazyCommand extends \RectorPrefix20211129\Symfony\Component\Console\
         return $this->getCommand()->run($input, $output);
     }
     /**
+     * @param \Symfony\Component\Console\Completion\CompletionInput $input
+     * @param \Symfony\Component\Console\Completion\CompletionSuggestions $suggestions
+     */
+    public function complete($input, $suggestions) : void
+    {
+        $this->getCommand()->complete($input, $suggestions);
+    }
+    /**
      * @return $this
      * @param callable $code
      */
@@ -89,11 +99,11 @@ final class LazyCommand extends \RectorPrefix20211129\Symfony\Component\Console\
         $this->getCommand()->setDefinition($definition);
         return $this;
     }
-    public function getDefinition() : \RectorPrefix20211129\Symfony\Component\Console\Input\InputDefinition
+    public function getDefinition() : \RectorPrefix20211130\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getDefinition();
     }
-    public function getNativeDefinition() : \RectorPrefix20211129\Symfony\Component\Console\Input\InputDefinition
+    public function getNativeDefinition() : \RectorPrefix20211130\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getNativeDefinition();
     }

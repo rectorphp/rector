@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Output;
+namespace RectorPrefix20211130\Symfony\Component\Console\Output;
 
-use RectorPrefix20211129\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211130\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * OutputInterface is the interface implemented by all Output classes.
  *
@@ -48,31 +48,31 @@ interface OutputInterface
     /**
      * Gets the current verbosity of the output.
      *
-     * @return int The current level of verbosity (one of the VERBOSITY constants)
+     * @return int
      */
     public function getVerbosity();
     /**
      * Returns whether verbosity is quiet (-q).
      *
-     * @return bool true if verbosity is set to VERBOSITY_QUIET, false otherwise
+     * @return bool
      */
     public function isQuiet();
     /**
      * Returns whether verbosity is verbose (-v).
      *
-     * @return bool true if verbosity is set to VERBOSITY_VERBOSE, false otherwise
+     * @return bool
      */
     public function isVerbose();
     /**
      * Returns whether verbosity is very verbose (-vv).
      *
-     * @return bool true if verbosity is set to VERBOSITY_VERY_VERBOSE, false otherwise
+     * @return bool
      */
     public function isVeryVerbose();
     /**
      * Returns whether verbosity is debug (-vvv).
      *
-     * @return bool true if verbosity is set to VERBOSITY_DEBUG, false otherwise
+     * @return bool
      */
     public function isDebug();
     /**
@@ -82,10 +82,10 @@ interface OutputInterface
     /**
      * Gets the decorated flag.
      *
-     * @return bool true if the output will decorate messages, false otherwise
+     * @return bool
      */
     public function isDecorated();
-    public function setFormatter(\RectorPrefix20211129\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter);
+    public function setFormatter(\RectorPrefix20211130\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter);
     /**
      * Returns current output formatter instance.
      *

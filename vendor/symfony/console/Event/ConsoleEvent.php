@@ -8,23 +8,23 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Event;
+namespace RectorPrefix20211130\Symfony\Component\Console\Event;
 
-use RectorPrefix20211129\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20211129\Symfony\Contracts\EventDispatcher\Event;
+use RectorPrefix20211130\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211130\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211130\Symfony\Contracts\EventDispatcher\Event;
 /**
  * Allows to inspect input and output of a command.
  *
  * @author Francesco Levorato <git@flevour.net>
  */
-class ConsoleEvent extends \RectorPrefix20211129\Symfony\Contracts\EventDispatcher\Event
+class ConsoleEvent extends \RectorPrefix20211130\Symfony\Contracts\EventDispatcher\Event
 {
     protected $command;
     private $input;
     private $output;
-    public function __construct(?\RectorPrefix20211129\Symfony\Component\Console\Command\Command $command, \RectorPrefix20211129\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(?\RectorPrefix20211130\Symfony\Component\Console\Command\Command $command, \RectorPrefix20211130\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $this->command = $command;
         $this->input = $input;
@@ -33,7 +33,7 @@ class ConsoleEvent extends \RectorPrefix20211129\Symfony\Contracts\EventDispatch
     /**
      * Gets the command that is executed.
      *
-     * @return Command|null A Command instance
+     * @return Command|null
      */
     public function getCommand()
     {
@@ -42,7 +42,7 @@ class ConsoleEvent extends \RectorPrefix20211129\Symfony\Contracts\EventDispatch
     /**
      * Gets the input instance.
      *
-     * @return InputInterface An InputInterface instance
+     * @return InputInterface
      */
     public function getInput()
     {
@@ -51,7 +51,7 @@ class ConsoleEvent extends \RectorPrefix20211129\Symfony\Contracts\EventDispatch
     /**
      * Gets the output instance.
      *
-     * @return OutputInterface An OutputInterface instance
+     * @return OutputInterface
      */
     public function getOutput()
     {

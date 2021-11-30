@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Yaml;
+namespace RectorPrefix20211130\Symfony\Component\Yaml;
 
-use RectorPrefix20211129\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix20211130\Symfony\Component\Yaml\Exception\ParseException;
 /**
  * Yaml offers convenience methods to load and dump YAML.
  *
@@ -43,13 +43,13 @@ class Yaml
      * @param string $filename The path to the YAML file to be parsed
      * @param int    $flags    A bit field of PARSE_* constants to customize the YAML parser behavior
      *
-     * @return mixed The YAML converted to a PHP value
+     * @return mixed
      *
      * @throws ParseException If the file could not be read or the YAML is not valid
      */
     public static function parseFile(string $filename, int $flags = 0)
     {
-        $yaml = new \RectorPrefix20211129\Symfony\Component\Yaml\Parser();
+        $yaml = new \RectorPrefix20211130\Symfony\Component\Yaml\Parser();
         return $yaml->parseFile($filename, $flags);
     }
     /**
@@ -64,13 +64,13 @@ class Yaml
      * @param string $input A string containing YAML
      * @param int    $flags A bit field of PARSE_* constants to customize the YAML parser behavior
      *
-     * @return mixed The YAML converted to a PHP value
+     * @return mixed
      *
      * @throws ParseException If the YAML is not valid
      */
     public static function parse(string $input, int $flags = 0)
     {
-        $yaml = new \RectorPrefix20211129\Symfony\Component\Yaml\Parser();
+        $yaml = new \RectorPrefix20211130\Symfony\Component\Yaml\Parser();
         return $yaml->parse($input, $flags);
     }
     /**
@@ -84,11 +84,11 @@ class Yaml
      * @param int   $indent The amount of spaces to use for indentation of nested nodes
      * @param int   $flags  A bit field of DUMP_* constants to customize the dumped YAML string
      *
-     * @return string A YAML string representing the original PHP value
+     * @return string
      */
     public static function dump($input, int $inline = 2, int $indent = 4, int $flags = 0) : string
     {
-        $yaml = new \RectorPrefix20211129\Symfony\Component\Yaml\Dumper($indent);
+        $yaml = new \RectorPrefix20211130\Symfony\Component\Yaml\Dumper($indent);
         return $yaml->dump($input, $inline, 0, $flags);
     }
 }

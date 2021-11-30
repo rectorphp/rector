@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\RectorInstaller;
 
-use RectorPrefix20211129\Composer\Installer\InstallationManager;
-use RectorPrefix20211129\Composer\IO\IOInterface;
-use RectorPrefix20211129\Composer\Package\PackageInterface;
-use RectorPrefix20211129\Composer\Repository\InstalledRepositoryInterface;
-use RectorPrefix20211129\Composer\Util\Filesystem as ComposerFilesystem;
+use RectorPrefix20211130\Composer\Installer\InstallationManager;
+use RectorPrefix20211130\Composer\IO\IOInterface;
+use RectorPrefix20211130\Composer\Package\PackageInterface;
+use RectorPrefix20211130\Composer\Repository\InstalledRepositoryInterface;
+use RectorPrefix20211130\Composer\Util\Filesystem as ComposerFilesystem;
 /**
  * @see \Rector\RectorInstaller\Tests\PluginInstallerTest
  */
@@ -69,7 +69,7 @@ CODE_SAMPLE;
      * @var string
      */
     private $configurationFile;
-    public function __construct(\Rector\RectorInstaller\Filesystem $filesystem, \RectorPrefix20211129\Composer\Repository\InstalledRepositoryInterface $localRepository, \RectorPrefix20211129\Composer\IO\IOInterface $io, \RectorPrefix20211129\Composer\Installer\InstallationManager $installationManager, \RectorPrefix20211129\Composer\Util\Filesystem $composerFilesystem, string $configurationFile)
+    public function __construct(\Rector\RectorInstaller\Filesystem $filesystem, \RectorPrefix20211130\Composer\Repository\InstalledRepositoryInterface $localRepository, \RectorPrefix20211130\Composer\IO\IOInterface $io, \RectorPrefix20211130\Composer\Installer\InstallationManager $installationManager, \RectorPrefix20211130\Composer\Util\Filesystem $composerFilesystem, string $configurationFile)
     {
         $this->filesystem = $filesystem;
         $this->localRepository = $localRepository;
@@ -106,7 +106,7 @@ CODE_SAMPLE;
             $this->io->write(\sprintf('> <info>%s:</info> installed', $name));
         }
     }
-    private function shouldSkip(\RectorPrefix20211129\Composer\Package\PackageInterface $package) : bool
+    private function shouldSkip(\RectorPrefix20211130\Composer\Package\PackageInterface $package) : bool
     {
         if ($package->getType() === self::RECTOR_EXTENSION_TYPE) {
             return \false;

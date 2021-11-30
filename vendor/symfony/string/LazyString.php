@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\String;
+namespace RectorPrefix20211130\Symfony\Component\String;
 
 /**
  * A string whose value is computed lazily by a callback.
@@ -17,16 +17,19 @@ namespace RectorPrefix20211129\Symfony\Component\String;
  */
 class LazyString implements \JsonSerializable
 {
+    /**
+     * @var \Closure|string
+     */
     private $value;
     /**
      * @param callable|array $callback A callable or a [Closure, method] lazy-callable
-     *
-     * @return static
+     * @param mixed ...$arguments
+     * @return $this
      */
-    public static function fromCallable($callback, ...$arguments) : self
+    public static function fromCallable($callback, ...$arguments)
     {
-        if (!\is_callable($callback) && !(\is_array($callback) && isset($callback[0]) && $callback[0] instanceof \Closure && 2 >= \count($callback))) {
-            throw new \TypeError(\sprintf('Argument 1 passed to "%s()" must be a callable or a [Closure, method] lazy-callable, "%s" given.', __METHOD__, \get_debug_type($callback)));
+        if (\is_array($callback) && !\is_callable($callback) && !(($callback[0] ?? null) instanceof \Closure || 2 < \count($callback))) {
+            throw new \TypeError(\sprintf('Argument 1 passed to "%s()" must be a callable or a [Closure, method] lazy-callable, "%s" given.', __METHOD__, '[' . \implode(', ', \array_map('get_debug_type', $callback)) . ']'));
         }
         $lazyString = new static();
         $lazyString->value = static function () use(&$callback, &$arguments, &$value) : string {
@@ -44,15 +47,11 @@ class LazyString implements \JsonSerializable
         return $lazyString;
     }
     /**
-     * @param string|int|float|bool|\Stringable $value
-     *
-     * @return static
+     * @param bool|float|int|string|\Stringable $value
+     * @return $this
      */
-    public static function fromStringable($value) : self
+    public static function fromStringable($value)
     {
-        if (!self::isStringable($value)) {
-            throw new \TypeError(\sprintf('Argument 1 passed to "%s()" must be a scalar or a stringable object, "%s" given.', __METHOD__, \get_debug_type($value)));
-        }
         if (\is_object($value)) {
             return static::fromCallable([$value, '__toString']);
         }
@@ -62,26 +61,23 @@ class LazyString implements \JsonSerializable
     }
     /**
      * Tells whether the provided value can be cast to string.
+     * @param mixed $value
      */
     public static final function isStringable($value) : bool
     {
-        return \is_string($value) || $value instanceof self || (\is_object($value) ? \method_exists($value, '__toString') : \is_scalar($value));
+        return \is_string($value) || $value instanceof \Stringable || \is_scalar($value);
     }
     /**
      * Casts scalars and stringable objects to strings.
      *
-     * @param object|string|int|float|bool $value
-     *
      * @throws \TypeError When the provided value is not stringable
+     * @param bool|float|int|string|\Stringable $value
      */
     public static final function resolve($value) : string
     {
         return $value;
     }
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString() : string
     {
         if (\is_string($this->value)) {
             return $this->value;
@@ -95,10 +91,6 @@ class LazyString implements \JsonSerializable
                 $r = new \ReflectionFunction($this->value);
                 $callback = $r->getStaticVariables()['callback'];
                 $e = new \TypeError(\sprintf('Return value of %s() passed to %s::fromCallable() must be of the type string, %s returned.', $callback, static::class, $type));
-            }
-            if (\PHP_VERSION_ID < 70400) {
-                // leverage the ErrorHandler component with graceful fallback when it's not available
-                return \trigger_error($e, \E_USER_ERROR);
             }
             throw $e;
         }

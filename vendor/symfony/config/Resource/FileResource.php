@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Config\Resource;
+namespace RectorPrefix20211130\Symfony\Component\Config\Resource;
 
 /**
  * FileResource represents a resource stored on the filesystem.
@@ -19,7 +19,7 @@ namespace RectorPrefix20211129\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class FileResource implements \RectorPrefix20211129\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class FileResource implements \RectorPrefix20211130\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var string|false
@@ -42,7 +42,7 @@ class FileResource implements \RectorPrefix20211129\Symfony\Component\Config\Res
         return $this->resource;
     }
     /**
-     * @return string The canonicalized, absolute path to the resource
+     * Returns the canonicalized, absolute path to the resource.
      */
     public function getResource() : string
     {

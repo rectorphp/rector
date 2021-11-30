@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\String\Inflector;
+namespace RectorPrefix20211130\Symfony\Component\String\Inflector;
 
 interface InflectorInterface
 {
@@ -17,7 +17,7 @@ interface InflectorInterface
      *
      * If the method can't determine the form with certainty, several possible singulars are returned.
      *
-     * @return string[] An array of possible singular forms
+     * @return string[]
      * @param string $plural
      */
     public function singularize($plural) : array;
@@ -26,7 +26,7 @@ interface InflectorInterface
      *
      * If the method can't determine the form with certainty, several possible plurals are returned.
      *
-     * @return string[] An array of possible plural forms
+     * @return string[]
      * @param string $singular
      */
     public function pluralize($singular) : array;

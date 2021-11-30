@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Process;
+namespace RectorPrefix20211130\Symfony\Component\Process;
 
 /**
  * Generic executable finder.
@@ -42,7 +42,7 @@ class ExecutableFinder
      * @param string|null $default   The default to return if no executable is found
      * @param array       $extraDirs Additional dirs to check into
      *
-     * @return string|null The executable path or default value
+     * @return string|null
      */
     public function find($name, $default = null, $extraDirs = [])
     {

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix20211130\Symfony\Component\DependencyInjection\Attribute;
 
 #[\Attribute(\Attribute::TARGET_PARAMETER)]
 class TaggedIterator
@@ -21,9 +21,19 @@ class TaggedIterator
      * @var string|null
      */
     public $indexAttribute;
-    public function __construct(string $tag, ?string $indexAttribute = null)
+    /**
+     * @var string|null
+     */
+    public $defaultIndexMethod;
+    /**
+     * @var string|null
+     */
+    public $defaultPriorityMethod;
+    public function __construct(string $tag, ?string $indexAttribute = null, ?string $defaultIndexMethod = null, ?string $defaultPriorityMethod = null)
     {
         $this->tag = $tag;
         $this->indexAttribute = $indexAttribute;
+        $this->defaultIndexMethod = $defaultIndexMethod;
+        $this->defaultPriorityMethod = $defaultPriorityMethod;
     }
 }

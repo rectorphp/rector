@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211129;
+namespace RectorPrefix20211130;
 
 use Ssch\TYPO3Rector\Rector\v7\v0\RemoveDivider2TabsConfigurationRector;
 use Ssch\TYPO3Rector\Rector\v7\v4\DropAdditionalPaletteRector;

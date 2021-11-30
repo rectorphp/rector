@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console;
+namespace RectorPrefix20211130\Symfony\Component\Console;
 
-use RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Pierre du Plessis <pdples@gmail.com>
  */
@@ -18,56 +18,89 @@ final class Cursor
 {
     private $output;
     private $input;
-    public function __construct(\RectorPrefix20211129\Symfony\Component\Console\Output\OutputInterface $output, $input = null)
+    /**
+     * @param resource|null $input
+     */
+    public function __construct(\RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface $output, $input = null)
     {
         $this->output = $output;
         $this->input = $input ?? (\defined('STDIN') ? \STDIN : \fopen('php://input', 'r+'));
     }
+    /**
+     * @return $this
+     */
     public function moveUp(int $lines = 1) : self
     {
         $this->output->write(\sprintf("\33[%dA", $lines));
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function moveDown(int $lines = 1) : self
     {
         $this->output->write(\sprintf("\33[%dB", $lines));
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function moveRight(int $columns = 1) : self
     {
         $this->output->write(\sprintf("\33[%dC", $columns));
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function moveLeft(int $columns = 1) : self
     {
         $this->output->write(\sprintf("\33[%dD", $columns));
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function moveToColumn(int $column) : self
     {
         $this->output->write(\sprintf("\33[%dG", $column));
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function moveToPosition(int $column, int $row) : self
     {
         $this->output->write(\sprintf("\33[%d;%dH", $row + 1, $column));
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function savePosition() : self
     {
         $this->output->write("\0337");
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function restorePosition() : self
     {
         $this->output->write("\338");
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function hide() : self
     {
         $this->output->write("\33[?25l");
         return $this;
     }
+    /**
+     * @return $this
+     */
     public function show() : self
     {
         $this->output->write("\33[?25h\33[?0c");
@@ -75,6 +108,8 @@ final class Cursor
     }
     /**
      * Clears all the output from the current line.
+     *
+     * @return $this
      */
     public function clearLine() : self
     {
@@ -91,6 +126,8 @@ final class Cursor
     }
     /**
      * Clears all the output from the cursors' current position to the end of the screen.
+     *
+     * @return $this
      */
     public function clearOutput() : self
     {
@@ -99,6 +136,8 @@ final class Cursor
     }
     /**
      * Clears the entire screen.
+     *
+     * @return $this
      */
     public function clearScreen() : self
     {

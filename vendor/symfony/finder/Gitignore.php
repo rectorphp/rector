@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Finder;
+namespace RectorPrefix20211130\Symfony\Component\Finder;
 
 /**
  * Gitignore matches against text.
@@ -26,10 +26,21 @@ class Gitignore
      */
     public static function toRegex($gitignoreFileContent) : string
     {
+        return self::buildRegex($gitignoreFileContent, \false);
+    }
+    /**
+     * @param string $gitignoreFileContent
+     */
+    public static function toRegexMatchingNegatedPatterns($gitignoreFileContent) : string
+    {
+        return self::buildRegex($gitignoreFileContent, \true);
+    }
+    private static function buildRegex(string $gitignoreFileContent, bool $inverted) : string
+    {
         $gitignoreFileContent = \preg_replace('~(?<!\\\\)#[^\\n\\r]*~', '', $gitignoreFileContent);
         $gitignoreLines = \preg_split('~\\r\\n?|\\n~', $gitignoreFileContent);
         $res = self::lineToRegex('');
-        foreach ($gitignoreLines as $i => $line) {
+        foreach ($gitignoreLines as $line) {
             $line = \preg_replace('~(?<!\\\\)[ \\t]+$~', '', $line);
             if ('!' === \substr($line, 0, 1)) {
                 $line = \substr($line, 1);
@@ -38,7 +49,7 @@ class Gitignore
                 $isNegative = \false;
             }
             if ('' !== $line) {
-                if ($isNegative) {
+                if ($isNegative xor $inverted) {
                     $res = '(?!' . self::lineToRegex($line) . '$)' . $res;
                 } else {
                     $res = '(?:' . $res . '|' . self::lineToRegex($line) . ')';

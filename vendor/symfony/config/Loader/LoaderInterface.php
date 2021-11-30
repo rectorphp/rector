@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Config\Loader;
+namespace RectorPrefix20211130\Symfony\Component\Config\Loader;
 
 /**
  * LoaderInterface is the interface implemented by all loader classes.
@@ -33,14 +33,14 @@ interface LoaderInterface
      *
      * @param mixed $resource A resource
      *
-     * @return bool True if this class supports the given resource, false otherwise
+     * @return bool
      * @param string|null $type
      */
     public function supports($resource, $type = null);
     /**
      * Gets the loader resolver.
      *
-     * @return LoaderResolverInterface A LoaderResolverInterface instance
+     * @return LoaderResolverInterface
      */
     public function getResolver();
     /**

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211129;
+namespace RectorPrefix20211130;
 
 use Rector\Laravel\Rector\FuncCall\HelperFuncCallToFacadeClassRector;
 use Rector\Laravel\Rector\StaticCall\RequestStaticValidateToInjectRector;

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Exception;
+namespace RectorPrefix20211130\Symfony\Component\Console\Exception;
 
 /**
  * Represents an incorrect command name typed in the console.
  *
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class CommandNotFoundException extends \InvalidArgumentException implements \RectorPrefix20211129\Symfony\Component\Console\Exception\ExceptionInterface
+class CommandNotFoundException extends \InvalidArgumentException implements \RectorPrefix20211130\Symfony\Component\Console\Exception\ExceptionInterface
 {
     private $alternatives;
     /**
@@ -30,7 +30,7 @@ class CommandNotFoundException extends \InvalidArgumentException implements \Rec
         $this->alternatives = $alternatives;
     }
     /**
-     * @return string[] A list of similar defined names
+     * @return string[]
      */
     public function getAlternatives()
     {

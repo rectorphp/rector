@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211129\Symplify\SymplifyKernel\Contract;
+namespace RectorPrefix20211130\Symplify\SymplifyKernel\Contract;
 
-use RectorPrefix20211129\Psr\Container\ContainerInterface;
+use RectorPrefix20211130\Psr\Container\ContainerInterface;
 /**
  * @api
  */
@@ -12,6 +12,6 @@ interface LightKernelInterface
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20211129\Psr\Container\ContainerInterface;
-    public function getContainer() : \RectorPrefix20211129\Psr\Container\ContainerInterface;
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20211130\Psr\Container\ContainerInterface;
+    public function getContainer() : \RectorPrefix20211130\Psr\Container\ContainerInterface;
 }

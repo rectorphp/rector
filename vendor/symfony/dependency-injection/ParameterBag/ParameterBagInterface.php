@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\DependencyInjection\ParameterBag;
+namespace RectorPrefix20211130\Symfony\Component\DependencyInjection\ParameterBag;
 
-use RectorPrefix20211129\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix20211129\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix20211130\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20211130\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 /**
  * ParameterBagInterface is the interface implemented by objects that manage service container parameters.
  *
@@ -22,20 +22,20 @@ interface ParameterBagInterface
     /**
      * Clears all parameters.
      *
-     * @throws LogicException if the ParameterBagInterface can not be cleared
+     * @throws LogicException if the ParameterBagInterface cannot be cleared
      */
     public function clear();
     /**
      * Adds parameters to the service container parameters.
      *
-     * @throws LogicException if the parameter can not be added
+     * @throws LogicException if the parameter cannot be added
      * @param mixed[] $parameters
      */
     public function add($parameters);
     /**
      * Gets the service container parameters.
      *
-     * @return array An array of parameters
+     * @return array
      */
     public function all();
     /**
@@ -57,14 +57,14 @@ interface ParameterBagInterface
      *
      * @param array|bool|string|int|float|null $value The parameter value
      *
-     * @throws LogicException if the parameter can not be set
+     * @throws LogicException if the parameter cannot be set
      * @param string $name
      */
     public function set($name, $value);
     /**
      * Returns true if a parameter name is defined.
      *
-     * @return bool true if the parameter name is defined, false otherwise
+     * @return bool
      * @param string $name
      */
     public function has($name);

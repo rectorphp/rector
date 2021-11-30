@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Input;
+namespace RectorPrefix20211130\Symfony\Component\Console\Input;
 
-use RectorPrefix20211129\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211129\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20211130\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211130\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * InputInterface is the interface implemented by all input classes.
  *
@@ -22,7 +22,7 @@ interface InputInterface
     /**
      * Returns the first argument from the raw parameters (not parsed).
      *
-     * @return string|null The value of the first argument or null otherwise
+     * @return string|null
      */
     public function getFirstArgument();
     /**
@@ -36,7 +36,7 @@ interface InputInterface
      * @param string|array $values     The values to look for in the raw parameters (can be an array)
      * @param bool         $onlyParams Only check real parameters, skip those following an end of options (--) signal
      *
-     * @return bool true if the value is contained in the raw parameters
+     * @return bool
      */
     public function hasParameterOption($values, $onlyParams = \false);
     /**
@@ -51,7 +51,7 @@ interface InputInterface
      * @param string|bool|int|float|array|null $default    The default value to return if no result is found
      * @param bool                             $onlyParams Only check real parameters, skip those following an end of options (--) signal
      *
-     * @return mixed The option value
+     * @return mixed
      */
     public function getParameterOption($values, $default = \false, $onlyParams = \false);
     /**
@@ -94,7 +94,7 @@ interface InputInterface
     /**
      * Returns true if an InputArgument object exists by name or position.
      *
-     * @return bool true if the InputArgument object exists, false otherwise
+     * @return bool
      * @param string $name
      */
     public function hasArgument($name);
@@ -125,7 +125,7 @@ interface InputInterface
     /**
      * Returns true if an InputOption object exists by name.
      *
-     * @return bool true if the InputOption object exists, false otherwise
+     * @return bool
      * @param string $name
      */
     public function hasOption($name);

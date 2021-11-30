@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Config\Resource;
+namespace RectorPrefix20211130\Symfony\Component\Config\Resource;
 
 /**
  * DirectoryResource represents a resources stored in a subdirectory tree.
@@ -17,7 +17,7 @@ namespace RectorPrefix20211129\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class DirectoryResource implements \RectorPrefix20211129\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class DirectoryResource implements \RectorPrefix20211130\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $resource;
     private $pattern;
@@ -39,16 +39,10 @@ class DirectoryResource implements \RectorPrefix20211129\Symfony\Component\Confi
     {
         return \md5(\serialize([$this->resource, $this->pattern]));
     }
-    /**
-     * @return string The file path to the resource
-     */
     public function getResource() : string
     {
         return $this->resource;
     }
-    /**
-     * Returns the pattern to restrict monitored files.
-     */
     public function getPattern() : ?string
     {
         return $this->pattern;

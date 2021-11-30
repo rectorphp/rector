@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Yaml;
+namespace RectorPrefix20211130\Symfony\Component\Yaml;
 
-use RectorPrefix20211129\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix20211130\Symfony\Component\Yaml\Exception\ParseException;
 /**
  * Unescaper encapsulates unescaping rules for single and double-quoted
  * YAML strings.
@@ -30,7 +30,7 @@ class Unescaper
      *
      * @param string $value A single quoted string
      *
-     * @return string The unescaped string
+     * @return string
      */
     public function unescapeSingleQuotedString($value) : string
     {
@@ -41,7 +41,7 @@ class Unescaper
      *
      * @param string $value A double quoted string
      *
-     * @return string The unescaped string
+     * @return string
      */
     public function unescapeDoubleQuotedString($value) : string
     {
@@ -56,7 +56,7 @@ class Unescaper
      *
      * @param string $value An escaped character
      *
-     * @return string The unescaped character
+     * @return string
      */
     private function unescapeCharacter(string $value) : string
     {
@@ -108,7 +108,7 @@ class Unescaper
             case 'U':
                 return self::utf8chr(\hexdec(\substr($value, 2, 8)));
             default:
-                throw new \RectorPrefix20211129\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Found unknown escape character "%s".', $value));
+                throw new \RectorPrefix20211130\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Found unknown escape character "%s".', $value));
         }
     }
     /**

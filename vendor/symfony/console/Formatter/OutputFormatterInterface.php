@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Formatter;
+namespace RectorPrefix20211130\Symfony\Component\Console\Formatter;
 
 /**
  * Formatter interface for console output.
@@ -23,9 +23,9 @@ interface OutputFormatterInterface
      */
     public function setDecorated($decorated);
     /**
-     * Gets the decorated flag.
+     * Whether the output will decorate messages.
      *
-     * @return bool true if the output will decorate messages, false otherwise
+     * @return bool
      */
     public function isDecorated();
     /**
@@ -52,6 +52,8 @@ interface OutputFormatterInterface
     public function getStyle($name);
     /**
      * Formats a message according to the given styles.
+     *
+     * @return string|null
      * @param string|null $message
      */
     public function format($message);

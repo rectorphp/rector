@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Finder;
+namespace RectorPrefix20211130\Symfony\Component\Finder;
 
 /**
  * Extends \SplFileInfo to support relative paths.
@@ -35,7 +35,7 @@ class SplFileInfo extends \SplFileInfo
      *
      * This path does not contain the file name.
      *
-     * @return string the relative path
+     * @return string
      */
     public function getRelativePath()
     {
@@ -46,7 +46,7 @@ class SplFileInfo extends \SplFileInfo
      *
      * This path contains the file name.
      *
-     * @return string the relative path name
+     * @return string
      */
     public function getRelativePathname()
     {
@@ -60,7 +60,7 @@ class SplFileInfo extends \SplFileInfo
     /**
      * Returns the contents of the file.
      *
-     * @return string the contents of the file
+     * @return string
      *
      * @throws \RuntimeException
      */
@@ -69,8 +69,11 @@ class SplFileInfo extends \SplFileInfo
         \set_error_handler(function ($type, $msg) use(&$error) {
             $error = $msg;
         });
-        $content = \file_get_contents($this->getPathname());
-        \restore_error_handler();
+        try {
+            $content = \file_get_contents($this->getPathname());
+        } finally {
+            \restore_error_handler();
+        }
         if (\false === $content) {
             throw new \RuntimeException($error);
         }

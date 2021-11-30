@@ -14,7 +14,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211129\Webmozart\Assert\Assert;
+use RectorPrefix20211130\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
  * @see \Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\ReservedFnFunctionRectorTest
@@ -97,8 +97,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $reservedNamesToNewOnes = $configuration[self::RESERVED_NAMES_TO_NEW_ONES] ?? $configuration;
-        \RectorPrefix20211129\Webmozart\Assert\Assert::allString(\array_keys($reservedNamesToNewOnes));
-        \RectorPrefix20211129\Webmozart\Assert\Assert::allString($reservedNamesToNewOnes);
+        \RectorPrefix20211130\Webmozart\Assert\Assert::allString(\array_keys($reservedNamesToNewOnes));
+        \RectorPrefix20211130\Webmozart\Assert\Assert::allString($reservedNamesToNewOnes);
         /** @var array<string, string> $reservedNamesToNewOnes */
         $this->reservedNamesToNewOnes = $reservedNamesToNewOnes;
     }

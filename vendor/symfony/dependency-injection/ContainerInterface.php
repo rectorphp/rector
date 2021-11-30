@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\DependencyInjection;
+namespace RectorPrefix20211130\Symfony\Component\DependencyInjection;
 
-use RectorPrefix20211129\Psr\Container\ContainerInterface as PsrContainerInterface;
-use RectorPrefix20211129\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20211129\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use RectorPrefix20211129\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix20211130\Psr\Container\ContainerInterface as PsrContainerInterface;
+use RectorPrefix20211130\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20211130\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix20211130\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /**
  * ContainerInterface is the interface implemented by service container classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-interface ContainerInterface extends \RectorPrefix20211129\Psr\Container\ContainerInterface
+interface ContainerInterface extends \RectorPrefix20211130\Psr\Container\ContainerInterface
 {
     public const RUNTIME_EXCEPTION_ON_INVALID_REFERENCE = 0;
     public const EXCEPTION_ON_INVALID_REFERENCE = 1;
@@ -39,7 +39,7 @@ interface ContainerInterface extends \RectorPrefix20211129\Psr\Container\Contain
      * @param string $id              The service identifier
      * @param int    $invalidBehavior The behavior when the service does not exist
      *
-     * @return object|null The associated service
+     * @return object|null
      *
      * @throws ServiceCircularReferenceException When a circular reference is detected
      * @throws ServiceNotFoundException          When the service is not defined
@@ -48,14 +48,14 @@ interface ContainerInterface extends \RectorPrefix20211129\Psr\Container\Contain
      */
     public function get($id, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE);
     /**
-     * @return bool true if the service is defined, false otherwise
+     * @return bool
      * @param string $id
      */
     public function has($id);
     /**
      * Check for whether or not a service has been initialized.
      *
-     * @return bool true if the service has been initialized, false otherwise
+     * @return bool
      * @param string $id
      */
     public function initialized($id);

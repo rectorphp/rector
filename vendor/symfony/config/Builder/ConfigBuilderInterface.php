@@ -8,14 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Config\Builder;
+namespace RectorPrefix20211130\Symfony\Component\Config\Builder;
 
 /**
  * A ConfigBuilder provides helper methods to build a large complex array.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- *
- * @experimental in 5.3
  */
 interface ConfigBuilderInterface
 {

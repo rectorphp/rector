@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211129\Symfony\Component\Console\Helper;
+namespace RectorPrefix20211130\Symfony\Component\Console\Helper;
 
-use RectorPrefix20211129\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211129\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20211130\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211130\Symfony\Component\Console\Exception\LogicException;
 /**
  * Defines the styles for a Table.
  *
@@ -54,7 +54,7 @@ class TableStyle
     public function setPaddingChar($paddingChar)
     {
         if (!$paddingChar) {
-            throw new \RectorPrefix20211129\Symfony\Component\Console\Exception\LogicException('The padding char must not be empty.');
+            throw new \RectorPrefix20211130\Symfony\Component\Console\Exception\LogicException('The padding char must not be empty.');
         }
         $this->paddingChar = $paddingChar;
         return $this;
@@ -81,6 +81,8 @@ class TableStyle
      * ║ 80-902734-1-6 │ And Then There Were None │ Agatha Christie  ║
      * ╚═══════════════╧══════════════════════════╧══════════════════╝
      * </code>
+     *
+     * @return $this
      * @param string $outside
      * @param string|null $inside
      */
@@ -104,6 +106,8 @@ class TableStyle
      * ║ 80-902734-1-6 │ And Then There Were None │ Agatha Christie  ║
      * ╚═══════════════╧══════════════════════════╧══════════════════╝
      * </code>
+     *
+     * @return $this
      * @param string $outside
      * @param string|null $inside
      */
@@ -150,6 +154,8 @@ class TableStyle
      * @param string|null $topLeftBottom  Top left bottom char (see #8' of example), equals to $midLeft if null
      * @param string|null $topMidBottom   Top mid bottom char (see #0' of example), equals to $cross if null
      * @param string|null $topRightBottom Top right bottom char (see #4' of example), equals to $midRight if null
+     *
+     * @return $this
      */
     public function setCrossingChars($cross, $topLeft, $topMid, $topRight, $midRight, $bottomRight, $bottomMid, $bottomLeft, $midLeft, $topLeftBottom = null, $topMidBottom = null, $topRightBottom = null) : self
     {
@@ -284,7 +290,7 @@ class TableStyle
     public function setPadType($padType)
     {
         if (!\in_array($padType, [\STR_PAD_LEFT, \STR_PAD_RIGHT, \STR_PAD_BOTH], \true)) {
-            throw new \RectorPrefix20211129\Symfony\Component\Console\Exception\InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
+            throw new \RectorPrefix20211130\Symfony\Component\Console\Exception\InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
         }
         $this->padType = $padType;
         return $this;
@@ -303,6 +309,7 @@ class TableStyle
         return $this->headerTitleFormat;
     }
     /**
+     * @return $this
      * @param string $format
      */
     public function setHeaderTitleFormat($format) : self
@@ -315,6 +322,7 @@ class TableStyle
         return $this->footerTitleFormat;
     }
     /**
+     * @return $this
      * @param string $format
      */
     public function setFooterTitleFormat($format) : self
