@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp56\NodeManipulator\ArgManipulator;
@@ -173,7 +174,7 @@ CODE_SAMPLE
         } else {
             return null;
         }
-        $newReflection = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name('\\ReflectionClass'), [new \PhpParser\Node\Arg($class)]);
+        $newReflection = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('ReflectionClass'), [new \PhpParser\Node\Arg($class)]);
         return new \PhpParser\Node\Expr\MethodCall($newReflection, 'newInstanceArgs', [$this->mergeArgs($args)]);
     }
 }
