@@ -27,11 +27,11 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -81,6 +81,7 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
         private PropertyAnalyzer $propertyAnalyzer,
         private PropertyUnionTypeResolver $propertyUnionTypeResolver,
         private AstResolver $astResolver,
+        private ObjectTypeAnalyzer $objectTypeAnalyzer
     ) {
     }
 
@@ -153,8 +154,7 @@ CODE_SAMPLE
             }
         }
 
-        // we are not sure what object type this is
-        if ($varType instanceof NonExistingObjectType) {
+        if ($this->objectTypeAnalyzer->isSpecial($varType)) {
             return null;
         }
 
