@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_81);
+
     $services = $containerConfigurator->services();
     $services->set(ArraySpreadInsteadOfArrayMergeRector::class);
 };

@@ -136,10 +136,11 @@ CODE_SAMPLE
         if (! $arrayStaticType instanceof ArrayType) {
             return true;
         }
+
         return ! $this->isArrayKeyTypeAllowed($arrayStaticType);
     }
 
-    private function isArrayKeyTypeAllowed(ArrayType $arrayStaticType): bool
+    private function isArrayKeyTypeAllowed(ArrayType $arrayType): bool
     {
         $allowedKeyTypes = [IntegerType::class];
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD_STRING_KEYS)) {
@@ -147,7 +148,7 @@ CODE_SAMPLE
         }
 
         foreach ($allowedKeyTypes as $allowedKeyType) {
-            if ($arrayStaticType->getKeyType() instanceof $allowedKeyType) {
+            if ($arrayType->getKeyType() instanceof $allowedKeyType) {
                 return true;
             }
         }

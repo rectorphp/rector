@@ -121,7 +121,9 @@ CODE_SAMPLE
 
             if ($argumentFuncCallToMethodCall instanceof ArgumentFuncCallToMethodCall) {
                 return $this->refactorFuncCallToMethodCall($argumentFuncCallToMethodCall, $classLike, $node);
-            } elseif ($argumentFuncCallToMethodCall instanceof ArrayFuncCallToMethodCall) {
+            }
+
+            if ($argumentFuncCallToMethodCall instanceof ArrayFuncCallToMethodCall) {
                 return $this->refactorArrayFunctionToMethodCall($argumentFuncCallToMethodCall, $node, $classLike);
             }
         }
