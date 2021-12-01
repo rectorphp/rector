@@ -69,6 +69,17 @@ class BuilderFactory
         return new \PhpParser\Builder\Trait_($name);
     }
     /**
+     * Creates an enum builder.
+     *
+     * @param string $name Name of the enum
+     *
+     * @return Builder\Enum_ The created enum builder
+     */
+    public function enum($name) : \PhpParser\Builder\Enum_
+    {
+        return new \PhpParser\Builder\Enum_($name);
+    }
+    /**
      * Creates a trait use builder.
      *
      * @param Node\Name|string ...$traits Trait names
@@ -183,6 +194,17 @@ class BuilderFactory
     public function classConst($name, $value) : \PhpParser\Builder\ClassConst
     {
         return new \PhpParser\Builder\ClassConst($name, $value);
+    }
+    /**
+     * Creates an enum case builder.
+     *
+     * @param string|Identifier $name  Name
+     *
+     * @return Builder\EnumCase The created use const builder
+     */
+    public function enumCase($name) : \PhpParser\Builder\EnumCase
+    {
+        return new \PhpParser\Builder\EnumCase($name);
     }
     /**
      * Creates node a for a literal value.

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -33,7 +34,7 @@ final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
      */
     public function resolve(\PhpParser\Node $node) : ?string
     {
-        if (\property_exists($node, 'namespacedName')) {
+        if (\property_exists($node, 'namespacedName') && $node->namespacedName instanceof \PhpParser\Node\Name) {
             return $node->namespacedName->toString();
         }
         if ($node->name === null) {

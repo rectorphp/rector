@@ -15,11 +15,15 @@ final class ObjectTypeAnalyzer
         if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {
             return \true;
         }
-        $types = !$varType instanceof \PHPStan\Type\UnionType ? [$varType] : $varType->getTypes();
+        $types = $varType instanceof \PHPStan\Type\UnionType ? $varType->getTypes() : [$varType];
         foreach ($types as $type) {
-            if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && $type->getClassName() === 'Prophecy\\Prophecy\\ObjectProphecy') {
-                return \true;
+            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+                continue;
             }
+            if ($type->getClassName() !== 'Prophecy\\Prophecy\\ObjectProphecy') {
+                continue;
+            }
+            return \true;
         }
         return \false;
     }

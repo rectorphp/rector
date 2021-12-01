@@ -54,7 +54,7 @@ final class UsedImportsResolver
         $class = $this->betterNodeFinder->findFirstInstanceOf($stmts, \PhpParser\Node\Stmt\Class_::class);
         // add class itself
         // is not anonymous class
-        if ($class !== null && \property_exists($class, 'namespacedName')) {
+        if ($class instanceof \PhpParser\Node\Stmt\Class_) {
             $className = (string) $this->nodeNameResolver->getName($class);
             $usedImports[] = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
         }

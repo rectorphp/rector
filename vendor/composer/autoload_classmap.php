@@ -82,6 +82,8 @@ return array(
     'PhpParser\\Builder\\ClassConst' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/ClassConst.php',
     'PhpParser\\Builder\\Class_' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/Class_.php',
     'PhpParser\\Builder\\Declaration' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/Declaration.php',
+    'PhpParser\\Builder\\EnumCase' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/EnumCase.php',
+    'PhpParser\\Builder\\Enum_' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/Enum_.php',
     'PhpParser\\Builder\\FunctionLike' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/FunctionLike.php',
     'PhpParser\\Builder\\Function_' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/Function_.php',
     'PhpParser\\Builder\\Interface_' => $vendorDir . '/nikic/php-parser/lib/PhpParser/Builder/Interface_.php',
