@@ -7,7 +7,7 @@
         "php": ">=8.0"
     },
     "require-dev": {
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#328fc16",
         "phpunit\/phpunit": "^9.5",
         "phpstan\/phpstan": "^1.0",
         "symplify\/phpstan-rules": "^10.0",
@@ -17,7 +17,9 @@
         "symplify\/monorepo-builder": "^10.0",
         "rector\/phpstan-rules": "^0.4.8",
         "phpstan\/extension-installer": "^1.1",
-        "phpstan\/phpstan-webmozart-assert": "^1.0"
+        "phpstan\/phpstan-webmozart-assert": "^1.0",
+        "phpstan\/phpstan-strict-rules": "^1.1",
+        "symplify\/vendor-patches": "^10.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,6 +45,11 @@
         ]
     },
     "extra": {
+        "patches": {
+            "symfony\/dependency-injection": [
+                "patches\/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
+            ]
+        },
         "branch-alias": {
             "dev-main": "0.11-dev"
         },

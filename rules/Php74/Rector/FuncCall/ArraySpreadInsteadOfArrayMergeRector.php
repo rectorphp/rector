@@ -120,14 +120,14 @@ CODE_SAMPLE
         }
         return !$this->isArrayKeyTypeAllowed($arrayStaticType);
     }
-    private function isArrayKeyTypeAllowed(\PHPStan\Type\ArrayType $arrayStaticType) : bool
+    private function isArrayKeyTypeAllowed(\PHPStan\Type\ArrayType $arrayType) : bool
     {
         $allowedKeyTypes = [\PHPStan\Type\IntegerType::class];
         if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::ARRAY_SPREAD_STRING_KEYS)) {
             $allowedKeyTypes[] = \PHPStan\Type\StringType::class;
         }
         foreach ($allowedKeyTypes as $allowedKeyType) {
-            if ($arrayStaticType->getKeyType() instanceof $allowedKeyType) {
+            if ($arrayType->getKeyType() instanceof $allowedKeyType) {
                 return \true;
             }
         }

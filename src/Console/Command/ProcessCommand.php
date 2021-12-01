@@ -23,12 +23,12 @@ use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
-use RectorPrefix20211130\Symfony\Component\Console\Application;
-use RectorPrefix20211130\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211130\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211130\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20211130\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211201\Symfony\Component\Console\Application;
+use RectorPrefix20211201\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211201\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211201\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20211201\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211201\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
@@ -90,7 +90,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \RectorPrefix20211130\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $rectors)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \RectorPrefix20211201\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $rectors)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -113,7 +113,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->setDescription('Upgrades or refactors source code with provided rectors');
         $names = $this->outputFormatterCollector->getNames();
         $description = \sprintf('Select output format: "%s".', \implode('", "', $names));
-        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, \Rector\Core\Configuration\Option::OUTPUT_FORMAT_SHORT, \RectorPrefix20211130\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
+        $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, \Rector\Core\Configuration\Option::OUTPUT_FORMAT_SHORT, \RectorPrefix20211201\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
         parent::configure();
     }
     /**
@@ -129,7 +129,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $configuration = $this->configurationFactory->createFromInput($input);
         // disable console output in case of json output formatter
         if ($configuration->getOutputFormat() === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
-            $this->symfonyStyle->setVerbosity(\RectorPrefix20211130\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
+            $this->symfonyStyle->setVerbosity(\RectorPrefix20211201\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);
         }
         // register autoloaded and included files
         $this->bootstrapFilesIncluder->includeBootstrapFiles();
@@ -167,7 +167,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     protected function initialize($input, $output) : void
     {
         $application = $this->getApplication();
-        if (!$application instanceof \RectorPrefix20211130\Symfony\Component\Console\Application) {
+        if (!$application instanceof \RectorPrefix20211201\Symfony\Component\Console\Application) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $optionDebug = (bool) $input->getOption(\Rector\Core\Configuration\Option::DEBUG);
@@ -190,13 +190,13 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     {
         // some errors were found → fail
         if ($processResult->getErrors() !== []) {
-            return \RectorPrefix20211130\Symfony\Component\Console\Command\Command::FAILURE;
+            return \RectorPrefix20211201\Symfony\Component\Console\Command\Command::FAILURE;
         }
         // inverse error code for CI dry-run
         if (!$configuration->isDryRun()) {
-            return \RectorPrefix20211130\Symfony\Component\Console\Command\Command::SUCCESS;
+            return \RectorPrefix20211201\Symfony\Component\Console\Command\Command::SUCCESS;
         }
-        return $processResult->getFileDiffs() === [] ? \RectorPrefix20211130\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20211130\Symfony\Component\Console\Command\Command::FAILURE;
+        return $processResult->getFileDiffs() === [] ? \RectorPrefix20211201\Symfony\Component\Console\Command\Command::SUCCESS : \RectorPrefix20211201\Symfony\Component\Console\Command\Command::FAILURE;
     }
     /**
      * @param File[] $files

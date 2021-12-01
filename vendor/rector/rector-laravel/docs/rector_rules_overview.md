@@ -18,11 +18,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddArgumentDefaultValueRector::class)
-        ->call('configure', [[
-            AddArgumentDefaultValueRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
-                new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
-            ]),
-        ]]);
+->configure([                new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
+]);
 };
 ```
 

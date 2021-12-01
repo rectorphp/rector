@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Laravel\ValueObject\AddArgumentDefaultValue;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211130\Webmozart\Assert\Assert;
+use RectorPrefix20211201\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Laravel\Tests\Rector\ClassMethod\AddArgumentDefaultValueRector\AddArgumentDefaultValueRectorTest
  */
@@ -78,12 +78,13 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, AddArgumentDefaultValue[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? [];
-        \RectorPrefix20211130\Webmozart\Assert\Assert::allIsInstanceOf($addedArguments, \Rector\Laravel\ValueObject\AddArgumentDefaultValue::class);
+        $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
+        \RectorPrefix20211201\Webmozart\Assert\Assert::isArray($addedArguments);
+        \RectorPrefix20211201\Webmozart\Assert\Assert::allIsInstanceOf($addedArguments, \Rector\Laravel\ValueObject\AddArgumentDefaultValue::class);
         $this->addedArguments = $addedArguments;
     }
 }

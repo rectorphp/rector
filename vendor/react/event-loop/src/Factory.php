@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211130\React\EventLoop;
+namespace RectorPrefix20211201\React\EventLoop;
 
 /**
  * [Deprecated] The `Factory` class exists as a convenient way to pick the best available event loop implementation.
@@ -34,7 +34,7 @@ final class Factory
     public static function create()
     {
         $loop = self::construct();
-        \RectorPrefix20211130\React\EventLoop\Loop::set($loop);
+        \RectorPrefix20211201\React\EventLoop\Loop::set($loop);
         return $loop;
     }
     /**
@@ -46,22 +46,22 @@ final class Factory
         // @codeCoverageIgnoreStart
         if (\function_exists('uv_loop_new')) {
             // only use ext-uv on PHP 7
-            return new \RectorPrefix20211130\React\EventLoop\ExtUvLoop();
+            return new \RectorPrefix20211201\React\EventLoop\ExtUvLoop();
         }
-        if (\class_exists('RectorPrefix20211130\\libev\\EventLoop', \false)) {
-            return new \RectorPrefix20211130\React\EventLoop\ExtLibevLoop();
+        if (\class_exists('RectorPrefix20211201\\libev\\EventLoop', \false)) {
+            return new \RectorPrefix20211201\React\EventLoop\ExtLibevLoop();
         }
         if (\class_exists('EvLoop', \false)) {
-            return new \RectorPrefix20211130\React\EventLoop\ExtEvLoop();
+            return new \RectorPrefix20211201\React\EventLoop\ExtEvLoop();
         }
         if (\class_exists('EventBase', \false)) {
-            return new \RectorPrefix20211130\React\EventLoop\ExtEventLoop();
+            return new \RectorPrefix20211201\React\EventLoop\ExtEventLoop();
         }
         if (\function_exists('event_base_new') && \PHP_MAJOR_VERSION === 5) {
             // only use ext-libevent on PHP 5 for now
-            return new \RectorPrefix20211130\React\EventLoop\ExtLibeventLoop();
+            return new \RectorPrefix20211201\React\EventLoop\ExtLibeventLoop();
         }
-        return new \RectorPrefix20211130\React\EventLoop\StreamSelectLoop();
+        return new \RectorPrefix20211201\React\EventLoop\StreamSelectLoop();
         // @codeCoverageIgnoreEnd
     }
 }

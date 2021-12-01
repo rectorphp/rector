@@ -51,6 +51,11 @@
         "rector\/rector": "<0.11"
     },
     "extra": {
+        "patches": {
+            "symfony\/dependency-injection": [
+                "patches\/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
+            ]
+        },
         "branch-alias": {
             "dev-main": "0.11-dev"
         },

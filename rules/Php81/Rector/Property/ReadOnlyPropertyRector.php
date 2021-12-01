@@ -85,7 +85,10 @@ CODE_SAMPLE
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($node)) {
             return null;
         }
-        if ($node->isReadonly() || $node->props[0]->default instanceof \PhpParser\Node\Expr) {
+        if ($node->isReadonly()) {
+            return null;
+        }
+        if ($node->props[0]->default instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if ($node->type === null) {

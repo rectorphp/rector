@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20211130\React\Socket;
+namespace RectorPrefix20211201\React\Socket;
 
-use RectorPrefix20211130\Evenement\EventEmitter;
-use RectorPrefix20211130\React\EventLoop\Loop;
-use RectorPrefix20211130\React\EventLoop\LoopInterface;
+use RectorPrefix20211201\Evenement\EventEmitter;
+use RectorPrefix20211201\React\EventLoop\Loop;
+use RectorPrefix20211201\React\EventLoop\LoopInterface;
 use InvalidArgumentException;
 use RuntimeException;
 /**
@@ -31,7 +31,7 @@ use RuntimeException;
  * @see ServerInterface
  * @see ConnectionInterface
  */
-final class TcpServer extends \RectorPrefix20211130\Evenement\EventEmitter implements \RectorPrefix20211130\React\Socket\ServerInterface
+final class TcpServer extends \RectorPrefix20211201\Evenement\EventEmitter implements \RectorPrefix20211201\React\Socket\ServerInterface
 {
     private $master;
     private $loop;
@@ -126,9 +126,9 @@ final class TcpServer extends \RectorPrefix20211130\Evenement\EventEmitter imple
      * @throws InvalidArgumentException if the listening address is invalid
      * @throws RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($uri, \RectorPrefix20211130\React\EventLoop\LoopInterface $loop = null, array $context = array())
+    public function __construct($uri, \RectorPrefix20211201\React\EventLoop\LoopInterface $loop = null, array $context = array())
     {
-        $this->loop = $loop ?: \RectorPrefix20211130\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20211201\React\EventLoop\Loop::get();
         // a single port has been given => assume localhost
         if ((string) (int) $uri === (string) $uri) {
             $uri = '127.0.0.1:' . $uri;
@@ -158,9 +158,9 @@ final class TcpServer extends \RectorPrefix20211130\Evenement\EventEmitter imple
             if ($errno === 0) {
                 // PHP does not seem to report errno, so match errno from errstr
                 // @link https://3v4l.org/3qOBl
-                $errno = \RectorPrefix20211130\React\Socket\SocketServer::errno($errstr);
+                $errno = \RectorPrefix20211201\React\Socket\SocketServer::errno($errstr);
             }
-            throw new \RuntimeException('Failed to listen on "' . $uri . '": ' . $errstr . \RectorPrefix20211130\React\Socket\SocketServer::errconst($errno), $errno);
+            throw new \RuntimeException('Failed to listen on "' . $uri . '": ' . $errstr . \RectorPrefix20211201\React\Socket\SocketServer::errconst($errno), $errno);
         }
         \stream_set_blocking($this->master, \false);
         $this->resume();
@@ -195,7 +195,7 @@ final class TcpServer extends \RectorPrefix20211130\Evenement\EventEmitter imple
         $that = $this;
         $this->loop->addReadStream($this->master, function ($master) use($that) {
             try {
-                $newSocket = \RectorPrefix20211130\React\Socket\SocketServer::accept($master);
+                $newSocket = \RectorPrefix20211201\React\Socket\SocketServer::accept($master);
             } catch (\RuntimeException $e) {
                 $that->emit('error', array($e));
                 return;
@@ -216,6 +216,6 @@ final class TcpServer extends \RectorPrefix20211130\Evenement\EventEmitter imple
     /** @internal */
     public function handleConnection($socket)
     {
-        $this->emit('connection', array(new \RectorPrefix20211130\React\Socket\Connection($socket, $this->loop)));
+        $this->emit('connection', array(new \RectorPrefix20211201\React\Socket\Connection($socket, $this->loop)));
     }
 }

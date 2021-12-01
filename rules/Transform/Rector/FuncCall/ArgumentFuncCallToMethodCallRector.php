@@ -24,7 +24,7 @@ use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
 use Rector\Transform\ValueObject\ArrayFuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211130\Webmozart\Assert\Assert;
+use RectorPrefix20211201\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\ArgumentFuncCallToMethodCallRectorTest
  */
@@ -113,7 +113,8 @@ CODE_SAMPLE
             }
             if ($argumentFuncCallToMethodCall instanceof \Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall) {
                 return $this->refactorFuncCallToMethodCall($argumentFuncCallToMethodCall, $classLike, $node);
-            } elseif ($argumentFuncCallToMethodCall instanceof \Rector\Transform\ValueObject\ArrayFuncCallToMethodCall) {
+            }
+            if ($argumentFuncCallToMethodCall instanceof \Rector\Transform\ValueObject\ArrayFuncCallToMethodCall) {
                 return $this->refactorArrayFunctionToMethodCall($argumentFuncCallToMethodCall, $node, $classLike);
             }
         }
@@ -125,8 +126,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $functionToMethodCalls = $configuration[self::FUNCTIONS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20211130\Webmozart\Assert\Assert::isArray($functionToMethodCalls);
-        \RectorPrefix20211130\Webmozart\Assert\Assert::allIsAOf($functionToMethodCalls, \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface::class);
+        \RectorPrefix20211201\Webmozart\Assert\Assert::isArray($functionToMethodCalls);
+        \RectorPrefix20211201\Webmozart\Assert\Assert::allIsAOf($functionToMethodCalls, \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface::class);
         $this->argumentFuncCallToMethodCalls = $functionToMethodCalls;
     }
     private function shouldSkipFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : bool

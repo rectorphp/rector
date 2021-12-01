@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Assign;
 
-use RectorPrefix20211130\Nette\Utils\Json;
-use RectorPrefix20211130\Nette\Utils\JsonException;
-use RectorPrefix20211130\Nette\Utils\Strings;
+use RectorPrefix20211201\Nette\Utils\Json;
+use RectorPrefix20211201\Nette\Utils\JsonException;
+use RectorPrefix20211201\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -153,8 +153,8 @@ CODE_SAMPLE
             return \false;
         }
         try {
-            return (bool) \RectorPrefix20211130\Nette\Utils\Json::decode($stringValue, \RectorPrefix20211130\Nette\Utils\Json::FORCE_ARRAY);
-        } catch (\RectorPrefix20211130\Nette\Utils\JsonException $exception) {
+            return (bool) \RectorPrefix20211201\Nette\Utils\Json::decode($stringValue, \RectorPrefix20211201\Nette\Utils\Json::FORCE_ARRAY);
+        } catch (\RectorPrefix20211201\Nette\Utils\JsonException $exception) {
             return \false;
         }
     }
@@ -194,7 +194,7 @@ CODE_SAMPLE
      */
     private function removeNodesAndCreateJsonEncodeFromStringValue(array $nodesToRemove, string $stringValue, array $placeholderNodes, \PhpParser\Node\Expr\Assign $assign) : ?\PhpParser\Node\Expr\Assign
     {
-        $stringValue = \RectorPrefix20211130\Nette\Utils\Strings::replace($stringValue, self::UNQUOTED_OBJECT_HASH_REGEX, '$1"$2"');
+        $stringValue = \RectorPrefix20211201\Nette\Utils\Strings::replace($stringValue, self::UNQUOTED_OBJECT_HASH_REGEX, '$1"$2"');
         if (!$this->isJsonString($stringValue)) {
             return null;
         }

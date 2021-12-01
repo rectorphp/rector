@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         $isAllowed = $this->isAllowed($node->class);
-        $toSkip = $isAllowed && $this->isBetweenParentheses($node) !== \false;
+        $toSkip = $isAllowed && $this->isBetweenParentheses($node);
         if ($toSkip) {
             return null;
         }
