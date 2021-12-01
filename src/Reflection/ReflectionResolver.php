@@ -22,6 +22,7 @@ use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry;
 use Rector\Core\ValueObject\MethodName;
@@ -36,13 +37,14 @@ final class ReflectionResolver
         private BetterNodeFinder $betterNodeFinder,
         private NodeTypeResolver $nodeTypeResolver,
         private NodeNameResolver $nodeNameResolver,
-        private TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry
+        private TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry,
+        private ClassAnalyzer $classAnalyzer
     ) {
     }
 
     public function resolveClassAndAnonymousClass(ClassLike $classLike): ClassReflection|null
     {
-        if ($classLike instanceof Class_ && $this->isAnonymousClass($classLike)) {
+        if ($classLike instanceof Class_ && $this->classAnalyzer->isAnonymousClass($classLike)) {
             return $this->reflectionProvider->getAnonymousClassReflection(
                 $classLike,
                 $classLike->getAttribute(AttributeKey::SCOPE)
@@ -218,10 +220,5 @@ final class ReflectionResolver
         // fallback to callable
         $funcCallNameType = $scope->getType($funcCall->name);
         return $this->typeToCallReflectionResolverRegistry->resolve($funcCallNameType, $scope);
-    }
-
-    private function isAnonymousClass(Class_ $class): bool
-    {
-        return ! property_exists($class, 'namespacedName');
     }
 }

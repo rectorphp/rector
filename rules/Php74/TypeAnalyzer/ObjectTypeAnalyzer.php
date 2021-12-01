@@ -18,14 +18,20 @@ final class ObjectTypeAnalyzer
             return true;
         }
 
-        $types = ! $varType instanceof UnionType
-            ? [$varType]
-            : $varType->getTypes();
+        $types = $varType instanceof UnionType
+            ? $varType->getTypes()
+            : [$varType];
 
         foreach ($types as $type) {
-            if ($type instanceof FullyQualifiedObjectType && $type->getClassName() === 'Prophecy\Prophecy\ObjectProphecy') {
-                return true;
+            if (! $type instanceof FullyQualifiedObjectType) {
+                continue;
             }
+
+            if ($type->getClassName() !== 'Prophecy\Prophecy\ObjectProphecy') {
+                continue;
+            }
+
+            return true;
         }
 
         return false;

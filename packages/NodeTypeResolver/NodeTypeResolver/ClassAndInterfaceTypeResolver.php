@@ -12,6 +12,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -23,6 +24,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
  */
 final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
 {
+    public function __construct(
+        private NodeNameResolver $nodeNameResolver
+    ) {
+    }
+
     /**
      * @return array<class-string<Node>>
      */
@@ -45,7 +51,7 @@ final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
 
         $classReflection = $scope->getClassReflection();
         if (! $classReflection instanceof ClassReflection) {
-            return new MixedType();
+            return new ObjectType((string) $this->nodeNameResolver->getName($node));
         }
 
         return new ObjectType($classReflection->getName(), null, $classReflection);

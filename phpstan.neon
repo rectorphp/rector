@@ -594,3 +594,11 @@ parameters:
         -
             message: '#Class has a static method must so must contains "Static" in its name#'
             path: src/Validation/RectorAssert.php
+
+        -
+            message: '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and .{1}namespacedName.{1} will always evaluate to true#'
+            path: packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
+
+        -
+            message: '#Instanceof between PhpParser\\Node\\Name and PhpParser\\Node\\Name will always evaluate to true#'
+            path: packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php

@@ -53,7 +53,7 @@ final class UsedImportsResolver
 
         // add class itself
         // is not anonymous class
-        if ($class !== null && property_exists($class, 'namespacedName')) {
+        if ($class instanceof Class_) {
             $className = (string) $this->nodeNameResolver->getName($class);
             $usedImports[] = new FullyQualifiedObjectType($className);
         }
