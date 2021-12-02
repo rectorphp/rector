@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20211201\Nette\Utils\Strings;
+use RectorPrefix20211202\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -225,7 +225,7 @@ final class DoctrineAnnotationDecorator
     }
     private function resolveFqnAnnotationSpacelessPhpDocTagNode(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode $phpDocTextNode) : ?\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
     {
-        $match = \RectorPrefix20211201\Nette\Utils\Strings::match($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
+        $match = \RectorPrefix20211202\Nette\Utils\Strings::match($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
         $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
         if ($fullyQualifiedAnnotationClass === null) {
             return null;

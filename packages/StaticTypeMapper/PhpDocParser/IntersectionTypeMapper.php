@@ -11,7 +11,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use RectorPrefix20211201\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211202\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
  */

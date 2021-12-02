@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\Visibility;
-use RectorPrefix20211201\Webmozart\Assert\Assert;
+use RectorPrefix20211202\Webmozart\Assert\Assert;
 final class VisibilityManipulator
 {
     /**
@@ -85,7 +85,7 @@ final class VisibilityManipulator
      */
     public function changeNodeVisibility($node, int $visibility) : void
     {
-        \RectorPrefix20211201\Webmozart\Assert\Assert::oneOf($visibility, [\Rector\Core\ValueObject\Visibility::PUBLIC, \Rector\Core\ValueObject\Visibility::PROTECTED, \Rector\Core\ValueObject\Visibility::PRIVATE, \Rector\Core\ValueObject\Visibility::STATIC, \Rector\Core\ValueObject\Visibility::ABSTRACT, \Rector\Core\ValueObject\Visibility::FINAL]);
+        \RectorPrefix20211202\Webmozart\Assert\Assert::oneOf($visibility, [\Rector\Core\ValueObject\Visibility::PUBLIC, \Rector\Core\ValueObject\Visibility::PROTECTED, \Rector\Core\ValueObject\Visibility::PRIVATE, \Rector\Core\ValueObject\Visibility::STATIC, \Rector\Core\ValueObject\Visibility::ABSTRACT, \Rector\Core\ValueObject\Visibility::FINAL]);
         $this->replaceVisibilityFlag($node, $visibility);
     }
     /**
@@ -162,7 +162,7 @@ final class VisibilityManipulator
     {
         $isStatic = $node instanceof \PhpParser\Node\Stmt\ClassMethod && $node->isStatic();
         if ($isStatic) {
-            $this->removeVisibility($node);
+            $this->makeNonStatic($node);
         }
         if ($visibility !== \Rector\Core\ValueObject\Visibility::STATIC && $visibility !== \Rector\Core\ValueObject\Visibility::ABSTRACT && $visibility !== \Rector\Core\ValueObject\Visibility::FINAL) {
             $this->removeVisibility($node);

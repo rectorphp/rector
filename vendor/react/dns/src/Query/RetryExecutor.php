@@ -1,15 +1,15 @@
 <?php
 
-namespace RectorPrefix20211201\React\Dns\Query;
+namespace RectorPrefix20211202\React\Dns\Query;
 
-use RectorPrefix20211201\React\Promise\CancellablePromiseInterface;
-use RectorPrefix20211201\React\Promise\Deferred;
-use RectorPrefix20211201\React\Promise\PromiseInterface;
-final class RetryExecutor implements \RectorPrefix20211201\React\Dns\Query\ExecutorInterface
+use RectorPrefix20211202\React\Promise\CancellablePromiseInterface;
+use RectorPrefix20211202\React\Promise\Deferred;
+use RectorPrefix20211202\React\Promise\PromiseInterface;
+final class RetryExecutor implements \RectorPrefix20211202\React\Dns\Query\ExecutorInterface
 {
     private $executor;
     private $retries;
-    public function __construct(\RectorPrefix20211201\React\Dns\Query\ExecutorInterface $executor, $retries = 2)
+    public function __construct(\RectorPrefix20211202\React\Dns\Query\ExecutorInterface $executor, $retries = 2)
     {
         $this->executor = $executor;
         $this->retries = $retries;
@@ -26,8 +26,8 @@ final class RetryExecutor implements \RectorPrefix20211201\React\Dns\Query\Execu
      */
     public function tryQuery($query, $retries)
     {
-        $deferred = new \RectorPrefix20211201\React\Promise\Deferred(function () use(&$promise) {
-            if ($promise instanceof \RectorPrefix20211201\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20211201\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+        $deferred = new \RectorPrefix20211202\React\Promise\Deferred(function () use(&$promise) {
+            if ($promise instanceof \RectorPrefix20211202\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20211202\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
                 $promise->cancel();
             }
         });
@@ -37,7 +37,7 @@ final class RetryExecutor implements \RectorPrefix20211201\React\Dns\Query\Execu
         };
         $executor = $this->executor;
         $errorback = function ($e) use($deferred, &$promise, $query, $success, &$errorback, &$retries, $executor) {
-            if (!$e instanceof \RectorPrefix20211201\React\Dns\Query\TimeoutException) {
+            if (!$e instanceof \RectorPrefix20211202\React\Dns\Query\TimeoutException) {
                 $errorback = null;
                 $deferred->reject($e);
             } elseif ($retries <= 0) {
