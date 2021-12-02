@@ -21,9 +21,9 @@ final class VisibilityManipulatorTest extends AbstractTestCase
 
     public function test(): void
     {
-        $node = new ClassMethod('SomeClass');
-        $node->flags = Visibility::PUBLIC | Visibility::STATIC;
-        $this->visibilityManipulator->changeNodeVisibility($node, Visibility::PROTECTED);
-        $this->assertSame(Visibility::PROTECTED | Visibility::STATIC, $node->flags);
+        $classMethod = new ClassMethod('SomeClass');
+        $classMethod->flags = Visibility::PUBLIC | Visibility::STATIC;
+        $this->visibilityManipulator->changeNodeVisibility($classMethod, Visibility::PROTECTED);
+        $this->assertSame(Visibility::PROTECTED | Visibility::STATIC, $classMethod->flags);
     }
 }

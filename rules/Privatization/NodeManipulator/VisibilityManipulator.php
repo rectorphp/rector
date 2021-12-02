@@ -12,6 +12,9 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\Visibility;
 use Webmozart\Assert\Assert;
 
+/**
+ * @see \Rector\Tests\Privatization\NodeManipulator\VisibilityManipulatorTest
+ */
 final class VisibilityManipulator
 {
     public function hasVisibility(ClassMethod | Property | ClassConst | Param $node, int $visibility): bool

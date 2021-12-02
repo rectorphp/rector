@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Core\ValueObject\Visibility;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -101,6 +102,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($node->flags !== Visibility::PRIVATE) {
+            return null;
+        }
+
         $this->visibilityManipulator->makeReadonly($node);
         return $node;
     }
@@ -112,7 +117,7 @@ CODE_SAMPLE
 
     private function refactorParam(Param $param): Param | null
     {
-        if ($param->flags === 0) {
+        if ($param->flags !== Visibility::PRIVATE) {
             return null;
         }
 
