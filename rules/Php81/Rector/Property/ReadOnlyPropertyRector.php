@@ -116,6 +116,10 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($param->type === null) {
+            return null;
+        }
+
         // promoted property?
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($param)) {
             return null;
