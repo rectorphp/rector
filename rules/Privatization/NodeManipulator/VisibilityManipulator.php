@@ -10,6 +10,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\Visibility;
 use RectorPrefix20211202\Webmozart\Assert\Assert;
+/**
+ * @see \Rector\Tests\Privatization\NodeManipulator\VisibilityManipulatorTest
+ */
 final class VisibilityManipulator
 {
     /**
