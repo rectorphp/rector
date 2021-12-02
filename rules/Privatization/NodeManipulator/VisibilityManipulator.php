@@ -162,7 +162,7 @@ final class VisibilityManipulator
     {
         $isStatic = $node instanceof \PhpParser\Node\Stmt\ClassMethod && $node->isStatic();
         if ($isStatic) {
-            $this->makeNonStatic($node);
+            $this->removeVisibility($node);
         }
         if ($visibility !== \Rector\Core\ValueObject\Visibility::STATIC && $visibility !== \Rector\Core\ValueObject\Visibility::ABSTRACT && $visibility !== \Rector\Core\ValueObject\Visibility::FINAL) {
             $this->removeVisibility($node);
