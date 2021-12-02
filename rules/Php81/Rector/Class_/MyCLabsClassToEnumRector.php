@@ -43,7 +43,7 @@ CODE_SAMPLE
 
                 ,
                 <<<'CODE_SAMPLE'
-enum Action
+enum Action : string
 {
     case VIEW = 'view';
     case EDIT = 'edit';

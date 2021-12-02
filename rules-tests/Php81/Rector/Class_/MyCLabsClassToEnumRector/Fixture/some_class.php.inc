@@ -22,7 +22,7 @@ namespace Rector\Tests\Php81\Rector\Class_\MyCLabsClassToEnumRector\Fixture;
 
 use MyCLabs\Enum\Enum;
 
-enum SomeClass
+enum SomeClass : string
 {
     /**
      * Some comment
