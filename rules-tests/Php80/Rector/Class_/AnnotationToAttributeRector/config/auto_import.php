@@ -21,6 +21,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity'),
             new AnnotationToAttribute('Doctrine\ORM\Mapping\Id'),
             new AnnotationToAttribute('Doctrine\ORM\Mapping\Column'),
+            new AnnotationToAttribute('Symfony\Component\Validator\Constraints\NotBlank'),
+            new AnnotationToAttribute('Symfony\Component\Validator\Constraints\Length'),
 
             new AnnotationToAttribute(Apple::class, AppleAttribute::class),
         ]);

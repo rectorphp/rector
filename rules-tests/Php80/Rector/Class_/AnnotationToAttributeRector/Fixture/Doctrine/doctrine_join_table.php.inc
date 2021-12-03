@@ -1,14 +1,14 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Set\DoctrineORM29Set\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture\Doctrine;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-class AnEntity
+final class DoctrineJoinTable
 {
     /**
-     * @ORM\ManyToMany(targetEntity=AnEntity::class)
+     * @ORM\ManyToMany(targetEntity=DoctrineJoinTable::class)
      * @ORM\JoinTable(
      *     name="my_join_table",
      *     joinColumns={@ORM\JoinColumn(name="first_column", referencedColumnName="id", onDelete="CASCADE")},
@@ -22,12 +22,12 @@ class AnEntity
 -----
 <?php
 
-namespace Rector\Doctrine\Tests\Set\DoctrineORM29Set\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture\Doctrine;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-class AnEntity
+final class DoctrineJoinTable
 {
     /**
      * @ORM\JoinTable(
@@ -36,7 +36,7 @@ class AnEntity
      *     inverseJoinColumns={@ORM\JoinColumn(name="second_column", referencedColumnName="id")}
      * )
      **/
-    #[ORM\ManyToMany(targetEntity: AnEntity::class)]
+    #[ORM\ManyToMany(targetEntity: DoctrineJoinTable::class)]
     protected Collection $list;
 }
 

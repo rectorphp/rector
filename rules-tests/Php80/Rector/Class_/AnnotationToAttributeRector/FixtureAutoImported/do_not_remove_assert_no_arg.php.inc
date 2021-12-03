@@ -5,7 +5,7 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAu
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
-class User
+class DoNotREmoveAssertNoArg
 {
     /**
      * @ORM\Column(type="string", length=27)
@@ -24,13 +24,11 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAu
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
-class User
+class DoNotREmoveAssertNoArg
 {
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Length(max=27)
-     */
     #[ORM\Column(type: 'string', length: 27)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 27)]
     private string $email;
 }
 

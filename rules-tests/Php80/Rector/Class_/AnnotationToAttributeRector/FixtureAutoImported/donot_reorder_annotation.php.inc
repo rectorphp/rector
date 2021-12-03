@@ -4,7 +4,7 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAu
 
 use Doctrine\ORM\Mapping as ORM;
 
-class News
+final class DoNotReorderAnnotatoin
 {
     /**
      * @var integer
@@ -23,7 +23,7 @@ namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\FixtureAu
 
 use Doctrine\ORM\Mapping as ORM;
 
-class News
+final class DoNotReorderAnnotatoin
 {
     /**
      * @var integer

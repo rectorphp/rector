@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\Testing\PHPUnit\AbstractTestCase;
+use Rector\Tests\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector\Fixture\Route;
 
 final class PhpAttributeGroupFactoryTest extends AbstractTestCase
 {
@@ -37,7 +38,7 @@ final class PhpAttributeGroupFactoryTest extends AbstractTestCase
         $args = $this->phpAttributeGroupFactory->createArgsFromItems([
             'path' => '/path',
             'name' => 'action',
-        ]);
+        ], Route::class);
 
         $this->assertCount(2, $args);
         $this->assertContainsOnlyInstancesOf(Arg::class, $args);

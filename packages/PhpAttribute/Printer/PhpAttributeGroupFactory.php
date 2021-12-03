@@ -13,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
+use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
 use Rector\PhpAttribute\NodeFactory\AttributeNameFactory;
 use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
@@ -27,7 +28,8 @@ final class PhpAttributeGroupFactory
         private NamedArgumentsResolver $namedArgumentsResolver,
         private AnnotationToAttributeMapper $annotationToAttributeMapper,
         private AttributeNameFactory $attributeNameFactory,
-        private NamedArgsFactory $namedArgsFactory
+        private NamedArgsFactory $namedArgsFactory,
+        private ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector
     ) {
     }
 
@@ -49,7 +51,7 @@ final class PhpAttributeGroupFactory
     public function createFromClassWithItems(string $attributeClass, array $items): AttributeGroup
     {
         $fullyQualified = new FullyQualified($attributeClass);
-        $args = $this->createArgsFromItems($items);
+        $args = $this->createArgsFromItems($items, $attributeClass);
         $attribute = new Attribute($fullyQualified, $args);
 
         return new AttributeGroup([$attribute]);
@@ -61,7 +63,7 @@ final class PhpAttributeGroupFactory
     ): AttributeGroup {
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
 
-        $args = $this->createArgsFromItems($values);
+        $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass());
         $argumentNames = $this->namedArgumentsResolver->resolveFromClass($annotationToAttribute->getAttributeClass());
 
         $this->completeNamedArguments($args, $argumentNames);
@@ -76,10 +78,13 @@ final class PhpAttributeGroupFactory
      * @param mixed[] $items
      * @return Arg[]
      */
-    public function createArgsFromItems(array $items): array
+    public function createArgsFromItems(array $items, string $attributeClass): array
     {
         /** @var Expr[] $items */
         $items = $this->annotationToAttributeMapper->map($items);
+
+        $items = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($items, $attributeClass);
+
         return $this->namedArgsFactory->createFromValues($items);
     }
 

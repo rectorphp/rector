@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Doctrine\Tests\Set\DoctrineORM29Set\Fixture;
+namespace Rector\Tests\Php80\Rector\Class_\AnnotationToAttributeRector\Fixture\Doctrine;
 
 use Doctrine\ORM\Mapping as ORM;
 
-class AnEntity
+final class SkipDoctrineNestedJoinColumns
 {
     /**
      * @ORM\JoinColumns({
@@ -14,5 +14,3 @@ class AnEntity
      **/
     protected $page;
 }
-
-?>
