@@ -15,7 +15,7 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php_version: ['7.1', '7.2', '7.3', '7.4', '8.0']
+                php_version: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1']
                 directory:
                     - 'e2e/attributes'
                     - 'e2e/define-constant'
