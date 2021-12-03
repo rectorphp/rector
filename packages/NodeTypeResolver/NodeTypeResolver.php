@@ -224,7 +224,8 @@ final class NodeTypeResolver
             return new MixedType();
         }
 
-        return $scope->getNativeType($expr);
+        $type = $scope->getNativeType($expr);
+        return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
     }
 
     public function isNumberType(Node $node): bool
