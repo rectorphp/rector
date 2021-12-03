@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
@@ -140,7 +141,7 @@ CODE_SAMPLE
     }
 
     private function shouldSkipClassMethod(
-        Class_ | Trait_ | Interface_ $classLike,
+        Class_ | Trait_ | Interface_ | Enum_ $classLike,
         MethodCall $methodCall,
         TypeWithClassName $typeWithClassName
     ): bool {

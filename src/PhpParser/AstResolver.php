@@ -13,6 +13,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
@@ -70,7 +71,7 @@ final class AstResolver
     ) {
     }
 
-    public function resolveClassFromName(string $className): Class_ | Trait_ | Interface_ | null
+    public function resolveClassFromName(string $className): Class_ | Trait_ | Interface_ | Enum_ | null
     {
         if (! $this->reflectionProvider->hasClass($className)) {
             return null;
@@ -82,7 +83,7 @@ final class AstResolver
 
     public function resolveClassFromObjectType(
         TypeWithClassName $typeWithClassName
-    ): Class_ | Trait_ | Interface_ | null {
+    ): Class_ | Trait_ | Interface_ | Enum_ | null {
         return $this->resolveClassFromName($typeWithClassName->getClassName());
     }
 
@@ -213,7 +214,7 @@ final class AstResolver
     public function resolveClassFromClassReflection(
         ClassReflection $classReflection,
         string $className
-    ): Trait_ | Class_ | Interface_ | null {
+    ): Trait_ | Class_ | Interface_ | Enum_ | null {
         return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $className);
     }
 

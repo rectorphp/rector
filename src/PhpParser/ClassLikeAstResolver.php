@@ -6,6 +6,7 @@ namespace Rector\Core\PhpParser;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
@@ -32,7 +33,7 @@ final class ClassLikeAstResolver
     public function resolveClassFromClassReflection(
         ClassReflection $classReflection,
         string $className
-    ): Trait_ | Class_ | Interface_ | null {
+    ): Trait_ | Class_ | Interface_ | Enum_ | null {
         if ($classReflection->isBuiltin()) {
             return null;
         }
