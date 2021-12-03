@@ -26,7 +26,7 @@ class ArraySpreadStringKey
         $parts = ['a' => 'b'];
         $parts2 = ['c' => 'd'];
 
-        $result = [...$parts, ...$parts2];
+        $result = array_merge($parts, $parts2);
     }
 }
 

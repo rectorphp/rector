@@ -30,7 +30,7 @@ class ArraySpreadStringKeyByDoc
         /** @var array<string, string> $parts2 */
         $parts2 = $this->data2();
 
-        $result = [...$parts, ...$parts2];
+        $result = array_merge($parts, $parts2);
     }
 }
 
