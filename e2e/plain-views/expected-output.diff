@@ -1,0 +1,16 @@
+1 file with changes
+===================
+
+1) src/view.php:0
+
+    ---------- begin diff ----------
+@@ @@
+-
+-	<div>
++<div>
+ 	<?php echo 1 ?>
+-	</div>
++	</div>
+    ----------- end diff -----------
+
+ [OK] 1 file would have changed (dry-run) by Rector
