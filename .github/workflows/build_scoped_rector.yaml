@@ -35,7 +35,7 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.0
+                    php-version: 8.1
                     coverage: none
 
                 # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
@@ -57,6 +57,17 @@ jobs:
 
             # 2. downgrade rector
             -   run: sh build/downgrade-rector.sh rector-build
+
+            # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.0
+                    coverage: none
+
+                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
+                env:
+                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # 3. prefix classes
             -   run: sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded

@@ -51,15 +51,16 @@ jobs:
                 uses: shivammathur/setup-php@v2
                 with:
                     # PHP 7.3 is required, so Rector's code is PHP 7.3 compatible even after refactoring
-                    php-version: 8.0
+                    php-version: 8.1
                     coverage: none
 
             -   run: composer install --no-progress --ansi
 
             ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
-            -   run: bin/rector process ${{ matrix.paths }} --ansi --no-progress-bar
+            # temporary disable rectify as splitted from https://github.com/rectorphp/rector-src/pull/1364
+            # -   run: bin/rector process ${{ matrix.paths }} --ansi --no-progress-bar
 
-            -   run: vendor/bin/ecs check --fix --ansi
+            # -   run: vendor/bin/ecs check --fix --ansi
 
             # see https://github.com/EndBug/add-and-commit
             -

@@ -11,6 +11,8 @@ use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
+use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
@@ -19,7 +21,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     // include the latest PHP version + all bellow in one config!
-    $containerConfigurator->import(LevelSetList::UP_TO_PHP_80);
+    $containerConfigurator->import(LevelSetList::UP_TO_PHP_81);
 
     // include sets
     $containerConfigurator->import(SetList::CODING_STYLE);
@@ -74,6 +76,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         FinalizeClassesWithoutChildrenRector::class => [
             __DIR__ . '/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
         ],
+
+        MyCLabsClassToEnumRector::class,
+        SpatieEnumClassToEnumRector::class,
 
         // test paths
         '*/tests/**/Fixture/*',
