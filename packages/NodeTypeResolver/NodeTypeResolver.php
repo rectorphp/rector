@@ -225,7 +225,8 @@ final class NodeTypeResolver
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return new \PHPStan\Type\MixedType();
         }
-        return $scope->getNativeType($expr);
+        $type = $scope->getNativeType($expr);
+        return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
     }
     public function isNumberType(\PhpParser\Node $node) : bool
     {
