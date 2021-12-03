@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit67b2463eb2becc42763feae1daca7435
+class ComposerStaticInitea5f20278b40bb57ab2bd495b8f1b0ac
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -3059,6 +3059,7 @@ class ComposerStaticInit67b2463eb2becc42763feae1daca7435
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/StringAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => __DIR__ . '/../..' . '/packages/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
         'Rector\\PhpAttribute\\Exception\\InvalidNestedAttributeException' => __DIR__ . '/../..' . '/packages/PhpAttribute/Exception/InvalidNestedAttributeException.php',
+        'Rector\\PhpAttribute\\NodeAnalyzer\\ExprParameterReflectionTypeCorrector' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/ExprParameterReflectionTypeCorrector.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
         'Rector\\PhpAttribute\\NodeFactory\\AttributeNameFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/AttributeNameFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
@@ -3795,9 +3796,9 @@ class ComposerStaticInit67b2463eb2becc42763feae1daca7435
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit67b2463eb2becc42763feae1daca7435::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit67b2463eb2becc42763feae1daca7435::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit67b2463eb2becc42763feae1daca7435::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitea5f20278b40bb57ab2bd495b8f1b0ac::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitea5f20278b40bb57ab2bd495b8f1b0ac::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitea5f20278b40bb57ab2bd495b8f1b0ac::$classMap;
 
         }, null, ClassLoader::class);
     }

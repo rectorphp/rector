@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
+use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
 use Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver;
 use Rector\PhpAttribute\NodeFactory\AttributeNameFactory;
 use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
@@ -37,12 +38,17 @@ final class PhpAttributeGroupFactory
      * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
     private $namedArgsFactory;
-    public function __construct(\Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver $namedArgumentsResolver, \Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory)
+    /**
+     * @var \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector
+     */
+    private $exprParameterReflectionTypeCorrector;
+    public function __construct(\Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver $namedArgumentsResolver, \Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector)
     {
         $this->namedArgumentsResolver = $namedArgumentsResolver;
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
         $this->attributeNameFactory = $attributeNameFactory;
         $this->namedArgsFactory = $namedArgsFactory;
+        $this->exprParameterReflectionTypeCorrector = $exprParameterReflectionTypeCorrector;
     }
     public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
@@ -60,14 +66,14 @@ final class PhpAttributeGroupFactory
     public function createFromClassWithItems(string $attributeClass, array $items) : \PhpParser\Node\AttributeGroup
     {
         $fullyQualified = new \PhpParser\Node\Name\FullyQualified($attributeClass);
-        $args = $this->createArgsFromItems($items);
+        $args = $this->createArgsFromItems($items, $attributeClass);
         $attribute = new \PhpParser\Node\Attribute($fullyQualified, $args);
         return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
-        $args = $this->createArgsFromItems($values);
+        $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass());
         $argumentNames = $this->namedArgumentsResolver->resolveFromClass($annotationToAttribute->getAttributeClass());
         $this->completeNamedArguments($args, $argumentNames);
         $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode);
@@ -78,10 +84,11 @@ final class PhpAttributeGroupFactory
      * @param mixed[] $items
      * @return Arg[]
      */
-    public function createArgsFromItems(array $items) : array
+    public function createArgsFromItems(array $items, string $attributeClass) : array
     {
         /** @var Expr[] $items */
         $items = $this->annotationToAttributeMapper->map($items);
+        $items = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($items, $attributeClass);
         return $this->namedArgsFactory->createFromValues($items);
     }
     /**

@@ -2662,6 +2662,7 @@ return array(
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/StringAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => $baseDir . '/packages/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
     'Rector\\PhpAttribute\\Exception\\InvalidNestedAttributeException' => $baseDir . '/packages/PhpAttribute/Exception/InvalidNestedAttributeException.php',
+    'Rector\\PhpAttribute\\NodeAnalyzer\\ExprParameterReflectionTypeCorrector' => $baseDir . '/packages/PhpAttribute/NodeAnalyzer/ExprParameterReflectionTypeCorrector.php',
     'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => $baseDir . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
     'Rector\\PhpAttribute\\NodeFactory\\AttributeNameFactory' => $baseDir . '/packages/PhpAttribute/NodeFactory/AttributeNameFactory.php',
     'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => $baseDir . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
