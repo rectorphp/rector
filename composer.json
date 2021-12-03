@@ -154,6 +154,9 @@
         "patches": {
             "symfony/dependency-injection": [
                 "patches/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
+            ],
+            "danielstjules/stringy": [
+                "patches/danielstjules-stringy-src-stringy-php.patch"
             ]
         },
         "branch-alias": {
