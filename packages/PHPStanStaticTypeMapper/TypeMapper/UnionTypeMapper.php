@@ -22,7 +22,6 @@ use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -144,7 +143,7 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
             return $nullabledTypeNode;
         }
         if ($nullabledTypeNode instanceof \PhpParser\Node\ComplexType) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            return $nullabledTypeNode;
         }
         return new \PhpParser\Node\NullableType($nullabledTypeNode);
     }
