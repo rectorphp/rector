@@ -34,6 +34,16 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
 {
     /**
      * @var string
+     * @see https://regex101.com/r/QA7mai/1
+     */
+    private const EMPTY_STARTING_TAG_REGEX = '/^<\\?php\\s+\\?>\\n?/';
+    /**
+     * @var string
+     * @see https://regex101.com/r/IVNkrt/1
+     */
+    private const EMPTY_ENDING_TAG_REGEX = '/<\\?php$/';
+    /**
+     * @var string
      * @see https://regex101.com/r/jUFizd/1
      */
     private const NEWLINE_END_REGEX = "#\n\$#";
@@ -97,6 +107,11 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
         // detect per print
         $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($origTokens);
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
+        // strip empty starting/ending php tags
+        if (\array_key_exists(0, $stmts) && $stmts[0] instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
+            $content = \RectorPrefix20211203\Nette\Utils\Strings::replace($content, self::EMPTY_STARTING_TAG_REGEX, '');
+            $content = \RectorPrefix20211203\Nette\Utils\Strings::replace(\rtrim($content), self::EMPTY_ENDING_TAG_REGEX, '') . "\n";
+        }
         // add new line in case of added stmts
         if (\count($stmts) !== \count($origStmts) && !\Rector\Core\Util\StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
@@ -354,7 +369,7 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
     private function resolveNewStmts(array $stmts) : array
     {
         if (\count($stmts) === 1 && $stmts[0] instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
-            return $stmts[0]->stmts;
+            return $this->resolveNewStmts($stmts[0]->stmts);
         }
         return $stmts;
     }
