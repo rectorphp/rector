@@ -6,7 +6,8 @@ namespace Rector\DowngradePhp81\Rector\Array_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntegerType;
 use Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -67,7 +68,15 @@ CODE_SAMPLE
             if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            if (!$item->key instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$item->unpack) {
+                continue;
+            }
+            $type = $this->nodeTypeResolver->getType($item->value);
+            if (!$type instanceof \PHPStan\Type\ArrayType) {
+                continue;
+            }
+            $keyType = $type->getKeyType();
+            if ($keyType instanceof \PHPStan\Type\IntegerType) {
                 return \true;
             }
         }
