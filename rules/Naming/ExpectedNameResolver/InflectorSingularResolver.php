@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Naming\ExpectedNameResolver;
 
-use RectorPrefix20211202\Doctrine\Inflector\Inflector;
-use RectorPrefix20211202\Nette\Utils\Strings;
+use RectorPrefix20211203\Doctrine\Inflector\Inflector;
+use RectorPrefix20211203\Nette\Utils\Strings;
 use Rector\Core\Util\StringUtils;
 /**
  * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
@@ -37,15 +37,15 @@ final class InflectorSingularResolver
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
-    public function __construct(\RectorPrefix20211202\Doctrine\Inflector\Inflector $inflector)
+    public function __construct(\RectorPrefix20211203\Doctrine\Inflector\Inflector $inflector)
     {
         $this->inflector = $inflector;
     }
     public function resolve(string $currentName) : string
     {
-        $matchBy = \RectorPrefix20211202\Nette\Utils\Strings::match($currentName, self::BY_MIDDLE_REGEX);
+        $matchBy = \RectorPrefix20211203\Nette\Utils\Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy !== null) {
-            return \RectorPrefix20211202\Nette\Utils\Strings::substring($currentName, 0, -\strlen($matchBy['by']));
+            return \RectorPrefix20211203\Nette\Utils\Strings::substring($currentName, 0, -\strlen($matchBy['by']));
         }
         $resolvedValue = $this->resolveSingularizeMap($currentName);
         if ($resolvedValue !== null) {
@@ -78,11 +78,11 @@ final class InflectorSingularResolver
                 return $singular;
             }
             if (\Rector\Core\Util\StringUtils::isMatch($currentName, '#' . \ucfirst($plural) . '#')) {
-                $resolvedValue = \RectorPrefix20211202\Nette\Utils\Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
+                $resolvedValue = \RectorPrefix20211203\Nette\Utils\Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
                 return $this->singularizeCamelParts($resolvedValue);
             }
             if (\Rector\Core\Util\StringUtils::isMatch($currentName, '#' . $plural . '#')) {
-                $resolvedValue = \RectorPrefix20211202\Nette\Utils\Strings::replace($currentName, '#' . $plural . '#', $singular);
+                $resolvedValue = \RectorPrefix20211203\Nette\Utils\Strings::replace($currentName, '#' . $plural . '#', $singular);
                 return $this->singularizeCamelParts($resolvedValue);
             }
         }
@@ -90,7 +90,7 @@ final class InflectorSingularResolver
     }
     private function singularizeCamelParts(string $currentName) : string
     {
-        $camelCases = \RectorPrefix20211202\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
+        $camelCases = \RectorPrefix20211203\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
             $value = $this->inflector->singularize($camelCase[self::CAMELCASE]);

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211202;
+namespace RectorPrefix20211203;
 
-use RectorPrefix20211202\Nette\Neon\Decoder;
+use RectorPrefix20211203\Nette\Neon\Decoder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\Nette\\NeonParser\\', __DIR__ . '/../packages/NeonParser')->exclude([__DIR__ . '/../packages/NeonParser/NeonNodeTraverser.php', __DIR__ . '/../packages/NeonParser/Node']);
-    $services->set(\RectorPrefix20211202\Nette\Neon\Decoder::class);
+    $services->set(\RectorPrefix20211203\Nette\Neon\Decoder::class);
 };

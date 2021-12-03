@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\ValueObject\Error;
 
 use Rector\Parallel\ValueObject\Name;
-use RectorPrefix20211202\Symplify\EasyParallel\Contract\SerializableInterface;
-final class SystemError implements \RectorPrefix20211202\Symplify\EasyParallel\Contract\SerializableInterface
+use RectorPrefix20211203\Symplify\EasyParallel\Contract\SerializableInterface;
+final class SystemError implements \RectorPrefix20211203\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @var int
@@ -43,7 +43,7 @@ final class SystemError implements \RectorPrefix20211202\Symplify\EasyParallel\C
     /**
      * @param mixed[] $json
      */
-    public static function decode($json) : \RectorPrefix20211202\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode($json) : \RectorPrefix20211203\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json[\Rector\Parallel\ValueObject\Name::LINE], $json[\Rector\Parallel\ValueObject\Name::MESSAGE], $json[\Rector\Parallel\ValueObject\Name::RELATIVE_FILE_PATH]);
     }

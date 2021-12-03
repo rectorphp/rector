@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php55;
 
-use RectorPrefix20211202\Nette\Utils\Strings;
+use RectorPrefix20211203\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;
@@ -37,7 +37,7 @@ final class RegexMatcher
             }
             $delimiter = $pattern[0];
             /** @var string $modifiers */
-            $modifiers = \RectorPrefix20211202\Nette\Utils\Strings::after($pattern, $delimiter, -1);
+            $modifiers = \RectorPrefix20211203\Nette\Utils\Strings::after($pattern, $delimiter, -1);
             if (\strpos($modifiers, 'e') === \false) {
                 return null;
             }
@@ -51,8 +51,8 @@ final class RegexMatcher
     }
     private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers) : string
     {
-        $modifiersWithoutE = \RectorPrefix20211202\Nette\Utils\Strings::replace($modifiers, '#e#', '');
-        return \RectorPrefix20211202\Nette\Utils\Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
+        $modifiersWithoutE = \RectorPrefix20211203\Nette\Utils\Strings::replace($modifiers, '#e#', '');
+        return \RectorPrefix20211203\Nette\Utils\Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
     private function matchConcat(\PhpParser\Node\Expr\BinaryOp\Concat $concat) : ?\PhpParser\Node\Expr
     {
@@ -60,7 +60,7 @@ final class RegexMatcher
         if (!$lastItem instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
-        $matches = \RectorPrefix20211202\Nette\Utils\Strings::match($lastItem->value, self::LETTER_SUFFIX_REGEX);
+        $matches = \RectorPrefix20211203\Nette\Utils\Strings::match($lastItem->value, self::LETTER_SUFFIX_REGEX);
         if (!isset($matches['modifiers'])) {
             return null;
         }
@@ -68,7 +68,7 @@ final class RegexMatcher
             return null;
         }
         // replace last "e" in the code
-        $lastItem->value = \RectorPrefix20211202\Nette\Utils\Strings::replace($lastItem->value, self::LAST_E_REGEX, '$1$2');
+        $lastItem->value = \RectorPrefix20211203\Nette\Utils\Strings::replace($lastItem->value, self::LAST_E_REGEX, '$1$2');
         return $concat;
     }
 }

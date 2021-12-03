@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211202\Symplify\Astral\PhpParser;
+namespace RectorPrefix20211203\Symplify\Astral\PhpParser;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeVisitor\NameResolver;
@@ -17,11 +17,11 @@ use PHPStan\Parser\SimpleParser;
  */
 final class SmartPhpParserFactory
 {
-    public function create() : \RectorPrefix20211202\Symplify\Astral\PhpParser\SmartPhpParser
+    public function create() : \RectorPrefix20211203\Symplify\Astral\PhpParser\SmartPhpParser
     {
         $nativePhpParser = $this->createNativePhpParser();
         $cachedParser = $this->createPHPStanParser($nativePhpParser);
-        return new \RectorPrefix20211202\Symplify\Astral\PhpParser\SmartPhpParser($cachedParser);
+        return new \RectorPrefix20211203\Symplify\Astral\PhpParser\SmartPhpParser($cachedParser);
     }
     private function createNativePhpParser() : \PhpParser\Parser
     {
