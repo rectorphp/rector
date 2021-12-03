@@ -2032,6 +2032,7 @@ return array(
     'Rector\\DowngradePhp80\\Reflection\\DefaultParameterValueResolver' => $baseDir . '/rules/DowngradePhp80/Reflection/DefaultParameterValueResolver.php',
     'Rector\\DowngradePhp80\\ValueObject\\DowngradeAttributeToAnnotation' => $baseDir . '/rules/DowngradePhp80/ValueObject/DowngradeAttributeToAnnotation.php',
     'Rector\\DowngradePhp81\\NodeManipulator\\ObjectToResourceReturn' => $baseDir . '/rules/DowngradePhp81/NodeManipulator/ObjectToResourceReturn.php',
+    'Rector\\DowngradePhp81\\Rector\\Array_\\DowngradeArraySpreadStringKeyRector' => $baseDir . '/rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php',
     'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => $baseDir . '/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
     'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => $baseDir . '/rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNeverTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php',
