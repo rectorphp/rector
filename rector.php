@@ -12,6 +12,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Privatization\Rector\Class_\FinalizeClassesWithoutChildrenRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -69,6 +70,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         StringClassNameToClassConstantRector::class,
         // some classes in config might not exist without dev dependencies
         SplitStringClassConstantToClassConstFetchRector::class,
+
+        FinalizeClassesWithoutChildrenRector::class => [
+            __DIR__ . '/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
+        ],
 
         // test paths
         '*/tests/**/Fixture/*',

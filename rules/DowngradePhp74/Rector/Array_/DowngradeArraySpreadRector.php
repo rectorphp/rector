@@ -31,7 +31,7 @@ use Traversable;
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector\DowngradeArraySpreadRectorTest
  */
-final class DowngradeArraySpreadRector extends AbstractRector
+class DowngradeArraySpreadRector extends AbstractRector
 {
     private bool $shouldIncrement = false;
 
