@@ -12,6 +12,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
@@ -102,7 +103,7 @@ final class AstResolver
         $this->classLikeAstResolver = $classLikeAstResolver;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromName(string $className)
     {
@@ -113,7 +114,7 @@ final class AstResolver
         return $this->resolveClassFromClassReflection($classReflection, $className);
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromObjectType(\PHPStan\Type\TypeWithClassName $typeWithClassName)
     {
@@ -222,7 +223,7 @@ final class AstResolver
         return $this->resolveClassMethod($callerStaticType->getClassName(), $methodName);
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {

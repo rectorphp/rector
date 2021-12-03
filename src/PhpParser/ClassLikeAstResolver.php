@@ -5,6 +5,7 @@ namespace Rector\Core\PhpParser;
 
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
@@ -34,7 +35,7 @@ final class ClassLikeAstResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Enum_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|null
      */
     public function resolveClassFromClassReflection(\PHPStan\Reflection\ClassReflection $classReflection, string $className)
     {
