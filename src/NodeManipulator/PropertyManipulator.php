@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
@@ -27,6 +28,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Symplify\PackageBuilder\Php\TypeChecker;
@@ -37,6 +39,14 @@ use Symplify\PackageBuilder\Php\TypeChecker;
  */
 final class PropertyManipulator
 {
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = [
+        'Doctrine\ORM\Mapping\Entity',
+        'Doctrine\ORM\Mapping\Table',
+    ];
+
     public function __construct(
         private AssignManipulator $assignManipulator,
         private BetterNodeFinder $betterNodeFinder,
@@ -46,7 +56,8 @@ final class PropertyManipulator
         private TypeChecker $typeChecker,
         private PropertyFetchFinder $propertyFetchFinder,
         private ReflectionResolver $reflectionResolver,
-        private NodeNameResolver $nodeNameResolver
+        private NodeNameResolver $nodeNameResolver,
+        private PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 
@@ -96,6 +107,21 @@ final class PropertyManipulator
 
     public function isPropertyChangeableExceptConstructor(Property | Param $propertyOrParam): bool
     {
+        $class = $this->betterNodeFinder->findParentType($propertyOrParam, Class_::class);
+        if ($class instanceof Class_) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
+            if ($phpDocInfo->hasByAnnotationClasses(self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
+                return true;
+            }
+
+            if ($this->phpAttributeAnalyzer->hasPhpAttributes(
+                $class,
+                self::ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES
+            )) {
+                return true;
+            }
+        }
+
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrParam);
 
         foreach ($propertyFetches as $propertyFetch) {
