@@ -14,6 +14,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\MagicConst\Line;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantStringType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -26,6 +27,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class BinaryOpBetweenNumberAndStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
+    {
+        $this->exprAnalyzer = $exprAnalyzer;
+    }
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::BINARY_OP_NUMBER_STRING;
@@ -70,6 +80,12 @@ CODE_SAMPLE
             return null;
         }
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
+            return null;
+        }
+        if ($this->exprAnalyzer->isNonTypedFromParam($node->left)) {
+            return null;
+        }
+        if ($this->exprAnalyzer->isNonTypedFromParam($node->right)) {
             return null;
         }
         if ($this->isStringOrStaticNonNumbericString($node->left) && $this->nodeTypeResolver->isNumberType($node->right)) {
