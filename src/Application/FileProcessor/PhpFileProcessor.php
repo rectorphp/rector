@@ -14,8 +14,10 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix20211204\Symfony\Component\Console\Style\SymfonyStyle;
@@ -78,10 +80,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         $this->errorFactory = $errorFactory;
     }
     /**
+     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      * @param \Rector\Core\ValueObject\Application\File $file
      * @param \Rector\Core\ValueObject\Configuration $configuration
      */
-    public function process($file, $configuration) : void
+    public function process($file, $configuration) : array
     {
         // 1. parse files to nodes
         $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
@@ -116,6 +119,9 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
                 $this->printFile($file, $configuration);
             }, \Rector\Core\Enum\ApplicationPhase::PRINT());
         } while ($file->hasChanged());
+        // return json here
+        $fileDiff = $file->getFileDiff();
+        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $file->getErrors(), \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $fileDiff instanceof \Rector\Core\ValueObject\Reporting\FileDiff ? [$fileDiff] : []];
     }
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
@@ -164,8 +170,8 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             if ($this->symfonyStyle->isVerbose() || \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
-            $rectorError = new \Rector\Core\ValueObject\Application\RectorError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
-            $file->addRectorError($rectorError);
+            $systemError = new \Rector\Core\ValueObject\Application\SystemError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
+            $file->addRectorError($systemError);
         }
     }
     private function printFile(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void

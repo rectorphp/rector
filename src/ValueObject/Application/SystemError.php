@@ -5,7 +5,7 @@ namespace Rector\Core\ValueObject\Application;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface;
-final class RectorError implements \RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface
+final class SystemError implements \RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @readonly

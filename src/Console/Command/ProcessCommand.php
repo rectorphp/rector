@@ -162,13 +162,13 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->configurePHPStanNodeScopeResolver($files);
         // MAIN PHASE
         // 5. run Rector
-        $this->applicationFileProcessor->run($files, $configuration);
+        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration);
         // REPORTING PHASE
         // 6. reporting phase
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
-        $processResult = $this->processResultFactory->create($files);
+        $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
         $outputFormatter->report($processResult, $configuration);
         // invalidate affected files
         $this->invalidateCacheChangedFiles($processResult);

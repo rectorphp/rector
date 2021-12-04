@@ -43,9 +43,9 @@ final class File
      */
     private $rectorWithLineChanges = [];
     /**
-     * @var RectorError[]
+     * @var SystemError[]
      */
-    private $rectorErrors = [];
+    private $systemErrors = [];
     /**
      * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileInfo
@@ -158,20 +158,20 @@ final class File
     {
         return $this->rectorWithLineChanges;
     }
-    public function addRectorError(\Rector\Core\ValueObject\Application\RectorError $rectorError) : void
+    public function addRectorError(\Rector\Core\ValueObject\Application\SystemError $systemError) : void
     {
-        $this->rectorErrors[] = $rectorError;
+        $this->systemErrors[] = $systemError;
     }
     public function hasErrors() : bool
     {
-        return $this->rectorErrors !== [];
+        return $this->systemErrors !== [];
     }
     /**
-     * @return RectorError[]
+     * @return SystemError[]
      */
     public function getErrors() : array
     {
-        return $this->rectorErrors;
+        return $this->systemErrors;
     }
     public function getRelativeFilePath() : string
     {

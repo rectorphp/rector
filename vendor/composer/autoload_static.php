@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16
+class ComposerStaticInit0a0f7ed647f95825022777dd6d23bbe7
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -2166,6 +2166,7 @@ class ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16
         'Rector\\Core\\Stubs\\DummyTraitClass' => __DIR__ . '/../..' . '/src/Stubs/DummyTraitClass.php',
         'Rector\\Core\\Stubs\\PHPStanStubLoader' => __DIR__ . '/../..' . '/src/Stubs/PHPStanStubLoader.php',
         'Rector\\Core\\Template\\DefaultResolver' => __DIR__ . '/../..' . '/src/Template/DefaultResolver.php',
+        'Rector\\Core\\UnusedPrivateConstant' => __DIR__ . '/../..' . '/src/UnusedPrivateConstant.php',
         'Rector\\Core\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
         'Rector\\Core\\Util\\StaticRectorStrings' => __DIR__ . '/../..' . '/src/Util/StaticRectorStrings.php',
         'Rector\\Core\\Util\\StringUtils' => __DIR__ . '/../..' . '/src/Util/StringUtils.php',
@@ -2177,7 +2178,7 @@ class ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16
         'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/ProcessResultFactory.php',
         'Rector\\Core\\ValueObject\\Application\\File' => __DIR__ . '/../..' . '/src/ValueObject/Application/File.php',
         'Rector\\Core\\ValueObject\\Application\\MovedFile' => __DIR__ . '/../..' . '/src/ValueObject/Application/MovedFile.php',
-        'Rector\\Core\\ValueObject\\Application\\RectorError' => __DIR__ . '/../..' . '/src/ValueObject/Application/RectorError.php',
+        'Rector\\Core\\ValueObject\\Application\\SystemError' => __DIR__ . '/../..' . '/src/ValueObject/Application/SystemError.php',
         'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/../..' . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
         'Rector\\Core\\ValueObject\\Configuration' => __DIR__ . '/../..' . '/src/ValueObject/Configuration.php',
         'Rector\\Core\\ValueObject\\Error\\SystemError' => __DIR__ . '/../..' . '/src/ValueObject/Error/SystemError.php',
@@ -3797,9 +3798,9 @@ class ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf8b497a70bd9ea2897a022ddd7e72c16::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0a0f7ed647f95825022777dd6d23bbe7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0a0f7ed647f95825022777dd6d23bbe7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0a0f7ed647f95825022777dd6d23bbe7::$classMap;
 
         }, null, ClassLoader::class);
     }

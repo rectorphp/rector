@@ -5,7 +5,10 @@ namespace Rector\Core\ValueObjectFactory;
 
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\ProcessResult;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ProcessResultFactory
 {
@@ -25,19 +28,12 @@ final class ProcessResultFactory
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
     /**
-     * @param File[] $files
+     * @param array{system_errors: SystemError[], file_diffs: FileDiff[]} $errorsAndFileDiffs
      */
-    public function create(array $files) : \Rector\Core\ValueObject\ProcessResult
+    public function create(array $errorsAndFileDiffs) : \Rector\Core\ValueObject\ProcessResult
     {
-        $fileDiffs = [];
-        $errors = [];
-        foreach ($files as $file) {
-            $errors = \array_merge($errors, $file->getErrors());
-            if ($file->getFileDiff() === null) {
-                continue;
-            }
-            $fileDiffs[] = $file->getFileDiff();
-        }
-        return new \Rector\Core\ValueObject\ProcessResult($fileDiffs, $errors, $this->removedAndAddedFilesCollector->getAddedFileCount(), $this->removedAndAddedFilesCollector->getRemovedFilesCount(), $this->nodesToRemoveCollector->getCount());
+        $systemErrors = $errorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS];
+        $fileDiffs = $errorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS];
+        return new \Rector\Core\ValueObject\ProcessResult($systemErrors, $fileDiffs, $this->removedAndAddedFilesCollector->getAddedFileCount(), $this->removedAndAddedFilesCollector->getRemovedFilesCount(), $this->nodesToRemoveCollector->getCount());
     }
 }

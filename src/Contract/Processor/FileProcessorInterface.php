@@ -13,10 +13,11 @@ interface FileProcessorInterface
      */
     public function supports($file, $configuration) : bool;
     /**
+     * @return mixed[]|void
      * @param \Rector\Core\ValueObject\Application\File $file
      * @param \Rector\Core\ValueObject\Configuration $configuration
      */
-    public function process($file, $configuration) : void;
+    public function process($file, $configuration);
     /**
      * @return string[]
      */

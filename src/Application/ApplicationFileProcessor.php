@@ -7,8 +7,11 @@ use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\FileFormatter\FileFormatter;
+use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix20211204\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
@@ -57,29 +60,36 @@ final class ApplicationFileProcessor
     }
     /**
      * @param File[] $files
+     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function run(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
+    public function run(array $files, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        $this->processFiles($files, $configuration);
+        $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
         $this->fileFormatter->format($files);
         $this->fileDiffFileDecorator->decorate($files);
         $this->printFiles($files, $configuration);
+        return $systemErrorsAndFileDiffs;
     }
     /**
      * @param File[] $files
+     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    private function processFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : void
+    private function processFiles(array $files, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
         if ($configuration->shouldShowProgressBar()) {
             $fileCount = \count($files);
             $this->symfonyStyle->progressStart($fileCount);
         }
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         foreach ($files as $file) {
             foreach ($this->fileProcessors as $fileProcessor) {
                 if (!$fileProcessor->supports($file, $configuration)) {
                     continue;
                 }
-                $fileProcessor->process($file, $configuration);
+                $result = $fileProcessor->process($file, $configuration);
+                if (\is_array($result)) {
+                    $systemErrorsAndFileDiffs = \array_merge($systemErrorsAndFileDiffs, $result);
+                }
             }
             // progress bar +1
             if ($configuration->shouldShowProgressBar()) {
@@ -87,6 +97,7 @@ final class ApplicationFileProcessor
             }
         }
         $this->removedAndAddedFilesProcessor->run($configuration);
+        return $systemErrorsAndFileDiffs;
     }
     /**
      * @param File[] $files

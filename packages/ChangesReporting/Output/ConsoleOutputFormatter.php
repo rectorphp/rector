@@ -7,7 +7,7 @@ use RectorPrefix20211204\Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
@@ -91,7 +91,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         }
     }
     /**
-     * @param RectorError[] $errors
+     * @param SystemError[] $errors
      */
     private function reportErrors(array $errors) : void
     {
