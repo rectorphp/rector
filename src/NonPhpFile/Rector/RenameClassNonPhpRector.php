@@ -139,7 +139,9 @@ CODE_SAMPLE
      */
     private function getRenameClasses(): array
     {
-        return array_merge($this->renameClasses, $this->renamedClassesDataCollector->getOldToNewClasses());
+        /** @var array<string, string> $renameClasses */
+        $renameClasses = [...$this->renameClasses, ...$this->renamedClassesDataCollector->getOldToNewClasses()];
+        return $renameClasses;
     }
 
     private function createOldClassRegex(string $oldClass): string

@@ -11,7 +11,6 @@ use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
-use Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
@@ -87,11 +86,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         MyCLabsClassToEnumRector::class,
         SpatieEnumClassToEnumRector::class,
 
-        // temporary skip it to avoid unrelated change string key array unpack on php 8.1 PR https://github.com/rectorphp/rector-src/pull/1380
-        // @todo remove when enabling it on different PR
-        ArraySpreadInsteadOfArrayMergeRector::class,
-
-        // temporary skip non readonly property rector
+        // temporary skip all with enable ArraySpreadInsteadOfArrayMergeRector
         ReturnNeverTypeRector::class,
         FinalizePublicClassConstantRector::class,
         MyCLabsMethodCallToEnumConstRector::class,
