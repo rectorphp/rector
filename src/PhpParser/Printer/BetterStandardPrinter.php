@@ -209,7 +209,7 @@ final class BetterStandardPrinter extends Standard
     protected function pArray(
         array $nodes,
         array $origNodes,
-        int & $pos,
+        int &$pos,
         int $indentAdjustment,
         string $parentNodeType,
         string $subNodeName,

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesFixer;
@@ -74,6 +75,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/packages-tests/NameImporting/NodeAnalyzer/UseAnalyzer/UseAnalyzerTest.php',
             '*TypeResolverTest.php',
             __DIR__ . '/rules-tests/CodingStyle/Node/UseManipulator/UseManipulatorTest.php',
+        ],
+
+        // skip add space on &$variable
+        FunctionTypehintSpaceFixer::class => [
+            __DIR__ . '/src/PhpParser/Printer/BetterStandardPrinter.php',
+            __DIR__ . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
+            __DIR__ . '/rules/Php70/EregToPcreTransformer.php',
         ],
     ]);
 

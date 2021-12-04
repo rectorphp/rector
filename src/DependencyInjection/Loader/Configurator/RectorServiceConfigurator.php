@@ -23,7 +23,7 @@ final class RectorServiceConfigurator extends ServiceConfigurator
         $this->ensureClassIsConfigurable($this->id);
 
         // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
-        array_walk_recursive($configuration, function (& $value) {
+        array_walk_recursive($configuration, function (&$value) {
             if (is_object($value)) {
                 $value = ValueObjectInliner::inline($value);
             }

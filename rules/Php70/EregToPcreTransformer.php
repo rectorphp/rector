@@ -206,7 +206,7 @@ final class EregToPcreTransformer
     /**
      * @param mixed[] $r
      */
-    private function processBracket(string $content, int $i, int $l, array & $r, int $rr): int
+    private function processBracket(string $content, int $i, int $l, array &$r, int $rr): int
     {
         // special case
         if ($i + 1 < $l && $content[$i + 1] === ')') {
@@ -281,7 +281,7 @@ final class EregToPcreTransformer
     /**
      * @param mixed[] $r
      */
-    private function processCurlyBracket(string $s, int $i, array & $r, int $rr): int
+    private function processCurlyBracket(string $s, int $i, array &$r, int $rr): int
     {
         $ii = strpos($s, '}', $i);
         if ($ii === false) {
