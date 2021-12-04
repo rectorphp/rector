@@ -26,9 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ActionInjectionToConstructorInjectionRector extends AbstractRector
 {
     public function __construct(
-        private ServiceMapProvider $applicationServiceMapProvider,
-        private VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
-        private PropertyToAddCollector $propertyToAddCollector,
+        private readonly ServiceMapProvider $applicationServiceMapProvider,
+        private readonly VariablesToPropertyFetchCollection $variablesToPropertyFetchCollection,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
     ) {
     }
 

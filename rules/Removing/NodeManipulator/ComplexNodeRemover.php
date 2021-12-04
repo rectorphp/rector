@@ -27,13 +27,13 @@ use Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer;
 final class ComplexNodeRemover
 {
     public function __construct(
-        private AssignRemover $assignRemover,
-        private PropertyFetchFinder $propertyFetchFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeRemover $nodeRemover,
-        private NodeComparator $nodeComparator,
-        private ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer
+        private readonly AssignRemover $assignRemover,
+        private readonly PropertyFetchFinder $propertyFetchFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeRemover $nodeRemover,
+        private readonly NodeComparator $nodeComparator,
+        private readonly ForbiddenPropertyRemovalAnalyzer $forbiddenPropertyRemovalAnalyzer
     ) {
     }
 

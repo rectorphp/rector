@@ -43,7 +43,7 @@ class DowngradeArraySpreadRector extends AbstractRector
     private array $lastPositionCurrentFile = [];
 
     public function __construct(
-        private VariableNaming $variableNaming
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

@@ -13,9 +13,9 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class DependencyResolver
 {
     public function __construct(
-        private NodeScopeResolver $nodeScopeResolver,
-        private PHPStanDependencyResolver $phpStanDependencyResolver,
-        private PrivatesAccessor $privatesAccessor
+        private readonly NodeScopeResolver $nodeScopeResolver,
+        private readonly PHPStanDependencyResolver $phpStanDependencyResolver,
+        private readonly PrivatesAccessor $privatesAccessor
     ) {
     }
 

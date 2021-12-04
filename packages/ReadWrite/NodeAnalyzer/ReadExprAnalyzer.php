@@ -14,7 +14,7 @@ final class ReadExprAnalyzer
      * @param ReadNodeAnalyzerInterface[] $readNodeAnalyzers
      */
     public function __construct(
-        private array $readNodeAnalyzers
+        private readonly array $readNodeAnalyzers
     ) {
     }
 

@@ -12,12 +12,12 @@ use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
 final class PropertyRename implements RenamePropertyValueObjectInterface
 {
     public function __construct(
-        private Property $property,
-        private string $expectedName,
-        private string $currentName,
-        private ClassLike $classLike,
-        private string $classLikeName,
-        private PropertyProperty $propertyProperty
+        private readonly Property $property,
+        private readonly string $expectedName,
+        private readonly string $currentName,
+        private readonly ClassLike $classLike,
+        private readonly string $classLikeName,
+        private readonly PropertyProperty $propertyProperty
     ) {
     }
 

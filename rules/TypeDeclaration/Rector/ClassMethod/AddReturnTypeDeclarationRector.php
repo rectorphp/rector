@@ -34,7 +34,7 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     private array $methodReturnTypes = [];
 
     public function __construct(
-        private TypeComparator $typeComparator
+        private readonly TypeComparator $typeComparator
     ) {
     }
 

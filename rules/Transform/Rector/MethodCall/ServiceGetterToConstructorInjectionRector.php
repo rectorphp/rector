@@ -38,9 +38,9 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
     private array $methodCallToServices = [];
 
     public function __construct(
-        private PropertyNaming $propertyNaming,
-        private ClassAnalyzer $classAnalyzer,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly PropertyNaming $propertyNaming,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

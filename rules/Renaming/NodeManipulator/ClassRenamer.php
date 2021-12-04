@@ -42,16 +42,16 @@ final class ClassRenamer
     private array $alreadyProcessedClasses = [];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private ClassNaming $classNaming,
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocClassRenamer $phpDocClassRenamer,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private DocBlockClassRenamer $docBlockClassRenamer,
-        private ReflectionProvider $reflectionProvider,
-        private NodeRemover $nodeRemover,
-        private ParameterProvider $parameterProvider
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly ClassNaming $classNaming,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocClassRenamer $phpDocClassRenamer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly DocBlockClassRenamer $docBlockClassRenamer,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeRemover $nodeRemover,
+        private readonly ParameterProvider $parameterProvider
     ) {
     }
 

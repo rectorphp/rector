@@ -12,8 +12,8 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class PropertyRenamer
 {
     public function __construct(
-        private PropertyRenameGuard $propertyRenameGuard,
-        private PropertyFetchRenamer $propertyFetchRenamer
+        private readonly PropertyRenameGuard $propertyRenameGuard,
+        private readonly PropertyFetchRenamer $propertyFetchRenamer
     ) {
     }
 

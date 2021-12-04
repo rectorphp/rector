@@ -20,9 +20,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ReturnStrictTypeAnalyzer
 {
     public function __construct(
-        private ReflectionResolver $reflectionResolver,
-        private TypeNodeUnwrapper $typeNodeUnwrapper,
-        private StaticTypeMapper $staticTypeMapper
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly TypeNodeUnwrapper $typeNodeUnwrapper,
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 

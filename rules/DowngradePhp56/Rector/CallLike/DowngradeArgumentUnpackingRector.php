@@ -33,7 +33,7 @@ use Webmozart\Assert\Assert;
 final class DowngradeArgumentUnpackingRector extends AbstractRector
 {
     public function __construct(
-        private ArgManipulator $argManipulator
+        private readonly ArgManipulator $argManipulator
     ) {
     }
 

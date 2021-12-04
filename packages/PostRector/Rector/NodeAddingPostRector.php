@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NodeAddingPostRector extends AbstractPostRector
 {
     public function __construct(
-        private NodesToAddCollector $nodesToAddCollector
+        private readonly NodesToAddCollector $nodesToAddCollector
     ) {
     }
 

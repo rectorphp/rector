@@ -12,7 +12,7 @@ use Rector\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFactory
 {
     public function __construct(
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

@@ -29,7 +29,7 @@ final class CallAnalyzer
     private BetterNodeFinder $betterNodeFinder;
 
     public function __construct(
-        private NodeComparator $nodeComparator
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

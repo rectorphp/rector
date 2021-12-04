@@ -23,8 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPromotedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private PropertyFetchFinder $propertyFetchFinder,
-        private PropertyManipulator $propertyManipulator,
+        private readonly PropertyFetchFinder $propertyFetchFinder,
+        private readonly PropertyManipulator $propertyManipulator,
     ) {
     }
 

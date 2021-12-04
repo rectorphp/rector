@@ -19,8 +19,8 @@ final class FileInfoDeletionAnalyzer
     private const TESTING_PREFIX_REGEX = '#input_(.*?)_#';
 
     public function __construct(
-        private ClassNaming $classNaming,
-        private NodeNameResolver $nodeNameResolver
+        private readonly ClassNaming $classNaming,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

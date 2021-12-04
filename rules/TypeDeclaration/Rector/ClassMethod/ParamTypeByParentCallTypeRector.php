@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByParentCallTypeRector extends AbstractRector
 {
     public function __construct(
-        private CallerParamMatcher $callerParamMatcher
+        private readonly CallerParamMatcher $callerParamMatcher
     ) {
     }
 

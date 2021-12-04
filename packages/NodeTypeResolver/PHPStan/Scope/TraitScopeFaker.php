@@ -13,8 +13,8 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class TraitScopeFaker
 {
     public function __construct(
-        private PrivatesAccessor $privatesAccessor,
-        private ReflectionProvider $reflectionProvider
+        private readonly PrivatesAccessor $privatesAccessor,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

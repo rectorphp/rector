@@ -33,16 +33,16 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ReflectionResolver
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry,
-        private ClassAnalyzer $classAnalyzer
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry,
+        private readonly ClassAnalyzer $classAnalyzer
     ) {
     }
 
-    public function resolveClassAndAnonymousClass(ClassLike $classLike): ClassReflection|null
+    public function resolveClassAndAnonymousClass(ClassLike $classLike): ClassReflection
     {
         if ($classLike instanceof Class_ && $this->classAnalyzer->isAnonymousClass($classLike)) {
             return $this->reflectionProvider->getAnonymousClassReflection(

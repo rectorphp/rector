@@ -11,7 +11,7 @@ use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 final class AttrGroupsFactory
 {
     public function __construct(
-        private PhpAttributeGroupFactory $phpAttributeGroupFactory
+        private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory
     ) {
     }
 

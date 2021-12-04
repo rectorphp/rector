@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SwitchNegatedTernaryRector extends AbstractRector
 {
     public function __construct(
-        private TernaryBracketWrapper $ternaryBracketWrapper
+        private readonly TernaryBracketWrapper $ternaryBracketWrapper
     ) {
     }
 

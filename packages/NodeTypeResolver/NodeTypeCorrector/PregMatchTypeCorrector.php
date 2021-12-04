@@ -21,11 +21,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PregMatchTypeCorrector
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private ParentScopeFinder $parentScopeFinder,
-        private NodeComparator $nodeComparator,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ParentScopeFinder $parentScopeFinder,
+        private readonly NodeComparator $nodeComparator,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

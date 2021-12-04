@@ -27,8 +27,8 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
     private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

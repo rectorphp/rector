@@ -27,7 +27,7 @@ final class InfiniteLoopValidator
     ];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

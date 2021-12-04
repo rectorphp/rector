@@ -29,9 +29,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CompactToVariablesRector extends AbstractRector
 {
     public function __construct(
-        private CompactConverter $compactConverter,
-        private ArrayItemsAnalyzer $arrayItemsAnalyzer,
-        private ArrayCompacter $arrayCompacter
+        private readonly CompactConverter $compactConverter,
+        private readonly ArrayItemsAnalyzer $arrayItemsAnalyzer,
+        private readonly ArrayCompacter $arrayCompacter
     ) {
     }
 

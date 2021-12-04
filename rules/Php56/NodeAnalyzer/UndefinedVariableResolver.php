@@ -34,10 +34,10 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class UndefinedVariableResolver
 {
     public function __construct(
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeComparator $nodeComparator,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

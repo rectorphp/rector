@@ -15,10 +15,10 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class RemovedAndAddedFilesProcessor
 {
     public function __construct(
-        private SmartFileSystem $smartFileSystem,
-        private NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
-        private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        private SymfonyStyle $symfonyStyle
+        private readonly SmartFileSystem $smartFileSystem,
+        private readonly NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter,
+        private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        private readonly SymfonyStyle $symfonyStyle
     ) {
     }
 

@@ -41,9 +41,9 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
     private const ALREADY_DOWNGRADED = 'already_downgraded';
 
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PrivatesCaller $privatesCaller,
-        private ReturnTagRemover $returnTagRemover
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PrivatesCaller $privatesCaller,
+        private readonly ReturnTagRemover $returnTagRemover
     ) {
     }
 

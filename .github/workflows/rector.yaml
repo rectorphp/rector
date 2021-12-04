@@ -57,10 +57,9 @@ jobs:
             -   run: composer install --no-progress --ansi
 
             ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
-            # temporary disable rectify as splitted from https://github.com/rectorphp/rector-src/pull/1364
-            # -   run: bin/rector process ${{ matrix.paths }} --ansi --no-progress-bar
+            -   run: bin/rector process ${{ matrix.paths }} --ansi --no-progress-bar
 
-            # -   run: vendor/bin/ecs check --fix --ansi
+            -   run: vendor/bin/ecs check --fix --ansi
 
             # see https://github.com/EndBug/add-and-commit
             -

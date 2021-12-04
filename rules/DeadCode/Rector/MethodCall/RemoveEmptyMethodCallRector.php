@@ -34,8 +34,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyMethodCallRector extends AbstractRector
 {
     public function __construct(
-        private AstResolver $reflectionAstResolver,
-        private CallAnalyzer $callAnalyzer
+        private readonly AstResolver $reflectionAstResolver,
+        private readonly CallAnalyzer $callAnalyzer
     ) {
     }
 

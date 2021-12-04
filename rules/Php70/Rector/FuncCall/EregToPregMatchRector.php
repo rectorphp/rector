@@ -44,8 +44,8 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
     ];
 
     public function __construct(
-        private EregToPcreTransformer $eregToPcreTransformer,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly EregToPcreTransformer $eregToPcreTransformer,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

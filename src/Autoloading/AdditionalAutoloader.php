@@ -16,9 +16,9 @@ use Symplify\SmartFileSystem\FileSystemGuard;
 final class AdditionalAutoloader
 {
     public function __construct(
-        private FileSystemGuard $fileSystemGuard,
-        private ParameterProvider $parameterProvider,
-        private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
+        private readonly FileSystemGuard $fileSystemGuard,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator
     ) {
     }
 

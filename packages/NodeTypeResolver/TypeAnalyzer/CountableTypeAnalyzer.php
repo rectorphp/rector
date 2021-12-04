@@ -17,9 +17,9 @@ final class CountableTypeAnalyzer
     private array $countableObjectTypes = [];
 
     public function __construct(
-        private ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        private NodeTypeResolver $nodeTypeResolver,
-        private PregMatchTypeCorrector $pregMatchTypeCorrector
+        private readonly ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PregMatchTypeCorrector $pregMatchTypeCorrector
     ) {
         $this->countableObjectTypes = [
             new ObjectType('Countable'),

@@ -19,12 +19,12 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
  */
 final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
 {
-    private int $nestedChainMethodCallLimit;
+    private readonly int $nestedChainMethodCallLimit;
 
     private ?Expression $removingExpression = null;
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly BetterNodeFinder $betterNodeFinder,
         ParameterProvider $parameterProvider
     ) {
         $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(

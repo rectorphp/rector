@@ -18,11 +18,11 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class NativeParamToPhpDocDecorator
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private StaticTypeMapper $staticTypeMapper,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private ValueResolver $valueResolver
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

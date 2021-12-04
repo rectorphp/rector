@@ -23,14 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NameImportingPostRector extends AbstractPostRector
 {
     public function __construct(
-        private ParameterProvider $parameterProvider,
-        private NameImporter $nameImporter,
-        private DocBlockNameImporter $docBlockNameImporter,
-        private ClassNameImportSkipper $classNameImportSkipper,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private ReflectionProvider $reflectionProvider,
-        private CurrentFileProvider $currentFileProvider,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly ParameterProvider $parameterProvider,
+        private readonly NameImporter $nameImporter,
+        private readonly DocBlockNameImporter $docBlockNameImporter,
+        private readonly ClassNameImportSkipper $classNameImportSkipper,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

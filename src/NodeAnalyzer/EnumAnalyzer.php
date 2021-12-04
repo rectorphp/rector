@@ -12,8 +12,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class EnumAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

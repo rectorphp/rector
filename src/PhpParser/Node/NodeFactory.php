@@ -76,15 +76,15 @@ final class NodeFactory
     private const THIS = 'this';
 
     public function __construct(
-        private BuilderFactory $builderFactory,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private PhpVersionProvider $phpVersionProvider,
-        private StaticTypeMapper $staticTypeMapper,
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private CurrentNodeProvider $currentNodeProvider,
-        private AstResolver $reflectionAstResolver,
-        private PropertyTypeDecorator $propertyTypeDecorator
+        private readonly BuilderFactory $builderFactory,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly CurrentNodeProvider $currentNodeProvider,
+        private readonly AstResolver $reflectionAstResolver,
+        private readonly PropertyTypeDecorator $propertyTypeDecorator
     ) {
     }
 

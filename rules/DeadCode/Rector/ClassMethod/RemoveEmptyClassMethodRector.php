@@ -21,8 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveEmptyClassMethodRector extends AbstractRector
 {
     public function __construct(
-        private ClassMethodManipulator $classMethodManipulator,
-        private ControllerClassMethodManipulator $controllerClassMethodManipulator
+        private readonly ClassMethodManipulator $classMethodManipulator,
+        private readonly ControllerClassMethodManipulator $controllerClassMethodManipulator
     ) {
     }
 

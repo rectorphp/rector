@@ -18,10 +18,10 @@ use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PathNormalizer $pathNormalizer,
-        private AstResolver $astResolver,
-        private ParamTypeInferer $paramTypeInferer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PathNormalizer $pathNormalizer,
+        private readonly AstResolver $astResolver,
+        private readonly ParamTypeInferer $paramTypeInferer
     ) {
     }
 

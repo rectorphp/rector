@@ -12,7 +12,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ErrorFactory
 {
     public function __construct(
-        private ExceptionCorrector $exceptionCorrector
+        private readonly ExceptionCorrector $exceptionCorrector
     ) {
     }
 

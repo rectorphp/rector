@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VarToPublicPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

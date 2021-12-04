@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class DocBlockTagReplacer
 {
     public function __construct(
-        private AnnotationNaming $annotationNaming
+        private readonly AnnotationNaming $annotationNaming
     ) {
     }
 

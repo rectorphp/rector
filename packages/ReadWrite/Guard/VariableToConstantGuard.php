@@ -24,8 +24,8 @@ final class VariableToConstantGuard
     private array $referencePositionsByFunctionName = [];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 

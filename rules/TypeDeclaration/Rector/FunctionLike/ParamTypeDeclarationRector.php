@@ -37,11 +37,11 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
     private bool $hasChanged = false;
 
     public function __construct(
-        private VendorLockResolver $vendorLockResolver,
-        private ParamTypeInferer $paramTypeInferer,
-        private TraitTypeAnalyzer $traitTypeAnalyzer,
-        private ParamTagRemover $paramTagRemover,
-        private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
+        private readonly VendorLockResolver $vendorLockResolver,
+        private readonly ParamTypeInferer $paramTypeInferer,
+        private readonly TraitTypeAnalyzer $traitTypeAnalyzer,
+        private readonly ParamTagRemover $paramTagRemover,
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 

@@ -20,7 +20,7 @@ final class WorkerCommandLineFactory
     private const OPTION_DASHES = '--';
 
     public function __construct(
-        private ProcessCommand $processCommand
+        private readonly ProcessCommand $processCommand
     ) {
     }
 

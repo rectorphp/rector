@@ -21,8 +21,8 @@ final class InvalidNameNodeReporter
     private const FILE = 'file';
 
     public function __construct(
-        private CurrentFileProvider $currentFileProvider,
-        private BetterStandardPrinter $betterStandardPrinter
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 

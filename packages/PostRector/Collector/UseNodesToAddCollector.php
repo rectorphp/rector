@@ -27,7 +27,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
     private array $useImportTypesInFilePath = [];
 
     public function __construct(
-        private CurrentFileProvider $currentFileProvider
+        private readonly CurrentFileProvider $currentFileProvider
     ) {
     }
 

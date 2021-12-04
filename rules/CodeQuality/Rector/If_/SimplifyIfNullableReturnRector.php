@@ -32,9 +32,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfNullableReturnRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private AssignVariableTypeResolver $assignVariableTypeResolver,
-        private VarTagRemover $varTagRemover
+        private readonly IfManipulator $ifManipulator,
+        private readonly AssignVariableTypeResolver $assignVariableTypeResolver,
+        private readonly VarTagRemover $varTagRemover
     ) {
     }
 

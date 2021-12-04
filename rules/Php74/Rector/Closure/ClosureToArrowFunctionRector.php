@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClosureToArrowFunctionRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer
+        private readonly ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer
     ) {
     }
 

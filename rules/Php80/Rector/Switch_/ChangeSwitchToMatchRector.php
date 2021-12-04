@@ -34,9 +34,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private SwitchExprsResolver $switchExprsResolver,
-        private MatchSwitchAnalyzer $matchSwitchAnalyzer,
-        private MatchFactory $matchFactory,
+        private readonly SwitchExprsResolver $switchExprsResolver,
+        private readonly MatchSwitchAnalyzer $matchSwitchAnalyzer,
+        private readonly MatchFactory $matchFactory,
     ) {
     }
 

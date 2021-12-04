@@ -15,7 +15,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
     public function __construct(
         ContainerBuilder $containerBuilder,
         FileLocatorInterface $fileLocator,
-        private ConfigureCallValuesCollector $configureCallValuesCollector
+        private readonly ConfigureCallValuesCollector $configureCallValuesCollector
     ) {
         parent::__construct($containerBuilder, $fileLocator);
     }

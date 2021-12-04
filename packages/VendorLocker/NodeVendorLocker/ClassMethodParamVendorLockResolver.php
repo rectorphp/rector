@@ -15,9 +15,9 @@ use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ClassMethodParamVendorLockResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PathNormalizer $pathNormalizer,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PathNormalizer $pathNormalizer,
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 

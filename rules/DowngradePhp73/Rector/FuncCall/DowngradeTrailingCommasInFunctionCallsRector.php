@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTrailingCommasInFunctionCallsRector extends AbstractRector
 {
     public function __construct(
-        private FollowedByCommaAnalyzer $followedByCommaAnalyzer
+        private readonly FollowedByCommaAnalyzer $followedByCommaAnalyzer
     ) {
     }
 

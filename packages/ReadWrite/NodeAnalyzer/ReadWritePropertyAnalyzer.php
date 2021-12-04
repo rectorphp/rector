@@ -24,10 +24,10 @@ use Rector\ReadWrite\Guard\VariableToConstantGuard;
 final class ReadWritePropertyAnalyzer
 {
     public function __construct(
-        private VariableToConstantGuard $variableToConstantGuard,
-        private AssignManipulator $assignManipulator,
-        private ReadExprAnalyzer $readExprAnalyzer,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly VariableToConstantGuard $variableToConstantGuard,
+        private readonly AssignManipulator $assignManipulator,
+        private readonly ReadExprAnalyzer $readExprAnalyzer,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

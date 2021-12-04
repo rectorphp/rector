@@ -18,9 +18,9 @@ final class AssertMethodCallFactory
     private bool $isBoolAssert = false;
 
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver
+        private readonly NodeFactory $nodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

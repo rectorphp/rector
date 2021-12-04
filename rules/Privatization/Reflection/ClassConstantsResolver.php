@@ -14,7 +14,7 @@ final class ClassConstantsResolver
     private array $cachedConstantNamesToValues = [];
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

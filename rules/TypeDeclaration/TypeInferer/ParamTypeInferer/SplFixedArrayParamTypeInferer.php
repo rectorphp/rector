@@ -14,8 +14,8 @@ use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
 final class SplFixedArrayParamTypeInferer implements ParamTypeInfererInterface
 {
     public function __construct(
-        private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        private NodeTypeResolver $nodeTypeResolver
+        private readonly SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 

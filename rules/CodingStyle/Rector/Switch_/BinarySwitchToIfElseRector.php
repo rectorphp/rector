@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BinarySwitchToIfElseRector extends AbstractRector
 {
     public function __construct(
-        private SwitchManipulator $switchManipulator
+        private readonly SwitchManipulator $switchManipulator
     ) {
     }
 

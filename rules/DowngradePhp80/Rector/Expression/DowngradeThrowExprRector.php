@@ -28,9 +28,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeThrowExprRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private CoalesceAnalyzer $coalesceAnalyzer,
-        private BinaryOpManipulator $binaryOpManipulator
+        private readonly IfManipulator $ifManipulator,
+        private readonly CoalesceAnalyzer $coalesceAnalyzer,
+        private readonly BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 

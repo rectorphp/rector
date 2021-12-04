@@ -14,8 +14,8 @@ use Rector\Core\ValueObject\Application\File;
 final class RectorChangeCollector
 {
     public function __construct(
-        private CurrentRectorProvider $currentRectorProvider,
-        private CurrentFileProvider $currentFileProvider
+        private readonly CurrentRectorProvider $currentRectorProvider,
+        private readonly CurrentFileProvider $currentFileProvider
     ) {
     }
 

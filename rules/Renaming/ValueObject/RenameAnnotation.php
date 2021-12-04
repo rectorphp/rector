@@ -12,8 +12,8 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 final class RenameAnnotation implements RenameAnnotationInterface
 {
     public function __construct(
-        private string $oldAnnotation,
-        private string $newAnnotation
+        private readonly string $oldAnnotation,
+        private readonly string $newAnnotation
     ) {
     }
 

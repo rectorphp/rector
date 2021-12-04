@@ -89,11 +89,11 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends AbstractPhpSpecToPHPUni
     private ?PropertyFetch $testedObjectPropertyFetch = null;
 
     public function __construct(
-        private MatchersManipulator $matchersManipulator,
-        private PhpSpecRenaming $phpSpecRenaming,
-        private AssertMethodCallFactory $assertMethodCallFactory,
-        private BeConstructedWithAssignFactory $beConstructedWithAssignFactory,
-        private DuringMethodCallFactory $duringMethodCallFactory
+        private readonly MatchersManipulator $matchersManipulator,
+        private readonly PhpSpecRenaming $phpSpecRenaming,
+        private readonly AssertMethodCallFactory $assertMethodCallFactory,
+        private readonly BeConstructedWithAssignFactory $beConstructedWithAssignFactory,
+        private readonly DuringMethodCallFactory $duringMethodCallFactory
     ) {
     }
 

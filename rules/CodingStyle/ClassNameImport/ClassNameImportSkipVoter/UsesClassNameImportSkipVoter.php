@@ -21,8 +21,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
     public function __construct(
-        private UseNodesToAddCollector $useNodesToAddCollector,
-        private RenamedClassesDataCollector $renamedClassesDataCollector
+        private readonly UseNodesToAddCollector $useNodesToAddCollector,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 

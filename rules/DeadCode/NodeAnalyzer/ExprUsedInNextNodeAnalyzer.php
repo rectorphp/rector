@@ -17,8 +17,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprUsedInNextNodeAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
     ) {
     }
 

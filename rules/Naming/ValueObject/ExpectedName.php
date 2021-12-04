@@ -7,8 +7,8 @@ namespace Rector\Naming\ValueObject;
 final class ExpectedName
 {
     public function __construct(
-        private string $name,
-        private string $singularized
+        private readonly string $name,
+        private readonly string $singularized
     ) {
     }
 

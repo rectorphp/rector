@@ -18,8 +18,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ChangedFilesDetector
 {
     public function __construct(
-        private FileHashComputer $fileHashComputer,
-        private Cache $cache
+        private readonly FileHashComputer $fileHashComputer,
+        private readonly Cache $cache
     ) {
     }
 

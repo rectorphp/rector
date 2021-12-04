@@ -16,8 +16,8 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class StaticCallPresenceAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeTypeResolver $nodeTypeResolver
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 

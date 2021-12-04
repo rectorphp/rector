@@ -7,9 +7,9 @@ namespace Rector\Caching\ValueObject;
 final class CacheFilePaths
 {
     public function __construct(
-        private string $firstDirectory,
-        private string $secondDirectory,
-        private string $filePath
+        private readonly string $firstDirectory,
+        private readonly string $secondDirectory,
+        private readonly string $filePath
     ) {
     }
 

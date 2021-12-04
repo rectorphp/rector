@@ -26,11 +26,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedAssignVariableRector extends AbstractRector
 {
     public function __construct(
-        private NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
-        private PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
-        private ScopeNestingComparator $scopeNestingComparator,
-        private SideEffectNodeDetector $sideEffectNodeDetector,
-        private ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
+        private readonly NextVariableUsageNodeFinder $nextVariableUsageNodeFinder,
+        private readonly PreviousVariableAssignNodeFinder $previousVariableAssignNodeFinder,
+        private readonly ScopeNestingComparator $scopeNestingComparator,
+        private readonly SideEffectNodeDetector $sideEffectNodeDetector,
+        private readonly ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
     ) {
     }
 

@@ -14,7 +14,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpParserTypeAnalyzer
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 

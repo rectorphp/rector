@@ -48,16 +48,16 @@ final class PropertyManipulator
     ];
 
     public function __construct(
-        private AssignManipulator $assignManipulator,
-        private BetterNodeFinder $betterNodeFinder,
-        private VariableToConstantGuard $variableToConstantGuard,
-        private ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private TypeChecker $typeChecker,
-        private PropertyFetchFinder $propertyFetchFinder,
-        private ReflectionResolver $reflectionResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer
+        private readonly AssignManipulator $assignManipulator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly VariableToConstantGuard $variableToConstantGuard,
+        private readonly ReadWritePropertyAnalyzer $readWritePropertyAnalyzer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly TypeChecker $typeChecker,
+        private readonly PropertyFetchFinder $propertyFetchFinder,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 

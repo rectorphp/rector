@@ -12,8 +12,8 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ProcessResultFactory
 {
     public function __construct(
-        private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        private NodesToRemoveCollector $nodesToRemoveCollector
+        private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        private readonly NodesToRemoveCollector $nodesToRemoveCollector
     ) {
     }
 

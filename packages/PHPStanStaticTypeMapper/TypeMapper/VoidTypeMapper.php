@@ -26,7 +26,7 @@ final class VoidTypeMapper implements TypeMapperInterface
     private const VOID = 'void';
 
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

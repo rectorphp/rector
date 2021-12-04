@@ -17,9 +17,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class InvertedIfFactory
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private ConditionInverter $conditionInverter,
-        private ContextAnalyzer $contextAnalyzer
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ConditionInverter $conditionInverter,
+        private readonly ContextAnalyzer $contextAnalyzer
     ) {
     }
 

@@ -20,9 +20,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class BeConstructedWithAssignFactory
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver,
-        private NodeFactory $nodeFactory
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeFactory $nodeFactory
     ) {
     }
 

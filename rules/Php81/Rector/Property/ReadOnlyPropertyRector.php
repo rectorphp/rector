@@ -25,8 +25,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private PropertyManipulator $propertyManipulator,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly PropertyManipulator $propertyManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

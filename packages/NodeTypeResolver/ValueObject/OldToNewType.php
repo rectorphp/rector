@@ -9,8 +9,8 @@ use PHPStan\Type\Type;
 final class OldToNewType
 {
     public function __construct(
-        private Type $oldType,
-        private Type $newType
+        private readonly Type $oldType,
+        private readonly Type $newType
     ) {
     }
 

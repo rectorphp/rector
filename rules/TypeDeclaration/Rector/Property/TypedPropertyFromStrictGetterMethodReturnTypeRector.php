@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer,
+        private readonly GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer,
     ) {
     }
 

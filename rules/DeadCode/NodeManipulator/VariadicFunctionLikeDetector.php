@@ -19,8 +19,8 @@ final class VariadicFunctionLikeDetector
     private const VARIADIC_FUNCTION_NAMES = ['func_get_arg', 'func_get_args', 'func_num_args'];
 
     public function __construct(
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

@@ -14,7 +14,7 @@ use PHPStan\Type\TypeTraverser;
 final class GenericClassStringTypeCorrector
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

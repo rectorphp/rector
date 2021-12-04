@@ -26,9 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveParentCallWithoutParentRector extends AbstractRector
 {
     public function __construct(
-        private ClassMethodManipulator $classMethodManipulator,
-        private ParentClassScopeResolver $parentClassScopeResolver,
-        private ClassAnalyzer $classAnalyzer
+        private readonly ClassMethodManipulator $classMethodManipulator,
+        private readonly ParentClassScopeResolver $parentClassScopeResolver,
+        private readonly ClassAnalyzer $classAnalyzer
     ) {
     }
 

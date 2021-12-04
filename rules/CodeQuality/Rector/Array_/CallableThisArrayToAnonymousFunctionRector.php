@@ -26,9 +26,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallableThisArrayToAnonymousFunctionRector extends AbstractRector
 {
     public function __construct(
-        private AnonymousFunctionFactory $anonymousFunctionFactory,
-        private ReflectionResolver $reflectionResolver,
-        private ArrayCallableMethodMatcher $arrayCallableMethodMatcher
+        private readonly AnonymousFunctionFactory $anonymousFunctionFactory,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ArrayCallableMethodMatcher $arrayCallableMethodMatcher
     ) {
     }
 

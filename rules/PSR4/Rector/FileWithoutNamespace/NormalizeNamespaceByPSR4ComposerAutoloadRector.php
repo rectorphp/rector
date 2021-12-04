@@ -23,9 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector
 {
     public function __construct(
-        private PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher,
-        private FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer,
-        private InlineHTMLAnalyzer $inlineHTMLAnalyzer
+        private readonly PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher,
+        private readonly FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer,
+        private readonly InlineHTMLAnalyzer $inlineHTMLAnalyzer
     ) {
     }
 

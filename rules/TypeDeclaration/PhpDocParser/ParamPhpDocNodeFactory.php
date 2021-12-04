@@ -12,7 +12,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ParamPhpDocNodeFactory
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

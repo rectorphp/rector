@@ -36,11 +36,11 @@ final class UnionTypesRector extends AbstractRector implements MinPhpVersionInte
     private bool $hasChanged = false;
 
     public function __construct(
-        private ReturnTagRemover $returnTagRemover,
-        private ParamTagRemover $paramTagRemover,
-        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        private UnionTypeAnalyzer $unionTypeAnalyzer,
-        private TypeFactory $typeFactory
+        private readonly ReturnTagRemover $returnTagRemover,
+        private readonly ParamTagRemover $paramTagRemover,
+        private readonly ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        private readonly UnionTypeAnalyzer $unionTypeAnalyzer,
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

@@ -18,7 +18,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 final class ArrayTypeComparator
 {
     public function __construct(
-        private UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
+        private readonly UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower
     ) {
     }
 

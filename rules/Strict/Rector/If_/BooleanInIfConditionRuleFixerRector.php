@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BooleanInIfConditionRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     public function __construct(
-        private ExactCompareFactory $exactCompareFactory
+        private readonly ExactCompareFactory $exactCompareFactory
     ) {
     }
 

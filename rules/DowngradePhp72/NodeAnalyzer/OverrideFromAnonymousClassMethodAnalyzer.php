@@ -18,9 +18,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class OverrideFromAnonymousClassMethodAnalyzer
 {
     public function __construct(
-        private ClassAnalyzer $classAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

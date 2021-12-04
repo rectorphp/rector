@@ -10,8 +10,8 @@ use Rector\Core\Validation\RectorAssert;
 final class ReturnArrayClassMethodToYield
 {
     public function __construct(
-        private string $type,
-        private string $method
+        private readonly string $type,
+        private readonly string $method
     ) {
         RectorAssert::className($type);
     }

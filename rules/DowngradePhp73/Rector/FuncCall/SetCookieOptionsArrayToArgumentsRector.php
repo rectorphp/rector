@@ -49,7 +49,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends AbstractRector
     private int $highestIndex = 1;
 
     public function __construct(
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

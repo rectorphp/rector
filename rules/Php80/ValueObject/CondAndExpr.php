@@ -13,9 +13,9 @@ final class CondAndExpr
      * @param Expr[]|null $condExprs
      */
     public function __construct(
-        private array|null $condExprs,
-        private Expr $expr,
-        private MatchKind $matchKind
+        private readonly array|null $condExprs,
+        private readonly Expr $expr,
+        private readonly MatchKind $matchKind
     ) {
     }
 

@@ -15,9 +15,9 @@ use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInterface
 {
     public function __construct(
-        private AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

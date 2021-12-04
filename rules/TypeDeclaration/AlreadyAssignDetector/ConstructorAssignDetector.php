@@ -26,10 +26,10 @@ final class ConstructorAssignDetector
     private const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';
 
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private PropertyAssignMatcher $propertyAssignMatcher,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PropertyAssignMatcher $propertyAssignMatcher,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer
     ) {
     }
 

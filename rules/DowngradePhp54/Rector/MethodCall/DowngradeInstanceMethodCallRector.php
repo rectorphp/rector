@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeInstanceMethodCallRector extends AbstractRector
 {
     public function __construct(
-        private VariableNaming $variableNaming
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

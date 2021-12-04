@@ -11,7 +11,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class InstanceOfUniqueKeyResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

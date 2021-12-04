@@ -17,10 +17,10 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class ClassManipulator
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodesToRemoveCollector $nodesToRemoveCollector,
-        private ReflectionProvider $reflectionProvider,
-        private ClassChildAnalyzer $classChildAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodesToRemoveCollector $nodesToRemoveCollector,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ClassChildAnalyzer $classChildAnalyzer
     ) {
     }
 

@@ -15,7 +15,7 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 final class PHPUnitTypeDeclarationDecorator
 {
     public function __construct(
-        private AstResolver $astResolver
+        private readonly AstResolver $astResolver
     ) {
     }
 

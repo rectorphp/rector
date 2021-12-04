@@ -9,8 +9,8 @@ use Rector\Composer\Contract\VersionAwareInterface;
 final class PackageAndVersion implements VersionAwareInterface
 {
     public function __construct(
-        private string $packageName,
-        private string $version
+        private readonly string $packageName,
+        private readonly string $version
     ) {
     }
 

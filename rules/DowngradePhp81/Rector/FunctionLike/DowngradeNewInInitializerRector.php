@@ -37,7 +37,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNewInInitializerRector extends AbstractRector
 {
     public function __construct(
-        private AnonymousFunctionFactory $anonymousFunctionFactory
+        private readonly AnonymousFunctionFactory $anonymousFunctionFactory
     ) {
     }
 

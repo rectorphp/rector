@@ -36,13 +36,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddArrayReturnDocTypeRector extends AbstractRector
 {
     public function __construct(
-        private ReturnTypeInferer $returnTypeInferer,
-        private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
-        private AdvancedArrayAnalyzer $advancedArrayAnalyzer,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
-        private ReturnTagRemover $returnTagRemover,
-        private DetailedTypeAnalyzer $detailedTypeAnalyzer,
+        private readonly ReturnTypeInferer $returnTypeInferer,
+        private readonly ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
+        private readonly AdvancedArrayAnalyzer $advancedArrayAnalyzer,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
+        private readonly ReturnTagRemover $returnTagRemover,
+        private readonly DetailedTypeAnalyzer $detailedTypeAnalyzer,
     ) {
     }
 

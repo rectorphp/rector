@@ -16,9 +16,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ForeachMatcher
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private CallMatcher $callMatcher,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly CallMatcher $callMatcher,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

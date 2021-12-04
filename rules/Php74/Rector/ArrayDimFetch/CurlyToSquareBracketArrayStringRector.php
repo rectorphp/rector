@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CurlyToSquareBracketArrayStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer
+        private readonly FollowedByCurlyBracketAnalyzer $followedByCurlyBracketAnalyzer
     ) {
     }
 

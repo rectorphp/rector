@@ -27,11 +27,11 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
     private const FUNCTION_NAME = 'strncmp';
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private StrStartsWithFactory $strStartsWithFactory,
-        private NodeComparator $nodeComparator,
-        private StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly StrStartsWithFactory $strStartsWithFactory,
+        private readonly NodeComparator $nodeComparator,
+        private readonly StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

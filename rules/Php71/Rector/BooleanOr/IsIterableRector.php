@@ -21,8 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IsIterableRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble,
-        private ReflectionProvider $reflectionProvider
+        private readonly IsArrayAndDualCheckToAble $isArrayAndDualCheckToAble,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

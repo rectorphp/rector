@@ -22,8 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeNestedIfsToEarlyReturnRector extends AbstractRector
 {
     public function __construct(
-        private ConditionInverter $conditionInverter,
-        private IfManipulator $ifManipulator
+        private readonly ConditionInverter $conditionInverter,
+        private readonly IfManipulator $ifManipulator
     ) {
     }
 

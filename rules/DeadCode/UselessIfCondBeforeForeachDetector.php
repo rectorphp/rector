@@ -23,10 +23,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class UselessIfCondBeforeForeachDetector
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeComparator $nodeComparator,
-        private BetterNodeFinder $betterNodeFinder,
-        private ParamAnalyzer $paramAnalyzer
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 

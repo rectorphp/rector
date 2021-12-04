@@ -29,8 +29,8 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
     private ?AggregateSourceLocator $aggregateSourceLocator = null;
 
     public function __construct(
-        private FileNodesFetcher $fileNodesFetcher,
-        private PhpVersion $phpVersion
+        private readonly FileNodesFetcher $fileNodesFetcher,
+        private readonly PhpVersion $phpVersion
     ) {
     }
 

@@ -11,10 +11,10 @@ use Rector\Core\Validation\RectorAssert;
 final class AddParamTypeDeclaration
 {
     public function __construct(
-        private string $className,
-        private string $methodName,
-        private int $position,
-        private Type $paramType
+        private readonly string $className,
+        private readonly string $methodName,
+        private readonly int $position,
+        private readonly Type $paramType
     ) {
         RectorAssert::className($className);
     }

@@ -16,7 +16,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterface
 {
     public function __construct(
-        private PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider
+        private readonly PSR4AutoloadPathsProvider $psr4AutoloadPathsProvider
     ) {
     }
 

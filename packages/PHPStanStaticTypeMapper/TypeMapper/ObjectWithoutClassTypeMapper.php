@@ -24,7 +24,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

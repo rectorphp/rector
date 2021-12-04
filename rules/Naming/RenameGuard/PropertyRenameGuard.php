@@ -13,7 +13,7 @@ final class PropertyRenameGuard
      * @param ConflictingNameGuardInterface[] $conflictingNameGuards
      */
     public function __construct(
-        private array $conflictingNameGuards
+        private readonly array $conflictingNameGuards
     ) {
     }
 

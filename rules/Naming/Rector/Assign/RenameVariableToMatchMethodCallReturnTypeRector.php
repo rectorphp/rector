@@ -32,15 +32,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
     public function __construct(
-        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        private ExpectedNameResolver $expectedNameResolver,
-        private NamingConventionAnalyzer $namingConventionAnalyzer,
-        private VarTagValueNodeRenamer $varTagValueNodeRenamer,
-        private VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
-        private VariableRenamer $variableRenamer,
-        private TypeUnwrapper $typeUnwrapper,
-        private ReflectionProvider $reflectionProvider,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private readonly BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private readonly ExpectedNameResolver $expectedNameResolver,
+        private readonly NamingConventionAnalyzer $namingConventionAnalyzer,
+        private readonly VarTagValueNodeRenamer $varTagValueNodeRenamer,
+        private readonly VariableAndCallAssignMatcher $variableAndCallAssignMatcher,
+        private readonly VariableRenamer $variableRenamer,
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 

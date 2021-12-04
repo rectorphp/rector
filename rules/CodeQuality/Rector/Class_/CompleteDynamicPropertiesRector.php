@@ -30,12 +30,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CompleteDynamicPropertiesRector extends AbstractRector
 {
     public function __construct(
-        private MissingPropertiesFactory $missingPropertiesFactory,
-        private LocalPropertyAnalyzer $localPropertyAnalyzer,
-        private ClassLikeAnalyzer $classLikeAnalyzer,
-        private ReflectionProvider $reflectionProvider,
-        private ClassAnalyzer $classAnalyzer,
-        private PropertyPresenceChecker $propertyPresenceChecker
+        private readonly MissingPropertiesFactory $missingPropertiesFactory,
+        private readonly LocalPropertyAnalyzer $localPropertyAnalyzer,
+        private readonly ClassLikeAnalyzer $classLikeAnalyzer,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly PropertyPresenceChecker $propertyPresenceChecker
     ) {
     }
 

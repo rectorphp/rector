@@ -24,7 +24,7 @@ final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInter
     private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

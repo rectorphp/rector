@@ -22,11 +22,11 @@ use Rector\Php80\ValueObject\StrStartsWith;
 final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver,
-        private NodeComparator $nodeComparator,
-        private StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

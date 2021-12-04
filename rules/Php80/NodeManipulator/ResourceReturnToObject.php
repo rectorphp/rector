@@ -24,10 +24,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ResourceReturnToObject
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

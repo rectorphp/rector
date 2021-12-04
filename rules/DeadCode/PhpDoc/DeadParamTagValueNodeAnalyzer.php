@@ -27,9 +27,9 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadParamTagValueNodeAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private TypeComparator $typeComparator,
-        private GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly TypeComparator $typeComparator,
+        private readonly GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
     ) {
     }
 

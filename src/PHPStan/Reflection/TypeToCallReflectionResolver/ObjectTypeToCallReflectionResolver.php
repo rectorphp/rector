@@ -20,7 +20,7 @@ use Rector\Core\ValueObject\MethodName;
 final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

@@ -16,7 +16,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 final class EditorConfigParser
 {
     public function __construct(
-        private EditorConfig $editorConfig
+        private readonly EditorConfig $editorConfig
     ) {
     }
 

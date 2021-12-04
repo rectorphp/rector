@@ -16,8 +16,8 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 final class DuringMethodCallFactory
 {
     public function __construct(
-        private ValueResolver $valueResolver,
-        private NodesToAddCollector $nodesToAddCollector
+        private readonly ValueResolver $valueResolver,
+        private readonly NodesToAddCollector $nodesToAddCollector
     ) {
     }
 

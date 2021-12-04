@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyArraySearchRector extends AbstractRector
 {
     public function __construct(
-        private BinaryOpManipulator $binaryOpManipulator
+        private readonly BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 

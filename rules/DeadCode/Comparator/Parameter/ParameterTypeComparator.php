@@ -11,7 +11,7 @@ use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 final class ParameterTypeComparator
 {
     public function __construct(
-        private MethodParameterTypeResolver $methodParameterTypeResolver
+        private readonly MethodParameterTypeResolver $methodParameterTypeResolver
     ) {
     }
 

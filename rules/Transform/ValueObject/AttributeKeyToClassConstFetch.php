@@ -10,10 +10,10 @@ final class AttributeKeyToClassConstFetch
      * @param array<string, string> $valuesToConstantsMap
      */
     public function __construct(
-        private string $attributeClass,
-        private string $attributeKey,
-        private string $constantClass,
-        private array $valuesToConstantsMap
+        private readonly string $attributeClass,
+        private readonly string $attributeKey,
+        private readonly string $constantClass,
+        private readonly array $valuesToConstantsMap
     ) {
     }
 

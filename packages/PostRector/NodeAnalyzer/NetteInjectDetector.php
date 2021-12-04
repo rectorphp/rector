@@ -13,9 +13,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class NetteInjectDetector
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private ReflectionProvider $reflectionProvider
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

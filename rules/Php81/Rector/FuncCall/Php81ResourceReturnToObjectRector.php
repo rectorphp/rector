@@ -56,7 +56,7 @@ final class Php81ResourceReturnToObjectRector extends AbstractRector implements 
     ];
 
     public function __construct(
-        private ResourceReturnToObject $resourceReturnToObject
+        private readonly ResourceReturnToObject $resourceReturnToObject
     ) {
     }
 

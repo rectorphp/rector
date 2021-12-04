@@ -11,8 +11,8 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class MissingPropertiesFactory
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private PropertyTypeDecorator $propertyTypeDecorator
+        private readonly NodeFactory $nodeFactory,
+        private readonly PropertyTypeDecorator $propertyTypeDecorator
     ) {
     }
 

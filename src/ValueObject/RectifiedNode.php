@@ -9,8 +9,8 @@ use PhpParser\Node;
 final class RectifiedNode
 {
     public function __construct(
-        private string $rectorClass,
-        private Node $node
+        private readonly string $rectorClass,
+        private readonly Node $node
     ) {
     }
 

@@ -24,8 +24,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractRector
 {
     public function __construct(
-        private NodeUsageFinder $nodeUsageFinder,
-        private ForeachAnalyzer $foreachAnalyzer
+        private readonly NodeUsageFinder $nodeUsageFinder,
+        private readonly ForeachAnalyzer $foreachAnalyzer
     ) {
     }
 

@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadConstructorRector extends AbstractRector
 {
     public function __construct(
-        private ClassMethodManipulator $classMethodManipulator
+        private readonly ClassMethodManipulator $classMethodManipulator
     ) {
     }
 

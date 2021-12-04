@@ -21,8 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PrivatizeFinalClassMethodRector extends AbstractRector
 {
     public function __construct(
-        private ClassMethodVisibilityGuard $classMethodVisibilityGuard,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly ClassMethodVisibilityGuard $classMethodVisibilityGuard,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

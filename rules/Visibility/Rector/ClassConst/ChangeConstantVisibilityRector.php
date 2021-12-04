@@ -31,7 +31,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
     private array $classConstantVisibilityChanges = [];
 
     public function __construct(
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

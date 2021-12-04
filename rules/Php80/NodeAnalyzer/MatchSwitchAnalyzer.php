@@ -18,8 +18,8 @@ use Rector\Php80\ValueObject\CondAndExpr;
 final class MatchSwitchAnalyzer
 {
     public function __construct(
-        private SwitchAnalyzer $switchAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
+        private readonly SwitchAnalyzer $switchAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
     ) {
     }
 

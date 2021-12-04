@@ -14,8 +14,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class MissedRectorDueVersionChecker
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider,
-        private SymfonyStyle $symfonyStyle,
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly SymfonyStyle $symfonyStyle,
     ) {
     }
 

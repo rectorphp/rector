@@ -20,8 +20,8 @@ final class VariableAssignPair
      * @param Assign|AssignOp|AssignRef $assign
      */
     public function __construct(
-        private Node $variable,
-        private Node $assign
+        private readonly Node $variable,
+        private readonly Node $assign
     ) {
     }
 

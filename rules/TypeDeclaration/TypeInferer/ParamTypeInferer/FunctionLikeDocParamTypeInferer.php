@@ -19,9 +19,9 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

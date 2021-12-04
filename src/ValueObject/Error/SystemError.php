@@ -10,9 +10,9 @@ use Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     public function __construct(
-        private int $line,
-        private string $message,
-        private string $relativeFilePath
+        private readonly int $line,
+        private readonly string $message,
+        private readonly string $relativeFilePath
     ) {
     }
 

@@ -29,7 +29,7 @@ final class ExclusionManager
     private const NO_RECTOR_START_REGEX = '#@noRector$#';
 
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

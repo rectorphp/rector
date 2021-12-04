@@ -20,11 +20,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ForeachAnalyzer
 {
     public function __construct(
-        private NodeComparator $nodeComparator,
-        private ForAnalyzer $forAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly NodeComparator $nodeComparator,
+        private readonly ForAnalyzer $forAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

@@ -37,7 +37,7 @@ final class DowngradeBoolvalRector extends AbstractRector
     private const BOOLVAL = 'boolval';
 
     public function __construct(
-        private ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

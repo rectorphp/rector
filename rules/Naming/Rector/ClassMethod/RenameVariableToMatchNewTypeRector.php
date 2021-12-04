@@ -22,9 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchNewTypeRector extends AbstractRector
 {
     public function __construct(
-        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        private ExpectedNameResolver $expectedNameResolver,
-        private VariableRenamer $variableRenamer
+        private readonly BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private readonly ExpectedNameResolver $expectedNameResolver,
+        private readonly VariableRenamer $variableRenamer
     ) {
     }
 

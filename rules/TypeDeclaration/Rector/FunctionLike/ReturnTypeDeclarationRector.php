@@ -39,13 +39,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private ReturnTypeInferer $returnTypeInferer,
-        private ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
-        private NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
-        private ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
-        private VendorLockResolver $vendorLockResolver,
-        private PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
-        private ObjectTypeComparator $objectTypeComparator,
+        private readonly ReturnTypeInferer $returnTypeInferer,
+        private readonly ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker,
+        private readonly NonInformativeReturnTagRemover $nonInformativeReturnTagRemover,
+        private readonly ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard,
+        private readonly VendorLockResolver $vendorLockResolver,
+        private readonly PhpParserTypeAnalyzer $phpParserTypeAnalyzer,
+        private readonly ObjectTypeComparator $objectTypeComparator,
     ) {
     }
 

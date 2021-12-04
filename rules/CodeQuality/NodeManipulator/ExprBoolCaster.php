@@ -19,10 +19,10 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class ExprBoolCaster
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private TypeUnwrapper $typeUnwrapper,
-        private StaticTypeAnalyzer $staticTypeAnalyzer,
-        private NodeFactory $nodeFactory
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly StaticTypeAnalyzer $staticTypeAnalyzer,
+        private readonly NodeFactory $nodeFactory
     ) {
     }
 

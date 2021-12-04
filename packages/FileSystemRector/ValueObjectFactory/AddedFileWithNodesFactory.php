@@ -22,11 +22,11 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class AddedFileWithNodesFactory
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private CategoryNamespaceProvider $categoryNamespaceProvider,
-        private FileRelocationResolver $fileRelocationResolver,
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
-        private FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly CategoryNamespaceProvider $categoryNamespaceProvider,
+        private readonly FileRelocationResolver $fileRelocationResolver,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
     }
 

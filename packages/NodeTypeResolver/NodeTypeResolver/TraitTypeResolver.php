@@ -21,7 +21,7 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 final class TraitTypeResolver implements NodeTypeResolverInterface
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

@@ -16,7 +16,7 @@ final class ShortenedGenericObjectType extends GenericObjectType
     public function __construct(
         string $shortName,
         array $types,
-        private string $fullyQualifiedName
+        private readonly string $fullyQualifiedName
     ) {
         parent::__construct($shortName, $types);
     }

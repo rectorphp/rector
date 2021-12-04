@@ -26,13 +26,13 @@ use Symplify\PackageBuilder\Reflection\PrivatesCaller;
  */
 final class BetterPhpDocParser extends PhpDocParser
 {
-    private PrivatesCaller $privatesCaller;
+    private readonly PrivatesCaller $privatesCaller;
 
     public function __construct(
         TypeParser $typeParser,
         ConstExprParser $constExprParser,
-        private TokenIteratorFactory $tokenIteratorFactory,
-        private DoctrineAnnotationDecorator $doctrineAnnotationDecorator
+        private readonly TokenIteratorFactory $tokenIteratorFactory,
+        private readonly DoctrineAnnotationDecorator $doctrineAnnotationDecorator
     ) {
         parent::__construct($typeParser, $constExprParser);
 

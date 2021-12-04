@@ -13,8 +13,8 @@ final class ReplaceFuncCallArgumentDefaultValue implements ReplaceArgumentDefaul
      * @param mixed $valueAfter
      */
     public function __construct(
-        private string $function,
-        private int $position,
+        private readonly string $function,
+        private readonly int $position,
         private $valueBefore,
         private $valueAfter
     ) {

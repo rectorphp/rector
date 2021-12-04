@@ -20,10 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeLocalPropertyToVariableRector extends AbstractRector
 {
     public function __construct(
-        private ClassManipulator $classManipulator,
-        private PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer,
-        private PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer,
-        private ClassAnalyzer $classAnalyzer
+        private readonly ClassManipulator $classManipulator,
+        private readonly PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer,
+        private readonly PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer,
+        private readonly ClassAnalyzer $classAnalyzer
     ) {
     }
 

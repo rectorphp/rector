@@ -27,10 +27,10 @@ final class DoctrineRelationPropertyTypeInferer implements PropertyTypeInfererIn
     private const COLLECTION_TYPE = 'Doctrine\Common\Collections\Collection';
 
     public function __construct(
-        private TypeFactory $typeFactory,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private ShortClassExpander $shortClassExpander,
-        private ClassAnnotationMatcher $classAnnotationMatcher
+        private readonly TypeFactory $typeFactory,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ShortClassExpander $shortClassExpander,
+        private readonly ClassAnnotationMatcher $classAnnotationMatcher
     ) {
     }
 

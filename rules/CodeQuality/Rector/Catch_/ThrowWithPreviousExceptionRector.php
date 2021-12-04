@@ -36,7 +36,7 @@ final class ThrowWithPreviousExceptionRector extends AbstractRector
     private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

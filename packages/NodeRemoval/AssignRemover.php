@@ -14,10 +14,10 @@ use Rector\PostRector\Collector\NodesToReplaceCollector;
 final class AssignRemover
 {
     public function __construct(
-        private NodesToReplaceCollector $nodesToReplaceCollector,
-        private RectorChangeCollector $rectorChangeCollector,
-        private NodeRemover $nodeRemover,
-        private LivingCodeManipulator $livingCodeManipulator
+        private readonly NodesToReplaceCollector $nodesToReplaceCollector,
+        private readonly RectorChangeCollector $rectorChangeCollector,
+        private readonly NodeRemover $nodeRemover,
+        private readonly LivingCodeManipulator $livingCodeManipulator
     ) {
     }
 

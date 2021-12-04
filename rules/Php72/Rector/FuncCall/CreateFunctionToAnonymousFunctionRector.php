@@ -36,10 +36,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CreateFunctionToAnonymousFunctionRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private InlineCodeParser $inlineCodeParser,
-        private AnonymousFunctionFactory $anonymousFunctionFactory,
-        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly InlineCodeParser $inlineCodeParser,
+        private readonly AnonymousFunctionFactory $anonymousFunctionFactory,
+        private readonly ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

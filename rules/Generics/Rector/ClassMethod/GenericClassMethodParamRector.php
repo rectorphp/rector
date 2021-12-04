@@ -39,9 +39,9 @@ final class GenericClassMethodParamRector extends AbstractRector implements Conf
     private array $genericClassMethodParams = [];
 
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PropertyNaming $propertyNaming,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

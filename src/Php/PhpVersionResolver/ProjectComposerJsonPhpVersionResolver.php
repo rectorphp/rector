@@ -14,9 +14,9 @@ use Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 final class ProjectComposerJsonPhpVersionResolver
 {
     public function __construct(
-        private ComposerJsonFactory $composerJsonFactory,
-        private VersionParser $versionParser,
-        private PhpVersionFactory $phpVersionFactory
+        private readonly ComposerJsonFactory $composerJsonFactory,
+        private readonly VersionParser $versionParser,
+        private readonly PhpVersionFactory $phpVersionFactory
     ) {
     }
 

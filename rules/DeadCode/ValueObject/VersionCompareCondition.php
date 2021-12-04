@@ -9,9 +9,9 @@ use Rector\DeadCode\Contract\ConditionInterface;
 final class VersionCompareCondition implements ConditionInterface
 {
     public function __construct(
-        private int $firstVersion,
-        private int $secondVersion,
-        private ?string $compareSign
+        private readonly int $firstVersion,
+        private readonly int $secondVersion,
+        private readonly ?string $compareSign
     ) {
     }
 

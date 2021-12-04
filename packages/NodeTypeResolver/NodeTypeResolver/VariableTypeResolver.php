@@ -23,8 +23,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class VariableTypeResolver implements NodeTypeResolverInterface
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

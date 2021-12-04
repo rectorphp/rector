@@ -45,11 +45,11 @@ final class DoctrineAnnotationDecorator
     private const NESTED_ANNOTATION_END_REGEX = '#(\s+)?\}\)(\s+)?#';
 
     public function __construct(
-        private CurrentNodeProvider $currentNodeProvider,
-        private ClassAnnotationMatcher $classAnnotationMatcher,
-        private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
-        private TokenIteratorFactory $tokenIteratorFactory,
-        private AttributeMirrorer $attributeMirrorer
+        private readonly CurrentNodeProvider $currentNodeProvider,
+        private readonly ClassAnnotationMatcher $classAnnotationMatcher,
+        private readonly StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser,
+        private readonly TokenIteratorFactory $tokenIteratorFactory,
+        private readonly AttributeMirrorer $attributeMirrorer
     ) {
     }
 

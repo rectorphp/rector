@@ -30,7 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeFromStrictTypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

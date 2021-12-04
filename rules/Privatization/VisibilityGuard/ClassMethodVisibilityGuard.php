@@ -11,7 +11,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodVisibilityGuard
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

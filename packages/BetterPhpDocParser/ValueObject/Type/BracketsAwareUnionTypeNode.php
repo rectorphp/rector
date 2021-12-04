@@ -15,7 +15,7 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode implements Stringab
      */
     public function __construct(
         array $types,
-        private bool $isWrappedInBrackets = false
+        private readonly bool $isWrappedInBrackets = false
     ) {
         parent::__construct($types);
     }

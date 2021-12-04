@@ -11,8 +11,8 @@ final class AnnotationToAttribute
      * @param class-string $attributeClass
      */
     public function __construct(
-        private string $tag,
-        private ?string $attributeClass = null
+        private readonly string $tag,
+        private readonly ?string $attributeClass = null
     ) {
     }
 

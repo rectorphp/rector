@@ -24,7 +24,7 @@ final class AnnotationTargetResolver
     ];
 
     public function __construct(
-        private NodeFactory $nodeFactory,
+        private readonly NodeFactory $nodeFactory,
     ) {
     }
 

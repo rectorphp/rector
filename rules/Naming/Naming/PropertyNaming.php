@@ -50,10 +50,10 @@ final class PropertyNaming
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
 
     public function __construct(
-        private TypeUnwrapper $typeUnwrapper,
-        private RectorNamingInflector $rectorNamingInflector,
-        private NodeTypeResolver $nodeTypeResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly RectorNamingInflector $rectorNamingInflector,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

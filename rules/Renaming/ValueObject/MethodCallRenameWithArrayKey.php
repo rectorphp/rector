@@ -13,9 +13,9 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
      * @param mixed $arrayKey
      */
     public function __construct(
-        private string $class,
-        private string $oldMethod,
-        private string $newMethod,
+        private readonly string $class,
+        private readonly string $oldMethod,
+        private readonly string $newMethod,
         private        $arrayKey
     ) {
     }

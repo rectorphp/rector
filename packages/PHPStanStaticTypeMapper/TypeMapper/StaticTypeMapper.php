@@ -25,7 +25,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 final class StaticTypeMapper implements TypeMapperInterface
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

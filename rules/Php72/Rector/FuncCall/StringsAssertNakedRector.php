@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringsAssertNakedRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private SimplePhpParser $simplePhpParser
+        private readonly SimplePhpParser $simplePhpParser
     ) {
     }
 

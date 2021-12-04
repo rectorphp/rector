@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PropertyAddingPostRector extends AbstractPostRector
 {
     public function __construct(
-        private ClassDependencyManipulator $classDependencyManipulator,
-        private ClassInsertManipulator $classInsertManipulator,
-        private NetteInjectDetector $netteInjectDetector,
-        private PropertyToAddCollector $propertyToAddCollector,
-        private ClassAnalyzer $classAnalyzer
+        private readonly ClassDependencyManipulator $classDependencyManipulator,
+        private readonly ClassInsertManipulator $classInsertManipulator,
+        private readonly NetteInjectDetector $netteInjectDetector,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly ClassAnalyzer $classAnalyzer
     ) {
     }
 

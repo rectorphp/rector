@@ -26,7 +26,7 @@ use Symplify\SymplifyKernel\Contract\LightKernelInterface;
 
 final class RectorKernel implements LightKernelInterface
 {
-    private ConfigureCallValuesCollector $configureCallValuesCollector;
+    private readonly ConfigureCallValuesCollector $configureCallValuesCollector;
 
     private ContainerInterface|null $container = null;
 

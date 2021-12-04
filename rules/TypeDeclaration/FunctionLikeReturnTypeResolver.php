@@ -12,7 +12,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class FunctionLikeReturnTypeResolver
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 

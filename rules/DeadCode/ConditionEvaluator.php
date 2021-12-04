@@ -17,7 +17,7 @@ use Rector\DeadCode\ValueObject\VersionCompareCondition;
 final class ConditionEvaluator
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

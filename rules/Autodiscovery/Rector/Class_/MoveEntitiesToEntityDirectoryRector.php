@@ -28,8 +28,8 @@ final class MoveEntitiesToEntityDirectoryRector extends AbstractRector
     private const ENTITY_PATH_REGEX = '#\bEntity\b#';
 
     public function __construct(
-        private DoctrineDocBlockResolver $doctrineDocBlockResolver,
-        private AddedFileWithNodesFactory $addedFileWithNodesFactory
+        private readonly DoctrineDocBlockResolver $doctrineDocBlockResolver,
+        private readonly AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
     }
 

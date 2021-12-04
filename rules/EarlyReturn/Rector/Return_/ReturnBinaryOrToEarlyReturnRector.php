@@ -23,9 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private AssignAndBinaryMap $assignAndBinaryMap,
-        private CallAnalyzer $callAnalyzer
+        private readonly IfManipulator $ifManipulator,
+        private readonly AssignAndBinaryMap $assignAndBinaryMap,
+        private readonly CallAnalyzer $callAnalyzer
     ) {
     }
 

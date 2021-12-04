@@ -16,7 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CommentRemover
 {
     public function __construct(
-        private CommentRemovingNodeTraverser $commentRemovingNodeTraverser
+        private readonly CommentRemovingNodeTraverser $commentRemovingNodeTraverser
     ) {
     }
 

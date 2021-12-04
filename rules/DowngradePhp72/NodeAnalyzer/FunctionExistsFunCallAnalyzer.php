@@ -15,9 +15,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class FunctionExistsFunCallAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

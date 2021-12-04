@@ -10,8 +10,8 @@ final class SwapFuncCallArguments
      * @param array<int, int> $order
      */
     public function __construct(
-        private string $function,
-        private array $order
+        private readonly string $function,
+        private readonly array $order
     ) {
     }
 

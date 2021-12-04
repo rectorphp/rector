@@ -11,8 +11,8 @@ final class SortedClassMethodsAndOriginalClassMethods
      * @param array<int, string> $originalClassMethods
      */
     public function __construct(
-        private array $sortedClassMethods,
-        private array $originalClassMethods
+        private readonly array $sortedClassMethods,
+        private readonly array $originalClassMethods
     ) {
     }
 

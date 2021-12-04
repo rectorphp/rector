@@ -13,10 +13,10 @@ final class MethodCallToAnotherMethodCallWithArguments
      * @param mixed[] $newArguments
      */
     public function __construct(
-        private string $type,
-        private string $oldMethod,
-        private string $newMethod,
-        private array $newArguments
+        private readonly string $type,
+        private readonly string $oldMethod,
+        private readonly string $newMethod,
+        private readonly array $newArguments
     ) {
         RectorAssert::className($type);
     }

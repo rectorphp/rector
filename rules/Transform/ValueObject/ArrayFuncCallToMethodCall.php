@@ -16,10 +16,10 @@ final class ArrayFuncCallToMethodCall implements ArgumentFuncCallToMethodCallInt
      * @param non-empty-string $nonArrayMethod
      */
     public function __construct(
-        private string $function,
-        private string $class,
-        private string $arrayMethod,
-        private string $nonArrayMethod
+        private readonly string $function,
+        private readonly string $class,
+        private readonly string $arrayMethod,
+        private readonly string $nonArrayMethod
     ) {
         RectorAssert::className($class);
     }

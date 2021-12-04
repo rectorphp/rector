@@ -9,8 +9,8 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 final class DoctrineTagAndAnnotationToAttribute
 {
     public function __construct(
-        private DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
-        private AnnotationToAttribute $annotationToAttribute,
+        private readonly DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode,
+        private readonly AnnotationToAttribute $annotationToAttribute,
     ) {
     }
 

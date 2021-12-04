@@ -20,8 +20,8 @@ final class PhpFilesFinder
     ];
 
     public function __construct(
-        private FilesFinder $filesFinder,
-        private UnchangedFilesFilter $unchangedFilesFilter
+        private readonly FilesFinder $filesFinder,
+        private readonly UnchangedFilesFilter $unchangedFilesFilter
     ) {
     }
 

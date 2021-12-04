@@ -21,8 +21,8 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class ArgumentDefaultValueReplacer
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private ValueResolver $valueResolver
+        private readonly NodeFactory $nodeFactory,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

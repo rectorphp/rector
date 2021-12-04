@@ -19,8 +19,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class CountManipulator
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

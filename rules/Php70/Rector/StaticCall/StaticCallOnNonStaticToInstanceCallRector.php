@@ -34,10 +34,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private StaticAnalyzer $staticAnalyzer,
-        private ReflectionProvider $reflectionProvider,
-        private ReflectionResolver $reflectionResolver,
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private readonly StaticAnalyzer $staticAnalyzer,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
 

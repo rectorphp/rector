@@ -22,10 +22,10 @@ use Rector\Php80\ValueObject\StrStartsWith;
 final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver,
-        private StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver,
+        private readonly StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

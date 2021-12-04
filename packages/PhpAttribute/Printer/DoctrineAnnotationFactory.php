@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DoctrineAnnotationFactory
 {
     public function __construct(
-        private BetterStandardPrinter $betterStandardPrinter
+        private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 

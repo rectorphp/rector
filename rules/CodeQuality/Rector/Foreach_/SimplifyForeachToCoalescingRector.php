@@ -31,7 +31,7 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector implements 
     private ?Return_ $return = null;
 
     public function __construct(
-        private ForeachManipulator $foreachManipulator
+        private readonly ForeachManipulator $foreachManipulator
     ) {
     }
 

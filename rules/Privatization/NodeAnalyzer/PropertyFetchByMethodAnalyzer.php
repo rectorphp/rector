@@ -31,9 +31,9 @@ final class PropertyFetchByMethodAnalyzer
     private const SCOPE_CHANGING_NODE_TYPES = [Do_::class, While_::class, If_::class, Else_::class];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 

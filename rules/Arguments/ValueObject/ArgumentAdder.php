@@ -13,13 +13,13 @@ final class ArgumentAdder
      * @param mixed|null $argumentDefaultValue
      */
     public function __construct(
-        private string $class,
-        private string $method,
-        private int $position,
-        private ?string $argumentName = null,
+        private readonly string $class,
+        private readonly string $method,
+        private readonly int $position,
+        private readonly ?string $argumentName = null,
         private $argumentDefaultValue = null,
-        private Type | null $argumentType = null,
-        private ?string $scope = null
+        private readonly Type | null $argumentType = null,
+        private readonly ?string $scope = null
     ) {
     }
 

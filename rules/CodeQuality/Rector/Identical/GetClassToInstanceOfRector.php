@@ -32,7 +32,7 @@ final class GetClassToInstanceOfRector extends AbstractRector
     private const NO_NAMESPACED_CLASSNAMES = ['self', 'static'];
 
     public function __construct(
-        private BinaryOpManipulator $binaryOpManipulator
+        private readonly BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 

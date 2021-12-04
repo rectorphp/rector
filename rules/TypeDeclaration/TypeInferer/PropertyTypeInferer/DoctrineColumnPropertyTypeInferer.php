@@ -34,8 +34,8 @@ final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInte
     private array $doctrineTypeToScalarType = [];
 
     public function __construct(
-        private TypeFactory $typeFactory,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly TypeFactory $typeFactory,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
         $this->doctrineTypeToScalarType = [
             'tinyint' => new BooleanType(),

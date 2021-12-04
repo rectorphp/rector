@@ -25,11 +25,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveOverriddenValuesRector extends AbstractRector
 {
     public function __construct(
-        private ContextAnalyzer $contextAnalyzer,
-        private NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
-        private VariableUseFinder $variableUseFinder,
-        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        private SideEffectNodeDetector $sideEffectNodeDetector
+        private readonly ContextAnalyzer $contextAnalyzer,
+        private readonly NodeByTypeAndPositionCollector $nodeByTypeAndPositionCollector,
+        private readonly VariableUseFinder $variableUseFinder,
+        private readonly ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private readonly SideEffectNodeDetector $sideEffectNodeDetector
     ) {
     }
 

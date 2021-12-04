@@ -12,8 +12,8 @@ final class ConcatStringAndPlaceholders
      * @param Expr[] $placeholderNodes
      */
     public function __construct(
-        private string $content,
-        private array $placeholderNodes
+        private readonly string $content,
+        private readonly array $placeholderNodes
     ) {
     }
 

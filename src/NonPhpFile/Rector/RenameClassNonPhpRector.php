@@ -41,7 +41,7 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
     private array $renameClasses = [];
 
     public function __construct(
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
     ) {
     }
 

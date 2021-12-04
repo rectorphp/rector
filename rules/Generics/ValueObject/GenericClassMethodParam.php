@@ -7,10 +7,10 @@ namespace Rector\Generics\ValueObject;
 final class GenericClassMethodParam
 {
     public function __construct(
-        private string $classType,
-        private string $methodName,
-        private int $paramPosition,
-        private string $paramGenericType
+        private readonly string $classType,
+        private readonly string $methodName,
+        private readonly int $paramPosition,
+        private readonly string $paramGenericType
     ) {
     }
 

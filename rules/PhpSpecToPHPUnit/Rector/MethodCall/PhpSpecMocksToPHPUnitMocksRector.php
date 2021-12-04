@@ -34,8 +34,8 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class PhpSpecMocksToPHPUnitMocksRector extends AbstractPhpSpecToPHPUnitRector
 {
     public function __construct(
-        private PhpSpecMockCollector $phpSpecMockCollector,
-        private TypeAnalyzer $typeAnalyzer
+        private readonly PhpSpecMockCollector $phpSpecMockCollector,
+        private readonly TypeAnalyzer $typeAnalyzer
     ) {
     }
 

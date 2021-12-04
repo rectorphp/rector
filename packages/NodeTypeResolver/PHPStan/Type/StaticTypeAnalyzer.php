@@ -21,7 +21,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 final class StaticTypeAnalyzer
 {
     public function __construct(
-        private UnionTypeAnalyzer $unionTypeAnalyzer
+        private readonly UnionTypeAnalyzer $unionTypeAnalyzer
     ) {
     }
 

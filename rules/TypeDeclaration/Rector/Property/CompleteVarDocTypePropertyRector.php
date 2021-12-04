@@ -20,8 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CompleteVarDocTypePropertyRector extends AbstractRector
 {
     public function __construct(
-        private PropertyTypeInferer $propertyTypeInferer,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PropertyTypeInferer $propertyTypeInferer,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

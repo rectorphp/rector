@@ -10,8 +10,8 @@ final class RemoveFuncCall
      * @param array<int, mixed[]> $argumentPositionAndValues
      */
     public function __construct(
-        private string $funcCall,
-        private array $argumentPositionAndValues = []
+        private readonly string $funcCall,
+        private readonly array $argumentPositionAndValues = []
     ) {
     }
 

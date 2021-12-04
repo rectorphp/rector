@@ -9,10 +9,10 @@ use PHPStan\Type\ObjectType;
 final class MethodCallToStaticCall
 {
     public function __construct(
-        private string $oldClass,
-        private string $oldMethod,
-        private string $newClass,
-        private string $newMethod
+        private readonly string $oldClass,
+        private readonly string $oldMethod,
+        private readonly string $newClass,
+        private readonly string $newMethod
     ) {
     }
 

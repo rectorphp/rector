@@ -21,7 +21,7 @@ final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
     private PhpParserNodeMapper $phpParserNodeMapper;
 
     public function __construct(
-        private TypeFactory $typeFactory
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

@@ -15,10 +15,10 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallForeach
 {
     public function __construct(
-        private Variable $variable,
-        private FuncCall | StaticCall | MethodCall $expr,
-        private string $variableName,
-        private ClassMethod | Function_ | Closure $functionLike
+        private readonly Variable $variable,
+        private readonly FuncCall | StaticCall | MethodCall $expr,
+        private readonly string $variableName,
+        private readonly ClassMethod | Function_ | Closure $functionLike
     ) {
     }
 

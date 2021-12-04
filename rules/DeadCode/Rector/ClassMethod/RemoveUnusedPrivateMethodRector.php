@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodRector extends AbstractRector
 {
     public function __construct(
-        private IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer
+        private readonly IsClassMethodUsedAnalyzer $isClassMethodUsedAnalyzer
     ) {
     }
 

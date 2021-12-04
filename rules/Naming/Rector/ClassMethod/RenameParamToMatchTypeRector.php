@@ -26,11 +26,11 @@ final class RenameParamToMatchTypeRector extends AbstractRector
     private bool $hasChanged = false;
 
     public function __construct(
-        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        private ExpectedNameResolver $expectedNameResolver,
-        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
-        private ParamRenameFactory $paramRenameFactory,
-        private ParamRenamer $paramRenamer
+        private readonly BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private readonly ExpectedNameResolver $expectedNameResolver,
+        private readonly MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
+        private readonly ParamRenameFactory $paramRenameFactory,
+        private readonly ParamRenamer $paramRenamer
     ) {
     }
 

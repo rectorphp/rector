@@ -25,9 +25,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class MagicPropertyFetchAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

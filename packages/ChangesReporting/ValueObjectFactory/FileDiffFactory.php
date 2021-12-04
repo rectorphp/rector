@@ -12,8 +12,8 @@ use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
 final class FileDiffFactory
 {
     public function __construct(
-        private DefaultDiffer $defaultDiffer,
-        private ConsoleDiffer $consoleDiffer
+        private readonly DefaultDiffer $defaultDiffer,
+        private readonly ConsoleDiffer $consoleDiffer
     ) {
     }
 

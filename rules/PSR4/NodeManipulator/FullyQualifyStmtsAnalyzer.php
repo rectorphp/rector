@@ -21,10 +21,10 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FullyQualifyStmtsAnalyzer
 {
     public function __construct(
-        private ParameterProvider $parameterProvider,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly ParameterProvider $parameterProvider,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

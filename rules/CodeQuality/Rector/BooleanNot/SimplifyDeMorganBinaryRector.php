@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyDeMorganBinaryRector extends AbstractRector
 {
     public function __construct(
-        private BinaryOpManipulator $binaryOpManipulator
+        private readonly BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 

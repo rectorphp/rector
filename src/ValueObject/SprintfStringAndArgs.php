@@ -13,8 +13,8 @@ final class SprintfStringAndArgs
      * @param Expr[] $arrayItems
      */
     public function __construct(
-        private String_ $string,
-        private array $arrayItems
+        private readonly String_ $string,
+        private readonly array $arrayItems
     ) {
     }
 

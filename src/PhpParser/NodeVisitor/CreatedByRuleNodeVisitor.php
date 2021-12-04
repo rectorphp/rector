@@ -11,7 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CreatedByRuleNodeVisitor extends NodeVisitorAbstract
 {
     public function __construct(
-        private string $rectorClass
+        private readonly string $rectorClass
     ) {
     }
 

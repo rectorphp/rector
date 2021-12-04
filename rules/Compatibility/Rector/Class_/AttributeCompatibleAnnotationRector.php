@@ -32,10 +32,10 @@ final class AttributeCompatibleAnnotationRector extends AbstractRector
     private const ATTRIBUTE = 'Attribute';
 
     public function __construct(
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private PhpDocTagRemover $phpDocTagRemover,
-        private RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer,
-        private ConstructorClassMethodFactory $constructorClassMethodFactory
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly PhpDocTagRemover $phpDocTagRemover,
+        private readonly RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer,
+        private readonly ConstructorClassMethodFactory $constructorClassMethodFactory
     ) {
     }
 

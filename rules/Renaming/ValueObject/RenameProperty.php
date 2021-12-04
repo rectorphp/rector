@@ -10,9 +10,9 @@ use Rector\Core\Validation\RectorAssert;
 final class RenameProperty
 {
     public function __construct(
-        private string $type,
-        private string $oldProperty,
-        private string $newProperty
+        private readonly string $type,
+        private readonly string $oldProperty,
+        private readonly string $newProperty
     ) {
         RectorAssert::className($type);
     }

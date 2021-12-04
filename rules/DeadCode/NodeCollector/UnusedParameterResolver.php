@@ -11,7 +11,7 @@ use Rector\Core\NodeManipulator\ClassMethodManipulator;
 final class UnusedParameterResolver
 {
     public function __construct(
-        private ClassMethodManipulator $classMethodManipulator
+        private readonly ClassMethodManipulator $classMethodManipulator
     ) {
     }
 

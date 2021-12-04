@@ -42,8 +42,8 @@ final class SideEffectNodeDetector
     ];
 
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private PureFunctionDetector $pureFunctionDetector
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PureFunctionDetector $pureFunctionDetector
     ) {
     }
 

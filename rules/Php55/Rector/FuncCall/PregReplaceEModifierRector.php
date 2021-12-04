@@ -27,9 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PregReplaceEModifierRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private AnonymousFunctionFactory $anonymousFunctionFactory,
-        private RegexMatcher $regexMatcher,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly AnonymousFunctionFactory $anonymousFunctionFactory,
+        private readonly RegexMatcher $regexMatcher,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

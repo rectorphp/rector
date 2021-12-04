@@ -21,10 +21,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ObjectToResourceReturn
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeComparator $nodeComparator,
-        private NodeFactory $nodeFactory
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly NodeFactory $nodeFactory
     ) {
     }
 

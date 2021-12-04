@@ -21,12 +21,12 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class DependencyClassMethodDecorator
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
-        private ReflectionProvider $reflectionProvider,
-        private AstResolver $astResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeFactory $nodeFactory,
+        private readonly PromotedPropertyParamCleaner $promotedPropertyParamCleaner,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly AstResolver $astResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

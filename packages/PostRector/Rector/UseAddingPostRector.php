@@ -21,13 +21,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UseAddingPostRector extends AbstractPostRector
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private TypeFactory $typeFactory,
-        private UseImportsAdder $useImportsAdder,
-        private UseImportsRemover $useImportsRemover,
-        private UseNodesToAddCollector $useNodesToAddCollector,
-        private CurrentFileProvider $currentFileProvider,
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly TypeFactory $typeFactory,
+        private readonly UseImportsAdder $useImportsAdder,
+        private readonly UseImportsRemover $useImportsRemover,
+        private readonly UseNodesToAddCollector $useNodesToAddCollector,
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
     ) {
     }
 

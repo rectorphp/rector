@@ -19,9 +19,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassMethodReturnTypeManipulator
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private NodeTypeResolver $nodeTypeResolver
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 

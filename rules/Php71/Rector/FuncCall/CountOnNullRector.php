@@ -44,8 +44,8 @@ final class CountOnNullRector extends AbstractRector implements MinPhpVersionInt
     private const ALREADY_CHANGED_ON_COUNT = 'already_changed_on_count';
 
     public function __construct(
-        private CountableTypeAnalyzer $countableTypeAnalyzer,
-        private CountableAnalyzer $countableAnalyzer
+        private readonly CountableTypeAnalyzer $countableTypeAnalyzer,
+        private readonly CountableAnalyzer $countableAnalyzer
     ) {
     }
 

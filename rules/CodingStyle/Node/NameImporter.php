@@ -30,12 +30,12 @@ final class NameImporter
     private array $aliasedUses = [];
 
     public function __construct(
-        private AliasUsesResolver $aliasUsesResolver,
-        private ClassNameImportSkipper $classNameImportSkipper,
-        private ParameterProvider $parameterProvider,
-        private StaticTypeMapper $staticTypeMapper,
-        private UseNodesToAddCollector $useNodesToAddCollector,
-        private ReflectionProvider $reflectionProvider
+        private readonly AliasUsesResolver $aliasUsesResolver,
+        private readonly ClassNameImportSkipper $classNameImportSkipper,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly UseNodesToAddCollector $useNodesToAddCollector,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

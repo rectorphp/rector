@@ -32,7 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocTagRemover $phpDocTagRemover
+        private readonly PhpDocTagRemover $phpDocTagRemover
     ) {
     }
 
@@ -181,11 +181,7 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $varTagValueNode);
         }
 
-        if ($type instanceof ShortenedObjectType) {
-            $fullyQualifiedType = $type->getFullyQualifiedName();
-        } else {
-            $fullyQualifiedType = $type->getClassName();
-        }
+        $fullyQualifiedType = $type instanceof ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
 
         return new BooleanNot(new Instanceof_($expr, new FullyQualified($fullyQualifiedType)));
     }

@@ -35,8 +35,8 @@ final class ContextAnalyzer
     private const LOOP_NODES = [For_::class, Foreach_::class, While_::class, Do_::class];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeTypeResolver $nodeTypeResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 

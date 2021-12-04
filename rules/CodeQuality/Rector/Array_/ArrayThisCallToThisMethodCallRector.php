@@ -27,8 +27,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayThisCallToThisMethodCallRector extends AbstractRector
 {
     public function __construct(
-        private ArrayCallableMethodMatcher $arrayCallableMethodMatcher,
-        private ReflectionProvider $reflectionProvider
+        private readonly ArrayCallableMethodMatcher $arrayCallableMethodMatcher,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

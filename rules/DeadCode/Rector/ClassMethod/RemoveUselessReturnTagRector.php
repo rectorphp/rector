@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessReturnTagRector extends AbstractRector
 {
     public function __construct(
-        private ReturnTagRemover $returnTagRemover
+        private readonly ReturnTagRemover $returnTagRemover
     ) {
     }
 

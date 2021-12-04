@@ -14,8 +14,8 @@ final class AddedFileWithNodes implements AddedFileInterface, FileWithNodesInter
      * @param Node\Stmt[] $nodes
      */
     public function __construct(
-        private string $filePath,
-        private array $nodes
+        private readonly string $filePath,
+        private readonly array $nodes
     ) {
     }
 

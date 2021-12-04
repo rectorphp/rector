@@ -28,10 +28,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ExpectedNameResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private PropertyNaming $propertyNaming,
-        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
     }
 

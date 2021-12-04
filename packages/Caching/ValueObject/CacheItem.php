@@ -14,7 +14,7 @@ final class CacheItem
      * @param mixed $data
      */
     public function __construct(
-        private string $variableKey,
+        private readonly string $variableKey,
         private $data
     ) {
     }

@@ -24,11 +24,11 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocFromTypeDeclarationDecorator
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private TypeUnwrapper $typeUnwrapper
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly TypeUnwrapper $typeUnwrapper
     ) {
     }
 

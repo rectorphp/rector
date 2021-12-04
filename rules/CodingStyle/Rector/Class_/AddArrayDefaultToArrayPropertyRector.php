@@ -32,9 +32,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
 {
     public function __construct(
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private IterableTypeAnalyzer $iterableTypeAnalyzer,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly IterableTypeAnalyzer $iterableTypeAnalyzer,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

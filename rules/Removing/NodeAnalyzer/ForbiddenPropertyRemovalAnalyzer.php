@@ -22,11 +22,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ForbiddenPropertyRemovalAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 

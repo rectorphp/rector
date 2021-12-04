@@ -40,8 +40,8 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     private array $methodsToYields = [];
 
     public function __construct(
-        private NodeTransformer $nodeTransformer,
-        private CommentsMerger $commentsMerger
+        private readonly NodeTransformer $nodeTransformer,
+        private readonly CommentsMerger $commentsMerger
     ) {
     }
 

@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
 final class ArrayCallable
 {
     public function __construct(
-        private Expr $callerExpr,
-        private string $class,
-        private string $method
+        private readonly Expr $callerExpr,
+        private readonly string $class,
+        private readonly string $method
     ) {
     }
 

@@ -19,11 +19,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class PropertyFetchWithConstFetchReplacer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private ConstantNaming $constantNaming,
-        private NodeFactory $nodeFactory
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly ConstantNaming $constantNaming,
+        private readonly NodeFactory $nodeFactory
     ) {
     }
 

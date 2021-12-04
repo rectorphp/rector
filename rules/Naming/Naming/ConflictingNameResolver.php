@@ -21,11 +21,11 @@ final class ConflictingNameResolver
     private array $conflictingVariableNamesByClassMethod = [];
 
     public function __construct(
-        private ArrayFilter $arrayFilter,
-        private BetterNodeFinder $betterNodeFinder,
-        private ExpectedNameResolver $expectedNameResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
+        private readonly ArrayFilter $arrayFilter,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ExpectedNameResolver $expectedNameResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver
     ) {
     }
 

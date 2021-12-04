@@ -13,8 +13,8 @@ use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 final class PhpDocTypeRenamer
 {
     public function __construct(
-        private UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory,
-        private UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
+        private readonly UnderscorePhpDocNodeTraverserFactory $underscorePhpDocNodeTraverserFactory,
+        private readonly UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
     ) {
     }
 

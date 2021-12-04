@@ -20,7 +20,7 @@ final class ClassAnalyzer
     private const ANONYMOUS_CLASS_REGEX = '#AnonymousClass\w+$#';
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

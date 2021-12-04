@@ -11,7 +11,7 @@ use Rector\Core\ValueObject\Application\File;
 final class FileDiffFileDecorator implements FileDecoratorInterface
 {
     public function __construct(
-        private FileDiffFactory $fileDiffFactory
+        private readonly FileDiffFactory $fileDiffFactory
     ) {
     }
 

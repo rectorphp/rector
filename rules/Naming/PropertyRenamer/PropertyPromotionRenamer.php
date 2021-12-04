@@ -23,14 +23,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyPromotionRenamer
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider,
-        private MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
-        private ParamRenameFactory $paramRenameFactory,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private ParamRenamer $paramRenamer,
-        private PropertyFetchRenamer $propertyFetchRenamer,
-        private NodeNameResolver $nodeNameResolver,
-        private VariableRenamer $variableRenamer
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver,
+        private readonly ParamRenameFactory $paramRenameFactory,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ParamRenamer $paramRenamer,
+        private readonly PropertyFetchRenamer $propertyFetchRenamer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly VariableRenamer $variableRenamer
     ) {
     }
 

@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SingularSwitchToIfRector extends AbstractRector
 {
     public function __construct(
-        private SwitchManipulator $switchManipulator
+        private readonly SwitchManipulator $switchManipulator
     ) {
     }
 

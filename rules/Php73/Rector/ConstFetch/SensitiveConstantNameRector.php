@@ -87,7 +87,7 @@ final class SensitiveConstantNameRector extends AbstractRector implements MinPhp
     ];
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

@@ -25,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameForeachValueVariableToMatchExprVariableRector extends AbstractRector
 {
     public function __construct(
-        private InflectorSingularResolver $inflectorSingularResolver,
-        private ForeachAnalyzer $foreachAnalyzer,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private readonly InflectorSingularResolver $inflectorSingularResolver,
+        private readonly ForeachAnalyzer $foreachAnalyzer,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 

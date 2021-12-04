@@ -10,8 +10,8 @@ final class PseudoNamespaceToNamespace
      * @param string[] $excludedClasses
      */
     public function __construct(
-        private string $namespacePrefix,
-        private array $excludedClasses = []
+        private readonly string $namespacePrefix,
+        private readonly array $excludedClasses = []
     ) {
     }
 

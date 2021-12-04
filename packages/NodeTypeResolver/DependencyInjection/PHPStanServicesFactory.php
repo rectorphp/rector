@@ -27,7 +27,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
  */
 final class PHPStanServicesFactory
 {
-    private Container $container;
+    private readonly Container $container;
 
     public function __construct(ParameterProvider $parameterProvider)
     {

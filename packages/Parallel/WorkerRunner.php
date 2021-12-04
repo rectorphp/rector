@@ -26,8 +26,8 @@ final class WorkerRunner
     private const RESULT = 'result';
 
     public function __construct(
-        private FileProcessor $fileProcessor,
-        private ParametersMerger $parametersMerger
+        private readonly FileProcessor $fileProcessor,
+        private readonly ParametersMerger $parametersMerger
     ) {
     }
 

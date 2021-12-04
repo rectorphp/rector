@@ -10,9 +10,9 @@ use Rector\Core\Validation\RectorAssert;
 final class UnsetAndIssetToMethodCall
 {
     public function __construct(
-        private string $type,
-        private string $issetMethodCall,
-        private string $unsedMethodCall
+        private readonly string $type,
+        private readonly string $issetMethodCall,
+        private readonly string $unsedMethodCall
     ) {
         RectorAssert::className($type);
     }

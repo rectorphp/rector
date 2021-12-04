@@ -9,9 +9,9 @@ use PHPStan\Type\Type;
 final class AddPropertyTypeDeclaration
 {
     public function __construct(
-        private string $class,
-        private string $propertyName,
-        private Type $type
+        private readonly string $class,
+        private readonly string $propertyName,
+        private readonly Type $type
     ) {
     }
 

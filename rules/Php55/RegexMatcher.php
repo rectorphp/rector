@@ -25,7 +25,7 @@ final class RegexMatcher
     private const LETTER_SUFFIX_REGEX = '#(?<modifiers>\w+)$#';
 
     public function __construct(
-        private ValueResolver $valueResolver
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

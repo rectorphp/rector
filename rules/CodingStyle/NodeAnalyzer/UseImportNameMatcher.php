@@ -22,7 +22,7 @@ final class UseImportNameMatcher
     private const SHORT_NAME_REGEX = '#^%s(\\\\[\w]+)?$#i';
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

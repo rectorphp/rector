@@ -50,12 +50,12 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
     private bool $shouldRemoveAnnotations = true;
 
     public function __construct(
-        private PhpDocTagRemover $phpDocTagRemover,
-        private AttributeFlagFactory $attributeFlagFactory,
-        private PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private PropertyToAddCollector $propertyToAddCollector,
-        private AnnotationTargetResolver $annotationTargetResolver
+        private readonly PhpDocTagRemover $phpDocTagRemover,
+        private readonly AttributeFlagFactory $attributeFlagFactory,
+        private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly AnnotationTargetResolver $annotationTargetResolver
     ) {
     }
 

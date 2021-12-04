@@ -31,8 +31,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveExtraParametersRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private VariadicAnalyzer $variadicAnalyzer,
-        private ReflectionResolver $reflectionResolver
+        private readonly VariadicAnalyzer $variadicAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

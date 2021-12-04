@@ -13,8 +13,8 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class CacheFactory
 {
     public function __construct(
-        private ParameterProvider $parameterProvider,
-        private SmartFileSystem $smartFileSystem
+        private readonly ParameterProvider $parameterProvider,
+        private readonly SmartFileSystem $smartFileSystem
     ) {
     }
 

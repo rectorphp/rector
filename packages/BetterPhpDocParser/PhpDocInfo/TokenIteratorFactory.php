@@ -17,8 +17,8 @@ final class TokenIteratorFactory
     private const INDEX = 'index';
 
     public function __construct(
-        private Lexer $lexer,
-        private PrivatesAccessor $privatesAccessor
+        private readonly Lexer $lexer,
+        private readonly PrivatesAccessor $privatesAccessor
     ) {
     }
 

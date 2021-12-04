@@ -15,9 +15,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class VariableUseFinder
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeComparator $nodeComparator
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

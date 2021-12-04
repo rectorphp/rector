@@ -21,8 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateClassConstantRector extends AbstractRector
 {
     public function __construct(
-        private ClassConstManipulator $classConstManipulator,
-        private EnumAnalyzer $enumAnalyzer,
+        private readonly ClassConstManipulator $classConstManipulator,
+        private readonly EnumAnalyzer $enumAnalyzer,
     ) {
     }
 

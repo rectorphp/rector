@@ -30,14 +30,14 @@ final class PhpFileProcessor implements FileProcessorInterface
     private array $notParsedFiles = [];
 
     public function __construct(
-        private FormatPerservingPrinter $formatPerservingPrinter,
-        private FileProcessor $fileProcessor,
-        private RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
-        private SymfonyStyle $symfonyStyle,
-        private FileDiffFileDecorator $fileDiffFileDecorator,
-        private CurrentFileProvider $currentFileProvider,
-        private PostFileProcessor $postFileProcessor,
-        private ErrorFactory $errorFactory
+        private readonly FormatPerservingPrinter $formatPerservingPrinter,
+        private readonly FileProcessor $fileProcessor,
+        private readonly RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
+        private readonly SymfonyStyle $symfonyStyle,
+        private readonly FileDiffFileDecorator $fileDiffFileDecorator,
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly PostFileProcessor $postFileProcessor,
+        private readonly ErrorFactory $errorFactory
     ) {
     }
 

@@ -17,7 +17,7 @@ use Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
 final class ConfigureCallMergingLoaderFactory implements LoaderFactoryInterface
 {
     public function __construct(
-        private ConfigureCallValuesCollector $configureCallValuesCollector
+        private readonly ConfigureCallValuesCollector $configureCallValuesCollector
     ) {
     }
 

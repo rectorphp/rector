@@ -27,8 +27,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NewTypeResolver implements NodeTypeResolverInterface
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ClassAnalyzer $classAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ClassAnalyzer $classAnalyzer,
     ) {
     }
 

@@ -11,7 +11,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 final class PhpVersionedFilter
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

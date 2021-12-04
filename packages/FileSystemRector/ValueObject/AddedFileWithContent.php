@@ -10,8 +10,8 @@ use Rector\FileSystemRector\Contract\AddedFileInterface;
 final class AddedFileWithContent implements AddedFileInterface
 {
     public function __construct(
-        private string $filePath,
-        private string $fileContent
+        private readonly string $filePath,
+        private readonly string $fileContent
     ) {
         if ($filePath === $fileContent) {
             throw new ShouldNotHappenException('File path and content are the same, probably a bug');

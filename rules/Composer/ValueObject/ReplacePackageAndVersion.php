@@ -10,14 +10,14 @@ use Webmozart\Assert\Assert;
 
 final class ReplacePackageAndVersion implements VersionAwareInterface
 {
-    private string $oldPackageName;
+    private readonly string $oldPackageName;
 
-    private string $newPackageName;
+    private readonly string $newPackageName;
 
     public function __construct(
         string $oldPackageName,
         string $newPackageName,
-        private string $version
+        private readonly string $version
     ) {
         Assert::notSame(
             $oldPackageName,

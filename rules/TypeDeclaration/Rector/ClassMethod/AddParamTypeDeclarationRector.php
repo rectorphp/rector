@@ -38,7 +38,7 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     private array $parameterTypehints = [];
 
     public function __construct(
-        private TypeComparator $typeComparator
+        private readonly TypeComparator $typeComparator
     ) {
     }
 

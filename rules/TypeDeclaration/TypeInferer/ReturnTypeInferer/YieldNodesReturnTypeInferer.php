@@ -22,9 +22,9 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private TypeFactory $typeFactory,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly TypeFactory $typeFactory,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 

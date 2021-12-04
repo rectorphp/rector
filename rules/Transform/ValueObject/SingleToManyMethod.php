@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class SingleToManyMethod
 {
     public function __construct(
-        private string $class,
-        private string $singleMethodName,
-        private string $manyMethodName
+        private readonly string $class,
+        private readonly string $singleMethodName,
+        private readonly string $manyMethodName
     ) {
     }
 

@@ -11,9 +11,9 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 final class RenameAnnotationByType implements RenameAnnotationInterface
 {
     public function __construct(
-        private string $type,
-        private string $oldAnnotation,
-        private string $newAnnotation
+        private readonly string $type,
+        private readonly string $oldAnnotation,
+        private readonly string $newAnnotation
     ) {
         RectorAssert::className($type);
     }

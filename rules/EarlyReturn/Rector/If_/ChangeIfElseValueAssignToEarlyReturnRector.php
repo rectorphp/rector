@@ -26,8 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeIfElseValueAssignToEarlyReturnRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private StmtsManipulator $stmtsManipulator
+        private readonly IfManipulator $ifManipulator,
+        private readonly StmtsManipulator $stmtsManipulator
     ) {
     }
 

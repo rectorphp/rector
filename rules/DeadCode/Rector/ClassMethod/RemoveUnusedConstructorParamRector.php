@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedConstructorParamRector extends AbstractRector
 {
     public function __construct(
-        private ParamAnalyzer $paramAnalyzer
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 

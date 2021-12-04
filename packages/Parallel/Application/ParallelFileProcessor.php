@@ -53,7 +53,7 @@ final class ParallelFileProcessor
     private ProcessPool|null $processPool = null;
 
     public function __construct(
-        private WorkerCommandLineFactory $workerCommandLineFactory
+        private readonly WorkerCommandLineFactory $workerCommandLineFactory
     ) {
     }
 

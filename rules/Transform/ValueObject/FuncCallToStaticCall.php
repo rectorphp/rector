@@ -7,9 +7,9 @@ namespace Rector\Transform\ValueObject;
 final class FuncCallToStaticCall
 {
     public function __construct(
-        private string $oldFuncName,
-        private string $newClassName,
-        private string $newMethodName
+        private readonly string $oldFuncName,
+        private readonly string $newClassName,
+        private readonly string $newMethodName
     ) {
     }
 

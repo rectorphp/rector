@@ -11,8 +11,8 @@ final class DowngradeAttributeToAnnotation
      * @param class-string|string|null $tag
      */
     public function __construct(
-        private string $attributeClass,
-        private ?string $tag = null
+        private readonly string $attributeClass,
+        private readonly ?string $tag = null
     ) {
     }
 

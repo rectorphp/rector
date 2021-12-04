@@ -26,10 +26,10 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     private bool $hasChanged = false;
 
     public function __construct(
-        private MatchTypePropertyRenamer $matchTypePropertyRenamer,
-        private PropertyRenameFactory $propertyRenameFactory,
-        private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
-        private PropertyPromotionRenamer $propertyPromotionRenamer,
+        private readonly MatchTypePropertyRenamer $matchTypePropertyRenamer,
+        private readonly PropertyRenameFactory $propertyRenameFactory,
+        private readonly MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
+        private readonly PropertyPromotionRenamer $propertyPromotionRenamer,
     ) {
     }
 

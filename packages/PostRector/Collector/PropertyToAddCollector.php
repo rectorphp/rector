@@ -30,8 +30,8 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     private array $propertiesWithoutConstructorByClass = [];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private RectorChangeCollector $rectorChangeCollector
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly RectorChangeCollector $rectorChangeCollector
     ) {
     }
 

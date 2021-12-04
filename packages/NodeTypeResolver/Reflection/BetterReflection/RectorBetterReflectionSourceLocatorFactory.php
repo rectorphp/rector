@@ -12,8 +12,8 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\Intermedia
 final class RectorBetterReflectionSourceLocatorFactory
 {
     public function __construct(
-        private BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory,
-        private IntermediateSourceLocator $intermediateSourceLocator
+        private readonly BetterReflectionSourceLocatorFactory $betterReflectionSourceLocatorFactory,
+        private readonly IntermediateSourceLocator $intermediateSourceLocator
     ) {
     }
 

@@ -51,7 +51,7 @@ final class NewLine implements Stringable
     private const VALID_NEWLINE_REGEX = '#^(?>\r\n|\n|\r)$#';
 
     private function __construct(
-        private string $string
+        private readonly string $string
     ) {
     }
 

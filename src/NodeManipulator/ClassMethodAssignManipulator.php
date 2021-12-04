@@ -35,13 +35,13 @@ final class ClassMethodAssignManipulator
     private array $alreadyAddedClassMethodNames = [];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeFactory $nodeFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private VariableManipulator $variableManipulator,
-        private NodeComparator $nodeComparator,
-        private ReflectionResolver $reflectionResolver,
-        private ArrayDestructVariableFilter $arrayDestructVariableFilter
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeFactory $nodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly VariableManipulator $variableManipulator,
+        private readonly NodeComparator $nodeComparator,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ArrayDestructVariableFilter $arrayDestructVariableFilter
     ) {
     }
 

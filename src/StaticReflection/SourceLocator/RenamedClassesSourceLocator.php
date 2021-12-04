@@ -21,7 +21,7 @@ use Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 final class RenamedClassesSourceLocator implements SourceLocator
 {
     public function __construct(
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
     ) {
     }
 

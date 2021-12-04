@@ -34,12 +34,12 @@ final class ValueResolver
     private ?ConstExprEvaluator $constExprEvaluator = null;
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private ConstFetchAnalyzer $constFetchAnalyzer,
-        private ReflectionProvider $reflectionProvider,
-        private CurrentFileProvider $currentFileProvider,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ConstFetchAnalyzer $constFetchAnalyzer,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

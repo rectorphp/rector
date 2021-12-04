@@ -9,7 +9,7 @@ use Symplify\SmartFileSystem\FileSystemGuard;
 final class FilesystemTweaker
 {
     public function __construct(
-        private FileSystemGuard $fileSystemGuard
+        private readonly FileSystemGuard $fileSystemGuard
     ) {
     }
 

@@ -13,10 +13,10 @@ final class MethodCallToMethodCall
      * @param class-string $newType
      */
     public function __construct(
-        private string $oldType,
-        private string $oldMethod,
-        private string $newType,
-        private string $newMethod,
+        private readonly string $oldType,
+        private readonly string $oldMethod,
+        private readonly string $newType,
+        private readonly string $newMethod,
     ) {
         RectorAssert::className($oldType);
         RectorAssert::className($newType);

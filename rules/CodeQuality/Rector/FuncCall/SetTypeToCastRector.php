@@ -46,7 +46,7 @@ final class SetTypeToCastRector extends AbstractRector
     ];
 
     public function __construct(
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

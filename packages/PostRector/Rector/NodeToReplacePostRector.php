@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NodeToReplacePostRector extends AbstractPostRector
 {
     public function __construct(
-        private NodesToReplaceCollector $nodesToReplaceCollector
+        private readonly NodesToReplaceCollector $nodesToReplaceCollector
     ) {
     }
 

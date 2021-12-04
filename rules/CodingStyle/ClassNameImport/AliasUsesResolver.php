@@ -13,8 +13,8 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class AliasUsesResolver
 {
     public function __construct(
-        private UseImportsTraverser $useImportsTraverser,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly UseImportsTraverser $useImportsTraverser,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

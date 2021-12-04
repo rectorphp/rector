@@ -76,13 +76,13 @@ final class PhpDocInfoPrinter
 
     private ?PhpDocInfo $phpDocInfo = null;
 
-    private PhpDocNodeTraverser $changedPhpDocNodeTraverser;
+    private readonly PhpDocNodeTraverser $changedPhpDocNodeTraverser;
 
     public function __construct(
-        private EmptyPhpDocDetector $emptyPhpDocDetector,
-        private DocBlockInliner $docBlockInliner,
-        private RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver,
-        private ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor,
+        private readonly EmptyPhpDocDetector $emptyPhpDocDetector,
+        private readonly DocBlockInliner $docBlockInliner,
+        private readonly RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver,
+        private readonly ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor,
         ChangedPhpDocNodeTraverserFactory $changedPhpDocNodeTraverserFactory
     ) {
         $this->changedPhpDocNodeTraverser = $changedPhpDocNodeTraverserFactory->create();

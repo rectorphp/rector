@@ -12,8 +12,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeComparator
 {
     public function __construct(
-        private CommentRemover $commentRemover,
-        private BetterStandardPrinter $betterStandardPrinter
+        private readonly CommentRemover $commentRemover,
+        private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 

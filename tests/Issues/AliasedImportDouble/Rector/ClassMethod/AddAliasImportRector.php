@@ -15,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddAliasImportRector extends AbstractRector
 {
     public function __construct(
-        private UseNodesToAddCollector $useNodesToAddCollector
+        private readonly UseNodesToAddCollector $useNodesToAddCollector
     ) {
     }
 

@@ -35,10 +35,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 final class NameNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
-        private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

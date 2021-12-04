@@ -52,11 +52,11 @@ final class ManualJsonStringToJsonEncodeArrayRector extends AbstractRector
     private const JSON_DATA = 'jsonData';
 
     public function __construct(
-        private ConcatJoiner $concatJoiner,
-        private ConcatManipulator $concatManipulator,
-        private JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,
-        private JsonArrayFactory $jsonArrayFactory,
-        private ReflectionProvider $reflectionProvider,
+        private readonly ConcatJoiner $concatJoiner,
+        private readonly ConcatManipulator $concatManipulator,
+        private readonly JsonEncodeStaticCallFactory $jsonEncodeStaticCallFactory,
+        private readonly JsonArrayFactory $jsonArrayFactory,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 

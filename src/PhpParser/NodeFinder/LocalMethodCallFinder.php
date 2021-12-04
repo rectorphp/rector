@@ -15,9 +15,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class LocalMethodCallFinder
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
     ) {
     }
 

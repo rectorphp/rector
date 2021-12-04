@@ -21,8 +21,8 @@ use Rector\TypeDeclaration\TypeNormalizer;
 final class AdvancedArrayAnalyzer
 {
     public function __construct(
-        private TypeNormalizer $typeNormalizer,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly TypeNormalizer $typeNormalizer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

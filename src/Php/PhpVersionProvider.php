@@ -24,8 +24,8 @@ final class PhpVersionProvider
     private const VALID_PHP_VERSION_REGEX = '#^\d{5,6}$#';
 
     public function __construct(
-        private ParameterProvider $parameterProvider,
-        private ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver
+        private readonly ParameterProvider $parameterProvider,
+        private readonly ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver
     ) {
     }
 

@@ -28,7 +28,7 @@ final class ReplacePackageAndVersionComposerRector implements ComposerRectorInte
     private array $replacePackagesAndVersions = [];
 
     public function __construct(
-        private VersionGuard $versionGuard
+        private readonly VersionGuard $versionGuard
     ) {
     }
 

@@ -11,7 +11,7 @@ use Stringy\Stringy;
 final class ConstantNaming
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

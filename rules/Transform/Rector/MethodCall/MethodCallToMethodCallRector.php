@@ -37,9 +37,9 @@ final class MethodCallToMethodCallRector extends AbstractRector implements Confi
     private array $methodCallsToMethodsCalls = [];
 
     public function __construct(
-        private PropertyNaming $propertyNaming,
-        private PropertyPresenceChecker $propertyPresenceChecker,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly PropertyNaming $propertyNaming,
+        private readonly PropertyPresenceChecker $propertyPresenceChecker,
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

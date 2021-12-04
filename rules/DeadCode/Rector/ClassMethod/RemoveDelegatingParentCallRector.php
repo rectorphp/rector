@@ -37,8 +37,8 @@ final class RemoveDelegatingParentCallRector extends AbstractRector
     ];
 
     public function __construct(
-        private CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator,
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer
+        private readonly CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 

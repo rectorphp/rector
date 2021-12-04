@@ -31,11 +31,11 @@ final class FilesFinder
     private const ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\*$#';
 
     public function __construct(
-        private FilesystemTweaker $filesystemTweaker,
-        private FinderSanitizer $finderSanitizer,
-        private FileSystemFilter $fileSystemFilter,
-        private SkippedPathsResolver $skippedPathsResolver,
-        private UnchangedFilesFilter $unchangedFilesFilter
+        private readonly FilesystemTweaker $filesystemTweaker,
+        private readonly FinderSanitizer $finderSanitizer,
+        private readonly FileSystemFilter $fileSystemFilter,
+        private readonly SkippedPathsResolver $skippedPathsResolver,
+        private readonly UnchangedFilesFilter $unchangedFilesFilter
     ) {
     }
 

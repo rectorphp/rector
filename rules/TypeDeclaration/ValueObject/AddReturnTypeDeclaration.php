@@ -10,9 +10,9 @@ use PHPStan\Type\Type;
 final class AddReturnTypeDeclaration
 {
     public function __construct(
-        private string $class,
-        private string $method,
-        private Type $returnType
+        private readonly string $class,
+        private readonly string $method,
+        private readonly Type $returnType
     ) {
     }
 

@@ -22,10 +22,10 @@ use ReflectionProperty;
 final class PropertyPresenceChecker
 {
     public function __construct(
-        private PromotedPropertyResolver $promotedPropertyResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
-        private AstResolver $astResolver
+        private readonly PromotedPropertyResolver $promotedPropertyResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly AstResolver $astResolver
     ) {
     }
 

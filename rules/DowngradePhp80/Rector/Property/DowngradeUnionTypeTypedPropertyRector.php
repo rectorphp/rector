@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeUnionTypeTypedPropertyRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

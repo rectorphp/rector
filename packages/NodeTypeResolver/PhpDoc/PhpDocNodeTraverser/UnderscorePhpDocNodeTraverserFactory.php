@@ -10,7 +10,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class UnderscorePhpDocNodeTraverserFactory
 {
     public function __construct(
-        private UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
+        private readonly UnderscoreRenamePhpDocNodeVisitor $underscoreRenamePhpDocNodeVisitor
     ) {
     }
 

@@ -22,8 +22,8 @@ final class ShortClassExpander
     private const CLASS_CONST_REGEX = '#::class#';
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private ObjectTypeSpecifier $objectTypeSpecifier
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ObjectTypeSpecifier $objectTypeSpecifier
     ) {
     }
 

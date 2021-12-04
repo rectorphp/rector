@@ -12,8 +12,8 @@ use Rector\Naming\VariableRenamer;
 final class ParamRenamer
 {
     public function __construct(
-        private VariableRenamer $variableRenamer,
-        private PropertyDocBlockManipulator $propertyDocBlockManipulator
+        private readonly VariableRenamer $variableRenamer,
+        private readonly PropertyDocBlockManipulator $propertyDocBlockManipulator
     ) {
     }
 

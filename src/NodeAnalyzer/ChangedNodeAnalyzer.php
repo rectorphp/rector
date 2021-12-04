@@ -13,7 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ChangedNodeAnalyzer
 {
     public function __construct(
-        private NodeComparator $nodeComparator
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

@@ -17,7 +17,7 @@ final class File
 {
     private bool $hasChanged = false;
 
-    private string $originalFileContent;
+    private readonly string $originalFileContent;
 
     private ?FileDiff $fileDiff = null;
 
@@ -47,7 +47,7 @@ final class File
     private array $rectorErrors = [];
 
     public function __construct(
-        private SmartFileInfo $smartFileInfo,
+        private readonly SmartFileInfo $smartFileInfo,
         private string $fileContent
     ) {
         $this->originalFileContent = $fileContent;

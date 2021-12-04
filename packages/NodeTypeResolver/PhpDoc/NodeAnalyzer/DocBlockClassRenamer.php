@@ -12,8 +12,8 @@ use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 final class DocBlockClassRenamer
 {
     public function __construct(
-        private ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor,
-        private RenamingPhpDocNodeVisitorFactory $renamingPhpDocNodeVisitorFactory
+        private readonly ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor,
+        private readonly RenamingPhpDocNodeVisitorFactory $renamingPhpDocNodeVisitorFactory
     ) {
     }
 

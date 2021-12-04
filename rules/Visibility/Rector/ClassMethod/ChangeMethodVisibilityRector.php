@@ -34,8 +34,8 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     private array $methodVisibilities = [];
 
     public function __construct(
-        private ParentClassScopeResolver $parentClassScopeResolver,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly ParentClassScopeResolver $parentClassScopeResolver,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

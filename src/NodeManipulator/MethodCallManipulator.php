@@ -19,9 +19,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class MethodCallManipulator
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer
     ) {
     }
 

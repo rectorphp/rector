@@ -36,10 +36,10 @@ final class PhpSpecClassToPHPUnitClassRector extends AbstractPhpSpecToPHPUnitRec
     private const ALREADY_RENAMED_TO_TEST = 'already_renamed_to_test';
 
     public function __construct(
-        private ClassInsertManipulator $classInsertManipulator,
-        private LetManipulator $letManipulator,
-        private PhpSpecRenaming $phpSpecRenaming,
-        private SetUpClassMethodFactory $setUpClassMethodFactory
+        private readonly ClassInsertManipulator $classInsertManipulator,
+        private readonly LetManipulator $letManipulator,
+        private readonly PhpSpecRenaming $phpSpecRenaming,
+        private readonly SetUpClassMethodFactory $setUpClassMethodFactory
     ) {
     }
 

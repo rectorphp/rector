@@ -12,7 +12,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ScopeFactory
 {
     public function __construct(
-        private PHPStanScopeFactory $phpStanScopeFactory
+        private readonly PHPStanScopeFactory $phpStanScopeFactory
     ) {
     }
 

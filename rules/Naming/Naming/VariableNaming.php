@@ -32,9 +32,9 @@ use Stringy\Stringy;
 final class VariableNaming
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver,
-        private NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 

@@ -32,7 +32,7 @@ final class RemoveParentRector extends AbstractRector implements ConfigurableRec
     private array $parentClassesToRemove = [];
 
     public function __construct(
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private readonly ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
 

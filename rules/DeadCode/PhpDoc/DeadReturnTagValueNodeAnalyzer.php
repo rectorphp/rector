@@ -19,9 +19,9 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadReturnTagValueNodeAnalyzer
 {
     public function __construct(
-        private TypeComparator $typeComparator,
-        private BetterNodeFinder $betterNodeFinder,
-        private GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
+        private readonly TypeComparator $typeComparator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer,
     ) {
     }
 

@@ -11,7 +11,7 @@ use PHPStan\Reflection\ReflectionProvider;
 final class NamedArgumentsResolver
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

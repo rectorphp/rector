@@ -25,13 +25,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariableManipulator
 {
     public function __construct(
-        private ArrayManipulator $arrayManipulator,
-        private AssignManipulator $assignManipulator,
-        private BetterNodeFinder $betterNodeFinder,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver,
-        private VariableToConstantGuard $variableToConstantGuard,
-        private NodeComparator $nodeComparator
+        private readonly ArrayManipulator $arrayManipulator,
+        private readonly AssignManipulator $assignManipulator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly VariableToConstantGuard $variableToConstantGuard,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

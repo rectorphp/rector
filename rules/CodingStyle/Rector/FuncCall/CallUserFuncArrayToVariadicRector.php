@@ -28,8 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallUserFuncArrayToVariadicRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

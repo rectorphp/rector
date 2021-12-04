@@ -17,9 +17,9 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UsedImportsResolver
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private UseImportsTraverser $useImportsTraverser,
-        private NodeNameResolver $nodeNameResolver
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly UseImportsTraverser $useImportsTraverser,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

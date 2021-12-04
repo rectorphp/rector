@@ -23,13 +23,13 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTagReturnTypeInfe
 final class GetterPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     public function __construct(
-        private ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
-        private ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
-        private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private AstResolver $astResolver
+        private readonly ReturnTagReturnTypeInferer $returnTagReturnTypeInferer,
+        private readonly ReturnedNodesReturnTypeInferer $returnedNodesReturnTypeInferer,
+        private readonly FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        private readonly ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly AstResolver $astResolver
     ) {
     }
 

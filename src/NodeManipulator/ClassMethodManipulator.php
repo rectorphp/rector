@@ -25,11 +25,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassMethodManipulator
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeComparator $nodeComparator,
-        private FuncCallManipulator $funcCallManipulator
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly FuncCallManipulator $funcCallManipulator
     ) {
     }
 

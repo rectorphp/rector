@@ -14,7 +14,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class ArrayTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     public function __construct(
-        private AttributeMirrorer $attributeMirrorer
+        private readonly AttributeMirrorer $attributeMirrorer
     ) {
     }
 

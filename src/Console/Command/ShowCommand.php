@@ -18,8 +18,8 @@ final class ShowCommand extends Command
      * @param RectorInterface[] $rectors
      */
     public function __construct(
-        private OutputStyleInterface $outputStyle,
-        private array $rectors
+        private readonly OutputStyleInterface $outputStyle,
+        private readonly array $rectors
     ) {
         parent::__construct();
     }

@@ -36,14 +36,14 @@ final class LocalPropertyAnalyzer
     private const LARAVEL_COLLECTION_CLASS = 'Illuminate\Support\Collection';
 
     public function __construct(
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private ClassAnalyzer $classAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private TypeFactory $typeFactory,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly TypeFactory $typeFactory,
     ) {
     }
 

@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class DefaultValuePropertyTypeInferer
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 

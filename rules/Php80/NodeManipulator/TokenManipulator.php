@@ -34,13 +34,13 @@ final class TokenManipulator
     private ?Expr $assignedNameExpr = null;
 
     public function __construct(
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodesToRemoveCollector $nodesToRemoveCollector,
-        private ValueResolver $valueResolver,
-        private NodeComparator $nodeComparator,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodesToRemoveCollector $nodesToRemoveCollector,
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

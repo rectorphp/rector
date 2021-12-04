@@ -21,7 +21,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 final class TypeWithClassNameTypeMapper implements TypeMapperInterface
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

@@ -51,11 +51,11 @@ final class RegexPatternArgumentManipulator
     ];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private LocalConstantFinder $localConstantFinder,
-        private NodeComparator $nodeComparator
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly LocalConstantFinder $localConstantFinder,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

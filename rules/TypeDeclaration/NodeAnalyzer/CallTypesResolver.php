@@ -21,8 +21,8 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class CallTypesResolver
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private TypeFactory $typeFactory
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

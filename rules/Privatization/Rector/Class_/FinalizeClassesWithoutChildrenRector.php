@@ -39,9 +39,9 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
     ];
 
     public function __construct(
-        private ClassAnalyzer $classAnalyzer,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

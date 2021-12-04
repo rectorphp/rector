@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallUserFuncWithArrowFunctionToInlineRector extends AbstractRector
 {
     public function __construct(
-        private ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer
+        private readonly ClosureArrowFunctionAnalyzer $closureArrowFunctionAnalyzer
     ) {
     }
 

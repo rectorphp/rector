@@ -21,7 +21,7 @@ final class PHPStanStaticTypeMapper
      * @param TypeMapperInterface[] $typeMappers
      */
     public function __construct(
-        private array $typeMappers
+        private readonly array $typeMappers
     ) {
     }
 

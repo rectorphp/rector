@@ -26,9 +26,9 @@ final class PhpSpecRenaming
     private const SPEC = 'Spec';
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private StringFormatConverter $stringFormatConverter,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly StringFormatConverter $stringFormatConverter,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

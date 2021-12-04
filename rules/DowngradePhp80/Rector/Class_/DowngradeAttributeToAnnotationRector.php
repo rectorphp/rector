@@ -40,7 +40,7 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
     private array $attributesToAnnotations = [];
 
     public function __construct(
-        private DoctrineAnnotationFactory $doctrineAnnotationFactory
+        private readonly DoctrineAnnotationFactory $doctrineAnnotationFactory
     ) {
     }
 

@@ -18,9 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NodeRemovingPostRector extends AbstractPostRector
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private NodesToRemoveCollector $nodesToRemoveCollector
+        private readonly NodeFactory $nodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodesToRemoveCollector $nodesToRemoveCollector
     ) {
     }
 

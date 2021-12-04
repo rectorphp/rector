@@ -25,8 +25,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNamedArgumentRector extends AbstractRector
 {
     public function __construct(
-        private ReflectionResolver $reflectionResolver,
-        private UnnamedArgumentResolver $unnamedArgumentResolver
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly UnnamedArgumentResolver $unnamedArgumentResolver
     ) {
     }
 

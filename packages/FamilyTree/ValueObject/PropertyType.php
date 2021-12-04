@@ -11,8 +11,8 @@ use PHPStan\Type\Type;
 final class PropertyType
 {
     public function __construct(
-        private Type $varType,
-        private Name|ComplexType|null $propertyTypeNode
+        private readonly Type $varType,
+        private readonly Name|ComplexType|null $propertyTypeNode
     ) {
     }
 

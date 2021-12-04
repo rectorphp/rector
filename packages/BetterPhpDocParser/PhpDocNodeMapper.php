@@ -21,10 +21,10 @@ final class PhpDocNodeMapper
      * @param BasePhpDocNodeVisitorInterface[] $phpDocNodeVisitors
      */
     public function __construct(
-        private CurrentTokenIteratorProvider $currentTokenIteratorProvider,
-        private ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor,
-        private CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor,
-        private array $phpDocNodeVisitors
+        private readonly CurrentTokenIteratorProvider $currentTokenIteratorProvider,
+        private readonly ParentConnectingPhpDocNodeVisitor $parentConnectingPhpDocNodeVisitor,
+        private readonly CloningPhpDocNodeVisitor $cloningPhpDocNodeVisitor,
+        private readonly array $phpDocNodeVisitors
     ) {
     }
 

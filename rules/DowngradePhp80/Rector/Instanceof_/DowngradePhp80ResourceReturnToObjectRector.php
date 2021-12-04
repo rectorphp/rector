@@ -61,7 +61,7 @@ final class DowngradePhp80ResourceReturnToObjectRector extends AbstractRector
     ];
 
     public function __construct(
-        private ObjectToResourceReturn $objectToResourceReturn
+        private readonly ObjectToResourceReturn $objectToResourceReturn
     ) {
     }
 

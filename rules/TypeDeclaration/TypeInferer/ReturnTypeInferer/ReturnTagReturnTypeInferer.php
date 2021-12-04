@@ -12,7 +12,7 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 final class ReturnTagReturnTypeInferer implements ReturnTypeInfererInterface
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

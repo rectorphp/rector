@@ -35,11 +35,11 @@ use Webmozart\Assert\Assert;
 final class BetterNodeFinder
 {
     public function __construct(
-        private NodeFinder $nodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private TypeChecker $typeChecker,
-        private NodeComparator $nodeComparator,
-        private ClassAnalyzer $classAnalyzer,
+        private readonly NodeFinder $nodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly TypeChecker $typeChecker,
+        private readonly NodeComparator $nodeComparator,
+        private readonly ClassAnalyzer $classAnalyzer,
     ) {
     }
 

@@ -71,17 +71,17 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
     private bool $privatePropertyOnly = false;
 
     public function __construct(
-        private PropertyTypeInferer $propertyTypeInferer,
-        private VendorLockResolver $vendorLockResolver,
-        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        private VarTagRemover $varTagRemover,
-        private ReflectionProvider $reflectionProvider,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private PropertyAnalyzer $propertyAnalyzer,
-        private PropertyUnionTypeResolver $propertyUnionTypeResolver,
-        private AstResolver $astResolver,
-        private ObjectTypeAnalyzer $objectTypeAnalyzer
+        private readonly PropertyTypeInferer $propertyTypeInferer,
+        private readonly VendorLockResolver $vendorLockResolver,
+        private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private readonly VarTagRemover $varTagRemover,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private readonly PropertyAnalyzer $propertyAnalyzer,
+        private readonly PropertyUnionTypeResolver $propertyUnionTypeResolver,
+        private readonly AstResolver $astResolver,
+        private readonly ObjectTypeAnalyzer $objectTypeAnalyzer
     ) {
     }
 

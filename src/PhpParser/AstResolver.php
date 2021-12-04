@@ -59,15 +59,15 @@ final class AstResolver
     private array $functionsByName = [];
 
     public function __construct(
-        private SmartPhpParser $smartPhpParser,
-        private SmartFileSystem $smartFileSystem,
-        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
-        private ReflectionResolver $reflectionResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private ClassLikeAstResolver $classLikeAstResolver
+        private readonly SmartPhpParser $smartPhpParser,
+        private readonly SmartFileSystem $smartFileSystem,
+        private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ClassLikeAstResolver $classLikeAstResolver
     ) {
     }
 

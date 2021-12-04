@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PreparedValueToEarlyReturnRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator
+        private readonly IfManipulator $ifManipulator
     ) {
     }
 

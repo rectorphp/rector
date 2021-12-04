@@ -17,8 +17,8 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class FormatPerservingPrinter
 {
     public function __construct(
-        private BetterStandardPrinter $betterStandardPrinter,
-        private SmartFileSystem $smartFileSystem
+        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly SmartFileSystem $smartFileSystem
     ) {
     }
 

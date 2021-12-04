@@ -18,9 +18,9 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class TestingParser
 {
     public function __construct(
-        private ParameterProvider $parameterProvider,
-        private RectorParser $rectorParser,
-        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly RectorParser $rectorParser,
+        private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
     ) {
     }
 

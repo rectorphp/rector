@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeAbstractPrivateMethodInTraitRector extends AbstractRector
 {
     public function __construct(
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

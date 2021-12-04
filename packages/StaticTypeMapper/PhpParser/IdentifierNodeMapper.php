@@ -16,7 +16,7 @@ use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 final class IdentifierNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(
-        private ScalarStringToTypeMapper $scalarStringToTypeMapper
+        private readonly ScalarStringToTypeMapper $scalarStringToTypeMapper
     ) {
     }
 

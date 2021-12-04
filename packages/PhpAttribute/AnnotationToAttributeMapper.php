@@ -17,7 +17,7 @@ final class AnnotationToAttributeMapper
      * @param AnnotationToAttributeMapperInterface[] $annotationToAttributeMappers
      */
     public function __construct(
-        private array $annotationToAttributeMappers
+        private readonly array $annotationToAttributeMappers
     ) {
     }
 

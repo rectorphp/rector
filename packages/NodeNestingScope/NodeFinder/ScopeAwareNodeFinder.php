@@ -13,7 +13,7 @@ final class ScopeAwareNodeFinder
     private bool $isBreakingNodeFoundFirst = false;
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

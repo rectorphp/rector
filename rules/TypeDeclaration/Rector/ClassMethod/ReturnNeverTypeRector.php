@@ -30,8 +30,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnNeverTypeRector extends AbstractRector
 {
     public function __construct(
-        private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

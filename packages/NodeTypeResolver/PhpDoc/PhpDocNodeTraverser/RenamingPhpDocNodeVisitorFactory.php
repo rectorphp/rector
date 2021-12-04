@@ -10,7 +10,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class RenamingPhpDocNodeVisitorFactory
 {
     public function __construct(
-        private ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor
+        private readonly ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor
     ) {
     }
 

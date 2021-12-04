@@ -28,7 +28,7 @@ final class FunctionSupportResolver
     ];
 
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

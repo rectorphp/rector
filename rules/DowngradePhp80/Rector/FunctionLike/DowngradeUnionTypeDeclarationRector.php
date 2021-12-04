@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeUnionTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
+        private readonly PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
     ) {
     }
 

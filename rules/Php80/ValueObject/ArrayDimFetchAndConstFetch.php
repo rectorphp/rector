@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\ConstFetch;
 final class ArrayDimFetchAndConstFetch
 {
     public function __construct(
-        private ArrayDimFetch $arrayDimFetch,
-        private ConstFetch $constFetch
+        private readonly ArrayDimFetch $arrayDimFetch,
+        private readonly ConstFetch $constFetch
     ) {
     }
 

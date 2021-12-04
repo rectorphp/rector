@@ -46,8 +46,8 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     private bool $haveArgumentsChanged = false;
 
     public function __construct(
-        private ArgumentAddingScope $argumentAddingScope,
-        private ChangedArgumentsDetector $changedArgumentsDetector
+        private readonly ArgumentAddingScope $argumentAddingScope,
+        private readonly ChangedArgumentsDetector $changedArgumentsDetector
     ) {
     }
 

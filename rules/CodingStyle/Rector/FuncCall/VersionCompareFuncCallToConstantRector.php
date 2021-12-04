@@ -51,8 +51,8 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
     ];
 
     public function __construct(
-        private PhpVersionFactory $phpVersionFactory,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly PhpVersionFactory $phpVersionFactory,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

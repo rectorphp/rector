@@ -11,7 +11,7 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadVarTagValueNodeAnalyzer
 {
     public function __construct(
-        private TypeComparator $typeComparator
+        private readonly TypeComparator $typeComparator
     ) {
     }
 

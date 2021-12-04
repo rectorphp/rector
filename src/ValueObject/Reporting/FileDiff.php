@@ -46,10 +46,10 @@ final class FileDiff implements SerializableInterface
      * @param RectorWithLineChange[] $rectorsWithLineChanges
      */
     public function __construct(
-        private string $relativeFilePath,
-        private string $diff,
-        private string $diffConsoleFormatted,
-        private array $rectorsWithLineChanges = []
+        private readonly string $relativeFilePath,
+        private readonly string $diff,
+        private readonly string $diffConsoleFormatted,
+        private readonly array $rectorsWithLineChanges = []
     ) {
     }
 

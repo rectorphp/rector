@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MyCLabsClassToEnumRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private EnumFactory $enumFactory
+        private readonly EnumFactory $enumFactory
     ) {
     }
 

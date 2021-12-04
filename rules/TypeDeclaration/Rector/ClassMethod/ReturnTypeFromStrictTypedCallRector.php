@@ -35,9 +35,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
 {
     public function __construct(
-        private TypeNodeUnwrapper $typeNodeUnwrapper,
-        private ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer,
-        private ReturnTypeInferer $returnTypeInferer
+        private readonly TypeNodeUnwrapper $typeNodeUnwrapper,
+        private readonly ReturnStrictTypeAnalyzer $returnStrictTypeAnalyzer,
+        private readonly ReturnTypeInferer $returnTypeInferer
     ) {
     }
 

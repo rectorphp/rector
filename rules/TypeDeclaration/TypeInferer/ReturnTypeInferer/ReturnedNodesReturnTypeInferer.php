@@ -33,15 +33,15 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ReturnedNodesReturnTypeInferer implements ReturnTypeInfererInterface
 {
     public function __construct(
-        private SilentVoidResolver $silentVoidResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private TypeFactory $typeFactory,
-        private SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
-        private AstResolver $reflectionAstResolver,
-        private BetterStandardPrinter $betterStandardPrinter,
-        private ReflectionResolver $reflectionResolver,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly SilentVoidResolver $silentVoidResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly TypeFactory $typeFactory,
+        private readonly SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower,
+        private readonly AstResolver $reflectionAstResolver,
+        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

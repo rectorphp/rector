@@ -32,8 +32,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class Php4ConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer,
-        private ParentClassScopeResolver $parentClassScopeResolver
+        private readonly Php4ConstructorClassMethodAnalyzer $php4ConstructorClassMethodAnalyzer,
+        private readonly ParentClassScopeResolver $parentClassScopeResolver
     ) {
     }
 

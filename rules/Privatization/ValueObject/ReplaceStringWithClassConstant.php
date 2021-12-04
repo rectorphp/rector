@@ -12,11 +12,11 @@ final class ReplaceStringWithClassConstant
      * @param class-string $classWithConstants
      */
     public function __construct(
-        private string $class,
-        private string $method,
-        private int $argPosition,
-        private string $classWithConstants,
-        private bool $caseInsensitive = false
+        private readonly string $class,
+        private readonly string $method,
+        private readonly int $argPosition,
+        private readonly string $classWithConstants,
+        private readonly bool $caseInsensitive = false
     ) {
     }
 

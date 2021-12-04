@@ -39,10 +39,10 @@ final class NewToConstructorInjectionRector extends AbstractRector implements Co
     private array $constructorInjectionObjectTypes = [];
 
     public function __construct(
-        private PropertyFetchFactory $propertyFetchFactory,
-        private PropertyNaming $propertyNaming,
-        private PropertyToAddCollector $propertyToAddCollector,
-        private AssignRemover $assignRemover
+        private readonly PropertyFetchFactory $propertyFetchFactory,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly AssignRemover $assignRemover
     ) {
     }
 

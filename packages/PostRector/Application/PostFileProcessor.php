@@ -25,10 +25,10 @@ final class PostFileProcessor
      * @param PostRectorInterface[] $postRectors
      */
     public function __construct(
-        private Skipper $skipper,
-        private CurrentFileProvider $currentFileProvider,
-        private CurrentRectorProvider $currentRectorProvider,
-        private SymfonyStyle $symfonyStyle,
+        private readonly Skipper $skipper,
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly CurrentRectorProvider $currentRectorProvider,
+        private readonly SymfonyStyle $symfonyStyle,
         array $postRectors
     ) {
         $this->postRectors = $this->sortByPriority($postRectors);

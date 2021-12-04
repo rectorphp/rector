@@ -14,8 +14,8 @@ use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 final class ReturnTypeDeclarationReturnTypeInferer implements ReturnTypeInfererInterface
 {
     public function __construct(
-        private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        private NodeNameResolver $nodeNameResolver
+        private readonly FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

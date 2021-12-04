@@ -13,9 +13,9 @@ final class NewArgToMethodCall
      * @param mixed $value
      */
     public function __construct(
-        private string $type,
+        private readonly string $type,
         private $value,
-        private string $methodCall
+        private readonly string $methodCall
     ) {
         RectorAssert::className($type);
     }

@@ -31,11 +31,11 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     private array $nodesToRemove = [];
 
     public function __construct(
-        private AffectedFilesCollector $affectedFilesCollector,
-        private BreakingRemovalGuard $breakingRemovalGuard,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator,
-        private CurrentFileProvider $currentFileProvider
+        private readonly AffectedFilesCollector $affectedFilesCollector,
+        private readonly BreakingRemovalGuard $breakingRemovalGuard,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator,
+        private readonly CurrentFileProvider $currentFileProvider
     ) {
     }
 

@@ -16,10 +16,10 @@ use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 final class NodeUsageFinder
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private ScopeAwareNodeFinder $scopeAwareNodeFinder,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ScopeAwareNodeFinder $scopeAwareNodeFinder,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

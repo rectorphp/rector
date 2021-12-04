@@ -37,12 +37,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver,
-        private VariableRenamer $variableRenamer,
-        private VarTagRemover $varTagRemover,
-        private ParamAnalyzer $paramAnalyzer,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PropertyAnalyzer $propertyAnalyzer
+        private readonly PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver,
+        private readonly VariableRenamer $variableRenamer,
+        private readonly VarTagRemover $varTagRemover,
+        private readonly ParamAnalyzer $paramAnalyzer,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PropertyAnalyzer $propertyAnalyzer
     ) {
     }
 

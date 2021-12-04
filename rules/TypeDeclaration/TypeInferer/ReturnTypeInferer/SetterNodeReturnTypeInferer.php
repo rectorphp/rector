@@ -17,10 +17,10 @@ use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 final class SetterNodeReturnTypeInferer implements ReturnTypeInfererInterface
 {
     public function __construct(
-        private AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
-        private FunctionLikeManipulator $functionLikeManipulator,
-        private TypeFactory $typeFactory,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
+        private readonly FunctionLikeManipulator $functionLikeManipulator,
+        private readonly TypeFactory $typeFactory,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

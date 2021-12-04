@@ -24,13 +24,13 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class AssignToPropertyTypeInferer
 {
     public function __construct(
-        private ConstructorAssignDetector $constructorAssignDetector,
-        private PropertyAssignMatcher $propertyAssignMatcher,
-        private PropertyDefaultAssignDetector $propertyDefaultAssignDetector,
-        private NullTypeAssignDetector $nullTypeAssignDetector,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private TypeFactory $typeFactory,
-        private NodeTypeResolver $nodeTypeResolver,
+        private readonly ConstructorAssignDetector $constructorAssignDetector,
+        private readonly PropertyAssignMatcher $propertyAssignMatcher,
+        private readonly PropertyDefaultAssignDetector $propertyDefaultAssignDetector,
+        private readonly NullTypeAssignDetector $nullTypeAssignDetector,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly TypeFactory $typeFactory,
+        private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
     }
 

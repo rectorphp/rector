@@ -39,8 +39,8 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
     private array $methodCallRenames = [];
 
     public function __construct(
-        private ClassManipulator $classManipulator,
-        private MethodCallRenameCollector $methodCallRenameCollector
+        private readonly ClassManipulator $classManipulator,
+        private readonly MethodCallRenameCollector $methodCallRenameCollector
     ) {
     }
 

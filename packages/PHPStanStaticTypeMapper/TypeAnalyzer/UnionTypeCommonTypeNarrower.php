@@ -39,8 +39,8 @@ final class UnionTypeCommonTypeNarrower
     ];
 
     public function __construct(
-        private GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
-        private ReflectionProvider $reflectionProvider
+        private readonly GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

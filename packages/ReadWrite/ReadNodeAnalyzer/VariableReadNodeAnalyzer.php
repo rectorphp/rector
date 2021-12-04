@@ -16,9 +16,9 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     public function __construct(
-        private ParentScopeFinder $parentScopeFinder,
-        private NodeUsageFinder $nodeUsageFinder,
-        private JustReadExprAnalyzer $justReadExprAnalyzer
+        private readonly ParentScopeFinder $parentScopeFinder,
+        private readonly NodeUsageFinder $nodeUsageFinder,
+        private readonly JustReadExprAnalyzer $justReadExprAnalyzer
     ) {
     }
 

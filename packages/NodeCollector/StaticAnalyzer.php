@@ -12,7 +12,7 @@ use Rector\Core\Util\StringUtils;
 final class StaticAnalyzer
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

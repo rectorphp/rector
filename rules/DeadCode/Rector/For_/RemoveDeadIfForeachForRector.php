@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadIfForeachForRector extends AbstractRector
 {
     public function __construct(
-        private ConditionInverter $conditionInverter
+        private readonly ConditionInverter $conditionInverter
     ) {
     }
 

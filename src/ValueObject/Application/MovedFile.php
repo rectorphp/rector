@@ -10,8 +10,8 @@ use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 final class MovedFile implements FileWithNodesInterface
 {
     public function __construct(
-        private File $file,
-        private string $newFilePath
+        private readonly File $file,
+        private readonly string $newFilePath
     ) {
     }
 

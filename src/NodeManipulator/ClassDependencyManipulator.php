@@ -31,16 +31,16 @@ use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 final class ClassDependencyManipulator
 {
     public function __construct(
-        private ClassInsertManipulator $classInsertManipulator,
-        private ClassMethodAssignManipulator $classMethodAssignManipulator,
-        private NodeFactory $nodeFactory,
-        private StmtsManipulator $stmtsManipulator,
-        private PhpVersionProvider $phpVersionProvider,
-        private PropertyPresenceChecker $propertyPresenceChecker,
-        private NodeNameResolver $nodeNameResolver,
-        private NodesToRemoveCollector $nodesToRemoveCollector,
-        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
-        private DependencyClassMethodDecorator $dependencyClassMethodDecorator
+        private readonly ClassInsertManipulator $classInsertManipulator,
+        private readonly ClassMethodAssignManipulator $classMethodAssignManipulator,
+        private readonly NodeFactory $nodeFactory,
+        private readonly StmtsManipulator $stmtsManipulator,
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly PropertyPresenceChecker $propertyPresenceChecker,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodesToRemoveCollector $nodesToRemoveCollector,
+        private readonly AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
+        private readonly DependencyClassMethodDecorator $dependencyClassMethodDecorator
     ) {
     }
 

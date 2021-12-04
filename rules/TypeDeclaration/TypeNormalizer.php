@@ -29,8 +29,8 @@ final class TypeNormalizer
     private array $collectedNestedArrayTypes = [];
 
     public function __construct(
-        private TypeFactory $typeFactory,
-        private PrivatesAccessor $privatesAccessor
+        private readonly TypeFactory $typeFactory,
+        private readonly PrivatesAccessor $privatesAccessor
     ) {
     }
 

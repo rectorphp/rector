@@ -47,8 +47,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExplicitBoolCompareRector extends AbstractRector
 {
     public function __construct(
-        private StringTypeAnalyzer $stringTypeAnalyzer,
-        private ArrayTypeAnalyzer $arrayTypeAnalyzer
+        private readonly StringTypeAnalyzer $stringTypeAnalyzer,
+        private readonly ArrayTypeAnalyzer $arrayTypeAnalyzer
     ) {
     }
 

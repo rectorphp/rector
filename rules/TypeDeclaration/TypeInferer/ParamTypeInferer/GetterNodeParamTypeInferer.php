@@ -24,12 +24,12 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
 {
     public function __construct(
-        private PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private NodeNameResolver $nodeNameResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly PropertyFetchAssignManipulator $propertyFetchAssignManipulator,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

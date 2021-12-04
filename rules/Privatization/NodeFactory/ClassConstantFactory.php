@@ -16,8 +16,8 @@ use Rector\Privatization\Naming\ConstantNaming;
 final class ClassConstantFactory
 {
     public function __construct(
-        private ConstantNaming $constantNaming,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly ConstantNaming $constantNaming,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

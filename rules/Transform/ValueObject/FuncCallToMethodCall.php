@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class FuncCallToMethodCall
 {
     public function __construct(
-        private string $oldFuncName,
-        private string $newClassName,
-        private string $newMethodName
+        private readonly string $oldFuncName,
+        private readonly string $newClassName,
+        private readonly string $newMethodName
     ) {
     }
 

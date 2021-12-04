@@ -13,8 +13,8 @@ final class StmtsAndTokens
      * @param mixed[] $tokens
      */
     public function __construct(
-        private array $stmts,
-        private array $tokens
+        private readonly array $stmts,
+        private readonly array $tokens
     ) {
     }
 

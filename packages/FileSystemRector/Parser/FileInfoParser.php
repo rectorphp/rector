@@ -13,8 +13,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoParser
 {
     public function __construct(
-        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private RectorParser $rectorParser
+        private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private readonly RectorParser $rectorParser
     ) {
     }
 

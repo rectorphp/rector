@@ -12,9 +12,9 @@ final class GetAndSetToMethodCall
      * @param class-string $classType
      */
     public function __construct(
-        private string $classType,
-        private string $getMethod,
-        private string $setMethod
+        private readonly string $classType,
+        private readonly string $getMethod,
+        private readonly string $setMethod
     ) {
     }
 

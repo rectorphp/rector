@@ -33,12 +33,12 @@ final class PropertyTypeInferer
      */
     public function __construct(
         TypeInfererSorter $typeInfererSorter,
-        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        private DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
-        private VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
-        private TypeFactory $typeFactory,
-        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        private PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private readonly DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
+        private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
+        private readonly TypeFactory $typeFactory,
+        private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
         array $propertyTypeInferers
     ) {
         $this->propertyTypeInferers = $typeInfererSorter->sort($propertyTypeInferers);

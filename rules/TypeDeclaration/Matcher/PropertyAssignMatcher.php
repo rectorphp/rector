@@ -13,8 +13,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyAssignMatcher
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
     ) {
     }
 

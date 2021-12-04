@@ -34,11 +34,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadInstanceOfRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private ConstructorAssignDetector $constructorAssignDetector,
-        private PromotedPropertyResolver $promotedPropertyResolver,
-        private ContextAnalyzer $contextAnalyzer
+        private readonly IfManipulator $ifManipulator,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly ConstructorAssignDetector $constructorAssignDetector,
+        private readonly PromotedPropertyResolver $promotedPropertyResolver,
+        private readonly ContextAnalyzer $contextAnalyzer
     ) {
     }
 

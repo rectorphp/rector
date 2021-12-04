@@ -29,7 +29,7 @@ final class ArgumentAddingScope
     public const SCOPE_CLASS_METHOD = 'class_method';
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

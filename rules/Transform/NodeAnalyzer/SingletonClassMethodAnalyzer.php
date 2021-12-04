@@ -24,11 +24,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SingletonClassMethodAnalyzer
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private ValueResolver $valueResolver,
-        private NodeComparator $nodeComparator,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

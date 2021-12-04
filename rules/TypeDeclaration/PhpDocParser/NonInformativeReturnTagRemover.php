@@ -47,8 +47,8 @@ final class NonInformativeReturnTagRemover
     ];
 
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private TypeChecker $typeChecker
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly TypeChecker $typeChecker
     ) {
     }
 

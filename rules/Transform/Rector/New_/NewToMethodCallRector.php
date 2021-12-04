@@ -37,8 +37,8 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
     private array $newsToMethodCalls = [];
 
     public function __construct(
-        private ClassNaming $classNaming,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly ClassNaming $classNaming,
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

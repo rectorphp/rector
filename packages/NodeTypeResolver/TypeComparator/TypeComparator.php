@@ -29,12 +29,12 @@ use Rector\TypeDeclaration\TypeNormalizer;
 final class TypeComparator
 {
     public function __construct(
-        private TypeHasher $typeHasher,
-        private TypeNormalizer $typeNormalizer,
-        private StaticTypeMapper $staticTypeMapper,
-        private ArrayTypeComparator $arrayTypeComparator,
-        private ScalarTypeComparator $scalarTypeComparator,
-        private TypeFactory $typeFactory,
+        private readonly TypeHasher $typeHasher,
+        private readonly TypeNormalizer $typeNormalizer,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly ArrayTypeComparator $arrayTypeComparator,
+        private readonly ScalarTypeComparator $scalarTypeComparator,
+        private readonly TypeFactory $typeFactory,
     ) {
     }
 

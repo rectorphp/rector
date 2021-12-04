@@ -37,7 +37,7 @@ final class StaticCallToMethodCallRector extends AbstractRector implements Confi
     private array $staticCallsToMethodCalls = [];
 
     public function __construct(
-        private FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer
+        private readonly FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer
     ) {
     }
 

@@ -26,8 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDoubleAssignRector extends AbstractRector
 {
     public function __construct(
-        private ScopeNestingComparator $scopeNestingComparator,
-        private SideEffectNodeDetector $sideEffectNodeDetector,
+        private readonly ScopeNestingComparator $scopeNestingComparator,
+        private readonly SideEffectNodeDetector $sideEffectNodeDetector,
     ) {
     }
 

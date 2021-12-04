@@ -21,8 +21,8 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 final class NullableTypeMapper implements PhpDocTypeMapperInterface
 {
     public function __construct(
-        private IdentifierTypeMapper $identifierTypeMapper,
-        private TypeNodeResolver $typeNodeResolver
+        private readonly IdentifierTypeMapper $identifierTypeMapper,
+        private readonly TypeNodeResolver $typeNodeResolver
     ) {
     }
 

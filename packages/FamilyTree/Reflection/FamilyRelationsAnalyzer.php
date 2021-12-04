@@ -33,12 +33,12 @@ use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private PrivatesAccessor $privatesAccessor,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private StaticTypeMapper $staticTypeMapper,
-        private AstResolver $astResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly PrivatesAccessor $privatesAccessor,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly AstResolver $astResolver,
     ) {
     }
 

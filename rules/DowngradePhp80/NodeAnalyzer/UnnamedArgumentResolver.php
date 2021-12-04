@@ -15,8 +15,8 @@ use ReflectionFunction;
 final class UnnamedArgumentResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NamedToUnnamedArgs $namedToUnnamedArgs
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NamedToUnnamedArgs $namedToUnnamedArgs
     ) {
     }
 

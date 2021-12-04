@@ -13,9 +13,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class MatchPropertyTypeExpectedNameResolver
 {
     public function __construct(
-        private PropertyNaming $propertyNaming,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private NodeNameResolver $nodeNameResolver
+        private readonly PropertyNaming $propertyNaming,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

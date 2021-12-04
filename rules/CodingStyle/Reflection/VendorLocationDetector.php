@@ -10,7 +10,7 @@ use Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
     public function __construct(
-        private PathNormalizer $pathNormalizer,
+        private readonly PathNormalizer $pathNormalizer,
     ) {
     }
 

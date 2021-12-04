@@ -17,7 +17,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameNameResolver implements NodeNameResolverInterface
 {
     public function __construct(
-        private FuncCallNameResolver $funcCallNameResolver
+        private readonly FuncCallNameResolver $funcCallNameResolver
     ) {
     }
 

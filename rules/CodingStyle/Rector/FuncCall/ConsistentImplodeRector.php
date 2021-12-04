@@ -22,8 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsistentImplodeRector extends AbstractRector
 {
     public function __construct(
-        private StringTypeAnalyzer $stringTypeAnalyzer,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly StringTypeAnalyzer $stringTypeAnalyzer,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

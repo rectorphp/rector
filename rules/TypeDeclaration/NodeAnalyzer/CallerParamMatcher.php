@@ -24,8 +24,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class CallerParamMatcher
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private AstResolver $astResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly AstResolver $astResolver
     ) {
     }
 

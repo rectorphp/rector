@@ -23,8 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyConditionsRector extends AbstractRector
 {
     public function __construct(
-        private AssignAndBinaryMap $assignAndBinaryMap,
-        private BinaryOpManipulator $binaryOpManipulator
+        private readonly AssignAndBinaryMap $assignAndBinaryMap,
+        private readonly BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 

@@ -30,10 +30,10 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class TypeProvidingExprFromClassResolver
 {
     public function __construct(
-        private TypeUnwrapper $typeUnwrapper,
-        private ReflectionProvider $reflectionProvider,
-        private NodeNameResolver $nodeNameResolver,
-        private PropertyNaming $propertyNaming,
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PropertyNaming $propertyNaming,
     ) {
     }
 

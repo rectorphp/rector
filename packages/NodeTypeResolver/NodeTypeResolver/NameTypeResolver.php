@@ -29,9 +29,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameTypeResolver implements NodeTypeResolverInterface
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

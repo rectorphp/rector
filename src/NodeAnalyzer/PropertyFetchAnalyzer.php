@@ -24,9 +24,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyFetchAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

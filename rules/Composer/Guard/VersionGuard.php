@@ -10,7 +10,7 @@ use Rector\Composer\Contract\VersionAwareInterface;
 final class VersionGuard
 {
     public function __construct(
-        private VersionParser $versionParser
+        private readonly VersionParser $versionParser
     ) {
     }
 

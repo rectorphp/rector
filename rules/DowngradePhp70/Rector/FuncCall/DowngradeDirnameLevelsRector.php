@@ -39,7 +39,7 @@ final class DowngradeDirnameLevelsRector extends AbstractRector
     private const DIRNAME = 'dirname';
 
     public function __construct(
-        private VariableNaming $variableNaming
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

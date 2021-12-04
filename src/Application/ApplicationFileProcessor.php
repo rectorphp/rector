@@ -19,12 +19,12 @@ final class ApplicationFileProcessor
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
-        private SmartFileSystem $smartFileSystem,
-        private FileDiffFileDecorator $fileDiffFileDecorator,
-        private FileFormatter $fileFormatter,
-        private RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
-        private SymfonyStyle $symfonyStyle,
-        private array $fileProcessors = []
+        private readonly SmartFileSystem $smartFileSystem,
+        private readonly FileDiffFileDecorator $fileDiffFileDecorator,
+        private readonly FileFormatter $fileFormatter,
+        private readonly RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
+        private readonly SymfonyStyle $symfonyStyle,
+        private readonly array $fileProcessors = []
     ) {
     }
 

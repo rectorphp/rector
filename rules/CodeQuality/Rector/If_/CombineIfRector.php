@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CombineIfRector extends AbstractRector
 {
     public function __construct(
-        private CommentsMerger $commentsMerger
+        private readonly CommentsMerger $commentsMerger
     ) {
     }
 

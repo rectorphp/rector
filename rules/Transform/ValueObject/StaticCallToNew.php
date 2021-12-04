@@ -7,8 +7,8 @@ namespace Rector\Transform\ValueObject;
 final class StaticCallToNew
 {
     public function __construct(
-        private string $class,
-        private string $method
+        private readonly string $class,
+        private readonly string $method
     ) {
     }
 

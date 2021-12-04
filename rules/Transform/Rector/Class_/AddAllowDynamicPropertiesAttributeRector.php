@@ -31,10 +31,10 @@ final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector impl
     private const ATTRIBUTE = 'AllowDynamicProperties';
 
     public function __construct(
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer,
-        private PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        private ReflectionProvider $reflectionProvider,
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 

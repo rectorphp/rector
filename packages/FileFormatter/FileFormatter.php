@@ -22,9 +22,9 @@ final class FileFormatter
      * @param FileFormatterInterface[] $fileFormatters
      */
     public function __construct(
-        private EditorConfigParser $editorConfigParser,
-        private ParameterProvider $parameterProvider,
-        private array $fileFormatters = []
+        private readonly EditorConfigParser $editorConfigParser,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly array $fileFormatters = []
     ) {
     }
 

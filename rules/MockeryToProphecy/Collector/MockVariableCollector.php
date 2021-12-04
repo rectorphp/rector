@@ -16,8 +16,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class MockVariableCollector
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ValueResolver $valueResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

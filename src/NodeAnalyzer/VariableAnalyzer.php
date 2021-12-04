@@ -15,8 +15,8 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class VariableAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

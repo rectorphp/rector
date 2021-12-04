@@ -20,10 +20,10 @@ use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     public function __construct(
-        private JustReadExprAnalyzer $justReadExprAnalyzer,
-        private PropertyFetchFinder $propertyFetchFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly JustReadExprAnalyzer $justReadExprAnalyzer,
+        private readonly PropertyFetchFinder $propertyFetchFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

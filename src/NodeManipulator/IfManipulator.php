@@ -26,12 +26,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class IfManipulator
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private StmtsManipulator $stmtsManipulator,
-        private ValueResolver $valueResolver,
-        private ConditionInverter $conditionInverter,
-        private NodeComparator $nodeComparator
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly StmtsManipulator $stmtsManipulator,
+        private readonly ValueResolver $valueResolver,
+        private readonly ConditionInverter $conditionInverter,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

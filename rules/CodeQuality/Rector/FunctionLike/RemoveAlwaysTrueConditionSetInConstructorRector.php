@@ -34,8 +34,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends AbstractRector
 {
     public function __construct(
-        private StaticTypeAnalyzer $staticTypeAnalyzer,
-        private TypeFactory $typeFactory
+        private readonly StaticTypeAnalyzer $staticTypeAnalyzer,
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

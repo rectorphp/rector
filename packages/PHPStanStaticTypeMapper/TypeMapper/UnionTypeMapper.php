@@ -45,12 +45,12 @@ final class UnionTypeMapper implements TypeMapperInterface
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     public function __construct(
-        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        private PhpVersionProvider $phpVersionProvider,
-        private UnionTypeAnalyzer $unionTypeAnalyzer,
-        private BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer,
-        private UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
-        private NodeNameResolver $nodeNameResolver
+        private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly UnionTypeAnalyzer $unionTypeAnalyzer,
+        private readonly BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer,
+        private readonly UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

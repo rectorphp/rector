@@ -36,8 +36,8 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector imp
     private const ALREADY_ADDED_VARIABLE_NAMES = 'already_added_variable_names';
 
     public function __construct(
-        private UndefinedVariableResolver $undefinedVariableResolver,
-        private InlineHTMLAnalyzer $inlineHTMLAnalyzer
+        private readonly UndefinedVariableResolver $undefinedVariableResolver,
+        private readonly InlineHTMLAnalyzer $inlineHTMLAnalyzer
     ) {
     }
 

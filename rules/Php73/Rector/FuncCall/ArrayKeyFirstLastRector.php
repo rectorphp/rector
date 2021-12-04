@@ -45,7 +45,7 @@ final class ArrayKeyFirstLastRector extends AbstractRector implements MinPhpVers
     ];
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class PropertyAssignToMethodCall
 {
     public function __construct(
-        private string $class,
-        private string $oldPropertyName,
-        private string $newMethodName
+        private readonly string $class,
+        private readonly string $oldPropertyName,
+        private readonly string $newMethodName
     ) {
     }
 

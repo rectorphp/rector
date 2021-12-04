@@ -18,7 +18,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     public const NAME = 'json';
 
     public function __construct(
-        private RectorsChangelogResolver $rectorsChangelogResolver
+        private readonly RectorsChangelogResolver $rectorsChangelogResolver
     ) {
     }
 

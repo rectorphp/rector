@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class DimFetchAssignToMethodCall
 {
     public function __construct(
-        private string $listClass,
-        private string $itemClass,
-        private string $addMethod
+        private readonly string $listClass,
+        private readonly string $itemClass,
+        private readonly string $addMethod
     ) {
     }
 

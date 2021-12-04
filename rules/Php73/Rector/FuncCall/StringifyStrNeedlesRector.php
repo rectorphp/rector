@@ -39,7 +39,7 @@ final class StringifyStrNeedlesRector extends AbstractRector implements MinPhpVe
     ];
 
     public function __construct(
-        private NodeTypeAnalyzer $nodeTypeAnalyzer
+        private readonly NodeTypeAnalyzer $nodeTypeAnalyzer
     ) {
     }
 

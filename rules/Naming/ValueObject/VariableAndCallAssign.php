@@ -16,11 +16,11 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallAssign
 {
     public function __construct(
-        private Variable $variable,
-        private FuncCall | StaticCall | MethodCall $expr,
-        private Assign $assign,
-        private string $variableName,
-        private ClassMethod | Function_ | Closure $functionLike
+        private readonly Variable $variable,
+        private readonly FuncCall | StaticCall | MethodCall $expr,
+        private readonly Assign $assign,
+        private readonly string $variableName,
+        private readonly ClassMethod | Function_ | Closure $functionLike
     ) {
     }
 

@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class CallableInMethodCallToVariable
 {
     public function __construct(
-        private string $classType,
-        private string $methodName,
-        private int $argumentPosition
+        private readonly string $classType,
+        private readonly string $methodName,
+        private readonly int $argumentPosition
     ) {
     }
 

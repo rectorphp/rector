@@ -29,8 +29,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ForeachToInArrayRector extends AbstractRector
 {
     public function __construct(
-        private BinaryOpManipulator $binaryOpManipulator,
-        private CommentsMerger $commentsMerger
+        private readonly BinaryOpManipulator $binaryOpManipulator,
+        private readonly CommentsMerger $commentsMerger
     ) {
     }
 

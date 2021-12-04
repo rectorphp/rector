@@ -15,8 +15,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeByTypeAndPositionCollector
 {
     public function __construct(
-        private FlowOfControlLocator $flowOfControlLocator,
-        private NodeNameResolver $nodeNameResolver
+        private readonly FlowOfControlLocator $flowOfControlLocator,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

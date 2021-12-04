@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnusedForeachValueToArrayKeysRector extends AbstractRector
 {
     public function __construct(
-        private ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
+        private readonly ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer
     ) {
     }
 

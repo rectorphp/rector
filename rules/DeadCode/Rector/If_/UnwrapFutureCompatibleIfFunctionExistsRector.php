@@ -23,8 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnwrapFutureCompatibleIfFunctionExistsRector extends AbstractRector
 {
     public function __construct(
-        private FunctionSupportResolver $functionSupportResolver,
-        private IfManipulator $ifManipulator
+        private readonly FunctionSupportResolver $functionSupportResolver,
+        private readonly IfManipulator $ifManipulator
     ) {
     }
 

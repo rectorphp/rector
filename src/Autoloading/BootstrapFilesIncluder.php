@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     public function __construct(
-        private ParameterProvider $parameterProvider
+        private readonly ParameterProvider $parameterProvider
     ) {
     }
 

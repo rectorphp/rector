@@ -33,11 +33,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedVariableAssignRector extends AbstractRector
 {
     public function __construct(
-        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
-        private ConditionSearcher $conditionSearcher,
-        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
-        private SideEffectNodeDetector $sideEffectNodeDetector,
-        private ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
+        private readonly ReservedKeywordAnalyzer $reservedKeywordAnalyzer,
+        private readonly ConditionSearcher $conditionSearcher,
+        private readonly UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
+        private readonly SideEffectNodeDetector $sideEffectNodeDetector,
+        private readonly ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer
     ) {
     }
 

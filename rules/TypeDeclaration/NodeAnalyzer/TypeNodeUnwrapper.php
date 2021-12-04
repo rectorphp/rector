@@ -14,7 +14,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 final class TypeNodeUnwrapper
 {
     public function __construct(
-        private NodeComparator $nodeComparator
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

@@ -46,7 +46,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
     private const FLAG = 'PREG_UNMATCHED_AS_NULL';
 
     public function __construct(
-        private IfManipulator $ifManipulator
+        private readonly IfManipulator $ifManipulator
     ) {
     }
 

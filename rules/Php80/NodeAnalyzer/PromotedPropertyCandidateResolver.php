@@ -29,13 +29,13 @@ use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 final class PromotedPropertyCandidateResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator,
-        private PropertyTypeInferer $propertyTypeInferer,
-        private NodeTypeResolver $nodeTypeResolver,
-        private TypeComparator $typeComparator,
-        private TypeFactory $typeFactory
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator,
+        private readonly PropertyTypeInferer $propertyTypeInferer,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly TypeComparator $typeComparator,
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

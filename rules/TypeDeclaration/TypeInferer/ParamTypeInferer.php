@@ -18,9 +18,9 @@ final class ParamTypeInferer
      * @param ParamTypeInfererInterface[] $paramTypeInferers
      */
     public function __construct(
-        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        private array $paramTypeInferers,
-        private NodeTypeResolver $nodeTypeResolver
+        private readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private readonly array $paramTypeInferers,
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 

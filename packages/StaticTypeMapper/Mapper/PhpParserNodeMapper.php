@@ -20,7 +20,7 @@ final class PhpParserNodeMapper
      * @param PhpParserNodeMapperInterface[] $phpParserNodeMappers
      */
     public function __construct(
-        private array $phpParserNodeMappers
+        private readonly array $phpParserNodeMappers
     ) {
     }
 

@@ -27,8 +27,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private const ON_LINE_REGEX = '# on line #';
 
     public function __construct(
-        private OutputStyleInterface $outputStyle,
-        private RectorsChangelogResolver $rectorsChangelogResolver
+        private readonly OutputStyleInterface $outputStyle,
+        private readonly RectorsChangelogResolver $rectorsChangelogResolver
     ) {
     }
 

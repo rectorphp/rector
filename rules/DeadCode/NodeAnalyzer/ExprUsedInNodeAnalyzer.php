@@ -16,10 +16,10 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 final class ExprUsedInNodeAnalyzer
 {
     public function __construct(
-        private NodeComparator $nodeComparator,
-        private UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
-        private CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
-        private BetterStandardPrinter $betterStandardPrinter
+        private readonly NodeComparator $nodeComparator,
+        private readonly UsedVariableNameAnalyzer $usedVariableNameAnalyzer,
+        private readonly CompactFuncCallAnalyzer $compactFuncCallAnalyzer,
+        private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 

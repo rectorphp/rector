@@ -18,8 +18,8 @@ use ReflectionFunction;
 final class NamedToUnnamedArgs
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private DefaultParameterValueResolver $defaultParameterValueResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly DefaultParameterValueResolver $defaultParameterValueResolver
     ) {
     }
 

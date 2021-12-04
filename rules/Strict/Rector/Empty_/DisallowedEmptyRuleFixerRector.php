@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     public function __construct(
-        private ExactCompareFactory $exactCompareFactory,
+        private readonly ExactCompareFactory $exactCompareFactory,
     ) {
     }
 

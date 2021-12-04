@@ -11,7 +11,7 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class FuncCallManipulator
 {
     public function __construct(
-        private ValueResolver $valueResolver
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

@@ -12,8 +12,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class BuiltInMethodAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ClassChildAnalyzer $classChildAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ClassChildAnalyzer $classChildAnalyzer
     ) {
     }
 

@@ -25,11 +25,11 @@ use Webmozart\Assert\Assert;
 final class PhpAttributeGroupFactory
 {
     public function __construct(
-        private NamedArgumentsResolver $namedArgumentsResolver,
-        private AnnotationToAttributeMapper $annotationToAttributeMapper,
-        private AttributeNameFactory $attributeNameFactory,
-        private NamedArgsFactory $namedArgsFactory,
-        private ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector
+        private readonly NamedArgumentsResolver $namedArgumentsResolver,
+        private readonly AnnotationToAttributeMapper $annotationToAttributeMapper,
+        private readonly AttributeNameFactory $attributeNameFactory,
+        private readonly NamedArgsFactory $namedArgsFactory,
+        private readonly ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector
     ) {
     }
 

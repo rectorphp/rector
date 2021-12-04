@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 final class BetterTypeParser extends TypeParser
 {
     public function __construct(
-        private TokenIteratorFactory $tokenIteratorFactory,
+        private readonly TokenIteratorFactory $tokenIteratorFactory,
         ?ConstExprParser $constExprParser = null
     ) {
         parent::__construct($constExprParser);

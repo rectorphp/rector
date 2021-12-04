@@ -19,9 +19,9 @@ final class ComposerFileProcessor implements FileProcessorInterface
      * @param ComposerRectorInterface[] $composerRectors
      */
     public function __construct(
-        private ComposerJsonFactory $composerJsonFactory,
-        private ComposerJsonPrinter $composerJsonPrinter,
-        private array $composerRectors
+        private readonly ComposerJsonFactory $composerJsonFactory,
+        private readonly ComposerJsonPrinter $composerJsonPrinter,
+        private readonly array $composerRectors
     ) {
     }
 

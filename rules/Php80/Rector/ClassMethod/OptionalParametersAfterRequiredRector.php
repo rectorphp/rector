@@ -33,10 +33,10 @@ final class OptionalParametersAfterRequiredRector extends AbstractRector impleme
     private const ALREADY_SORTED = 'already_sorted';
 
     public function __construct(
-        private RequireOptionalParamResolver $requireOptionalParamResolver,
-        private ArgumentSorter $argumentSorter,
-        private ReflectionResolver $reflectionResolver,
-        private VendorLocationDetector $vendorLocationDetector
+        private readonly RequireOptionalParamResolver $requireOptionalParamResolver,
+        private readonly ArgumentSorter $argumentSorter,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly VendorLocationDetector $vendorLocationDetector
     ) {
     }
 

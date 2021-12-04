@@ -20,9 +20,9 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class JsonArrayFactory
 {
     public function __construct(
-        private NodeFactory $nodeFactory,
-        private ImplodeAnalyzer $implodeAnalyzer,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private readonly NodeFactory $nodeFactory,
+        private readonly ImplodeAnalyzer $implodeAnalyzer,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 

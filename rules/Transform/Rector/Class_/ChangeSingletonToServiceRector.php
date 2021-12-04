@@ -25,9 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSingletonToServiceRector extends AbstractRector
 {
     public function __construct(
-        private SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer,
-        private ClassAnalyzer $classAnalyzer,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly SingletonClassMethodAnalyzer $singletonClassMethodAnalyzer,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

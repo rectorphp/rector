@@ -19,7 +19,7 @@ final class NamespaceNodeVisitor extends NodeVisitorAbstract
     private array $useNodes = [];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

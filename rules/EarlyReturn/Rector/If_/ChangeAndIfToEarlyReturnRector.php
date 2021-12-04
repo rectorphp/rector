@@ -29,10 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeAndIfToEarlyReturnRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private InvertedIfFactory $invertedIfFactory,
-        private ContextAnalyzer $contextAnalyzer,
-        private BooleanAndAnalyzer $booleanAndAnalyzer,
+        private readonly IfManipulator $ifManipulator,
+        private readonly InvertedIfFactory $invertedIfFactory,
+        private readonly ContextAnalyzer $contextAnalyzer,
+        private readonly BooleanAndAnalyzer $booleanAndAnalyzer,
     ) {
     }
 

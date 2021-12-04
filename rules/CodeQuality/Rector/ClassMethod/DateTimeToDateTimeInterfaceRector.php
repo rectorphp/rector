@@ -46,11 +46,11 @@ final class DateTimeToDateTimeInterfaceRector extends AbstractRector implements 
     private const DATE_TIME = 'DateTime';
 
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private ParamAnalyzer $paramAnalyzer,
-        private ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator,
-        private ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator,
-        private CallAnalyzer $callAnalyzer
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly ParamAnalyzer $paramAnalyzer,
+        private readonly ClassMethodReturnTypeManipulator $classMethodReturnTypeManipulator,
+        private readonly ClassMethodParameterTypeManipulator $classMethodParameterTypeManipulator,
+        private readonly CallAnalyzer $callAnalyzer
     ) {
     }
 

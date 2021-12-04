@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorOutputStyle implements OutputStyleInterface
 {
     public function __construct(
-        private SymfonyStyle $symfonyStyle
+        private readonly SymfonyStyle $symfonyStyle
     ) {
     }
 

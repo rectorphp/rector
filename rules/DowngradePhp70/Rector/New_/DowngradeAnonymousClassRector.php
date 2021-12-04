@@ -31,9 +31,9 @@ final class DowngradeAnonymousClassRector extends AbstractRector
     private array $classes = [];
 
     public function __construct(
-        private ClassAnalyzer $classAnalyzer,
-        private ClassFromAnonymousFactory $classFromAnonymousFactory,
-        private NamespacedNameDecorator $namespacedNameDecorator
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly ClassFromAnonymousFactory $classFromAnonymousFactory,
+        private readonly NamespacedNameDecorator $namespacedNameDecorator
     ) {
     }
 

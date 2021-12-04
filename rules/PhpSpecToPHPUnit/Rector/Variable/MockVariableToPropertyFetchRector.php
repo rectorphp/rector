@@ -21,7 +21,7 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class MockVariableToPropertyFetchRector extends AbstractPhpSpecToPHPUnitRector
 {
     public function __construct(
-        private PhpSpecMockCollector $phpSpecMockCollector
+        private readonly PhpSpecMockCollector $phpSpecMockCollector
     ) {
     }
 

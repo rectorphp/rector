@@ -34,9 +34,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByMethodCallTypeRector extends AbstractRector
 {
     public function __construct(
-        private CallerParamMatcher $callerParamMatcher,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
+        private readonly CallerParamMatcher $callerParamMatcher,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 

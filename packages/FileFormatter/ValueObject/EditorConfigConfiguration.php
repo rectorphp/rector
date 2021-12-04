@@ -10,9 +10,9 @@ namespace Rector\FileFormatter\ValueObject;
 final class EditorConfigConfiguration
 {
     public function __construct(
-        private Indent $indent,
-        private NewLine $newLine,
-        private bool $insertFinalNewline
+        private readonly Indent $indent,
+        private readonly NewLine $newLine,
+        private readonly bool $insertFinalNewline
     ) {
     }
 

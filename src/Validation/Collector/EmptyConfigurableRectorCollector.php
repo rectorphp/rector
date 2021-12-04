@@ -14,8 +14,8 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class EmptyConfigurableRectorCollector
 {
     public function __construct(
-        private PrivatesAccessor $privatesAccessor,
-        private PropertyNaming $propertyNaming
+        private readonly PrivatesAccessor $privatesAccessor,
+        private readonly PropertyNaming $propertyNaming
     ) {
     }
 

@@ -23,10 +23,10 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class SingleMethodAssignedNodePropertyTypeInferer implements PropertyTypeInfererInterface
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

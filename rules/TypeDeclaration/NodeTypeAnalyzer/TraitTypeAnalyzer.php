@@ -12,8 +12,8 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class TraitTypeAnalyzer
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private ReflectionProvider $reflectionProvider
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

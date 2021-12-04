@@ -46,11 +46,11 @@ final class ShortNameResolver
     private PhpDocInfoFactory $phpDocInfoFactory;
 
     public function __construct(
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder,
-        private UseImportNameMatcher $useImportNameMatcher,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly UseImportNameMatcher $useImportNameMatcher,
     ) {
     }
 

@@ -26,9 +26,9 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
     private const MAX_UNION_TYPES = 3;
 
     public function __construct(
-        private CallTypesResolver $callTypesResolver,
-        private ClassMethodParamTypeCompleter $classMethodParamTypeCompleter,
-        private LocalMethodCallFinder $localMethodCallFinder,
+        private readonly CallTypesResolver $callTypesResolver,
+        private readonly ClassMethodParamTypeCompleter $classMethodParamTypeCompleter,
+        private readonly LocalMethodCallFinder $localMethodCallFinder,
     ) {
     }
 

@@ -31,7 +31,7 @@ final class ChangeGlobalVariablesToPropertiesRector extends AbstractRector
     private array $globalVariableNames = [];
 
     public function __construct(
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

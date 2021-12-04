@@ -47,10 +47,10 @@ final class InlineCodeParser
     private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
 
     public function __construct(
-        private BetterStandardPrinter $betterStandardPrinter,
-        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private SimplePhpParser $simplePhpParser,
-        private SmartFileSystem $smartFileSystem
+        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private readonly SimplePhpParser $simplePhpParser,
+        private readonly SmartFileSystem $smartFileSystem
     ) {
     }
 

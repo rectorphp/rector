@@ -20,8 +20,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseImportsAdder
 {
     public function __construct(
-        private UsedImportsResolver $usedImportsResolver,
-        private TypeFactory $typeFactory
+        private readonly UsedImportsResolver $usedImportsResolver,
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

@@ -13,7 +13,7 @@ use Rector\ChangesReporting\Collector\RectorChangeCollector;
 final class ArrayManipulator
 {
     public function __construct(
-        private RectorChangeCollector $rectorChangeCollector
+        private readonly RectorChangeCollector $rectorChangeCollector
     ) {
     }
 

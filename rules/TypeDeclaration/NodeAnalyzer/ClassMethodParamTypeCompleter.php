@@ -21,10 +21,10 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 final class ClassMethodParamTypeCompleter
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper,
-        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        private UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
-        private PhpVersionProvider $phpVersionProvider,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        private readonly UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower,
+        private readonly PhpVersionProvider $phpVersionProvider,
     ) {
     }
 

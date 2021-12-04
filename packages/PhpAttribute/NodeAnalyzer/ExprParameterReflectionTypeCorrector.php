@@ -19,9 +19,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ExprParameterReflectionTypeCorrector
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper,
-        private ReflectionProvider $reflectionProvider,
-        private NodeFactory $nodeFactory
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeFactory $nodeFactory
     ) {
     }
 

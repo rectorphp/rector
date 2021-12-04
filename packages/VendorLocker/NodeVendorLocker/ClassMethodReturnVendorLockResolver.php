@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassMethodReturnVendorLockResolver
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

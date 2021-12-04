@@ -16,8 +16,8 @@ final class MissingRectorRulesReporter
      * @param RectorInterface[] $rectors
      */
     public function __construct(
-        private array $rectors,
-        private SymfonyStyle $symfonyStyle
+        private readonly array $rectors,
+        private readonly SymfonyStyle $symfonyStyle
     ) {
     }
 

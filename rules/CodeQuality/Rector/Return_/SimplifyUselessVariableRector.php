@@ -28,9 +28,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyUselessVariableRector extends AbstractRector
 {
     public function __construct(
-        private AssignAndBinaryMap $assignAndBinaryMap,
-        private VariableAnalyzer $variableAnalyzer,
-        private CallAnalyzer $callAnalyzer
+        private readonly AssignAndBinaryMap $assignAndBinaryMap,
+        private readonly VariableAnalyzer $variableAnalyzer,
+        private readonly CallAnalyzer $callAnalyzer
     ) {
     }
 

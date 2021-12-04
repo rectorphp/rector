@@ -50,8 +50,8 @@ final class RecastingRemovalRector extends AbstractRector
     ];
 
     public function __construct(
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private ReflectionResolver $reflectionResolver
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

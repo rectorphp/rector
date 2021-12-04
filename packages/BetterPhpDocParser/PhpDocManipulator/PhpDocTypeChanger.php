@@ -25,10 +25,10 @@ use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 final class PhpDocTypeChanger
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper,
-        private TypeComparator $typeComparator,
-        private ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
-        private NodeNameResolver $nodeNameResolver
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly TypeComparator $typeComparator,
+        private readonly ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

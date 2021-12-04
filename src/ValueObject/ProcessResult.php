@@ -31,9 +31,9 @@ final class ProcessResult
     public function __construct(
         array $fileDiffs,
         array $errors,
-        private int $addedFilesCount,
-        private int $removedFilesCount,
-        private int $removedNodeCount
+        private readonly int $addedFilesCount,
+        private readonly int $removedFilesCount,
+        private readonly int $removedNodeCount
     ) {
         Assert::allIsAOf($fileDiffs, FileDiff::class);
         Assert::allIsAOf($errors, RectorError::class);

@@ -34,9 +34,9 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
     private bool $usePhpdoc = false;
 
     public function __construct(
-        private SilentVoidResolver $silentVoidResolver,
-        private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly SilentVoidResolver $silentVoidResolver,
+        private readonly ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

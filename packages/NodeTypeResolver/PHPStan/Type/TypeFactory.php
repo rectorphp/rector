@@ -24,7 +24,7 @@ use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 final class TypeFactory
 {
     public function __construct(
-        private TypeHasher $typeHasher,
+        private readonly TypeHasher $typeHasher,
     ) {
     }
 

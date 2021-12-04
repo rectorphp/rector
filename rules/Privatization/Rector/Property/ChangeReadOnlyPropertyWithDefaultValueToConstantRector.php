@@ -22,9 +22,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends AbstractRector
 {
     public function __construct(
-        private PropertyManipulator $propertyManipulator,
-        private ClassConstantFactory $classConstantFactory,
-        private PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
+        private readonly PropertyManipulator $propertyManipulator,
+        private readonly ClassConstantFactory $classConstantFactory,
+        private readonly PropertyFetchWithConstFetchReplacer $propertyFetchWithConstFetchReplacer
     ) {
     }
 

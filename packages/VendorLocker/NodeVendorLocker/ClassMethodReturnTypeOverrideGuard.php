@@ -34,11 +34,11 @@ final class ClassMethodReturnTypeOverrideGuard
     ];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer,
-        private BetterNodeFinder $betterNodeFinder,
-        private AstResolver $astResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly AstResolver $astResolver
     ) {
     }
 

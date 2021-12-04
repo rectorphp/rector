@@ -24,10 +24,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CurrentAndParentClassMethodComparator
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ParameterDefaultsComparator $parameterDefaultsComparator,
-        private ParameterTypeComparator $parameterTypeComparator,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ParameterDefaultsComparator $parameterDefaultsComparator,
+        private readonly ParameterTypeComparator $parameterTypeComparator,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

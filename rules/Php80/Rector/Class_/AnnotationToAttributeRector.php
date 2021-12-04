@@ -51,10 +51,10 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
     private array $annotationsToAttributes = [];
 
     public function __construct(
-        private PhpAttributeGroupFactory $phpAttributeGroupFactory,
-        private AttrGroupsFactory $attrGroupsFactory,
-        private PhpDocTagRemover $phpDocTagRemover,
-        private PhpDocNodeFinder $phpDocNodeFinder,
+        private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private readonly AttrGroupsFactory $attrGroupsFactory,
+        private readonly PhpDocTagRemover $phpDocTagRemover,
+        private readonly PhpDocNodeFinder $phpDocNodeFinder,
     ) {
     }
 

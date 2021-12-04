@@ -26,7 +26,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
     private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
 
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
     }
 

@@ -23,8 +23,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
     public function __construct(
-        private CurrentFileProvider $currentFileProvider,
-        private UsedImportsResolver $usedImportsResolver
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly UsedImportsResolver $usedImportsResolver
     ) {
     }
 

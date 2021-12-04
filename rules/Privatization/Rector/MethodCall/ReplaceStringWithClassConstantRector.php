@@ -31,7 +31,7 @@ final class ReplaceStringWithClassConstantRector extends AbstractRector implemen
     private array $replaceStringWithClassConstants = [];
 
     public function __construct(
-        private ClassConstantFetchValueFactory $classConstantFetchValueFactory
+        private readonly ClassConstantFetchValueFactory $classConstantFetchValueFactory
     ) {
     }
 

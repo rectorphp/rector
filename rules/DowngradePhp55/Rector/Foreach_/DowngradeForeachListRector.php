@@ -24,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeForeachListRector extends AbstractRector
 {
     public function __construct(
-        private VariableNaming $variableNaming
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

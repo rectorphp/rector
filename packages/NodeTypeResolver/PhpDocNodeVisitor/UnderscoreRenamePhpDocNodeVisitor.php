@@ -20,7 +20,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private ?\PhpParser\Node $currentPhpParserNode = null;
 
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper
+        private readonly StaticTypeMapper $staticTypeMapper
     ) {
     }
 

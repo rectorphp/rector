@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class InlineHTMLAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

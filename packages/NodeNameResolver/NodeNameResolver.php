@@ -27,11 +27,11 @@ final class NodeNameResolver
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
     public function __construct(
-        private RegexPatternDetector $regexPatternDetector,
-        private ClassNaming $classNaming,
-        private InvalidNameNodeReporter $invalidNameNodeReporter,
-        private CallAnalyzer $callAnalyzer,
-        private array $nodeNameResolvers = []
+        private readonly RegexPatternDetector $regexPatternDetector,
+        private readonly ClassNaming $classNaming,
+        private readonly InvalidNameNodeReporter $invalidNameNodeReporter,
+        private readonly CallAnalyzer $callAnalyzer,
+        private readonly array $nodeNameResolvers = []
     ) {
     }
 

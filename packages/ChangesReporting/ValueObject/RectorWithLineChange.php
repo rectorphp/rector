@@ -22,14 +22,14 @@ final class RectorWithLineChange implements SerializableInterface
     /**
      * @var class-string<RectorInterface>
      */
-    private string $rectorClass;
+    private readonly string $rectorClass;
 
     /**
      * @param class-string<RectorInterface>|RectorInterface $rectorClass
      */
     public function __construct(
         string|RectorInterface $rectorClass,
-        private int $line
+        private readonly int $line
     ) {
         if ($rectorClass instanceof RectorInterface) {
             $rectorClass = $rectorClass::class;

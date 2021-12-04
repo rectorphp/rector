@@ -44,7 +44,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     ];
 
     public function __construct(
-        private ClassLikeExistenceChecker $classLikeExistenceChecker
+        private readonly ClassLikeExistenceChecker $classLikeExistenceChecker
     ) {
     }
 

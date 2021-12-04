@@ -17,9 +17,9 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class ParamAnalyzer
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeComparator $nodeComparator,
-        private ValueResolver $valueResolver
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeComparator $nodeComparator,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

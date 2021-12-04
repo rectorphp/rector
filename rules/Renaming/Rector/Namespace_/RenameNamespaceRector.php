@@ -42,7 +42,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     private array $isChangedInNamespaces = [];
 
     public function __construct(
-        private NamespaceMatcher $namespaceMatcher
+        private readonly NamespaceMatcher $namespaceMatcher
     ) {
     }
 

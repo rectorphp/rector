@@ -13,9 +13,9 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ChangedArgumentsDetector
 {
     public function __construct(
-        private ValueResolver $valueResolver,
-        private StaticTypeMapper $staticTypeMapper,
-        private TypeComparator $typeComparator
+        private readonly ValueResolver $valueResolver,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly TypeComparator $typeComparator
     ) {
     }
 

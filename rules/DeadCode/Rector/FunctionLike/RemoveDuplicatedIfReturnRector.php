@@ -32,9 +32,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDuplicatedIfReturnRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private ModifiedVariableNamesCollector $modifiedVariableNamesCollector,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly IfManipulator $ifManipulator,
+        private readonly ModifiedVariableNamesCollector $modifiedVariableNamesCollector,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
         NodeComparator $nodeComparator
     ) {
         $this->nodeComparator = $nodeComparator;

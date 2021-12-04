@@ -17,12 +17,12 @@ use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 final class NodeScopeAndMetadataDecorator
 {
     public function __construct(
-        private CloningVisitor $cloningVisitor,
-        private NamespaceNodeVisitor $namespaceNodeVisitor,
-        private PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
-        private StatementNodeVisitor $statementNodeVisitor,
-        private NodeConnectingVisitor $nodeConnectingVisitor,
-        private FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
+        private readonly CloningVisitor $cloningVisitor,
+        private readonly NamespaceNodeVisitor $namespaceNodeVisitor,
+        private readonly PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
+        private readonly StatementNodeVisitor $statementNodeVisitor,
+        private readonly NodeConnectingVisitor $nodeConnectingVisitor,
+        private readonly FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor
     ) {
     }
 

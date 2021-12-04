@@ -41,7 +41,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
     private const METHOD_KEY = 'method';
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 

@@ -30,12 +30,12 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private ?PhpParserNode $currentPhpParserNode = null;
 
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper,
-        private ParameterProvider $parameterProvider,
-        private ClassNameImportSkipper $classNameImportSkipper,
-        private UseNodesToAddCollector $useNodesToAddCollector,
-        private CurrentFileProvider $currentFileProvider,
-        private ClassLikeExistenceChecker $classLikeExistenceChecker
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly ClassNameImportSkipper $classNameImportSkipper,
+        private readonly UseNodesToAddCollector $useNodesToAddCollector,
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly ClassLikeExistenceChecker $classLikeExistenceChecker
     ) {
     }
 

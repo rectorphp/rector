@@ -16,9 +16,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PhpAttributeAnalyzer
 {
     public function __construct(
-        private AstResolver $astResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
+        private readonly AstResolver $astResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 

@@ -13,7 +13,7 @@ use Rector\Core\NodeManipulator\BinaryOpManipulator;
 final class ConditionInverter
 {
     public function __construct(
-        private BinaryOpManipulator $binaryOpManipulator
+        private readonly BinaryOpManipulator $binaryOpManipulator
     ) {
     }
 

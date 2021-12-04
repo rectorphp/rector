@@ -40,10 +40,10 @@ final class ForToForeachRector extends AbstractRector
     private ?Expr $iteratedExpr = null;
 
     public function __construct(
-        private Inflector $inflector,
-        private ForAnalyzer $forAnalyzer,
-        private ForeachFactory $foreachFactory,
-        private ForeachAnalyzer $foreachAnalyzer
+        private readonly Inflector $inflector,
+        private readonly ForAnalyzer $forAnalyzer,
+        private readonly ForeachFactory $foreachFactory,
+        private readonly ForeachAnalyzer $foreachAnalyzer
     ) {
     }
 

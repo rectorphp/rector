@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class NewToMethodCall
 {
     public function __construct(
-        private string $newType,
-        private string $serviceType,
-        private string $serviceMethod
+        private readonly string $newType,
+        private readonly string $serviceType,
+        private readonly string $serviceMethod
     ) {
     }
 

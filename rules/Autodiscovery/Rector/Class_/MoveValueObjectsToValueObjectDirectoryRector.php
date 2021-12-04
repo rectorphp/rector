@@ -61,8 +61,8 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends AbstractRector 
     private array $suffixes = [];
 
     public function __construct(
-        private AddedFileWithNodesFactory $addedFileWithNodesFactory,
-        private ValueObjectClassAnalyzer $valueObjectClassAnalyzer
+        private readonly AddedFileWithNodesFactory $addedFileWithNodesFactory,
+        private readonly ValueObjectClassAnalyzer $valueObjectClassAnalyzer
     ) {
     }
 

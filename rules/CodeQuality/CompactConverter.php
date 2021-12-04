@@ -16,7 +16,7 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class CompactConverter
 {
     public function __construct(
-        private ValueResolver $valueResolver
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

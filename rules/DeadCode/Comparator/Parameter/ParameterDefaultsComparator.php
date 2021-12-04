@@ -13,8 +13,8 @@ use Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver;
 final class ParameterDefaultsComparator
 {
     public function __construct(
-        private NodeComparator $nodeComparator,
-        private DefaultParameterValueResolver $defaultParameterValueResolver
+        private readonly NodeComparator $nodeComparator,
+        private readonly DefaultParameterValueResolver $defaultParameterValueResolver
     ) {
     }
 

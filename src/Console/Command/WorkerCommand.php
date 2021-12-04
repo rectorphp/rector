@@ -25,7 +25,7 @@ use Symplify\EasyParallel\Enum\ReactCommand;
 final class WorkerCommand extends AbstractProcessCommand
 {
     public function __construct(
-        private WorkerRunner $workerRunner,
+        private readonly WorkerRunner $workerRunner,
     ) {
         parent::__construct();
     }

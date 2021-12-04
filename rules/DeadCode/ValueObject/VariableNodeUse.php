@@ -23,11 +23,11 @@ final class VariableNodeUse
     public const TYPE_ASSIGN = 'assign';
 
     public function __construct(
-        private int $startTokenPosition,
-        private string $variableName,
-        private string $type,
-        private Variable $variable,
-        private ?string $nestingHash = null
+        private readonly int $startTokenPosition,
+        private readonly string $variableName,
+        private readonly string $type,
+        private readonly Variable $variable,
+        private readonly ?string $nestingHash = null
     ) {
         RectorAssert::className($type);
     }

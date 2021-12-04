@@ -11,7 +11,7 @@ use Rector\Php80\ValueObject\CondAndExpr;
 final class MatchFactory
 {
     public function __construct(
-        private MatchArmsFactory $matchArmsFactory
+        private readonly MatchArmsFactory $matchArmsFactory
     ) {
     }
 

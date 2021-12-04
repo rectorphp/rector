@@ -31,8 +31,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeSpaceshipRector extends AbstractRector
 {
     public function __construct(
-        private IfManipulator $ifManipulator,
-        private VariableNaming $variableNaming
+        private readonly IfManipulator $ifManipulator,
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

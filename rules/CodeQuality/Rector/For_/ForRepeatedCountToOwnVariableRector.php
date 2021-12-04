@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ForRepeatedCountToOwnVariableRector extends AbstractRector
 {
     public function __construct(
-        private VariableNaming $variableNaming
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

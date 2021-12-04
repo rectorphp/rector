@@ -12,10 +12,10 @@ use PHPStan\Type\ObjectType;
 final class StaticCallToMethodCall
 {
     public function __construct(
-        private string $staticClass,
-        private string $staticMethod,
-        private string $classType,
-        private string $methodName
+        private readonly string $staticClass,
+        private readonly string $staticMethod,
+        private readonly string $classType,
+        private readonly string $methodName
     ) {
     }
 

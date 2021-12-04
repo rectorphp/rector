@@ -30,8 +30,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePropertyPromotionRector extends AbstractRector
 {
     public function __construct(
-        private ClassInsertManipulator $classInsertManipulator,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly ClassInsertManipulator $classInsertManipulator,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

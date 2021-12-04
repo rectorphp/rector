@@ -30,7 +30,7 @@ final class DesiredPropertyClassMethodTypeToDynamicRector extends AbstractRector
 
     public function __construct(
         ParameterProvider $parameterProvider,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);
         foreach ($typesToRemoveStaticFrom as $typeToRemoveStaticFrom) {

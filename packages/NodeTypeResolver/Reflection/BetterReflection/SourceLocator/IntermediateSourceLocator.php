@@ -17,7 +17,7 @@ final class IntermediateSourceLocator implements SourceLocator
      * @param SourceLocatorProviderInterface[] $sourceLocatorProviders
      */
     public function __construct(
-        private array $sourceLocatorProviders
+        private readonly array $sourceLocatorProviders
     ) {
     }
 

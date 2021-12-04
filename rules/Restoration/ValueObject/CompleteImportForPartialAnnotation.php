@@ -7,8 +7,8 @@ namespace Rector\Restoration\ValueObject;
 final class CompleteImportForPartialAnnotation
 {
     public function __construct(
-        private string $use,
-        private string $alias
+        private readonly string $use,
+        private readonly string $alias
     ) {
     }
 

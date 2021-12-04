@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
@@ -51,12 +50,12 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     private array $safeTypesToMethods = [];
 
     public function __construct(
-        private NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
-        private ReflectionResolver $reflectionResolver,
-        private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
-        private BuiltInMethodAnalyzer $builtInMethodAnalyzer,
-        private OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer,
-        private SealedClassAnalyzer $sealedClassAnalyzer
+        private readonly NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer,
+        private readonly BuiltInMethodAnalyzer $builtInMethodAnalyzer,
+        private readonly OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer,
+        private readonly SealedClassAnalyzer $sealedClassAnalyzer
     ) {
     }
 
@@ -131,9 +130,6 @@ CODE_SAMPLE
         }
 
         $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
-        if (! $classReflection instanceof ClassReflection) {
-            throw new ShouldNotHappenException();
-        }
 
         return $this->processRemoveParamTypeFromMethod($classReflection, $node);
     }

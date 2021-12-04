@@ -30,9 +30,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends AbstractRector
 {
     public function __construct(
-        private ClassMethodAssignManipulator $classMethodAssignManipulator,
-        private VarAnnotationManipulator $varAnnotationManipulator,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly ClassMethodAssignManipulator $classMethodAssignManipulator,
+        private readonly VarAnnotationManipulator $varAnnotationManipulator,
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

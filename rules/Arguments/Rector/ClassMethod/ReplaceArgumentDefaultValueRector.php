@@ -32,7 +32,7 @@ final class ReplaceArgumentDefaultValueRector extends AbstractRector implements 
     private array $replacedArguments = [];
 
     public function __construct(
-        private ArgumentDefaultValueReplacer $argumentDefaultValueReplacer
+        private readonly ArgumentDefaultValueReplacer $argumentDefaultValueReplacer
     ) {
     }
 

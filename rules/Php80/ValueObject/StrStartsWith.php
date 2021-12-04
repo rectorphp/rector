@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\FuncCall;
 final class StrStartsWith
 {
     public function __construct(
-        private FuncCall $funcCall,
-        private Expr $haystackExpr,
-        private Expr $needleExpr,
-        private bool $isPositive
+        private readonly FuncCall $funcCall,
+        private readonly Expr $haystackExpr,
+        private readonly Expr $needleExpr,
+        private readonly bool $isPositive
     ) {
     }
 

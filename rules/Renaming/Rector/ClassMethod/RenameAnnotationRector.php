@@ -34,7 +34,7 @@ final class RenameAnnotationRector extends AbstractRector implements Configurabl
     private array $renameAnnotations = [];
 
     public function __construct(
-        private DocBlockTagReplacer $docBlockTagReplacer
+        private readonly DocBlockTagReplacer $docBlockTagReplacer
     ) {
     }
 

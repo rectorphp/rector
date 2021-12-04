@@ -27,7 +27,7 @@ final class OrderPrivateMethodsByUseRector extends AbstractRector
     private const MAX_ATTEMPTS = 5;
 
     public function __construct(
-        private StmtOrder $stmtOrder
+        private readonly StmtOrder $stmtOrder
     ) {
     }
 

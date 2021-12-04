@@ -37,10 +37,10 @@ final class ReturnTypeAlreadyAddedChecker
     private const FOREACHABLE_TYPES = ['iterable', 'Iterator', 'Traversable', 'array'];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private StaticTypeMapper $staticTypeMapper,
-        private NodeComparator $nodeComparator,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly NodeComparator $nodeComparator,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

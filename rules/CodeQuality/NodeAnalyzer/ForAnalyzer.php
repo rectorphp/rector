@@ -31,10 +31,10 @@ final class ForAnalyzer
     private const COUNT = 'count';
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private AssignManipulator $assignManipulator,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly AssignManipulator $assignManipulator,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

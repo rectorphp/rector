@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class StaticCallToFuncCall
 {
     public function __construct(
-        private string $class,
-        private string $method,
-        private string $function
+        private readonly string $class,
+        private readonly string $method,
+        private readonly string $function
     ) {
     }
 

@@ -24,8 +24,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     public function __construct(
-        private CommentsMerger $commentsMerger,
-        private ExprBoolCaster $exprBoolCaster
+        private readonly CommentsMerger $commentsMerger,
+        private readonly ExprBoolCaster $exprBoolCaster
     ) {
     }
 

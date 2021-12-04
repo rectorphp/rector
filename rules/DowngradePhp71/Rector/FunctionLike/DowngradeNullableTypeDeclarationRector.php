@@ -24,9 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNullableTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
-        private ParamAnalyzer $paramAnalyzer
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator,
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 

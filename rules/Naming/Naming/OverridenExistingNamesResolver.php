@@ -21,9 +21,9 @@ final class OverridenExistingNamesResolver
     private array $overridenExistingVariableNamesByClassMethod = [];
 
     public function __construct(
-        private ArrayFilter $arrayFilter,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver
+        private readonly ArrayFilter $arrayFilter,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

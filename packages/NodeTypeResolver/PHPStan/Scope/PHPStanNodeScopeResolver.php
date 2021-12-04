@@ -47,16 +47,16 @@ final class PHPStanNodeScopeResolver
     private const CONTEXT = 'context';
 
     public function __construct(
-        private ChangedFilesDetector $changedFilesDetector,
-        private DependencyResolver $dependencyResolver,
-        private NodeScopeResolver $nodeScopeResolver,
-        private ReflectionProvider $reflectionProvider,
-        private RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
-        private ScopeFactory $scopeFactory,
-        private PrivatesAccessor $privatesAccessor,
-        private RenamedClassesSourceLocator $renamedClassesSourceLocator,
-        private ParentAttributeSourceLocator $parentAttributeSourceLocator,
-        private TraitScopeFaker $traitScopeFaker,
+        private readonly ChangedFilesDetector $changedFilesDetector,
+        private readonly DependencyResolver $dependencyResolver,
+        private readonly NodeScopeResolver $nodeScopeResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor,
+        private readonly ScopeFactory $scopeFactory,
+        private readonly PrivatesAccessor $privatesAccessor,
+        private readonly RenamedClassesSourceLocator $renamedClassesSourceLocator,
+        private readonly ParentAttributeSourceLocator $parentAttributeSourceLocator,
+        private readonly TraitScopeFaker $traitScopeFaker,
     ) {
     }
 

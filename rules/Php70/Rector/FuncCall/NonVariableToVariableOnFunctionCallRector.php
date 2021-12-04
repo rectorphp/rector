@@ -47,10 +47,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NonVariableToVariableOnFunctionCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private VariableNaming $variableNaming,
-        private ParentScopeFinder $parentScopeFinder,
-        private ReflectionResolver $reflectionResolver,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly VariableNaming $variableNaming,
+        private readonly ParentScopeFinder $parentScopeFinder,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

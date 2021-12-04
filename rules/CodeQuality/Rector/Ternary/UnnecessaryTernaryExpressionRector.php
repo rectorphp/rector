@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnnecessaryTernaryExpressionRector extends AbstractRector
 {
     public function __construct(
-        private AssignAndBinaryMap $assignAndBinaryMap
+        private readonly AssignAndBinaryMap $assignAndBinaryMap
     ) {
     }
 

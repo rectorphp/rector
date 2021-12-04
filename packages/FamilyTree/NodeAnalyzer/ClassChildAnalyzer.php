@@ -11,7 +11,7 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 final class ClassChildAnalyzer
 {
     public function __construct(
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 

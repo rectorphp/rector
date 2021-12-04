@@ -14,9 +14,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class MatchPropertyTypeConflictingNameGuard
 {
     public function __construct(
-        private MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private ArrayFilter $arrayFilter
+        private readonly MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ArrayFilter $arrayFilter
     ) {
     }
 

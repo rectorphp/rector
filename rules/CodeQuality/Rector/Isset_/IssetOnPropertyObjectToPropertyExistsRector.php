@@ -30,8 +30,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
-        private ReflectionResolver $reflectionResolver
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

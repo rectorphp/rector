@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeClosureCallRector extends AbstractRector
 {
     public function __construct(
-        private MethodTypeAnalyzer $methodTypeAnalyzer
+        private readonly MethodTypeAnalyzer $methodTypeAnalyzer
     ) {
     }
 

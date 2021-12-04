@@ -9,7 +9,7 @@ use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 final class Cache
 {
     public function __construct(
-        private CacheStorageInterface $cacheStorage
+        private readonly CacheStorageInterface $cacheStorage
     ) {
     }
 

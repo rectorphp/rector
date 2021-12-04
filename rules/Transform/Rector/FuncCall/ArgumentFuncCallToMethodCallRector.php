@@ -43,9 +43,9 @@ final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements
     private array $argumentFuncCallToMethodCalls = [];
 
     public function __construct(
-        private ArrayTypeAnalyzer $arrayTypeAnalyzer,
-        private PropertyNaming $propertyNaming,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly ArrayTypeAnalyzer $arrayTypeAnalyzer,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

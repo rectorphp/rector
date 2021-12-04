@@ -27,8 +27,8 @@ final class PlainValueParser
     private ArrayParser $arrayParser;
 
     public function __construct(
-        private ClassAnnotationMatcher $classAnnotationMatcher,
-        private CurrentNodeProvider $currentNodeProvider
+        private readonly ClassAnnotationMatcher $classAnnotationMatcher,
+        private readonly CurrentNodeProvider $currentNodeProvider
     ) {
     }
 

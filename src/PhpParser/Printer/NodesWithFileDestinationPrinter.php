@@ -10,8 +10,8 @@ use Rector\PostRector\Application\PostFileProcessor;
 final class NodesWithFileDestinationPrinter
 {
     public function __construct(
-        private BetterStandardPrinter $betterStandardPrinter,
-        private PostFileProcessor $postFileProcessor
+        private readonly BetterStandardPrinter $betterStandardPrinter,
+        private readonly PostFileProcessor $postFileProcessor
     ) {
     }
 

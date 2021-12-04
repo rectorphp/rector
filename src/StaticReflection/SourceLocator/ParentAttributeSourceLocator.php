@@ -30,7 +30,7 @@ final class ParentAttributeSourceLocator implements SourceLocator
     private AstResolver $astResolver;
 
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 

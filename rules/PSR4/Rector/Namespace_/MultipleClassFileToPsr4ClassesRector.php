@@ -24,8 +24,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
 {
     public function __construct(
-        private NamespaceManipulator $namespaceManipulator,
-        private FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
+        private readonly NamespaceManipulator $namespaceManipulator,
+        private readonly FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
     }
 

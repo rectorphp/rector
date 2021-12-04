@@ -20,8 +20,8 @@ use Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     public function __construct(
-        private CurrentTokenIteratorProvider $currentTokenIteratorProvider,
-        private AttributeMirrorer $attributeMirrorer
+        private readonly CurrentTokenIteratorProvider $currentTokenIteratorProvider,
+        private readonly AttributeMirrorer $attributeMirrorer
     ) {
     }
 

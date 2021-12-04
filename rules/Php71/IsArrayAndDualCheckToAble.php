@@ -18,8 +18,8 @@ use Rector\Php71\ValueObject\TwoNodeMatch;
 final class IsArrayAndDualCheckToAble
 {
     public function __construct(
-        private BinaryOpManipulator $binaryOpManipulator,
-        private NodeNameResolver $nodeNameResolver
+        private readonly BinaryOpManipulator $binaryOpManipulator,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

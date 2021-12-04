@@ -10,9 +10,9 @@ use PHPStan\Type\Type;
 final class NestedArrayType
 {
     public function __construct(
-        private Type $type,
-        private int $arrayNestingLevel,
-        private ?Type $keyType = null
+        private readonly Type $type,
+        private readonly int $arrayNestingLevel,
+        private readonly ?Type $keyType = null
     ) {
     }
 

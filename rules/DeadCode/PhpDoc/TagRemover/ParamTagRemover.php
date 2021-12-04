@@ -15,7 +15,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class ParamTagRemover
 {
     public function __construct(
-        private DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer
+        private readonly DeadParamTagValueNodeAnalyzer $deadParamTagValueNodeAnalyzer
     ) {
     }
 

@@ -28,14 +28,14 @@ final class PhpDocInfoFactory
     private array $phpDocInfosByObjectHash = [];
 
     public function __construct(
-        private PhpDocNodeMapper $phpDocNodeMapper,
-        private CurrentNodeProvider $currentNodeProvider,
-        private Lexer $lexer,
-        private BetterPhpDocParser $betterPhpDocParser,
-        private StaticTypeMapper $staticTypeMapper,
-        private AnnotationNaming $annotationNaming,
-        private RectorChangeCollector $rectorChangeCollector,
-        private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
+        private readonly PhpDocNodeMapper $phpDocNodeMapper,
+        private readonly CurrentNodeProvider $currentNodeProvider,
+        private readonly Lexer $lexer,
+        private readonly BetterPhpDocParser $betterPhpDocParser,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly AnnotationNaming $annotationNaming,
+        private readonly RectorChangeCollector $rectorChangeCollector,
+        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
     ) {
     }
 

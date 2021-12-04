@@ -37,12 +37,12 @@ final class BreakingVariableRenameGuard
     private const AT_NAMING_REGEX = '#[\w+]At$#';
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private ConflictingNameResolver $conflictingNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private OverridenExistingNamesResolver $overridenExistingNamesResolver,
-        private TypeUnwrapper $typeUnwrapper,
-        private NodeNameResolver $nodeNameResolver
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ConflictingNameResolver $conflictingNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly OverridenExistingNamesResolver $overridenExistingNamesResolver,
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

@@ -14,7 +14,7 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class NetteComponentFactoryInterfaceAnalyzer
 {
     public function __construct(
-        private ReturnTypeInferer $returnTypeInferer
+        private readonly ReturnTypeInferer $returnTypeInferer
     ) {
     }
 

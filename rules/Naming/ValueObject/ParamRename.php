@@ -14,11 +14,11 @@ use Rector\Naming\Contract\RenameParamValueObjectInterface;
 final class ParamRename implements RenameParamValueObjectInterface
 {
     public function __construct(
-        private string $currentName,
-        private string $expectedName,
-        private Param $param,
-        private Variable $variable,
-        private ClassMethod | Function_ | Closure $functionLike
+        private readonly string $currentName,
+        private readonly string $expectedName,
+        private readonly Param $param,
+        private readonly Variable $variable,
+        private readonly ClassMethod | Function_ | Closure $functionLike
     ) {
     }
 

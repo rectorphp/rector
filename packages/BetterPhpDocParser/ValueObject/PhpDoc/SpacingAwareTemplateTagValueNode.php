@@ -14,7 +14,7 @@ final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode implem
         string $name,
         ?TypeNode $typeNode,
         string $description,
-        private string $preposition
+        private readonly string $preposition
     ) {
         parent::__construct($name, $typeNode, $description);
     }

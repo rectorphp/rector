@@ -14,10 +14,10 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 final class FileProcessor
 {
     public function __construct(
-        private AffectedFilesCollector $affectedFilesCollector,
-        private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
-        private RectorParser $rectorParser,
-        private RectorNodeTraverser $rectorNodeTraverser
+        private readonly AffectedFilesCollector $affectedFilesCollector,
+        private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
+        private readonly RectorParser $rectorParser,
+        private readonly RectorNodeTraverser $rectorNodeTraverser
     ) {
     }
 

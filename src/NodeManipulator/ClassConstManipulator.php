@@ -17,9 +17,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassConstManipulator
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeNameResolver $nodeNameResolver,
-        private AstResolver $astResolver
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly AstResolver $astResolver
     ) {
     }
 

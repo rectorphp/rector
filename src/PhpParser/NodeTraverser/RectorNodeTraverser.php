@@ -20,9 +20,9 @@ final class RectorNodeTraverser extends NodeTraverser
      * @param PhpRectorInterface[] $phpRectors
      */
     public function __construct(
-        private array $phpRectors,
-        private NodeFinder $nodeFinder,
-        private PhpVersionedFilter $phpVersionedFilter
+        private readonly array $phpRectors,
+        private readonly NodeFinder $nodeFinder,
+        private readonly PhpVersionedFilter $phpVersionedFilter
     ) {
     }
 

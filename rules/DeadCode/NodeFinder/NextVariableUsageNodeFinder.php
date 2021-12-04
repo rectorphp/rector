@@ -18,11 +18,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class NextVariableUsageNodeFinder
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private NodeNameResolver $nodeNameResolver,
-        private ParentScopeFinder $parentScopeFinder,
-        private NodeComparator $nodeComparator
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ParentScopeFinder $parentScopeFinder,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

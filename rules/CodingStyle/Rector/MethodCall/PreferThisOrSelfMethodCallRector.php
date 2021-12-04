@@ -35,7 +35,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     private array $typeToPreference = [];
 
     public function __construct(
-        private AstResolver $astResolver
+        private readonly AstResolver $astResolver
     ) {
     }
 

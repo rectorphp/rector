@@ -49,19 +49,19 @@ final class PhpDocInfo
 
     private bool $isSingleLine = false;
 
-    private PhpDocNode $originalPhpDocNode;
+    private readonly PhpDocNode $originalPhpDocNode;
 
     private bool $hasChanged = false;
 
     public function __construct(
-        private PhpDocNode $phpDocNode,
-        private BetterTokenIterator $betterTokenIterator,
-        private StaticTypeMapper $staticTypeMapper,
-        private \PhpParser\Node $node,
-        private AnnotationNaming $annotationNaming,
-        private CurrentNodeProvider $currentNodeProvider,
-        private RectorChangeCollector $rectorChangeCollector,
-        private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
+        private readonly PhpDocNode $phpDocNode,
+        private readonly BetterTokenIterator $betterTokenIterator,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly \PhpParser\Node $node,
+        private readonly AnnotationNaming $annotationNaming,
+        private readonly CurrentNodeProvider $currentNodeProvider,
+        private readonly RectorChangeCollector $rectorChangeCollector,
+        private readonly PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder
     ) {
         $this->originalPhpDocNode = clone $phpDocNode;
 

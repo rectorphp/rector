@@ -15,9 +15,9 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class LocalConstantFinder
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

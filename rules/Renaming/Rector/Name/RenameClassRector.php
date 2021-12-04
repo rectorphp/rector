@@ -34,8 +34,8 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
 
     public function __construct(
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
-        private ClassRenamer $classRenamer
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly ClassRenamer $classRenamer
     ) {
     }
 

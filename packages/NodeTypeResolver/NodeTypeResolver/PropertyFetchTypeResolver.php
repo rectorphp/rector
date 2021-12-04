@@ -29,9 +29,9 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
     private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

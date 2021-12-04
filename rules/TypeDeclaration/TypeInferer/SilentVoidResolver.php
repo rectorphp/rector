@@ -24,7 +24,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class SilentVoidResolver
 {
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

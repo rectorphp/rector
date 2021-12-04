@@ -7,9 +7,9 @@ namespace Rector\Renaming\ValueObject;
 final class RenamedNamespace
 {
     public function __construct(
-        private string $currentName,
-        private string $oldNamespace,
-        private string $newNamespace
+        private readonly string $currentName,
+        private readonly string $oldNamespace,
+        private readonly string $newNamespace
     ) {
     }
 

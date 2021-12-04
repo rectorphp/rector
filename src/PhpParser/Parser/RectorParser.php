@@ -13,8 +13,8 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorParser
 {
     public function __construct(
-        private Lexer $lexer,
-        private Parser $parser,
+        private readonly Lexer $lexer,
+        private readonly Parser $parser,
     ) {
     }
 

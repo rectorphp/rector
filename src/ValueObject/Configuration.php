@@ -17,16 +17,16 @@ final class Configuration
      * @param string[] $paths
      */
     public function __construct(
-        private bool $isDryRun = false,
-        private bool $showProgressBar = true,
-        private bool $shouldClearCache = false,
-        private string $outputFormat = ConsoleOutputFormatter::NAME,
-        private array $fileExtensions = ['php'],
-        private array $paths = [],
-        private bool $showDiffs = true,
-        private ?BootstrapConfigs $bootstrapConfigs = null,
-        private string | null $parallelPort = null,
-        private string | null $parallelIdentifier = null,
+        private readonly bool $isDryRun = false,
+        private readonly bool $showProgressBar = true,
+        private readonly bool $shouldClearCache = false,
+        private readonly string $outputFormat = ConsoleOutputFormatter::NAME,
+        private readonly array $fileExtensions = ['php'],
+        private readonly array $paths = [],
+        private readonly bool $showDiffs = true,
+        private readonly ?BootstrapConfigs $bootstrapConfigs = null,
+        private readonly string | null $parallelPort = null,
+        private readonly string | null $parallelIdentifier = null,
     ) {
     }
 

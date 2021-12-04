@@ -27,9 +27,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnSpreadOperatorRector extends AbstractRector
 {
     public function __construct(
-        private SpreadVariablesCollector $spreadVariablesCollector,
-        private ReflectionResolver $reflectionResolver,
-        private VendorLocationDetector $vendorLocationDetector
+        private readonly SpreadVariablesCollector $spreadVariablesCollector,
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly VendorLocationDetector $vendorLocationDetector
     ) {
     }
 

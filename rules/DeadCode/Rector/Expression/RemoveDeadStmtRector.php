@@ -24,9 +24,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadStmtRector extends AbstractRector
 {
     public function __construct(
-        private LivingCodeManipulator $livingCodeManipulator,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private ReflectionResolver $reflectionResolver
+        private readonly LivingCodeManipulator $livingCodeManipulator,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

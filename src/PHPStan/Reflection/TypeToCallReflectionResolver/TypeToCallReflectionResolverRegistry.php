@@ -16,7 +16,7 @@ final class TypeToCallReflectionResolverRegistry
      * @param TypeToCallReflectionResolverInterface[] $resolvers
      */
     public function __construct(
-        private array $resolvers
+        private readonly array $resolvers
     ) {
     }
 

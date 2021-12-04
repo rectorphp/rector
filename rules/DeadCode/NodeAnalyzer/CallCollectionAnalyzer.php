@@ -13,8 +13,8 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CallCollectionAnalyzer
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

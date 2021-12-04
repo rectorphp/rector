@@ -21,11 +21,11 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class NullTypeAssignDetector
 {
     public function __construct(
-        private ScopeNestingComparator $scopeNestingComparator,
-        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        private NodeTypeResolver $nodeTypeResolver,
-        private PropertyAssignMatcher $propertyAssignMatcher,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private readonly ScopeNestingComparator $scopeNestingComparator,
+        private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PropertyAssignMatcher $propertyAssignMatcher,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 

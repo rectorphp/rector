@@ -43,7 +43,7 @@ final class InflectorSingularResolver
     private const CAMELCASE = 'camelcase';
 
     public function __construct(
-        private Inflector $inflector
+        private readonly Inflector $inflector
     ) {
     }
 

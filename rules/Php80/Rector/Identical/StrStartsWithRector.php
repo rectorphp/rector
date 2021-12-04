@@ -29,7 +29,7 @@ final class StrStartsWithRector extends AbstractRector implements MinPhpVersionI
      * @param StrStartWithMatchAndRefactorInterface[] $strStartWithMatchAndRefactors
      */
     public function __construct(
-        private array $strStartWithMatchAndRefactors
+        private readonly array $strStartWithMatchAndRefactors
     ) {
     }
 

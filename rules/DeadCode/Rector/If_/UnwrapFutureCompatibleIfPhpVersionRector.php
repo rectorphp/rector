@@ -22,8 +22,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
 {
     public function __construct(
-        private ConditionEvaluator $conditionEvaluator,
-        private ConditionResolver $conditionResolver
+        private readonly ConditionEvaluator $conditionEvaluator,
+        private readonly ConditionResolver $conditionResolver
     ) {
     }
 

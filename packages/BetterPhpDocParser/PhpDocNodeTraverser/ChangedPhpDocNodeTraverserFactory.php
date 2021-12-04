@@ -10,7 +10,7 @@ use Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class ChangedPhpDocNodeTraverserFactory
 {
     public function __construct(
-        private ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor
+        private readonly ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor
     ) {
     }
 

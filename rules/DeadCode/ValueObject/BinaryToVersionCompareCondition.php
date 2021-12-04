@@ -12,8 +12,8 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
      * @param mixed $expectedValue
      */
     public function __construct(
-        private VersionCompareCondition $versionCompareCondition,
-        private string $binaryClass,
+        private readonly VersionCompareCondition $versionCompareCondition,
+        private readonly string $binaryClass,
         private $expectedValue
     ) {
     }

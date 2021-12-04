@@ -20,10 +20,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class EnumFactory
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private BuilderFactory $builderFactory,
-        private ValueResolver $valueResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly BuilderFactory $builderFactory,
+        private readonly ValueResolver $valueResolver
     ) {
     }
 

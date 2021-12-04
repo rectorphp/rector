@@ -20,7 +20,7 @@ final class BetterTokenIterator extends TokenIterator
      */
     private const INDEX = 'index';
 
-    private PrivatesAccessor $privatesAccessor;
+    private readonly PrivatesAccessor $privatesAccessor;
 
     /**
      * @param array<int, mixed> $tokens

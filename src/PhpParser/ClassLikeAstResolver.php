@@ -25,8 +25,8 @@ final class ClassLikeAstResolver
     private array $classLikesByName = [];
 
     public function __construct(
-        private SmartPhpParser $smartPhpParser,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly SmartPhpParser $smartPhpParser,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

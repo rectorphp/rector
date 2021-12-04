@@ -21,8 +21,8 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class NodeRemover
 {
     public function __construct(
-        private NodesToRemoveCollector $nodesToRemoveCollector,
-        private RectorChangeCollector $rectorChangeCollector
+        private readonly NodesToRemoveCollector $nodesToRemoveCollector,
+        private readonly RectorChangeCollector $rectorChangeCollector
     ) {
     }
 

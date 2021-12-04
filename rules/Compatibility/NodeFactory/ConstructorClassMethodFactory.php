@@ -15,8 +15,8 @@ use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 final class ConstructorClassMethodFactory
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private ParamTagRemover $paramTagRemover,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly ParamTagRemover $paramTagRemover,
     ) {
     }
 

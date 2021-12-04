@@ -37,20 +37,20 @@ final class ProcessCommand extends AbstractProcessCommand
      * @param RectorInterface[] $rectors
      */
     public function __construct(
-        private AdditionalAutoloader $additionalAutoloader,
-        private ChangedFilesDetector $changedFilesDetector,
-        private MissingRectorRulesReporter $missingRectorRulesReporter,
-        private ApplicationFileProcessor $applicationFileProcessor,
-        private FileFactory $fileFactory,
-        private BootstrapFilesIncluder $bootstrapFilesIncluder,
-        private ProcessResultFactory $processResultFactory,
-        private NodeScopeResolver $nodeScopeResolver,
-        private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
-        private MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
-        private EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
-        private OutputFormatterCollector $outputFormatterCollector,
-        private SymfonyStyle $symfonyStyle,
-        private array $rectors
+        private readonly AdditionalAutoloader $additionalAutoloader,
+        private readonly ChangedFilesDetector $changedFilesDetector,
+        private readonly MissingRectorRulesReporter $missingRectorRulesReporter,
+        private readonly ApplicationFileProcessor $applicationFileProcessor,
+        private readonly FileFactory $fileFactory,
+        private readonly BootstrapFilesIncluder $bootstrapFilesIncluder,
+        private readonly ProcessResultFactory $processResultFactory,
+        private readonly NodeScopeResolver $nodeScopeResolver,
+        private readonly DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
+        private readonly MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
+        private readonly EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
+        private readonly OutputFormatterCollector $outputFormatterCollector,
+        private readonly SymfonyStyle $symfonyStyle,
+        private readonly array $rectors
     ) {
         parent::__construct();
     }

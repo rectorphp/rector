@@ -12,8 +12,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class EmptyConfigurableRectorChecker
 {
     public function __construct(
-        private EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector,
-        private SymfonyStyle $symfonyStyle
+        private readonly EmptyConfigurableRectorCollector $emptyConfigurableRectorCollector,
+        private readonly SymfonyStyle $symfonyStyle
     ) {
     }
 

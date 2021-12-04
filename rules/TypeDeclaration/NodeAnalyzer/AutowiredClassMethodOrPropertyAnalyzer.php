@@ -14,8 +14,8 @@ use Symfony\Contracts\Service\Attribute\Required;
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 

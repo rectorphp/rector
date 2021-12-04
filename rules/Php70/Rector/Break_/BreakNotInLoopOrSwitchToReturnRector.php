@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BreakNotInLoopOrSwitchToReturnRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private ContextAnalyzer $contextAnalyzer
+        private readonly ContextAnalyzer $contextAnalyzer
     ) {
     }
 

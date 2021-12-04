@@ -32,7 +32,7 @@ final class RectifiedAnalyzer
     private array $previousFileWithNodes = [];
 
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

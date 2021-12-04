@@ -23,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePureIntersectionTypeRector extends AbstractRector
 {
     public function __construct(
-        private PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
+        private readonly PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator
     ) {
     }
 

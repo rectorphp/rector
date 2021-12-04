@@ -26,8 +26,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromStrictTypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private TypeFactory $typeFactory,
-        private ReflectionResolver $reflectionResolver
+        private readonly TypeFactory $typeFactory,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

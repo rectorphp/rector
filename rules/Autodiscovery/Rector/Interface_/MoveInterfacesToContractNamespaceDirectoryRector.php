@@ -21,8 +21,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInterfacesToContractNamespaceDirectoryRector extends AbstractRector
 {
     public function __construct(
-        private NetteComponentFactoryInterfaceAnalyzer $netteComponentFactoryInterfaceAnalyzer,
-        private AddedFileWithNodesFactory $addedFileWithNodesFactory
+        private readonly NetteComponentFactoryInterfaceAnalyzer $netteComponentFactoryInterfaceAnalyzer,
+        private readonly AddedFileWithNodesFactory $addedFileWithNodesFactory
     ) {
     }
 

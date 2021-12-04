@@ -24,8 +24,8 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
     private AnnotationToAttributeMapper $annotationToAttributeMapper;
 
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider,
-        private NamedArgsFactory $namedArgsFactory
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly NamedArgsFactory $namedArgsFactory
     ) {
     }
 

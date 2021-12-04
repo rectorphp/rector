@@ -20,10 +20,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PropertyTypeDecorator
 {
     public function __construct(
-        private PhpVersionProvider $phpVersionProvider,
-        private StaticTypeMapper $staticTypeMapper,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

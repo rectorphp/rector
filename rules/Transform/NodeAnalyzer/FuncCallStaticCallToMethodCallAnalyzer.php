@@ -22,12 +22,12 @@ use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 final class FuncCallStaticCallToMethodCallAnalyzer
 {
     public function __construct(
-        private TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver,
-        private PropertyNaming $propertyNaming,
-        private NodeNameResolver $nodeNameResolver,
-        private NodeFactory $nodeFactory,
-        private PropertyFetchFactory $propertyFetchFactory,
-        private PropertyToAddCollector $propertyToAddCollector
+        private readonly TypeProvidingExprFromClassResolver $typeProvidingExprFromClassResolver,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeFactory $nodeFactory,
+        private readonly PropertyFetchFactory $propertyFetchFactory,
+        private readonly PropertyToAddCollector $propertyToAddCollector
     ) {
     }
 

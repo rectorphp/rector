@@ -39,9 +39,9 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     private NodeTypeResolver $nodeTypeResolver;
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private TypeFactory $typeFactory,
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly TypeFactory $typeFactory,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

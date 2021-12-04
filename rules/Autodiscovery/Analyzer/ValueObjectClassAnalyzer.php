@@ -22,11 +22,11 @@ final class ValueObjectClassAnalyzer
     private array $valueObjectStatusByClassName = [];
 
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private AstResolver $astResolver,
-        private ClassAnalyzer $classAnalyzer,
-        private NodeNameResolver $nodeNameResolver
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly AstResolver $astResolver,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver
     ) {
     }
 

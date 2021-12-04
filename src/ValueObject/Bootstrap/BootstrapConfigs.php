@@ -10,8 +10,8 @@ final class BootstrapConfigs
      * @param string[] $setConfigFiles
      */
     public function __construct(
-        private ?string $mainConfigFile,
-        private array $setConfigFiles
+        private readonly ?string $mainConfigFile,
+        private readonly array $setConfigFiles
     ) {
     }
 

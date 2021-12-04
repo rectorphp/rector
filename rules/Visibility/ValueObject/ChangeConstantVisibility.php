@@ -9,9 +9,9 @@ use PHPStan\Type\ObjectType;
 final class ChangeConstantVisibility
 {
     public function __construct(
-        private string $class,
-        private string $constant,
-        private int $visibility
+        private readonly string $class,
+        private readonly string $constant,
+        private readonly int $visibility
     ) {
     }
 

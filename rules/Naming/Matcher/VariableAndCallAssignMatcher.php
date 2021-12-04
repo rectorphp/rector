@@ -17,9 +17,9 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class VariableAndCallAssignMatcher
 {
     public function __construct(
-        private CallMatcher $callMatcher,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly CallMatcher $callMatcher,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

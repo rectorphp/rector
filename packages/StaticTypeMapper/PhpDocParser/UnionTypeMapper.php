@@ -22,7 +22,7 @@ final class UnionTypeMapper implements PhpDocTypeMapperInterface
     private PhpDocTypeMapper $phpDocTypeMapper;
 
     public function __construct(
-        private TypeFactory $typeFactory
+        private readonly TypeFactory $typeFactory
     ) {
     }
 

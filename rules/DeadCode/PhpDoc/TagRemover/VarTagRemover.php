@@ -25,10 +25,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class VarTagRemover
 {
     public function __construct(
-        private DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
-        private StaticTypeMapper $staticTypeMapper,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
+        private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer
     ) {
     }
 

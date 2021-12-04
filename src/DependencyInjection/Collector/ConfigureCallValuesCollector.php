@@ -15,7 +15,7 @@ final class ConfigureCallValuesCollector
      */
     private array $configureCallValuesByRectorClass = [];
 
-    private ParametersMerger $parametersMerger;
+    private readonly ParametersMerger $parametersMerger;
 
     public function __construct()
     {

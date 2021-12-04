@@ -27,8 +27,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeKeysInListRector extends AbstractRector
 {
     public function __construct(
-        private InflectorSingularResolver $inflectorSingularResolver,
-        private VariableNaming $variableNaming
+        private readonly InflectorSingularResolver $inflectorSingularResolver,
+        private readonly VariableNaming $variableNaming
     ) {
     }
 

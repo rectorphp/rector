@@ -13,7 +13,7 @@ use Rector\Naming\ValueObject\ParamRename;
 final class PropertyDocBlockManipulator
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 

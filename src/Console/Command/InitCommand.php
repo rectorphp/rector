@@ -25,11 +25,11 @@ final class InitCommand extends Command
      * @param TemplateResolverInterface[] $templateResolvers
      */
     public function __construct(
-        private FileSystemGuard $fileSystemGuard,
-        private SmartFileSystem $smartFileSystem,
-        private SymfonyStyle $symfonyStyle,
-        private array $templateResolvers,
-        private PhpVersionProvider $phpVersionProvider
+        private readonly FileSystemGuard $fileSystemGuard,
+        private readonly SmartFileSystem $smartFileSystem,
+        private readonly SymfonyStyle $symfonyStyle,
+        private readonly array $templateResolvers,
+        private readonly PhpVersionProvider $phpVersionProvider
     ) {
         parent::__construct();
     }

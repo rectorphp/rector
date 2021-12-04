@@ -33,7 +33,7 @@ final class SimplifyRegexPatternRector extends AbstractRector
     ];
 
     public function __construct(
-        private RegexPatternArgumentManipulator $regexPatternArgumentManipulator
+        private readonly RegexPatternArgumentManipulator $regexPatternArgumentManipulator
     ) {
     }
 

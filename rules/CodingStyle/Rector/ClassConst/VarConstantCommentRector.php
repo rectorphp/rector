@@ -27,8 +27,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VarConstantCommentRector extends AbstractRector
 {
     public function __construct(
-        private TypeComparator $typeComparator,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly TypeComparator $typeComparator,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

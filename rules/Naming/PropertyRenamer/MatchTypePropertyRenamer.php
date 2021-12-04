@@ -11,8 +11,8 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class MatchTypePropertyRenamer
 {
     public function __construct(
-        private PropertyRenamer $propertyRenamer,
-        private MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard
+        private readonly PropertyRenamer $propertyRenamer,
+        private readonly MatchPropertyTypeConflictingNameGuard $matchPropertyTypeConflictingNameGuard
     ) {
     }
 

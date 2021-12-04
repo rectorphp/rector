@@ -33,9 +33,9 @@ final class DesiredClassTypeToDynamicRector extends AbstractRector
     private array $staticObjectTypes = [];
 
     public function __construct(
-        private PropertyNaming $propertyNaming,
-        private StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer,
-        private PropertyToAddCollector $propertyToAddCollector,
+        private readonly PropertyNaming $propertyNaming,
+        private readonly StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
         ParameterProvider $parameterProvider
     ) {
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(Option::TYPES_TO_REMOVE_STATIC_FROM);

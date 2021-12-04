@@ -32,7 +32,7 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
     private array $funcNameToMethodCallNames = [];
 
     public function __construct(
-        private FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer
+        private readonly FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer
     ) {
     }
 

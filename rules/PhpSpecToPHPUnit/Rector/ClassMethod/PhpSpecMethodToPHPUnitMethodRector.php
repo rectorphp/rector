@@ -19,9 +19,9 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 final class PhpSpecMethodToPHPUnitMethodRector extends AbstractPhpSpecToPHPUnitRector
 {
     public function __construct(
-        private PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
-        private PhpSpecRenaming $phpSpecRenaming,
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly PHPUnitTypeDeclarationDecorator $phpUnitTypeDeclarationDecorator,
+        private readonly PhpSpecRenaming $phpSpecRenaming,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

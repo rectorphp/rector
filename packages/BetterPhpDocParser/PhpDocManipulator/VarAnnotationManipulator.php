@@ -18,8 +18,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class VarAnnotationManipulator
 {
     public function __construct(
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 

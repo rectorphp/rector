@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessVarTagRector extends AbstractRector
 {
     public function __construct(
-        private VarTagRemover $varTagRemover
+        private readonly VarTagRemover $varTagRemover
     ) {
     }
 

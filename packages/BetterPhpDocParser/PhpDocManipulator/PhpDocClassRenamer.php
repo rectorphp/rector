@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 final class PhpDocClassRenamer
 {
     public function __construct(
-        private ClassAnnotationMatcher $classAnnotationMatcher
+        private readonly ClassAnnotationMatcher $classAnnotationMatcher
     ) {
     }
 

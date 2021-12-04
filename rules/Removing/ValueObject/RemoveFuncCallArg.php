@@ -7,8 +7,8 @@ namespace Rector\Removing\ValueObject;
 final class RemoveFuncCallArg
 {
     public function __construct(
-        private string $function,
-        private int $argumentPosition
+        private readonly string $function,
+        private readonly int $argumentPosition
     ) {
     }
 

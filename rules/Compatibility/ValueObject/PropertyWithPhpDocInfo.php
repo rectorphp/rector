@@ -13,9 +13,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class PropertyWithPhpDocInfo
 {
     public function __construct(
-        private string $propertyName,
-        private Property $property,
-        private PhpDocInfo $phpDocInfo
+        private readonly string $propertyName,
+        private readonly Property $property,
+        private readonly PhpDocInfo $phpDocInfo
     ) {
     }
 

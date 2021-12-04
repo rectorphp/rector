@@ -27,7 +27,7 @@ final class DowngradeReadonlyPropertyRector extends AbstractRector
     private const TAGNAME = 'readonly';
 
     public function __construct(
-        private VisibilityManipulator $visibilityManipulator,
+        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 

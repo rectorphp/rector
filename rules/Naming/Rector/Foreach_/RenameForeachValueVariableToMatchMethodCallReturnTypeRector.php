@@ -22,11 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
     public function __construct(
-        private BreakingVariableRenameGuard $breakingVariableRenameGuard,
-        private ExpectedNameResolver $expectedNameResolver,
-        private NamingConventionAnalyzer $namingConventionAnalyzer,
-        private VariableRenamer $variableRenamer,
-        private ForeachMatcher $foreachMatcher
+        private readonly BreakingVariableRenameGuard $breakingVariableRenameGuard,
+        private readonly ExpectedNameResolver $expectedNameResolver,
+        private readonly NamingConventionAnalyzer $namingConventionAnalyzer,
+        private readonly VariableRenamer $variableRenamer,
+        private readonly ForeachMatcher $foreachMatcher
     ) {
     }
 

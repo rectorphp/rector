@@ -33,7 +33,7 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends Abstr
     private array $coalescingNodes = [];
 
     public function __construct(
-        private IfManipulator $ifManipulator
+        private readonly IfManipulator $ifManipulator
     ) {
     }
 

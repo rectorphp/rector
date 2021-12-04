@@ -14,7 +14,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class CallTypeAnalyzer
 {
     public function __construct(
-        private ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

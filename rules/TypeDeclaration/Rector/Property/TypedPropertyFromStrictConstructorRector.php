@@ -23,8 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromStrictConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
-        private VarTagRemover $varTagRemover
+        private readonly ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
+        private readonly VarTagRemover $varTagRemover
     ) {
     }
 

@@ -13,8 +13,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassRenamingPostRector extends AbstractPostRector
 {
     public function __construct(
-        private ClassRenamer $classRenamer,
-        private RenamedClassesDataCollector $renamedClassesDataCollector
+        private readonly ClassRenamer $classRenamer,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector
     ) {
     }
 

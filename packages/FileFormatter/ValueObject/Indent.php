@@ -52,7 +52,7 @@ final class Indent implements Stringable
     private const PARSE_INDENT_REGEX = '/^(?P<indent>( +|\t+)).*/m';
 
     private function __construct(
-        private string $string
+        private readonly string $string
     ) {
     }
 

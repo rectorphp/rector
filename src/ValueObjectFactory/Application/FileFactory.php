@@ -19,9 +19,9 @@ final class FileFactory
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
-        private FilesFinder $filesFinder,
-        private ChangedFilesDetector $changedFilesDetector,
-        private array $fileProcessors,
+        private readonly FilesFinder $filesFinder,
+        private readonly ChangedFilesDetector $changedFilesDetector,
+        private readonly array $fileProcessors,
     ) {
     }
 

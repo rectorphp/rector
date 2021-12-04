@@ -27,7 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class WhileEachToForeachRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private AssignManipulator $assignManipulator
+        private readonly AssignManipulator $assignManipulator
     ) {
     }
 

@@ -15,7 +15,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class MethodParameterTypeResolver
 {
     public function __construct(
-        private ReflectionResolver $reflectionResolver,
+        private readonly ReflectionResolver $reflectionResolver,
     ) {
     }
 

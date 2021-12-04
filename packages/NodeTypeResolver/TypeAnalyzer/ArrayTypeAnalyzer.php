@@ -26,10 +26,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayTypeAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private PregMatchTypeCorrector $pregMatchTypeCorrector,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly PregMatchTypeCorrector $pregMatchTypeCorrector,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

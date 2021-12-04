@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeIndirectCallByArrayRector extends AbstractRector
 {
     public function __construct(
-        private StringTypeAnalyzer $stringTypeAnalyzer
+        private readonly StringTypeAnalyzer $stringTypeAnalyzer
     ) {
     }
 

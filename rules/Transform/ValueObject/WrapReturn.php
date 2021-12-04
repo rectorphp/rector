@@ -10,9 +10,9 @@ use Rector\Core\Validation\RectorAssert;
 final class WrapReturn
 {
     public function __construct(
-        private string $type,
-        private string $method,
-        private bool $isArrayWrap
+        private readonly string $type,
+        private readonly string $method,
+        private readonly bool $isArrayWrap
     ) {
         RectorAssert::className($type);
     }

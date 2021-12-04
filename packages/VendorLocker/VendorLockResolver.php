@@ -14,9 +14,9 @@ use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 final class VendorLockResolver
 {
     public function __construct(
-        private ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
-        private ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
-        private PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver
+        private readonly ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver,
+        private readonly ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver,
+        private readonly PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver
     ) {
     }
 

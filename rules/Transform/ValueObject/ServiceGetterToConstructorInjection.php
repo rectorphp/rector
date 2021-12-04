@@ -10,9 +10,9 @@ use Rector\Core\Validation\RectorAssert;
 final class ServiceGetterToConstructorInjection
 {
     public function __construct(
-        private string $oldType,
-        private string $oldMethod,
-        private string $serviceType
+        private readonly string $oldType,
+        private readonly string $oldMethod,
+        private readonly string $serviceType
     ) {
         RectorAssert::className($oldType);
         RectorAssert::className($serviceType);

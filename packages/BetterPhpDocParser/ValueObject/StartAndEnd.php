@@ -9,8 +9,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class StartAndEnd
 {
     public function __construct(
-        private int $start,
-        private int $end
+        private readonly int $start,
+        private readonly int $end
     ) {
         if ($end < $start) {
             throw new ShouldNotHappenException();

@@ -56,13 +56,13 @@ final class AnonymousFunctionFactory
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\d+)#';
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private NodeFactory $nodeFactory,
-        private StaticTypeMapper $staticTypeMapper,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private SimplePhpParser $simplePhpParser,
-        private NodeComparator $nodeComparator
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly NodeFactory $nodeFactory,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly SimplePhpParser $simplePhpParser,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 

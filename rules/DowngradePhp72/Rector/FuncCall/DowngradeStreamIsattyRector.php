@@ -25,8 +25,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStreamIsattyRector extends AbstractRector
 {
     public function __construct(
-        private InlineCodeParser $inlineCodeParser,
-        private FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer
+        private readonly InlineCodeParser $inlineCodeParser,
+        private readonly FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer
     ) {
     }
 

@@ -27,8 +27,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private StaticAnalyzer $staticAnalyzer,
-        private ReflectionResolver $reflectionResolver
+        private readonly StaticAnalyzer $staticAnalyzer,
+        private readonly ReflectionResolver $reflectionResolver
     ) {
     }
 

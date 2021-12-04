@@ -19,10 +19,10 @@ use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     public function __construct(
-        private FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
-        private ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
-        private NodeNameResolver $nodeNameResolver,
-        private BetterNodeFinder $betterNodeFinder
+        private readonly FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
+        private readonly ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly BetterNodeFinder $betterNodeFinder
     ) {
     }
 

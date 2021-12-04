@@ -57,15 +57,15 @@ final class NodeTypeResolver
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
     public function __construct(
-        private ObjectTypeSpecifier $objectTypeSpecifier,
-        private ClassAnalyzer $classAnalyzer,
-        private GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
-        private ReflectionProvider $reflectionProvider,
-        private HasOffsetTypeCorrector $hasOffsetTypeCorrector,
-        private AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector,
-        private IdentifierTypeResolver $identifierTypeResolver,
-        private RenamedClassesDataCollector $renamedClassesDataCollector,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly ObjectTypeSpecifier $objectTypeSpecifier,
+        private readonly ClassAnalyzer $classAnalyzer,
+        private readonly GenericClassStringTypeCorrector $genericClassStringTypeCorrector,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly HasOffsetTypeCorrector $hasOffsetTypeCorrector,
+        private readonly AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector,
+        private readonly IdentifierTypeResolver $identifierTypeResolver,
+        private readonly RenamedClassesDataCollector $renamedClassesDataCollector,
+        private readonly BetterNodeFinder $betterNodeFinder,
         array $nodeTypeResolvers
     ) {
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {

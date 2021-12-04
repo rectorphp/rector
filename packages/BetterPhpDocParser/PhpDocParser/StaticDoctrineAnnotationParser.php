@@ -19,8 +19,8 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 final class StaticDoctrineAnnotationParser
 {
     public function __construct(
-        private PlainValueParser $plainValueParser,
-        private ArrayParser $arrayParser
+        private readonly PlainValueParser $plainValueParser,
+        private readonly ArrayParser $arrayParser
     ) {
     }
 

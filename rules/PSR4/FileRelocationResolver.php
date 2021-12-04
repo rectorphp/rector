@@ -21,7 +21,7 @@ final class FileRelocationResolver
     private const NAMESPACE_SEPARATOR = '\\';
 
     public function __construct(
-        private FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
+        private readonly FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer
     ) {
     }
 

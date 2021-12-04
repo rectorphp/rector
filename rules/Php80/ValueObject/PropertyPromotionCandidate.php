@@ -11,9 +11,9 @@ use PhpParser\Node\Stmt\Property;
 final class PropertyPromotionCandidate
 {
     public function __construct(
-        private Property $property,
-        private Assign $assign,
-        private Param $param
+        private readonly Property $property,
+        private readonly Assign $assign,
+        private readonly Param $param
     ) {
     }
 

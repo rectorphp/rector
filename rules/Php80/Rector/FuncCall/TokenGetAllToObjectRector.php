@@ -29,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TokenGetAllToObjectRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private TokenManipulator $tokenManipulator,
+        private readonly TokenManipulator $tokenManipulator,
     ) {
     }
 

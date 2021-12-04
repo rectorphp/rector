@@ -31,11 +31,11 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayCallableMethodMatcher
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeTypeResolver $nodeTypeResolver,
-        private ValueResolver $valueResolver,
-        private ReflectionProvider $reflectionProvider,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly ValueResolver $valueResolver,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

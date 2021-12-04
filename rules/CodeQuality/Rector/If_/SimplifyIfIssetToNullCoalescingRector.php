@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfIssetToNullCoalescingRector extends AbstractRector
 {
     public function __construct(
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

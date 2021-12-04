@@ -12,8 +12,8 @@ use Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor;
 final class DocBlockNameImporter
 {
     public function __construct(
-        private NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor,
-        private ImportingPhpDocNodeTraverserFactory $importingPhpDocNodeTraverserFactory
+        private readonly NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor,
+        private readonly ImportingPhpDocNodeTraverserFactory $importingPhpDocNodeTraverserFactory
     ) {
     }
 

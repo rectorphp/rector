@@ -29,9 +29,9 @@ final class NodesToAddCollector implements NodeCollectorInterface
     private array $nodesToAddBefore = [];
 
     public function __construct(
-        private BetterNodeFinder $betterNodeFinder,
-        private RectorChangeCollector $rectorChangeCollector,
-        private BetterStandardPrinter $betterStandardPrinter
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly RectorChangeCollector $rectorChangeCollector,
+        private readonly BetterStandardPrinter $betterStandardPrinter
     ) {
     }
 

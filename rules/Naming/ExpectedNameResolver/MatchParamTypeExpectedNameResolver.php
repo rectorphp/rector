@@ -12,8 +12,8 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MatchParamTypeExpectedNameResolver
 {
     public function __construct(
-        private StaticTypeMapper $staticTypeMapper,
-        private PropertyNaming $propertyNaming
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly PropertyNaming $propertyNaming
     ) {
     }
 

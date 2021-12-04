@@ -22,8 +22,8 @@ final class ClassAnnotationMatcher
     private array $fullyQualifiedNameByHash = [];
 
     public function __construct(
-        private UseImportNameMatcher $useImportNameMatcher,
-        private ReflectionProvider $reflectionProvider
+        private readonly UseImportNameMatcher $useImportNameMatcher,
+        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 

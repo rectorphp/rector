@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyAnalyzer
 {
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 

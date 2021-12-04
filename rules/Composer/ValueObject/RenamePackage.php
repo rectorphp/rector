@@ -7,8 +7,8 @@ namespace Rector\Composer\ValueObject;
 final class RenamePackage
 {
     public function __construct(
-        private string $oldPackageName,
-        private string $newPackageName
+        private readonly string $oldPackageName,
+        private readonly string $newPackageName
     ) {
     }
 

@@ -7,8 +7,8 @@ namespace Rector\Transform\ValueObject;
 final class PropertyAndClassMethodName
 {
     public function __construct(
-        private string $propertyName,
-        private string $classMethodName
+        private readonly string $propertyName,
+        private readonly string $classMethodName
     ) {
     }
 

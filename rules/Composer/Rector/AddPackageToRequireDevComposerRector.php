@@ -28,7 +28,7 @@ final class AddPackageToRequireDevComposerRector implements ComposerRectorInterf
     private array $packageAndVersions = [];
 
     public function __construct(
-        private VersionGuard $versionGuard
+        private readonly VersionGuard $versionGuard
     ) {
     }
 

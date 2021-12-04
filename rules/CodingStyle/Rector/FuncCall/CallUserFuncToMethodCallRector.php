@@ -22,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallUserFuncToMethodCallRector extends AbstractRector
 {
     public function __construct(
-        private ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory
+        private readonly ArrayCallableToMethodCallFactory $arrayCallableToMethodCallFactory
     ) {
     }
 

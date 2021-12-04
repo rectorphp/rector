@@ -20,12 +20,12 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 final class PropertyConstructorInjectionManipulator
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private PhpDocInfoFactory $phpDocInfoFactory,
-        private PhpDocTypeChanger $phpDocTypeChanger,
-        private PhpDocTagRemover $phpDocTagRemover,
-        private PropertyToAddCollector $propertyToAddCollector,
-        private BetterNodeFinder $betterNodeFinder,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PhpDocTagRemover $phpDocTagRemover,
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly BetterNodeFinder $betterNodeFinder,
     ) {
     }
 

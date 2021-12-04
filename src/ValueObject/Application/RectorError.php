@@ -13,10 +13,10 @@ final class RectorError implements SerializableInterface
      * @param class-string<RectorInterface>|null $rectorClass
      */
     public function __construct(
-        private string $message,
-        private string $relativeFilePath,
-        private ?int $line = null,
-        private ?string $rectorClass = null
+        private readonly string $message,
+        private readonly string $relativeFilePath,
+        private readonly ?int $line = null,
+        private readonly ?string $rectorClass = null
     ) {
     }
 

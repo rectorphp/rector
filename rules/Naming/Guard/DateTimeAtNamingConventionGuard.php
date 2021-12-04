@@ -25,8 +25,8 @@ final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInter
     private const AT_NAMING_REGEX = '#[\w+]At$#';
 
     public function __construct(
-        private NodeTypeResolver $nodeTypeResolver,
-        private TypeUnwrapper $typeUnwrapper
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly TypeUnwrapper $typeUnwrapper
     ) {
     }
 

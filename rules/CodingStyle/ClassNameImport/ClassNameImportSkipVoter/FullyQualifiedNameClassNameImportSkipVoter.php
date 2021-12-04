@@ -22,7 +22,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
 {
     public function __construct(
-        private ShortNameResolver $shortNameResolver,
+        private readonly ShortNameResolver $shortNameResolver,
     ) {
     }
 

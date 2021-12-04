@@ -23,10 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
 {
     public function __construct(
-        private CountManipulator $countManipulator,
-        private IfManipulator $ifManipulator,
-        private UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector,
-        private ReservedKeywordAnalyzer $reservedKeywordAnalyzer
+        private readonly CountManipulator $countManipulator,
+        private readonly IfManipulator $ifManipulator,
+        private readonly UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector,
+        private readonly ReservedKeywordAnalyzer $reservedKeywordAnalyzer
     ) {
     }
 

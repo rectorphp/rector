@@ -13,9 +13,9 @@ use Rector\Privatization\Reflection\ClassConstantsResolver;
 final class ClassConstantFetchValueFactory
 {
     public function __construct(
-        private ValueResolver $valueResolver,
-        private NodeFactory $nodeFactory,
-        private ClassConstantsResolver $classConstantsResolver
+        private readonly ValueResolver $valueResolver,
+        private readonly NodeFactory $nodeFactory,
+        private readonly ClassConstantsResolver $classConstantsResolver
     ) {
     }
 

@@ -30,7 +30,7 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
     private const STRINGABLE = 'Stringable';
 
     public function __construct(
-        private FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer
     ) {
     }
 

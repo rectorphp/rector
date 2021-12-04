@@ -44,13 +44,13 @@ final class ReturnTypeInferer
      */
     public function __construct(
         array $returnTypeInferers,
-        private TypeNormalizer $typeNormalizer,
+        private readonly TypeNormalizer $typeNormalizer,
         TypeInfererSorter $typeInfererSorter,
-        private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        private PhpVersionProvider $phpVersionProvider,
-        private ParameterProvider $parameterProvider,
-        private BetterNodeFinder $betterNodeFinder,
-        private ReflectionProvider $reflectionProvider,
+        private readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private readonly PhpVersionProvider $phpVersionProvider,
+        private readonly ParameterProvider $parameterProvider,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
         $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
     }

@@ -12,8 +12,8 @@ final class ParentClassToTraits
      * @param string[] $traitNames
      */
     public function __construct(
-        private string $parentType,
-        private array $traitNames
+        private readonly string $parentType,
+        private readonly array $traitNames
     ) {
     }
 

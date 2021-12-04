@@ -7,9 +7,9 @@ namespace Rector\Transform\ValueObject;
 final class StringToClassConstant
 {
     public function __construct(
-        private string $string,
-        private string $class,
-        private string $constant
+        private readonly string $string,
+        private readonly string $class,
+        private readonly string $constant
     ) {
     }
 

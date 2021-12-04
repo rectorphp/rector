@@ -9,9 +9,9 @@ use PHPStan\Type\Type;
 final class PropertyMetadata
 {
     public function __construct(
-        private string $name,
-        private ?Type $type,
-        private int $flags
+        private readonly string $name,
+        private readonly ?Type $type,
+        private readonly int $flags
     ) {
     }
 

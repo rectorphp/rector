@@ -36,15 +36,15 @@ use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     public function __construct(
-        private ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
-        private ReflectionProvider $reflectionProvider,
-        private NodeNameResolver $nodeNameResolver,
-        private SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private TypeFactory $typeFactory,
-        private StaticTypeMapper $staticTypeMapper,
-        private NodeTypeResolver $nodeTypeResolver,
-        private BetterNodeFinder $betterNodeFinder,
-        private ParamAnalyzer $paramAnalyzer
+        private readonly ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
+        private readonly ReflectionProvider $reflectionProvider,
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly TypeFactory $typeFactory,
+        private readonly StaticTypeMapper $staticTypeMapper,
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly ParamAnalyzer $paramAnalyzer
     ) {
     }
 

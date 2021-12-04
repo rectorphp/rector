@@ -14,8 +14,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ImplodeAnalyzer
 {
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private ArgsAnalyzer $argsAnalyzer
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 

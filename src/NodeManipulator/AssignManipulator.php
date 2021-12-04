@@ -40,11 +40,11 @@ final class AssignManipulator
     ];
 
     public function __construct(
-        private NodeNameResolver $nodeNameResolver,
-        private NodeComparator $nodeComparator,
-        private BetterNodeFinder $betterNodeFinder,
-        private PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private TypeChecker $typeChecker
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly NodeComparator $nodeComparator,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly TypeChecker $typeChecker
     ) {
     }
 
