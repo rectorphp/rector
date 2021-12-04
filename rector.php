@@ -14,7 +14,6 @@ use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
-use Rector\Php81\Rector\ClassMethod\NewInInitializerRector;
 use Rector\Php81\Rector\FuncCall\Php81ResourceReturnToObjectRector;
 use Rector\Php81\Rector\FunctionLike\IntersectionTypesRector;
 use Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector;
@@ -86,12 +85,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         MyCLabsClassToEnumRector::class,
         SpatieEnumClassToEnumRector::class,
 
-        // temporary skip all with enable ArraySpreadInsteadOfArrayMergeRector
+        // temporary skip non new in initialization rector
         ReturnNeverTypeRector::class,
         FinalizePublicClassConstantRector::class,
         MyCLabsMethodCallToEnumConstRector::class,
         Php81ResourceReturnToObjectRector::class,
-        NewInInitializerRector::class,
         IntersectionTypesRector::class,
 
         // test paths
