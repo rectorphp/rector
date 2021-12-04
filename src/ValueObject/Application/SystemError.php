@@ -7,7 +7,7 @@ namespace Rector\Core\ValueObject\Application;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\EasyParallel\Contract\SerializableInterface;
 
-final class RectorError implements SerializableInterface
+final class SystemError implements SerializableInterface
 {
     /**
      * @param class-string<RectorInterface>|null $rectorClass

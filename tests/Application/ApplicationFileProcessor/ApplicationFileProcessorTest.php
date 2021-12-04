@@ -33,9 +33,10 @@ final class ApplicationFileProcessorTest extends AbstractTestCase
         $this->assertCount(2, $files);
 
         $configuration = new Configuration(isDryRun: true);
-        $this->applicationFileProcessor->run($files, $configuration);
+        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration);
 
-        $processResult = $this->processResultFactory->create($files);
+        $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
+
         $this->assertCount(1, $processResult->getFileDiffs());
     }
 }

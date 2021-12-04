@@ -8,7 +8,11 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-    $services->set(TextFileProcessor::class);
+    $services->defaults()
+        ->public()
+        ->autowire()
+        ->autoconfigure();
 
+    $services->set(TextFileProcessor::class);
     $services->set(ChangeTextRector::class);
 };

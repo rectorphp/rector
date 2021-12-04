@@ -6,7 +6,7 @@ namespace Rector\ChangesReporting\ValueObjectFactory;
 
 use PHPStan\AnalysedCodeException;
 use Rector\Core\Error\ExceptionCorrector;
-use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Application\SystemError;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class ErrorFactory
@@ -19,8 +19,8 @@ final class ErrorFactory
     public function createAutoloadError(
         AnalysedCodeException $analysedCodeException,
         SmartFileInfo $smartFileInfo
-    ): RectorError {
+    ): SystemError {
         $message = $this->exceptionCorrector->getAutoloadExceptionMessageAndAddLocation($analysedCodeException);
-        return new RectorError($message, $smartFileInfo->getRelativeFilePathFromCwd());
+        return new SystemError($message, $smartFileInfo->getRelativeFilePathFromCwd());
     }
 }

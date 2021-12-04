@@ -15,8 +15,10 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -41,7 +43,10 @@ final class PhpFileProcessor implements FileProcessorInterface
     ) {
     }
 
-    public function process(File $file, Configuration $configuration): void
+    /**
+     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
+     */
+    public function process(File $file, Configuration $configuration): array
     {
         // 1. parse files to nodes
         $this->tryCatchWrapper($file, function (File $file): void {
@@ -83,6 +88,14 @@ final class PhpFileProcessor implements FileProcessorInterface
                 $this->printFile($file, $configuration);
             }, ApplicationPhase::PRINT());
         } while ($file->hasChanged());
+
+        // return json here
+        $fileDiff = $file->getFileDiff();
+
+        return [
+            Bridge::SYSTEM_ERRORS => $file->getErrors(),
+            Bridge::FILE_DIFFS => $fileDiff instanceof FileDiff ? [$fileDiff] : [],
+        ];
     }
 
     public function supports(File $file, Configuration $configuration): bool
@@ -136,12 +149,13 @@ final class PhpFileProcessor implements FileProcessorInterface
                 throw $throwable;
             }
 
-            $rectorError = new RectorError(
+            $systemError = new SystemError(
                 $throwable->getMessage(),
                 $file->getRelativeFilePath(),
                 $throwable->getLine()
             );
-            $file->addRectorError($rectorError);
+
+            $file->addRectorError($systemError);
         }
     }
 

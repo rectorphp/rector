@@ -41,6 +41,8 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludePaths:
+        - src/UnusedPrivateConstant.php
+
         # temp rule
         - src/Rector/ConfigureRector.php
 
@@ -251,8 +253,6 @@ parameters:
                 - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
                 - src/Validation/Collector/EmptyConfigurableRectorCollector.php
-                # namespacedName
-                - rules/CodingStyle/ClassNameImport/UsedImportsResolver.php
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
@@ -488,11 +488,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 10#'
 
         -
-            # name resolver php-parser feature
-            message: '#Function "property_exists\(\)" cannot be used/left in the code#'
-            path: src/Reflection/ReflectionResolver.php
-
-        -
             path: rules/Php74/Rector/Property/TypedPropertyRector.php
             message: '#Class cognitive complexity is 36, keep it under 30#'
 
@@ -596,9 +591,19 @@ parameters:
             path: src/Validation/RectorAssert.php
 
         -
-            message: '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and .{1}namespacedName.{1} will always evaluate to true#'
-            path: packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
-
-        -
             message: '#Instanceof between PhpParser\\Node\\Name and PhpParser\\Node\\Name will always evaluate to true#'
             path: packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
+
+        # parallel
+        -
+             message: '#Instead of array shape, use value object with specific types in constructor and getters#'
+             paths:
+                 - src/ValueObjectFactory/ProcessResultFactory.php
+                 - src/Application/*Processor.php
+                 - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
+
+        -
+            message: '#Method Rector\\Core\\Application\\ApplicationFileProcessor\:\:processFiles\(\) should return array\{system_errors\: array<Rector\\Core\\ValueObject\\Application\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} but returns array#'
+            path: src/Application/ApplicationFileProcessor.php
+
+        - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'

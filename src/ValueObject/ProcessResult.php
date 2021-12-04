@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject;
 
-use Rector\Core\ValueObject\Application\RectorError;
+use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Webmozart\Assert\Assert;
@@ -15,31 +15,18 @@ use Webmozart\Assert\Assert;
 final class ProcessResult
 {
     /**
-     * @var FileDiff[]
-     */
-    private array $fileDiffs = [];
-
-    /**
-     * @var RectorError[]
-     */
-    private array $errors = [];
-
-    /**
      * @param FileDiff[] $fileDiffs
-     * @param RectorError[] $errors
+     * @param SystemError[] $systemErrors
      */
     public function __construct(
-        array $fileDiffs,
-        array $errors,
+        private readonly array $systemErrors,
+        private readonly array $fileDiffs,
         private readonly int $addedFilesCount,
         private readonly int $removedFilesCount,
         private readonly int $removedNodeCount
     ) {
         Assert::allIsAOf($fileDiffs, FileDiff::class);
-        Assert::allIsAOf($errors, RectorError::class);
-
-        $this->fileDiffs = $fileDiffs;
-        $this->errors = $errors;
+        Assert::allIsAOf($systemErrors, SystemError::class);
     }
 
     /**
@@ -51,11 +38,11 @@ final class ProcessResult
     }
 
     /**
-     * @return RectorError[]
+     * @return SystemError[]
      */
     public function getErrors(): array
     {
-        return $this->errors;
+        return $this->systemErrors;
     }
 
     public function getAddedFilesCount(): int

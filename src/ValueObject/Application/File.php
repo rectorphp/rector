@@ -42,9 +42,9 @@ final class File
     private array $rectorWithLineChanges = [];
 
     /**
-     * @var RectorError[]
+     * @var SystemError[]
      */
-    private array $rectorErrors = [];
+    private array $systemErrors = [];
 
     public function __construct(
         private readonly SmartFileInfo $smartFileInfo,
@@ -169,22 +169,22 @@ final class File
         return $this->rectorWithLineChanges;
     }
 
-    public function addRectorError(RectorError $rectorError): void
+    public function addRectorError(SystemError $systemError): void
     {
-        $this->rectorErrors[] = $rectorError;
+        $this->systemErrors[] = $systemError;
     }
 
     public function hasErrors(): bool
     {
-        return $this->rectorErrors !== [];
+        return $this->systemErrors !== [];
     }
 
     /**
-     * @return RectorError[]
+     * @return SystemError[]
      */
     public function getErrors(): array
     {
-        return $this->rectorErrors;
+        return $this->systemErrors;
     }
 
     public function getRelativeFilePath(): string

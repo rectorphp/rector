@@ -11,7 +11,10 @@ interface FileProcessorInterface
 {
     public function supports(File $file, Configuration $configuration): bool;
 
-    public function process(File $file, Configuration $configuration): void;
+    /**
+     * @return mixed[]|void
+     */
+    public function process(File $file, Configuration $configuration);
 
     /**
      * @return string[]
