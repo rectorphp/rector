@@ -15,7 +15,6 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\FunctionLike;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -26,6 +25,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -51,7 +51,8 @@ final class RecastingRemovalRector extends AbstractRector
 
     public function __construct(
         private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
-        private readonly ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ExprAnalyzer $exprAnalyzer
     ) {
     }
 
@@ -116,7 +117,7 @@ CODE_SAMPLE
     private function shouldSkip(Expr $expr): bool
     {
         if (! $this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
-            return $this->isNonTypedFromParam($expr);
+            return $this->exprAnalyzer->isNonTypedFromParam($expr);
         }
 
         /** @var PropertyFetch|StaticPropertyFetch $expr */
@@ -134,24 +135,5 @@ CODE_SAMPLE
 
         $nativeType = $phpPropertyReflection->getNativeType();
         return $nativeType instanceof MixedType;
-    }
-
-    private function isNonTypedFromParam(Expr $expr): bool
-    {
-        $functionLike = $this->betterNodeFinder->findParentType($expr, FunctionLike::class);
-        if (! $functionLike instanceof FunctionLike) {
-            return false;
-        }
-
-        $params = $functionLike->getParams();
-        foreach ($params as $param) {
-            if (! $this->nodeComparator->areNodesEqual($param->var, $expr)) {
-                continue;
-            }
-
-            return $param->type === null;
-        }
-
-        return false;
     }
 }
