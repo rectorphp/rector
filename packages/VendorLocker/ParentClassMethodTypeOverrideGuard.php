@@ -7,7 +7,10 @@ namespace Rector\VendorLocker;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -33,6 +36,11 @@ final class ParentClassMethodTypeOverrideGuard
         // nothing to check
         if (! $parentClassMethodReflection instanceof MethodReflection) {
             return true;
+        }
+
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
+        if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs && ! $parametersAcceptor->getNativeReturnType() instanceof MixedType) {
+            return false;
         }
 
         $classReflection = $parentClassMethodReflection->getDeclaringClass();
@@ -95,11 +103,8 @@ final class ParentClassMethodTypeOverrideGuard
             return null;
         }
 
-        foreach ($classReflection->getAncestors() as $parentClassReflection) {
-            if ($classReflection === $parentClassReflection) {
-                continue;
-            }
-
+        $parentClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        foreach ($parentClassReflections as $parentClassReflection) {
             if (! $parentClassReflection->hasNativeMethod($methodName)) {
                 continue;
             }
