@@ -90,22 +90,27 @@ final class PhpSpecPromisesToPHPUnitAssertRector extends \Rector\PhpSpecToPHPUni
      */
     private $testedObjectPropertyFetch;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\MatchersManipulator
      */
     private $matchersManipulator;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming
      */
     private $phpSpecRenaming;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\NodeFactory\AssertMethodCallFactory
      */
     private $assertMethodCallFactory;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\NodeFactory\BeConstructedWithAssignFactory
      */
     private $beConstructedWithAssignFactory;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\NodeFactory\DuringMethodCallFactory
      */
     private $duringMethodCallFactory;

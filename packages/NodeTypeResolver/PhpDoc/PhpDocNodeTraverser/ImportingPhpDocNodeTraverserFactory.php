@@ -8,6 +8,7 @@ use RectorPrefix20211204\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class ImportingPhpDocNodeTraverserFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor
      */
     private $nameImportingPhpDocNodeVisitor;

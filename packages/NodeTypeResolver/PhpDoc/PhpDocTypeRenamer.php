@@ -11,10 +11,12 @@ use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 final class PhpDocTypeRenamer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\UnderscorePhpDocNodeTraverserFactory
      */
     private $underscorePhpDocNodeTraverserFactory;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor
      */
     private $underscoreRenamePhpDocNodeVisitor;

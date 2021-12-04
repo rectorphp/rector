@@ -17,9 +17,11 @@ final class RectorWithLineChange implements \RectorPrefix20211204\Symplify\EasyP
     private const KEY_LINE = 'line';
     /**
      * @var class-string<RectorInterface>
+     * @readonly
      */
     private $rectorClass;
     /**
+     * @readonly
      * @var int
      */
     private $line;

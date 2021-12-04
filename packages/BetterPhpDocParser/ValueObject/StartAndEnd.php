@@ -7,10 +7,12 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class StartAndEnd
 {
     /**
+     * @readonly
      * @var int
      */
     private $start;
     /**
+     * @readonly
      * @var int
      */
     private $end;

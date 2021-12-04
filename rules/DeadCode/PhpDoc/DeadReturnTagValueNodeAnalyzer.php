@@ -17,14 +17,17 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadReturnTagValueNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
     private $genericTypeNodeAnalyzer;

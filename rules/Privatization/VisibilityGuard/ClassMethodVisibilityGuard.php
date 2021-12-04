@@ -9,6 +9,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodVisibilityGuard
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

@@ -16,10 +16,12 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class AddMockPropertiesRector extends \Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\PhpSpecMockCollector
      */
     private $phpSpecMockCollector;

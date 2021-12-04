@@ -20,22 +20,27 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class AddedFileWithNodesFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Autodiscovery\Configuration\CategoryNamespaceProvider
      */
     private $categoryNamespaceProvider;
     /**
+     * @readonly
      * @var \Rector\PSR4\FileRelocationResolver
      */
     private $fileRelocationResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
+     * @readonly
      * @var \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer
      */
     private $fileInfoDeletionAnalyzer;

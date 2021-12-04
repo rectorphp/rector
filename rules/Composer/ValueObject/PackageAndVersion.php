@@ -7,10 +7,12 @@ use Rector\Composer\Contract\VersionAwareInterface;
 final class PackageAndVersion implements \Rector\Composer\Contract\VersionAwareInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $packageName;
     /**
+     * @readonly
      * @var string
      */
     private $version;

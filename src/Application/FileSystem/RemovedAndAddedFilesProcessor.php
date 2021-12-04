@@ -13,18 +13,22 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class RemovedAndAddedFilesProcessor
 {
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter
      */
     private $nodesWithFileDestinationPrinter;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

@@ -21,14 +21,17 @@ final class ProcessResult
      */
     private $errors = [];
     /**
+     * @readonly
      * @var int
      */
     private $addedFilesCount;
     /**
+     * @readonly
      * @var int
      */
     private $removedFilesCount;
     /**
+     * @readonly
      * @var int
      */
     private $removedNodeCount;

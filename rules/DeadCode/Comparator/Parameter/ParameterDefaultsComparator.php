@@ -11,10 +11,12 @@ use Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver;
 final class ParameterDefaultsComparator
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver
      */
     private $defaultParameterValueResolver;

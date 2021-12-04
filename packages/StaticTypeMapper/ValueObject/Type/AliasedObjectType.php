@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class AliasedObjectType extends \PHPStan\Type\ObjectType
 {
     /**
+     * @readonly
      * @var string
      */
     private $fullyQualifiedClass;

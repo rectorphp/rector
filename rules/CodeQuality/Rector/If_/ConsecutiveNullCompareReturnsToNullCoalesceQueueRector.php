@@ -29,6 +29,7 @@ final class ConsecutiveNullCompareReturnsToNullCoalesceQueueRector extends \Rect
      */
     private $coalescingNodes = [];
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;

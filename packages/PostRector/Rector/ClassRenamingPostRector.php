@@ -11,10 +11,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
+     * @readonly
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;

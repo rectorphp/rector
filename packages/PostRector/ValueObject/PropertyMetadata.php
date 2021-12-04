@@ -7,14 +7,17 @@ use PHPStan\Type\Type;
 final class PropertyMetadata
 {
     /**
+     * @readonly
      * @var string
      */
     private $name;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type|null
      */
     private $type;
     /**
+     * @readonly
      * @var int
      */
     private $flags;

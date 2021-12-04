@@ -17,10 +17,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class CountManipulator
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

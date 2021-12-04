@@ -26,10 +26,12 @@ final class MockeryCreateMockToProphizeRector extends \Rector\Core\Rector\Abstra
      */
     private $mockVariableTypesByNames = [];
     /**
+     * @readonly
      * @var \Rector\MockeryToProphecy\Collector\MockVariableCollector
      */
     private $mockVariableCollector;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

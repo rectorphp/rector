@@ -7,14 +7,17 @@ use PHPStan\Type\ObjectType;
 final class CallableInMethodCallToVariable
 {
     /**
+     * @readonly
      * @var string
      */
     private $classType;
     /**
+     * @readonly
      * @var string
      */
     private $methodName;
     /**
+     * @readonly
      * @var int
      */
     private $argumentPosition;

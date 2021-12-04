@@ -9,10 +9,12 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class MatchTypePropertyRenamer
 {
     /**
+     * @readonly
      * @var \Rector\Naming\PropertyRenamer\PropertyRenamer
      */
     private $propertyRenamer;
     /**
+     * @readonly
      * @var \Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard
      */
     private $matchPropertyTypeConflictingNameGuard;

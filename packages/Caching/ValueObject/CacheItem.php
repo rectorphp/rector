@@ -10,6 +10,7 @@ namespace Rector\Caching\ValueObject;
 final class CacheItem
 {
     /**
+     * @readonly
      * @var string
      */
     private $variableKey;

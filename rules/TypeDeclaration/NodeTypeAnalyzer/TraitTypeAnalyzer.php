@@ -10,10 +10,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class TraitTypeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

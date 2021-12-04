@@ -20,22 +20,27 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends \RectorPrefix20211204\Symfony\Component\Console\Command\Command
 {
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
      * @var \Rector\Core\Contract\Template\TemplateResolverInterface[]
+     * @readonly
      */
     private $templateResolvers;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

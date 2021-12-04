@@ -33,14 +33,17 @@ final class MethodCallToMethodCallRector extends \Rector\Core\Rector\AbstractRec
      */
     private $methodCallsToMethodsCalls = [];
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

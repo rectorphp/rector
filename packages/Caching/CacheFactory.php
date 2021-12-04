@@ -11,10 +11,12 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class CacheFactory
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;

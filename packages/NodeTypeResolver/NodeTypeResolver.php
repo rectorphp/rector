@@ -51,38 +51,47 @@ final class NodeTypeResolver
      */
     private $nodeTypeResolvers = [];
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector
      */
     private $genericClassStringTypeCorrector;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector
      */
     private $hasOffsetTypeCorrector;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector
      */
     private $accessoryNonEmptyStringTypeCorrector;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver
      */
     private $identifierTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

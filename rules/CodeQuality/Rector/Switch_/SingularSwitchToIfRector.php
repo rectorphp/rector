@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SingularSwitchToIfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
     private $switchManipulator;

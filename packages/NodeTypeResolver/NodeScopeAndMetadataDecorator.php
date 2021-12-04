@@ -15,26 +15,32 @@ use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 final class NodeScopeAndMetadataDecorator
 {
     /**
+     * @readonly
      * @var \PhpParser\NodeVisitor\CloningVisitor
      */
     private $cloningVisitor;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeVisitor\NamespaceNodeVisitor
      */
     private $namespaceNodeVisitor;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeVisitor\StatementNodeVisitor
      */
     private $statementNodeVisitor;
     /**
+     * @readonly
      * @var \PhpParser\NodeVisitor\NodeConnectingVisitor
      */
     private $nodeConnectingVisitor;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor
      */
     private $functionLikeParamArgPositionNodeVisitor;

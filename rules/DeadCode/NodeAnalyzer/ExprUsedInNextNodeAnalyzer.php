@@ -15,10 +15,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprUsedInNextNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;

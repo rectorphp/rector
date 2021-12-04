@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class DefaultValuePropertyTypeInferer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

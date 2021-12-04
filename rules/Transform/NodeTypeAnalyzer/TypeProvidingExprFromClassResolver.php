@@ -28,18 +28,22 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class TypeProvidingExprFromClassResolver
 {
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

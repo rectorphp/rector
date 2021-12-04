@@ -21,10 +21,12 @@ final class VariableToConstantGuard
      */
     private $referencePositionsByFunctionName = [];
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

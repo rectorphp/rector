@@ -31,6 +31,7 @@ use RectorPrefix20211204\Webmozart\Assert\Assert;
 final class DowngradeArgumentUnpackingRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DowngradePhp56\NodeManipulator\ArgManipulator
      */
     private $argManipulator;

@@ -22,10 +22,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class CallerParamMatcher
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

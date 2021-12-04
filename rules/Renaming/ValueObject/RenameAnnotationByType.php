@@ -9,14 +9,17 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 final class RenameAnnotationByType implements \Rector\Renaming\Contract\RenameAnnotationInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $oldAnnotation;
     /**
+     * @readonly
      * @var string
      */
     private $newAnnotation;

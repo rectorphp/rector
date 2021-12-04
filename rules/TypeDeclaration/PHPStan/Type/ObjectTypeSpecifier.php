@@ -29,6 +29,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ObjectTypeSpecifier
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

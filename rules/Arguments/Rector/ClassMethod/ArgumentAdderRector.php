@@ -44,10 +44,12 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $haveArgumentsChanged = \false;
     /**
+     * @readonly
      * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
     private $argumentAddingScope;
     /**
+     * @readonly
      * @var \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector
      */
     private $changedArgumentsDetector;

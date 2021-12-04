@@ -16,6 +16,7 @@ final class PhpParserNodeMapper
 {
     /**
      * @var \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface[]
+     * @readonly
      */
     private $phpParserNodeMappers;
     /**

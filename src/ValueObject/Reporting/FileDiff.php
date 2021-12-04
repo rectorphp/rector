@@ -35,19 +35,23 @@ final class FileDiff implements \RectorPrefix20211204\Symplify\EasyParallel\Cont
      */
     private const KEY_RECTORS_WITH_LINE_CHANGES = 'rectors_with_line_changes';
     /**
+     * @readonly
      * @var string
      */
     private $relativeFilePath;
     /**
+     * @readonly
      * @var string
      */
     private $diff;
     /**
+     * @readonly
      * @var string
      */
     private $diffConsoleFormatted;
     /**
      * @var \Rector\ChangesReporting\ValueObject\RectorWithLineChange[]
+     * @readonly
      */
     private $rectorsWithLineChanges = [];
     /**

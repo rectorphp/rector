@@ -16,10 +16,12 @@ final class FileInfoDeletionAnalyzer
      */
     private const TESTING_PREFIX_REGEX = '#input_(.*?)_#';
     /**
+     * @readonly
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

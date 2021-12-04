@@ -19,6 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CurlyToSquareBracketArrayStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php74\Tokenizer\FollowedByCurlyBracketAnalyzer
      */
     private $followedByCurlyBracketAnalyzer;

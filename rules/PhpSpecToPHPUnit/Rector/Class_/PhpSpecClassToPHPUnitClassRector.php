@@ -33,18 +33,22 @@ final class PhpSpecClassToPHPUnitClassRector extends \Rector\PhpSpecToPHPUnit\Re
      */
     private const ALREADY_RENAMED_TO_TEST = 'already_renamed_to_test';
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\LetManipulator
      */
     private $letManipulator;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming
      */
     private $phpSpecRenaming;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\SetUpClassMethodFactory
      */
     private $setUpClassMethodFactory;

@@ -28,6 +28,7 @@ final class RemoveParentRector extends \Rector\Core\Rector\AbstractRector implem
      */
     private $parentClassesToRemove = [];
     /**
+     * @readonly
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;

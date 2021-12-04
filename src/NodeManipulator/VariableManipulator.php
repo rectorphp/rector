@@ -23,30 +23,37 @@ use RectorPrefix20211204\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class VariableManipulator
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\ReadWrite\Guard\VariableToConstantGuard
      */
     private $variableToConstantGuard;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

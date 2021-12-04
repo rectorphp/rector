@@ -30,6 +30,7 @@ final class AddReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractR
      */
     private $methodReturnTypes = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;

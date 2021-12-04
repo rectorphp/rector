@@ -35,10 +35,12 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 final class LivingCodeManipulator
 {
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

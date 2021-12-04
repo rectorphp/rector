@@ -23,10 +23,12 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
      */
     private const ON_LINE_REGEX = '# on line #';
     /**
+     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $outputStyle;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;

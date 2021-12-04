@@ -12,6 +12,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class MethodTypeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

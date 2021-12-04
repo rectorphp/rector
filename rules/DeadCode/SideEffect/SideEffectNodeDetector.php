@@ -33,10 +33,12 @@ final class SideEffectNodeDetector
      */
     private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;

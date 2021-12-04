@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassMethodReturnVendorLockResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

@@ -16,14 +16,17 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class TestingParser
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;

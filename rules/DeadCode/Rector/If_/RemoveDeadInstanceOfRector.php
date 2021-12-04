@@ -32,22 +32,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadInstanceOfRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;

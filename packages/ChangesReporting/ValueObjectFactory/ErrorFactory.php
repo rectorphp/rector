@@ -10,6 +10,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ErrorFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\Error\ExceptionCorrector
      */
     private $exceptionCorrector;

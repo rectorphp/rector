@@ -13,6 +13,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class MethodParameterTypeResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

@@ -29,6 +29,7 @@ final class RectifiedAnalyzer
      */
     private $previousFileWithNodes = [];
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

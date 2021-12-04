@@ -37,22 +37,27 @@ final class ParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRecto
      */
     private $hasChanged = \false;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\VendorLockResolver
      */
     private $vendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer
      */
     private $traitTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;

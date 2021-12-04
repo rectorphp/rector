@@ -7,10 +7,12 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 final class DoctrineTagAndAnnotationToAttribute
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     private $doctrineAnnotationTagValueNode;
     /**
+     * @readonly
      * @var \Rector\Php80\ValueObject\AnnotationToAttribute
      */
     private $annotationToAttribute;

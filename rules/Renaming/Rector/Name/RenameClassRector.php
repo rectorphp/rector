@@ -31,10 +31,12 @@ final class RenameClassRector extends \Rector\Core\Rector\AbstractRector impleme
      */
     public const OLD_TO_NEW_CLASSES = 'old_to_new_classes';
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
+     * @readonly
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;

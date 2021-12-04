@@ -30,14 +30,17 @@ final class DesiredClassTypeToDynamicRector extends \Rector\Core\Rector\Abstract
      */
     private $staticObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer
      */
     private $staticCallPresenceAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

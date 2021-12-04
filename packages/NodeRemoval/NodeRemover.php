@@ -19,10 +19,12 @@ use Rector\PostRector\Collector\NodesToRemoveCollector;
 final class NodeRemover
 {
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;

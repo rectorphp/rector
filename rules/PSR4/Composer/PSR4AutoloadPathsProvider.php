@@ -12,6 +12,7 @@ final class PSR4AutoloadPathsProvider
      */
     private $cachedComposerJsonPSR4AutoloadPaths = [];
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\Json\JsonFileSystem
      */
     private $jsonFileSystem;

@@ -73,38 +73,47 @@ final class NodeFactory
      */
     private const THIS = 'this';
     /**
+     * @readonly
      * @var \PhpParser\BuilderFactory
      */
     private $builderFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $reflectionAstResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;

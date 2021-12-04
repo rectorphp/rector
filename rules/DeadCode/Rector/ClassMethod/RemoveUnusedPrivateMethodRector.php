@@ -22,6 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer
      */
     private $isClassMethodUsedAnalyzer;

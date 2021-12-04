@@ -11,6 +11,7 @@ final class ClassConstantsResolver
      */
     private $cachedConstantNamesToValues = [];
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

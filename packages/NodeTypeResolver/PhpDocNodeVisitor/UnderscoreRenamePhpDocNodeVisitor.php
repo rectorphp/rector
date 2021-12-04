@@ -22,6 +22,7 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20211204\Symp
      */
     private $currentPhpParserNode;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

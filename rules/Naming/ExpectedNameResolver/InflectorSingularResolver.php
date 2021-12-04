@@ -34,6 +34,7 @@ final class InflectorSingularResolver
      */
     private const CAMELCASE = 'camelcase';
     /**
+     * @readonly
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;

@@ -7,10 +7,12 @@ use Rector\DeadCode\Contract\ConditionInterface;
 final class BinaryToVersionCompareCondition implements \Rector\DeadCode\Contract\ConditionInterface
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\ValueObject\VersionCompareCondition
      */
     private $versionCompareCondition;
     /**
+     * @readonly
      * @var string
      */
     private $binaryClass;

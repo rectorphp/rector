@@ -39,6 +39,7 @@ final class NewLine
      */
     private const VALID_NEWLINE_REGEX = '#^(?>\\r\\n|\\n|\\r)$#';
     /**
+     * @readonly
      * @var string
      */
     private $string;

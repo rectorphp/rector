@@ -11,10 +11,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyAssignMatcher
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;

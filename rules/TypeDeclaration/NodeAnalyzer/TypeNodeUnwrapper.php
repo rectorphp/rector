@@ -12,6 +12,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 final class TypeNodeUnwrapper
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

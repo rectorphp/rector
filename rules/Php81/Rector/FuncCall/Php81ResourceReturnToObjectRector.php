@@ -48,6 +48,7 @@ final class Php81ResourceReturnToObjectRector extends \Rector\Core\Rector\Abstra
         'pg_lo_open' => 'PgSql\\Lob',
     ];
     /**
+     * @readonly
      * @var \Rector\Php80\NodeManipulator\ResourceReturnToObject
      */
     private $resourceReturnToObject;

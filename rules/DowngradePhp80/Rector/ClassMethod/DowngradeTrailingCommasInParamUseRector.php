@@ -25,6 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTrailingCommasInParamUseRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
     private $followedByCommaAnalyzer;

@@ -79,6 +79,7 @@ final class Php8ResourceReturnToObjectRector extends \Rector\Core\Rector\Abstrac
         'deflate_init' => 'DeflateContext',
     ];
     /**
+     * @readonly
      * @var \Rector\Php80\NodeManipulator\ResourceReturnToObject
      */
     private $resourceReturnToObject;

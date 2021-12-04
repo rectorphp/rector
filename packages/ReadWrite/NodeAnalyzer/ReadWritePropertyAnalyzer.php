@@ -22,18 +22,22 @@ use Rector\ReadWrite\Guard\VariableToConstantGuard;
 final class ReadWritePropertyAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\ReadWrite\Guard\VariableToConstantGuard
      */
     private $variableToConstantGuard;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     /**
+     * @readonly
      * @var \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer
      */
     private $readExprAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

@@ -16,10 +16,12 @@ use Rector\Php71\ValueObject\TwoNodeMatch;
 final class IsArrayAndDualCheckToAble
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

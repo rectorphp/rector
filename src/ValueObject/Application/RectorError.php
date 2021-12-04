@@ -8,19 +8,23 @@ use RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface;
 final class RectorError implements \RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $message;
     /**
+     * @readonly
      * @var string
      */
     private $relativeFilePath;
     /**
+     * @readonly
      * @var int|null
      */
     private $line;
     /**
      * @var class-string<\Rector\Core\Contract\Rector\RectorInterface>|null
+     * @readonly
      */
     private $rectorClass;
     /**

@@ -25,30 +25,37 @@ use Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer;
 final class ComplexNodeRemover
 {
     /**
+     * @readonly
      * @var \Rector\NodeRemoval\AssignRemover
      */
     private $assignRemover;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\Removing\NodeAnalyzer\ForbiddenPropertyRemovalAnalyzer
      */
     private $forbiddenPropertyRemovalAnalyzer;

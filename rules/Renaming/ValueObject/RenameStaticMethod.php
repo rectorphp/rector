@@ -7,18 +7,22 @@ use PHPStan\Type\ObjectType;
 final class RenameStaticMethod
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldClass;
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
+     * @readonly
      * @var string
      */
     private $newClass;
     /**
+     * @readonly
      * @var string
      */
     private $newMethod;

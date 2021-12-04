@@ -15,6 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveFinalFromEntityRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

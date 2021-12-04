@@ -22,10 +22,12 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20211204\Symplify\
      */
     private $oldToNewTypes = [];
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;

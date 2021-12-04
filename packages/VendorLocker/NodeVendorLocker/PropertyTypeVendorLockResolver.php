@@ -14,10 +14,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyTypeVendorLockResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;

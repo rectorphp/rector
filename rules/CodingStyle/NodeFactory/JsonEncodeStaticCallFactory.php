@@ -17,6 +17,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class JsonEncodeStaticCallFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

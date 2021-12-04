@@ -27,6 +27,7 @@ final class ChangeConstantVisibilityRector extends \Rector\Core\Rector\AbstractR
      */
     private $classConstantVisibilityChanges = [];
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

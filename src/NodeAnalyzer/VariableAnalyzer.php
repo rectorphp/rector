@@ -13,10 +13,12 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class VariableAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

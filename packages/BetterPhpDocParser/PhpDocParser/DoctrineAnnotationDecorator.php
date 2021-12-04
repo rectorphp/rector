@@ -40,22 +40,27 @@ final class DoctrineAnnotationDecorator
      */
     private const NESTED_ANNOTATION_END_REGEX = '#(\\s+)?\\}\\)(\\s+)?#';
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser
      */
     private $staticDoctrineAnnotationParser;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
     private $tokenIteratorFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;

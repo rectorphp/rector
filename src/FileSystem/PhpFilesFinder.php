@@ -17,10 +17,12 @@ final class PhpFilesFinder
         '.tpl',
     ];
     /**
+     * @readonly
      * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
     /**
+     * @readonly
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;

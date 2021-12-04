@@ -29,18 +29,22 @@ final class AttributeCompatibleAnnotationRector extends \Rector\Core\Rector\Abst
      */
     private const ATTRIBUTE = 'Attribute';
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Rector\Compatibility\NodeAnalyzer\RequiredAnnotationPropertyAnalyzer
      */
     private $requiredAnnotationPropertyAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Compatibility\NodeFactory\ConstructorClassMethodFactory
      */
     private $constructorClassMethodFactory;

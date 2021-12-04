@@ -30,10 +30,12 @@ final class DesiredStaticPropertyFetchTypeToDynamicRector extends \Rector\Core\R
      */
     private $staticObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

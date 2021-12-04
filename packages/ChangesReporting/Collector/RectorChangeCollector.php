@@ -12,10 +12,12 @@ use Rector\Core\ValueObject\Application\File;
 final class RectorChangeCollector
 {
     /**
+     * @readonly
      * @var \Rector\Core\Logging\CurrentRectorProvider
      */
     private $currentRectorProvider;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;

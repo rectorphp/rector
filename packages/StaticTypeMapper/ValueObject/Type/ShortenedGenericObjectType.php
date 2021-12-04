@@ -10,6 +10,7 @@ final class ShortenedGenericObjectType extends \PHPStan\Type\Generic\GenericObje
 {
     /**
      * @var class-string
+     * @readonly
      */
     private $fullyQualifiedName;
     /**

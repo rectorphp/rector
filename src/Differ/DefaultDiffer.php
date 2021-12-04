@@ -8,6 +8,7 @@ use RectorPrefix20211204\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBu
 final class DefaultDiffer
 {
     /**
+     * @readonly
      * @var \SebastianBergmann\Diff\Differ
      */
     private $differ;

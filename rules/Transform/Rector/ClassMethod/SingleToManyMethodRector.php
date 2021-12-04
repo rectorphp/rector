@@ -32,6 +32,7 @@ final class SingleToManyMethodRector extends \Rector\Core\Rector\AbstractRector 
      */
     private $singleToManyMethods = [];
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;

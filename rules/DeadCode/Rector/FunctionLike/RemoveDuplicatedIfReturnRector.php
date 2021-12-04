@@ -30,14 +30,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDuplicatedIfReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector
      */
     private $modifiedVariableNamesCollector;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;

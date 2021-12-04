@@ -21,14 +21,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface
      */
     private $psr4AutoloadNamespaceMatcher;
     /**
+     * @readonly
      * @var \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer
      */
     private $fullyQualifyStmtsAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
      */
     private $inlineHTMLAnalyzer;

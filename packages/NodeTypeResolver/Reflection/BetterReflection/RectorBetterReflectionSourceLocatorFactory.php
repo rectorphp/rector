@@ -10,10 +10,12 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\Intermedia
 final class RectorBetterReflectionSourceLocatorFactory
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory
      */
     private $betterReflectionSourceLocatorFactory;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
      */
     private $intermediateSourceLocator;

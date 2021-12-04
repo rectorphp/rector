@@ -10,10 +10,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeComparator
 {
     /**
+     * @readonly
      * @var \Rector\Comments\CommentRemover
      */
     private $commentRemover;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

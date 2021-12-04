@@ -22,14 +22,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodParameterRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeManipulator\VariadicFunctionLikeDetector
      */
     private $variadicFunctionLikeDetector;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeCollector\UnusedParameterResolver
      */
     private $unusedParameterResolver;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;

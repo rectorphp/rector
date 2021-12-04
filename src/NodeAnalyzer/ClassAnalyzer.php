@@ -17,6 +17,7 @@ final class ClassAnalyzer
      */
     private const ANONYMOUS_CLASS_REGEX = '#AnonymousClass\\w+$#';
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

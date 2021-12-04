@@ -10,10 +10,12 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class PropertyRenamer
 {
     /**
+     * @readonly
      * @var \Rector\Naming\RenameGuard\PropertyRenameGuard
      */
     private $propertyRenameGuard;
     /**
+     * @readonly
      * @var \Rector\Naming\PropertyRenamer\PropertyFetchRenamer
      */
     private $propertyFetchRenamer;

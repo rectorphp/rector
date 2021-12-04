@@ -27,6 +27,7 @@ final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRect
      */
     private const STRINGABLE = 'Stringable';
     /**
+     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;

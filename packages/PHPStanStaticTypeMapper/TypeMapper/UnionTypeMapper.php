@@ -45,26 +45,32 @@ final class UnionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\
      */
     private $phpStanStaticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer
      */
     private $boolUnionTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower
      */
     private $unionTypeCommonTypeNarrower;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

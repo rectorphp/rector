@@ -19,10 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateClassConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassConstManipulator
      */
     private $classConstManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\EnumAnalyzer
      */
     private $enumAnalyzer;

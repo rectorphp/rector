@@ -9,6 +9,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CreatedByRuleNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
+     * @readonly
      * @var string
      */
     private $rectorClass;

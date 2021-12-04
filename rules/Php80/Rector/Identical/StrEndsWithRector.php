@@ -30,10 +30,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StrEndsWithRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer
      */
     private $binaryOpAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

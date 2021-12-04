@@ -74,10 +74,12 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
      */
     private $tabOrSpaceIndentCharacter = ' ';
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector
      */
     private $indentCharacterDetector;
     /**
+     * @readonly
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;

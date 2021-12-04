@@ -19,6 +19,7 @@ final class UseImportNameMatcher
      */
     private const SHORT_NAME_REGEX = '#^%s(\\\\[\\w]+)?$#i';
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

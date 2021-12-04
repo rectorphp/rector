@@ -47,22 +47,27 @@ final class ManualJsonStringToJsonEncodeArrayRector extends \Rector\Core\Rector\
      */
     private const JSON_DATA = 'jsonData';
     /**
+     * @readonly
      * @var \Rector\CodingStyle\Node\ConcatJoiner
      */
     private $concatJoiner;
     /**
+     * @readonly
      * @var \Rector\CodingStyle\Node\ConcatManipulator
      */
     private $concatManipulator;
     /**
+     * @readonly
      * @var \Rector\CodingStyle\NodeFactory\JsonEncodeStaticCallFactory
      */
     private $jsonEncodeStaticCallFactory;
     /**
+     * @readonly
      * @var \Rector\CodingStyle\NodeFactory\JsonArrayFactory
      */
     private $jsonArrayFactory;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

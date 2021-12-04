@@ -6,11 +6,13 @@ namespace Rector\Arguments\ValueObject;
 final class SwapFuncCallArguments
 {
     /**
+     * @readonly
      * @var string
      */
     private $function;
     /**
      * @var int[]
+     * @readonly
      */
     private $order;
     /**

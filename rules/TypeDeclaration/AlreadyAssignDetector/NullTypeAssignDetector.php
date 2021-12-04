@@ -19,22 +19,27 @@ use RectorPrefix20211204\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class NullTypeAssignDetector
 {
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ScopeNestingComparator
      */
     private $scopeNestingComparator;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher
      */
     private $propertyAssignMatcher;
     /**
+     * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;

@@ -22,10 +22,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfReturnBoolRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeManipulator\ExprBoolCaster
      */
     private $exprBoolCaster;

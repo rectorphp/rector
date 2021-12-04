@@ -20,10 +20,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsistentImplodeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

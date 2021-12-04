@@ -27,22 +27,27 @@ final class FilesFinder
      */
     private const ENDS_WITH_ASTERISK_REGEX = '#^[^*](.*?)\\*$#';
     /**
+     * @readonly
      * @var \Rector\Core\FileSystem\FilesystemTweaker
      */
     private $filesystemTweaker;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\Finder\FinderSanitizer
      */
     private $finderSanitizer;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\FileSystemFilter
      */
     private $fileSystemFilter;
     /**
+     * @readonly
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
     /**
+     * @readonly
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;

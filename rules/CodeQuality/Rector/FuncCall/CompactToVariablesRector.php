@@ -27,14 +27,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CompactToVariablesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\CodeQuality\CompactConverter
      */
     private $compactConverter;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ArrayItemsAnalyzer
      */
     private $arrayItemsAnalyzer;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ArrayCompacter
      */
     private $arrayCompacter;

@@ -45,6 +45,7 @@ final class PseudoNamespaceToNamespaceRector extends \Rector\Core\Rector\Abstrac
      */
     private $newNamespace;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer
      */
     private $phpDocTypeRenamer;

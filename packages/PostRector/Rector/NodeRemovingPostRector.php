@@ -16,14 +16,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NodeRemovingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
     private $nodesToRemoveCollector;

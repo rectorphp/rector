@@ -8,14 +8,17 @@ use RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements \RectorPrefix20211204\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
+     * @readonly
      * @var int
      */
     private $line;
     /**
+     * @readonly
      * @var string
      */
     private $message;
     /**
+     * @readonly
      * @var string
      */
     private $relativeFilePath;

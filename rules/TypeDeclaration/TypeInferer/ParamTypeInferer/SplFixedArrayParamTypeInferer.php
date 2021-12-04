@@ -12,10 +12,12 @@ use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
 final class SplFixedArrayParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower
      */
     private $splArrayFixedTypeNarrower;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

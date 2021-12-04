@@ -14,10 +14,12 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ConditionSearcher
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

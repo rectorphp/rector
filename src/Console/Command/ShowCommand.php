@@ -13,11 +13,13 @@ use RectorPrefix20211204\Symfony\Component\Console\Output\OutputInterface;
 final class ShowCommand extends \RectorPrefix20211204\Symfony\Component\Console\Command\Command
 {
     /**
+     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $outputStyle;
     /**
      * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @readonly
      */
     private $rectors;
     /**

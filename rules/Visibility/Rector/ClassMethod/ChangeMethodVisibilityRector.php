@@ -30,10 +30,12 @@ final class ChangeMethodVisibilityRector extends \Rector\Core\Rector\AbstractRec
      */
     private $methodVisibilities = [];
     /**
+     * @readonly
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

@@ -9,6 +9,7 @@ use Stringable;
 final class BracketsAwareUnionTypeNode extends \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode
 {
     /**
+     * @readonly
      * @var bool
      */
     private $isWrappedInBrackets = \false;

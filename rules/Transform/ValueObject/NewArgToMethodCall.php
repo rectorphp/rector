@@ -8,11 +8,13 @@ use Rector\Core\Validation\RectorAssert;
 final class NewArgToMethodCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     private $value;
     /**
+     * @readonly
      * @var string
      */
     private $methodCall;

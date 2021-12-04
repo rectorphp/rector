@@ -23,6 +23,7 @@ final class UseNodesToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     private $useImportTypesInFilePath = [];
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;

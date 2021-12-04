@@ -12,6 +12,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class CallTypeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

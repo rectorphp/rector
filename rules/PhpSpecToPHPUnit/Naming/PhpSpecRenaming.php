@@ -23,14 +23,17 @@ final class PhpSpecRenaming
      */
     private const SPEC = 'Spec';
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Strings\StringFormatConverter
      */
     private $stringFormatConverter;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

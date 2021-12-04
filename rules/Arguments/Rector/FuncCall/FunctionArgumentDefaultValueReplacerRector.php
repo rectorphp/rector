@@ -29,6 +29,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends \Rector\Core\Rect
      */
     private $replacedArguments = [];
     /**
+     * @readonly
      * @var \Rector\Arguments\ArgumentDefaultValueReplacer
      */
     private $argumentDefaultValueReplacer;

@@ -19,6 +19,7 @@ use RectorPrefix20211204\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
 {
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;

@@ -27,6 +27,7 @@ final class DesiredStaticCallTypeToDynamicRector extends \Rector\Core\Rector\Abs
      */
     private $staticObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

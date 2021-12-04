@@ -20,14 +20,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchNewTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
     private $breakingVariableRenameGuard;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
     private $expectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;

@@ -14,18 +14,22 @@ use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
 final class NodeUsageFinder
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder
      */
     private $scopeAwareNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

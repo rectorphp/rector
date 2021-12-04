@@ -18,13 +18,16 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
     private $areNodeVisitorsPrepared = \false;
     /**
      * @var \Rector\Core\Contract\Rector\PhpRectorInterface[]
+     * @readonly
      */
     private $phpRectors;
     /**
+     * @readonly
      * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
     /**
+     * @readonly
      * @var \Rector\VersionBonding\PhpVersionedFilter
      */
     private $phpVersionedFilter;

@@ -12,22 +12,27 @@ use Rector\Naming\Contract\RenameParamValueObjectInterface;
 final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjectInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $currentName;
     /**
+     * @readonly
      * @var string
      */
     private $expectedName;
     /**
+     * @readonly
      * @var \PhpParser\Node\Param
      */
     private $param;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
     private $functionLike;

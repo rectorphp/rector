@@ -45,18 +45,22 @@ final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
      */
     private $iteratedExpr;
     /**
+     * @readonly
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer
      */
     private $forAnalyzer;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeFactory\ForeachFactory
      */
     private $foreachFactory;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;

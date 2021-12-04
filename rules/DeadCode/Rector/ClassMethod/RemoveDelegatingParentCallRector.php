@@ -30,10 +30,12 @@ final class RemoveDelegatingParentCallRector extends \Rector\Core\Rector\Abstrac
      */
     private const ALLOWED_ATTRIBUTES = ['Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Contracts\\Service\\Attribute\\Required'];
     /**
+     * @readonly
      * @var \Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator
      */
     private $currentAndParentClassMethodComparator;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;

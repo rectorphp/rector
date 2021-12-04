@@ -12,6 +12,7 @@ use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class NetteComponentFactoryInterfaceAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;

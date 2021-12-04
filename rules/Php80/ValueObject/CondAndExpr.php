@@ -9,13 +9,16 @@ final class CondAndExpr
 {
     /**
      * @var \PhpParser\Node\Expr[]|null
+     * @readonly
      */
     private $condExprs;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $expr;
     /**
+     * @readonly
      * @var \Rector\Php80\Enum\MatchKind
      */
     private $matchKind;

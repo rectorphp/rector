@@ -23,10 +23,12 @@ final class WorkerRunner
      */
     private const RESULT = 'result';
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileProcessor
      */
     private $fileProcessor;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
      */
     private $parametersMerger;

@@ -27,26 +27,32 @@ use Rector\TypeDeclaration\TypeNormalizer;
 final class TypeComparator
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
      */
     private $typeHasher;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeNormalizer
      */
     private $typeNormalizer;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\ArrayTypeComparator
      */
     private $arrayTypeComparator;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\ScalarTypeComparator
      */
     private $scalarTypeComparator;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

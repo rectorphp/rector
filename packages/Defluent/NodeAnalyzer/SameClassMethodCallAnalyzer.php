@@ -9,6 +9,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class SameClassMethodCallAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

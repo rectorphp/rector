@@ -8,10 +8,12 @@ use Rector\PostRector\Application\PostFileProcessor;
 final class NodesWithFileDestinationPrinter
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
+     * @readonly
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;

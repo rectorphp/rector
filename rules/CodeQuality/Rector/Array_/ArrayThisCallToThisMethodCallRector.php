@@ -25,10 +25,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayThisCallToThisMethodCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
     private $arrayCallableMethodMatcher;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

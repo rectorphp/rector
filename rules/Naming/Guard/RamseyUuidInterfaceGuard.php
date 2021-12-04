@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class RamseyUuidInterfaceGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

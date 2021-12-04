@@ -31,6 +31,7 @@ final class SimplifyForeachToCoalescingRector extends \Rector\Core\Rector\Abstra
      */
     private $return;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ForeachManipulator
      */
     private $foreachManipulator;

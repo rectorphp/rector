@@ -8,10 +8,12 @@ use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 final class MovedFile implements \Rector\FileSystemRector\Contract\FileWithNodesInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\ValueObject\Application\File
      */
     private $file;
     /**
+     * @readonly
      * @var string
      */
     private $newFilePath;

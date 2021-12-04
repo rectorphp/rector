@@ -26,6 +26,7 @@ final class DesiredPropertyClassMethodTypeToDynamicRector extends \Rector\Core\R
      */
     private $staticObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

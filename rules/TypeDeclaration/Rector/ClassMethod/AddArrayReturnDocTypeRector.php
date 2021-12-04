@@ -34,30 +34,37 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddArrayReturnDocTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer
      */
     private $advancedArrayAnalyzer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
      * @var \Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType
      */
     private $normalizeTypeToRespectArrayScalarType;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer
      */
     private $detailedTypeAnalyzer;

@@ -7,10 +7,12 @@ use PhpParser\Node;
 final class RectifiedNode
 {
     /**
+     * @readonly
      * @var string
      */
     private $rectorClass;
     /**
+     * @readonly
      * @var \PhpParser\Node
      */
     private $node;

@@ -37,30 +37,37 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker
      */
     private $returnTypeAlreadyAddedChecker;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover
      */
     private $nonInformativeReturnTagRemover;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\VendorLockResolver
      */
     private $vendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PhpParserTypeAnalyzer
      */
     private $phpParserTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator
      */
     private $objectTypeComparator;

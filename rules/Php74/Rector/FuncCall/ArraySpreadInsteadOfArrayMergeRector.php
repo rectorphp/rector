@@ -29,6 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArraySpreadInsteadOfArrayMergeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;

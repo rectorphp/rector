@@ -13,6 +13,7 @@ final class AnnotationToAttributeMapper
 {
     /**
      * @var \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface[]
+     * @readonly
      */
     private $annotationToAttributeMappers;
     /**

@@ -16,10 +16,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class ChangedFilesDetector
 {
     /**
+     * @readonly
      * @var \Rector\Caching\Config\FileHashComputer
      */
     private $fileHashComputer;
     /**
+     * @readonly
      * @var \Rector\Caching\Cache
      */
     private $cache;

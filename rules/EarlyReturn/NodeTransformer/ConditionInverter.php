@@ -11,6 +11,7 @@ use Rector\Core\NodeManipulator\BinaryOpManipulator;
 final class ConditionInverter
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;

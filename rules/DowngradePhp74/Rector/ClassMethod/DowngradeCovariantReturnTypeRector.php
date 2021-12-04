@@ -38,14 +38,17 @@ final class DowngradeCovariantReturnTypeRector extends \Rector\Core\Rector\Abstr
      */
     private const ALREADY_DOWNGRADED = 'already_downgraded';
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;

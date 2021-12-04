@@ -9,6 +9,7 @@ use PHPStan\Reflection\ReflectionProvider;
 final class NamedArgumentsResolver
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

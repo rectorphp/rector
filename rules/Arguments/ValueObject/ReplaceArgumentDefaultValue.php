@@ -12,14 +12,17 @@ final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\Re
      */
     public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var int
      */
     private $position;

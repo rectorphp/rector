@@ -14,27 +14,33 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
      */
     private $fileDiffFileDecorator;
     /**
+     * @readonly
      * @var \Rector\FileFormatter\FileFormatter
      */
     private $fileFormatter;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor
      */
     private $removedAndAddedFilesProcessor;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
      * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
+     * @readonly
      */
     private $fileProcessors = [];
     /**

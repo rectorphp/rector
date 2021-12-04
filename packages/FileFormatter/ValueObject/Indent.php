@@ -41,6 +41,7 @@ final class Indent
      */
     private const PARSE_INDENT_REGEX = '/^(?P<indent>( +|\\t+)).*/m';
     /**
+     * @readonly
      * @var string
      */
     private $string;

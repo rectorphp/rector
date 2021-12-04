@@ -24,18 +24,22 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayTypeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector
      */
     private $pregMatchTypeCorrector;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

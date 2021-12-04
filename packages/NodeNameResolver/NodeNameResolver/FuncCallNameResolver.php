@@ -16,6 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FuncCallNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

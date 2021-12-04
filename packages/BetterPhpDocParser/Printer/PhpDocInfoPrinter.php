@@ -74,22 +74,27 @@ final class PhpDocInfoPrinter
      */
     private $phpDocInfo;
     /**
+     * @readonly
      * @var \Symplify\SimplePhpDocParser\PhpDocNodeTraverser
      */
     private $changedPhpDocNodeTraverser;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector
      */
     private $emptyPhpDocDetector;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\DocBlockInliner
      */
     private $docBlockInliner;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver
      */
     private $removeNodesStartAndEndResolver;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor
      */
     private $changedPhpDocNodeVisitor;

@@ -13,6 +13,7 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 final class PHPUnitTypeDeclarationDecorator
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

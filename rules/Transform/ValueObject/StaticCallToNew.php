@@ -6,10 +6,12 @@ namespace Rector\Transform\ValueObject;
 final class StaticCallToNew
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;

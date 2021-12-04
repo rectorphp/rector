@@ -20,10 +20,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnwrapFutureCompatibleIfPhpVersionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\ConditionEvaluator
      */
     private $conditionEvaluator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\ConditionResolver
      */
     private $conditionResolver;

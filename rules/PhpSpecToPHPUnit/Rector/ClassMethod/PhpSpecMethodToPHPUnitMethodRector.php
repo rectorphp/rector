@@ -17,14 +17,17 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
 {
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator
      */
     private $phpUnitTypeDeclarationDecorator;
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming
      */
     private $phpSpecRenaming;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

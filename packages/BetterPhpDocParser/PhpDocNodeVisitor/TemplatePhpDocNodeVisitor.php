@@ -18,10 +18,12 @@ use RectorPrefix20211204\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractP
 final class TemplatePhpDocNodeVisitor extends \RectorPrefix20211204\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
     private $currentTokenIteratorProvider;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;

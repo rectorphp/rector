@@ -14,6 +14,7 @@ final class MergeImportedRectorConfigureCallValuesCompilerPass implements \Recto
      */
     private const CONFIGURE_METHOD_NAME = 'configure';
     /**
+     * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;

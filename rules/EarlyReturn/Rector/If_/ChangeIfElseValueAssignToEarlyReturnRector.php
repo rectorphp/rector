@@ -24,10 +24,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeIfElseValueAssignToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\StmtsManipulator
      */
     private $stmtsManipulator;

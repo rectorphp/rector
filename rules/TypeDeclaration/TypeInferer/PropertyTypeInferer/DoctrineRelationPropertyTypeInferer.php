@@ -24,18 +24,22 @@ final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclarati
      */
     private const COLLECTION_TYPE = 'Doctrine\\Common\\Collections\\Collection';
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PhpDoc\ShortClassExpander
      */
     private $shortClassExpander;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;

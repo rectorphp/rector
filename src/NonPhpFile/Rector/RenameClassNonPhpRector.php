@@ -35,6 +35,7 @@ final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonP
      */
     private $renameClasses = [];
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;

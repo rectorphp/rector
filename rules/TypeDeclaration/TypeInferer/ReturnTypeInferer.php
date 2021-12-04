@@ -37,26 +37,32 @@ final class ReturnTypeInferer
      */
     private $returnTypeInferers = [];
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeNormalizer
      */
     private $typeNormalizer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer
      */
     private $genericClassStringTypeNormalizer;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

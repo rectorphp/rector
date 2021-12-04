@@ -36,6 +36,7 @@ final class DowngradeAttributeToAnnotationRector extends \Rector\Core\Rector\Abs
      */
     private $attributesToAnnotations = [];
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\Printer\DoctrineAnnotationFactory
      */
     private $doctrineAnnotationFactory;

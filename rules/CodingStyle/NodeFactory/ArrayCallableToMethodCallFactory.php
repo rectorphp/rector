@@ -14,6 +14,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayCallableToMethodCallFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

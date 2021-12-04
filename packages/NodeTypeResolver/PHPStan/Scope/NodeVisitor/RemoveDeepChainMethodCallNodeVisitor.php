@@ -18,6 +18,7 @@ use RectorPrefix20211204\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
+     * @readonly
      * @var int
      */
     private $nestedChainMethodCallLimit;
@@ -26,6 +27,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends \PhpParser\NodeVisitorA
      */
     private $removingExpression;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

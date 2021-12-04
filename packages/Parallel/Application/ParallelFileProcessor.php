@@ -51,6 +51,7 @@ final class ParallelFileProcessor
      */
     private $processPool = null;
     /**
+     * @readonly
      * @var \Rector\Parallel\Command\WorkerCommandLineFactory
      */
     private $workerCommandLineFactory;

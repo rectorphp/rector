@@ -19,6 +19,7 @@ use Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector;
 final class MockVariableToPropertyFetchRector extends \Rector\PhpSpecToPHPUnit\Rector\AbstractPhpSpecToPHPUnitRector
 {
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\PhpSpecMockCollector
      */
     private $phpSpecMockCollector;

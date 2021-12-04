@@ -13,6 +13,7 @@ final class IntermediateSourceLocator implements \PHPStan\BetterReflection\Sourc
 {
     /**
      * @var \Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface[]
+     * @readonly
      */
     private $sourceLocatorProviders;
     /**

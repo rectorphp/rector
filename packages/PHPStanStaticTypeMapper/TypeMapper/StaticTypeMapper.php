@@ -23,6 +23,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

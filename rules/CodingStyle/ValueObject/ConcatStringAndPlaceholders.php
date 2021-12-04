@@ -7,11 +7,13 @@ use PhpParser\Node\Expr;
 final class ConcatStringAndPlaceholders
 {
     /**
+     * @readonly
      * @var string
      */
     private $content;
     /**
      * @var \PhpParser\Node\Expr[]
+     * @readonly
      */
     private $placeholderNodes;
     /**

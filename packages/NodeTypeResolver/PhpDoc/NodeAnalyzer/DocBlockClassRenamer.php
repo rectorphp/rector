@@ -10,10 +10,12 @@ use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 final class DocBlockClassRenamer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
     private $classRenamePhpDocNodeVisitor;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocNodeTraverser\RenamingPhpDocNodeVisitorFactory
      */
     private $renamingPhpDocNodeVisitorFactory;

@@ -12,10 +12,12 @@ use RectorPrefix20211204\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissedRectorDueVersionChecker
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

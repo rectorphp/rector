@@ -7,22 +7,27 @@ use PHPStan\Type\ObjectType;
 final class ReplaceStringWithClassConstant
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var int
      */
     private $argPosition;
     /**
      * @var class-string
+     * @readonly
      */
     private $classWithConstants;
     /**
+     * @readonly
      * @var bool
      */
     private $caseInsensitive = \false;

@@ -24,6 +24,7 @@ final class ChangePackageVersionComposerRector implements \Rector\Composer\Contr
      */
     private $packagesAndVersions = [];
     /**
+     * @readonly
      * @var \Rector\Composer\Guard\VersionGuard
      */
     private $versionGuard;

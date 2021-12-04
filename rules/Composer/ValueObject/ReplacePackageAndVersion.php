@@ -9,14 +9,17 @@ use RectorPrefix20211204\Webmozart\Assert\Assert;
 final class ReplacePackageAndVersion implements \Rector\Composer\Contract\VersionAwareInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldPackageName;
     /**
+     * @readonly
      * @var string
      */
     private $newPackageName;
     /**
+     * @readonly
      * @var string
      */
     private $version;

@@ -24,6 +24,7 @@ final class DowngradeReadonlyPropertyRector extends \Rector\Core\Rector\Abstract
      */
     private const TAGNAME = 'readonly';
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

@@ -36,10 +36,12 @@ final class ReturnArrayClassMethodToYieldRector extends \Rector\Core\Rector\Abst
      */
     private $methodsToYields = [];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;

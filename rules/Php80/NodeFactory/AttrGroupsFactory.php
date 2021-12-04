@@ -9,6 +9,7 @@ use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 final class AttrGroupsFactory
 {
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;

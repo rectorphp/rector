@@ -14,10 +14,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class MockVariableCollector
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

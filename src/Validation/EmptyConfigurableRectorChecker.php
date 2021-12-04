@@ -10,10 +10,12 @@ use RectorPrefix20211204\Symfony\Component\Console\Style\SymfonyStyle;
 final class EmptyConfigurableRectorChecker
 {
     /**
+     * @readonly
      * @var \Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector
      */
     private $emptyConfigurableRectorCollector;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

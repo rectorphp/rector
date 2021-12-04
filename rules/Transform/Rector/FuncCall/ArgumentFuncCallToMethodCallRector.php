@@ -39,14 +39,17 @@ final class ArgumentFuncCallToMethodCallRector extends \Rector\Core\Rector\Abstr
      */
     private $argumentFuncCallToMethodCalls = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

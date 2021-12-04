@@ -7,14 +7,17 @@ use Rector\DeadCode\Contract\ConditionInterface;
 final class VersionCompareCondition implements \Rector\DeadCode\Contract\ConditionInterface
 {
     /**
+     * @readonly
      * @var int
      */
     private $firstVersion;
     /**
+     * @readonly
      * @var int
      */
     private $secondVersion;
     /**
+     * @readonly
      * @var string|null
      */
     private $compareSign;

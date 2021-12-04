@@ -27,10 +27,12 @@ final class DynamicSourceLocatorProvider implements \Rector\NodeTypeResolver\Con
      */
     private $aggregateSourceLocator;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher
      */
     private $fileNodesFetcher;
     /**
+     * @readonly
      * @var \PHPStan\Php\PhpVersion
      */
     private $phpVersion;

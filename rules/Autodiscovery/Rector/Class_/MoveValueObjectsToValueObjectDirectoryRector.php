@@ -53,10 +53,12 @@ final class MoveValueObjectsToValueObjectDirectoryRector extends \Rector\Core\Re
      */
     private $suffixes = [];
     /**
+     * @readonly
      * @var \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory
      */
     private $addedFileWithNodesFactory;
     /**
+     * @readonly
      * @var \Rector\Autodiscovery\Analyzer\ValueObjectClassAnalyzer
      */
     private $valueObjectClassAnalyzer;

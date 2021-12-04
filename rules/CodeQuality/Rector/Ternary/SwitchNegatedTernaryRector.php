@@ -16,6 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SwitchNegatedTernaryRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\TernaryBracketWrapper
      */
     private $ternaryBracketWrapper;

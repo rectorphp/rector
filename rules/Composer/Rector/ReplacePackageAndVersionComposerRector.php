@@ -24,6 +24,7 @@ final class ReplacePackageAndVersionComposerRector implements \Rector\Composer\C
      */
     private $replacePackagesAndVersions = [];
     /**
+     * @readonly
      * @var \Rector\Composer\Guard\VersionGuard
      */
     private $versionGuard;

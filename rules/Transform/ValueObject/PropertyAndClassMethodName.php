@@ -6,10 +6,12 @@ namespace Rector\Transform\ValueObject;
 final class PropertyAndClassMethodName
 {
     /**
+     * @readonly
      * @var string
      */
     private $propertyName;
     /**
+     * @readonly
      * @var string
      */
     private $classMethodName;

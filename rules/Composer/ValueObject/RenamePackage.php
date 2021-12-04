@@ -6,10 +6,12 @@ namespace Rector\Composer\ValueObject;
 final class RenamePackage
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldPackageName;
     /**
+     * @readonly
      * @var string
      */
     private $newPackageName;

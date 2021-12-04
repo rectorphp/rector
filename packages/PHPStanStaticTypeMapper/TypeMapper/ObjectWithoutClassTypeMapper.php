@@ -22,6 +22,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

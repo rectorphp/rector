@@ -9,11 +9,13 @@ use Rector\FileSystemRector\Contract\FileWithNodesInterface;
 final class AddedFileWithNodes implements \Rector\FileSystemRector\Contract\AddedFileInterface, \Rector\FileSystemRector\Contract\FileWithNodesInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $filePath;
     /**
      * @var \PhpParser\Node\Stmt[]
+     * @readonly
      */
     private $nodes;
     /**

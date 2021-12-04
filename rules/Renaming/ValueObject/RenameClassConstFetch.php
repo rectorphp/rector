@@ -8,14 +8,17 @@ use Rector\Renaming\Contract\RenameClassConstFetchInterface;
 final class RenameClassConstFetch implements \Rector\Renaming\Contract\RenameClassConstFetchInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldClass;
     /**
+     * @readonly
      * @var string
      */
     private $oldConstant;
     /**
+     * @readonly
      * @var string
      */
     private $newConstant;

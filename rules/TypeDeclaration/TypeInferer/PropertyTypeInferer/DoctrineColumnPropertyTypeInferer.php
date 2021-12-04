@@ -30,10 +30,12 @@ final class DoctrineColumnPropertyTypeInferer implements \Rector\TypeDeclaration
      */
     private $doctrineTypeToScalarType = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

@@ -19,10 +19,12 @@ final class ShortClassExpander
      */
     private const CLASS_CONST_REGEX = '#::class#';
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;

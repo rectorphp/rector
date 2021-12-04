@@ -25,10 +25,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeKeysInListRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\InflectorSingularResolver
      */
     private $inflectorSingularResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

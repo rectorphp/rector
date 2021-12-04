@@ -19,18 +19,22 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
 final class ClassMethodParamTypeCompleter
 {
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver
      */
     private $classMethodParamVendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower
      */
     private $unionTypeCommonTypeNarrower;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

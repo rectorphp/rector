@@ -40,6 +40,7 @@ final class StringClassNameToClassConstantRector extends \Rector\Core\Rector\Abs
         'Exception',
     ];
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;

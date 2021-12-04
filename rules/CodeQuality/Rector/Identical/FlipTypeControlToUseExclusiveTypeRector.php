@@ -30,6 +30,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FlipTypeControlToUseExclusiveTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
@@ -154,11 +155,7 @@ CODE_SAMPLE
         if ($varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $varTagValueNode);
         }
-        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
-            $fullyQualifiedType = $type->getFullyQualifiedName();
-        } else {
-            $fullyQualifiedType = $type->getClassName();
-        }
+        $fullyQualifiedType = $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
         return new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Instanceof_($expr, new \PhpParser\Node\Name\FullyQualified($fullyQualifiedType)));
     }
 }

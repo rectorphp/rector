@@ -36,6 +36,7 @@ final class DowngradeDirnameLevelsRector extends \Rector\Core\Rector\AbstractRec
      */
     private const DIRNAME = 'dirname';
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

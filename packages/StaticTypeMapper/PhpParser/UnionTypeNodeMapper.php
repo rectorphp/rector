@@ -20,6 +20,7 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
      */
     private $phpParserNodeMapper;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

@@ -12,14 +12,17 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class MatchPropertyTypeConflictingNameGuard
 {
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver
      */
     private $matchPropertyTypeExpectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\PhpArray\ArrayFilter
      */
     private $arrayFilter;

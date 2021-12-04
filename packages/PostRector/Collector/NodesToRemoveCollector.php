@@ -28,22 +28,27 @@ final class NodesToRemoveCollector implements \Rector\PostRector\Contract\Collec
      */
     private $nodesToRemove = [];
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Collector\AffectedFilesCollector
      */
     private $affectedFilesCollector;
     /**
+     * @readonly
      * @var \Rector\NodeRemoval\BreakingRemovalGuard
      */
     private $breakingRemovalGuard;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;

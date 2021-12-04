@@ -8,6 +8,7 @@ use RectorPrefix20211204\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class UnderscorePhpDocNodeTraverserFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor
      */
     private $underscoreRenamePhpDocNodeVisitor;

@@ -26,6 +26,7 @@ final class ExclusionManager
      */
     private const NO_RECTOR_START_REGEX = '#@noRector$#';
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

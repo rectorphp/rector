@@ -21,6 +21,7 @@ final class AnnotationTargetResolver
         'ANNOTATION' => 'TARGET_CLASS',
     ];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

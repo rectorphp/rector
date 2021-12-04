@@ -33,10 +33,12 @@ final class NewToMethodCallRector extends \Rector\Core\Rector\AbstractRector imp
      */
     private $newsToMethodCalls = [];
     /**
+     * @readonly
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

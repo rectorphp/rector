@@ -10,6 +10,7 @@ final class ReadExprAnalyzer
 {
     /**
      * @var \Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface[]
+     * @readonly
      */
     private $readNodeAnalyzers;
     /**

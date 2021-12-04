@@ -19,10 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInterfacesToContractNamespaceDirectoryRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Autodiscovery\NodeAnalyzer\NetteComponentFactoryInterfaceAnalyzer
      */
     private $netteComponentFactoryInterfaceAnalyzer;
     /**
+     * @readonly
      * @var \Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory
      */
     private $addedFileWithNodesFactory;

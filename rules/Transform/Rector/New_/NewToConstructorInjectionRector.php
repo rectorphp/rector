@@ -35,18 +35,22 @@ final class NewToConstructorInjectionRector extends \Rector\Core\Rector\Abstract
      */
     private $constructorInjectionObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\Transform\NodeFactory\PropertyFetchFactory
      */
     private $propertyFetchFactory;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
+     * @readonly
      * @var \Rector\NodeRemoval\AssignRemover
      */
     private $assignRemover;

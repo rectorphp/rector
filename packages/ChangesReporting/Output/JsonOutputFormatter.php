@@ -15,6 +15,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
      */
     public const NAME = 'json';
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;

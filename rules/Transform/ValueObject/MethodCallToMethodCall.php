@@ -8,17 +8,21 @@ final class MethodCallToMethodCall
 {
     /**
      * @var class-string
+     * @readonly
      */
     private $oldType;
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
      * @var class-string
+     * @readonly
      */
     private $newType;
     /**
+     * @readonly
      * @var string
      */
     private $newMethod;

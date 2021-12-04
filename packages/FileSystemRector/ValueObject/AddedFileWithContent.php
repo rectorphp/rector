@@ -8,10 +8,12 @@ use Rector\FileSystemRector\Contract\AddedFileInterface;
 final class AddedFileWithContent implements \Rector\FileSystemRector\Contract\AddedFileInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $filePath;
     /**
+     * @readonly
      * @var string
      */
     private $fileContent;

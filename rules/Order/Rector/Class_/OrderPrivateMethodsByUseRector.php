@@ -24,6 +24,7 @@ final class OrderPrivateMethodsByUseRector extends \Rector\Core\Rector\AbstractR
      */
     private const MAX_ATTEMPTS = 5;
     /**
+     * @readonly
      * @var \Rector\Order\StmtOrder
      */
     private $stmtOrder;

@@ -23,22 +23,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveOverriddenValuesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeCollector\NodeByTypeAndPositionCollector
      */
     private $nodeByTypeAndPositionCollector;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeFinder\VariableUseFinder
      */
     private $variableUseFinder;
     /**
+     * @readonly
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
     /**
+     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;

@@ -24,6 +24,7 @@ final class ArgumentAddingScope
      */
     public const SCOPE_CLASS_METHOD = 'class_method';
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

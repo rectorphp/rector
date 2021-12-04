@@ -22,30 +22,37 @@ use RectorPrefix20211204\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class AssignToPropertyTypeInferer
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher
      */
     private $propertyAssignMatcher;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector
      */
     private $propertyDefaultAssignDetector;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector
      */
     private $nullTypeAssignDetector;
     /**
+     * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

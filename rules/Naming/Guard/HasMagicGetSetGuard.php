@@ -13,6 +13,7 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class HasMagicGetSetGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

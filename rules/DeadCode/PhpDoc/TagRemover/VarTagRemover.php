@@ -23,18 +23,22 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class VarTagRemover
 {
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer
      */
     private $deadVarTagValueNodeAnalyzer;

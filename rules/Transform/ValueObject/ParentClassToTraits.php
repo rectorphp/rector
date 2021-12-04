@@ -7,11 +7,13 @@ use PHPStan\Type\ObjectType;
 final class ParentClassToTraits
 {
     /**
+     * @readonly
      * @var string
      */
     private $parentType;
     /**
      * @var string[]
+     * @readonly
      */
     private $traitNames;
     /**

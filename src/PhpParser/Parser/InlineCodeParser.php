@@ -41,18 +41,22 @@ final class InlineCodeParser
      */
     private const ENDING_SEMI_COLON_REGEX = '#;(\\s+)?$#';
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;

@@ -25,14 +25,17 @@ use RectorPrefix20211204\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
      */
     private $privatesCaller;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
     private $tokenIteratorFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator
      */
     private $doctrineAnnotationDecorator;

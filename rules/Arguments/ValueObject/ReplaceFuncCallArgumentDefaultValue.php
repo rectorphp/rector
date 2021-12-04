@@ -7,10 +7,12 @@ use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 final class ReplaceFuncCallArgumentDefaultValue implements \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $function;
     /**
+     * @readonly
      * @var int
      */
     private $position;

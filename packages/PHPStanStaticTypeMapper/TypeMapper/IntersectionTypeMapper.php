@@ -26,6 +26,7 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
      */
     private $phpStanStaticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

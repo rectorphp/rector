@@ -32,14 +32,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByMethodCallTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher
      */
     private $callerParamMatcher;
     /**
+     * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;

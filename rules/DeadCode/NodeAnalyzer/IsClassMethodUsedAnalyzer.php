@@ -23,26 +23,32 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class IsClassMethodUsedAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
+     * @readonly
      * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
     private $arrayCallableMethodMatcher;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\CallCollectionAnalyzer
      */
     private $callCollectionAnalyzer;

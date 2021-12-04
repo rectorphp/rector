@@ -34,18 +34,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CreateFunctionToAnonymousFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
     /**
+     * @readonly
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
     /**
+     * @readonly
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

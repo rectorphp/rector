@@ -7,14 +7,17 @@ use PHPStan\Type\ObjectType;
 final class ChangeConstantVisibility
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $constant;
     /**
+     * @readonly
      * @var int
      */
     private $visibility;

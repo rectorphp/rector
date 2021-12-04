@@ -14,10 +14,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class StaticCallPresenceAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

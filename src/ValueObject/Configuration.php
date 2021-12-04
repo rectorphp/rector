@@ -11,42 +11,52 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class Configuration
 {
     /**
+     * @readonly
      * @var bool
      */
     private $isDryRun = \false;
     /**
+     * @readonly
      * @var bool
      */
     private $showProgressBar = \true;
     /**
+     * @readonly
      * @var bool
      */
     private $shouldClearCache = \false;
     /**
+     * @readonly
      * @var string
      */
     private $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME;
     /**
      * @var string[]
+     * @readonly
      */
     private $fileExtensions = ['php'];
     /**
      * @var string[]
+     * @readonly
      */
     private $paths = [];
     /**
+     * @readonly
      * @var bool
      */
     private $showDiffs = \true;
     /**
+     * @readonly
      * @var \Rector\Core\ValueObject\Bootstrap\BootstrapConfigs|null
      */
     private $bootstrapConfigs;
     /**
+     * @readonly
      * @var string|null
      */
     private $parallelPort = null;
     /**
+     * @readonly
      * @var string|null
      */
     private $parallelIdentifier = null;

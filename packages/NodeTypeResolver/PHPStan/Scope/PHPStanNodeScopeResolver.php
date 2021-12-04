@@ -43,42 +43,52 @@ final class PHPStanNodeScopeResolver
      */
     private const CONTEXT = 'context';
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
+     * @readonly
      * @var \Rector\Caching\FileSystem\DependencyResolver
      */
     private $dependencyResolver;
     /**
+     * @readonly
      * @var \PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor
      */
     private $removeDeepChainMethodCallNodeVisitor;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
      */
     private $scopeFactory;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**
+     * @readonly
      * @var \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator
      */
     private $renamedClassesSourceLocator;
     /**
+     * @readonly
      * @var \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator
      */
     private $parentAttributeSourceLocator;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\TraitScopeFaker
      */
     private $traitScopeFaker;

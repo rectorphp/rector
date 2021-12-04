@@ -31,10 +31,12 @@ final class ParentClassToTraitsRector extends \Rector\Core\Rector\AbstractRector
      */
     private $parentClassToTraits = [];
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;

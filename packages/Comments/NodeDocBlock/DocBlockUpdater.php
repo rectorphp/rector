@@ -16,6 +16,7 @@ final class DocBlockUpdater
      */
     public const SPACE_OR_ASTERISK_REGEX = '#(\\s|\\*)+#';
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;

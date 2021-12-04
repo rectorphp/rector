@@ -31,6 +31,7 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
      */
     private $typeToPreference = [];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

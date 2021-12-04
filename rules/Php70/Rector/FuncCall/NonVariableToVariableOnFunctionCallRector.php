@@ -45,18 +45,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NonVariableToVariableOnFunctionCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ParentScopeFinder
      */
     private $parentScopeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

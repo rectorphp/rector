@@ -19,10 +19,12 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 final class NullableTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper
      */
     private $identifierTypeMapper;
     /**
+     * @readonly
      * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;

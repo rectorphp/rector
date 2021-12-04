@@ -27,34 +27,42 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      */
     private $notParsedFiles = [];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
      */
     private $formatPerservingPrinter;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileProcessor
      */
     private $fileProcessor;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
      */
     private $fileDiffFileDecorator;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
+     * @readonly
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;

@@ -24,6 +24,7 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

@@ -8,19 +8,23 @@ use Rector\Core\Validation\RectorAssert;
 final class MethodCallToAnotherMethodCallWithArguments
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
+     * @readonly
      * @var string
      */
     private $newMethod;
     /**
      * @var mixed[]
+     * @readonly
      */
     private $newArguments;
     /**

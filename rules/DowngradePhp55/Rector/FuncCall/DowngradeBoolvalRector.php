@@ -34,6 +34,7 @@ final class DowngradeBoolvalRector extends \Rector\Core\Rector\AbstractRector
      */
     private const BOOLVAL = 'boolval';
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

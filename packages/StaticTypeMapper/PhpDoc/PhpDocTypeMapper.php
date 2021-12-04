@@ -16,9 +16,11 @@ final class PhpDocTypeMapper
 {
     /**
      * @var \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface[]
+     * @readonly
      */
     private $phpDocTypeMappers;
     /**
+     * @readonly
      * @var \PHPStan\PhpDoc\TypeNodeResolver
      */
     private $typeNodeResolver;

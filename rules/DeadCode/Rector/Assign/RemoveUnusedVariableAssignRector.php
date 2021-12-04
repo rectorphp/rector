@@ -31,22 +31,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedVariableAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\ConditionSearcher
      */
     private $conditionSearcher;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer
      */
     private $usedVariableNameAnalyzer;
     /**
+     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;

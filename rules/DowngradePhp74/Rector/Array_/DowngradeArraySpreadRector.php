@@ -42,6 +42,7 @@ class DowngradeArraySpreadRector extends \Rector\Core\Rector\AbstractRector
      */
     private $lastPositionCurrentFile = [];
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

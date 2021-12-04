@@ -27,14 +27,17 @@ final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRe
      */
     private $classes = [];
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
+     * @readonly
      * @var \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory
      */
     private $classFromAnonymousFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeDecorator\NamespacedNameDecorator
      */
     private $namespacedNameDecorator;

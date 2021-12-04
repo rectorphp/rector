@@ -33,6 +33,7 @@ final class StaticCallToMethodCallRector extends \Rector\Core\Rector\AbstractRec
      */
     private $staticCallsToMethodCalls = [];
     /**
+     * @readonly
      * @var \Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer
      */
     private $funcCallStaticCallToMethodCallAnalyzer;

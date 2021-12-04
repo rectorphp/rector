@@ -8,10 +8,12 @@ final class StmtsAndTokens
 {
     /**
      * @var \PhpParser\Node\Stmt[]
+     * @readonly
      */
     private $stmts;
     /**
      * @var mixed[]
+     * @readonly
      */
     private $tokens;
     /**

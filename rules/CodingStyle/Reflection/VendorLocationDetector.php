@@ -8,6 +8,7 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;

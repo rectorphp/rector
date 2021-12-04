@@ -8,13 +8,16 @@ final class GetAndSetToMethodCall
 {
     /**
      * @var class-string
+     * @readonly
      */
     private $classType;
     /**
+     * @readonly
      * @var string
      */
     private $getMethod;
     /**
+     * @readonly
      * @var string
      */
     private $setMethod;

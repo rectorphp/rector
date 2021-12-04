@@ -21,10 +21,12 @@ final class PhpVersionProvider
      */
     private const VALID_PHP_VERSION_REGEX = '#^\\d{5,6}$#';
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;

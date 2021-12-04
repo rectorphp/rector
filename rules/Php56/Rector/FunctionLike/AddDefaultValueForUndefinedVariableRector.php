@@ -33,10 +33,12 @@ final class AddDefaultValueForUndefinedVariableRector extends \Rector\Core\Recto
      */
     private const ALREADY_ADDED_VARIABLE_NAMES = 'already_added_variable_names';
     /**
+     * @readonly
      * @var \Rector\Php56\NodeAnalyzer\UndefinedVariableResolver
      */
     private $undefinedVariableResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
      */
     private $inlineHTMLAnalyzer;

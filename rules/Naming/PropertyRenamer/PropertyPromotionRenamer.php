@@ -21,34 +21,42 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyPromotionRenamer
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
      */
     private $matchParamTypeExpectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\ValueObjectFactory\ParamRenameFactory
      */
     private $paramRenameFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\Naming\ParamRenamer\ParamRenamer
      */
     private $paramRenamer;
     /**
+     * @readonly
      * @var \Rector\Naming\PropertyRenamer\PropertyFetchRenamer
      */
     private $propertyFetchRenamer;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;

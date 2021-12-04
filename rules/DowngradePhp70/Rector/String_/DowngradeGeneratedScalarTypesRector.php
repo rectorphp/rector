@@ -39,6 +39,7 @@ final class DowngradeGeneratedScalarTypesRector extends \Rector\Core\Rector\Abst
      */
     private $phpRectors = [];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;

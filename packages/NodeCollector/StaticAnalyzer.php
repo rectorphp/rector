@@ -10,6 +10,7 @@ use Rector\Core\Util\StringUtils;
 final class StaticAnalyzer
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

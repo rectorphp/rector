@@ -9,10 +9,12 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class MissingPropertiesFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;

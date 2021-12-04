@@ -13,10 +13,12 @@ use ReflectionFunction;
 final class UnnamedArgumentResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\DowngradePhp80\NodeAnalyzer\NamedToUnnamedArgs
      */
     private $namedToUnnamedArgs;

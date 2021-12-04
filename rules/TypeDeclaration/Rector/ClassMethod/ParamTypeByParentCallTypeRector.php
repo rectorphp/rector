@@ -21,6 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByParentCallTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher
      */
     private $callerParamMatcher;

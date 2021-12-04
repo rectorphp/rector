@@ -13,6 +13,7 @@ final class ConfigureCallValuesCollector
      */
     private $configureCallValuesByRectorClass = [];
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
      */
     private $parametersMerger;

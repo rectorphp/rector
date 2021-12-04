@@ -8,14 +8,17 @@ use Rector\Core\Validation\RectorAssert;
 final class WrapReturn
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var bool
      */
     private $isArrayWrap;

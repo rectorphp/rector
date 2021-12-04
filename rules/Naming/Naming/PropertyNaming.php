@@ -44,18 +44,22 @@ final class PropertyNaming
      */
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
     /**
+     * @readonly
      * @var \Rector\Naming\RectorNamingInflector
      */
     private $rectorNamingInflector;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

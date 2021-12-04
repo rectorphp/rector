@@ -13,6 +13,7 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class RequiredAnnotationPropertyAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

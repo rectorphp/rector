@@ -36,22 +36,27 @@ final class UnionTypesRector extends \Rector\Core\Rector\AbstractRector implemen
      */
     private $hasChanged = \false;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver
      */
     private $classMethodParamVendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

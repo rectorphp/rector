@@ -35,6 +35,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNewInInitializerRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;

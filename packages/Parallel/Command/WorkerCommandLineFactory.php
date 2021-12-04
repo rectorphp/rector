@@ -17,6 +17,7 @@ final class WorkerCommandLineFactory
      */
     private const OPTION_DASHES = '--';
     /**
+     * @readonly
      * @var \Rector\Core\Console\Command\ProcessCommand
      */
     private $processCommand;

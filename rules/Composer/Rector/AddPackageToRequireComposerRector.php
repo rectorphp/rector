@@ -24,6 +24,7 @@ final class AddPackageToRequireComposerRector implements \Rector\Composer\Contra
      */
     private $packagesAndVersions = [];
     /**
+     * @readonly
      * @var \Rector\Composer\Guard\VersionGuard
      */
     private $versionGuard;

@@ -10,9 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -24,18 +22,22 @@ final class PropertyFetchFinder
      */
     private const THIS = 'this';
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
@@ -61,9 +63,6 @@ final class PropertyFetchFinder
             return [];
         }
         $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
-        }
         $nodes = [$classLike];
         $nodesTrait = $this->astResolver->parseClassReflectionTraits($classReflection);
         $hasTrait = $nodesTrait !== [];

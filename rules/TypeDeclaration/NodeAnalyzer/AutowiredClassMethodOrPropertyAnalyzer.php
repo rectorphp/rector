@@ -12,10 +12,12 @@ use RectorPrefix20211204\Symfony\Contracts\Service\Attribute\Required;
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;

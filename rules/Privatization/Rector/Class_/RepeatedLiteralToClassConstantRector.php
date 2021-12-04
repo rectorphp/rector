@@ -44,14 +44,17 @@ final class RepeatedLiteralToClassConstantRector extends \Rector\Core\Rector\Abs
      */
     private const SLASH_AND_DASH_REGEX = '#[-\\\\/]#';
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder
      */
     private $scopeAwareNodeFinder;

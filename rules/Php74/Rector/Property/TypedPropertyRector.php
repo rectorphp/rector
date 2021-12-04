@@ -67,46 +67,57 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      */
     private $privatePropertyOnly = \false;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
      */
     private $propertyTypeInferer;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\VendorLockResolver
      */
     private $vendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyAnalyzer
      */
     private $propertyAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver
      */
     private $propertyUnionTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
+     * @readonly
      * @var \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer
      */
     private $objectTypeAnalyzer;

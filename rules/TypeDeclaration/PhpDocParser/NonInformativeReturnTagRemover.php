@@ -35,10 +35,12 @@ final class NonInformativeReturnTagRemover
      */
     private const USELESS_DOC_NAMES_BY_TYPE_CLASS = [\PHPStan\Type\IterableType::class => ['iterable'], \PHPStan\Type\CallableType::class => ['callable'], \PHPStan\Type\VoidType::class => ['void'], \PHPStan\Type\ArrayType::class => ['array'], \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType::class => ['self'], \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType::class => ['parent'], \PHPStan\Type\BooleanType::class => ['bool', 'boolean'], \PHPStan\Type\ObjectWithoutClassType::class => ['object']];
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;

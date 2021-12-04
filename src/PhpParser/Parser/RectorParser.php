@@ -11,10 +11,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorParser
 {
     /**
+     * @readonly
      * @var \PhpParser\Lexer
      */
     private $lexer;
     /**
+     * @readonly
      * @var \PHPStan\Parser\Parser
      */
     private $parser;

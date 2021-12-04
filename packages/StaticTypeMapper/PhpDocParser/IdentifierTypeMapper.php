@@ -31,22 +31,27 @@ use Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier;
 final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\Type\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper
      */
     private $scalarStringToTypeMapper;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

@@ -24,22 +24,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedAssignVariableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeFinder\NextVariableUsageNodeFinder
      */
     private $nextVariableUsageNodeFinder;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeFinder\PreviousVariableAssignNodeFinder
      */
     private $previousVariableAssignNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ScopeNestingComparator
      */
     private $scopeNestingComparator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;

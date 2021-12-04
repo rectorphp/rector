@@ -9,6 +9,7 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 final class ClassChildAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;

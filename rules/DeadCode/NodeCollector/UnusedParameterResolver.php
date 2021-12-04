@@ -9,6 +9,7 @@ use Rector\Core\NodeManipulator\ClassMethodManipulator;
 final class UnusedParameterResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;

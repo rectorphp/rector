@@ -14,14 +14,17 @@ final class CountableTypeAnalyzer
      */
     private $countableObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector
      */
     private $pregMatchTypeCorrector;

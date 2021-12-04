@@ -6,14 +6,17 @@ namespace Rector\Renaming\ValueObject;
 final class RenamedNamespace
 {
     /**
+     * @readonly
      * @var string
      */
     private $currentName;
     /**
+     * @readonly
      * @var string
      */
     private $oldNamespace;
     /**
+     * @readonly
      * @var string
      */
     private $newNamespace;

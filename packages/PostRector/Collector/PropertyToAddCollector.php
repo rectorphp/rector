@@ -25,10 +25,12 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     private $propertiesWithoutConstructorByClass = [];
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;

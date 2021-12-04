@@ -14,18 +14,22 @@ use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 final class ExprUsedInNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer
      */
     private $usedVariableNameAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\CompactFuncCallAnalyzer
      */
     private $compactFuncCallAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

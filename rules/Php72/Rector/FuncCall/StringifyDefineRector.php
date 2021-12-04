@@ -21,6 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringifyDefineRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;

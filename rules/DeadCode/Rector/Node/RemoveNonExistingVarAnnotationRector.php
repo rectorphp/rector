@@ -37,14 +37,17 @@ final class RemoveNonExistingVarAnnotationRector extends \Rector\Core\Rector\Abs
      */
     private const NODES_TO_MATCH = [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Expr\AssignRef::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\Static_::class, \PhpParser\Node\Stmt\Echo_::class, \PhpParser\Node\Stmt\Return_::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Throw_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\Switch_::class, \PhpParser\Node\Stmt\Nop::class];
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Php\TypeChecker
      */
     private $typeChecker;
     /**
+     * @readonly
      * @var \Rector\Comments\CommentRemover
      */
     private $commentRemover;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;

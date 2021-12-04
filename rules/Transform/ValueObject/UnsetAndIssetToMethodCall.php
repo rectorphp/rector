@@ -8,14 +8,17 @@ use Rector\Core\Validation\RectorAssert;
 final class UnsetAndIssetToMethodCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $issetMethodCall;
     /**
+     * @readonly
      * @var string
      */
     private $unsedMethodCall;

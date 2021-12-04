@@ -9,14 +9,17 @@ use PhpParser\Node\Stmt\Property;
 final class PropertyPromotionCandidate
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\Property
      */
     private $property;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**
+     * @readonly
      * @var \PhpParser\Node\Param
      */
     private $param;

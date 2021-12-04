@@ -10,6 +10,7 @@ final class ShortenedObjectType extends \PHPStan\Type\ObjectType
 {
     /**
      * @var class-string
+     * @readonly
      */
     private $fullyQualifiedName;
     /**

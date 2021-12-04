@@ -26,6 +26,7 @@ use RectorPrefix20211204\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class PHPStanServicesFactory
 {
     /**
+     * @readonly
      * @var \PHPStan\DependencyInjection\Container
      */
     private $container;

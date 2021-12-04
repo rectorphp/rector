@@ -26,10 +26,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CallUserFuncArrayToVariadicRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\CodingStyle\NodeFactory\ArrayCallableToMethodCallFactory
      */
     private $arrayCallableToMethodCallFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

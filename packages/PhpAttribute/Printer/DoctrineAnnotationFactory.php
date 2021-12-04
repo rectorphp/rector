@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DoctrineAnnotationFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

@@ -7,18 +7,22 @@ use Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface;
 final class ArgumentFuncCallToMethodCall implements \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $function;
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string|null
      */
     private $methodIfArgs;
     /**
+     * @readonly
      * @var string|null
      */
     private $methodIfNoArgs;

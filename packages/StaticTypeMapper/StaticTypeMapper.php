@@ -31,18 +31,22 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 final class StaticTypeMapper
 {
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
     private $nameScopeFactory;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
      */
     private $phpDocTypeMapper;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
      */
     private $phpParserNodeMapper;

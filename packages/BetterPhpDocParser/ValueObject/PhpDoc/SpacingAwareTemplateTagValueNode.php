@@ -9,6 +9,7 @@ use Stringable;
 final class SpacingAwareTemplateTagValueNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode
 {
     /**
+     * @readonly
      * @var string
      */
     private $preposition;

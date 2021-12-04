@@ -28,26 +28,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CompleteDynamicPropertiesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeFactory\MissingPropertiesFactory
      */
     private $missingPropertiesFactory;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\LocalPropertyAnalyzer
      */
     private $localPropertyAnalyzer;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ClassLikeAnalyzer
      */
     private $classLikeAnalyzer;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;

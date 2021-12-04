@@ -9,6 +9,7 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadVarTagValueNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;

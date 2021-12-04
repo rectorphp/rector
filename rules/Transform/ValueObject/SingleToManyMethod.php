@@ -7,14 +7,17 @@ use PHPStan\Type\ObjectType;
 final class SingleToManyMethod
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $singleMethodName;
     /**
+     * @readonly
      * @var string
      */
     private $manyMethodName;

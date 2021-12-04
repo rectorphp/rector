@@ -19,22 +19,27 @@ final class VariableNodeUse
      */
     public const TYPE_ASSIGN = 'assign';
     /**
+     * @readonly
      * @var int
      */
     private $startTokenPosition;
     /**
+     * @readonly
      * @var string
      */
     private $variableName;
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
+     * @readonly
      * @var string|null
      */
     private $nestingHash;

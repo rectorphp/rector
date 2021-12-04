@@ -47,18 +47,22 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      */
     private $annotationsToAttributes = [];
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeFactory\AttrGroupsFactory
      */
     private $attrGroupsFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Rector\Php80\PhpDoc\PhpDocNodeFinder
      */
     private $phpDocNodeFinder;

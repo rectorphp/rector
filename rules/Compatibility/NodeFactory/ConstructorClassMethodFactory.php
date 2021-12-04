@@ -13,10 +13,12 @@ use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 final class ConstructorClassMethodFactory
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;

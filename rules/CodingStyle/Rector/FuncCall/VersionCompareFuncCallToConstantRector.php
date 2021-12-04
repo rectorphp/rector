@@ -33,10 +33,12 @@ final class VersionCompareFuncCallToConstantRector extends \Rector\Core\Rector\A
      */
     private const OPERATOR_TO_COMPARISON = ['=' => \PhpParser\Node\Expr\BinaryOp\Identical::class, '==' => \PhpParser\Node\Expr\BinaryOp\Identical::class, 'eq' => \PhpParser\Node\Expr\BinaryOp\Identical::class, '!=' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, '<>' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, 'ne' => \PhpParser\Node\Expr\BinaryOp\NotIdentical::class, '>' => \PhpParser\Node\Expr\BinaryOp\Greater::class, 'gt' => \PhpParser\Node\Expr\BinaryOp\Greater::class, '<' => \PhpParser\Node\Expr\BinaryOp\Smaller::class, 'lt' => \PhpParser\Node\Expr\BinaryOp\Smaller::class, '>=' => \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, 'ge' => \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, '<=' => \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, 'le' => \PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class];
     /**
+     * @readonly
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

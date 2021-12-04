@@ -32,10 +32,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveAlwaysTrueConditionSetInConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer
      */
     private $staticTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

@@ -11,10 +11,12 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoParser
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;

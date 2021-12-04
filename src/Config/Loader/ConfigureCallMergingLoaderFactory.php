@@ -15,6 +15,7 @@ use RectorPrefix20211204\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryIn
 final class ConfigureCallMergingLoaderFactory implements \RectorPrefix20211204\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;

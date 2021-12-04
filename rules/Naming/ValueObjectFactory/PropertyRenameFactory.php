@@ -14,10 +14,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PropertyRenameFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

@@ -12,9 +12,11 @@ final class MissingRectorRulesReporter
 {
     /**
      * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @readonly
      */
     private $rectors;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

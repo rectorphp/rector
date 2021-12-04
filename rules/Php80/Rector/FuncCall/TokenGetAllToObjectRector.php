@@ -27,6 +27,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TokenGetAllToObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php80\NodeManipulator\TokenManipulator
      */
     private $tokenManipulator;

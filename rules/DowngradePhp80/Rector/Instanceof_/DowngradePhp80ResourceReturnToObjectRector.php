@@ -49,6 +49,7 @@ final class DowngradePhp80ResourceReturnToObjectRector extends \Rector\Core\Rect
         'DeflateContext',
     ];
     /**
+     * @readonly
      * @var \Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn
      */
     private $objectToResourceReturn;

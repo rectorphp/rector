@@ -12,6 +12,7 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
 {
     /**
      * @var \Rector\Core\Contract\Rector\NonPhpRectorInterface[]
+     * @readonly
      */
     private $nonPhpRectors;
     /**

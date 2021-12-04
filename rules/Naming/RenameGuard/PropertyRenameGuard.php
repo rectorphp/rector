@@ -9,6 +9,7 @@ final class PropertyRenameGuard
 {
     /**
      * @var \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface[]
+     * @readonly
      */
     private $conflictingNameGuards;
     /**

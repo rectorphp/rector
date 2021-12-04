@@ -15,10 +15,12 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class FormatPerservingPrinter
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;

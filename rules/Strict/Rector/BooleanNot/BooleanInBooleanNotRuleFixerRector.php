@@ -21,6 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BooleanInBooleanNotRuleFixerRector extends \Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector
 {
     /**
+     * @readonly
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;

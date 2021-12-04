@@ -22,10 +22,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ForeachItemsAssignToEmptyArrayToAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
      */
     private $nodeUsageFinder;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;

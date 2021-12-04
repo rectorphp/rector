@@ -33,14 +33,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromStrictTypedCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper
      */
     private $typeNodeUnwrapper;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnStrictTypeAnalyzer
      */
     private $returnStrictTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;

@@ -7,10 +7,12 @@ final class SortedClassMethodsAndOriginalClassMethods
 {
     /**
      * @var string[]
+     * @readonly
      */
     private $sortedClassMethods;
     /**
      * @var string[]
+     * @readonly
      */
     private $originalClassMethods;
     /**

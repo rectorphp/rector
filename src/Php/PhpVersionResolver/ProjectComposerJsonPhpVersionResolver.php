@@ -12,14 +12,17 @@ use RectorPrefix20211204\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 final class ProjectComposerJsonPhpVersionResolver
 {
     /**
+     * @readonly
      * @var \Symplify\ComposerJsonManipulator\ComposerJsonFactory
      */
     private $composerJsonFactory;
     /**
+     * @readonly
      * @var \Composer\Semver\VersionParser
      */
     private $versionParser;
     /**
+     * @readonly
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;

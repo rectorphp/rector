@@ -18,22 +18,27 @@ final class ConflictingNameResolver
      */
     private $conflictingVariableNamesByClassMethod = [];
     /**
+     * @readonly
      * @var \Rector\Naming\PhpArray\ArrayFilter
      */
     private $arrayFilter;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
     private $expectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
      */
     private $matchParamTypeExpectedNameResolver;

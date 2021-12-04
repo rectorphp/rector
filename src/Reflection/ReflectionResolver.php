@@ -31,26 +31,32 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ReflectionResolver
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverRegistry
      */
     private $typeToCallReflectionResolverRegistry;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
@@ -63,10 +69,7 @@ final class ReflectionResolver
         $this->typeToCallReflectionResolverRegistry = $typeToCallReflectionResolverRegistry;
         $this->classAnalyzer = $classAnalyzer;
     }
-    /**
-     * @return \PHPStan\Reflection\ClassReflection|null
-     */
-    public function resolveClassAndAnonymousClass(\PhpParser\Node\Stmt\ClassLike $classLike)
+    public function resolveClassAndAnonymousClass(\PhpParser\Node\Stmt\ClassLike $classLike) : \PHPStan\Reflection\ClassReflection
     {
         if ($classLike instanceof \PhpParser\Node\Stmt\Class_ && $this->classAnalyzer->isAnonymousClass($classLike)) {
             return $this->reflectionProvider->getAnonymousClassReflection($classLike, $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE));

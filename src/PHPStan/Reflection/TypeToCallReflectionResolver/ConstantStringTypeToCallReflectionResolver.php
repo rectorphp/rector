@@ -36,6 +36,7 @@ final class ConstantStringTypeToCallReflectionResolver implements \Rector\Core\C
      */
     private const METHOD_KEY = 'method';
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

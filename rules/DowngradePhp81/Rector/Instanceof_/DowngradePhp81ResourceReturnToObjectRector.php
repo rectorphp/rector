@@ -40,6 +40,7 @@ final class DowngradePhp81ResourceReturnToObjectRector extends \Rector\Core\Rect
         'PgSql\\Lob',
     ];
     /**
+     * @readonly
      * @var \Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn
      */
     private $objectToResourceReturn;

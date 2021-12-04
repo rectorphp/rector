@@ -23,14 +23,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSingletonToServiceRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Transform\NodeAnalyzer\SingletonClassMethodAnalyzer
      */
     private $singletonClassMethodAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

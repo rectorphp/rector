@@ -25,6 +25,7 @@ use RectorPrefix20211204\Symplify\SymplifyKernel\Contract\LightKernelInterface;
 final class RectorKernel implements \RectorPrefix20211204\Symplify\SymplifyKernel\Contract\LightKernelInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;

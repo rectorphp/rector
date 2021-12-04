@@ -23,6 +23,7 @@ use RectorPrefix20211204\Symplify\EasyParallel\Enum\ReactCommand;
 final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
+     * @readonly
      * @var \Rector\Parallel\WorkerRunner
      */
     private $workerRunner;

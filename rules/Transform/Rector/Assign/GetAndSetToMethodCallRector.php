@@ -33,10 +33,12 @@ final class GetAndSetToMethodCallRector extends \Rector\Core\Rector\AbstractRect
      */
     private $getAndSetToMethodCalls = [];
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\MagicPropertyFetchAnalyzer
      */
     private $magicPropertyFetchAnalyzer;

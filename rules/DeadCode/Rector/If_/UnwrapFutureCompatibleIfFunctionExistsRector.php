@@ -21,10 +21,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnwrapFutureCompatibleIfFunctionExistsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\FeatureSupport\FunctionSupportResolver
      */
     private $functionSupportResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;

@@ -24,10 +24,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDoubleAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ScopeNestingComparator
      */
     private $scopeNestingComparator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;

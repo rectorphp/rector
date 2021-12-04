@@ -7,14 +7,17 @@ use PHPStan\Type\ObjectType;
 final class DimFetchAssignToMethodCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $listClass;
     /**
+     * @readonly
      * @var string
      */
     private $itemClass;
     /**
+     * @readonly
      * @var string
      */
     private $addMethod;

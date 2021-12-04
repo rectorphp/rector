@@ -10,26 +10,32 @@ use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
 final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValueObjectInterface
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\Property
      */
     private $property;
     /**
+     * @readonly
      * @var string
      */
     private $expectedName;
     /**
+     * @readonly
      * @var string
      */
     private $currentName;
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\ClassLike
      */
     private $classLike;
     /**
+     * @readonly
      * @var string
      */
     private $classLikeName;
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\PropertyProperty
      */
     private $propertyProperty;

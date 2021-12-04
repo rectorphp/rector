@@ -13,18 +13,22 @@ use PhpParser\Node\Stmt\Function_;
 final class VariableAndCallForeach
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
     private $expr;
     /**
+     * @readonly
      * @var string
      */
     private $variableName;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
      */
     private $functionLike;

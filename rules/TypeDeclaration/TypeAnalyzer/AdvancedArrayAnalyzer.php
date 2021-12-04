@@ -19,10 +19,12 @@ use Rector\TypeDeclaration\TypeNormalizer;
 final class AdvancedArrayAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeNormalizer
      */
     private $typeNormalizer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

@@ -33,6 +33,7 @@ final class SetTypeToCastRector extends \Rector\Core\Rector\AbstractRector
      */
     private const TYPE_TO_CAST = ['array' => \PhpParser\Node\Expr\Cast\Array_::class, 'bool' => \PhpParser\Node\Expr\Cast\Bool_::class, 'boolean' => \PhpParser\Node\Expr\Cast\Bool_::class, 'double' => \PhpParser\Node\Expr\Cast\Double::class, 'float' => \PhpParser\Node\Expr\Cast\Double::class, 'int' => \PhpParser\Node\Expr\Cast\Int_::class, 'integer' => \PhpParser\Node\Expr\Cast\Int_::class, 'object' => \PhpParser\Node\Expr\Cast\Object_::class, 'string' => \PhpParser\Node\Expr\Cast\String_::class];
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

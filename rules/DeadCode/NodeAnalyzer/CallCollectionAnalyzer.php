@@ -11,10 +11,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CallCollectionAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

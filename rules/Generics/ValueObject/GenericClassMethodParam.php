@@ -6,18 +6,22 @@ namespace Rector\Generics\ValueObject;
 final class GenericClassMethodParam
 {
     /**
+     * @readonly
      * @var string
      */
     private $classType;
     /**
+     * @readonly
      * @var string
      */
     private $methodName;
     /**
+     * @readonly
      * @var int
      */
     private $paramPosition;
     /**
+     * @readonly
      * @var string
      */
     private $paramGenericType;

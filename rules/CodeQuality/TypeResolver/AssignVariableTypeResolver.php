@@ -10,6 +10,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class AssignVariableTypeResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

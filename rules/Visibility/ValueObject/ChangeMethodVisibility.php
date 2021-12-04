@@ -6,14 +6,17 @@ namespace Rector\Visibility\ValueObject;
 final class ChangeMethodVisibility
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var int
      */
     private $visibility;

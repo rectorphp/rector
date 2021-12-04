@@ -7,10 +7,12 @@ final class AnnotationToAttribute
 {
     /**
      * @var class-string|string
+     * @readonly
      */
     private $tag;
     /**
      * @var class-string
+     * @readonly
      */
     private $attributeClass;
     /**

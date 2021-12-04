@@ -22,10 +22,12 @@ final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\G
      */
     private const AT_NAMING_REGEX = '#[\\w+]At$#';
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;

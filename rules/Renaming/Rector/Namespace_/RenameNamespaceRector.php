@@ -37,6 +37,7 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
      */
     private $isChangedInNamespaces = [];
     /**
+     * @readonly
      * @var \Rector\Naming\NamespaceMatcher
      */
     private $namespaceMatcher;

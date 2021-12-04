@@ -14,6 +14,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface
 {
     /**
+     * @readonly
      * @var \Rector\PSR4\Composer\PSR4AutoloadPathsProvider
      */
     private $psr4AutoloadPathsProvider;

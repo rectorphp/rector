@@ -6,11 +6,13 @@ namespace Rector\Removing\ValueObject;
 final class RemoveFuncCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $funcCall;
     /**
      * @var array<int, mixed[]>
+     * @readonly
      */
     private $argumentPositionAndValues = [];
     /**

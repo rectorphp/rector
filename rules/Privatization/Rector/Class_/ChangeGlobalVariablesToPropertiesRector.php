@@ -28,6 +28,7 @@ final class ChangeGlobalVariablesToPropertiesRector extends \Rector\Core\Rector\
      */
     private $globalVariableNames = [];
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

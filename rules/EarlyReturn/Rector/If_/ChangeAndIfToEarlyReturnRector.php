@@ -27,18 +27,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeAndIfToEarlyReturnRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
+     * @readonly
      * @var \Rector\EarlyReturn\NodeFactory\InvertedIfFactory
      */
     private $invertedIfFactory;
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer
      */
     private $booleanAndAnalyzer;

@@ -11,6 +11,7 @@ use RectorPrefix20211204\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;

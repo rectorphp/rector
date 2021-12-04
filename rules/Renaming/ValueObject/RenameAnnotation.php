@@ -10,10 +10,12 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 final class RenameAnnotation implements \Rector\Renaming\Contract\RenameAnnotationInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldAnnotation;
     /**
+     * @readonly
      * @var string
      */
     private $newAnnotation;

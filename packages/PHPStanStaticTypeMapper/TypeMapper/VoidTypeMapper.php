@@ -23,6 +23,7 @@ final class VoidTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\T
      */
     private const VOID = 'void';
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

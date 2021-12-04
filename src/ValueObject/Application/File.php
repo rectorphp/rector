@@ -18,6 +18,7 @@ final class File
      */
     private $hasChanged = \false;
     /**
+     * @readonly
      * @var string
      */
     private $originalFileContent;
@@ -46,6 +47,7 @@ final class File
      */
     private $rectorErrors = [];
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $smartFileInfo;

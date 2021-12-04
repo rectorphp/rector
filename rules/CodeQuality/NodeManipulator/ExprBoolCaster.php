@@ -17,18 +17,22 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class ExprBoolCaster
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer
      */
     private $staticTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

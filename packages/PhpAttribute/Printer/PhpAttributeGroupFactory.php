@@ -23,22 +23,27 @@ use RectorPrefix20211204\Webmozart\Assert\Assert;
 final class PhpAttributeGroupFactory
 {
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\NodeAnalyzer\NamedArgumentsResolver
      */
     private $namedArgumentsResolver;
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
     private $annotationToAttributeMapper;
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\AttributeNameFactory
      */
     private $attributeNameFactory;
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
     private $namedArgsFactory;
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector
      */
     private $exprParameterReflectionTypeCorrector;

@@ -55,6 +55,7 @@ final class EregToPcreTransformer
      */
     private $cache = [];
     /**
+     * @readonly
      * @var string
      */
     private $pcreDelimiter = '#';

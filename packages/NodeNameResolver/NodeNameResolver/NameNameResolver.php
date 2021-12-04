@@ -15,6 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NameNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver\FuncCallNameResolver
      */
     private $funcCallNameResolver;

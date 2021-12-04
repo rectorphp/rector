@@ -11,10 +11,12 @@ use RectorPrefix20211204\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class TraitScopeFaker
 {
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

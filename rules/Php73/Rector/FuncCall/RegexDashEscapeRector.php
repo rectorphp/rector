@@ -40,6 +40,7 @@ final class RegexDashEscapeRector extends \Rector\Core\Rector\AbstractRector imp
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\\[)-(\\\\(w|s|d)[.*]?)\\]#i';
     /**
+     * @readonly
      * @var \Rector\Core\Php\Regex\RegexPatternArgumentManipulator
      */
     private $regexPatternArgumentManipulator;

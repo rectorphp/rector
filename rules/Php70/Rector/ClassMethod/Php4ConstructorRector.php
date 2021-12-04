@@ -30,10 +30,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class Php4ConstructorRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer
      */
     private $php4ConstructorClassMethodAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;

@@ -20,26 +20,32 @@ use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
 final class FuncCallStaticCallToMethodCallAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver
      */
     private $typeProvidingExprFromClassResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\Transform\NodeFactory\PropertyFetchFactory
      */
     private $propertyFetchFactory;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

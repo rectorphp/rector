@@ -19,18 +19,22 @@ final class PostFileProcessor
      */
     private $postRectors = [];
     /**
+     * @readonly
      * @var \Symplify\Skipper\Skipper\Skipper
      */
     private $skipper;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
+     * @readonly
      * @var \Rector\Core\Logging\CurrentRectorProvider
      */
     private $currentRectorProvider;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

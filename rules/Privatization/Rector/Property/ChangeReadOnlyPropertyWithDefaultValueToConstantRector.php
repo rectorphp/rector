@@ -20,14 +20,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeReadOnlyPropertyWithDefaultValueToConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeFactory\ClassConstantFactory
      */
     private $classConstantFactory;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer
      */
     private $propertyFetchWithConstFetchReplacer;

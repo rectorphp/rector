@@ -14,10 +14,12 @@ final class TokenIteratorFactory
      */
     private const INDEX = 'index';
     /**
+     * @readonly
      * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

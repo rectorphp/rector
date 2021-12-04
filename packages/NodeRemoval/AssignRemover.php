@@ -12,18 +12,22 @@ use Rector\PostRector\Collector\NodesToReplaceCollector;
 final class AssignRemover
 {
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToReplaceCollector
      */
     private $nodesToReplaceCollector;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
     /**
+     * @readonly
      * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeManipulator\LivingCodeManipulator
      */
     private $livingCodeManipulator;

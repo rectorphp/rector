@@ -24,6 +24,7 @@ final class AddPackageToRequireDevComposerRector implements \Rector\Composer\Con
      */
     private $packageAndVersions = [];
     /**
+     * @readonly
      * @var \Rector\Composer\Guard\VersionGuard
      */
     private $versionGuard;

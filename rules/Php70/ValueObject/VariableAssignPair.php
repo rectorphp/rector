@@ -15,10 +15,12 @@ final class VariableAssignPair
 {
     /**
      * @var ArrayDimFetch|PropertyFetch|StaticPropertyFetch|Variable
+     * @readonly
      */
     private $variable;
     /**
      * @var Assign|AssignOp|AssignRef
+     * @readonly
      */
     private $assign;
     /**

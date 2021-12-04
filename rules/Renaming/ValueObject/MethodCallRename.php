@@ -8,14 +8,17 @@ use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRename implements \Rector\Renaming\Contract\MethodCallRenameInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
+     * @readonly
      * @var string
      */
     private $newMethod;

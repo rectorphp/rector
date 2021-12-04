@@ -26,26 +26,32 @@ final class PropertyTypeInferer
      */
     private $propertyTypeInferers = [];
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer
      */
     private $genericClassStringTypeNormalizer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer
      */
     private $defaultValuePropertyTypeInferer;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer
      */
     private $varDocPropertyTypeInferer;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

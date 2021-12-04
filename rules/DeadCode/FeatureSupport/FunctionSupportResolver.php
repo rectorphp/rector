@@ -12,6 +12,7 @@ final class FunctionSupportResolver
      */
     private const FUNCTIONS_BY_VERSION = [\Rector\Core\ValueObject\PhpVersion::PHP_56 => ['session_abort', 'hash_equals', 'ldap_escape'], \Rector\Core\ValueObject\PhpVersion::PHP_70 => ['random_int', 'random_bytes', 'intdiv', 'preg_replace_callback_array', 'error_clear_last'], \Rector\Core\ValueObject\PhpVersion::PHP_71 => ['is_iterable'], \Rector\Core\ValueObject\PhpVersion::PHP_72 => ['spl_object_id', 'stream_isatty'], \Rector\Core\ValueObject\PhpVersion::PHP_73 => ['array_key_first', 'array_key_last', 'hrtime', 'is_countable'], \Rector\Core\ValueObject\PhpVersion::PHP_74 => ['get_mangled_object_vars', 'mb_str_split', 'password_algos']];
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

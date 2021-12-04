@@ -17,6 +17,7 @@ final class PHPStanStaticTypeMapper
 {
     /**
      * @var \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface[]
+     * @readonly
      */
     private $typeMappers;
     /**

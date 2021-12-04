@@ -7,14 +7,17 @@ use PHPStan\Type\ObjectType;
 final class NewToMethodCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $newType;
     /**
+     * @readonly
      * @var string
      */
     private $serviceType;
     /**
+     * @readonly
      * @var string
      */
     private $serviceMethod;

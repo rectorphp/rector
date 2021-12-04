@@ -37,6 +37,7 @@ final class ArrayKeyFirstLastRector extends \Rector\Core\Rector\AbstractRector i
      */
     private const PREVIOUS_TO_NEW_FUNCTIONS = ['reset' => self::ARRAY_KEY_FIRST, 'end' => self::ARRAY_KEY_LAST];
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

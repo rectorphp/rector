@@ -48,26 +48,32 @@ final class DoctrineAnnotationClassToAttributeRector extends \Rector\Core\Rector
      */
     private $shouldRemoveAnnotations = \true;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeFactory\AttributeFlagFactory
      */
     private $attributeFlagFactory;
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\Printer\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\AnnotationTargetResolver
      */
     private $annotationTargetResolver;

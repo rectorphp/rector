@@ -21,6 +21,7 @@ final class NullableTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\
      */
     private $phpParserNodeMapper;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

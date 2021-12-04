@@ -17,10 +17,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivatePropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
+     * @readonly
      * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
      */
     private $complexNodeRemover;

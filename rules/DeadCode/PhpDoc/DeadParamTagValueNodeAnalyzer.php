@@ -25,14 +25,17 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 final class DeadParamTagValueNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
     private $genericTypeNodeAnalyzer;

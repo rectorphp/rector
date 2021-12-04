@@ -20,6 +20,7 @@ final class InfiniteLoopValidator
      */
     private const ALLOWED_INFINITE_RECTOR_CLASSES = [\Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector::class, \Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector::class, \Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector::class];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

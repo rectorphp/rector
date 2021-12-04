@@ -40,22 +40,27 @@ final class DateTimeToDateTimeInterfaceRector extends \Rector\Core\Rector\Abstra
      */
     private const DATE_TIME = 'DateTime';
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeManipulator\ClassMethodReturnTypeManipulator
      */
     private $classMethodReturnTypeManipulator;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeManipulator\ClassMethodParameterTypeManipulator
      */
     private $classMethodParameterTypeManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;

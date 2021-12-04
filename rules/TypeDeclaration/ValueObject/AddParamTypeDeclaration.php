@@ -9,18 +9,22 @@ use Rector\Core\Validation\RectorAssert;
 final class AddParamTypeDeclaration
 {
     /**
+     * @readonly
      * @var string
      */
     private $className;
     /**
+     * @readonly
      * @var string
      */
     private $methodName;
     /**
+     * @readonly
      * @var int
      */
     private $position;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $paramType;

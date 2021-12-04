@@ -14,14 +14,17 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\FileSystemGuard;
 final class AdditionalAutoloader
 {
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;

@@ -12,14 +12,17 @@ use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 final class VendorLockResolver
 {
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver
      */
     private $classMethodParamVendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver
      */
     private $classMethodReturnVendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver
      */
     private $propertyTypeVendorLockResolver;

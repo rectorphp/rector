@@ -8,6 +8,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassLikeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

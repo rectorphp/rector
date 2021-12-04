@@ -30,6 +30,7 @@ final class RenameAnnotationRector extends \Rector\Core\Rector\AbstractRector im
      */
     private $renameAnnotations = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
     private $docBlockTagReplacer;

@@ -11,6 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ChangedNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

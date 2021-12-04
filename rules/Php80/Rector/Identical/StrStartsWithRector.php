@@ -25,6 +25,7 @@ final class StrStartsWithRector extends \Rector\Core\Rector\AbstractRector imple
 {
     /**
      * @var \Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface[]
+     * @readonly
      */
     private $strStartWithMatchAndRefactors;
     /**

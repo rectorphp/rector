@@ -9,10 +9,12 @@ use PHPStan\Type\Type;
 final class PropertyType
 {
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $varType;
     /**
+     * @readonly
      * @var \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null
      */
     private $propertyTypeNode;

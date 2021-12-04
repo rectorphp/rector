@@ -19,10 +19,12 @@ final class ClassAnnotationMatcher
      */
     private $fullyQualifiedNameByHash = [];
     /**
+     * @readonly
      * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
      */
     private $useImportNameMatcher;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

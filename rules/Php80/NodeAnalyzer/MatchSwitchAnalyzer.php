@@ -16,10 +16,12 @@ use Rector\Php80\ValueObject\CondAndExpr;
 final class MatchSwitchAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\SwitchAnalyzer
      */
     private $switchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

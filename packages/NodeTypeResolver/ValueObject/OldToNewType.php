@@ -7,10 +7,12 @@ use PHPStan\Type\Type;
 final class OldToNewType
 {
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $oldType;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $newType;

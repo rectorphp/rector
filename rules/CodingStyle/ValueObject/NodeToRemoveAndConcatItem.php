@@ -8,10 +8,12 @@ use PhpParser\Node\Expr;
 final class NodeToRemoveAndConcatItem
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $removedExpr;
     /**
+     * @readonly
      * @var \PhpParser\Node
      */
     private $concatItemNode;

@@ -32,59 +32,73 @@ use RectorPrefix20211204\Symfony\Component\Console\Style\SymfonyStyle;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
+     * @readonly
      * @var \Rector\Core\Autoloading\AdditionalAutoloader
      */
     private $additionalAutoloader;
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
+     * @readonly
      * @var \Rector\Core\Reporting\MissingRectorRulesReporter
      */
     private $missingRectorRulesReporter;
     /**
+     * @readonly
      * @var \Rector\Core\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
     /**
+     * @readonly
      * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
      */
     private $fileFactory;
     /**
+     * @readonly
      * @var \Rector\Core\Autoloading\BootstrapFilesIncluder
      */
     private $bootstrapFilesIncluder;
     /**
+     * @readonly
      * @var \Rector\Core\ValueObjectFactory\ProcessResultFactory
      */
     private $processResultFactory;
     /**
+     * @readonly
      * @var \PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
     /**
+     * @readonly
      * @var \Rector\VersionBonding\Application\MissedRectorDueVersionChecker
      */
     private $missedRectorDueVersionChecker;
     /**
+     * @readonly
      * @var \Rector\Core\Validation\EmptyConfigurableRectorChecker
      */
     private $emptyConfigurableRectorChecker;
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\OutputFormatterCollector
      */
     private $outputFormatterCollector;
     /**
+     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
      * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @readonly
      */
     private $rectors;
     /**

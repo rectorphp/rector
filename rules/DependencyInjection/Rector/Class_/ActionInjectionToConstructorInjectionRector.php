@@ -24,14 +24,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ActionInjectionToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $applicationServiceMapProvider;
     /**
+     * @readonly
      * @var \Rector\DependencyInjection\Collector\VariablesToPropertyFetchCollection
      */
     private $variablesToPropertyFetchCollection;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

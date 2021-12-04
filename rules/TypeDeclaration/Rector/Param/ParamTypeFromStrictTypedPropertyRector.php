@@ -28,6 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeFromStrictTypedPropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

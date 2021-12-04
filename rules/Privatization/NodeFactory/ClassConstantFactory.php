@@ -14,10 +14,12 @@ use Rector\Privatization\Naming\ConstantNaming;
 final class ClassConstantFactory
 {
     /**
+     * @readonly
      * @var \Rector\Privatization\Naming\ConstantNaming
      */
     private $constantNaming;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

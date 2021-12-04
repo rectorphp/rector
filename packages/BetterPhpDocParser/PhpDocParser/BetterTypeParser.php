@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 final class BetterTypeParser extends \PHPStan\PhpDocParser\Parser\TypeParser
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
     private $tokenIteratorFactory;

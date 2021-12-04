@@ -17,15 +17,18 @@ use RectorPrefix20211204\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FileFormatter
 {
     /**
+     * @readonly
      * @var \Rector\FileFormatter\EditorConfig\EditorConfigParser
      */
     private $editorConfigParser;
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
      * @var \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface[]
+     * @readonly
      */
     private $fileFormatters = [];
     /**

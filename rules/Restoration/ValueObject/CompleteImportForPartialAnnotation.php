@@ -6,10 +6,12 @@ namespace Rector\Restoration\ValueObject;
 final class CompleteImportForPartialAnnotation
 {
     /**
+     * @readonly
      * @var string
      */
     private $use;
     /**
+     * @readonly
      * @var string
      */
     private $alias;

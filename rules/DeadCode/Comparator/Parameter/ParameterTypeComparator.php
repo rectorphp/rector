@@ -9,6 +9,7 @@ use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 final class ParameterTypeComparator
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\MethodParameterTypeResolver
      */
     private $methodParameterTypeResolver;

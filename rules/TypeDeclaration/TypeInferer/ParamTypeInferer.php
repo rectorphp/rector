@@ -13,14 +13,17 @@ use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 final class ParamTypeInferer
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer
      */
     private $genericClassStringTypeNormalizer;
     /**
      * @var \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface[]
+     * @readonly
      */
     private $paramTypeInferers;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

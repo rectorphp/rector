@@ -33,14 +33,17 @@ final class AddVoidReturnTypeWhereNoReturnRector extends \Rector\Core\Rector\Abs
      */
     private $usePhpdoc = \false;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
     private $silentVoidResolver;
     /**
+     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver
      */
     private $classMethodReturnVendorLockResolver;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;

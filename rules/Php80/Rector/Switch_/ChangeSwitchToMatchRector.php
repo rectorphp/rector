@@ -32,14 +32,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSwitchToMatchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php80\NodeResolver\SwitchExprsResolver
      */
     private $switchExprsResolver;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer
      */
     private $matchSwitchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeFactory\MatchFactory
      */
     private $matchFactory;

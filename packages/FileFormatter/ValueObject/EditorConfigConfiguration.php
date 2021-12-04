@@ -9,14 +9,17 @@ namespace Rector\FileFormatter\ValueObject;
 final class EditorConfigConfiguration
 {
     /**
+     * @readonly
      * @var \Rector\FileFormatter\ValueObject\Indent
      */
     private $indent;
     /**
+     * @readonly
      * @var \Rector\FileFormatter\ValueObject\NewLine
      */
     private $newLine;
     /**
+     * @readonly
      * @var bool
      */
     private $insertFinalNewline;

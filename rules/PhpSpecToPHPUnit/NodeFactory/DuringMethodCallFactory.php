@@ -14,10 +14,12 @@ use Rector\PostRector\Collector\NodesToAddCollector;
 final class DuringMethodCallFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;

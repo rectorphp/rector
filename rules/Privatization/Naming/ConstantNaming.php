@@ -9,6 +9,7 @@ use RectorPrefix20211204\Stringy\Stringy;
 final class ConstantNaming
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

@@ -12,10 +12,12 @@ use RectorPrefix20211204\Symplify\SmartFileSystem\SmartFileSystem;
 final class SimplePhpParser
 {
     /**
+     * @readonly
      * @var \PhpParser\Parser
      */
     private $phpParser;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;

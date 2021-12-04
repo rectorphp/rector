@@ -26,18 +26,22 @@ final class RenamePropertyToMatchTypeRector extends \Rector\Core\Rector\Abstract
      */
     private $hasChanged = \false;
     /**
+     * @readonly
      * @var \Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer
      */
     private $matchTypePropertyRenamer;
     /**
+     * @readonly
      * @var \Rector\Naming\ValueObjectFactory\PropertyRenameFactory
      */
     private $propertyRenameFactory;
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver
      */
     private $matchPropertyTypeExpectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
      */
     private $propertyPromotionRenamer;

@@ -19,6 +19,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 final class TypeWithClassNameTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

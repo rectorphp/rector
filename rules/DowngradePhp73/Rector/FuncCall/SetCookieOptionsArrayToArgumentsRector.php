@@ -35,6 +35,7 @@ final class SetCookieOptionsArrayToArgumentsRector extends \Rector\Core\Rector\A
      */
     private $highestIndex = 1;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

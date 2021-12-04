@@ -10,6 +10,7 @@ use Rector\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

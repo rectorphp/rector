@@ -14,15 +14,18 @@ use Rector\Core\ValueObject\Configuration;
 final class FileFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
      * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
+     * @readonly
      */
     private $fileProcessors;
     /**

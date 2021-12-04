@@ -12,6 +12,7 @@ final class TypeToCallReflectionResolverRegistry
 {
     /**
      * @var \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface[]
+     * @readonly
      */
     private $resolvers;
     /**

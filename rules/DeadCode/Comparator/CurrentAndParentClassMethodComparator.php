@@ -22,18 +22,22 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CurrentAndParentClassMethodComparator
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator
      */
     private $parameterDefaultsComparator;
     /**
+     * @readonly
      * @var \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator
      */
     private $parameterTypeComparator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

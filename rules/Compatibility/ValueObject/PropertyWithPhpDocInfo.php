@@ -11,14 +11,17 @@ use Rector\Core\Exception\ShouldNotHappenException;
 final class PropertyWithPhpDocInfo
 {
     /**
+     * @readonly
      * @var string
      */
     private $propertyName;
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\Property
      */
     private $property;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
     private $phpDocInfo;

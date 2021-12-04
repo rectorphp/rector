@@ -24,10 +24,12 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      */
     private $annotationToAttributeMapper;
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
     private $namedArgsFactory;

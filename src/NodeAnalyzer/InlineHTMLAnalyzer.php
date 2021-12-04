@@ -10,6 +10,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class InlineHTMLAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

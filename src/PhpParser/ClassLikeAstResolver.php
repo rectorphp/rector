@@ -22,10 +22,12 @@ final class ClassLikeAstResolver
      */
     private $classLikesByName = [];
     /**
+     * @readonly
      * @var \Symplify\Astral\PhpParser\SmartPhpParser
      */
     private $smartPhpParser;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

@@ -7,14 +7,17 @@ use PHPStan\Type\ObjectType;
 final class StaticCallToFuncCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var string
      */
     private $function;

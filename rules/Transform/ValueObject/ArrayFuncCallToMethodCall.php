@@ -9,18 +9,22 @@ final class ArrayFuncCallToMethodCall implements \Rector\Transform\Contract\Valu
 {
     /**
      * @var \non-empty-string
+     * @readonly
      */
     private $function;
     /**
      * @var \non-empty-string
+     * @readonly
      */
     private $class;
     /**
      * @var \non-empty-string
+     * @readonly
      */
     private $arrayMethod;
     /**
      * @var \non-empty-string
+     * @readonly
      */
     private $nonArrayMethod;
     /**

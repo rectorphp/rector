@@ -14,6 +14,7 @@ use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 final class EditorConfigParser
 {
     /**
+     * @readonly
      * @var \Idiosyncratic\EditorConfig\EditorConfig
      */
     private $editorConfig;
