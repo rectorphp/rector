@@ -91,7 +91,10 @@ CODE_SAMPLE
                 return null;
             }
             $collectedVariableTypesByNames = $this->mockVariableCollector->collectMockVariableName($node);
-            $this->mockVariableTypesByNames = \array_merge($this->mockVariableTypesByNames, $collectedVariableTypesByNames);
+            $item0Unpacked = $this->mockVariableTypesByNames;
+            /** @var array<string, class-string> $result */
+            $result = \array_merge($item0Unpacked, $collectedVariableTypesByNames);
+            $this->mockVariableTypesByNames = $result;
             $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
             if ($parentNode instanceof \PhpParser\Node\Arg) {
                 $prophesizeMethodCall = $this->createProphesizeMethodCall($node);

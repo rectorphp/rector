@@ -23,7 +23,10 @@ final class RenamedClassesDataCollector
      */
     public function addOldToNewClasses(array $oldToNewClasses) : void
     {
-        $this->oldToNewClasses = \array_merge($this->oldToNewClasses, $oldToNewClasses);
+        $item0Unpacked = $this->oldToNewClasses;
+        /** @var array<string, string> $oldToNewClasses */
+        $oldToNewClasses = \array_merge($item0Unpacked, $oldToNewClasses);
+        $this->oldToNewClasses = $oldToNewClasses;
     }
     /**
      * @return array<string, string>

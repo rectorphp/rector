@@ -110,7 +110,11 @@ CODE_SAMPLE
      */
     private function getRenameClasses() : array
     {
-        return \array_merge($this->renameClasses, $this->renamedClassesDataCollector->getOldToNewClasses());
+        $item0Unpacked = $this->renameClasses;
+        $item1Unpacked = $this->renamedClassesDataCollector->getOldToNewClasses();
+        /** @var array<string, string> $renameClasses */
+        $renameClasses = \array_merge($item0Unpacked, $item1Unpacked);
+        return $renameClasses;
     }
     private function createOldClassRegex(string $oldClass) : string
     {

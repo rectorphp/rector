@@ -36,6 +36,7 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements \Rector\Coding
     public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
     {
         // "new X" or "X::static()"
+        /** @var array<string, string> $shortNamesToFullyQualifiedNames */
         $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveFromFile($file);
         $loweredShortNameFullyQualified = $fullyQualifiedObjectType->getShortNameLowered();
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
