@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211203\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20211204\Helmich\TypoScriptParser\Tokenizer;
 
 use Iterator;
 /**
@@ -20,9 +20,9 @@ class Scanner implements \Iterator
     {
         $this->lines = $lines;
     }
-    public function current() : \RectorPrefix20211203\Helmich\TypoScriptParser\Tokenizer\ScannerLine
+    public function current() : \RectorPrefix20211204\Helmich\TypoScriptParser\Tokenizer\ScannerLine
     {
-        return new \RectorPrefix20211203\Helmich\TypoScriptParser\Tokenizer\ScannerLine($this->index + 1, $this->lines[$this->index]);
+        return new \RectorPrefix20211204\Helmich\TypoScriptParser\Tokenizer\ScannerLine($this->index + 1, $this->lines[$this->index]);
     }
     public function next() : void
     {

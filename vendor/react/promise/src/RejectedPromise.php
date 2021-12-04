@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix20211203\React\Promise;
+namespace RectorPrefix20211204\React\Promise;
 
 /**
  * @deprecated 2.8.0 External usage of RejectedPromise is deprecated, use `reject()` instead.
  */
-class RejectedPromise implements \RectorPrefix20211203\React\Promise\ExtendedPromiseInterface, \RectorPrefix20211203\React\Promise\CancellablePromiseInterface
+class RejectedPromise implements \RectorPrefix20211204\React\Promise\ExtendedPromiseInterface, \RectorPrefix20211204\React\Promise\CancellablePromiseInterface
 {
     private $reason;
     public function __construct($reason = null)
     {
-        if ($reason instanceof \RectorPrefix20211203\React\Promise\PromiseInterface) {
+        if ($reason instanceof \RectorPrefix20211204\React\Promise\PromiseInterface) {
             throw new \InvalidArgumentException('You cannot create React\\Promise\\RejectedPromise with a promise. Use React\\Promise\\reject($promiseOrValue) instead.');
         }
         $this->reason = $reason;
@@ -28,9 +28,9 @@ class RejectedPromise implements \RectorPrefix20211203\React\Promise\ExtendedPro
         try {
             return resolve($onRejected($this->reason));
         } catch (\Throwable $exception) {
-            return new \RectorPrefix20211203\React\Promise\RejectedPromise($exception);
+            return new \RectorPrefix20211204\React\Promise\RejectedPromise($exception);
         } catch (\Exception $exception) {
-            return new \RectorPrefix20211203\React\Promise\RejectedPromise($exception);
+            return new \RectorPrefix20211204\React\Promise\RejectedPromise($exception);
         }
     }
     /**
@@ -41,13 +41,13 @@ class RejectedPromise implements \RectorPrefix20211203\React\Promise\ExtendedPro
     public function done($onFulfilled = null, $onRejected = null, $onProgress = null)
     {
         if (null === $onRejected) {
-            throw \RectorPrefix20211203\React\Promise\UnhandledRejectionException::resolve($this->reason);
+            throw \RectorPrefix20211204\React\Promise\UnhandledRejectionException::resolve($this->reason);
         }
         $result = $onRejected($this->reason);
         if ($result instanceof self) {
-            throw \RectorPrefix20211203\React\Promise\UnhandledRejectionException::resolve($result->reason);
+            throw \RectorPrefix20211204\React\Promise\UnhandledRejectionException::resolve($result->reason);
         }
-        if ($result instanceof \RectorPrefix20211203\React\Promise\ExtendedPromiseInterface) {
+        if ($result instanceof \RectorPrefix20211204\React\Promise\ExtendedPromiseInterface) {
             $result->done();
         }
     }
@@ -68,7 +68,7 @@ class RejectedPromise implements \RectorPrefix20211203\React\Promise\ExtendedPro
     {
         return $this->then(null, function ($reason) use($onFulfilledOrRejected) {
             return resolve($onFulfilledOrRejected())->then(function () use($reason) {
-                return new \RectorPrefix20211203\React\Promise\RejectedPromise($reason);
+                return new \RectorPrefix20211204\React\Promise\RejectedPromise($reason);
             });
         });
     }

@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211203\Symfony\Component\Console\Tester;
+namespace RectorPrefix20211204\Symfony\Component\Console\Tester;
 
-use RectorPrefix20211203\PHPUnit\Framework\Assert;
-use RectorPrefix20211203\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211203\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix20211203\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20211203\Symfony\Component\Console\Output\StreamOutput;
-use RectorPrefix20211203\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
+use RectorPrefix20211204\PHPUnit\Framework\Assert;
+use RectorPrefix20211204\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211204\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix20211204\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211204\Symfony\Component\Console\Output\StreamOutput;
+use RectorPrefix20211204\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful;
 /**
  * @author Amrouche Hamza <hamza.simperfit@gmail.com>
  */
@@ -101,7 +101,7 @@ trait TesterTrait
     }
     public function assertCommandIsSuccessful(string $message = '') : void
     {
-        \RectorPrefix20211203\PHPUnit\Framework\Assert::assertThat($this->statusCode, new \RectorPrefix20211203\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful(), $message);
+        \RectorPrefix20211204\PHPUnit\Framework\Assert::assertThat($this->statusCode, new \RectorPrefix20211204\Symfony\Component\Console\Tester\Constraint\CommandIsSuccessful(), $message);
     }
     /**
      * Sets the user inputs.
@@ -129,7 +129,7 @@ trait TesterTrait
     {
         $this->captureStreamsIndependently = \array_key_exists('capture_stderr_separately', $options) && $options['capture_stderr_separately'];
         if (!$this->captureStreamsIndependently) {
-            $this->output = new \RectorPrefix20211203\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
+            $this->output = new \RectorPrefix20211204\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
             if (isset($options['decorated'])) {
                 $this->output->setDecorated($options['decorated']);
             }
@@ -137,8 +137,8 @@ trait TesterTrait
                 $this->output->setVerbosity($options['verbosity']);
             }
         } else {
-            $this->output = new \RectorPrefix20211203\Symfony\Component\Console\Output\ConsoleOutput($options['verbosity'] ?? \RectorPrefix20211203\Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL, $options['decorated'] ?? null);
-            $errorOutput = new \RectorPrefix20211203\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
+            $this->output = new \RectorPrefix20211204\Symfony\Component\Console\Output\ConsoleOutput($options['verbosity'] ?? \RectorPrefix20211204\Symfony\Component\Console\Output\ConsoleOutput::VERBOSITY_NORMAL, $options['decorated'] ?? null);
+            $errorOutput = new \RectorPrefix20211204\Symfony\Component\Console\Output\StreamOutput(\fopen('php://memory', 'w', \false));
             $errorOutput->setFormatter($this->output->getFormatter());
             $errorOutput->setVerbosity($this->output->getVerbosity());
             $errorOutput->setDecorated($this->output->isDecorated());

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211203\Tracy\Dumper;
+namespace RectorPrefix20211204\Tracy\Dumper;
 
 /**
  * @internal

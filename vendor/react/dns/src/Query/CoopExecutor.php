@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211203\React\Dns\Query;
+namespace RectorPrefix20211204\React\Dns\Query;
 
-use RectorPrefix20211203\React\Promise\Promise;
+use RectorPrefix20211204\React\Promise\Promise;
 /**
  * Cooperatively resolves hosts via the given base executor to ensure same query is not run concurrently
  *
@@ -33,12 +33,12 @@ use RectorPrefix20211203\React\Promise\Promise;
  * );
  * ```
  */
-final class CoopExecutor implements \RectorPrefix20211203\React\Dns\Query\ExecutorInterface
+final class CoopExecutor implements \RectorPrefix20211204\React\Dns\Query\ExecutorInterface
 {
     private $executor;
     private $pending = array();
     private $counts = array();
-    public function __construct(\RectorPrefix20211203\React\Dns\Query\ExecutorInterface $base)
+    public function __construct(\RectorPrefix20211204\React\Dns\Query\ExecutorInterface $base)
     {
         $this->executor = $base;
     }
@@ -70,7 +70,7 @@ final class CoopExecutor implements \RectorPrefix20211203\React\Dns\Query\Execut
         // when no other child promise is awaiting the same query.
         $pending =& $this->pending;
         $counts =& $this->counts;
-        return new \RectorPrefix20211203\React\Promise\Promise(function ($resolve, $reject) use($promise) {
+        return new \RectorPrefix20211204\React\Promise\Promise(function ($resolve, $reject) use($promise) {
             $promise->then($resolve, $reject);
         }, function () use(&$promise, $key, $query, &$pending, &$counts) {
             if (--$counts[$key] < 1) {
@@ -81,7 +81,7 @@ final class CoopExecutor implements \RectorPrefix20211203\React\Dns\Query\Execut
             throw new \RuntimeException('DNS query for ' . $query->describe() . ' has been cancelled');
         });
     }
-    private function serializeQueryToIdentity(\RectorPrefix20211203\React\Dns\Query\Query $query)
+    private function serializeQueryToIdentity(\RectorPrefix20211204\React\Dns\Query\Query $query)
     {
         return \sprintf('%s:%s:%s', $query->name, $query->type, $query->class);
     }

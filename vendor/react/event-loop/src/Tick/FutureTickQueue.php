@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211203\React\EventLoop\Tick;
+namespace RectorPrefix20211204\React\EventLoop\Tick;
 
 use SplQueue;
 /**
