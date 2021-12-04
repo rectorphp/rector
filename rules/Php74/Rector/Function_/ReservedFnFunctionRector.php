@@ -82,11 +82,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $reservedName)) {
                 continue;
             }
-            if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
-                $node->name = new \PhpParser\Node\Name($newName);
-            } else {
-                $node->name = new \PhpParser\Node\Identifier($newName);
-            }
+            $node->name = $node instanceof \PhpParser\Node\Expr\FuncCall ? new \PhpParser\Node\Name($newName) : new \PhpParser\Node\Identifier($newName);
             return $node;
         }
         return null;
