@@ -47,6 +47,7 @@ final class DowngradePathsCommand extends Command
             'vendor/symplify vendor/nikic src packages',
             'vendor/ssch',
             'rules',
+            'utils',
             'bin rector.php',
         ], $downgradePaths);
 
