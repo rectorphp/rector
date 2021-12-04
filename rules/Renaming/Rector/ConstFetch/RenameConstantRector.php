@@ -21,7 +21,7 @@ final class RenameConstantRector extends AbstractRector implements ConfigurableR
     /**
      * @var string
      */
-    public const OLD_TO_NEW_CONSTANTS = 'old_to_new_constants';
+    final public const OLD_TO_NEW_CONSTANTS = 'old_to_new_constants';
 
     /**
      * @var array<string, string>

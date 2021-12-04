@@ -27,7 +27,7 @@ final class CallableInMethodCallToVariableRector extends AbstractRector implemen
     /**
      * @var string
      */
-    public const CALLABLE_IN_METHOD_CALL_TO_VARIABLE = 'callable_in_method_call_to_variable';
+    final public const CALLABLE_IN_METHOD_CALL_TO_VARIABLE = 'callable_in_method_call_to_variable';
 
     /**
      * @var CallableInMethodCallToVariable[]

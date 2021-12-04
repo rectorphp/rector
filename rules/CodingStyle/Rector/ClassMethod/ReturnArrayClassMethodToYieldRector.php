@@ -32,7 +32,7 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
     /**
      * @var string
      */
-    public const METHODS_TO_YIELDS = 'methods_to_yields';
+    final public const METHODS_TO_YIELDS = 'methods_to_yields';
 
     /**
      * @var ReturnArrayClassMethodToyield[]

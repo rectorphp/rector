@@ -23,7 +23,7 @@ final class PropertyAssignToMethodCallRector extends AbstractRector implements C
     /**
      * @var string
      */
-    public const PROPERTY_ASSIGNS_TO_METHODS_CALLS = 'property_assigns_to_methods_calls';
+    final public const PROPERTY_ASSIGNS_TO_METHODS_CALLS = 'property_assigns_to_methods_calls';
 
     /**
      * @var PropertyAssignToMethodCall[]

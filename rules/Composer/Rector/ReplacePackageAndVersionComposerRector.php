@@ -20,7 +20,7 @@ final class ReplacePackageAndVersionComposerRector implements ComposerRectorInte
     /**
      * @var string
      */
-    public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';
+    final public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';
 
     /**
      * @var ReplacePackageAndVersion[]

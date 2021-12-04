@@ -11,7 +11,7 @@ final class DefaultResolver implements TemplateResolverInterface
     /**
      * @var string
      */
-    public const TYPE = 'default';
+    final public const TYPE = 'default';
 
     public function provide(): string
     {

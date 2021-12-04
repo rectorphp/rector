@@ -27,7 +27,7 @@ final class ControlStructure
     /**
      * @var array<class-string<FunctionLike>>
      */
-    public const RETURN_ISOLATING_SCOPE_NODE_TYPES = [
+    final public const RETURN_ISOLATING_SCOPE_NODE_TYPES = [
         Function_::class,
         ClassMethod::class,
         Closure::class,
@@ -37,7 +37,7 @@ final class ControlStructure
     /**
      * @var array<class-string<Node>>
      */
-    public const BREAKING_SCOPE_NODE_TYPES = [
+    final public const BREAKING_SCOPE_NODE_TYPES = [
         For_::class,
         Foreach_::class,
         If_::class,
@@ -54,7 +54,7 @@ final class ControlStructure
      * These situations happens only if condition is met
      * @var array<class-string<Node>>
      */
-    public const CONDITIONAL_NODE_SCOPE_TYPES = [
+    final public const CONDITIONAL_NODE_SCOPE_TYPES = [
         If_::class,
         While_::class,
         Do_::class,

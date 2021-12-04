@@ -23,7 +23,7 @@ final class ChangeConstantVisibilityRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';
+    final public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';
 
     /**
      * @var ChangeConstantVisibility[]

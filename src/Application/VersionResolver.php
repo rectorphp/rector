@@ -18,12 +18,12 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = '@package_version@';
+    final public const PACKAGE_VERSION = '@package_version@';
 
     /**
      * @var string
      */
-    public const RELEASE_DATE = '@release_date@';
+    final public const RELEASE_DATE = '@release_date@';
 
     public static function resolvePackageVersion(): string
     {

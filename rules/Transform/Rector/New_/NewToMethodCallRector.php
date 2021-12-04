@@ -29,7 +29,7 @@ final class NewToMethodCallRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const NEWS_TO_METHOD_CALLS = 'news_to_method_calls';
+    final public const NEWS_TO_METHOD_CALLS = 'news_to_method_calls';
 
     /**
      * @var NewToMethodCall[]

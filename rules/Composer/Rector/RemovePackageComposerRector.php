@@ -18,7 +18,7 @@ final class RemovePackageComposerRector implements ComposerRectorInterface
     /**
      * @var string
      */
-    public const PACKAGE_NAMES = 'package_names';
+    final public const PACKAGE_NAMES = 'package_names';
 
     /**
      * @var string[]

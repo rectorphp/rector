@@ -23,7 +23,7 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
     /**
      * @var string
      */
-    public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';
+    final public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';
 
     /**
      * @var UnsetAndIssetToMethodCall[]

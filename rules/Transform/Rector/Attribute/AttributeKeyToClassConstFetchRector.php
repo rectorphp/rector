@@ -24,7 +24,7 @@ final class AttributeKeyToClassConstFetchRector extends AbstractRector implement
     /**
      * @var string
      */
-    public const ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES = 'attribute_keys_to_class_const_fetches';
+    final public const ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES = 'attribute_keys_to_class_const_fetches';
 
     /**
      * @var AttributeKeyToClassConstFetch[]

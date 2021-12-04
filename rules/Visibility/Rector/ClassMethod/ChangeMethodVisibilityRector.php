@@ -26,7 +26,7 @@ final class ChangeMethodVisibilityRector extends AbstractRector implements Confi
     /**
      * @var string
      */
-    public const METHOD_VISIBILITIES = 'method_visibilities';
+    final public const METHOD_VISIBILITIES = 'method_visibilities';
 
     /**
      * @var ChangeMethodVisibility[]

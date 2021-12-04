@@ -30,7 +30,7 @@ final class ServiceGetterToConstructorInjectionRector extends AbstractRector imp
     /**
      * @var string
      */
-    public const METHOD_CALL_TO_SERVICES = 'method_call_to_services';
+    final public const METHOD_CALL_TO_SERVICES = 'method_call_to_services';
 
     /**
      * @var ServiceGetterToConstructorInjection[]

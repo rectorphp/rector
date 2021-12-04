@@ -21,7 +21,7 @@ final class NewToStaticCallRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const TYPE_TO_STATIC_CALLS = 'type_to_static_calls';
+    final public const TYPE_TO_STATIC_CALLS = 'type_to_static_calls';
 
     /**
      * @var NewToStaticCall[]

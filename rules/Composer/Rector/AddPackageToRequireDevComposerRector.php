@@ -20,7 +20,7 @@ final class AddPackageToRequireDevComposerRector implements ComposerRectorInterf
     /**
      * @var string
      */
-    public const PACKAGES_AND_VERSIONS = 'packages_and_version';
+    final public const PACKAGES_AND_VERSIONS = 'packages_and_version';
 
     /**
      * @var PackageAndVersion[]

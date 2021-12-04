@@ -9,7 +9,7 @@ final class StaticNonPhpFileSuffixes
     /**
      * @var string[]
      */
-    public const SUFFIXES = ['neon', 'yaml', 'xml', 'yml', 'twig', 'latte', 'blade.php'];
+    final public const SUFFIXES = ['neon', 'yaml', 'xml', 'yml', 'twig', 'latte', 'blade.php'];
 
     public static function getSuffixRegexPattern(): string
     {

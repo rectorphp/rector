@@ -25,7 +25,7 @@ final class DimFetchAssignToMethodCallRector extends AbstractRector implements C
     /**
      * @var string
      */
-    public const DIM_FETCH_ASSIGN_TO_METHOD_CALL = 'dim_fetch_assign_to_method_call';
+    final public const DIM_FETCH_ASSIGN_TO_METHOD_CALL = 'dim_fetch_assign_to_method_call';
 
     /**
      * @var DimFetchAssignToMethodCall[]

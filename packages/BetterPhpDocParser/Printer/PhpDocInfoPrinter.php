@@ -34,7 +34,7 @@ final class PhpDocInfoPrinter
      * @var string
      * @see https://regex101.com/r/Ab0Vey/1
      */
-    public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
+    final public const CLOSING_DOCBLOCK_REGEX = '#\*\/(\s+)?$#';
 
     /**
      * @var string

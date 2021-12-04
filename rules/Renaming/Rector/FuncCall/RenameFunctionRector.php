@@ -23,7 +23,7 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
     /**
      * @var string
      */
-    public const OLD_FUNCTION_TO_NEW_FUNCTION = 'old_function_to_new_function';
+    final public const OLD_FUNCTION_TO_NEW_FUNCTION = 'old_function_to_new_function';
 
     /**
      * @var array<string, string>

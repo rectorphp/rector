@@ -19,7 +19,7 @@ final class RenamePackageComposerRector implements ComposerRectorInterface
     /**
      * @var string
      */
-    public const RENAME_PACKAGES = 'rename_packages';
+    final public const RENAME_PACKAGES = 'rename_packages';
 
     /**
      * @var RenamePackage[]

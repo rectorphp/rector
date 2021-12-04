@@ -29,7 +29,7 @@ final class MethodCallToMethodCallRector extends AbstractRector implements Confi
     /**
      * @var string
      */
-    public const METHOD_CALLS_TO_METHOD_CALLS = 'method_calls_to_method_calls';
+    final public const METHOD_CALLS_TO_METHOD_CALLS = 'method_calls_to_method_calls';
 
     /**
      * @var MethodCallToMethodCall[]

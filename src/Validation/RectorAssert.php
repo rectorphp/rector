@@ -17,7 +17,7 @@ final class RectorAssert
      * @see https://regex101.com/r/PYQaPF/1
      * @var string
      */
-    public const CLASS_NAME_REGEX = '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*$#';
+    final public const CLASS_NAME_REGEX = '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*(\\\\[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)*$#';
 
     /**
      * Assert value is valid class name

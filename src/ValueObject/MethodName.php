@@ -12,64 +12,64 @@ final class MethodName
     /**
      * @var string
      */
-    public const __SET = '__set';
+    final public const __SET = '__set';
 
     /**
      * @var string
      */
-    public const __GET = '__get';
+    final public const __GET = '__get';
 
     /**
      * @var string
      */
-    public const CONSTRUCT = '__construct';
+    final public const CONSTRUCT = '__construct';
 
     /**
      * @var string
      */
-    public const DESCTRUCT = '__destruct';
+    final public const DESCTRUCT = '__destruct';
 
     /**
      * @var string
      */
-    public const CLONE = '__clone';
+    final public const CLONE = '__clone';
 
     /**
      * Mostly used in unit tests
      * @see https://phpunit.readthedocs.io/en/9.3/fixtures.html#more-setup-than-teardown
      * @var string
      */
-    public const SET_UP = 'setUp';
+    final public const SET_UP = 'setUp';
 
     /**
      * Mostly used in unit tests
      * @var string
      */
-    public const TEAR_DOWN = 'tearDown';
+    final public const TEAR_DOWN = 'tearDown';
 
     /**
      * @var string
      */
-    public const SET_STATE = '__set_state';
+    final public const SET_STATE = '__set_state';
 
     /**
      * @see https://phpunit.readthedocs.io/en/9.3/fixtures.html#fixtures-sharing-fixture-examples-databasetest-php
      * @var string
      */
-    public const SET_UP_BEFORE_CLASS = 'setUpBeforeClass';
+    final public const SET_UP_BEFORE_CLASS = 'setUpBeforeClass';
 
     /**
      * @var string
      */
-    public const CALL = '__call';
+    final public const CALL = '__call';
 
     /**
      * @var string
      */
-    public const TO_STRING = '__toString';
+    final public const TO_STRING = '__toString';
 
     /**
      * @var string
      */
-    public const INVOKE = '__invoke';
+    final public const INVOKE = '__invoke';
 }

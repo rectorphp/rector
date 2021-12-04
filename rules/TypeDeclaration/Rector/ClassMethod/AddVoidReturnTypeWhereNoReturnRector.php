@@ -29,7 +29,7 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
     /**
      * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code beeing processed.
      */
-    public const USE_PHPDOC = 'use_phpdoc';
+    final public const USE_PHPDOC = 'use_phpdoc';
 
     private bool $usePhpdoc = false;
 

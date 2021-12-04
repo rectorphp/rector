@@ -12,15 +12,15 @@ final class CacheKey
     /**
      * @var string
      */
-    public const CONFIGURATION_HASH_KEY = 'configuration_hash';
+    final public const CONFIGURATION_HASH_KEY = 'configuration_hash';
 
     /**
      * @var string
      */
-    public const FILE_HASH_KEY = 'file_hash';
+    final public const FILE_HASH_KEY = 'file_hash';
 
     /**
      * @var string
      */
-    public const DEPENDENT_FILES_KEY = 'dependency_files_key';
+    final public const DEPENDENT_FILES_KEY = 'dependency_files_key';
 }

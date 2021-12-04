@@ -25,7 +25,7 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
     /**
      * @var string
      */
-    public const REMOVED_ARGUMENTS = 'removed_arguments';
+    final public const REMOVED_ARGUMENTS = 'removed_arguments';
 
     /**
      * @var ArgumentRemover[]

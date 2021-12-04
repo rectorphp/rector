@@ -28,7 +28,7 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector implements Conf
     /**
      * @var string
      */
-    public const PHP_VERSION_CONSTRAINT = 'phpVersionConstraint';
+    final public const PHP_VERSION_CONSTRAINT = 'phpVersionConstraint';
 
     private string | int | null $phpVersionConstraint;
 

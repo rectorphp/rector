@@ -12,30 +12,30 @@ final class Name
     /**
      * @var string
      */
-    public const LINE = 'line';
+    final public const LINE = 'line';
 
     /**
      * @var string
      */
-    public const MESSAGE = 'message';
+    final public const MESSAGE = 'message';
 
     /**
      * @var string
      */
-    public const RELATIVE_FILE_PATH = 'relative_file_path';
+    final public const RELATIVE_FILE_PATH = 'relative_file_path';
 
     /**
      * @var string
      */
-    public const DIFF = 'diff';
+    final public const DIFF = 'diff';
 
     /**
      * @var string
      */
-    public const DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
+    final public const DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
 
     /**
      * @var string
      */
-    public const APPLIED_RECTORS = 'applied_rectors';
+    final public const APPLIED_RECTORS = 'applied_rectors';
 }

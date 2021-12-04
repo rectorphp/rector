@@ -23,7 +23,7 @@ final class RenameStaticMethodRector extends AbstractRector implements Configura
     /**
      * @var string
      */
-    public const OLD_TO_NEW_METHODS_BY_CLASSES = 'old_to_new_method_by_classes';
+    final public const OLD_TO_NEW_METHODS_BY_CLASSES = 'old_to_new_method_by_classes';
 
     /**
      * @var string

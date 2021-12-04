@@ -52,12 +52,12 @@ final class TypedPropertyRector extends AbstractRector implements ConfigurableRe
     /**
      * @var string
      */
-    public const CLASS_LIKE_TYPE_ONLY = 'class_like_type_only';
+    final public const CLASS_LIKE_TYPE_ONLY = 'class_like_type_only';
 
     /**
      * @var string
      */
-    public const PRIVATE_PROPERTY_ONLY = 'PRIVATE_PROPERTY_ONLY';
+    final public const PRIVATE_PROPERTY_ONLY = 'PRIVATE_PROPERTY_ONLY';
 
     /**
      * Useful for refactoring of huge applications. Taking types first narrows scope

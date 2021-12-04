@@ -27,7 +27,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @api
      * @var string
      */
-    public const TYPE_TO_PREFERENCE = 'type_to_preference';
+    final public const TYPE_TO_PREFERENCE = 'type_to_preference';
 
     /**
      * @var array<PreferenceSelfThis>

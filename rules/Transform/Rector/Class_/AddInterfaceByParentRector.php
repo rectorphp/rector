@@ -24,7 +24,7 @@ final class AddInterfaceByParentRector extends AbstractRector implements Configu
     /**
      * @var string
      */
-    public const INTERFACE_BY_PARENT = 'interface_by_parent';
+    final public const INTERFACE_BY_PARENT = 'interface_by_parent';
 
     /**
      * @var array<string, string>

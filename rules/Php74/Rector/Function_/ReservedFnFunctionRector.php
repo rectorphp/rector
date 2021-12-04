@@ -27,7 +27,7 @@ final class ReservedFnFunctionRector extends AbstractRector implements Configura
      * @api
      * @var string
      */
-    public const RESERVED_NAMES_TO_NEW_ONES = '$reservedNamesToNewOnes';
+    final public const RESERVED_NAMES_TO_NEW_ONES = '$reservedNamesToNewOnes';
 
     /**
      * @var string[]
@@ -100,11 +100,7 @@ CODE_SAMPLE
                 continue;
             }
 
-            if ($node instanceof FuncCall) {
-                $node->name = new Name($newName);
-            } else {
-                $node->name = new Identifier($newName);
-            }
+            $node->name = $node instanceof FuncCall ? new Name($newName) : new Identifier($newName);
 
             return $node;
         }

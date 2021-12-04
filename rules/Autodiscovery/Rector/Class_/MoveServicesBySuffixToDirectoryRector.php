@@ -28,7 +28,7 @@ final class MoveServicesBySuffixToDirectoryRector extends AbstractRector impleme
     /**
      * @var string
      */
-    public const GROUP_NAMES_BY_SUFFIX = 'group_names_by_suffix';
+    final public const GROUP_NAMES_BY_SUFFIX = 'group_names_by_suffix';
 
     /**
      * @var string[]

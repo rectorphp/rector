@@ -22,7 +22,7 @@ final class RemoveTraitUseRector extends AbstractRector implements ConfigurableR
     /**
      * @var string
      */
-    public const TRAITS_TO_REMOVE = 'traits_to_remove';
+    final public const TRAITS_TO_REMOVE = 'traits_to_remove';
 
     private bool $classHasChanged = false;
 

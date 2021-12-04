@@ -24,7 +24,7 @@ final class FuncCallToMethodCallRector extends AbstractRector implements Configu
     /**
      * @var string
      */
-    public const FUNC_CALL_TO_CLASS_METHOD_CALL = 'function_to_class_to_method_call';
+    final public const FUNC_CALL_TO_CLASS_METHOD_CALL = 'function_to_class_to_method_call';
 
     /**
      * @var FuncCallToMethodCall[]

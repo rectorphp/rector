@@ -19,7 +19,7 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
     /**
      * @var string
      */
-    public const RENAME_CLASSES = 'rename_classes';
+    final public const RENAME_CLASSES = 'rename_classes';
 
     /**
      * @see https://regex101.com/r/HKUFJD/7

@@ -32,7 +32,7 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @api
      * @var string
      */
-    public const CLASSES_TO_SKIP = 'classes_to_skip';
+    final public const CLASSES_TO_SKIP = 'classes_to_skip';
 
     /**
      * @var string[]

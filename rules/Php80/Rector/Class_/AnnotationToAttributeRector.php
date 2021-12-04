@@ -43,7 +43,7 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
     /**
      * @var string
      */
-    public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
+    final public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';
 
     /**
      * @var AnnotationToAttribute[]

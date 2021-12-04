@@ -16,7 +16,7 @@ final class DocBlockUpdater
      * @var string
      * @see https://regex101.com/r/VdaVGL/1
      */
-    public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
+    final public const SPACE_OR_ASTERISK_REGEX = '#(\s|\*)+#';
 
     public function __construct(
         private readonly PhpDocInfoPrinter $phpDocInfoPrinter

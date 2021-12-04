@@ -26,7 +26,7 @@ final class MergeInterfacesRector extends AbstractRector implements Configurable
      * @api
      * @var string
      */
-    public const OLD_TO_NEW_INTERFACES = 'old_to_new_interfaces';
+    final public const OLD_TO_NEW_INTERFACES = 'old_to_new_interfaces';
 
     /**
      * @var array<string, string>

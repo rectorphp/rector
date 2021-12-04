@@ -20,7 +20,7 @@ final class RemoveInterfacesRector extends AbstractRector implements Configurabl
     /**
      * @var string
      */
-    public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';
+    final public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';
 
     /**
      * @var string[]

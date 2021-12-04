@@ -28,7 +28,7 @@ final class SingleToManyMethodRector extends AbstractRector implements Configura
      * @api
      * @var string
      */
-    public const SINGLES_TO_MANY_METHODS = 'singles_to_many_methods';
+    final public const SINGLES_TO_MANY_METHODS = 'singles_to_many_methods';
 
     /**
      * @var SingleToManyMethod[]

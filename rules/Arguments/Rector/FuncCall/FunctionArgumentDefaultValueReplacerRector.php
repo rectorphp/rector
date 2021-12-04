@@ -25,7 +25,7 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
     /**
      * @var string
      */
-    public const REPLACED_ARGUMENTS = 'replaced_arguments';
+    final public const REPLACED_ARGUMENTS = 'replaced_arguments';
 
     /**
      * @var ReplaceFuncCallArgumentDefaultValue[]

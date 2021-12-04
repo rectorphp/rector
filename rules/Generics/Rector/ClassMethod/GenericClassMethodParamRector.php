@@ -31,7 +31,7 @@ final class GenericClassMethodParamRector extends AbstractRector implements Conf
     /**
      * @var string
      */
-    public const GENERIC_CLASS_METHOD_PARAMS = 'generic_class_method_params';
+    final public const GENERIC_CLASS_METHOD_PARAMS = 'generic_class_method_params';
 
     /**
      * @var GenericClassMethodParam[]

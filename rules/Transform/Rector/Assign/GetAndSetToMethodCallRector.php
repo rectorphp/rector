@@ -29,7 +29,7 @@ final class GetAndSetToMethodCallRector extends AbstractRector implements Config
     /**
      * @var string
      */
-    public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
+    final public const TYPE_TO_METHOD_CALLS = 'type_to_method_calls';
 
     /**
      * @var GetAndSetToMethodCall[]

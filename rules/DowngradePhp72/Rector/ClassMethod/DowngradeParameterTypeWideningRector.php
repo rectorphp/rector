@@ -32,12 +32,12 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
     /**
      * @var string
      */
-    public const SAFE_TYPES = 'safe_types';
+    final public const SAFE_TYPES = 'safe_types';
 
     /**
      * @var string
      */
-    public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
+    final public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
 
     /**
      * @var string[]

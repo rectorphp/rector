@@ -22,7 +22,7 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
     /**
      * @var string
      */
-    public const REMOVED_FUNCTION_ARGUMENTS = 'removed_function_arguments';
+    final public const REMOVED_FUNCTION_ARGUMENTS = 'removed_function_arguments';
 
     /**
      * @var RemoveFuncCallArg[]

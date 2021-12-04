@@ -26,7 +26,7 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     /**
      * @var string
      */
-    public const METHOD_RETURN_TYPES = 'method_return_types';
+    final public const METHOD_RETURN_TYPES = 'method_return_types';
 
     /**
      * @var AddReturnTypeDeclaration[]

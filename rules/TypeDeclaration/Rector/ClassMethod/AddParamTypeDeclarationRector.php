@@ -30,7 +30,7 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     /**
      * @var string
      */
-    public const PARAMETER_TYPEHINTS = 'parameter_typehints';
+    final public const PARAMETER_TYPEHINTS = 'parameter_typehints';
 
     /**
      * @var AddParamTypeDeclaration[]

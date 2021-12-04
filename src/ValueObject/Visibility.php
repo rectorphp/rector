@@ -11,35 +11,35 @@ final class Visibility
     /**
      * @var int
      */
-    public const PUBLIC = Class_::MODIFIER_PUBLIC;
+    final public const PUBLIC = Class_::MODIFIER_PUBLIC;
 
     /**
      * @var int
      */
-    public const PROTECTED = Class_::MODIFIER_PROTECTED;
+    final public const PROTECTED = Class_::MODIFIER_PROTECTED;
 
     /**
      * @var int
      */
-    public const PRIVATE = Class_::MODIFIER_PRIVATE;
+    final public const PRIVATE = Class_::MODIFIER_PRIVATE;
 
     /**
      * @var int
      */
-    public const STATIC = Class_::MODIFIER_STATIC;
+    final public const STATIC = Class_::MODIFIER_STATIC;
 
     /**
      * @var int
      */
-    public const ABSTRACT = Class_::MODIFIER_ABSTRACT;
+    final public const ABSTRACT = Class_::MODIFIER_ABSTRACT;
 
     /**
      * @var int
      */
-    public const FINAL = Class_::MODIFIER_FINAL;
+    final public const FINAL = Class_::MODIFIER_FINAL;
 
     /**
      * @var int
      */
-    public const READONLY = Class_::MODIFIER_READONLY;
+    final public const READONLY = Class_::MODIFIER_READONLY;
 }

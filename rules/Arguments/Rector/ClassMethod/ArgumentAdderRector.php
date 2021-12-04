@@ -36,7 +36,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     /**
      * @var string
      */
-    public const ADDED_ARGUMENTS = 'added_arguments';
+    final public const ADDED_ARGUMENTS = 'added_arguments';
 
     /**
      * @var ArgumentAdder[]
