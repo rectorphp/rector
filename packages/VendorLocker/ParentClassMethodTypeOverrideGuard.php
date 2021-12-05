@@ -3,9 +3,6 @@
 declare (strict_types=1);
 namespace Rector\VendorLocker;
 
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -13,13 +10,10 @@ use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\NonexistentParentClassType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use RectorPrefix20211205\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
@@ -44,18 +38,12 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
-    /**
-     * @readonly
-     * @var \Rector\StaticTypeMapper\StaticTypeMapper
-     */
-    private $staticTypeMapper;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211205\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211205\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
         $this->astResolver = $astResolver;
         $this->paramTypeInferer = $paramTypeInferer;
-        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function isReturnTypeChangeAllowed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -66,11 +54,8 @@ final class ParentClassMethodTypeOverrideGuard
             return \true;
         }
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
-        if ($parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs) {
-            $parentNativeReturnType = $parametersAcceptor->getNativeReturnType();
-            if (!$parentNativeReturnType instanceof \PHPStan\Type\MixedType && $classMethod->returnType !== null) {
-                return \false;
-            }
+        if ($parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof \PHPStan\Type\MixedType) {
+            return \false;
         }
         $classReflection = $parentClassMethodReflection->getDeclaringClass();
         $fileName = $classReflection->getFileName();
@@ -78,45 +63,8 @@ final class ParentClassMethodTypeOverrideGuard
         if ($fileName === null) {
             return \false;
         }
-        /*
-         * Below verify that both current file name and parent file name is not in the /vendor/, if yes, then allowed.
-         * This can happen when rector run into /vendor/ directory while child and parent both are there.
-         */
-        /** @var Scope $scope */
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        /** @var ClassReflection $currentClassReflection */
-        $currentClassReflection = $scope->getClassReflection();
-        /** @var string $currentFileName */
-        $currentFileName = $currentClassReflection->getFileName();
-        // child (current)
-        $normalizedCurrentFileName = $this->pathNormalizer->normalizePath($currentFileName);
-        $isCurrentNotInVendor = \strpos($normalizedCurrentFileName, '/vendor/') === \false;
-        // parent
         $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
-        $isParentNotInVendor = \strpos($normalizedFileName, '/vendor/') === \false;
-        return $isCurrentNotInVendor && $isParentNotInVendor;
-    }
-    /**
-     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null
-     */
-    public function getParentClassMethodNodeType(\PhpParser\Node\Stmt\ClassMethod $classMethod)
-    {
-        $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
-        if (!$parentClassMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
-            return null;
-        }
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
-        if (!$parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs) {
-            return null;
-        }
-        $parentNativeReturnType = $parametersAcceptor->getNativeReturnType();
-        if ($parentNativeReturnType instanceof \PHPStan\Type\MixedType) {
-            return null;
-        }
-        if ($parentNativeReturnType instanceof \PHPStan\Type\NonexistentParentClassType) {
-            return null;
-        }
-        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parentNativeReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
+        return \strpos($normalizedFileName, '/vendor/') === \false;
     }
     public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

@@ -38,9 +38,10 @@ class UnicodeString extends \RectorPrefix20211205\Symfony\Component\String\Abstr
         }
     }
     /**
+     * @return $this
      * @param string ...$suffix
      */
-    public function append(...$suffix) : self
+    public function append(...$suffix)
     {
         $str = clone $this;
         $str->string = $this->string . (1 >= \count($suffix) ? $suffix[0] ?? '' : \implode('', $suffix));
@@ -163,10 +164,11 @@ class UnicodeString extends \RectorPrefix20211205\Symfony\Component\String\Abstr
         return \false === $i ? null : $i;
     }
     /**
+     * @return $this
      * @param mixed[] $strings
      * @param string|null $lastGlue
      */
-    public function join($strings, $lastGlue = null) : self
+    public function join($strings, $lastGlue = null)
     {
         $str = parent::join($strings, $lastGlue);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
@@ -177,9 +179,10 @@ class UnicodeString extends \RectorPrefix20211205\Symfony\Component\String\Abstr
         return \grapheme_strlen($this->string);
     }
     /**
+     * @return $this
      * @param int $form
      */
-    public function normalize($form = self::NFC) : self
+    public function normalize($form = self::NFC)
     {
         $str = clone $this;
         if (\in_array($form, [self::NFC, self::NFKC], \true)) {
@@ -193,9 +196,10 @@ class UnicodeString extends \RectorPrefix20211205\Symfony\Component\String\Abstr
         return $str;
     }
     /**
+     * @return $this
      * @param string ...$prefix
      */
-    public function prepend(...$prefix) : self
+    public function prepend(...$prefix)
     {
         $str = clone $this;
         $str->string = (1 >= \count($prefix) ? $prefix[0] ?? '' : \implode('', $prefix)) . $this->string;
@@ -206,10 +210,11 @@ class UnicodeString extends \RectorPrefix20211205\Symfony\Component\String\Abstr
         return $str;
     }
     /**
+     * @return $this
      * @param string $from
      * @param string $to
      */
-    public function replace($from, $to) : self
+    public function replace($from, $to)
     {
         $str = clone $this;
         \normalizer_is_normalized($from) ?: ($from = \normalizer_normalize($from));
@@ -232,30 +237,33 @@ class UnicodeString extends \RectorPrefix20211205\Symfony\Component\String\Abstr
     }
     /**
      * @param callable|string $to
+     * @return $this
      * @param string $fromRegexp
      */
-    public function replaceMatches($fromRegexp, $to) : self
+    public function replaceMatches($fromRegexp, $to)
     {
         $str = parent::replaceMatches($fromRegexp, $to);
         \normalizer_is_normalized($str->string) ?: ($str->string = \normalizer_normalize($str->string));
         return $str;
     }
     /**
+     * @return $this
      * @param int $start
      * @param int|null $length
      */
-    public function slice($start = 0, $length = null) : self
+    public function slice($start = 0, $length = null)
     {
         $str = clone $this;
         $str->string = (string) \grapheme_substr($this->string, $start, $length ?? 2147483647);
         return $str;
     }
     /**
+     * @return $this
      * @param string $replacement
      * @param int $start
      * @param int|null $length
      */
-    public function splice($replacement, $start = 0, $length = null) : self
+    public function splice($replacement, $start = 0, $length = null)
     {
         $str = clone $this;
         $start = $start ? \strlen(\grapheme_substr($this->string, 0, $start)) : 0;
