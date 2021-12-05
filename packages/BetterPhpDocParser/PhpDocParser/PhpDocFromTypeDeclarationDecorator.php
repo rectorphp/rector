@@ -20,6 +20,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 
 final class PhpDocFromTypeDeclarationDecorator
 {
@@ -28,7 +29,8 @@ final class PhpDocFromTypeDeclarationDecorator
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly TypeUnwrapper $typeUnwrapper
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
     ) {
     }
 
@@ -38,10 +40,19 @@ final class PhpDocFromTypeDeclarationDecorator
             return;
         }
 
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
+        if ($functionLike instanceof ClassMethod && ! $this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed(
+            $functionLike
+        )) {
+            $returnType = $this->parentClassMethodTypeOverrideGuard->getParentClassMethodNodeType($functionLike);
+            if ($returnType !== null) {
+                $functionLike->returnType = $returnType;
+                $this->changePhpDocReturnType($functionLike);
 
+                return;
+            }
+        }
+
+        $this->changePhpDocReturnType($functionLike);
         $functionLike->returnType = null;
     }
 
@@ -100,6 +111,15 @@ final class PhpDocFromTypeDeclarationDecorator
 
         $this->decorate($functionLike);
         return true;
+    }
+
+    private function changePhpDocReturnType(ClassMethod | Function_ | Closure | ArrowFunction $functionLike): void
+    {
+        /** @var ComplexType|Identifier|Name $returnType $returnType */
+        $returnType = $functionLike->returnType;
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
     }
 
     private function isTypeMatch(ComplexType|Identifier|Name $typeNode, Type $requireType): bool
