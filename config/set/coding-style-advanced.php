@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211204;
+namespace RectorPrefix20211205;
 
 use Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

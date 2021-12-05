@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211204\Symfony\Component\Console\Completion\Output;
+namespace RectorPrefix20211205\Symfony\Component\Console\Completion\Output;
 
-use RectorPrefix20211204\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20211204\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211205\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20211205\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class BashCompletionOutput implements \RectorPrefix20211204\Symfony\Component\Console\Completion\Output\CompletionOutputInterface
+class BashCompletionOutput implements \RectorPrefix20211205\Symfony\Component\Console\Completion\Output\CompletionOutputInterface
 {
     /**
      * @param \Symfony\Component\Console\Completion\CompletionSuggestions $suggestions

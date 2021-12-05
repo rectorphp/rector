@@ -6,7 +6,7 @@ namespace Rector\Parallel\Command;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
-use RectorPrefix20211204\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211205\Symfony\Component\Console\Input\InputInterface;
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
  */
@@ -25,7 +25,7 @@ final class WorkerCommandLineFactory
     {
         $this->processCommand = $processCommand;
     }
-    public function create(string $mainScript, string $originalCommandName, string $workerCommandName, ?string $projectConfigFile, \RectorPrefix20211204\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
+    public function create(string $mainScript, string $originalCommandName, string $workerCommandName, ?string $projectConfigFile, \RectorPrefix20211205\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $mainScript], $commandArguments);
@@ -80,7 +80,7 @@ final class WorkerCommandLineFactory
      * @param string[] $checkCommandOptionNames
      * @return string[]
      */
-    private function createProcessCommandOptions(\RectorPrefix20211204\Symfony\Component\Console\Input\InputInterface $input, array $checkCommandOptionNames) : array
+    private function createProcessCommandOptions(\RectorPrefix20211205\Symfony\Component\Console\Input\InputInterface $input, array $checkCommandOptionNames) : array
     {
         $processCommandOptions = [];
         foreach ($checkCommandOptionNames as $checkCommandOptionName) {
@@ -104,7 +104,7 @@ final class WorkerCommandLineFactory
         }
         return $processCommandOptions;
     }
-    private function shouldSkipOption(\RectorPrefix20211204\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(\RectorPrefix20211205\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;

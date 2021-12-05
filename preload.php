@@ -33,6 +33,8 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Declarati
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/FunctionLike.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/ClassConst.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Class_.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/EnumCase.php';
+require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Enum_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Function_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Interface_.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Builder/Method.php';

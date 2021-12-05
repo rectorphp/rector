@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211204\Symfony\Component\Console\Helper;
+namespace RectorPrefix20211205\Symfony\Component\Console\Helper;
 
-use RectorPrefix20211204\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211204\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20211205\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211205\Symfony\Component\Console\Exception\LogicException;
 /**
  * Defines the styles for a Table.
  *
@@ -54,7 +54,7 @@ class TableStyle
     public function setPaddingChar($paddingChar)
     {
         if (!$paddingChar) {
-            throw new \RectorPrefix20211204\Symfony\Component\Console\Exception\LogicException('The padding char must not be empty.');
+            throw new \RectorPrefix20211205\Symfony\Component\Console\Exception\LogicException('The padding char must not be empty.');
         }
         $this->paddingChar = $paddingChar;
         return $this;
@@ -290,7 +290,7 @@ class TableStyle
     public function setPadType($padType)
     {
         if (!\in_array($padType, [\STR_PAD_LEFT, \STR_PAD_RIGHT, \STR_PAD_BOTH], \true)) {
-            throw new \RectorPrefix20211204\Symfony\Component\Console\Exception\InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
+            throw new \RectorPrefix20211205\Symfony\Component\Console\Exception\InvalidArgumentException('Invalid padding type. Expected one of (STR_PAD_LEFT, STR_PAD_RIGHT, STR_PAD_BOTH).');
         }
         $this->padType = $padType;
         return $this;
