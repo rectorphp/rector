@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit439ed022b1f73ae246b1b5414e67b710
+class ComposerStaticInitc0bfbfcdeea8e80344d153233076feea
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1945,16 +1945,10 @@ class ComposerStaticInit439ed022b1f73ae246b1b5414e67b710
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
         'Rector\\CodingStyle\\Enum\\PreferenceSelfThis' => __DIR__ . '/../..' . '/rules/CodingStyle/Enum/PreferenceSelfThis.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
-        'Rector\\CodingStyle\\NodeAnalyzer\\ImplodeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/ImplodeAnalyzer.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\SpreadVariablesCollector' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/SpreadVariablesCollector.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
         'Rector\\CodingStyle\\NodeFactory\\ArrayCallableToMethodCallFactory' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeFactory/ArrayCallableToMethodCallFactory.php',
-        'Rector\\CodingStyle\\NodeFactory\\JsonArrayFactory' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeFactory/JsonArrayFactory.php',
-        'Rector\\CodingStyle\\NodeFactory\\JsonEncodeStaticCallFactory' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeFactory/JsonEncodeStaticCallFactory.php',
-        'Rector\\CodingStyle\\Node\\ConcatJoiner' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/ConcatJoiner.php',
-        'Rector\\CodingStyle\\Node\\ConcatManipulator' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/ConcatManipulator.php',
         'Rector\\CodingStyle\\Node\\NameImporter' => __DIR__ . '/../..' . '/rules/CodingStyle/Node/NameImporter.php',
-        'Rector\\CodingStyle\\Rector\\Assign\\ManualJsonStringToJsonEncodeArrayRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php',
         'Rector\\CodingStyle\\Rector\\Assign\\PHPStormVarAnnotationRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php',
         'Rector\\CodingStyle\\Rector\\Assign\\SplitDoubleAssignRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php',
         'Rector\\CodingStyle\\Rector\\Catch_\\CatchExceptionNameMatchingTypeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php',
@@ -1993,9 +1987,6 @@ class ComposerStaticInit439ed022b1f73ae246b1b5414e67b710
         'Rector\\CodingStyle\\Rector\\Use_\\SeparateMultiUseImportsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Use_/SeparateMultiUseImportsRector.php',
         'Rector\\CodingStyle\\Reflection\\VendorLocationDetector' => __DIR__ . '/../..' . '/rules/CodingStyle/Reflection/VendorLocationDetector.php',
         'Rector\\CodingStyle\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/TypeAnalyzer/IterableTypeAnalyzer.php',
-        'Rector\\CodingStyle\\ValueObject\\ConcatExpressionJoinData' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ConcatExpressionJoinData.php',
-        'Rector\\CodingStyle\\ValueObject\\ConcatStringAndPlaceholders' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ConcatStringAndPlaceholders.php',
-        'Rector\\CodingStyle\\ValueObject\\NodeToRemoveAndConcatItem' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/NodeToRemoveAndConcatItem.php',
         'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
         'Rector\\CodingStyle\\ValueObject\\ReturnArrayClassMethodToYield' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ReturnArrayClassMethodToYield.php',
         'Rector\\Comments\\CommentRemover' => __DIR__ . '/../..' . '/packages/Comments/CommentRemover.php',
@@ -3798,9 +3789,9 @@ class ComposerStaticInit439ed022b1f73ae246b1b5414e67b710
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit439ed022b1f73ae246b1b5414e67b710::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit439ed022b1f73ae246b1b5414e67b710::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit439ed022b1f73ae246b1b5414e67b710::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc0bfbfcdeea8e80344d153233076feea::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc0bfbfcdeea8e80344d153233076feea::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc0bfbfcdeea8e80344d153233076feea::$classMap;
 
         }, null, ClassLoader::class);
     }
