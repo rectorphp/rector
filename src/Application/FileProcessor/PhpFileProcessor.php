@@ -26,11 +26,6 @@ use Throwable;
 
 final class PhpFileProcessor implements FileProcessorInterface
 {
-    /**
-     * @var File[]
-     */
-    private array $notParsedFiles = [];
-
     public function __construct(
         private readonly FormatPerservingPrinter $formatPerservingPrinter,
         private readonly FileProcessor $fileProcessor,
@@ -48,10 +43,20 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     public function process(File $file, Configuration $configuration): array
     {
+        $systemErrorsAndFileDiffs = [
+            Bridge::SYSTEM_ERRORS => [],
+            Bridge::FILE_DIFFS => [],
+        ];
+
         // 1. parse files to nodes
-        $this->tryCatchWrapper($file, function (File $file): void {
-            $this->fileProcessor->parseFileInfoToLocalCache($file);
-        }, ApplicationPhase::PARSING());
+        $parsingSystemErrors = $this->parseFileAndDecorateNodes($file);
+        if ($parsingSystemErrors !== []) {
+            // we cannot process this file as the parsing and type resolving itself went wrong
+            $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
+            $this->notifyPhase($file, ApplicationPhase::PRINT_SKIP());
+
+            return $systemErrorsAndFileDiffs;
+        }
 
         // 2. change nodes with Rectors
         $loopCounter = 0;
@@ -66,36 +71,27 @@ final class PhpFileProcessor implements FileProcessorInterface
             $this->refactorNodesWithRectors($file, $configuration);
 
             // 3. apply post rectors
-            $this->tryCatchWrapper($file, function (File $file): void {
-                $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
-
-                // this is needed for new tokens added in "afterTraverse()"
-                $file->changeNewStmts($newStmts);
-            }, ApplicationPhase::POST_RECTORS());
+            $this->notifyPhase($file, ApplicationPhase::POST_RECTORS());
+            $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
+            // this is needed for new tokens added in "afterTraverse()"
+            $file->changeNewStmts($newStmts);
 
             // 4. print to file or string
             $this->currentFileProvider->setFile($file);
 
-            // cannot print file with errors, as print would break everything to original nodes
-            if ($file->hasErrors()) {
-                // cannot print file with errors, as print would b
-                $this->notifyPhase($file, ApplicationPhase::PRINT_SKIP());
-                continue;
-            }
-
             // important to detect if file has changed
-            $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
-                $this->printFile($file, $configuration);
-            }, ApplicationPhase::PRINT());
+            $this->notifyPhase($file, ApplicationPhase::PRINT());
+            $this->printFile($file, $configuration);
         } while ($file->hasChanged());
 
         // return json here
         $fileDiff = $file->getFileDiff();
 
-        return [
-            Bridge::SYSTEM_ERRORS => $file->getErrors(),
-            Bridge::FILE_DIFFS => $fileDiff instanceof FileDiff ? [$fileDiff] : [],
-        ];
+        if ($fileDiff instanceof FileDiff) {
+            $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
+        }
+
+        return $systemErrorsAndFileDiffs;
     }
 
     public function supports(File $file, Configuration $configuration): bool
@@ -115,24 +111,21 @@ final class PhpFileProcessor implements FileProcessorInterface
     private function refactorNodesWithRectors(File $file, Configuration $configuration): void
     {
         $this->currentFileProvider->setFile($file);
+        $this->notifyPhase($file, ApplicationPhase::REFACTORING());
 
-        $this->tryCatchWrapper($file, function (File $file) use ($configuration): void {
-            $this->fileProcessor->refactor($file, $configuration);
-        }, ApplicationPhase::REFACTORING());
+        $this->fileProcessor->refactor($file, $configuration);
     }
 
-    private function tryCatchWrapper(File $file, callable $callback, ApplicationPhase $applicationPhase): void
+    /**
+     * @return SystemError[]
+     */
+    private function parseFileAndDecorateNodes(File $file): array
     {
         $this->currentFileProvider->setFile($file);
-        $this->notifyPhase($file, $applicationPhase);
+        $this->notifyPhase($file, ApplicationPhase::PARSING());
 
         try {
-            if (in_array($file, $this->notParsedFiles, true)) {
-                // we cannot process this file
-                return;
-            }
-
-            $callback($file);
+            $this->fileProcessor->parseFileInfoToLocalCache($file);
         } catch (ShouldNotHappenException $shouldNotHappenException) {
             throw $shouldNotHappenException;
         } catch (AnalysedCodeException $analysedCodeException) {
@@ -141,9 +134,11 @@ final class PhpFileProcessor implements FileProcessorInterface
                 throw $analysedCodeException;
             }
 
-            $this->notParsedFiles[] = $file;
-            $error = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getSmartFileInfo());
-            $file->addRectorError($error);
+            $autoloadSystemError = $this->errorFactory->createAutoloadError(
+                $analysedCodeException,
+                $file->getSmartFileInfo()
+            );
+            return [$autoloadSystemError];
         } catch (Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
@@ -155,8 +150,10 @@ final class PhpFileProcessor implements FileProcessorInterface
                 $throwable->getLine()
             );
 
-            $file->addRectorError($systemError);
+            return [$systemError];
         }
+
+        return [];
     }
 
     private function printFile(File $file, Configuration $configuration): void
