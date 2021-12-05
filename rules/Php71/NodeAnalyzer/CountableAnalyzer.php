@@ -13,6 +13,9 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
@@ -30,9 +33,13 @@ final class CountableAnalyzer
     ) {
     }
 
-    public function isCastableArrayType(Expr $expr): bool
+    public function isCastableArrayType(Expr $expr, ArrayType $arrayType): bool
     {
         if (! $expr instanceof PropertyFetch) {
+            return false;
+        }
+
+        if ($arrayType instanceof ConstantArrayType) {
             return false;
         }
 
@@ -76,16 +83,21 @@ final class CountableAnalyzer
         }
 
         $nativeType = $phpPropertyReflection->getNativeType();
-        if ($nativeType->isIterable()->yes()) {
-            return false;
-        }
-
-        if ($this->propertyFetchAnalyzer->isFilledByConstructParam($expr)) {
+        if ($this->isIterableOrFilledByConstructParam($nativeType, $expr)) {
             return false;
         }
 
         $propertyDefaultValue = $propertiesDefaults[$propertyName];
         return $propertyDefaultValue === null;
+    }
+
+    private function isIterableOrFilledByConstructParam(Type $nativeType, PropertyFetch $propertyFetch): bool
+    {
+        if ($nativeType->isIterable()->yes()) {
+            return true;
+        }
+
+        return $this->propertyFetchAnalyzer->isFilledByConstructParam($propertyFetch);
     }
 
     private function resolveProperty(

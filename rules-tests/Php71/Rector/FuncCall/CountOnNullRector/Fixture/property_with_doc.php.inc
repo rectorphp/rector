@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
-class PropertyWithDoc
+final class PropertyWithDoc
 {
     /**
      * @var int[]
@@ -21,7 +21,7 @@ class PropertyWithDoc
 
 namespace Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\Fixture;
 
-class PropertyWithDoc
+final class PropertyWithDoc
 {
     /**
      * @var int[]
