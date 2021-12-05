@@ -1,4 +1,4 @@
-# 504 Rules Overview
+# 503 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [CodeQuality](#codequality) (70)
 
-- [CodingStyle](#codingstyle) (37)
+- [CodingStyle](#codingstyle) (36)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2124,31 +2124,6 @@ Make method visibility same as parent one
  {
      protected function run()
      {
-     }
- }
-```
-
-<br>
-
-### ManualJsonStringToJsonEncodeArrayRector
-
-Convert manual JSON string to JSON::encode array
-
-- class: [`Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector`](../rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php)
-
-```diff
-+use Nette\Utils\Json;
-+
- final class SomeClass
- {
-     public function run()
-     {
--        $someJsonAsString = '{"role_name":"admin","numberz":{"id":"10"}}';
-+        $data = [
-+            'role_name' => 'admin',
-+            'numberz' => ['id' => 10]
-+        ];
-+        $someJsonAsString = Json::encode($data);
      }
  }
 ```

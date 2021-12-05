@@ -413,7 +413,6 @@ parameters:
             paths:
                 - packages/NodeNestingScope/FlowOfControlLocator.php
                 - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
-                - rules/CodingStyle/Rector/Assign/ManualJsonStringToJsonEncodeArrayRector.php
                 - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
                 - src/Application/FileProcessor.php
                 - src/PhpParser/Node/BetterNodeFinder.php

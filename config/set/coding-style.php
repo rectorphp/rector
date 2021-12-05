@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodingStyle\Rector\Assign\ManualJsonStringToJsonEncodeArrayRector;
 use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
@@ -55,7 +54,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(EncapsedStringsToSprintfRector::class);
     $services->set(WrapEncapsedVariableInCurlyBracesRector::class);
     $services->set(NewlineBeforeNewAssignSetRector::class);
-    $services->set(ManualJsonStringToJsonEncodeArrayRector::class);
     $services->set(AddArrayDefaultToArrayPropertyRector::class);
     $services->set(AddFalseDefaultToBoolPropertyRector::class);
     $services->set(MakeInheritedMethodVisibilitySameAsParentRector::class);
