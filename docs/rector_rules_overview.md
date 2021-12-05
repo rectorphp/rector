@@ -1,4 +1,4 @@
-# 502 Rules Overview
+# 504 Rules Overview
 
 <br>
 
@@ -40,9 +40,9 @@
 
 - [DowngradePhp74](#downgradephp74) (11)
 
-- [DowngradePhp80](#downgradephp80) (19)
+- [DowngradePhp80](#downgradephp80) (20)
 
-- [DowngradePhp81](#downgradephp81) (7)
+- [DowngradePhp81](#downgradephp81) (8)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -127,9 +127,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArgumentAdderRector::class)
-        ->configure([
-            new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType('SomeType')),
-        ]);
+        ->call('configure', [[
+            ArgumentAdderRector::ADDED_ARGUMENTS => ValueObjectInliner::inline([
+                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType('SomeType')),
+            ]),
+        ]]);
 };
 ```
 
@@ -5254,6 +5256,24 @@ Remove "abstract" from private methods in traits and adds an empty function body
 
 <br>
 
+### DowngradeArbitraryExpressionsSupportRector
+
+Replace arbitrary expressions used with new or instanceof.
+
+- class: [`Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector`](../rules/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php)
+
+```diff
+ function getObjectClassName() {
+     return stdClass::class;
+ }
+
+-$object = new (getObjectClassName());
++$className = getObjectClassName();
++$object = new $className();
+```
+
+<br>
+
 ### DowngradeAttributeToAnnotationRector
 
 Refactor PHP attribute markers to annotations notation
@@ -5658,6 +5678,28 @@ Removes union type property type definition, adding `@var` annotations instead.
 <br>
 
 ## DowngradePhp81
+
+### DowngradeArraySpreadStringKeyRector
+
+Replace array spread with string key to array_merge function
+
+- class: [`Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector`](../rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+         $parts = ['a' => 'b'];
+         $parts2 = ['c' => 'd'];
+
+-        $result = [...$parts, ...$parts2];
++        $result = array_merge($parts, $parts2);
+     }
+ }
+```
+
+<br>
 
 ### DowngradeFinalizePublicClassConstantRector
 
@@ -7619,7 +7661,7 @@ Change `array_key_exists()` on property to `property_exists()`
 
 ### ArraySpreadInsteadOfArrayMergeRector
 
-Change `array_merge()` to spread operator, except values with possible string key values
+Change `array_merge()` to spread operator
 
 - class: [`Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector`](../rules/Php74/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php)
 
@@ -8372,7 +8414,7 @@ Refactor MyCLabs enum class to native Enum
 -use MyCLabs\Enum\Enum;
 -
 -final class Action extends Enum
-+enum Action
++enum Action : string
  {
 -    private const VIEW = 'view';
 -    private const EDIT = 'edit';
@@ -8477,7 +8519,7 @@ Refactor Spatie enum class to native Enum
 - * @method static self archived()
 - */
 -class StatusEnum extends Enum
-+enum StatusEnum
++enum StatusEnum : string
  {
 +    case draft = 'draft';
 +    case published = 'published';
@@ -9501,18 +9543,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameAnnotationRector::class)
-        ->call('configure', [[
-            RenameAnnotationRector::RENAMED_ANNOTATIONS => ValueObjectInliner::inline([
-                new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario'),
-            ]),
-        ]]);
+        ->call(
+            'configure',
+            [[ValueObjectInliner::inline(new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario'))]]
+        );
 };
 ```
 
 ↓
 
 ```diff
- class SomeTest extends PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
  {
      /**
 -     * @test
