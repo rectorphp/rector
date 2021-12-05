@@ -50,7 +50,7 @@ CODE_SAMPLE
      * @param SetupMethodCall $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode(\RectorPrefix20211205\Nette\Neon\Node $node)
+    public function enterNode(\RectorPrefix20211205\Nette\Neon\Node $node) : ?\RectorPrefix20211205\Nette\Neon\Node
     {
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             if (!\is_a($node->className, $methodCallRename->getClass(), \true)) {

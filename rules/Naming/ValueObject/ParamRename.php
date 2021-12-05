@@ -56,9 +56,9 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
         return $this->expectedName;
     }
     /**
-     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
+     * @return \PhpParser\Node\FunctionLike
      */
-    public function getFunctionLike()
+    public function getFunctionLike() : \PhpParser\Node\FunctionLike
     {
         return $this->functionLike;
     }

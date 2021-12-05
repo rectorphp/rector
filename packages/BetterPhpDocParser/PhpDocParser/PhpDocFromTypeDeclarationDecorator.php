@@ -19,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 final class PhpDocFromTypeDeclarationDecorator
 {
     /**
@@ -46,13 +47,19 @@ final class PhpDocFromTypeDeclarationDecorator
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper)
+    /**
+     * @readonly
+     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
+     */
+    private $parentClassMethodTypeOverrideGuard;
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->typeUnwrapper = $typeUnwrapper;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     /**
      * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -62,9 +69,15 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($functionLike->returnType === null) {
             return;
         }
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
+        if ($functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && !$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($functionLike)) {
+            $returnType = $this->parentClassMethodTypeOverrideGuard->getParentClassMethodNodeType($functionLike);
+            if ($returnType !== null) {
+                $functionLike->returnType = $returnType;
+                $this->changePhpDocReturnType($functionLike);
+                return;
+            }
+        }
+        $this->changePhpDocReturnType($functionLike);
         $functionLike->returnType = null;
     }
     /**
@@ -110,6 +123,17 @@ final class PhpDocFromTypeDeclarationDecorator
         }
         $this->decorate($functionLike);
         return \true;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function changePhpDocReturnType($functionLike) : void
+    {
+        /** @var ComplexType|Identifier|Name $returnType $returnType */
+        $returnType = $functionLike->returnType;
+        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
     }
     /**
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
