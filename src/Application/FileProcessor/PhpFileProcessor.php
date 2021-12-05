@@ -25,10 +25,6 @@ use Throwable;
 final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var File[]
-     */
-    private $notParsedFiles = [];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
      */
@@ -86,10 +82,15 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      */
     public function process($file, $configuration) : array
     {
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         // 1. parse files to nodes
-        $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
-            $this->fileProcessor->parseFileInfoToLocalCache($file);
-        }, \Rector\Core\Enum\ApplicationPhase::PARSING());
+        $parsingSystemErrors = $this->parseFileAndDecorateNodes($file);
+        if ($parsingSystemErrors !== []) {
+            // we cannot process this file as the parsing and type resolving itself went wrong
+            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
+            $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT_SKIP());
+            return $systemErrorsAndFileDiffs;
+        }
         // 2. change nodes with Rectors
         $loopCounter = 0;
         do {
@@ -101,27 +102,22 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             $file->changeHasChanged(\false);
             $this->refactorNodesWithRectors($file, $configuration);
             // 3. apply post rectors
-            $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) : void {
-                $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
-                // this is needed for new tokens added in "afterTraverse()"
-                $file->changeNewStmts($newStmts);
-            }, \Rector\Core\Enum\ApplicationPhase::POST_RECTORS());
+            $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::POST_RECTORS());
+            $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
+            // this is needed for new tokens added in "afterTraverse()"
+            $file->changeNewStmts($newStmts);
             // 4. print to file or string
             $this->currentFileProvider->setFile($file);
-            // cannot print file with errors, as print would break everything to original nodes
-            if ($file->hasErrors()) {
-                // cannot print file with errors, as print would b
-                $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT_SKIP());
-                continue;
-            }
             // important to detect if file has changed
-            $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
-                $this->printFile($file, $configuration);
-            }, \Rector\Core\Enum\ApplicationPhase::PRINT());
+            $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT());
+            $this->printFile($file, $configuration);
         } while ($file->hasChanged());
         // return json here
         $fileDiff = $file->getFileDiff();
-        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $file->getErrors(), \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $fileDiff instanceof \Rector\Core\ValueObject\Reporting\FileDiff ? [$fileDiff] : []];
+        if ($fileDiff instanceof \Rector\Core\ValueObject\Reporting\FileDiff) {
+            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = [$fileDiff];
+        }
+        return $systemErrorsAndFileDiffs;
     }
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
@@ -142,20 +138,18 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
     private function refactorNodesWithRectors(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $this->currentFileProvider->setFile($file);
-        $this->tryCatchWrapper($file, function (\Rector\Core\ValueObject\Application\File $file) use($configuration) : void {
-            $this->fileProcessor->refactor($file, $configuration);
-        }, \Rector\Core\Enum\ApplicationPhase::REFACTORING());
+        $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::REFACTORING());
+        $this->fileProcessor->refactor($file, $configuration);
     }
-    private function tryCatchWrapper(\Rector\Core\ValueObject\Application\File $file, callable $callback, \Rector\Core\Enum\ApplicationPhase $applicationPhase) : void
+    /**
+     * @return SystemError[]
+     */
+    private function parseFileAndDecorateNodes(\Rector\Core\ValueObject\Application\File $file) : array
     {
         $this->currentFileProvider->setFile($file);
-        $this->notifyPhase($file, $applicationPhase);
+        $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PARSING());
         try {
-            if (\in_array($file, $this->notParsedFiles, \true)) {
-                // we cannot process this file
-                return;
-            }
-            $callback($file);
+            $this->fileProcessor->parseFileInfoToLocalCache($file);
         } catch (\Rector\Core\Exception\ShouldNotHappenException $shouldNotHappenException) {
             throw $shouldNotHappenException;
         } catch (\PHPStan\AnalysedCodeException $analysedCodeException) {
@@ -163,16 +157,16 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
             if (\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $analysedCodeException;
             }
-            $this->notParsedFiles[] = $file;
-            $error = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getSmartFileInfo());
-            $file->addRectorError($error);
+            $autoloadSystemError = $this->errorFactory->createAutoloadError($analysedCodeException, $file->getSmartFileInfo());
+            return [$autoloadSystemError];
         } catch (\Throwable $throwable) {
             if ($this->symfonyStyle->isVerbose() || \Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
             $systemError = new \Rector\Core\ValueObject\Application\SystemError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
-            $file->addRectorError($systemError);
+            return [$systemError];
         }
+        return [];
     }
     private function printFile(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {

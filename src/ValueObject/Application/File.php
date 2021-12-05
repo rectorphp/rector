@@ -43,10 +43,6 @@ final class File
      */
     private $rectorWithLineChanges = [];
     /**
-     * @var SystemError[]
-     */
-    private $systemErrors = [];
-    /**
      * @readonly
      * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
@@ -157,21 +153,6 @@ final class File
     public function getRectorWithLineChanges() : array
     {
         return $this->rectorWithLineChanges;
-    }
-    public function addRectorError(\Rector\Core\ValueObject\Application\SystemError $systemError) : void
-    {
-        $this->systemErrors[] = $systemError;
-    }
-    public function hasErrors() : bool
-    {
-        return $this->systemErrors !== [];
-    }
-    /**
-     * @return SystemError[]
-     */
-    public function getErrors() : array
-    {
-        return $this->systemErrors;
     }
     public function getRelativeFilePath() : string
     {
