@@ -43,7 +43,7 @@ class AutowireRequiredPropertiesPass extends \RectorPrefix20211206\Symfony\Compo
             if (!($type = $reflectionProperty->getType()) instanceof \ReflectionNamedType) {
                 continue;
             }
-            if ((\PHP_VERSION_ID < 80000 || !$reflectionProperty->getAttributes(\RectorPrefix20211206\Symfony\Contracts\Service\Attribute\Required::class)) && (\false === ($doc = $reflectionProperty->getDocComment()) || \false === \stripos($doc, '@required') || !\preg_match('#(?:^/\\*\\*|\\n\\s*+\\*)\\s*+@required(?:\\s|\\*/$)#i', $doc))) {
+            if ((\PHP_VERSION_ID < 80000 || ![]) && (\false === ($doc = $reflectionProperty->getDocComment()) || \false === \stripos($doc, '@required') || !\preg_match('#(?:^/\\*\\*|\\n\\s*+\\*)\\s*+@required(?:\\s|\\*/$)#i', $doc))) {
                 continue;
             }
             if (\array_key_exists($name = $reflectionProperty->getName(), $properties)) {

@@ -51,7 +51,7 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20211206
      */
     public function processClass($container, $class)
     {
-        foreach ($class->getAttributes(\RectorPrefix20211206\Symfony\Component\DependencyInjection\Attribute\Autoconfigure::class, \ReflectionAttribute::IS_INSTANCEOF) as $attribute) {
+        foreach ([] as $attribute) {
             self::registerForAutoconfiguration($container, $class, $attribute);
         }
     }

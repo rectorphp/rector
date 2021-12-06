@@ -62,7 +62,7 @@ class Command
     public static function getDefaultName()
     {
         $class = static::class;
-        if (\PHP_VERSION_ID >= 80000 && ($attribute = (new \ReflectionClass($class))->getAttributes(\RectorPrefix20211206\Symfony\Component\Console\Attribute\AsCommand::class))) {
+        if (\PHP_VERSION_ID >= 80000 && ($attribute = [])) {
             return $attribute[0]->newInstance()->name;
         }
         $r = new \ReflectionProperty($class, 'defaultName');
@@ -71,7 +71,7 @@ class Command
     public static function getDefaultDescription() : ?string
     {
         $class = static::class;
-        if (\PHP_VERSION_ID >= 80000 && ($attribute = (new \ReflectionClass($class))->getAttributes(\RectorPrefix20211206\Symfony\Component\Console\Attribute\AsCommand::class))) {
+        if (\PHP_VERSION_ID >= 80000 && ($attribute = [])) {
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');

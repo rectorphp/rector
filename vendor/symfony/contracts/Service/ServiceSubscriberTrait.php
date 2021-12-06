@@ -38,7 +38,7 @@ trait ServiceSubscriberTrait
                 if (self::class !== $method->getDeclaringClass()->name) {
                     continue;
                 }
-                if (!($attribute = $method->getAttributes(\RectorPrefix20211206\Symfony\Contracts\Service\Attribute\SubscribedService::class)[0] ?? null)) {
+                if (!($attribute = [][0] ?? null)) {
                     continue;
                 }
                 if ($method->isStatic() || $method->isAbstract() || $method->isGenerator() || $method->isInternal() || $method->getNumberOfRequiredParameters()) {

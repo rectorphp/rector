@@ -109,7 +109,7 @@ class ReflectionClassResource implements \RectorPrefix20211206\Symfony\Component
     {
         if (\PHP_VERSION_ID >= 80000) {
             $attributes = [];
-            foreach ($class->getAttributes() as $a) {
+            foreach ([] as $a) {
                 $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
             }
             (yield \print_r($attributes, \true));
@@ -129,7 +129,7 @@ class ReflectionClassResource implements \RectorPrefix20211206\Symfony\Component
             $defaults = $class->getDefaultProperties();
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
                 if (\PHP_VERSION_ID >= 80000) {
-                    foreach ($p->getAttributes() as $a) {
+                    foreach ([] as $a) {
                         $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                     }
                     (yield \print_r($attributes, \true));
@@ -148,7 +148,7 @@ class ReflectionClassResource implements \RectorPrefix20211206\Symfony\Component
         }, null, $class->name);
         foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $m) {
             if (\PHP_VERSION_ID >= 80000) {
-                foreach ($m->getAttributes() as $a) {
+                foreach ([] as $a) {
                     $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                 }
                 (yield \print_r($attributes, \true));
@@ -158,7 +158,7 @@ class ReflectionClassResource implements \RectorPrefix20211206\Symfony\Component
             $parametersWithUndefinedConstants = [];
             foreach ($m->getParameters() as $p) {
                 if (\PHP_VERSION_ID >= 80000) {
-                    foreach ($p->getAttributes() as $a) {
+                    foreach ([] as $a) {
                         $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                     }
                     (yield \print_r($attributes, \true));

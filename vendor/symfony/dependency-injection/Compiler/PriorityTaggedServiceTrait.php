@@ -119,7 +119,7 @@ class PriorityTaggedServiceUtil
             return null;
         }
         if ($checkTaggedItem && !$r->hasMethod($defaultMethod)) {
-            foreach ($r->getAttributes(\RectorPrefix20211206\Symfony\Component\DependencyInjection\Attribute\AsTaggedItem::class) as $attribute) {
+            foreach ([] as $attribute) {
                 return 'priority' === $indexAttribute ? $attribute->newInstance()->priority : $attribute->newInstance()->index;
             }
             return null;

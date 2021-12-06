@@ -2017,6 +2017,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
     'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradePhp80ResourceReturnToObjectRector' => $baseDir . '/rules/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php',
     'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeNamedArgumentRector' => $baseDir . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php',
+    'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeReflectionGetAttributesRector' => $baseDir . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionGetAttributesRector.php',
     'Rector\\DowngradePhp80\\Rector\\New_\\DowngradeArbitraryExpressionsSupportRector' => $baseDir . '/rules/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php',
     'Rector\\DowngradePhp80\\Rector\\NullsafeMethodCall\\DowngradeNullsafeToTernaryOperatorRector' => $baseDir . '/rules/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php',
     'Rector\\DowngradePhp80\\Rector\\Property\\DowngradeUnionTypeTypedPropertyRector' => $baseDir . '/rules/DowngradePhp80/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php',
