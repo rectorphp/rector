@@ -106,7 +106,13 @@ CODE_SAMPLE
         if ($hasNotNeverNodes) {
             return \true;
         }
-        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOf($node, [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class]);
+        $hasNeverNodes = (bool) $this->betterNodeFinder->findFirst((array) $node->stmts, function (\PhpParser\Node $subNode) use($node) : bool {
+            if (!\in_array(\get_class($subNode), [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class], \true)) {
+                return \false;
+            }
+            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
+            return $parentFunctionOrClassMethod === $node;
+        });
         $hasNeverFuncCall = $this->hasNeverFuncCall($node);
         if (!$hasNeverNodes && !$hasNeverFuncCall) {
             return \true;
