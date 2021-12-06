@@ -25,7 +25,6 @@ use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
-use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
@@ -43,7 +42,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TernaryConditionVariableAssignmentRector::class);
     $services->set(SymplifyQuoteEscapeRector::class);
     $services->set(SplitGroupedConstantsAndPropertiesRector::class);
-    $services->set(SplitStringClassConstantToClassConstFetchRector::class);
     $services->set(StringClassNameToClassConstantRector::class);
     $services->set(ConsistentPregDelimiterRector::class);
     $services->set(FollowRequireByDirRector::class);

@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
 use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
 use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
-use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Configuration\Option;
 use Rector\Nette\Set\NetteSetList;
@@ -70,8 +69,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters->set(Option::SKIP, [
         StringClassNameToClassConstantRector::class,
-        // some classes in config might not exist without dev dependencies
-        SplitStringClassConstantToClassConstFetchRector::class,
 
         FinalizeClassesWithoutChildrenRector::class => [
             __DIR__ . '/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
