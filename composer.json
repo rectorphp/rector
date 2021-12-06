@@ -151,14 +151,7 @@
         "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
-        "patches": {
-            "symfony/dependency-injection": [
-                "patches/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
-            ],
-            "danielstjules/stringy": [
-                "patches/danielstjules-stringy-src-stringy-php.patch"
-            ]
-        },
+        "patches-file": "https://raw.githubusercontent.com/rectorphp/vendor-patches/master/composer.patches.json",
         "branch-alias": {
             "dev-main": "0.12-dev"
         }
