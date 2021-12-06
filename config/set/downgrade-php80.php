@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
+
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
@@ -20,6 +21,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector;
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;
+use Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRector;
 use Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
@@ -67,4 +69,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradePhpTokenRector::class);
     $services->set(DowngradeThrowExprRector::class);
     $services->set(DowngradePhp80ResourceReturnToObjectRector::class);
+    $services->set(DowngradeReflectionGetAttributesRector::class);
 };
