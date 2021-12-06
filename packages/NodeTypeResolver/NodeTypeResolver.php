@@ -16,8 +16,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
@@ -141,17 +139,6 @@ final class NodeTypeResolver
             return $this->resolveObjectType($resolvedType, $requiredObjectType);
         }
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
-    }
-    /**
-     * @deprecated
-     * @see use NodeTypeResolver::getType() instead
-     */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
-    {
-        $errorMessage = \sprintf('Method "%s" is deprecated. Use "getType()" instead', __METHOD__);
-        \trigger_error($errorMessage, \E_USER_WARNING);
-        \sleep(3);
-        return $this->getType($node);
     }
     public function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
