@@ -102,17 +102,11 @@ CODE_SAMPLE
             return \true;
         }
         $yieldAndConditionalNodes = \array_merge([\PhpParser\Node\Expr\Yield_::class], \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
-        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOf($node, $yieldAndConditionalNodes);
+        $hasNotNeverNodes = $this->hasNotNeverNodes($node, $yieldAndConditionalNodes);
         if ($hasNotNeverNodes) {
             return \true;
         }
-        $hasNeverNodes = (bool) $this->betterNodeFinder->findFirst((array) $node->stmts, function (\PhpParser\Node $subNode) use($node) : bool {
-            if (!\in_array(\get_class($subNode), [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class], \true)) {
-                return \false;
-            }
-            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
-            return $parentFunctionOrClassMethod === $node;
-        });
+        $hasNeverNodes = $this->hasNeverNodes($node);
         $hasNeverFuncCall = $this->hasNeverFuncCall($node);
         if (!$hasNeverNodes && !$hasNeverFuncCall) {
             return \true;
@@ -124,6 +118,33 @@ CODE_SAMPLE
             return \false;
         }
         return $this->isName($node->returnType, 'never');
+    }
+    /**
+     * @param class-string<Node>[] $yieldAndConditionalNodes
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function hasNotNeverNodes($functionLike, array $yieldAndConditionalNodes) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (\PhpParser\Node $subNode) use($functionLike, $yieldAndConditionalNodes) : bool {
+            if (!\in_array(\get_class($subNode), $yieldAndConditionalNodes, \true)) {
+                return \false;
+            }
+            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
+            return $parentFunctionOrClassMethod === $functionLike;
+        });
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function hasNeverNodes($functionLike) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (\PhpParser\Node $subNode) use($functionLike) : bool {
+            if (!\in_array(\get_class($subNode), [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class], \true)) {
+                return \false;
+            }
+            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
+            return $parentFunctionOrClassMethod === $functionLike;
+        });
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
