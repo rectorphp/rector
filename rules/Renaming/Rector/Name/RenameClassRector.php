@@ -71,7 +71,7 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
     }
 }
 CODE_SAMPLE
-, [self::OLD_TO_NEW_CLASSES => ['App\\SomeOldClass' => 'App\\SomeNewClass']])]);
+, ['App\\SomeOldClass' => 'App\\SomeNewClass'])]);
     }
     /**
      * @return array<class-string<Node>>

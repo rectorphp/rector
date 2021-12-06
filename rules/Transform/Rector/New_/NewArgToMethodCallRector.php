@@ -49,7 +49,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::NEW_ARGS_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\NewArgToMethodCall('Dotenv', \true, 'usePutenv')]])]);
+, [new \Rector\Transform\ValueObject\NewArgToMethodCall('Dotenv', \true, 'usePutenv')])]);
     }
     /**
      * @return array<class-string<Node>>

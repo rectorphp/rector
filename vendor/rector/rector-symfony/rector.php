@@ -20,7 +20,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         '*/Source/*',
     ]);
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->call('configure', [[\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::CLASSES_TO_SKIP => ['Symfony\\*', 'Twig_*', 'Swift_*']]]);
+    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure(['Symfony\\*', 'Twig_*', 'Swift_*']);
     $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);

@@ -99,7 +99,7 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [self::ANNOTATION_TO_ATTRIBUTE => [new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route')]])]);
+, [new \Rector\Php80\ValueObject\AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route')])]);
     }
     /**
      * @return array<class-string<Node>>

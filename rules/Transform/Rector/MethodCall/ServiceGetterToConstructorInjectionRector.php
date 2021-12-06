@@ -120,7 +120,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::METHOD_CALL_TO_SERVICES => [new \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')]])]);
+, [new \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')])]);
     }
     /**
      * @return array<class-string<Node>>

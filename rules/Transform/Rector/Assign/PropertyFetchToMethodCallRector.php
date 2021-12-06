@@ -29,23 +29,19 @@ final class PropertyFetchToMethodCallRector extends \Rector\Core\Rector\Abstract
     private $propertiesToMethodCalls = [];
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        $firstConfiguration = [self::PROPERTIES_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty')]];
-        $secondConfiguration = [self::PROPERTIES_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', null, ['someArg'])]];
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replaces properties assign calls be defined methods.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $result = $object->property;
 $object->property = $value;
+
+$bare = $object->bareProperty;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $result = $object->getProperty();
 $object->setProperty($value);
+
+$bare = $object->getConfig('someArg');
 CODE_SAMPLE
-, $firstConfiguration), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-$result = $object->property;
-CODE_SAMPLE
-, <<<'CODE_SAMPLE'
-$result = $object->getProperty('someArg');
-CODE_SAMPLE
-, $secondConfiguration)]);
+, [new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty'), new \Rector\Transform\ValueObject\PropertyFetchToMethodCall('SomeObject', 'bareProperty', 'getConfig', null, ['someArg'])])]);
     }
     /**
      * @return array<class-string<Node>>

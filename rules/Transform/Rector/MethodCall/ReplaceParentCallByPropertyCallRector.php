@@ -44,7 +44,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::PARENT_CALLS_TO_PROPERTIES => [new \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty')]])]);
+, [new \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty')])]);
     }
     /**
      * @return array<class-string<Node>>

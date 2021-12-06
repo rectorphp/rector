@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Rector upgrades rules for Symfony Framework",
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "ext-xml": "*",
         "danielstjules\/stringy": "^3.1"
     },
@@ -54,6 +54,9 @@
         "patches": {
             "symfony\/dependency-injection": [
                 "patches\/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
+            ],
+            "danielstjules\/stringy": [
+                "patches\/danielstjules-stringy-src-stringy-php.patch"
             ]
         },
         "branch-alias": {

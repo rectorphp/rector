@@ -60,8 +60,6 @@ final class ArgumentAdderRector extends \Rector\Core\Rector\AbstractRector imple
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        $objectType = new \PHPStan\Type\ObjectType('SomeType');
-        $exampleConfiguration = [self::ADDED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', \true, $objectType)]];
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('This Rector adds new default arguments in calls of defined methods and class types.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->someMethod();
@@ -84,7 +82,7 @@ class MyCustomClass extends SomeExampleClass
     }
 }
 CODE_SAMPLE
-, $exampleConfiguration)]);
+, [new \Rector\Arguments\ValueObject\ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', \true, new \PHPStan\Type\ObjectType('SomeType'))])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -38,7 +38,6 @@ final class RemoveFuncCallRector extends \Rector\Core\Rector\AbstractRector impl
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        $configuration = [self::REMOVE_FUNC_CALLS => [new \Rector\Removing\ValueObject\RemoveFuncCall('ini_get', [1 => ['y2k_compliance']])]];
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove ini_get by configuration', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 ini_get('y2k_compliance');
 ini_get('keep_me');
@@ -46,7 +45,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 ini_get('keep_me');
 CODE_SAMPLE
-, $configuration)]);
+, [new \Rector\Removing\ValueObject\RemoveFuncCall('ini_get', [1 => ['y2k_compliance']])])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\SymfonyPhpConfig\Reflection;
+namespace RectorPrefix20211206\Symplify\SymfonyPhpConfig\Reflection;
 
 use RectorPrefix20211206\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class ArgumentAndParameterFactory

@@ -46,7 +46,7 @@ class Someclass
 {
 }
 CODE_SAMPLE
-, [self::ATTRIBUTES_ORDER => ['First', 'Second']])]);
+, ['First', 'Second'])]);
     }
     /**
      * @return array<class-string<Node>>

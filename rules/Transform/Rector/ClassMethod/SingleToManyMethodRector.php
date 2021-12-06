@@ -63,7 +63,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::SINGLES_TO_MANY_METHODS => [new \Rector\Transform\ValueObject\SingleToManyMethod('SomeClass', 'getNode', 'getNodes')]])]);
+, [new \Rector\Transform\ValueObject\SingleToManyMethod('SomeClass', 'getNode', 'getNodes')])]);
     }
     /**
      * @return array<class-string<Node>>

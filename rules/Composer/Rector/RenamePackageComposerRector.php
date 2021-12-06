@@ -51,7 +51,7 @@ CODE_SAMPLE
     }
 }
 CODE_SAMPLE
-, [self::RENAME_PACKAGES => [new \Rector\Composer\ValueObject\RenamePackage('rector/rector', 'rector/rector-src')]])]);
+, [new \Rector\Composer\ValueObject\RenamePackage('rector/rector', 'rector/rector-src')])]);
     }
     /**
      * @param mixed[] $configuration

@@ -57,7 +57,7 @@ CODE_SAMPLE
 $container = new SomeContainer;
 $container->setService("someService", $someService);
 CODE_SAMPLE
-, [self::TYPE_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\GetAndSetToMethodCall('SomeContainer', 'addService', 'getService')]])]);
+, [new \Rector\Transform\ValueObject\GetAndSetToMethodCall('SomeContainer', 'addService', 'getService')])]);
     }
     /**
      * @return array<class-string<Node>>

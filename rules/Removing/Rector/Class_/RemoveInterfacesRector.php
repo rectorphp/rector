@@ -35,7 +35,7 @@ class SomeClass
 {
 }
 CODE_SAMPLE
-, [self::INTERFACES_TO_REMOVE => ['SomeInterface']])]);
+, ['SomeInterface'])]);
     }
     /**
      * @return array<class-string<Node>>

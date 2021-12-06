@@ -74,7 +74,7 @@ final class SomeTest implements TestCase
     }
 }
 CODE_SAMPLE
-, [self::METHODS_TO_YIELDS => [new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', '*provide*')]])]);
+, [new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', '*provide*')])]);
     }
     /**
      * @return array<class-string<Node>>

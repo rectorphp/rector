@@ -92,7 +92,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::TYPES_TO_CONSTRUCTOR_INJECTION => ['Validator']])]);
+, ['Validator'])]);
     }
     /**
      * @return array<class-string<Node>>

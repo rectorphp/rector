@@ -48,7 +48,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::STATIC_CALLS_TO_NEWS => [new \Rector\Transform\ValueObject\StaticCallToNew('JsonResponse', 'create')]])]);
+, [new \Rector\Transform\ValueObject\StaticCallToNew('JsonResponse', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>

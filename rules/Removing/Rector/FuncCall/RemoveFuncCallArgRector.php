@@ -33,7 +33,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 remove_last_arg(1);
 CODE_SAMPLE
-, [self::REMOVED_FUNCTION_ARGUMENTS => [new \Rector\Removing\ValueObject\RemoveFuncCallArg('remove_last_arg', 1)]])]);
+, [new \Rector\Removing\ValueObject\RemoveFuncCallArg('remove_last_arg', 1)])]);
     }
     /**
      * @return array<class-string<Node>>

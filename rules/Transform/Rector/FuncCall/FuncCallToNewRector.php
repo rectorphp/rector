@@ -45,7 +45,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::FUNCTIONS_TO_NEWS => ['collection' => ['Collection']]])]);
+, ['collection' => ['Collection']])]);
     }
     /**
      * @return array<class-string<Node>>

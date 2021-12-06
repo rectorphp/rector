@@ -47,7 +47,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::TYPE_METHOD_WRAPS => [new \Rector\Transform\ValueObject\WrapReturn('SomeClass', 'getItem', \true)]])]);
+, [new \Rector\Transform\ValueObject\WrapReturn('SomeClass', 'getItem', \true)])]);
     }
     /**
      * @return array<class-string<Node>>

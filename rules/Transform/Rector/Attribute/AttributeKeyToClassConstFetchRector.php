@@ -48,7 +48,7 @@ class SomeClass
     public $name;
 }
 CODE_SAMPLE
-, [self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES => [new \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])]])]);
+, [new \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -64,7 +64,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE => [new \Rector\Transform\ValueObject\CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1)]])]);
+, [new \Rector\Transform\ValueObject\CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1)])]);
     }
     /**
      * @return array<class-string<Node>>

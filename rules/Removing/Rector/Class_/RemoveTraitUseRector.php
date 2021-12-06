@@ -42,7 +42,7 @@ class SomeClass
 {
 }
 CODE_SAMPLE
-, [self::TRAITS_TO_REMOVE => ['TraitNameToRemove']])]);
+, ['TraitNameToRemove'])]);
     }
     /**
      * @return array<class-string<Node>>

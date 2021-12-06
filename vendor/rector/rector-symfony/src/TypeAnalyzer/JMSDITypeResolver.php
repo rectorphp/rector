@@ -13,7 +13,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Application\RectorError;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
@@ -75,8 +74,7 @@ final class JMSDITypeResolver
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $errorMessage = \sprintf('Service "%s" was not found in DI Container of your Symfony App.', $serviceName);
-        $rectorError = new \Rector\Core\ValueObject\Application\RectorError($errorMessage, $file->getRelativeFilePath(), $property->getLine());
-        $file->addRectorError($rectorError);
+        throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
     }
     private function resolveFromServiceName(string $serviceName, \Rector\Symfony\ValueObject\ServiceMap\ServiceMap $serviceMap) : \PHPStan\Type\Type
     {

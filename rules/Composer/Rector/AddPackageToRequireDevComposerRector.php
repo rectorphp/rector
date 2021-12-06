@@ -51,7 +51,7 @@ CODE_SAMPLE
     }
 }
 CODE_SAMPLE
-, [self::PACKAGES_AND_VERSIONS => [new \Rector\Composer\ValueObject\PackageAndVersion('symfony/console', '^3.4')]])]);
+, [new \Rector\Composer\ValueObject\PackageAndVersion('symfony/console', '^3.4')])]);
     }
     /**
      * @param mixed[] $configuration

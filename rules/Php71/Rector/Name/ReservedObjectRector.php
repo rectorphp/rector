@@ -46,7 +46,7 @@ class SmartObject
 {
 }
 CODE_SAMPLE
-, [self::RESERVED_KEYWORDS_TO_REPLACEMENTS => ['ReservedObject' => 'SmartObject', 'Object' => 'AnotherSmartObject']])]);
+, ['ReservedObject' => 'SmartObject', 'Object' => 'AnotherSmartObject'])]);
     }
     /**
      * @return array<class-string<Node>>

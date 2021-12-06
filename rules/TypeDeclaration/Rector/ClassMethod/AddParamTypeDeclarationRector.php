@@ -44,7 +44,6 @@ final class AddParamTypeDeclarationRector extends \Rector\Core\Rector\AbstractRe
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        $configuration = [self::PARAMETER_TYPEHINTS => [new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('SomeClass', 'process', 0, new \PHPStan\Type\StringType())]];
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add param types where needed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
@@ -61,7 +60,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, $configuration)]);
+, [new \Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration('SomeClass', 'process', 0, new \PHPStan\Type\StringType())])]);
     }
     /**
      * @return array<class-string<Node>>

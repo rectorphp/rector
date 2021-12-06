@@ -59,7 +59,7 @@ CODE_SAMPLE
 $someObject = new SomeExampleClass;
 $someObject->newMethod();
 CODE_SAMPLE
-, [self::METHOD_CALL_RENAMES => [new \Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod')]])]);
+, [new \Rector\Renaming\ValueObject\MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod')])]);
     }
     /**
      * @return array<class-string<Node>>

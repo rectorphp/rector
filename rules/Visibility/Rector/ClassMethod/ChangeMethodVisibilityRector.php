@@ -76,7 +76,7 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
-, [self::METHOD_VISIBILITIES => [new \Rector\Visibility\ValueObject\ChangeMethodVisibility('FrameworkClass', 'someMethod', \Rector\Core\ValueObject\Visibility::PROTECTED)]])]);
+, [new \Rector\Visibility\ValueObject\ChangeMethodVisibility('FrameworkClass', 'someMethod', \Rector\Core\ValueObject\Visibility::PROTECTED)])]);
     }
     /**
      * @return array<class-string<Node>>

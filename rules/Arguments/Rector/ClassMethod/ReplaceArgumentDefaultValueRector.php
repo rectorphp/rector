@@ -46,7 +46,7 @@ CODE_SAMPLE
 $someObject = new SomeClass;
 $someObject->someMethod(false);
 CODE_SAMPLE
-, [self::REPLACED_ARGUMENTS => [new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)]])]);
+, [new \Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)])]);
     }
     /**
      * @return array<class-string<Node>>

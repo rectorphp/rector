@@ -70,7 +70,7 @@ class SomeClass
 	}
 }
 CODE_SAMPLE
-, [self::NEWS_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\NewToMethodCall('MyClass', 'MyClassFactory', 'create')]])]);
+, [new \Rector\Transform\ValueObject\NewToMethodCall('MyClass', 'MyClassFactory', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>

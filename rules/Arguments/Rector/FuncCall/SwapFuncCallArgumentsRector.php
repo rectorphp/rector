@@ -49,7 +49,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::FUNCTION_ARGUMENT_SWAPS => [new \Rector\Arguments\ValueObject\SwapFuncCallArguments('some_function', [1, 0])]])]);
+, [new \Rector\Arguments\ValueObject\SwapFuncCallArguments('some_function', [1, 0])])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -66,7 +66,7 @@ class ProductRepository
 {
 }
 CODE_SAMPLE
-, [self::GROUP_NAMES_BY_SUFFIX => ['Repository']])]);
+, ['Repository'])]);
     }
     /**
      * @return array<class-string<Node>>

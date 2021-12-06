@@ -58,7 +58,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::METHOD_CALLS_TO_STATIC_CALLS => [new \Rector\Transform\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod')]])]);
+, [new \Rector\Transform\ValueObject\MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod')])]);
     }
     /**
      * @return array<class-string<Node>>

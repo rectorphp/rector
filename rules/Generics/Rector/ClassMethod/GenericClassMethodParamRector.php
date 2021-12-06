@@ -112,7 +112,7 @@ final class SomeClass implements SomeInterface
     }
 }
 CODE_SAMPLE
-, [self::GENERIC_CLASS_METHOD_PARAMS => [new \Rector\Generics\ValueObject\GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface')]])]);
+, [new \Rector\Generics\ValueObject\GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface')])]);
     }
     /**
      * @param mixed[] $configuration

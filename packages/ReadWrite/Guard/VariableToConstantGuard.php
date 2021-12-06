@@ -52,6 +52,9 @@ final class VariableToConstantGuard
             return \true;
         }
         $functionReflection = $this->reflectionProvider->getFunction($functionName, $argScope);
+        if (!$argScope instanceof \PHPStan\Analyser\Scope) {
+            return \true;
+        }
         $referenceParametersPositions = $this->resolveFunctionReferencePositions($functionReflection, [$arg], $argScope);
         if ($referenceParametersPositions === []) {
             // no reference always only write

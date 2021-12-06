@@ -53,7 +53,7 @@ CODE_SAMPLE
 services:
     - SomeNewClass
 CODE_SAMPLE
-, [self::RENAME_CLASSES => ['SomeOldClass' => 'SomeNewClass']])]);
+, ['SomeOldClass' => 'SomeNewClass'])]);
     }
     public function refactorFileContent(string $fileContent) : string
     {

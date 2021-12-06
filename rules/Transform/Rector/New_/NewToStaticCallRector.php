@@ -44,7 +44,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::TYPE_TO_STATIC_CALLS => [new \Rector\Transform\ValueObject\NewToStaticCall('Cookie', 'Cookie', 'create')]])]);
+, [new \Rector\Transform\ValueObject\NewToStaticCall('Cookie', 'Cookie', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>

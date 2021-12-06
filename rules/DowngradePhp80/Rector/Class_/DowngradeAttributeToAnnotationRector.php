@@ -70,7 +70,7 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [self::ATTRIBUTE_TO_ANNOTATION => [new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route')]])]);
+, [new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route')])]);
     }
     /**
      * @return array<class-string<Node>>
