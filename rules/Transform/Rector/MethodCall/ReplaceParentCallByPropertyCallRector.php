@@ -54,11 +54,7 @@ final class SomeClass
 }
 CODE_SAMPLE
                     ,
-                    [
-                        self::PARENT_CALLS_TO_PROPERTIES => [
-                            new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty'),
-                        ],
-                    ]
+                    [new ReplaceParentCallByPropertyCall('SomeTypeToReplace', 'someMethodCall', 'someProperty')]
                 ),
             ]
         );

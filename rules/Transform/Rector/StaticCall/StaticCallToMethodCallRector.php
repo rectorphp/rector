@@ -80,14 +80,12 @@ class SomeClass
 CODE_SAMPLE
             ,
                 [
-                    self::STATIC_CALLS_TO_METHOD_CALLS => [
-                        new StaticCallToMethodCall(
-                            'Nette\Utils\FileSystem',
-                            'write',
-                            'Symplify\SmartFileSystem\SmartFileSystem',
-                            'dumpFile'
-                        ),
-                    ],
+                    new StaticCallToMethodCall(
+                        'Nette\Utils\FileSystem',
+                        'write',
+                        'Symplify\SmartFileSystem\SmartFileSystem',
+                        'dumpFile'
+                    ),
                 ]
             ),
         ]);

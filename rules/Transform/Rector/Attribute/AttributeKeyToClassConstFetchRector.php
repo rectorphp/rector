@@ -57,11 +57,9 @@ class SomeClass
 CODE_SAMPLE
 ,
                 [
-                    self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES => [
-                        new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', [
-                            'string' => 'STRING',
-                        ]),
-                    ],
+                    new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', [
+                        'string' => 'STRING',
+                    ]),
                 ]
             ),
         ]);

@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Validation;
 
-use function count;
-use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -17,20 +16,17 @@ final class EmptyConfigurableRectorChecker
     ) {
     }
 
-    /**
-     * @param RectorInterface[] $rectors
-     */
-    public function check(array $rectors): void
+    public function check(): void
     {
-        $emptyConfigurableRectors = $this->emptyConfigurableRectorCollector->resolveEmptyConfigurable($rectors);
-        if ($emptyConfigurableRectors === []) {
+        $emptyConfigurableRectorClasses = $this->emptyConfigurableRectorCollector->resolveEmptyConfigurableRectorClasses();
+        if ($emptyConfigurableRectorClasses === []) {
             return;
         }
 
-        $this->reportWarningMessage($emptyConfigurableRectors);
+        $this->reportWarningMessage($emptyConfigurableRectorClasses);
 
         $solutionMessage = sprintf(
-            'Do you want to run them?%sConfigure them in `rector.php` with ...->call("configure", ...);',
+            'Do you want to run them?%sConfigure them in `rector.php` with "...->configure(...);"',
             PHP_EOL
         );
         $this->symfonyStyle->note($solutionMessage);
@@ -42,18 +38,18 @@ final class EmptyConfigurableRectorChecker
     }
 
     /**
-     * @param RectorInterface[] $emptyConfigurableRectors
+     * @param array<class-string<ConfigurableRectorInterface>> $emptyConfigurableRectorClasses
      */
-    private function reportWarningMessage(array $emptyConfigurableRectors): void
+    private function reportWarningMessage(array $emptyConfigurableRectorClasses): void
     {
         $warningMessage = sprintf(
             'Your project contains %d configurable rector rules that are skipped as need to be configured to run.',
-            count($emptyConfigurableRectors)
+            count($emptyConfigurableRectorClasses)
         );
         $this->symfonyStyle->warning($warningMessage);
 
-        foreach ($emptyConfigurableRectors as $emptyConfigurableRector) {
-            $this->symfonyStyle->writeln(' * ' . $emptyConfigurableRector::class);
+        foreach ($emptyConfigurableRectorClasses as $emptyConfigurableRectorClass) {
+            $this->symfonyStyle->writeln(' * ' . $emptyConfigurableRectorClass);
         }
 
         // to take time to absorb it

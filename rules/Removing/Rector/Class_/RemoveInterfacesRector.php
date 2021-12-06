@@ -43,9 +43,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::INTERFACES_TO_REMOVE => ['SomeInterface'],
-                ]
+                ['SomeInterface']
             ),
         ]);
     }

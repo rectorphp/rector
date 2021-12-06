@@ -48,9 +48,7 @@ $someObject = new SomeClass;
 $someObject->someMethod();
 CODE_SAMPLE
                     ,
-                    [
-                        self::REMOVED_ARGUMENTS => [new ArgumentRemover('ExampleClass', 'someMethod', 0, [true])],
-                    ]
+                    [new ArgumentRemover('ExampleClass', 'someMethod', 0, [true])]
                 ),
             ]
         );

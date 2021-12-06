@@ -41,9 +41,7 @@ CODE_SAMPLE
 remove_last_arg(1);
 CODE_SAMPLE
                 ,
-                [
-                    self::REMOVED_FUNCTION_ARGUMENTS => [new RemoveFuncCallArg('remove_last_arg', 1)],
-                ]
+                [new RemoveFuncCallArg('remove_last_arg', 1)]
             ),
         ]);
     }

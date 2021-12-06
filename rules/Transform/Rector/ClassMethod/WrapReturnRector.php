@@ -55,9 +55,7 @@ final class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::TYPE_METHOD_WRAPS => [new WrapReturn('SomeClass', 'getItem', true)],
-                ]
+                [new WrapReturn('SomeClass', 'getItem', true)]
             ),
         ]);
     }

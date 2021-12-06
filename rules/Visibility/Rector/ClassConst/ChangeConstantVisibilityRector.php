@@ -65,11 +65,7 @@ class MyClass extends FrameworkClass
 }
 CODE_SAMPLE
                                 ,
-                    [
-                        self::CLASS_CONSTANT_VISIBILITY_CHANGES => [
-                            new ChangeConstantVisibility('ParentObject', 'SOME_CONSTANT', Visibility::PROTECTED),
-                        ],
-                    ]
+                    [new ChangeConstantVisibility('ParentObject', 'SOME_CONSTANT', Visibility::PROTECTED)]
                 ),
             ]
         );

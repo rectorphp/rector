@@ -44,10 +44,6 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $configuration = [
-            self::PARAMETER_TYPEHINTS => [new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())],
-        ];
-
         return new RuleDefinition('Add param types where needed', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
@@ -68,7 +64,7 @@ class SomeClass
 }
 CODE_SAMPLE
             ,
-                $configuration
+                [new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())]
             ),
         ]);
     }

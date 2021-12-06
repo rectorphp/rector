@@ -52,9 +52,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::TYPE_TO_STATIC_CALLS => [new NewToStaticCall('Cookie', 'Cookie', 'create')],
-                ]
+                [new NewToStaticCall('Cookie', 'Cookie', 'create')]
             ),
         ]);
     }

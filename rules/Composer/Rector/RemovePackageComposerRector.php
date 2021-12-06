@@ -34,8 +34,9 @@ final class RemovePackageComposerRector implements ComposerRectorInterface
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove package from "require" and "require-dev" in `composer.json`', [new ConfiguredCodeSample(
-            <<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove package from "require" and "require-dev" in `composer.json`', [
+            new ConfiguredCodeSample(
+                <<<'CODE_SAMPLE'
 {
     "require": {
         "symfony/console": "^3.4"
@@ -43,15 +44,13 @@ final class RemovePackageComposerRector implements ComposerRectorInterface
 }
 CODE_SAMPLE
             ,
-            <<<'CODE_SAMPLE'
+                <<<'CODE_SAMPLE'
 {
 }
 CODE_SAMPLE
             ,
-            [
-                self::PACKAGE_NAMES => ['symfony/console'],
-            ]
-        ),
+                ['symfony/console']
+            ),
         ]);
     }
 

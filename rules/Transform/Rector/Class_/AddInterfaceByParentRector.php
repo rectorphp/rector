@@ -50,9 +50,7 @@ class SomeClass extends SomeParent implements SomeInterface
 CODE_SAMPLE
             ,
                 [
-                    self::INTERFACE_BY_PARENT => [
-                        'SomeParent' => 'SomeInterface',
-                    ],
+                    'SomeParent' => 'SomeInterface',
                 ]
             ),
         ]);

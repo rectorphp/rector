@@ -113,11 +113,7 @@ final class SomeClass implements SomeInterface
 }
 CODE_SAMPLE
             ,
-                [
-                    self::GENERIC_CLASS_METHOD_PARAMS => [
-                        new GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface'),
-                    ],
-                ]
+                [new GenericClassMethodParam('SomeInterface', 'getParams', 0, 'ParamInterface')]
             ),
         ]);
     }

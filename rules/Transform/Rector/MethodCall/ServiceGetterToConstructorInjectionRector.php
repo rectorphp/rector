@@ -114,11 +114,7 @@ final class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::METHOD_CALL_TO_SERVICES => [
-                        new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService'),
-                    ],
-                ]
+                [new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')]
             ),
         ]);
     }

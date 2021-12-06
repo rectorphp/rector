@@ -38,13 +38,6 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $configuration = [
-            self::REMOVE_FUNC_CALLS => [
-                new RemoveFuncCall('ini_get', [
-                    1 => ['y2k_compliance'],
-                ]),
-            ],
-        ];
         return new RuleDefinition(
             'Remove ini_get by configuration',
             [
@@ -58,7 +51,11 @@ CODE_SAMPLE
 ini_get('keep_me');
 CODE_SAMPLE
                     ,
-                    $configuration
+                    [
+                        new RemoveFuncCall('ini_get', [
+                            1 => ['y2k_compliance'],
+                        ]),
+                    ]
                 ), ]
         );
     }

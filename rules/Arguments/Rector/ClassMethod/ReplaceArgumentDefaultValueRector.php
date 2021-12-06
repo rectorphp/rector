@@ -53,15 +53,13 @@ $someObject->someMethod(false);
 CODE_SAMPLE
                     ,
                     [
-                        self::REPLACED_ARGUMENTS => [
-                            new ReplaceArgumentDefaultValue(
-                                'SomeClass',
-                                'someMethod',
-                                0,
-                                'SomeClass::OLD_CONSTANT',
-                                false
-                            ),
-                        ],
+                        new ReplaceArgumentDefaultValue(
+                            'SomeClass',
+                            'someMethod',
+                            0,
+                            'SomeClass::OLD_CONSTANT',
+                            false
+                        ),
                     ]
                 ),
             ]

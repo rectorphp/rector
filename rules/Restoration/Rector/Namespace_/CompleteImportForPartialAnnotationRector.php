@@ -36,9 +36,11 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('In case you have accidentally removed use imports but code still contains partial use statements, this will save you', [
-            new ConfiguredCodeSample(
-                <<<'CODE_SAMPLE'
+        return new RuleDefinition(
+            'In case you have accidentally removed use imports but code still contains partial use statements, this will save you',
+            [
+                new ConfiguredCodeSample(
+                    <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -47,8 +49,8 @@ class SomeClass
     public $id;
 }
 CODE_SAMPLE
-                ,
-                <<<'CODE_SAMPLE'
+                    ,
+                    <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SomeClass
@@ -59,14 +61,12 @@ class SomeClass
     public $id;
 }
 CODE_SAMPLE
-                ,
-                [
-                    self::USE_IMPORTS_TO_RESTORE => [
-                        new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM'),
-                    ],
-                ]
-            ),
-        ]);
+                    ,
+                    [new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM')]
+                ),
+
+            ]
+        );
     }
 
     /**

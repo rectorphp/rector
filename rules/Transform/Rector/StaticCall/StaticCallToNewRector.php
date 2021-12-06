@@ -56,9 +56,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                [
-                    self::STATIC_CALLS_TO_NEWS => [new StaticCallToNew('JsonResponse', 'create')],
-                ]
+                [new StaticCallToNew('JsonResponse', 'create')]
             ),
         ]);
     }

@@ -34,13 +34,6 @@ final class RenameClassConstFetchRector extends AbstractRector implements Config
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $configuration = [
-            self::CLASS_CONSTANT_RENAME => [
-                new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
-                new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
-            ],
-        ];
-
         return new RuleDefinition(
             'Replaces defined class constants in their calls.',
             [
@@ -55,7 +48,15 @@ $value = SomeClass::NEW_CONSTANT;
 $value = DifferentClass::NEW_CONSTANT;
 CODE_SAMPLE
                     ,
-                    $configuration
+                    [
+                        new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'),
+                        new RenameClassAndConstFetch(
+                            'SomeClass',
+                            'OTHER_OLD_CONSTANT',
+                            'DifferentClass',
+                            'NEW_CONSTANT'
+                        ),
+                    ]
                 ),
             ]
         );

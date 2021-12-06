@@ -44,14 +44,12 @@ $serviceDefinition->addTag('inject');
 CODE_SAMPLE
                 ,
                 [
-                    self::METHOD_CALL_RENAMES_WITH_ADDED_ARGUMENTS => [
-                        new MethodCallToAnotherMethodCallWithArguments(
-                            'Nette\DI\ServiceDefinition',
-                            'setInject',
-                            'addTag',
-                            ['inject']
-                        ),
-                    ],
+                    new MethodCallToAnotherMethodCallWithArguments(
+                        'Nette\DI\ServiceDefinition',
+                        'setInject',
+                        'addTag',
+                        ['inject']
+                    ),
                 ]
             ),
         ]);

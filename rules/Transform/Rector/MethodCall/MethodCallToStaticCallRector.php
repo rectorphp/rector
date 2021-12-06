@@ -66,11 +66,7 @@ final class SomeClass
 }
 CODE_SAMPLE
 ,
-                [
-                    self::METHOD_CALLS_TO_STATIC_CALLS => [
-                        new MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod'),
-                    ],
-                ]
+                [new MethodCallToStaticCall('AnotherDependency', 'process', 'StaticCaller', 'anotherMethod')]
             ),
         ]);
     }

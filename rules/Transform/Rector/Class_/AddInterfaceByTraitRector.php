@@ -50,9 +50,7 @@ class SomeClass implements SomeInterface
 CODE_SAMPLE
             ,
                 [
-                    self::INTERFACE_BY_TRAIT => [
-                        'SomeTrait' => 'SomeInterface',
-                    ],
+                    'SomeTrait' => 'SomeInterface',
                 ]
             ),
         ]);

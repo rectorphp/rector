@@ -64,9 +64,7 @@ class SomeClass extends \PHPUnit\Framework\TestCase
 CODE_SAMPLE
                 ,
                 [
-                    self::TYPE_TO_PREFERENCE => [
-                        'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_SELF(),
-                    ],
+                    'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_SELF(),
                 ]
             ),
         ]);

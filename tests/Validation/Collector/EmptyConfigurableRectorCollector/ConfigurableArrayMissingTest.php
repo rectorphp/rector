@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollector;
 
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 
 /**
@@ -23,9 +22,7 @@ final class ConfigurableArrayMissingTest extends AbstractTestCase
 
     public function test(): void
     {
-        $emptyConfigurableRectors = $this->collector->resolveEmptyConfigurable(
-            [$this->getService(AnnotationToAttributeRector::class)]
-        );
+        $emptyConfigurableRectors = $this->collector->resolveEmptyConfigurableRectorClasses();
         $this->assertCount(1, $emptyConfigurableRectors);
     }
 }

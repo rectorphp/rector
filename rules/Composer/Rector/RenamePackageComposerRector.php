@@ -68,9 +68,7 @@ CODE_SAMPLE
 }
 CODE_SAMPLE
             ,
-            [
-                self::RENAME_PACKAGES => [new RenamePackage('rector/rector', 'rector/rector-src')],
-            ]
+            [new RenamePackage('rector/rector', 'rector/rector-src')]
         ),
         ]);
     }

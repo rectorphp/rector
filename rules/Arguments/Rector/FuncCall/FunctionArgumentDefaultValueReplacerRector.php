@@ -50,11 +50,7 @@ CODE_SAMPLE
 version_compare(PHP_VERSION, '5.6', 'ge');
 CODE_SAMPLE
             ,
-                [
-                    self::REPLACED_ARGUMENTS => [
-                        new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge',),
-                    ],
-                ]
+                [new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge',)]
             ),
         ]);
     }

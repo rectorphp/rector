@@ -44,11 +44,7 @@ $someObject = new SomeClass;
 $someObject->newMethodCall(false);
 CODE_SAMPLE
                 ,
-                [
-                    self::PROPERTY_ASSIGNS_TO_METHODS_CALLS => [
-                        new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall'),
-                    ],
-                ]
+                [new PropertyAssignToMethodCall('SomeClass', 'oldProperty', 'newMethodCall')]
             ),
         ]);
     }

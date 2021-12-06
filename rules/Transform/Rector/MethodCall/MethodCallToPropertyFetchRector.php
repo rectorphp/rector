@@ -53,9 +53,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::METHOD_CALL_TO_PROPERTY_FETCHES => [
-                        'someMethod' => 'someProperty',
-                    ],
+                    'someMethod' => 'someProperty',
                 ]
             ),
         ]);

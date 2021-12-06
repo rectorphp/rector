@@ -66,13 +66,11 @@ class RouterFactory
 CODE_SAMPLE
 ,
                     [
-                        self::DIM_FETCH_ASSIGN_TO_METHOD_CALL => [
-                            new DimFetchAssignToMethodCall(
-                                'Nette\Application\Routers\RouteList',
-                                'Nette\Application\Routers\Route',
-                                'addRoute'
-                            ),
-                        ],
+                        new DimFetchAssignToMethodCall(
+                            'Nette\Application\Routers\RouteList',
+                            'Nette\Application\Routers\Route',
+                            'addRoute'
+                        ),
                     ]
                 ),
             ]

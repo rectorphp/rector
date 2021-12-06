@@ -57,9 +57,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                [
-                    self::NEW_ARGS_TO_METHOD_CALLS => [new NewArgToMethodCall('Dotenv', true, 'usePutenv')],
-                ]
+                [new NewArgToMethodCall('Dotenv', true, 'usePutenv')]
             ),
         ]);
     }

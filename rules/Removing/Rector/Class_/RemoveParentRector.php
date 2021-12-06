@@ -52,9 +52,7 @@ final class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::PARENT_TYPES_TO_REMOVE => ['SomeParentClass'],
-                ]
+                ['SomeParentClass']
             ),
         ]);
     }

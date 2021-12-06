@@ -85,11 +85,7 @@ class SomeController
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::FUNCTIONS_TO_METHOD_CALLS => [
-                        new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make'),
-                    ],
-                ]
+                [new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make')]
             ),
         ]);
     }

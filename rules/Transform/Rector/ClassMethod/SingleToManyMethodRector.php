@@ -67,9 +67,7 @@ class SomeClass
 }
 CODE_SAMPLE
             ,
-                [
-                    self::SINGLES_TO_MANY_METHODS => [new SingleToManyMethod('SomeClass', 'getNode', 'getNodes')],
-                ]
+                [new SingleToManyMethod('SomeClass', 'getNode', 'getNodes')]
             ),
         ]);
     }

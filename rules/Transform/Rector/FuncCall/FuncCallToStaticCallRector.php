@@ -34,11 +34,7 @@ final class FuncCallToStaticCallRector extends AbstractRector implements Configu
             new ConfiguredCodeSample(
                 'view("...", []);',
                 'SomeClass::render("...", []);',
-                [
-                    self::FUNC_CALLS_TO_STATIC_CALLS => [
-                        new FuncCallToStaticCall('view', 'SomeStaticClass', 'render'),
-                    ],
-                ]
+                [new FuncCallToStaticCall('view', 'SomeStaticClass', 'render')]
             ),
         ]);
     }

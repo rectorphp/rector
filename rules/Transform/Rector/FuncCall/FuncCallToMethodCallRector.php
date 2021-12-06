@@ -70,11 +70,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::FUNC_CALL_TO_CLASS_METHOD_CALL => [
-                        new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render'),
-                    ],
-                ]
+                [new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render')]
             ),
         ]);
     }

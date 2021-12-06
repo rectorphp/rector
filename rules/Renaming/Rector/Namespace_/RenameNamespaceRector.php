@@ -53,9 +53,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
                 '$someObject = new SomeOldNamespace\SomeClass;',
                 '$someObject = new SomeNewNamespace\SomeClass;',
                 [
-                    self::OLD_TO_NEW_NAMESPACES => [
-                        'SomeOldNamespace' => 'SomeNewNamespace',
-                    ],
+                    'SomeOldNamespace' => 'SomeNewNamespace',
                 ]
             ),
         ]);

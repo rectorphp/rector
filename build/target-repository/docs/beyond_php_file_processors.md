@@ -22,7 +22,6 @@ All you have to do is using the ChangePackageVersionComposerRector:
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
@@ -45,7 +44,6 @@ use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
 use Rector\Composer\ValueObject\PackageAndVersion;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();

@@ -69,9 +69,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::NEWS_TO_METHOD_CALLS => [new NewToMethodCall('MyClass', 'MyClassFactory', 'create')],
-                ]
+                [new NewToMethodCall('MyClass', 'MyClassFactory', 'create')]
             ),
         ]);
     }

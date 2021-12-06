@@ -58,9 +58,7 @@ final class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::FUNCTION_ARGUMENT_SWAPS => [new SwapFuncCallArguments('some_function', [1, 0])],
-                ]
+                [new SwapFuncCallArguments('some_function', [1, 0])],
             ),
         ]);
     }

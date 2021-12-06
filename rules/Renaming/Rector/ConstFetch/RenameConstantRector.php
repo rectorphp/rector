@@ -53,10 +53,8 @@ final class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::OLD_TO_NEW_CONSTANTS => [
-                        'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-                        'OLD_CONSTANT' => 'NEW_CONSTANT',
-                    ],
+                    'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
+                    'OLD_CONSTANT' => 'NEW_CONSTANT',
                 ]
             ),
         ]);

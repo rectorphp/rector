@@ -51,6 +51,10 @@ final class VariableToConstantGuard
 
         $functionReflection = $this->reflectionProvider->getFunction($functionName, $argScope);
 
+        if (! $argScope instanceof Scope) {
+            return true;
+        }
+
         $referenceParametersPositions = $this->resolveFunctionReferencePositions(
             $functionReflection,
             [$arg],

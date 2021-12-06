@@ -39,11 +39,7 @@ final class StaticCallToFuncCallRector extends AbstractRector implements Configu
             new ConfiguredCodeSample(
                 'OldClass::oldMethod("args");',
                 'new_function("args");',
-                [
-                    self::STATIC_CALLS_TO_FUNCTIONS => [
-                        new StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function'),
-                    ],
-                ]
+                [new StaticCallToFuncCall('OldClass', 'oldMethod', 'new_function')]
             ),
         ]);
     }

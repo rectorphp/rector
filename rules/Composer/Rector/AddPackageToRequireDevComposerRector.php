@@ -58,9 +58,7 @@ CODE_SAMPLE
 }
 CODE_SAMPLE
             ,
-            [
-                self::PACKAGES_AND_VERSIONS => [new PackageAndVersion('symfony/console', '^3.4')],
-            ]
+            [new PackageAndVersion('symfony/console', '^3.4')]
         ),
         ]);
     }

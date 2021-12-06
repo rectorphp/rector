@@ -28,6 +28,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\BetterTypeParser;
 use Rector\Caching\Cache;
 use Rector\Caching\CacheFactory;
 use Rector\Core\Console\ConsoleApplication;
+use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -77,6 +78,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->alias(Application::class, ConsoleApplication::class);
 
     $services->set(FileSystemGuard::class);
+
+    $services->set(EmptyConfigurableRectorCollector::class)
+        ->arg('$containerBuilder', service('service_container'));
 
     $services->set(SimpleCallableNodeTraverser::class);
 

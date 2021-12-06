@@ -52,11 +52,7 @@ final class SomeSubscriber
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::STRINGS_TO_CLASS_CONSTANTS => [
-                        new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT'),
-                    ],
-                ]
+                [new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT')]
             ),
         ]);
     }

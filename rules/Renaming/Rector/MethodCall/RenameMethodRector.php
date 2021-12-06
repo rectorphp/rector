@@ -58,11 +58,7 @@ $someObject = new SomeExampleClass;
 $someObject->newMethod();
 CODE_SAMPLE
                 ,
-                [
-                    self::METHOD_CALL_RENAMES => [
-                        new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod'),
-                    ],
-                ]
+                [new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod')]
             ),
         ]);
     }

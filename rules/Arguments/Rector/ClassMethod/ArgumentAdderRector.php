@@ -53,14 +53,6 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $objectType = new ObjectType('SomeType');
-
-        $exampleConfiguration = [
-            self::ADDED_ARGUMENTS => [
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, $objectType),
-            ],
-        ];
-
         return new RuleDefinition(
             'This Rector adds new default arguments in calls of defined methods and class types.',
             [
@@ -89,7 +81,11 @@ class MyCustomClass extends SomeExampleClass
 }
 CODE_SAMPLE
                     ,
-                    $exampleConfiguration
+                    [
+                        new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType(
+                            'SomeType'
+                        )),
+                    ]
                 ),
             ]
         );

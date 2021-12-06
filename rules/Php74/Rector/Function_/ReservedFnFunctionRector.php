@@ -74,9 +74,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::RESERVED_NAMES_TO_NEW_ONES => [
-                        'fn' => 'someFunctionName',
-                    ],
+                    'fn' => 'someFunctionName',
                 ]
             ),
         ]);

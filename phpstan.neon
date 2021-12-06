@@ -606,3 +606,12 @@ parameters:
             path: src/Application/ApplicationFileProcessor.php
 
         - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'
+
+        # code sample configuration
+        -
+            message: '#new <class\> is limited to 3 "new <class\>\(new <class\>\)\)" nesting to each other\. You have 4 nesting#'
+            paths:
+                - rules/Renaming/Rector/ClassConstFetch/RenameClassConstFetchRector.php
+                - rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php
+                - rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php
+                - rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php

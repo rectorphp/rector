@@ -80,9 +80,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                [
-                    self::CLASSES_TO_SKIP => ['ClassName', 'AnotherClassName'],
-                ]
+                ['ClassName', 'AnotherClassName'],
             ),
         ]);
     }

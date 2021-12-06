@@ -77,11 +77,7 @@ class MyClass extends FrameworkClass
 }
 CODE_SAMPLE
                     ,
-                    [
-                        self::METHOD_VISIBILITIES => [
-                            new ChangeMethodVisibility('FrameworkClass', 'someMethod', Visibility::PROTECTED),
-                        ],
-                    ]
+                    [new ChangeMethodVisibility('FrameworkClass', 'someMethod', Visibility::PROTECTED)]
                 ),
             ]
         );

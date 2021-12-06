@@ -50,9 +50,7 @@ class SomeClass implements SomeInterface
 CODE_SAMPLE
                 ,
                 [
-                    self::OLD_TO_NEW_INTERFACES => [
-                        'SomeOldInterface' => 'SomeInterface',
-                    ],
+                    'SomeOldInterface' => 'SomeInterface',
                 ]
             ),
         ]);

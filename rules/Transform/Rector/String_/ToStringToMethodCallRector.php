@@ -48,9 +48,7 @@ $result = $someValue->getPath();
 CODE_SAMPLE
                 ,
                 [
-                    self::METHOD_NAMES_BY_TYPE => [
-                        'SomeObject' => 'getPath',
-                    ],
+                    'SomeObject' => 'getPath',
                 ]
             ),
         ]);

@@ -102,7 +102,7 @@ final class ProcessCommand extends AbstractProcessCommand
         $this->missedRectorDueVersionChecker->check($this->rectors);
 
         // 2. inform user about registering configurable rule without configuration
-        $this->emptyConfigurableRectorChecker->check($this->rectors);
+        $this->emptyConfigurableRectorChecker->check();
 
         // 3. collect all files from files+dirs provided paths
         $files = $this->fileFactory->createFromPaths($paths, $configuration);

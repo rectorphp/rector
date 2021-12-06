@@ -54,9 +54,7 @@ class SomeClass
 CODE_SAMPLE
                 ,
                 [
-                    self::FUNCTIONS_TO_CONSTANTS => [
-                        'php_sapi_name' => 'PHP_SAPI',
-                    ],
+                    'php_sapi_name' => 'PHP_SAPI',
                 ]
             ),
 

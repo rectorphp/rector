@@ -73,11 +73,7 @@ final class SomeTest implements TestCase
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::METHODS_TO_YIELDS => [
-                        new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
-                    ],
-                ]
+                [new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*')]
             ),
         ]);
     }

@@ -54,9 +54,7 @@ class SomeClass
 CODE_SAMPLE
 ,
                 [
-                    self::STRING_CHANGES => [
-                        'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
-                    ],
+                    'ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR',
                 ]
             ),
         ]);

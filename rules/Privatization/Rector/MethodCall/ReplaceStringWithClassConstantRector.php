@@ -59,11 +59,7 @@ class SomeClass
 }
 CODE_SAMPLE
 ,
-                [
-                    self::REPLACE_STRING_WITH_CLASS_CONSTANT => [
-                        new ReplaceStringWithClassConstant('SomeClass', 'call', 0, 'Placeholder'),
-                    ],
-                ]
+                [new ReplaceStringWithClassConstant('SomeClass', 'call', 0, 'Placeholder')]
             ),
         ]);
     }

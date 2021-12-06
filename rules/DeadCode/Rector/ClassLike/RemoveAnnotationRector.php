@@ -57,9 +57,7 @@ final class SomeClass
 }
 CODE_SAMPLE
 ,
-                [
-                    self::ANNOTATIONS_TO_REMOVE => ['method'],
-                ]
+                ['method'],
             ),
         ]);
     }

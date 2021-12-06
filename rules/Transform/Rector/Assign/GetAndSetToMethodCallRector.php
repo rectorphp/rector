@@ -56,11 +56,7 @@ $container = new SomeContainer;
 $container->setService("someService", $someService);
 CODE_SAMPLE
                 ,
-                [
-                    self::TYPE_TO_METHOD_CALLS => [
-                        new GetAndSetToMethodCall('SomeContainer', 'addService', 'getService'),
-                    ],
-                ]
+                [new GetAndSetToMethodCall('SomeContainer', 'addService', 'getService')]
             ),
         ]);
     }

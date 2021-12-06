@@ -88,11 +88,7 @@ class SymfonyRoute
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::ANNOTATION_TO_ATTRIBUTE => [
-                        new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route'),
-                    ],
-                ]
+                [new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')]
             ),
         ]);
     }

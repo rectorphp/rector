@@ -62,9 +62,7 @@ services:
 CODE_SAMPLE
                 ,
                     [
-                        self::RENAME_CLASSES => [
-                            'SomeOldClass' => 'SomeNewClass',
-                        ],
+                        'SomeOldClass' => 'SomeNewClass',
                     ]
                 ),
             ]

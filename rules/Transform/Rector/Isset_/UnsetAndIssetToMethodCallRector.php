@@ -32,8 +32,6 @@ final class UnsetAndIssetToMethodCallRector extends AbstractRector implements Co
 
     public function getRuleDefinition(): RuleDefinition
     {
-        $unsetAndIssetToMethodCall = new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService');
-
         return new RuleDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
@@ -48,9 +46,7 @@ $container->hasService("someKey");
 $container->removeService("someKey");
 CODE_SAMPLE
                 ,
-                [
-                    self::ISSET_UNSET_TO_METHOD_CALL => [$unsetAndIssetToMethodCall],
-                ]
+                [new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService')]
             ),
         ]);
     }

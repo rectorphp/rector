@@ -62,13 +62,7 @@ CODE_SAMPLE
 }
 CODE_SAMPLE
             ,
-            [
-                self::REPLACE_PACKAGES_AND_VERSIONS => [new ReplacePackageAndVersion(
-                    'symfony/console',
-                    'symfony/http-kernel',
-                    '^4.4'
-                )],
-            ]
+            [new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4')]
         ),
         ]);
     }
