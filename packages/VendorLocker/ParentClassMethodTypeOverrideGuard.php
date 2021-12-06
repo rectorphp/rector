@@ -15,7 +15,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix20211205\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20211206\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -38,7 +38,7 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211205\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211206\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
@@ -63,8 +63,29 @@ final class ParentClassMethodTypeOverrideGuard
         if ($fileName === null) {
             return \false;
         }
+        /*
+         * Below verify that both current file name and parent file name is not in the /vendor/, if yes, then allowed.
+         * This can happen when rector run into /vendor/ directory while child and parent both are there.
+         *
+         *  @see https://3v4l.org/Rc0RF#v8.0.13
+         *
+         *     - both in /vendor/ -> allowed
+         *     - one of them in /vendor/ -> not allowed
+         *     - both not in /vendor/ -> allowed
+         */
+        /** @var Scope $scope */
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        /** @var ClassReflection $currentClassReflection */
+        $currentClassReflection = $scope->getClassReflection();
+        /** @var string $currentFileName */
+        $currentFileName = $currentClassReflection->getFileName();
+        // child (current)
+        $normalizedCurrentFileName = $this->pathNormalizer->normalizePath($currentFileName);
+        $isCurrentInVendor = \strpos($normalizedCurrentFileName, '/vendor/') !== \false;
+        // parent
         $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
-        return \strpos($normalizedFileName, '/vendor/') === \false;
+        $isParentInVendor = \strpos($normalizedFileName, '/vendor/') !== \false;
+        return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
     }
     public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {

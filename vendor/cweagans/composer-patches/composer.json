@@ -23,12 +23,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211205\\cweagans\\Composer\\": "src"
+            "RectorPrefix20211206\\cweagans\\Composer\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211205\\cweagans\\Composer\\Tests\\": "tests"
+            "RectorPrefix20211206\\cweagans\\Composer\\Tests\\": "tests"
         }
     }
 }

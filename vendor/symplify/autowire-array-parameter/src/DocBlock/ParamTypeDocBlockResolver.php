@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211205\Symplify\AutowireArrayParameter\DocBlock;
+namespace RectorPrefix20211206\Symplify\AutowireArrayParameter\DocBlock;
 
-use RectorPrefix20211205\Nette\Utils\Strings;
+use RectorPrefix20211206\Nette\Utils\Strings;
 /**
  * @see \Symplify\AutowireArrayParameter\Tests\DocBlock\ParamTypeDocBlockResolverTest
  */
@@ -38,7 +38,7 @@ final class ParamTypeDocBlockResolver
     {
         foreach (self::ARRAY_REGEXES as $arrayRegexWithPlaceholder) {
             $arrayRegex = \str_replace(self::NAME_PLACEHOLDER, $parameterName, $arrayRegexWithPlaceholder);
-            $result = \RectorPrefix20211205\Nette\Utils\Strings::match($docBlock, $arrayRegex);
+            $result = \RectorPrefix20211206\Nette\Utils\Strings::match($docBlock, $arrayRegex);
             if (isset($result[self::TYPE_PART])) {
                 return $result[self::TYPE_PART];
             }

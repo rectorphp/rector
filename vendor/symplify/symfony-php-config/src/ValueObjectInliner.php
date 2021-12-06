@@ -5,10 +5,10 @@ namespace Symplify\SymfonyPhpConfig;
 
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix20211205\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
-use RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
-use RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
+use RectorPrefix20211206\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
+use RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
+use RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
 /**
  * @api
@@ -18,7 +18,7 @@ final class ValueObjectInliner
     /**
      * @param object $object
      */
-    public static function inlineArgumentObject($object, \RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $servicesConfigurator) : \RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
+    public static function inlineArgumentObject($object, \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $servicesConfigurator) : \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
     {
         $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();
@@ -27,8 +27,8 @@ final class ValueObjectInliner
         // @see https://symfony.com/doc/current/service_container/factories.html#passing-arguments-to-the-factory-method
         $servicesConfigurator->set(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class);
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $servicesConfigurator->set($className)->factory([new \RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
-        return new \RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator($className);
+        $servicesConfigurator->set($className)->factory([new \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
+        return new \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator($className);
     }
     /**
      * @param object|object[] $object
@@ -94,12 +94,12 @@ final class ValueObjectInliner
     /**
      * @param object $object
      */
-    private static function inlineSingle($object) : \RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
+    private static function inlineSingle($object) : \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator
     {
         $reflectionClass = new \ReflectionClass($object);
         $className = $reflectionClass->getName();
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $inlineServiceConfigurator = new \RectorPrefix20211205\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20211205\Symfony\Component\DependencyInjection\Definition($className));
+        $inlineServiceConfigurator = new \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator(new \RectorPrefix20211206\Symfony\Component\DependencyInjection\Definition($className));
         if ($argumentValues !== []) {
             $inlineServiceConfigurator->args($argumentValues);
         }

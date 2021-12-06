@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix20211205\React\Stream;
+namespace RectorPrefix20211206\React\Stream;
 
-use RectorPrefix20211205\Evenement\EventEmitter;
-use RectorPrefix20211205\React\EventLoop\Loop;
-use RectorPrefix20211205\React\EventLoop\LoopInterface;
-final class WritableResourceStream extends \RectorPrefix20211205\Evenement\EventEmitter implements \RectorPrefix20211205\React\Stream\WritableStreamInterface
+use RectorPrefix20211206\Evenement\EventEmitter;
+use RectorPrefix20211206\React\EventLoop\Loop;
+use RectorPrefix20211206\React\EventLoop\LoopInterface;
+final class WritableResourceStream extends \RectorPrefix20211206\Evenement\EventEmitter implements \RectorPrefix20211206\React\Stream\WritableStreamInterface
 {
     private $stream;
     /** @var LoopInterface */
@@ -22,7 +22,7 @@ final class WritableResourceStream extends \RectorPrefix20211205\Evenement\Event
     private $writable = \true;
     private $closed = \false;
     private $data = '';
-    public function __construct($stream, \RectorPrefix20211205\React\EventLoop\LoopInterface $loop = null, $writeBufferSoftLimit = null, $writeChunkSize = null)
+    public function __construct($stream, \RectorPrefix20211206\React\EventLoop\LoopInterface $loop = null, $writeBufferSoftLimit = null, $writeChunkSize = null)
     {
         if (!\is_resource($stream) || \get_resource_type($stream) !== "stream") {
             throw new \InvalidArgumentException('First parameter must be a valid stream resource');
@@ -38,7 +38,7 @@ final class WritableResourceStream extends \RectorPrefix20211205\Evenement\Event
             throw new \RuntimeException('Unable to set stream resource to non-blocking mode');
         }
         $this->stream = $stream;
-        $this->loop = $loop ?: \RectorPrefix20211205\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20211206\React\EventLoop\Loop::get();
         $this->softLimit = $writeBufferSoftLimit === null ? 65536 : (int) $writeBufferSoftLimit;
         $this->writeChunkSize = $writeChunkSize === null ? -1 : (int) $writeChunkSize;
     }

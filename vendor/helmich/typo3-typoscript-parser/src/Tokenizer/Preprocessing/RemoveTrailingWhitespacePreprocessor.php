@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211205\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
+namespace RectorPrefix20211206\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
 
 /**
  * Preprocessor that removes trailing whitespaces from a file
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class RemoveTrailingWhitespacePreprocessor implements \RectorPrefix20211205\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class RemoveTrailingWhitespacePreprocessor implements \RectorPrefix20211206\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
 {
     /** @var string */
     private $eolCharacter;

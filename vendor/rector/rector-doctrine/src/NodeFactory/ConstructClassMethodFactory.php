@@ -16,7 +16,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211205\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20211206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class ConstructClassMethodFactory
 {
     /**
@@ -51,7 +51,7 @@ final class ConstructClassMethodFactory
             $params[] = $this->createParam($publicProperty, $propertyName);
             $assigns[] = $this->createAssign($propertyName);
         }
-        $methodBuilder = new \RectorPrefix20211205\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        $methodBuilder = new \RectorPrefix20211206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         $methodBuilder->makePublic();
         $methodBuilder->addParams($params);
         $methodBuilder->addStmts($assigns);

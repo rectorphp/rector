@@ -19,7 +19,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211205\Webmozart\Assert\Assert;
+use RectorPrefix20211206\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
@@ -162,8 +162,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallToServices = $configuration[self::METHOD_CALL_TO_SERVICES] ?? $configuration;
-        \RectorPrefix20211205\Webmozart\Assert\Assert::isArray($methodCallToServices);
-        \RectorPrefix20211205\Webmozart\Assert\Assert::allIsAOf($methodCallToServices, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
+        \RectorPrefix20211206\Webmozart\Assert\Assert::isArray($methodCallToServices);
+        \RectorPrefix20211206\Webmozart\Assert\Assert::allIsAOf($methodCallToServices, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
         $this->methodCallToServices = $methodCallToServices;
     }
 }
