@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
+
     $services->set(MethodCallToMethodCallRector::class)
         ->configure([new MethodCallToMethodCall(FirstDependency::class, 'go', SecondDependency::class, 'away')]);
 };

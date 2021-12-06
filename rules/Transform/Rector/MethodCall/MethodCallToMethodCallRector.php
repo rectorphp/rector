@@ -78,11 +78,7 @@ class SomeClass
 }
 CODE_SAMPLE
                 ,
-                [
-                    self::METHOD_CALLS_TO_METHOD_CALLS => [
-                        new MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away'),
-                    ],
-                ]
+                [new MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away')]
             ),
         ]);
     }
@@ -172,7 +168,7 @@ CODE_SAMPLE
             return $newPropertyName;
         }
 
-        // re-use existing proeprty name
+        // re-use existing property name
         return $this->getName($classContextProperty);
     }
 }

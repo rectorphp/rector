@@ -9,6 +9,7 @@ use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
+use Rector\Parallel\ValueObject\Bridge;
 
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
@@ -29,7 +30,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
     public function report(ProcessResult $processResult, Configuration $configuration): void
     {
-        $errorsArray = [
+        $errorsJson = [
             'meta' => [
                 'config' => $configuration->getMainConfigFilePath(),
             ],
@@ -47,7 +48,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
 
             $appliedRectorsWithChangelog = $this->rectorsChangelogResolver->resolve($fileDiff->getRectorClasses());
 
-            $errorsArray['file_diffs'][] = [
+            $errorsJson[Bridge::FILE_DIFFS][] = [
                 'file' => $relativeFilePath,
                 'diff' => $fileDiff->getDiff(),
                 'applied_rectors' => $fileDiff->getRectorClasses(),
@@ -55,18 +56,18 @@ final class JsonOutputFormatter implements OutputFormatterInterface
             ];
 
             // for Rector CI
-            $errorsArray['changed_files'][] = $relativeFilePath;
+            $errorsJson['changed_files'][] = $relativeFilePath;
         }
 
         $errors = $processResult->getErrors();
-        $errorsArray['totals']['errors'] = count($errors);
+        $errorsJson['totals']['errors'] = count($errors);
 
         $errorsData = $this->createErrorsData($errors);
         if ($errorsData !== []) {
-            $errorsArray['errors'] = $errorsData;
+            $errorsJson['errors'] = $errorsData;
         }
 
-        $json = Json::encode($errorsArray, Json::PRETTY);
+        $json = Json::encode($errorsJson, Json::PRETTY);
         echo $json . PHP_EOL;
     }
 
@@ -79,20 +80,20 @@ final class JsonOutputFormatter implements OutputFormatterInterface
         $errorsData = [];
 
         foreach ($errors as $error) {
-            $errorData = [
+            $errorDataJson = [
                 'message' => $error->getMessage(),
                 'file' => $error->getRelativeFilePath(),
             ];
 
             if ($error->getRectorClass()) {
-                $errorData['caused_by'] = $error->getRectorClass();
+                $errorDataJson['caused_by'] = $error->getRectorClass();
             }
 
             if ($error->getLine() !== null) {
-                $errorData['line'] = $error->getLine();
+                $errorDataJson['line'] = $error->getLine();
             }
 
-            $errorsData[] = $errorData;
+            $errorsData[] = $errorDataJson;
         }
 
         return $errorsData;
