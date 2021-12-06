@@ -97,8 +97,7 @@ CODE_SAMPLE
      */
     private function shouldSkip($node) : bool
     {
-        $return = $this->betterNodeFinder->findFirstInstanceOf($node, \PhpParser\Node\Stmt\Return_::class);
-        if ($return instanceof \PhpParser\Node\Stmt\Return_) {
+        if ($this->hasReturnNode($node)) {
             return \true;
         }
         $yieldAndConditionalNodes = \array_merge([\PhpParser\Node\Expr\Yield_::class], \Rector\NodeNestingScope\ValueObject\ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
@@ -118,6 +117,19 @@ CODE_SAMPLE
             return \false;
         }
         return $this->isName($node->returnType, 'never');
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function hasReturnNode($functionLike) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (\PhpParser\Node $subNode) use($functionLike) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
+                return \false;
+            }
+            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
+            return $parentFunctionOrClassMethod === $functionLike;
+        });
     }
     /**
      * @param class-string<Node>[] $yieldAndConditionalNodes

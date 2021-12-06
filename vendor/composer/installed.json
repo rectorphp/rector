@@ -1772,17 +1772,17 @@
         },
         {
             "name": "react\/promise-timer",
-            "version": "v1.7.0",
-            "version_normalized": "1.7.0.0",
+            "version": "v1.8.0",
+            "version_normalized": "1.8.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/promise-timer.git",
-                "reference": "607dd79990e32fcb402cb0a176b4a4be12f97e7c"
+                "reference": "0bbbcc79589e5bfdddba68a287f1cb805581a479"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise-timer\/zipball\/607dd79990e32fcb402cb0a176b4a4be12f97e7c",
-                "reference": "607dd79990e32fcb402cb0a176b4a4be12f97e7c",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise-timer\/zipball\/0bbbcc79589e5bfdddba68a287f1cb805581a479",
+                "reference": "0bbbcc79589e5bfdddba68a287f1cb805581a479",
                 "shasum": ""
             },
             "require": {
@@ -1793,7 +1793,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35"
             },
-            "time": "2021-07-11T13:08:51+00:00",
+            "time": "2021-12-06T11:08:48+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1842,7 +1842,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/promise-timer\/issues",
-                "source": "https:\/\/github.com\/reactphp\/promise-timer\/tree\/v1.7.0"
+                "source": "https:\/\/github.com\/reactphp\/promise-timer\/tree\/v1.8.0"
             },
             "funding": [
                 {
