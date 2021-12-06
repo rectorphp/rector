@@ -8,10 +8,9 @@ use RectorPrefix20211206\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use RectorPrefix20211206\Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20211206\Symplify\PackageBuilder\Composer\VendorDirProvider;
-use RectorPrefix20211206\Symplify\PackageBuilder\Console\Command\CommandNaming;
 use RectorPrefix20211206\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix20211206\Symplify\SmartFileSystem\Json\JsonFileSystem;
-use RectorPrefix20211206\Symplify\VendorPatches\Console\VendorPatchesConsoleApplication;
+use RectorPrefix20211206\Symplify\VendorPatches\Command\GenerateCommand;
 use function RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -21,7 +20,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\RectorPrefix20211206\SebastianBergmann\Diff\Differ::class)->args(['$outputBuilder' => \RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211206\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)]);
     $services->set(\RectorPrefix20211206\Symplify\PackageBuilder\Composer\VendorDirProvider::class);
     $services->set(\RectorPrefix20211206\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
-    $services->alias(\RectorPrefix20211206\Symfony\Component\Console\Application::class, \RectorPrefix20211206\Symplify\VendorPatches\Console\VendorPatchesConsoleApplication::class);
-    $services->set(\RectorPrefix20211206\Symplify\PackageBuilder\Console\Command\CommandNaming::class);
+    $services->set(\RectorPrefix20211206\Symfony\Component\Console\Application::class)->call('addCommands', [[\RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211206\Symplify\VendorPatches\Command\GenerateCommand::class)]]);
     $services->set(\RectorPrefix20211206\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };

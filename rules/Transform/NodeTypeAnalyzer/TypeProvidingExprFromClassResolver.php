@@ -95,8 +95,8 @@ final class TypeProvidingExprFromClassResolver
     }
     private function resolvePropertyFetchProvidingType(\PHPStan\Reflection\ClassReflection $classReflection, \PHPStan\Analyser\Scope $scope, \PHPStan\Type\ObjectType $objectType) : ?\PhpParser\Node\Expr\PropertyFetch
     {
-        $reflectionClass = $classReflection->getNativeReflection();
-        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+        $nativeReflectionClass = $classReflection->getNativeReflection();
+        foreach ($nativeReflectionClass->getProperties() as $reflectionProperty) {
             /** @var PhpPropertyReflection $phpPropertyReflection */
             $phpPropertyReflection = $classReflection->getProperty($reflectionProperty->getName(), $scope);
             $readableType = $phpPropertyReflection->getReadableType();

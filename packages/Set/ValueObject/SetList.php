@@ -165,8 +165,4 @@ final class SetList implements \Rector\Set\Contract\SetListInterface
      * @var string
      */
     public const EARLY_RETURN = __DIR__ . '/../../../config/set/early-return.php';
-    /**
-     * @var string
-     */
-    public const CARBON_2 = __DIR__ . '/../../../config/set/carbon-2.php';
 }

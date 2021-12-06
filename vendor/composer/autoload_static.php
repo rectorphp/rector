@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitad990f187e90a0c8236f265ebda091e0
+class ComposerStaticInitc0d47fc313f9ea913da3733da09c3ef3
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -1609,7 +1609,6 @@ class ComposerStaticInitad990f187e90a0c8236f265ebda091e0
         'RectorPrefix20211206\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
         'RectorPrefix20211206\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
         'RectorPrefix20211206\\Symplify\\EasyTesting\\Command\\ValidateFixtureSkipNamingCommand' => __DIR__ . '/..' . '/symplify/easy-testing/src/Command/ValidateFixtureSkipNamingCommand.php',
-        'RectorPrefix20211206\\Symplify\\EasyTesting\\Console\\EasyTestingConsoleApplication' => __DIR__ . '/..' . '/symplify/easy-testing/src/Console/EasyTestingConsoleApplication.php',
         'RectorPrefix20211206\\Symplify\\EasyTesting\\DataProvider\\StaticFixtureFinder' => __DIR__ . '/..' . '/symplify/easy-testing/src/DataProvider/StaticFixtureFinder.php',
         'RectorPrefix20211206\\Symplify\\EasyTesting\\DataProvider\\StaticFixtureUpdater' => __DIR__ . '/..' . '/symplify/easy-testing/src/DataProvider/StaticFixtureUpdater.php',
         'RectorPrefix20211206\\Symplify\\EasyTesting\\Finder\\FixtureFinder' => __DIR__ . '/..' . '/symplify/easy-testing/src/Finder/FixtureFinder.php',
@@ -1701,7 +1700,6 @@ class ComposerStaticInitad990f187e90a0c8236f265ebda091e0
         'RectorPrefix20211206\\Symplify\\VendorPatches\\Composer\\ComposerPatchesConfigurationUpdater' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/ComposerPatchesConfigurationUpdater.php',
         'RectorPrefix20211206\\Symplify\\VendorPatches\\Composer\\PackageNameResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Composer/PackageNameResolver.php',
         'RectorPrefix20211206\\Symplify\\VendorPatches\\Console\\GenerateCommandReporter' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/GenerateCommandReporter.php',
-        'RectorPrefix20211206\\Symplify\\VendorPatches\\Console\\VendorPatchesConsoleApplication' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Console/VendorPatchesConsoleApplication.php',
         'RectorPrefix20211206\\Symplify\\VendorPatches\\Differ\\PatchDiffer' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Differ/PatchDiffer.php',
         'RectorPrefix20211206\\Symplify\\VendorPatches\\FileSystem\\PathResolver' => __DIR__ . '/..' . '/symplify/vendor-patches/src/FileSystem/PathResolver.php',
         'RectorPrefix20211206\\Symplify\\VendorPatches\\Finder\\OldToNewFilesFinder' => __DIR__ . '/..' . '/symplify/vendor-patches/src/Finder/OldToNewFilesFinder.php',
@@ -1834,8 +1832,6 @@ class ComposerStaticInitad990f187e90a0c8236f265ebda091e0
         'Rector\\CakePHP\\ValueObject\\ModalToGetSet' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ModalToGetSet.php',
         'Rector\\CakePHP\\ValueObject\\RemoveIntermediaryMethod' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/RemoveIntermediaryMethod.php',
         'Rector\\CakePHP\\ValueObject\\RenameMethodCallBasedOnParameter' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/RenameMethodCallBasedOnParameter.php',
-        'Rector\\Carbon\\Rector\\MethodCall\\ChangeCarbonSingularMethodCallToPluralRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector.php',
-        'Rector\\Carbon\\Rector\\MethodCall\\ChangeDiffForHumansArgsRector' => __DIR__ . '/../..' . '/rules/Carbon/Rector/MethodCall/ChangeDiffForHumansArgsRector.php',
         'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => __DIR__ . '/../..' . '/packages/ChangesReporting/Annotation/AnnotationExtractor.php',
         'Rector\\ChangesReporting\\Annotation\\RectorsChangelogResolver' => __DIR__ . '/../..' . '/packages/ChangesReporting/Annotation/RectorsChangelogResolver.php',
         'Rector\\ChangesReporting\\Collector\\AffectedFilesCollector' => __DIR__ . '/../..' . '/packages/ChangesReporting/Collector/AffectedFilesCollector.php',
@@ -2395,6 +2391,7 @@ class ComposerStaticInitad990f187e90a0c8236f265ebda091e0
         'Rector\\DowngradePhp74\\Rector\\Identical\\DowngradeFreadFwriteFalsyToNegationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp74/Rector/Identical/DowngradeFreadFwriteFalsyToNegationRector.php',
         'Rector\\DowngradePhp74\\Rector\\Interface_\\DowngradePreviouslyImplementedInterfaceRector' => __DIR__ . '/../..' . '/rules/DowngradePhp74/Rector/Interface_/DowngradePreviouslyImplementedInterfaceRector.php',
         'Rector\\DowngradePhp74\\Rector\\LNumber\\DowngradeNumericLiteralSeparatorRector' => __DIR__ . '/../..' . '/rules/DowngradePhp74/Rector/LNumber/DowngradeNumericLiteralSeparatorRector.php',
+        'Rector\\DowngradePhp74\\Rector\\MethodCall\\DowngradeReflectionGetTypeRector' => __DIR__ . '/../..' . '/rules/DowngradePhp74/Rector/MethodCall/DowngradeReflectionGetTypeRector.php',
         'Rector\\DowngradePhp74\\Rector\\Property\\DowngradeTypedPropertyRector' => __DIR__ . '/../..' . '/rules/DowngradePhp74/Rector/Property/DowngradeTypedPropertyRector.php',
         'Rector\\DowngradePhp80\\NodeAnalyzer\\NamedToUnnamedArgs' => __DIR__ . '/../..' . '/rules/DowngradePhp80/NodeAnalyzer/NamedToUnnamedArgs.php',
         'Rector\\DowngradePhp80\\NodeAnalyzer\\UnnamedArgumentResolver' => __DIR__ . '/../..' . '/rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php',
@@ -3789,9 +3786,9 @@ class ComposerStaticInitad990f187e90a0c8236f265ebda091e0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitad990f187e90a0c8236f265ebda091e0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitad990f187e90a0c8236f265ebda091e0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitad990f187e90a0c8236f265ebda091e0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc0d47fc313f9ea913da3733da09c3ef3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc0d47fc313f9ea913da3733da09c3ef3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc0d47fc313f9ea913da3733da09c3ef3::$classMap;
 
         }, null, ClassLoader::class);
     }

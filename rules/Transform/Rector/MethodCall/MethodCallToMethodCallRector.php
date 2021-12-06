@@ -83,7 +83,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::METHOD_CALLS_TO_METHOD_CALLS => [new \Rector\Transform\ValueObject\MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away')]])]);
+, [new \Rector\Transform\ValueObject\MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away')])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -148,7 +148,7 @@ CODE_SAMPLE
         if ($classContextProperty === null) {
             return $newPropertyName;
         }
-        // re-use existing proeprty name
+        // re-use existing property name
         return $this->getName($classContextProperty);
     }
 }

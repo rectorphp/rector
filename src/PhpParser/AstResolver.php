@@ -21,6 +21,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -30,7 +31,6 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionProperty;
 use RectorPrefix20211206\Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20211206\Symplify\SmartFileSystem\SmartFileSystem;
@@ -269,18 +269,19 @@ final class AstResolver
     /**
      * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
      */
-    public function resolvePropertyFromPropertyReflection(\ReflectionProperty $reflectionProperty)
+    public function resolvePropertyFromPropertyReflection(\PHPStan\Reflection\Php\PhpPropertyReflection $phpPropertyReflection)
     {
-        $reflectionClass = $reflectionProperty->getDeclaringClass();
-        $fileName = $reflectionClass->getFileName();
-        if ($fileName === \false) {
+        $classReflection = $phpPropertyReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+        if ($fileName === null) {
             return null;
         }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
         if ($nodes === null) {
             return null;
         }
-        $desiredPropertyName = $reflectionProperty->name;
+        $nativeReflectionProperty = $phpPropertyReflection->getNativeReflection();
+        $desiredPropertyName = $nativeReflectionProperty->getName();
         /** @var Property[] $properties */
         $properties = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Stmt\Property::class);
         foreach ($properties as $property) {

@@ -7,6 +7,7 @@ use RectorPrefix20211206\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20211206\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20211206\Symplify\PackageBuilder\Composer\VendorDirProvider;
 use RectorPrefix20211206\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
+use RectorPrefix20211206\Symplify\PackageBuilder\Console\Command\CommandNaming;
 use RectorPrefix20211206\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater;
 use RectorPrefix20211206\Symplify\VendorPatches\Console\GenerateCommandReporter;
 use RectorPrefix20211206\Symplify\VendorPatches\Differ\PatchDiffer;
@@ -50,6 +51,7 @@ final class GenerateCommand extends \RectorPrefix20211206\Symplify\PackageBuilde
     }
     protected function configure() : void
     {
+        $this->setName(\RectorPrefix20211206\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
         $this->setDescription('Generate patches from /vendor directory');
     }
     /**

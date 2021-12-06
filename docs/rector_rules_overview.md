@@ -8,8 +8,6 @@
 
 - [Autodiscovery](#autodiscovery) (4)
 
-- [Carbon](#carbon) (2)
-
 - [CodeQuality](#codequality) (70)
 
 - [CodingStyle](#codingstyle) (35)
@@ -38,9 +36,9 @@
 
 - [DowngradePhp73](#downgradephp73) (6)
 
-- [DowngradePhp74](#downgradephp74) (11)
+- [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (20)
+- [DowngradePhp80](#downgradephp80) (21)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -391,53 +389,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      public function getName()
      {
          return $this->name;
-     }
- }
-```
-
-<br>
-
-## Carbon
-
-### ChangeCarbonSingularMethodCallToPluralRector
-
-Change setter methods with args to their plural names on `Carbon\Carbon`
-
-- class: [`Rector\Carbon\Rector\MethodCall\ChangeCarbonSingularMethodCallToPluralRector`](../rules/Carbon/Rector/MethodCall/ChangeCarbonSingularMethodCallToPluralRector.php)
-
-```diff
- use Carbon\Carbon;
-
- final class SomeClass
- {
-     public function run(Carbon $carbon, $value): void
-     {
--        $carbon->addMinute($value);
-+        $carbon->addMinutes($value);
-     }
- }
-```
-
-<br>
-
-### ChangeDiffForHumansArgsRector
-
-Change methods arguments of `diffForHumans()` on `Carbon\Carbon`
-
-- class: [`Rector\Carbon\Rector\MethodCall\ChangeDiffForHumansArgsRector`](../rules/Carbon/Rector/MethodCall/ChangeDiffForHumansArgsRector.php)
-
-```diff
- use Carbon\Carbon;
-
- final class SomeClass
- {
-     public function run(Carbon $carbon): void
-     {
--        $carbon->diffForHumans(null, true);
-+        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_ABSOLUTE);
-
--        $carbon->diffForHumans(null, false);
-+        $carbon->diffForHumans(null, \Carbon\CarbonInterface::DIFF_RELATIVE_AUTO);
      }
  }
 ```
@@ -5140,6 +5091,29 @@ Downgrade previously implemented interface
 
 <br>
 
+### DowngradeReflectionGetTypeRector
+
+Downgrade reflection `$refleciton->getType()` method call
+
+- class: [`Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector`](../rules/DowngradePhp74/Rector/MethodCall/DowngradeReflectionGetTypeRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(ReflectionProperty $reflectionProperty)
+     {
+-        if ($reflectionProperty->getType()) {
++        if (null) {
+             return true;
+         }
+
+         return false;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeStripTagsCallWithArrayRector
 
 Convert 2nd param to `strip_tags` from array to string
@@ -5461,6 +5435,29 @@ Change constructor property promotion to property asssign
 +    public function __construct(float $value = 0.0)
      {
 +        $this->value = $value;
+     }
+ }
+```
+
+<br>
+
+### DowngradeReflectionGetAttributesRector
+
+Remove reflection `getAttributes()` class method code
+
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionGetAttributesRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(ReflectionClass $reflectionClass)
+     {
+-        if ($reflectionClass->getAttributes()) {
++        if ([]) {
+             return true;
+         }
+
+         return false;
      }
  }
 ```

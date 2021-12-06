@@ -6,14 +6,14 @@ namespace Rector\Core\NodeAnalyzer;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\PostRector\ValueObject\PropertyMetadata;
-use ReflectionNamedType;
-use ReflectionProperty;
 /**
  * Can be local property, parent property etc.
  */
@@ -59,7 +59,10 @@ final class PropertyPresenceChecker
      */
     public function getClassContextProperty(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
     {
-        $className = (string) $this->nodeNameResolver->getName($class);
+        $className = $this->nodeNameResolver->getName($class);
+        if ($className === null) {
+            return null;
+        }
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
@@ -67,7 +70,7 @@ final class PropertyPresenceChecker
         if ($property instanceof \PhpParser\Node\Stmt\Property) {
             return $property;
         }
-        $property = $this->matchPropertyByParentPublicOrProtectedProperties($className, $propertyMetadata);
+        $property = $this->matchPropertyByParentNonPrivateProperties($className, $propertyMetadata);
         if ($property instanceof \PhpParser\Node\Stmt\Property || $property instanceof \PhpParser\Node\Param) {
             return $property;
         }
@@ -80,9 +83,9 @@ final class PropertyPresenceChecker
         return null;
     }
     /**
-     * @return ReflectionProperty[]
+     * @return PhpPropertyReflection[]
      */
-    private function getParentClassPublicAndProtectedPropertyReflections(string $className) : array
+    private function getParentClassNonPrivatePropertyReflections(string $className) : array
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return [];
@@ -90,55 +93,66 @@ final class PropertyPresenceChecker
         $classReflection = $this->reflectionProvider->getClass($className);
         $propertyReflections = [];
         foreach ($classReflection->getParents() as $parentClassReflection) {
-            $nativeReflectionClass = $parentClassReflection->getNativeReflection();
-            $currentPropertyReflections = $nativeReflectionClass->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
-            $propertyReflections = \array_merge($propertyReflections, $currentPropertyReflections);
+            $propertyNames = $this->resolveNonPrivatePropertyNames($parentClassReflection);
+            foreach ($propertyNames as $propertyName) {
+                $propertyReflections[] = $parentClassReflection->getNativeProperty($propertyName);
+            }
         }
         return $propertyReflections;
     }
     /**
      * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
      */
-    private function matchPropertyByType(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata, \ReflectionProperty $reflectionProperty)
+    private function matchPropertyByType(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata, \PHPStan\Reflection\Php\PhpPropertyReflection $phpPropertyReflection)
     {
         if ($propertyMetadata->getType() === null) {
-            return null;
-        }
-        if (!$reflectionProperty->getType() instanceof \ReflectionNamedType) {
             return null;
         }
         if (!$propertyMetadata->getType() instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
-        $propertyObjectType = $propertyMetadata->getType();
-        $propertyObjectTypeClassName = $propertyObjectType->getClassName();
-        if ($propertyObjectTypeClassName !== (string) $reflectionProperty->getType()) {
+        if (!$phpPropertyReflection->getWritableType() instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         $propertyObjectType = $propertyMetadata->getType();
-        $propertyObjectTypeClassName = $propertyObjectType->getClassName();
-        if ($propertyObjectTypeClassName !== (string) $reflectionProperty->getType()) {
+        if (!$propertyObjectType->equals($phpPropertyReflection->getWritableType())) {
             return null;
         }
-        return $this->astResolver->resolvePropertyFromPropertyReflection($reflectionProperty);
+        return $this->astResolver->resolvePropertyFromPropertyReflection($phpPropertyReflection);
     }
     /**
      * @return \PhpParser\Node\Param|\PhpParser\Node\Stmt\Property|null
      */
-    private function matchPropertyByParentPublicOrProtectedProperties(string $className, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
+    private function matchPropertyByParentNonPrivateProperties(string $className, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
     {
-        $availablePropertyReflections = $this->getParentClassPublicAndProtectedPropertyReflections($className);
+        $availablePropertyReflections = $this->getParentClassNonPrivatePropertyReflections($className);
         foreach ($availablePropertyReflections as $availablePropertyReflection) {
             // 1. match type by priority
             $property = $this->matchPropertyByType($propertyMetadata, $availablePropertyReflection);
             if ($property instanceof \PhpParser\Node\Stmt\Property || $property instanceof \PhpParser\Node\Param) {
                 return $property;
             }
+            $nativePropertyReflection = $availablePropertyReflection->getNativeReflection();
             // 2. match by name
-            if ($availablePropertyReflection->getName() === $propertyMetadata->getName()) {
+            if ($nativePropertyReflection->getName() === $propertyMetadata->getName()) {
                 return $this->astResolver->resolvePropertyFromPropertyReflection($availablePropertyReflection);
             }
         }
         return null;
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveNonPrivatePropertyNames(\PHPStan\Reflection\ClassReflection $classReflection) : array
+    {
+        $propertyNames = [];
+        $reflectionClass = $classReflection->getNativeReflection();
+        foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+            if ($reflectionProperty->isPrivate()) {
+                continue;
+            }
+            $propertyNames[] = $reflectionProperty->getName();
+        }
+        return $propertyNames;
     }
 }

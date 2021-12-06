@@ -82,7 +82,8 @@ final class KernelBootAndApplicationRun
         if (\is_a($kernelClass, \RectorPrefix20211206\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
             return;
         }
-        $errorMessage = \sprintf('Class "%s" must by type of "%s" or "%s"', $kernelClass, \RectorPrefix20211206\Symfony\Component\HttpKernel\KernelInterface::class, \RectorPrefix20211206\Symplify\SymplifyKernel\Contract\LightKernelInterface::class);
+        $currentValueType = \get_debug_type($kernelClass);
+        $errorMessage = \sprintf('Class "%s" must by type of "%s" or "%s". "%s" given', $kernelClass, \RectorPrefix20211206\Symfony\Component\HttpKernel\KernelInterface::class, \RectorPrefix20211206\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, $currentValueType);
         throw new \RectorPrefix20211206\Symplify\SymplifyKernel\Exception\BootException($errorMessage);
     }
 }
