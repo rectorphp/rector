@@ -372,6 +372,28 @@ final class BetterNodeFinder
     }
     /**
      * @template T of Node
+     * @param array<class-string<T>>|class-string<T> $types
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    public function hasInstancesOfInFunctionLikeScoped($functionLike, $types) : bool
+    {
+        if (\is_string($types)) {
+            $types = [$types];
+        }
+        foreach ($types as $type) {
+            $foundNode = $this->findFirstInstanceOf((array) $functionLike->stmts, $type);
+            if (!$foundNode instanceof \PhpParser\Node) {
+                continue;
+            }
+            $parentFunctionLike = $this->findParentType($foundNode, \get_class($functionLike));
+            if ($parentFunctionLike === $functionLike) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @template T of Node
      * @param mixed[]|\PhpParser\Node $nodes
      * @param class-string<T> $type
      */
