@@ -97,8 +97,7 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod | Function_ $node): bool
     {
-        $return = $this->betterNodeFinder->findFirstInstanceOf($node, Return_::class);
-        if ($return instanceof Return_) {
+        if ($this->hasReturnNode($node)) {
             return true;
         }
 
@@ -127,6 +126,20 @@ CODE_SAMPLE
         }
 
         return $this->isName($node->returnType, 'never');
+    }
+
+    private function hasReturnNode(ClassMethod | Function_ $functionLike): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (Node $subNode) use (
+            $functionLike
+        ): bool {
+            if (! $subNode instanceof Return_) {
+                return false;
+            }
+
+            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
+            return $parentFunctionOrClassMethod === $functionLike;
+        });
     }
 
     /**
