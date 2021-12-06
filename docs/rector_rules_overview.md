@@ -1,4 +1,4 @@
-# 503 Rules Overview
+# 502 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [CodeQuality](#codequality) (70)
 
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (35)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2432,30 +2432,6 @@ Separate constant and properties to own lines
 +     * @var string
 +     */
 +    public $isIsThough;
- }
-```
-
-<br>
-
-### SplitStringClassConstantToClassConstFetchRector
-
-Separate class constant in a string to class constant fetch and string
-
-- class: [`Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector`](../rules/CodingStyle/Rector/String_/SplitStringClassConstantToClassConstFetchRector.php)
-
-```diff
- class SomeClass
- {
-     const HI = true;
- }
-
- class AnotherClass
- {
-     public function get()
-     {
--        return 'SomeClass::HI';
-+        return SomeClass::class . '::HI';
-     }
  }
 ```
 

@@ -26,7 +26,6 @@ use Rector\CodingStyle\Rector\Plus\UseIncrementAssignRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
 use Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
-use Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector;
 use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\CodingStyle\Rector\Switch_\BinarySwitchToIfElseRector;
 use Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector;
@@ -43,7 +42,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector::class);
     $services->set(\Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector::class);
     $services->set(\Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector::class);
-    $services->set(\Rector\CodingStyle\Rector\String_\SplitStringClassConstantToClassConstFetchRector::class);
     $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class);
     $services->set(\Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector::class);
     $services->set(\Rector\CodingStyle\Rector\Include_\FollowRequireByDirRector::class);
