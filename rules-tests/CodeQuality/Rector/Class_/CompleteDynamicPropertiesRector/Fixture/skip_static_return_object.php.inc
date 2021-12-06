@@ -2,20 +2,12 @@
 
 namespace Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\Fixture;
 
-final class Carbon
-{
-    public $timestamp;
+use Rector\Tests\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector\Source\StaticFactory;
 
-    public static function now()
-    {
-        return new static();
-    }
-}
-
-class SkipStaticReturnObject
+final class SkipStaticReturnObject
 {
     public function getCurrentTimestamp()
     {
-        return Carbon::now()->timestamp;
+        return StaticFactory::now()->timestamp;
     }
 }
