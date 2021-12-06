@@ -97,18 +97,25 @@ CODE_SAMPLE
 
     private function shouldSkip(ClassMethod | Function_ $node): bool
     {
-        if ($this->hasReturnNode($node)) {
+        $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, Return_::class);
+        if ($hasReturn) {
             return true;
         }
 
         $yieldAndConditionalNodes = array_merge([Yield_::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
-        $hasNotNeverNodes = $this->hasNotNeverNodes($node, $yieldAndConditionalNodes);
+        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped(
+            $node,
+            $yieldAndConditionalNodes
+        );
 
         if ($hasNotNeverNodes) {
             return true;
         }
 
-        $hasNeverNodes = $this->hasNeverNodes($node);
+        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped(
+            $node,
+            [Node\Expr\Throw_::class, Throw_::class]
+        );
         $hasNeverFuncCall = $this->hasNeverFuncCall($node);
 
         if (! $hasNeverNodes && ! $hasNeverFuncCall) {
@@ -126,52 +133,6 @@ CODE_SAMPLE
         }
 
         return $this->isName($node->returnType, 'never');
-    }
-
-    private function hasReturnNode(ClassMethod | Function_ $functionLike): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (Node $subNode) use (
-            $functionLike
-        ): bool {
-            if (! $subNode instanceof Return_) {
-                return false;
-            }
-
-            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
-            return $parentFunctionOrClassMethod === $functionLike;
-        });
-    }
-
-    /**
-     * @param class-string<Node>[] $yieldAndConditionalNodes
-     */
-    private function hasNotNeverNodes(ClassMethod | Function_ $functionLike, array $yieldAndConditionalNodes): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (Node $subNode) use (
-            $functionLike,
-            $yieldAndConditionalNodes
-        ): bool {
-            if (! in_array($subNode::class, $yieldAndConditionalNodes, true)) {
-                return false;
-            }
-
-            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
-            return $parentFunctionOrClassMethod === $functionLike;
-        });
-    }
-
-    private function hasNeverNodes(ClassMethod | Function_ $functionLike): bool
-    {
-        return (bool) $this->betterNodeFinder->findFirst((array) $functionLike->stmts, function (Node $subNode) use (
-            $functionLike
-        ): bool {
-            if (! in_array($subNode::class, [Node\Expr\Throw_::class, Throw_::class], true)) {
-                return false;
-            }
-
-            $parentFunctionOrClassMethod = $this->betterNodeFinder->findParentByTypes($subNode, $this->getNodeTypes());
-            return $parentFunctionOrClassMethod === $functionLike;
-        });
     }
 
     private function hasNeverFuncCall(ClassMethod | Function_ $functionLike): bool

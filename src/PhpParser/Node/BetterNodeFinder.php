@@ -410,6 +410,31 @@ final class BetterNodeFinder
 
     /**
      * @template T of Node
+     * @param array<class-string<T>>|class-string<T> $types
+     */
+    public function hasInstancesOfInFunctionLikeScoped(ClassMethod | Function_ $functionLike, string|array $types): bool
+    {
+        if (is_string($types)) {
+            $types = [$types];
+        }
+
+        foreach ($types as $type) {
+            $foundNode = $this->findFirstInstanceOf((array) $functionLike->stmts, $type);
+            if (! $foundNode instanceof Node) {
+                continue;
+            }
+
+            $parentFunctionLike = $this->findParentType($foundNode, $functionLike::class);
+            if ($parentFunctionLike === $functionLike) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @template T of Node
      * @param Node|Node[] $nodes
      * @param class-string<T> $type
      */
