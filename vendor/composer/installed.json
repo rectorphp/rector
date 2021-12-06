@@ -295,7 +295,7 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "patches\/danielstjules-stringy-src-stringy-php.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/master\/danielstjules-stringy-src-stringy-php.patch"
                 ]
             },
             "installation-source": "dist",
