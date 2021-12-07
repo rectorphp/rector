@@ -1,4 +1,4 @@
-# 502 Rules Overview
+# 501 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodeQuality](#codequality) (70)
 
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (34)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2465,28 +2465,6 @@ Use ++ increment instead of `$var += 1`
      {
 -        $style += 1;
 +        ++$style;
-     }
- }
-```
-
-<br>
-
-### UseMessageVariableForSprintfInSymfonyStyleRector
-
-Decouple `$message` property from `sprintf()` calls in `$this->symfonyStyle->method()`
-
-- class: [`Rector\CodingStyle\Rector\MethodCall\UseMessageVariableForSprintfInSymfonyStyleRector`](../rules/CodingStyle/Rector/MethodCall/UseMessageVariableForSprintfInSymfonyStyleRector.php)
-
-```diff
- use Symfony\Component\Console\Style\SymfonyStyle;
-
- final class SomeClass
- {
-     public function run(SymfonyStyle $symfonyStyle)
-     {
--        $symfonyStyle->info(sprintf('Hi %s', 'Tom'));
-+        $message = sprintf('Hi %s', 'Tom');
-+        $symfonyStyle->info($message);
      }
  }
 ```
