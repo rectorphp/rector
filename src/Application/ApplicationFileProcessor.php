@@ -13,6 +13,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix20211207\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211207\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
@@ -42,6 +43,11 @@ final class ApplicationFileProcessor
      */
     private $symfonyStyle;
     /**
+     * @readonly
+     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     */
+    private $parametersMerger;
+    /**
      * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
      * @readonly
      */
@@ -49,13 +55,14 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20211207\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20211207\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20211207\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->fileFormatter = $fileFormatter;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->symfonyStyle = $symfonyStyle;
+        $this->parametersMerger = $parametersMerger;
         $this->fileProcessors = $fileProcessors;
     }
     /**
@@ -88,7 +95,7 @@ final class ApplicationFileProcessor
                 }
                 $result = $fileProcessor->process($file, $configuration);
                 if (\is_array($result)) {
-                    $systemErrorsAndFileDiffs = \array_merge($systemErrorsAndFileDiffs, $result);
+                    $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
                 }
             }
             // progress bar +1
