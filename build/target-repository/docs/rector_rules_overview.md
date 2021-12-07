@@ -124,11 +124,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ArgumentAdderRector::class)
-        ->configure([
-            ArgumentAdderRector::ADDED_ARGUMENTS => [
-                new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType('SomeType')),
-            ],
-        ]);
+        ->configure(
+            [new ArgumentAdder('SomeExampleClass', 'someMethod', 0, 'someArgument', true, new ObjectType('SomeType'))]
+        );
 };
 ```
 
@@ -2600,11 +2598,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddPackageToRequireComposerRector::class)
-        ->configure([
-            AddPackageToRequireComposerRector::PACKAGES_AND_VERSIONS => [
-                new PackageAndVersion('symfony/console', '^3.4'),
-            ],
-        ]);
+        ->configure([new PackageAndVersion('symfony/console', '^3.4')]);
 };
 ```
 
@@ -2637,11 +2631,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddPackageToRequireDevComposerRector::class)
-        ->configure([
-            AddPackageToRequireDevComposerRector::PACKAGES_AND_VERSIONS => [
-                new PackageAndVersion('symfony/console', '^3.4'),
-            ],
-        ]);
+        ->configure([new PackageAndVersion('symfony/console', '^3.4')]);
 };
 ```
 
@@ -2674,11 +2664,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ChangePackageVersionComposerRector::class)
-        ->configure([
-            ChangePackageVersionComposerRector::PACKAGES_AND_VERSIONS => [
-                new PackageAndVersion('symfony/console', '^4.4'),
-            ],
-        ]);
+        ->configure([new PackageAndVersion('symfony/console', '^4.4')]);
 };
 ```
 
@@ -2712,9 +2698,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RemovePackageComposerRector::class)
-        ->configure([
-            RemovePackageComposerRector::PACKAGE_NAMES => ['symfony/console'],
-        ]);
+        ->configure(['symfony/console']);
 };
 ```
 
@@ -2747,9 +2731,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenamePackageComposerRector::class)
-        ->configure([
-            RenamePackageComposerRector::RENAME_PACKAGES => [new RenamePackage('rector/rector', 'rector/rector-src')],
-        ]);
+        ->configure([new RenamePackage('rector/rector', 'rector/rector-src')]);
 };
 ```
 
@@ -2783,11 +2765,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ReplacePackageAndVersionComposerRector::class)
-        ->configure([
-            ReplacePackageAndVersionComposerRector::REPLACE_PACKAGES_AND_VERSIONS => [
-                new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4'),
-            ],
-        ]);
+        ->configure([new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4')]);
 };
 ```
 
@@ -5498,22 +5476,17 @@ Downgrade `str_starts_with()` to `strncmp()` version
 
 ### DowngradeThrowExprRector
 
-Downgrade throw as expr
+Downgrade throw expression
 
 - class: [`Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector`](../rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php)
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
--        $id = $somethingNonexistent ?? throw new RuntimeException();
-+        if (!isset($somethingNonexistent)) {
-+            throw new RuntimeException();
-+        }
-+        $id = $somethingNonexistent;
-     }
- }
+-echo $variable ?? throw new RuntimeException();
++if (! isset($variable)) {
++    throw new RuntimeException();
++}
++
++echo $variable;
 ```
 
 <br>
@@ -9129,9 +9102,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RemoveFuncCallRector::class)
-        ->configure([
-            RemoveFuncCallRector::REMOVE_FUNC_CALLS => [new RemoveFuncCall('ini_get', [['y2k_compliance']])],
-        ]);
+        ->configure([new RemoveFuncCall('ini_get', [['y2k_compliance']])]);
 };
 ```
 
@@ -9451,16 +9422,16 @@ Replaces defined class constants in their calls.
 ```php
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassConstFetchRector::class)
+        ->configure([new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')])
         ->configure([
-            RenameClassConstFetchRector::CLASS_CONSTANT_RENAME => [
-                new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
-            ],
+            1 => new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
         ]);
 };
 ```
@@ -9699,11 +9670,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameStaticMethodRector::class)
-        ->configure([
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod'),
-            ],
-        ]);
+        ->configure([new RenameStaticMethod('SomeClass', 'oldMethod', 'AnotherExampleClass', 'newStaticMethod')]);
 };
 ```
 
@@ -9712,32 +9679,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ```diff
 -SomeClass::oldStaticMethod();
 +AnotherExampleClass::newStaticMethod();
-```
-
-<br>
-
-```php
-use Rector\Renaming\Rector\StaticCall\RenameStaticMethodRector;
-use Rector\Renaming\ValueObject\RenameStaticMethod;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(RenameStaticMethodRector::class)
-        ->configure([
-            RenameStaticMethodRector::OLD_TO_NEW_METHODS_BY_CLASSES => [
-                new RenameStaticMethod('SomeClass', 'oldMethod', 'SomeClass', 'newStaticMethod'),
-            ],
-        ]);
-};
-```
-
-↓
-
-```diff
--SomeClass::oldStaticMethod();
-+SomeClass::newStaticMethod();
 ```
 
 <br>
@@ -10992,10 +10933,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(PropertyFetchToMethodCallRector::class)
+        ->configure([new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty', [])])
         ->configure([
-            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => [
-                new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty', []),
-            ],
+            1 => new PropertyFetchToMethodCall('SomeObject', 'bareProperty', 'getConfig', ['someArg']),
         ]);
 };
 ```
@@ -11007,32 +10947,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -$object->property = $value;
 +$result = $object->getProperty();
 +$object->setProperty($value);
-```
 
-<br>
-
-```php
-use Rector\Transform\Rector\Assign\PropertyFetchToMethodCallRector;
-use Rector\Transform\ValueObject\PropertyFetchToMethodCall;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(PropertyFetchToMethodCallRector::class)
-        ->configure([
-            PropertyFetchToMethodCallRector::PROPERTIES_TO_METHOD_CALLS => [
-                new PropertyFetchToMethodCall('SomeObject', 'property', 'getConfig', ['someArg']),
-            ],
-        ]);
-};
-```
-
-↓
-
-```diff
--$result = $object->property;
-+$result = $object->getProperty('someArg');
+-$bare = $object->bareProperty;
++$bare = $object->getConfig('someArg');
 ```
 
 <br>
@@ -11559,11 +11476,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddParamTypeDeclarationRector::class)
-        ->configure([
-            AddParamTypeDeclarationRector::PARAMETER_TYPEHINTS => [
-                new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType()),
-            ],
-        ]);
+        ->configure([new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())]);
 };
 ```
 
@@ -11634,13 +11547,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddReturnTypeDeclarationRector::class)
-        ->configure([
-            AddReturnTypeDeclarationRector::METHOD_RETURN_TYPES => [
-                new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(false), new MixedType(
-                    false
-                ))),
-            ],
-        ]);
+        ->configure(
+            [new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(false), new MixedType(
+                false
+            )))]
+        );
 };
 ```
 

@@ -258,23 +258,14 @@ final class IfManipulator
     public function createIfNegation(Expr $expr, Stmt $stmt): If_
     {
         $expr = $this->conditionInverter->createInvertedCondition($expr);
-
-        return new If_(
-            $expr,
-            [
-                'stmts' => [$stmt],
-            ]
-        );
+        return $this->createIfExpr($expr, $stmt);
     }
 
     public function createIfExpr(Expr $expr, Stmt $stmt): If_
     {
-        return new If_(
-            $expr,
-            [
-                'stmts' => [$stmt],
-            ]
-        );
+        return new If_($expr, [
+            'stmts' => [$stmt],
+        ]);
     }
 
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return): ?Expr
