@@ -78,6 +78,8 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
     /**
+     * Better return created nodes right in refactor() method to keep context
+     * @deprecated
      * @param \PhpParser\Node $addedNode
      * @param \PhpParser\Node $positionNode
      */

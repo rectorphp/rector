@@ -4,12 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Assign;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -63,25 +59,12 @@ CODE_SAMPLE
             return null;
         }
         $newAssign = new \PhpParser\Node\Expr\Assign($node->var, $node->expr->expr);
-        if (!$this->isExprCallOrNew($node->expr->expr)) {
+        if (!$node->expr->expr instanceof \PhpParser\Node\Expr\CallLike) {
             $this->nodesToAddCollector->addNodeAfterNode($node->expr, $node);
             return $newAssign;
         }
         $varAssign = new \PhpParser\Node\Expr\Assign($node->expr->var, $node->var);
         $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression($newAssign), $node);
         return $varAssign;
-    }
-    private function isExprCallOrNew(\PhpParser\Node\Expr $expr) : bool
-    {
-        if ($expr instanceof \PhpParser\Node\Expr\MethodCall) {
-            return \true;
-        }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticCall) {
-            return \true;
-        }
-        if ($expr instanceof \PhpParser\Node\Expr\FuncCall) {
-            return \true;
-        }
-        return $expr instanceof \PhpParser\Node\Expr\New_;
     }
 }
