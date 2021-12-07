@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Set\ValueObject;
 
-use Rector\PHPOffice\Set\PHPOfficeSetList;
 use Rector\Set\Contract\SetListInterface;
 final class SetList implements \Rector\Set\Contract\SetListInterface
 {
@@ -64,15 +63,6 @@ final class SetList implements \Rector\Set\Contract\SetListInterface
      * @var string
      */
     public const ORDER = __DIR__ . '/../../../config/set/order.php';
-    /**
-     * @var string
-     */
-    public const PHALCON_40 = __DIR__ . '/../../../config/set/phalcon40.php';
-    /**
-     * @var string
-     * @deprecated Use PHPOfficeSetList class instead
-     */
-    public const PHPEXCEL_TO_PHPSPREADSHEET = \Rector\PHPOffice\Set\PHPOfficeSetList::PHPEXCEL_TO_PHPSPREADSHEET;
     /**
      * @var string
      */
