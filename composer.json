@@ -151,7 +151,7 @@
         "release": "vendor/bin/monorepo-builder release patch --ansi"
     },
     "extra": {
-        "patches-file": "https://raw.githubusercontent.com/rectorphp/vendor-patches/master/composer.patches.json",
+        "patches-file": "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/composer.patches.json",
         "branch-alias": {
             "dev-main": "0.12-dev"
         }
