@@ -15,6 +15,9 @@ env:
 
 jobs:
     build_scoped_rector:
+        # Don't run on forks.
+        if: github.repository == 'rectorphp/rector-src'
+
         runs-on: ubuntu-latest
         timeout-minutes: 30
 

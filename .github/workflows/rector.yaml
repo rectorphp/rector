@@ -21,6 +21,9 @@ env:
 
 jobs:
     rector:
+        # Don't run on forks.
+        if: github.repository == 'rectorphp/rector-src'
+
         strategy:
             fail-fast: false
             matrix:

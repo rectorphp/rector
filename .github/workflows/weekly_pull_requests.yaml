@@ -11,6 +11,9 @@ env:
 
 jobs:
     weekly_pull_requests:
+        # Don't run on forks.
+        if: github.repository == 'rectorphp/rector-src'
+
         strategy:
             fail-fast: false
             matrix:
