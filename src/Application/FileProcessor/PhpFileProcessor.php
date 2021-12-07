@@ -26,6 +26,14 @@ use Throwable;
 
 final class PhpFileProcessor implements FileProcessorInterface
 {
+    /**
+     * @var array{system_errors: SystemError[], file_diffs: FileDiff[]}
+     */
+    private array $systemErrorsAndFileDiffs = [
+        Bridge::SYSTEM_ERRORS => [],
+        Bridge::FILE_DIFFS => [],
+    ];
+
     public function __construct(
         private readonly FormatPerservingPrinter $formatPerservingPrinter,
         private readonly FileProcessor $fileProcessor,
@@ -43,19 +51,17 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     public function process(File $file, Configuration $configuration): array
     {
-        $systemErrorsAndFileDiffs = [
-            Bridge::SYSTEM_ERRORS => [],
-            Bridge::FILE_DIFFS => [],
-        ];
-
         // 1. parse files to nodes
         $parsingSystemErrors = $this->parseFileAndDecorateNodes($file);
         if ($parsingSystemErrors !== []) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
+            $this->systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = array_merge(
+                $this->systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS],
+                $parsingSystemErrors
+            );
             $this->notifyPhase($file, ApplicationPhase::PRINT_SKIP());
 
-            return $systemErrorsAndFileDiffs;
+            return $this->systemErrorsAndFileDiffs;
         }
 
         // 2. change nodes with Rectors
@@ -86,12 +92,16 @@ final class PhpFileProcessor implements FileProcessorInterface
 
         // return json here
         $fileDiff = $file->getFileDiff();
-
-        if ($fileDiff instanceof FileDiff) {
-            $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
+        if (! $fileDiff instanceof FileDiff) {
+            return $this->systemErrorsAndFileDiffs;
         }
 
-        return $systemErrorsAndFileDiffs;
+        $this->systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = array_merge(
+            $this->systemErrorsAndFileDiffs[Bridge::FILE_DIFFS],
+            [$fileDiff]
+        );
+
+        return $this->systemErrorsAndFileDiffs;
     }
 
     public function supports(File $file, Configuration $configuration): bool
