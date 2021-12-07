@@ -68,6 +68,10 @@ final class NodesToAddCollector implements NodeCollectorInterface
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
 
+    /**
+     * Better return created nodes right in refactor() method to keep context
+     * @deprecated
+     */
     public function addNodeAfterNode(Node $addedNode, Node $positionNode): void
     {
         $position = $this->resolveNearestStmtPosition($positionNode);
