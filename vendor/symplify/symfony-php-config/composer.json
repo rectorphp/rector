@@ -14,12 +14,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211206\\Symplify\\SymfonyPhpConfig\\": "src"
+            "RectorPrefix20211207\\Symplify\\SymfonyPhpConfig\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211206\\Symplify\\SymfonyPhpConfig\\Tests\\": "tests"
+            "RectorPrefix20211207\\Symplify\\SymfonyPhpConfig\\Tests\\": "tests"
         }
     },
     "extra": {

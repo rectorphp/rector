@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211206\Symfony\Component\Config\Definition;
+namespace RectorPrefix20211207\Symfony\Component\Config\Definition;
 
-use RectorPrefix20211206\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix20211207\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 /**
  * This node represents a Boolean value in the config tree.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class BooleanNode extends \RectorPrefix20211206\Symfony\Component\Config\Definition\ScalarNode
+class BooleanNode extends \RectorPrefix20211207\Symfony\Component\Config\Definition\ScalarNode
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class BooleanNode extends \RectorPrefix20211206\Symfony\Component\Config\Definit
     protected function validateType($value)
     {
         if (!\is_bool($value)) {
-            $ex = new \RectorPrefix20211206\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "bool", but got "%s".', $this->getPath(), \get_debug_type($value)));
+            $ex = new \RectorPrefix20211207\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "bool", but got "%s".', $this->getPath(), \get_debug_type($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }

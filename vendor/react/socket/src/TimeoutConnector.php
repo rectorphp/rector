@@ -1,25 +1,25 @@
 <?php
 
-namespace RectorPrefix20211206\React\Socket;
+namespace RectorPrefix20211207\React\Socket;
 
-use RectorPrefix20211206\React\EventLoop\Loop;
-use RectorPrefix20211206\React\EventLoop\LoopInterface;
-use RectorPrefix20211206\React\Promise\Timer;
-use RectorPrefix20211206\React\Promise\Timer\TimeoutException;
-final class TimeoutConnector implements \RectorPrefix20211206\React\Socket\ConnectorInterface
+use RectorPrefix20211207\React\EventLoop\Loop;
+use RectorPrefix20211207\React\EventLoop\LoopInterface;
+use RectorPrefix20211207\React\Promise\Timer;
+use RectorPrefix20211207\React\Promise\Timer\TimeoutException;
+final class TimeoutConnector implements \RectorPrefix20211207\React\Socket\ConnectorInterface
 {
     private $connector;
     private $timeout;
     private $loop;
-    public function __construct(\RectorPrefix20211206\React\Socket\ConnectorInterface $connector, $timeout, \RectorPrefix20211206\React\EventLoop\LoopInterface $loop = null)
+    public function __construct(\RectorPrefix20211207\React\Socket\ConnectorInterface $connector, $timeout, \RectorPrefix20211207\React\EventLoop\LoopInterface $loop = null)
     {
         $this->connector = $connector;
         $this->timeout = $timeout;
-        $this->loop = $loop ?: \RectorPrefix20211206\React\EventLoop\Loop::get();
+        $this->loop = $loop ?: \RectorPrefix20211207\React\EventLoop\Loop::get();
     }
     public function connect($uri)
     {
-        return \RectorPrefix20211206\React\Promise\Timer\timeout($this->connector->connect($uri), $this->timeout, $this->loop)->then(null, self::handler($uri));
+        return \RectorPrefix20211207\React\Promise\Timer\timeout($this->connector->connect($uri), $this->timeout, $this->loop)->then(null, self::handler($uri));
     }
     /**
      * Creates a static rejection handler that reports a proper error message in case of a timeout.
@@ -34,7 +34,7 @@ final class TimeoutConnector implements \RectorPrefix20211206\React\Socket\Conne
     private static function handler($uri)
     {
         return function (\Exception $e) use($uri) {
-            if ($e instanceof \RectorPrefix20211206\React\Promise\Timer\TimeoutException) {
+            if ($e instanceof \RectorPrefix20211207\React\Promise\Timer\TimeoutException) {
                 throw new \RuntimeException('Connection to ' . $uri . ' timed out after ' . $e->getTimeout() . ' seconds (ETIMEDOUT)', \defined('SOCKET_ETIMEDOUT') ? \SOCKET_ETIMEDOUT : 110);
             }
             throw $e;

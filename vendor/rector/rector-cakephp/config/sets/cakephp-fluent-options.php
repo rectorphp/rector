@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211206;
+namespace RectorPrefix20211207;
 
 use Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector;
 use Rector\CakePHP\ValueObject\ArrayToFluentCall;
 use Rector\CakePHP\ValueObject\FactoryMethod;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211206\Symplify\SymfonyPhpConfig\ValueObjectInliner;
+use RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::class)->call('configure', [[\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => \RectorPrefix20211206\Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Association', [
+    $services->set(\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::class)->call('configure', [[\Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::ARRAYS_TO_FLUENT_CALLS => \RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Association', [
         'bindingKey' => 'setBindingKey',
         'cascadeCallbacks' => 'setCascadeCallbacks',
         'className' => 'setClassName',
@@ -48,5 +48,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         # BelongsToMany only
         'targetForeignKey' => 'setTargetForeignKey',
         'through' => 'setThrough',
-    ]), new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Query', ['fields' => 'select', 'conditions' => 'where', 'join' => 'join', 'order' => 'order', 'limit' => 'limit', 'offset' => 'offset', 'group' => 'group', 'having' => 'having', 'contain' => 'contain', 'page' => 'page'])]), \Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::FACTORY_METHODS => \RectorPrefix20211206\Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'belongsTo', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'belongsToMany', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'hasMany', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'hasOne', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'find', 'Cake\\ORM\\Query', 2)])]]);
+    ]), new \Rector\CakePHP\ValueObject\ArrayToFluentCall('Cake\\ORM\\Query', ['fields' => 'select', 'conditions' => 'where', 'join' => 'join', 'order' => 'order', 'limit' => 'limit', 'offset' => 'offset', 'group' => 'group', 'having' => 'having', 'contain' => 'contain', 'page' => 'page'])]), \Rector\CakePHP\Rector\MethodCall\ArrayToFluentCallRector::FACTORY_METHODS => \RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'belongsTo', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'belongsToMany', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'hasMany', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'hasOne', 'Cake\\ORM\\Association', 2), new \Rector\CakePHP\ValueObject\FactoryMethod('Cake\\ORM\\Table', 'find', 'Cake\\ORM\\Query', 2)])]]);
 };

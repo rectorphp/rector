@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211206\Symplify\ComposerJsonManipulator\Json;
+namespace RectorPrefix20211207\Symplify\ComposerJsonManipulator\Json;
 
-use RectorPrefix20211206\Nette\Utils\Strings;
-use RectorPrefix20211206\Symplify\ComposerJsonManipulator\ValueObject\Option;
-use RectorPrefix20211206\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211207\Nette\Utils\Strings;
+use RectorPrefix20211207\Symplify\ComposerJsonManipulator\ValueObject\Option;
+use RectorPrefix20211207\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class JsonInliner
 {
     /**
@@ -17,20 +17,20 @@ final class JsonInliner
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(\RectorPrefix20211206\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20211207\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
     public function inlineSections(string $jsonContent) : string
     {
-        if (!$this->parameterProvider->hasParameter(\RectorPrefix20211206\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS)) {
+        if (!$this->parameterProvider->hasParameter(\RectorPrefix20211207\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS)) {
             return $jsonContent;
         }
-        $inlineSections = $this->parameterProvider->provideArrayParameter(\RectorPrefix20211206\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS);
+        $inlineSections = $this->parameterProvider->provideArrayParameter(\RectorPrefix20211207\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS);
         foreach ($inlineSections as $inlineSection) {
             $pattern = '#("' . \preg_quote($inlineSection, '#') . '": )\\[(.*?)\\](,)#ms';
-            $jsonContent = \RectorPrefix20211206\Nette\Utils\Strings::replace($jsonContent, $pattern, function (array $match) : string {
-                $inlined = \RectorPrefix20211206\Nette\Utils\Strings::replace($match[2], self::SPACE_REGEX, ' ');
+            $jsonContent = \RectorPrefix20211207\Nette\Utils\Strings::replace($jsonContent, $pattern, function (array $match) : string {
+                $inlined = \RectorPrefix20211207\Nette\Utils\Strings::replace($match[2], self::SPACE_REGEX, ' ');
                 $inlined = \trim($inlined);
                 $inlined = '[' . $inlined . ']';
                 return $match[1] . $inlined . $match[3];

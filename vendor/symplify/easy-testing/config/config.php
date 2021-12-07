@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211206;
+namespace RectorPrefix20211207;
 
-use RectorPrefix20211206\Symfony\Component\Console\Application;
+use RectorPrefix20211207\Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211206\Symplify\EasyTesting\Command\ValidateFixtureSkipNamingCommand;
-use function RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20211207\Symplify\EasyTesting\Command\ValidateFixtureSkipNamingCommand;
+use function RectorPrefix20211207\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20211206\Symplify\\EasyTesting\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/DataProvider', __DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject']);
+    $services->load('RectorPrefix20211207\Symplify\\EasyTesting\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/DataProvider', __DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject']);
     // console
-    $services->set(\RectorPrefix20211206\Symfony\Component\Console\Application::class)->call('add', [\RectorPrefix20211206\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211206\Symplify\EasyTesting\Command\ValidateFixtureSkipNamingCommand::class)]);
+    $services->set(\RectorPrefix20211207\Symfony\Component\Console\Application::class)->call('add', [\RectorPrefix20211207\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20211207\Symplify\EasyTesting\Command\ValidateFixtureSkipNamingCommand::class)]);
 };

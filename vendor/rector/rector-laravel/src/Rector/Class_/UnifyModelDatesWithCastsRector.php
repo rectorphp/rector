@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20211206\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20211207\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211206\Webmozart\Assert\Assert;
+use RectorPrefix20211207\Webmozart\Assert\Assert;
 /**
  * @see https://github.com/laravel/framework/pull/32856
  *
@@ -100,7 +100,7 @@ CODE_SAMPLE
         $casts = $this->valueResolver->getValue($castsPropertyProperty->default);
         // exclude attributes added in $casts
         $missingDates = \array_diff($dates, \array_keys($casts));
-        \RectorPrefix20211206\Webmozart\Assert\Assert::allString($missingDates);
+        \RectorPrefix20211207\Webmozart\Assert\Assert::allString($missingDates);
         foreach ($missingDates as $missingDate) {
             $castsPropertyProperty->default->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('datetime'), new \PhpParser\Node\Scalar\String_($missingDate));
         }
@@ -109,7 +109,7 @@ CODE_SAMPLE
     }
     private function createCastsProperty() : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20211206\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
+        $propertyBuilder = new \RectorPrefix20211207\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('casts');
         $propertyBuilder->makeProtected();
         $propertyBuilder->setDefault([]);
         $property = $propertyBuilder->getNode();

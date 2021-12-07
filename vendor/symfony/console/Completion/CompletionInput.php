@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211206\Symfony\Component\Console\Completion;
+namespace RectorPrefix20211207\Symfony\Component\Console\Completion;
 
-use RectorPrefix20211206\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20211206\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20211206\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20211206\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20211207\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20211207\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20211207\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20211207\Symfony\Component\Console\Input\InputOption;
 /**
  * An input specialized for shell completion.
  *
@@ -22,7 +22,7 @@ use RectorPrefix20211206\Symfony\Component\Console\Input\InputOption;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-final class CompletionInput extends \RectorPrefix20211206\Symfony\Component\Console\Input\ArgvInput
+final class CompletionInput extends \RectorPrefix20211207\Symfony\Component\Console\Input\ArgvInput
 {
     public const TYPE_ARGUMENT_VALUE = 'argument_value';
     public const TYPE_OPTION_VALUE = 'option_value';
@@ -172,12 +172,12 @@ final class CompletionInput extends \RectorPrefix20211206\Symfony\Component\Cons
     {
         try {
             return parent::parseToken($token, $parseOptions);
-        } catch (\RectorPrefix20211206\Symfony\Component\Console\Exception\RuntimeException $e) {
+        } catch (\RectorPrefix20211207\Symfony\Component\Console\Exception\RuntimeException $e) {
             // suppress errors, completed input is almost never valid
         }
         return $parseOptions;
     }
-    private function getOptionFromToken(string $optionToken) : ?\RectorPrefix20211206\Symfony\Component\Console\Input\InputOption
+    private function getOptionFromToken(string $optionToken) : ?\RectorPrefix20211207\Symfony\Component\Console\Input\InputOption
     {
         $optionName = \ltrim($optionToken, '-');
         if (!$optionName) {

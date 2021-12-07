@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211206\Symplify\EasyTesting\DataProvider;
+namespace RectorPrefix20211207\Symplify\EasyTesting\DataProvider;
 
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211206\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @api
  */
@@ -28,9 +28,9 @@ final class StaticFixtureUpdater
         }
         self::getSmartFileSystem()->dumpFile($expectedFixtureFileInfo->getRealPath(), $newOriginalContent);
     }
-    private static function getSmartFileSystem() : \RectorPrefix20211206\Symplify\SmartFileSystem\SmartFileSystem
+    private static function getSmartFileSystem() : \RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem
     {
-        return new \RectorPrefix20211206\Symplify\SmartFileSystem\SmartFileSystem();
+        return new \RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem();
     }
     /**
      * @param string|\Symplify\SmartFileSystem\SmartFileInfo $originalFileInfo
