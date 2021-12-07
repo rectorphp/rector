@@ -295,7 +295,7 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "patches\/danielstjules-stringy-src-stringy-php.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/master\/danielstjules-stringy-src-stringy-php.patch"
                 ]
             },
             "installation-source": "dist",
@@ -2485,17 +2485,17 @@
         },
         {
             "name": "rector\/rector-symfony",
-            "version": "0.11.45",
-            "version_normalized": "0.11.45.0",
+            "version": "0.11.46",
+            "version_normalized": "0.11.46.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "1c76befd5a64d57bd0732aad989b06fd3ed3cb33"
+                "reference": "64d2775c837b95ae99883f88ac70c7eafb32af27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/1c76befd5a64d57bd0732aad989b06fd3ed3cb33",
-                "reference": "1c76befd5a64d57bd0732aad989b06fd3ed3cb33",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/64d2775c837b95ae99883f88ac70c7eafb32af27",
+                "reference": "64d2775c837b95ae99883f88ac70c7eafb32af27",
                 "shasum": ""
             },
             "require": {
@@ -2522,17 +2522,10 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0"
             },
-            "time": "2021-12-06T20:57:19+00:00",
+            "time": "2021-12-07T03:26:51+00:00",
             "type": "rector-extension",
             "extra": {
-                "patches": {
-                    "symfony\/dependency-injection": [
-                        "patches\/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
-                    ],
-                    "danielstjules\/stringy": [
-                        "patches\/danielstjules-stringy-src-stringy-php.patch"
-                    ]
-                },
+                "patches-file": "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/master\/composer.patches.json",
                 "branch-alias": {
                     "dev-main": "0.11-dev"
                 },
@@ -2555,7 +2548,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.45"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.46"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

@@ -25,6 +25,10 @@ use Throwable;
 final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
+     * @var array{system_errors: SystemError[], file_diffs: FileDiff[]}
+     */
+    private $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
+    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
      */
@@ -82,14 +86,13 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
      */
     public function process($file, $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         // 1. parse files to nodes
         $parsingSystemErrors = $this->parseFileAndDecorateNodes($file);
         if ($parsingSystemErrors !== []) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
+            $this->systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] = \array_merge($this->systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS], $parsingSystemErrors);
             $this->notifyPhase($file, \Rector\Core\Enum\ApplicationPhase::PRINT_SKIP());
-            return $systemErrorsAndFileDiffs;
+            return $this->systemErrorsAndFileDiffs;
         }
         // 2. change nodes with Rectors
         $loopCounter = 0;
@@ -114,10 +117,11 @@ final class PhpFileProcessor implements \Rector\Core\Contract\Processor\FileProc
         } while ($file->hasChanged());
         // return json here
         $fileDiff = $file->getFileDiff();
-        if ($fileDiff instanceof \Rector\Core\ValueObject\Reporting\FileDiff) {
-            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = [$fileDiff];
+        if (!$fileDiff instanceof \Rector\Core\ValueObject\Reporting\FileDiff) {
+            return $this->systemErrorsAndFileDiffs;
         }
-        return $systemErrorsAndFileDiffs;
+        $this->systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = \array_merge($this->systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS], [$fileDiff]);
+        return $this->systemErrorsAndFileDiffs;
     }
     /**
      * @param \Rector\Core\ValueObject\Application\File $file
