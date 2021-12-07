@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -207,7 +208,7 @@ CODE_SAMPLE
 
     private function createCondExpr(Coalesce $coalesce): BooleanNot|Identical
     {
-        if ($coalesce->left instanceof Variable) {
+        if ($coalesce->left instanceof Variable || $coalesce->left instanceof ArrayDimFetch) {
             return new BooleanNot(new Isset_([$coalesce->left]));
         }
 
