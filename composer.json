@@ -153,13 +153,13 @@
     "extra": {
         "patches": {
             "danielstjules/stringy": [
-                "patches/danielstjules-stringy.patch"
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/danielstjules-stringy-src-stringy-php.patch"
             ],
             "helmich/typo3-typoscript-parser": [
-                "patches/helmich-typo3-typoscript-parser.patch"
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/helmich-typo3-typoscript-parser-parser-tokenstream-php.patch"
             ],
             "symfony/dependency-injection": [
-                "patches/symfony-dependency-injection.patch"
+                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/symfony-dependency-injection.patch"
             ]
         },
         "branch-alias": {
