@@ -14,6 +14,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\ValueObject\Bridge;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
 final class ApplicationFileProcessor
@@ -27,6 +28,7 @@ final class ApplicationFileProcessor
         private readonly FileFormatter $fileFormatter,
         private readonly RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor,
         private readonly SymfonyStyle $symfonyStyle,
+        private readonly ParametersMerger $parametersMerger,
         private readonly array $fileProcessors = []
     ) {
     }
@@ -71,7 +73,7 @@ final class ApplicationFileProcessor
                 $result = $fileProcessor->process($file, $configuration);
 
                 if (is_array($result)) {
-                    $systemErrorsAndFileDiffs = array_merge($systemErrorsAndFileDiffs, $result);
+                    $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
                 }
             }
 
