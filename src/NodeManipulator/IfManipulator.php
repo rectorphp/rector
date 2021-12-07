@@ -239,7 +239,7 @@ final class IfManipulator
     public function createIfNegation(\PhpParser\Node\Expr $expr, \PhpParser\Node\Stmt $stmt) : \PhpParser\Node\Stmt\If_
     {
         $expr = $this->conditionInverter->createInvertedCondition($expr);
-        return new \PhpParser\Node\Stmt\If_($expr, ['stmts' => [$stmt]]);
+        return $this->createIfExpr($expr, $stmt);
     }
     public function createIfExpr(\PhpParser\Node\Expr $expr, \PhpParser\Node\Stmt $stmt) : \PhpParser\Node\Stmt\If_
     {
