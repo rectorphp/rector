@@ -81,7 +81,7 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
         /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
         $oldMethodName = $identifierNode->toString();
-        if ($functionNameWithAssertMethods->getAssetMethodName() && \in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], \true)) {
+        if (\in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], \true)) {
             $node->name = new \PhpParser\Node\Identifier($functionNameWithAssertMethods->getAssetMethodName());
         }
         if ($functionNameWithAssertMethods->getNotAssertMethodName() === '') {

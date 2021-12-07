@@ -84,7 +84,7 @@ final class ConsecutiveAssertionFactory
     private function createReturnArgs(array $expectationMocks) : array
     {
         return \array_map(static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMock) : Arg {
-            return new \PhpParser\Node\Arg($expectationMock->getReturn() ?: new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
+            return new \PhpParser\Node\Arg($expectationMock->getReturn() instanceof \PhpParser\Node\Expr ? $expectationMock->getReturn() : new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
         }, $expectationMocks);
     }
     /**
@@ -95,7 +95,7 @@ final class ConsecutiveAssertionFactory
     {
         return \array_map(static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMock) : Arg {
             $arrayItems = \array_map(static function (?\PhpParser\Node\Expr $expr) : ArrayItem {
-                return new \PhpParser\Node\Expr\ArrayItem($expr ?: new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
+                return new \PhpParser\Node\Expr\ArrayItem($expr instanceof \PhpParser\Node\Expr ? $expr : new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null')));
             }, $expectationMock->getWithArguments());
             return new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Array_($arrayItems));
         }, $expectationMocks);

@@ -20,7 +20,8 @@
         "rector\/rector-generator": "^0.4.3",
         "symplify\/monorepo-builder": "^10.0",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
-        "phpstan\/phpstan-strict-rules": "^1.1"
+        "phpstan\/phpstan-strict-rules": "^1.1",
+        "symplify\/vendor-patches": "^10.0"
     },
     "autoload": {
         "psr-4": {
@@ -46,6 +47,7 @@
         ]
     },
     "extra": {
+        "enable-patching": true,
         "branch-alias": {
             "dev-main": "0.11-dev"
         },

@@ -186,6 +186,9 @@ CODE_SAMPLE
         while (!$currentMethodCallee instanceof \PhpParser\Node\Expr\Variable) {
             $currentMethodCallee = $currentMethodCallee->var;
         }
+        if (!$currentMethodCallee instanceof \PhpParser\Node\Expr\Variable) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
         return $currentMethodCallee;
     }
     private function resolveNumberOfRequiredParameters(string $mockClass, string $mockMethod) : int

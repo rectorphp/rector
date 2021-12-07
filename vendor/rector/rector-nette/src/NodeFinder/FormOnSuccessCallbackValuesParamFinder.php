@@ -5,11 +5,13 @@ namespace Rector\Nette\NodeFinder;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 final class FormOnSuccessCallbackValuesParamFinder
 {
     public function find(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr $onSuccessCallback) : ?\PhpParser\Node\Param
@@ -19,10 +21,9 @@ final class FormOnSuccessCallbackValuesParamFinder
         }
         $methodName = null;
         if ($onSuccessCallback instanceof \PhpParser\Node\Expr\Array_) {
-            /** @var Expr\ArrayItem|null $varPart */
             $varPart = $onSuccessCallback->items[0] ?? null;
             $methodNamePart = $onSuccessCallback->items[1] ?? null;
-            if ($varPart === null || $methodNamePart === null) {
+            if (!$varPart instanceof \PhpParser\Node\Expr\ArrayItem || !$methodNamePart instanceof \PhpParser\Node\Expr\ArrayItem) {
                 return null;
             }
             if (!$varPart->value instanceof \PhpParser\Node\Expr\Variable) {
@@ -40,7 +41,7 @@ final class FormOnSuccessCallbackValuesParamFinder
             return null;
         }
         $classMethod = $class->getMethod($methodName);
-        if ($classMethod === null) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         return $classMethod->params[1] ?? null;

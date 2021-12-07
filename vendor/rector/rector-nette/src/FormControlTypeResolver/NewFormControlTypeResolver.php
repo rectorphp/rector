@@ -5,6 +5,7 @@ namespace Rector\Nette\FormControlTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
@@ -51,7 +52,7 @@ final class NewFormControlTypeResolver implements \Rector\Nette\Contract\FormCon
             return [];
         }
         $classMethod = $this->astResolver->resolveClassMethod($className, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);

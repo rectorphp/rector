@@ -7,10 +7,9 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
+    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
         // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecations-in-the-wrapper-connection-class
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Connection', 'executeUpdate', 'executeStatement'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Connection', 'exec', 'executeStatement'),
@@ -31,8 +30,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchAssoc', 'fetchAssociative'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchColumn', 'fetchOne'),
         new \Rector\Renaming\ValueObject\MethodCallRename('Doctrine\\DBAL\\Statement', 'fetchAll', 'fetchAllAssociative'),
-    ])]]);
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->call('configure', [[\Rector\Renaming\Rector\Name\RenameClassRector::OLD_TO_NEW_CLASSES => [
+    ]);
+    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure([\Rector\Renaming\Rector\Name\RenameClassRector::OLD_TO_NEW_CLASSES => [
         // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#pdo-related-classes-outside-of-the-pdo-namespace-are-deprecated
         'Doctrine\\DBAL\\Driver\\PDOMySql\\Driver' => 'Doctrine\\DBAL\\Driver\\PDO\\MySQL\\Driver',
         'Doctrine\\DBAL\\Driver\\PDOOracle\\Driver' => 'Doctrine\\DBAL\\Driver\\PDO\\OCI\\Driver',
@@ -59,5 +58,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         'Doctrine\\DBAL\\Driver\\PDOStatement' => 'Doctrine\\DBAL\\Driver\\PDO\\Statement',
         // https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-masterslaveconnection-use-primaryreadreplicaconnection
         'Doctrine\\DBAL\\Connections\\MasterSlaveConnection' => 'Doctrine\\DBAL\\Connections\\PrimaryReadReplicaConnection',
-    ]]]);
+    ]]);
 };

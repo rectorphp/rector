@@ -33,7 +33,7 @@ final class ExpectationMockCollection
         $indexes = \array_map(static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMock) : int {
             return $expectationMock->getIndex();
         }, $this->expectationMocks);
-        return \max($indexes) ?: 0;
+        return (int) \max($indexes);
     }
     public function getLowestAtIndex() : int
     {
@@ -43,7 +43,7 @@ final class ExpectationMockCollection
         $indexes = \array_map(static function (\Rector\PHPUnit\ValueObject\ExpectationMock $expectationMock) : int {
             return $expectationMock->getIndex();
         }, $this->expectationMocks);
-        return \min($indexes) ?: 0;
+        return (int) \min($indexes);
     }
     public function isMissingAtIndexBetweenHighestAndLowest() : bool
     {
@@ -97,7 +97,7 @@ final class ExpectationMockCollection
         $previousMethod = '';
         foreach ($this->expectationMocks as $expectationMock) {
             $methodArgument = $expectationMock->getMethodArguments()[0];
-            if ($methodArgument !== null && $methodArgument->value instanceof \PhpParser\Node\Scalar\String_) {
+            if ($methodArgument->value instanceof \PhpParser\Node\Scalar\String_) {
                 if ($previousMethod === '') {
                     $previousMethod = $methodArgument->value->value;
                 }

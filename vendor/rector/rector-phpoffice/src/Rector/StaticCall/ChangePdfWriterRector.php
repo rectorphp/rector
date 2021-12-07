@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PHPOffice\Rector\StaticCall;
 
-use RectorPrefix20211207\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -11,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -69,7 +69,7 @@ CODE_SAMPLE
             if (!\is_string($secondArgValue)) {
                 return null;
             }
-            if (\RectorPrefix20211207\Nette\Utils\Strings::match($secondArgValue, '#pdf#i')) {
+            if (\Rector\Core\Util\StringUtils::isMatch($secondArgValue, '#pdf#i')) {
                 return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
             }
         }

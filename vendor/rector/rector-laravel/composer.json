@@ -4,10 +4,10 @@
     "license": "MIT",
     "description": "Rector upgrades rules for Laravel Framework",
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.1"
     },
     "require-dev": {
-        "rector\/rector-src": "dev-main#328fc16",
+        "rector\/rector-src": "dev-main",
         "phpunit\/phpunit": "^9.5",
         "phpstan\/phpstan": "^1.0",
         "symplify\/phpstan-rules": "^10.0",
@@ -45,11 +45,7 @@
         ]
     },
     "extra": {
-        "patches": {
-            "symfony\/dependency-injection": [
-                "patches\/symfony-dependency-injection-loader-configurator-servicesconfigurator-php.patch"
-            ]
-        },
+        "enable-patching": true,
         "branch-alias": {
             "dev-main": "0.11-dev"
         },

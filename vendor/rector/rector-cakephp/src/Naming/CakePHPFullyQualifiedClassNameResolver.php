@@ -6,6 +6,7 @@ namespace Rector\CakePHP\Naming;
 use RectorPrefix20211207\Nette\Utils\Strings;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CakePHP\ImplicitNameResolver;
+use Rector\Core\Util\StringUtils;
 /**
  * @inspired https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/AppUsesTask.php
  */
@@ -52,7 +53,7 @@ final class CakePHPFullyQualifiedClassNameResolver
         }
         // Chop Lib out as locations moves those files to the top level.
         // But only if Lib is not the last folder.
-        if (\RectorPrefix20211207\Nette\Utils\Strings::match($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
+        if (\Rector\Core\Util\StringUtils::isMatch($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
             $pseudoNamespace = \RectorPrefix20211207\Nette\Utils\Strings::replace($pseudoNamespace, '#\\\\Lib#', '');
         }
         // B. is Cake native class?
@@ -61,7 +62,7 @@ final class CakePHPFullyQualifiedClassNameResolver
             return $cakePhpVersion;
         }
         // C. is not plugin nor lib custom App class?
-        if (\strpos($pseudoNamespace, '\\') !== \false && !\RectorPrefix20211207\Nette\Utils\Strings::match($pseudoNamespace, self::PLUGIN_OR_LIB_REGEX)) {
+        if (\strpos($pseudoNamespace, '\\') !== \false && !\Rector\Core\Util\StringUtils::isMatch($pseudoNamespace, self::PLUGIN_OR_LIB_REGEX)) {
             return 'App\\' . $pseudoNamespace . '\\' . $shortClass;
         }
         return $pseudoNamespace . '\\' . $shortClass;

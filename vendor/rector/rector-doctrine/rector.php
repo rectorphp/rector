@@ -23,5 +23,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
     $services = $containerConfigurator->services();
-    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->call('configure', [[\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::CLASSES_TO_SKIP => ['Doctrine\\*', 'Gedmo\\*', 'Knp\\*', 'DateTime', 'DateTimeInterface']]]);
+    $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure(['Doctrine\\*', 'Gedmo\\*', 'Knp\\*', 'DateTime', 'DateTimeInterface']);
 };

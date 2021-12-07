@@ -61,7 +61,7 @@ final class ExpectationAnalyzer
             if (!$atValue instanceof \PhpParser\Node\Scalar\LNumber) {
                 continue;
             }
-            if (!($expects->var instanceof \PhpParser\Node\Expr\Variable || $expects->var instanceof \PhpParser\Node\Expr\PropertyFetch)) {
+            if (!$expects->var instanceof \PhpParser\Node\Expr\Variable && !$expects->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
             $expectationMockCollection->add(new \Rector\PHPUnit\ValueObject\ExpectationMock($expects->var, $method->args, $atValue->value, $this->getWill($expr), $this->getWithArgs($method->var), $stmt));

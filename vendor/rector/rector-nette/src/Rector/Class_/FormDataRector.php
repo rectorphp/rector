@@ -4,7 +4,10 @@ declare (strict_types=1);
 namespace Rector\Nette\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -133,7 +136,7 @@ CODE_SAMPLE
         $shortClassName = $this->nodeNameResolver->getShortName($node);
         $fullClassName = $this->getName($node);
         $form = $this->formVariableFinder->find($node);
-        if ($form === null) {
+        if (!$form instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         $formFields = $this->formFieldsFinder->find($node, $form);
@@ -142,7 +145,7 @@ CODE_SAMPLE
         }
         $properties = [];
         foreach ($formFields as $formField) {
-            $properties[$formField->getName()] = ['type' => $formField->getType(), 'nullable' => $formField->getType() === 'int' && $formField->isRequired() === \false];
+            $properties[$formField->getName()] = ['type' => $formField->getType(), 'nullable' => $formField->getType() === 'int' && !$formField->isRequired()];
         }
         $formDataClassName = $shortClassName . 'FormData';
         $fullFormDataClassName = '\\' . $fullClassName . 'FormData';
@@ -153,11 +156,11 @@ CODE_SAMPLE
         $addedFileWithContent = new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($targetFilePath, $printedClassContent);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
         $onSuccessCallback = $this->formOnSuccessCallbackFinder->find($node, $form);
-        if ($onSuccessCallback === null) {
+        if (!$onSuccessCallback instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $valuesParam = $this->formOnSuccessCallbackValuesParamFinder->find($node, $onSuccessCallback);
-        if ($valuesParam === null) {
+        if (!$valuesParam instanceof \PhpParser\Node\Param) {
             return null;
         }
         $valuesParam->type = new \PhpParser\Node\Identifier($fullFormDataClassName);

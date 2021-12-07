@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\NodeManipulator\ForeachManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -63,18 +62,10 @@ CODE_SAMPLE
         if ($matchedNode === null) {
             return null;
         }
-        /** @var MethodCall|StaticCall $matchedNode */
-        $callClass = \get_class($matchedNode);
-        return new $callClass($this->resolveVar($matchedNode), new \PhpParser\Node\Name('assertContainsOnlyInstancesOf'), [$matchedNode->args[0], new \PhpParser\Node\Arg($node->expr)]);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
-     */
-    private function resolveVar($node) : \PhpParser\Node
-    {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
-            return $node->var;
+        $args = [$matchedNode->args[0], new \PhpParser\Node\Arg($node->expr)];
+        if ($matchedNode instanceof \PhpParser\Node\Expr\StaticCall) {
+            return new \PhpParser\Node\Expr\StaticCall($matchedNode->class, 'assertContainsOnlyInstancesOf', $args);
         }
-        return $node->class;
+        return new \PhpParser\Node\Expr\MethodCall($matchedNode->var, 'assertContainsOnlyInstancesOf', $args);
     }
 }

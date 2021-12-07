@@ -93,14 +93,16 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param array<string, ArrayToFluentCall|FactoryMethod> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
         $arraysToFluentCalls = $configuration[self::ARRAYS_TO_FLUENT_CALLS] ?? [];
+        \RectorPrefix20211207\Webmozart\Assert\Assert::isArray($arraysToFluentCalls);
         \RectorPrefix20211207\Webmozart\Assert\Assert::allIsInstanceOf($arraysToFluentCalls, \Rector\CakePHP\ValueObject\ArrayToFluentCall::class);
         $this->arraysToFluentCalls = $arraysToFluentCalls;
         $factoryMethods = $configuration[self::FACTORY_METHODS] ?? [];
+        \RectorPrefix20211207\Webmozart\Assert\Assert::isArray($factoryMethods);
         \RectorPrefix20211207\Webmozart\Assert\Assert::allIsInstanceOf($factoryMethods, \Rector\CakePHP\ValueObject\FactoryMethod::class);
         $this->factoryMethods = $factoryMethods;
     }

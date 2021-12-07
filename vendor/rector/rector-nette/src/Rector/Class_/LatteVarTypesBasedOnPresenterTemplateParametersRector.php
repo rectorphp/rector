@@ -86,7 +86,7 @@ CODE_SAMPLE
         $actionVarTypes = [];
         foreach ($node->getMethods() as $method) {
             $fullActionName = $method->name->name;
-            if (!(\strncmp($fullActionName, 'action', \strlen('action')) === 0 || \strncmp($fullActionName, 'render', \strlen('render')) === 0)) {
+            if (\strncmp($fullActionName, 'action', \strlen('action')) !== 0 && \strncmp($fullActionName, 'render', \strlen('render')) !== 0) {
                 continue;
             }
             $actionName = \str_replace(['action', 'render'], '', $fullActionName);

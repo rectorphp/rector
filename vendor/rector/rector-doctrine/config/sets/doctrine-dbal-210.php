@@ -8,5 +8,5 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-type-constants
-    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->call('configure', [[\Rector\Renaming\Rector\Name\RenameClassRector::OLD_TO_NEW_CLASSES => ['Doctrine\\DBAL\\Types\\Type' => 'Doctrine\\DBAL\\Types\\Types']]]);
+    $services->set(\Rector\Renaming\Rector\Name\RenameClassRector::class)->configure(['Doctrine\\DBAL\\Types\\Type' => 'Doctrine\\DBAL\\Types\\Types']);
 };

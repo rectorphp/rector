@@ -5,6 +5,7 @@ namespace Rector\Nette\FormControlTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\AstResolver;
@@ -65,7 +66,7 @@ final class VariableConstructorFormControlTypeResolver implements \Rector\Nette\
             return [];
         }
         $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), \Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if ($classMethod === null) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($classMethod);

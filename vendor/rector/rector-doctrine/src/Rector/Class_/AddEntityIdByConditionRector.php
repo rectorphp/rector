@@ -104,7 +104,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $detectTraits = $configuration[self::DETECTED_TRAITS] ?? [];
+        $detectTraits = $configuration[self::DETECTED_TRAITS] ?? $configuration;
         \RectorPrefix20211207\Webmozart\Assert\Assert::isArray($detectTraits);
         \RectorPrefix20211207\Webmozart\Assert\Assert::allString($detectTraits);
         $this->detectedTraits = $detectTraits;

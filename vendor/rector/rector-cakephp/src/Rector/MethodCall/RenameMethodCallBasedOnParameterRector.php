@@ -65,11 +65,12 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, RenameMethodCallBasedOnParameter[]> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $callsWithParamRenames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? [];
+        $callsWithParamRenames = $configuration[self::CALLS_WITH_PARAM_RENAMES] ?? $configuration;
+        \RectorPrefix20211207\Webmozart\Assert\Assert::isArray($callsWithParamRenames);
         \RectorPrefix20211207\Webmozart\Assert\Assert::allIsInstanceOf($callsWithParamRenames, \Rector\CakePHP\ValueObject\RenameMethodCallBasedOnParameter::class);
         $this->callsWithParamRenames = $callsWithParamRenames;
     }

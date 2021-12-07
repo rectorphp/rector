@@ -61,7 +61,7 @@ final class ThisVariableInAnotherMethodFormControlTypeResolver implements \Recto
             return [];
         }
         $constructorClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if ($constructorClassMethod === null) {
+        if (!$constructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];
         }
         return $this->methodNamesByInputNamesResolver->resolveExpr($constructorClassMethod);

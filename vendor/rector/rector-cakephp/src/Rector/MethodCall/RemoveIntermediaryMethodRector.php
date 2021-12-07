@@ -69,12 +69,15 @@ CODE_SAMPLE
         $target = $var->var;
         return new \PhpParser\Node\Expr\MethodCall($target, $replacement->getFinalMethod(), $node->args);
     }
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration) : void
     {
-        /** @var RemoveIntermediaryMethod[] $replacements */
-        $replacements = $configuration[self::REMOVE_INTERMEDIARY_METHOD] ?? [];
-        \RectorPrefix20211207\Webmozart\Assert\Assert::allIsInstanceOf($replacements, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
-        $this->removeIntermediaryMethod = $replacements;
+        $removeIntermediaryMethods = $configuration[self::REMOVE_INTERMEDIARY_METHOD] ?? $configuration;
+        \RectorPrefix20211207\Webmozart\Assert\Assert::isArray($removeIntermediaryMethods);
+        \RectorPrefix20211207\Webmozart\Assert\Assert::allIsAOf($removeIntermediaryMethods, \Rector\CakePHP\ValueObject\RemoveIntermediaryMethod::class);
+        $this->removeIntermediaryMethod = $removeIntermediaryMethods;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\RemoveIntermediaryMethod
     {

@@ -72,12 +72,13 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param array<string, ModalToGetSet[]>  $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? [];
-        \RectorPrefix20211207\Webmozart\Assert\Assert::allIsInstanceOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
+        $unprefixedMethodsToGetSet = $configuration[self::UNPREFIXED_METHODS_TO_GET_SET] ?? $configuration;
+        \RectorPrefix20211207\Webmozart\Assert\Assert::isArray($unprefixedMethodsToGetSet);
+        \RectorPrefix20211207\Webmozart\Assert\Assert::allIsAOf($unprefixedMethodsToGetSet, \Rector\CakePHP\ValueObject\ModalToGetSet::class);
         $this->unprefixedMethodsToGetSet = $unprefixedMethodsToGetSet;
     }
     private function matchTypeAndMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\Rector\CakePHP\ValueObject\ModalToGetSet

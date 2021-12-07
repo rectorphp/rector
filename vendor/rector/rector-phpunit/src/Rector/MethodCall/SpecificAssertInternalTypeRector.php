@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Php\TypeAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,18 +22,13 @@ final class SpecificAssertInternalTypeRector extends \Rector\Core\Rector\Abstrac
     /**
      * @var array<string, string[]>
      */
-    private const TYPE_TO_METHOD = ['array' => ['assertIsArray', 'assertIsNotArray'], 'bool' => ['assertIsBool', 'assertIsNotBool'], 'float' => ['assertIsFloat', 'assertIsNotFloat'], 'int' => ['assertIsInt', 'assertIsNotInt'], 'numeric' => ['assertIsNumeric', 'assertIsNotNumeric'], 'object' => ['assertIsObject', 'assertIsNotObject'], 'resource' => ['assertIsResource', 'assertIsNotResource'], 'string' => ['assertIsString', 'assertIsNotString'], 'scalar' => ['assertIsScalar', 'assertIsNotScalar'], 'callable' => ['assertIsCallable', 'assertIsNotCallable'], 'iterable' => ['assertIsIterable', 'assertIsNotIterable'], 'null' => ['assertNull', 'assertNotNull']];
-    /**
-     * @var \Rector\Core\Php\TypeAnalyzer
-     */
-    private $typeAnalyzer;
+    private const TYPE_TO_METHOD = ['array' => ['assertIsArray', 'assertIsNotArray'], 'bool' => ['assertIsBool', 'assertIsNotBool'], 'boolean' => ['assertIsBool', 'assertIsNotBool'], 'float' => ['assertIsFloat', 'assertIsNotFloat'], 'int' => ['assertIsInt', 'assertIsNotInt'], 'integer' => ['assertIsInt', 'assertIsNotInt'], 'numeric' => ['assertIsNumeric', 'assertIsNotNumeric'], 'object' => ['assertIsObject', 'assertIsNotObject'], 'resource' => ['assertIsResource', 'assertIsNotResource'], 'string' => ['assertIsString', 'assertIsNotString'], 'scalar' => ['assertIsScalar', 'assertIsNotScalar'], 'callable' => ['assertIsCallable', 'assertIsNotCallable'], 'iterable' => ['assertIsIterable', 'assertIsNotIterable'], 'null' => ['assertNull', 'assertNotNull']];
     /**
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\Core\Php\TypeAnalyzer $typeAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
-        $this->typeAnalyzer = $typeAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -82,7 +76,7 @@ CODE_SAMPLE
         if (!$typeNode instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
-        $type = $this->typeAnalyzer->normalizeType($typeNode->value);
+        $type = $typeNode->value;
         if (!isset(self::TYPE_TO_METHOD[$type])) {
             return null;
         }

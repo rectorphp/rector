@@ -48,7 +48,7 @@ final class FormFieldsFinder
                     continue;
                 }
                 $methodCall = $this->findMethodCall($stmt);
-                if ($methodCall === null) {
+                if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
                     continue;
                 }
                 $addFieldMethodCall = $this->findAddFieldMethodCall($methodCall);
@@ -97,7 +97,7 @@ final class FormFieldsFinder
     private function isFormAddFieldMethodCall(\PhpParser\Node\Expr\MethodCall $addFieldMethodCall, \PhpParser\Node\Expr\Variable $form) : bool
     {
         $methodCallVariable = $this->findMethodCallVariable($addFieldMethodCall);
-        if ($methodCallVariable === null) {
+        if (!$methodCallVariable instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         if ($methodCallVariable->name !== $form->name) {

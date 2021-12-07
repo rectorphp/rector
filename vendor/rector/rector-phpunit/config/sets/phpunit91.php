@@ -7,11 +7,10 @@ use Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->set(\Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector::class);
-    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->call('configure', [[\Rector\Renaming\Rector\MethodCall\RenameMethodRector::METHOD_CALL_RENAMES => \RectorPrefix20211207\Symplify\SymfonyPhpConfig\ValueObjectInliner::inline([
+    $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([
         // https://github.com/sebastianbergmann/phpunit/issues/4087
         new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertRegExp', 'assertMatchesRegularExpression'),
         // https://github.com/sebastianbergmann/phpunit/issues/4090
@@ -30,5 +29,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsWritable', 'assertIsNotWritable'),
         // https://github.com/sebastianbergmann/phpunit/issues/4063
         new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsReadable', 'assertIsNotReadable'),
-    ])]]);
+    ]);
 };

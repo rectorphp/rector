@@ -87,7 +87,7 @@ CODE_SAMPLE
             $variable = clone $node->var;
             $getCellMethodCall = new \PhpParser\Node\Expr\MethodCall($variable, $conditionalSetValue->getNewGetMethod(), $locationArgs);
             $node->var = $getCellMethodCall;
-            $node->args = $args;
+            $node->args = \array_values($args);
             $node->name = new \PhpParser\Node\Identifier($conditionalSetValue->getNewSetMethod());
             return $node;
         }

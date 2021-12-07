@@ -254,7 +254,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(FormDataRector::class)
-        ->call('configure', [[
+->configure([
             FormDataRector::FORM_DATA_CLASS_PARENT => '',
             FormDataRector::FORM_DATA_CLASS_TRAITS => [],
         ]]);
@@ -841,7 +841,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(TemplateTypeBasedOnPresenterTemplateParametersRector::class)
-        ->call('configure', [[
+->configure([
             TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_PARENT => '',
             TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_TRAITS => [],
         ]]);
