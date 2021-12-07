@@ -295,7 +295,7 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "patches\/danielstjules-stringy.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/danielstjules-stringy-src-stringy-php.patch"
                 ]
             },
             "installation-source": "dist",
@@ -584,7 +584,7 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "patches\/helmich-typo3-typoscript-parser.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/helmich-typo3-typoscript-parser-parser-tokenstream-php.patch"
                 ]
             },
             "installation-source": "dist",
@@ -3059,7 +3059,7 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "patches\/symfony-dependency-injection.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/symfony-dependency-injection.patch"
                 ]
             },
             "installation-source": "dist",
