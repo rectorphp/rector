@@ -2219,17 +2219,17 @@
         },
         {
             "name": "rector\/rector-laravel",
-            "version": "0.11.15",
-            "version_normalized": "0.11.15.0",
+            "version": "0.11.16",
+            "version_normalized": "0.11.16.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "a412d388afe51e5d70dcd1c981e47adb517357af"
+                "reference": "4fb11377fafb49f93f8bac246fa1dabddce80e45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/a412d388afe51e5d70dcd1c981e47adb517357af",
-                "reference": "a412d388afe51e5d70dcd1c981e47adb517357af",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/4fb11377fafb49f93f8bac246fa1dabddce80e45",
+                "reference": "4fb11377fafb49f93f8bac246fa1dabddce80e45",
                 "shasum": ""
             },
             "require": {
@@ -2253,7 +2253,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-07T11:52:52+00:00",
+            "time": "2021-12-08T09:06:48+00:00",
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
@@ -2279,7 +2279,7 @@
             "description": "Rector upgrades rules for Laravel Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-laravel\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-laravel\/tree\/0.11.15"
+                "source": "https:\/\/github.com\/rectorphp\/rector-laravel\/tree\/0.11.16"
             },
             "install-path": "..\/rector\/rector-laravel"
         },

@@ -176,8 +176,8 @@ CODE_SAMPLE
     }
     private function createIf(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce, \PhpParser\Node\Expr\Throw_ $throw) : \PhpParser\Node\Stmt\If_
     {
-        $condExpr = $this->createCondExpr($coalesce);
-        return new \PhpParser\Node\Stmt\If_($condExpr, ['stmts' => [new \PhpParser\Node\Stmt\Expression($throw)]]);
+        $booleanNot = new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Isset_([$coalesce->left]));
+        return new \PhpParser\Node\Stmt\If_($booleanNot, ['stmts' => [new \PhpParser\Node\Stmt\Expression($throw)]]);
     }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BooleanNot
