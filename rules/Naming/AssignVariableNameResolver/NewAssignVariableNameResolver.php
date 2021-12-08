@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Rector\Naming\AssignVariableNameResolver;
+
+use PhpParser\Node;
+use PhpParser\Node\Expr\New_;
+use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Naming\Contract\AssignVariableNameResolverInterface;
+use Rector\NodeNameResolver\NodeNameResolver;
+
+/**
+ * @implements AssignVariableNameResolverInterface<New_>
+ */
+final class NewAssignVariableNameResolver implements AssignVariableNameResolverInterface
+{
+    public function __construct(
+        private readonly NodeNameResolver $nodeNameResolver
+    ) {
+    }
+
+    public function match(Node $node): bool
+    {
+        return $node instanceof New_;
+    }
+
+    /**
+     * @param New_ $node
+     */
+    public function resolve(Node $node): string
+    {
+        $className = $this->nodeNameResolver->getName($node->class);
+        if ($className === null) {
+            throw new NotImplementedYetException();
+        }
+
+        return $this->nodeNameResolver->getShortName($className);
+    }
+}

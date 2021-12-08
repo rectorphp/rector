@@ -13,6 +13,7 @@ use Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
 use Rector\FileFormatter\Contract\Formatter\FileFormatterInterface;
 use Rector\FileSystemRector\Parser\FileInfoParser;
+use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -64,6 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         OutputStyleInterface::class,
         FileFormatterInterface::class,
         MethodCallManipulator::class,
+        AssignVariableNameResolverInterface::class,
         // fix later - rector-symfony
         PropertyConstructorInjectionManipulator::class,
         // used in tests
