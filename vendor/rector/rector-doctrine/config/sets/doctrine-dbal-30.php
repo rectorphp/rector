@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211207;
+namespace RectorPrefix20211208;
 
 use PHPStan\Type\VoidType;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;

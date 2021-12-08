@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211207;
+namespace RectorPrefix20211208;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211208\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER, null);
@@ -14,5 +14,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->defaults()->public()->autowire()->autoconfigure();
     $services->load('Rector\\Symfony\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/{Rector,ValueObject}']);
     $services->set(\Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector::class);
-    $services->set(\RectorPrefix20211207\Symplify\SmartFileSystem\SmartFileSystem::class);
+    $services->set(\RectorPrefix20211208\Symplify\SmartFileSystem\SmartFileSystem::class);
 };

@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix20211207\React\Promise;
+namespace RectorPrefix20211208\React\Promise;
 
 /**
  * @deprecated 2.8.0 External usage of FulfilledPromise is deprecated, use `resolve()` instead.
  */
-class FulfilledPromise implements \RectorPrefix20211207\React\Promise\ExtendedPromiseInterface, \RectorPrefix20211207\React\Promise\CancellablePromiseInterface
+class FulfilledPromise implements \RectorPrefix20211208\React\Promise\ExtendedPromiseInterface, \RectorPrefix20211208\React\Promise\CancellablePromiseInterface
 {
     private $value;
     public function __construct($value = null)
     {
-        if ($value instanceof \RectorPrefix20211207\React\Promise\PromiseInterface) {
+        if ($value instanceof \RectorPrefix20211208\React\Promise\PromiseInterface) {
             throw new \InvalidArgumentException('You cannot create React\\Promise\\FulfilledPromise with a promise. Use React\\Promise\\resolve($promiseOrValue) instead.');
         }
         $this->value = $value;
@@ -28,9 +28,9 @@ class FulfilledPromise implements \RectorPrefix20211207\React\Promise\ExtendedPr
         try {
             return resolve($onFulfilled($this->value));
         } catch (\Throwable $exception) {
-            return new \RectorPrefix20211207\React\Promise\RejectedPromise($exception);
+            return new \RectorPrefix20211208\React\Promise\RejectedPromise($exception);
         } catch (\Exception $exception) {
-            return new \RectorPrefix20211207\React\Promise\RejectedPromise($exception);
+            return new \RectorPrefix20211208\React\Promise\RejectedPromise($exception);
         }
     }
     /**
@@ -44,7 +44,7 @@ class FulfilledPromise implements \RectorPrefix20211207\React\Promise\ExtendedPr
             return;
         }
         $result = $onFulfilled($this->value);
-        if ($result instanceof \RectorPrefix20211207\React\Promise\ExtendedPromiseInterface) {
+        if ($result instanceof \RectorPrefix20211208\React\Promise\ExtendedPromiseInterface) {
             $result->done();
         }
     }

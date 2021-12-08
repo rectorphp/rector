@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211207\Symplify\EasyTesting\ValueObject;
+namespace RectorPrefix20211208\Symplify\EasyTesting\ValueObject;
 
 final class Prefix
 {

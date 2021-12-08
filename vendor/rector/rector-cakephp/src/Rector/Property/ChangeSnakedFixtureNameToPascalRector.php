@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20211207\Stringy\Stringy;
+use RectorPrefix20211208\Stringy\Stringy;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -89,7 +89,7 @@ CODE_SAMPLE
         [$prefix, $table] = \explode('.', $string->value);
         $tableParts = \explode('/', $table);
         $pascalCaseTableParts = \array_map(function (string $token) : string {
-            $stringy = new \RectorPrefix20211207\Stringy\Stringy($token);
+            $stringy = new \RectorPrefix20211208\Stringy\Stringy($token);
             return (string) $stringy->upperCamelize();
         }, $tableParts);
         $table = \implode('/', $pascalCaseTableParts);

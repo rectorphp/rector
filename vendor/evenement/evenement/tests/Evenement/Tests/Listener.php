@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211207\Evenement\Tests;
+namespace RectorPrefix20211208\Evenement\Tests;
 
 class Listener
 {

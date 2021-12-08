@@ -3,10 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\Validation\Collector;
 
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
-use RectorPrefix20211207\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211207\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211208\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211208\Symfony\Component\DependencyInjection\Definition;
 /**
  * @see \Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollector\EmptyConfigurableRectorCollectorTest
  */
@@ -17,7 +18,7 @@ final class EmptyConfigurableRectorCollector
      * @var \Symfony\Component\DependencyInjection\ContainerBuilder
      */
     private $containerBuilder;
-    public function __construct(\RectorPrefix20211207\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder)
+    public function __construct(\RectorPrefix20211208\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder)
     {
         $this->containerBuilder = $containerBuilder;
     }
@@ -29,6 +30,9 @@ final class EmptyConfigurableRectorCollector
         $emptyConfigurableRectorClasses = [];
         foreach ($this->containerBuilder->getServiceIds() as $serviceId) {
             if (!\is_a($serviceId, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
+                continue;
+            }
+            if (\is_a($serviceId, \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface::class, \true)) {
                 continue;
             }
             // it seems always loaded
@@ -43,7 +47,7 @@ final class EmptyConfigurableRectorCollector
         }
         return $emptyConfigurableRectorClasses;
     }
-    private function hasConfigureMethodCall(\RectorPrefix20211207\Symfony\Component\DependencyInjection\Definition $definition) : bool
+    private function hasConfigureMethodCall(\RectorPrefix20211208\Symfony\Component\DependencyInjection\Definition $definition) : bool
     {
         foreach ($definition->getMethodCalls() as $methodCall) {
             if ($methodCall[0] === 'configure') {
