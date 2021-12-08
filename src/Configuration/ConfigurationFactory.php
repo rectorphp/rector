@@ -22,7 +22,7 @@ final class ConfigurationFactory
     {
         $fileExtensions = $this->parameterProvider->provideArrayParameter(Option::FILE_EXTENSIONS);
 
-        return new Configuration(isDryRun: true, fileExtensions: $fileExtensions);
+        return new Configuration(true, true, false, ConsoleOutputFormatter::NAME, $fileExtensions);
     }
 
     /**

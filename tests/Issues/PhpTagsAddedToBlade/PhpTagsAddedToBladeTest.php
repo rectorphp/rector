@@ -19,7 +19,7 @@ final class PhpTagsAddedToBladeTest extends AbstractRectorTestCase
         $inputFileInfoContent = $inputFileInfo->getContents();
         $expectedFileInfo = new SmartFileInfo(__DIR__ . '/Fixture/php_tags_added_to_blade.expected.php');
 
-        $configuration = new Configuration(isDryRun: false);
+        $configuration = new Configuration(false);
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);

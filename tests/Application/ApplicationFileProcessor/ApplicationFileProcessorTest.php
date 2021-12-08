@@ -32,7 +32,7 @@ final class ApplicationFileProcessorTest extends AbstractTestCase
         $files = $this->fileFactory->createFromPaths([__DIR__ . '/Fixture'], new Configuration());
         $this->assertCount(2, $files);
 
-        $configuration = new Configuration(isDryRun: true);
+        $configuration = new Configuration(true);
         $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration);
 
         $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
