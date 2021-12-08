@@ -28,7 +28,7 @@ final class ConfigurationFactory
     public function createForTests() : \Rector\Core\ValueObject\Configuration
     {
         $fileExtensions = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
-        return new \Rector\Core\ValueObject\Configuration(\true, \true, \false, 'console', $fileExtensions);
+        return new \Rector\Core\ValueObject\Configuration(\true, \true, \false, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, $fileExtensions);
     }
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.

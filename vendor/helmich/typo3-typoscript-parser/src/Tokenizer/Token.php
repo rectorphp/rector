@@ -45,12 +45,12 @@ class Token implements \RectorPrefix20211208\Helmich\TypoScriptParser\Tokenizer\
         return $this->value;
     }
     /**
-     * @param string $string
+     * @param string $name
      * @return string|null
      */
-    public function getSubMatch($string) : ?string
+    public function getSubMatch($name) : ?string
     {
-        return isset($this->patternMatches[$string]) ? $this->patternMatches[$string] : null;
+        return isset($this->patternMatches[$name]) ? $this->patternMatches[$name] : null;
     }
     /**
      * @return int

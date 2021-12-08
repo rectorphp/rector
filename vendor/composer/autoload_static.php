@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0
+class ComposerStaticInitc5b8c9c6c6a1fbbb73470088e634a38b
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -19,7 +19,6 @@ class ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0
         'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
-        '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
@@ -77,7 +76,6 @@ class ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0
             'RectorPrefix20211208\\Symfony\\Component\\DependencyInjection\\' => 59,
             'RectorPrefix20211208\\Symfony\\Component\\Console\\' => 47,
             'RectorPrefix20211208\\Symfony\\Component\\Config\\' => 46,
-            'RectorPrefix20211208\\Stringy\\' => 29,
             'RectorPrefix20211208\\React\\Stream\\' => 34,
             'RectorPrefix20211208\\React\\Socket\\' => 34,
             'RectorPrefix20211208\\React\\Promise\\Timer\\' => 41,
@@ -296,10 +294,6 @@ class ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0
         'RectorPrefix20211208\\Symfony\\Component\\Config\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/config',
-        ),
-        'RectorPrefix20211208\\Stringy\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/danielstjules/stringy/src',
         ),
         'RectorPrefix20211208\\React\\Stream\\' => 
         array (
@@ -1063,8 +1057,6 @@ class ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0
         'RectorPrefix20211208\\SebastianBergmann\\Diff\\Output\\UnifiedDiffOutputBuilder' => __DIR__ . '/..' . '/sebastian/diff/src/Output/UnifiedDiffOutputBuilder.php',
         'RectorPrefix20211208\\SebastianBergmann\\Diff\\Parser' => __DIR__ . '/..' . '/sebastian/diff/src/Parser.php',
         'RectorPrefix20211208\\SebastianBergmann\\Diff\\TimeEfficientLongestCommonSubsequenceCalculator' => __DIR__ . '/..' . '/sebastian/diff/src/TimeEfficientLongestCommonSubsequenceCalculator.php',
-        'RectorPrefix20211208\\Stringy\\StaticStringy' => __DIR__ . '/..' . '/danielstjules/stringy/src/StaticStringy.php',
-        'RectorPrefix20211208\\Stringy\\Stringy' => __DIR__ . '/..' . '/danielstjules/stringy/src/Stringy.php',
         'RectorPrefix20211208\\Symfony\\Component\\Config\\Builder\\ClassBuilder' => __DIR__ . '/..' . '/symfony/config/Builder/ClassBuilder.php',
         'RectorPrefix20211208\\Symfony\\Component\\Config\\Builder\\ConfigBuilderGenerator' => __DIR__ . '/..' . '/symfony/config/Builder/ConfigBuilderGenerator.php',
         'RectorPrefix20211208\\Symfony\\Component\\Config\\Builder\\ConfigBuilderGeneratorInterface' => __DIR__ . '/..' . '/symfony/config/Builder/ConfigBuilderGeneratorInterface.php',
@@ -3803,9 +3795,9 @@ class ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4f2c41a239e57dc9590846eaeec156b0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc5b8c9c6c6a1fbbb73470088e634a38b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc5b8c9c6c6a1fbbb73470088e634a38b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc5b8c9c6c6a1fbbb73470088e634a38b::$classMap;
 
         }, null, ClassLoader::class);
     }

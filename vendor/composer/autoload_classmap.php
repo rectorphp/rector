@@ -661,8 +661,6 @@ return array(
     'RectorPrefix20211208\\SebastianBergmann\\Diff\\Output\\UnifiedDiffOutputBuilder' => $vendorDir . '/sebastian/diff/src/Output/UnifiedDiffOutputBuilder.php',
     'RectorPrefix20211208\\SebastianBergmann\\Diff\\Parser' => $vendorDir . '/sebastian/diff/src/Parser.php',
     'RectorPrefix20211208\\SebastianBergmann\\Diff\\TimeEfficientLongestCommonSubsequenceCalculator' => $vendorDir . '/sebastian/diff/src/TimeEfficientLongestCommonSubsequenceCalculator.php',
-    'RectorPrefix20211208\\Stringy\\StaticStringy' => $vendorDir . '/danielstjules/stringy/src/StaticStringy.php',
-    'RectorPrefix20211208\\Stringy\\Stringy' => $vendorDir . '/danielstjules/stringy/src/Stringy.php',
     'RectorPrefix20211208\\Symfony\\Component\\Config\\Builder\\ClassBuilder' => $vendorDir . '/symfony/config/Builder/ClassBuilder.php',
     'RectorPrefix20211208\\Symfony\\Component\\Config\\Builder\\ConfigBuilderGenerator' => $vendorDir . '/symfony/config/Builder/ConfigBuilderGenerator.php',
     'RectorPrefix20211208\\Symfony\\Component\\Config\\Builder\\ConfigBuilderGeneratorInterface' => $vendorDir . '/symfony/config/Builder/ConfigBuilderGeneratorInterface.php',

@@ -52,7 +52,6 @@ return array(
     'RectorPrefix20211208\\Symfony\\Component\\DependencyInjection\\' => array($vendorDir . '/symfony/dependency-injection'),
     'RectorPrefix20211208\\Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'RectorPrefix20211208\\Symfony\\Component\\Config\\' => array($vendorDir . '/symfony/config'),
-    'RectorPrefix20211208\\Stringy\\' => array($vendorDir . '/danielstjules/stringy/src'),
     'RectorPrefix20211208\\React\\Stream\\' => array($vendorDir . '/react/stream/src'),
     'RectorPrefix20211208\\React\\Socket\\' => array($vendorDir . '/react/socket/src'),
     'RectorPrefix20211208\\React\\Promise\\Timer\\' => array($vendorDir . '/react/promise-timer/src'),
