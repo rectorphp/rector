@@ -34,7 +34,7 @@ final class ThrowPropertyFetch
 
     public function run()
     {
-        if ($this->progressBar === null) {
+        if (!isset($this->progressBar)) {
             throw new \InvalidArgumentException();
         }
         return $this->progressBar;

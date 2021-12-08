@@ -199,9 +199,9 @@ CODE_SAMPLE
 
     private function createIf(Coalesce $coalesce, Throw_ $throw): If_
     {
-        $condExpr = $this->createCondExpr($coalesce);
+        $booleanNot = new BooleanNot(new Isset_([$coalesce->left]));
 
-        return new If_($condExpr, [
+        return new If_($booleanNot, [
             'stmts' => [new Expression($throw)],
         ]);
     }
