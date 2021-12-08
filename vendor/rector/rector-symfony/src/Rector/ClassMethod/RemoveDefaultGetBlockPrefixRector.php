@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20211208\Stringy\Stringy;
+use RectorPrefix20211208\Symfony\Component\String\UnicodeString;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -77,8 +77,8 @@ CODE_SAMPLE
         if (\substr_compare($shortClassName, 'Type', -\strlen('Type')) === 0) {
             $shortClassName = (string) \RectorPrefix20211208\Nette\Utils\Strings::before($shortClassName, 'Type');
         }
-        $stringy = new \RectorPrefix20211208\Stringy\Stringy($shortClassName);
-        $underscoredClassShortName = (string) $stringy->underscored();
+        $shortClassNameUnicodeString = new \RectorPrefix20211208\Symfony\Component\String\UnicodeString($shortClassName);
+        $underscoredClassShortName = $shortClassNameUnicodeString->snake()->toString();
         if ($underscoredClassShortName !== $returnedValue) {
             return null;
         }

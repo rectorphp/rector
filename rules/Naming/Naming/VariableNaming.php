@@ -7,7 +7,6 @@ use RectorPrefix20211208\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -17,16 +16,14 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20211208\Stringy\Stringy;
+use RectorPrefix20211208\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
     /**
@@ -36,33 +33,13 @@ final class VariableNaming
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
-     */
-    private $valueResolver;
-    /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->valueResolver = $valueResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-    }
-    public function resolveFromNodeAndType(\PhpParser\Node $node, \PHPStan\Type\Type $type) : ?string
-    {
-        $variableName = $this->resolveBareFromNode($node);
-        if ($variableName === null) {
-            return null;
-        }
-        // adjust static to specific class
-        if ($variableName === 'this' && $type instanceof \PHPStan\Type\ThisType) {
-            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
-            $variableName = \lcfirst($shortClassName);
-        }
-        $stringy = new \RectorPrefix20211208\Stringy\Stringy($variableName);
-        return (string) $stringy->camelize();
     }
     public function resolveFromNodeWithScopeCountAndFallbackName(\PhpParser\Node\Expr $expr, ?\PHPStan\Analyser\Scope $scope, string $fallbackName) : string
     {
@@ -99,7 +76,23 @@ final class VariableNaming
         $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);
         return $this->createCountedValueName($bareName, $scope);
     }
-    public function resolveFromNode(\PhpParser\Node $node) : ?string
+    public function resolveFromNodeAndType(\PhpParser\Node $node, \PHPStan\Type\Type $type) : ?string
+    {
+        $variableName = $this->resolveBareFromNode($node);
+        if ($variableName === null) {
+            return null;
+        }
+        // adjust static to specific class
+        if ($variableName === 'this' && $type instanceof \PHPStan\Type\ThisType) {
+            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
+            $variableName = \lcfirst($shortClassName);
+        } else {
+            $variableName = $this->nodeNameResolver->getShortName($variableName);
+        }
+        $variableNameUnicodeString = new \RectorPrefix20211208\Symfony\Component\String\UnicodeString($variableName);
+        return $variableNameUnicodeString->camel()->toString();
+    }
+    private function resolveFromNode(\PhpParser\Node $node) : ?string
     {
         $nodeType = $this->nodeTypeResolver->getType($node);
         return $this->resolveFromNodeAndType($node, $nodeType);
@@ -107,9 +100,6 @@ final class VariableNaming
     private function resolveBareFromNode(\PhpParser\Node $node) : ?string
     {
         $node = $this->unwrapNode($node);
-        if ($node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            return $this->resolveParamNameFromArrayDimFetch($node);
-        }
         if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return $this->resolveFromPropertyFetch($node);
         }
@@ -133,20 +123,6 @@ final class VariableNaming
             return $node->value;
         }
         return null;
-    }
-    private function resolveParamNameFromArrayDimFetch(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : ?string
-    {
-        while ($arrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            if ($arrayDimFetch->dim instanceof \PhpParser\Node\Scalar) {
-                $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
-                $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
-                $stringy = new \RectorPrefix20211208\Stringy\Stringy($dimName);
-                $dimName = (string) $stringy->upperCamelize();
-                return $valueName . $dimName;
-            }
-            $arrayDimFetch = $arrayDimFetch->var;
-        }
-        return $this->resolveBareFromNode($arrayDimFetch);
     }
     private function resolveFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : string
     {

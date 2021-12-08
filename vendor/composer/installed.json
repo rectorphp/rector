@@ -293,11 +293,6 @@
             },
             "time": "2017-06-12T01:10:27+00:00",
             "type": "library",
-            "extra": {
-                "patches_applied": [
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/danielstjules-stringy-src-stringy-php.patch"
-                ]
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
@@ -2088,23 +2083,23 @@
         },
         {
             "name": "rector\/rector-cakephp",
-            "version": "0.11.8",
-            "version_normalized": "0.11.8.0",
+            "version": "0.11.9",
+            "version_normalized": "0.11.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "b0d9a6b5256467a3d46310aa1e7b87b5de539f3a"
+                "reference": "584d84bb1a8357423858ab2347249e50b1ff4803"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/b0d9a6b5256467a3d46310aa1e7b87b5de539f3a",
-                "reference": "b0d9a6b5256467a3d46310aa1e7b87b5de539f3a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/584d84bb1a8357423858ab2347249e50b1ff4803",
+                "reference": "584d84bb1a8357423858ab2347249e50b1ff4803",
                 "shasum": ""
             },
             "require": {
-                "danielstjules\/stringy": "^3.1",
                 "ext-xml": "*",
-                "php": ">=8.1"
+                "php": ">=8.1",
+                "symfony\/string": "^6.0"
             },
             "conflict": {
                 "rector\/rector": "<0.11"
@@ -2124,7 +2119,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-07T12:05:57+00:00",
+            "time": "2021-12-08T07:38:23+00:00",
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
@@ -2150,7 +2145,7 @@
             "description": "Rector upgrades rules for CakePHP",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-cakephp\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/0.11.8"
+                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/0.11.9"
             },
             "install-path": "..\/rector\/rector-cakephp"
         },
@@ -2290,25 +2285,25 @@
         },
         {
             "name": "rector\/rector-nette",
-            "version": "0.11.56",
-            "version_normalized": "0.11.56.0",
+            "version": "0.11.57",
+            "version_normalized": "0.11.57.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "3984915c40c1210d252286271dd95215428c4824"
+                "reference": "1e3b3ab4e1248623b020ce9c8e744ad89e942e74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/3984915c40c1210d252286271dd95215428c4824",
-                "reference": "3984915c40c1210d252286271dd95215428c4824",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/1e3b3ab4e1248623b020ce9c8e744ad89e942e74",
+                "reference": "1e3b3ab4e1248623b020ce9c8e744ad89e942e74",
                 "shasum": ""
             },
             "require": {
-                "danielstjules\/stringy": "^3.1",
                 "ext-xml": "*",
                 "nette\/neon": "^3.3.2",
                 "php": ">=8.1",
                 "rector\/rector-phpunit": "^0.11.15",
+                "symfony\/string": "^6.0",
                 "symplify\/vendor-patches": "^10.0"
             },
             "conflict": {
@@ -2332,7 +2327,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-07T12:02:25+00:00",
+            "time": "2021-12-08T07:35:30+00:00",
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
@@ -2361,7 +2356,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.56"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.11.57"
             },
             "install-path": "..\/rector\/rector-nette"
         },
@@ -2500,23 +2495,24 @@
         },
         {
             "name": "rector\/rector-symfony",
-            "version": "0.11.47",
-            "version_normalized": "0.11.47.0",
+            "version": "0.11.48",
+            "version_normalized": "0.11.48.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "d4ccfa2f725ed7060bab76ce1e9278c611e700b1"
+                "reference": "5a24edfe3cf6f66766cbf2bc7eddc7340f06a800"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d4ccfa2f725ed7060bab76ce1e9278c611e700b1",
-                "reference": "d4ccfa2f725ed7060bab76ce1e9278c611e700b1",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5a24edfe3cf6f66766cbf2bc7eddc7340f06a800",
+                "reference": "5a24edfe3cf6f66766cbf2bc7eddc7340f06a800",
                 "shasum": ""
             },
             "require": {
                 "danielstjules\/stringy": "^3.1",
                 "ext-xml": "*",
-                "php": ">=8.1"
+                "php": ">=8.1",
+                "symfony\/string": "^6.0"
             },
             "conflict": {
                 "rector\/rector": "<0.11"
@@ -2535,9 +2531,10 @@
                 "symplify\/monorepo-builder": "^10.0",
                 "symplify\/phpstan-extensions": "^10.0",
                 "symplify\/phpstan-rules": "^10.0",
-                "symplify\/rule-doc-generator": "^10.0"
+                "symplify\/rule-doc-generator": "^10.0",
+                "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-07T12:04:04+00:00",
+            "time": "2021-12-08T07:34:28+00:00",
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
@@ -2563,7 +2560,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.47"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.48"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

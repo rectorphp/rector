@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfef361833e76868574315519dd140e11
+class ComposerStaticInit194254aa78c7df32b7ab98bf9107287e
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -14,8 +14,8 @@ class ComposerStaticInitfef361833e76868574315519dd140e11
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
@@ -3787,9 +3787,9 @@ class ComposerStaticInitfef361833e76868574315519dd140e11
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfef361833e76868574315519dd140e11::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfef361833e76868574315519dd140e11::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfef361833e76868574315519dd140e11::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit194254aa78c7df32b7ab98bf9107287e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit194254aa78c7df32b7ab98bf9107287e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit194254aa78c7df32b7ab98bf9107287e::$classMap;
 
         }, null, ClassLoader::class);
     }
