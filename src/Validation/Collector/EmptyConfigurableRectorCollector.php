@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Validation\Collector;
 
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -28,6 +29,10 @@ final class EmptyConfigurableRectorCollector
 
         foreach ($this->containerBuilder->getServiceIds() as $serviceId) {
             if (! is_a($serviceId, ConfigurableRectorInterface::class, true)) {
+                continue;
+            }
+
+            if (is_a($serviceId, AllowEmptyConfigurableRectorInterface::class, true)) {
                 continue;
             }
 
