@@ -74,6 +74,7 @@ return array(
     'RectorPrefix20211208\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),
     'RectorPrefix20211208\\Composer\\XdebugHandler\\' => array($vendorDir . '/composer/xdebug-handler/src'),
     'RectorPrefix20211208\\Composer\\Semver\\' => array($vendorDir . '/composer/semver/src'),
+    'RectorPrefix20211208\\Composer\\Pcre\\' => array($vendorDir . '/composer/pcre/src'),
     'RectorPrefix20211208\\Clue\\React\\NDJson\\' => array($vendorDir . '/clue/ndjson-react/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'PHPStan\\PhpDocParser\\' => array($vendorDir . '/phpstan/phpdoc-parser/src'),

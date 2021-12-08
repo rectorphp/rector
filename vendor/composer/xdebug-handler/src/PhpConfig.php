@@ -12,13 +12,15 @@ namespace RectorPrefix20211208\Composer\XdebugHandler;
 
 /**
  * @author John Stevenson <john-stevenson@blueyonder.co.uk>
+ *
+ * @phpstan-type restartData array{tmpIni: string, scannedInis: bool, scanDir: false|string, phprc: false|string, inis: string[], skipped: string}
  */
 class PhpConfig
 {
     /**
      * Use the original PHP configuration
      *
-     * @return array PHP cli options
+     * @return string[] Empty array of PHP cli options
      */
     public function useOriginal()
     {
@@ -28,11 +30,12 @@ class PhpConfig
     /**
      * Use standard restart settings
      *
-     * @return array PHP cli options
+     * @return string[] PHP cli options
      */
     public function useStandard()
     {
-        if ($data = $this->getDataAndReset()) {
+        $data = $this->getDataAndReset();
+        if ($data !== null) {
             return array('-n', '-c', $data['tmpIni']);
         }
         return array();
@@ -40,11 +43,12 @@ class PhpConfig
     /**
      * Use environment variables to persist settings
      *
-     * @return array PHP cli options
+     * @return string[] Empty array of PHP cli options
      */
     public function usePersistent()
     {
-        if ($data = $this->getDataAndReset()) {
+        $data = $this->getDataAndReset();
+        if ($data !== null) {
             $this->updateEnv('PHPRC', $data['tmpIni']);
             $this->updateEnv('PHP_INI_SCAN_DIR', '');
         }
@@ -54,10 +58,12 @@ class PhpConfig
      * Returns restart data if available and resets the environment
      *
      * @return array|null
+     * @phpstan-return restartData|null
      */
     private function getDataAndReset()
     {
-        if ($data = \RectorPrefix20211208\Composer\XdebugHandler\XdebugHandler::getRestartSettings()) {
+        $data = \RectorPrefix20211208\Composer\XdebugHandler\XdebugHandler::getRestartSettings();
+        if ($data !== null) {
             $this->updateEnv('PHPRC', $data['phprc']);
             $this->updateEnv('PHP_INI_SCAN_DIR', $data['scanDir']);
         }
@@ -68,6 +74,8 @@ class PhpConfig
      *
      * @param string $name
      * @param string|false $value
+     *
+     * @return void
      */
     private function updateEnv($name, $value)
     {

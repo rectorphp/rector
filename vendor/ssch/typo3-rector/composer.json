@@ -10,17 +10,18 @@
         }
     ],
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "helmich\/typo3-typoscript-parser": "^2.3.1",
-        "symfony\/var-exporter": "^5.3"
+        "symfony\/var-exporter": "^5.3",
+        "symfony\/string": "^6.0"
     },
     "require-dev": {
         "phpspec\/prophecy-phpunit": "^2.0",
         "phpstan\/extension-installer": "^1.1",
-        "phpstan\/phpstan": "^1.0",
+        "phpstan\/phpstan": "^1.2",
         "phpunit\/phpunit": "^9.5",
-        "rector\/rector-generator": "^0.4.2",
-        "rector\/phpstan-rules": "^0.4.7",
+        "rector\/rector-generator": "^0.4.4",
+        "rector\/phpstan-rules": "^0.4.15",
         "rector\/rector-src": "dev-main",
         "symfony\/console": "^5.3",
         "symplify\/coding-standard": "^10.0",
@@ -28,7 +29,8 @@
         "symplify\/phpstan-extensions": "^10.0",
         "symplify\/phpstan-rules": "^10.0",
         "symplify\/rule-doc-generator": "^10.0",
-        "tracy\/tracy": "^2.8"
+        "tracy\/tracy": "^2.8",
+        "symplify\/vendor-patches": "^10.0"
     },
     "autoload": {
         "psr-4": {
@@ -76,6 +78,7 @@
         "update-composer-packages": "@php vendor\/bin\/rector add-composer-typo3-extensions-to-config"
     },
     "extra": {
+        "enable-patching": true,
         "rector": {
             "includes": [
                 "config\/config.php"

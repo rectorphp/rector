@@ -1,0 +1,46 @@
+{
+    "name": "composer\/pcre",
+    "description": "PCRE wrapping library that offers type-safe preg_* replacements.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "pcre",
+        "regex",
+        "preg",
+        "regular expression"
+    ],
+    "authors": [
+        {
+            "name": "Jordi Boggiano",
+            "email": "j.boggiano@seld.be",
+            "homepage": "http:\/\/seld.be"
+        }
+    ],
+    "require": {
+        "php": "^5.3.2 || ^7.0 || ^8.0"
+    },
+    "require-dev": {
+        "symfony\/phpunit-bridge": "^4.2 || ^5",
+        "phpstan\/phpstan": "^1",
+        "phpstan\/phpstan-strict-rules": "^1.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "RectorPrefix20211208\\Composer\\Pcre\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "RectorPrefix20211208\\Composer\\Pcre\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        }
+    },
+    "scripts": {
+        "test": "SYMFONY_PHPUNIT_REMOVE_RETURN_TYPEHINT=1 vendor\/bin\/simple-phpunit",
+        "phpstan": "phpstan analyse"
+    }
+}

@@ -19,11 +19,13 @@
     },
     "require": {
         "php": "^5.3.2 || ^7.0 || ^8.0",
-        "psr\/log": "^1 || ^2 || ^3"
+        "psr\/log": "^1 || ^2 || ^3",
+        "composer\/pcre": "^1"
     },
     "require-dev": {
-        "symfony\/phpunit-bridge": "^4.2 || ^5",
-        "phpstan\/phpstan": "^0.12.55"
+        "symfony\/phpunit-bridge": "^4.2 || ^5.0 || ^6.0",
+        "phpstan\/phpstan": "^1.0",
+        "phpstan\/phpstan-strict-rules": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -32,7 +34,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211208\\Composer\\XdebugHandler\\": "tests"
+            "RectorPrefix20211208\\Composer\\XdebugHandler\\Tests\\": "tests"
         }
     },
     "scripts": {

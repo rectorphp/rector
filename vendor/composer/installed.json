@@ -68,6 +68,80 @@
             "install-path": "..\/clue\/ndjson-react"
         },
         {
+            "name": "composer\/pcre",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/composer\/pcre.git",
+                "reference": "3d322d715c43a1ac36c7fe215fa59336265500f2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/3d322d715c43a1ac36c7fe215fa59336265500f2",
+                "reference": "3d322d715c43a1ac36c7fe215fa59336265500f2",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.2 || ^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpstan\/phpstan": "^1",
+                "phpstan\/phpstan-strict-rules": "^1.1",
+                "symfony\/phpunit-bridge": "^4.2 || ^5"
+            },
+            "time": "2021-12-06T15:17:27+00:00",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix20211208\\Composer\\Pcre\\": "src"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jordi Boggiano",
+                    "email": "j.boggiano@seld.be",
+                    "homepage": "http:\/\/seld.be"
+                }
+            ],
+            "description": "PCRE wrapping library that offers type-safe preg_* replacements.",
+            "keywords": [
+                "PCRE",
+                "preg",
+                "regex",
+                "regular expression"
+            ],
+            "support": {
+                "issues": "https:\/\/github.com\/composer\/pcre\/issues",
+                "source": "https:\/\/github.com\/composer\/pcre\/tree\/1.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/composer",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/composer\/composer",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": ".\/pcre"
+        },
+        {
             "name": "composer\/semver",
             "version": "3.2.6",
             "version_normalized": "3.2.6.0",
@@ -153,28 +227,30 @@
         },
         {
             "name": "composer\/xdebug-handler",
-            "version": "2.0.2",
-            "version_normalized": "2.0.2.0",
+            "version": "2.0.3",
+            "version_normalized": "2.0.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/xdebug-handler.git",
-                "reference": "84674dd3a7575ba617f5a76d7e9e29a7d3891339"
+                "reference": "6555461e76962fd0379c444c46fd558a0fcfb65e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/xdebug-handler\/zipball\/84674dd3a7575ba617f5a76d7e9e29a7d3891339",
-                "reference": "84674dd3a7575ba617f5a76d7e9e29a7d3891339",
+                "url": "https:\/\/api.github.com\/repos\/composer\/xdebug-handler\/zipball\/6555461e76962fd0379c444c46fd558a0fcfb65e",
+                "reference": "6555461e76962fd0379c444c46fd558a0fcfb65e",
                 "shasum": ""
             },
             "require": {
+                "composer\/pcre": "^1",
                 "php": "^5.3.2 || ^7.0 || ^8.0",
                 "psr\/log": "^1 || ^2 || ^3"
             },
             "require-dev": {
-                "phpstan\/phpstan": "^0.12.55",
-                "symfony\/phpunit-bridge": "^4.2 || ^5"
+                "phpstan\/phpstan": "^1.0",
+                "phpstan\/phpstan-strict-rules": "^1.1",
+                "symfony\/phpunit-bridge": "^4.2 || ^5.0 || ^6.0"
             },
-            "time": "2021-07-31T17:03:58+00:00",
+            "time": "2021-12-08T13:07:32+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -200,7 +276,7 @@
             "support": {
                 "irc": "irc:\/\/irc.freenode.org\/composer",
                 "issues": "https:\/\/github.com\/composer\/xdebug-handler\/issues",
-                "source": "https:\/\/github.com\/composer\/xdebug-handler\/tree\/2.0.2"
+                "source": "https:\/\/github.com\/composer\/xdebug-handler\/tree\/2.0.3"
             },
             "funding": [
                 {
@@ -2495,21 +2571,20 @@
         },
         {
             "name": "rector\/rector-symfony",
-            "version": "0.11.48",
-            "version_normalized": "0.11.48.0",
+            "version": "0.11.49",
+            "version_normalized": "0.11.49.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "5a24edfe3cf6f66766cbf2bc7eddc7340f06a800"
+                "reference": "e76ac4f58191b6419ec2e439ad6ed96a1d0aec95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5a24edfe3cf6f66766cbf2bc7eddc7340f06a800",
-                "reference": "5a24edfe3cf6f66766cbf2bc7eddc7340f06a800",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/e76ac4f58191b6419ec2e439ad6ed96a1d0aec95",
+                "reference": "e76ac4f58191b6419ec2e439ad6ed96a1d0aec95",
                 "shasum": ""
             },
             "require": {
-                "danielstjules\/stringy": "^3.1",
                 "ext-xml": "*",
                 "php": ">=8.1",
                 "symfony\/string": "^6.0"
@@ -2534,7 +2609,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-08T07:34:28+00:00",
+            "time": "2021-12-08T12:40:56+00:00",
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
@@ -2560,7 +2635,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.48"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.11.49"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
@@ -2635,22 +2710,23 @@
         },
         {
             "name": "ssch\/typo3-rector",
-            "version": "v0.11.31",
-            "version_normalized": "0.11.31.0",
+            "version": "v0.11.32",
+            "version_normalized": "0.11.32.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "ce3e55ebce3e70efb5d984d4f5951e2263440856"
+                "reference": "83e4eb922f3d6fb733e8893d1f870ec2731adcfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/ce3e55ebce3e70efb5d984d4f5951e2263440856",
-                "reference": "ce3e55ebce3e70efb5d984d4f5951e2263440856",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/83e4eb922f3d6fb733e8893d1f870ec2731adcfb",
+                "reference": "83e4eb922f3d6fb733e8893d1f870ec2731adcfb",
                 "shasum": ""
             },
             "require": {
                 "helmich\/typo3-typoscript-parser": "^2.3.1",
-                "php": ">=8.0",
+                "php": ">=8.1",
+                "symfony\/string": "^6.0",
                 "symfony\/var-exporter": "^5.3"
             },
             "conflict": {
@@ -2659,10 +2735,10 @@
             "require-dev": {
                 "phpspec\/prophecy-phpunit": "^2.0",
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.0",
+                "phpstan\/phpstan": "^1.2",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.4.7",
-                "rector\/rector-generator": "^0.4.2",
+                "rector\/phpstan-rules": "^0.4.15",
+                "rector\/rector-generator": "^0.4.4",
                 "rector\/rector-src": "dev-main",
                 "symfony\/console": "^5.3",
                 "symplify\/coding-standard": "^10.0",
@@ -2670,11 +2746,13 @@
                 "symplify\/phpstan-extensions": "^10.0",
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/rule-doc-generator": "^10.0",
+                "symplify\/vendor-patches": "^10.0",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2021-11-16T09:00:37+00:00",
+            "time": "2021-12-08T12:56:39+00:00",
             "type": "rector-extension",
             "extra": {
+                "enable-patching": true,
                 "rector": {
                     "includes": [
                         "config\/config.php"
@@ -2704,7 +2782,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.31"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.32"
             },
             "funding": [
                 {

@@ -4,12 +4,12 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965
+class ComposerStaticInitcc88079b4471f6b1f0d0e6807c331b13
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '23c18046f52bef3eea034657bafda50f' => __DIR__ . '/..' . '/symfony/polyfill-php81/bootstrap.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
@@ -99,6 +99,7 @@ class ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965
             'RectorPrefix20211208\\Doctrine\\Inflector\\' => 40,
             'RectorPrefix20211208\\Composer\\XdebugHandler\\' => 44,
             'RectorPrefix20211208\\Composer\\Semver\\' => 37,
+            'RectorPrefix20211208\\Composer\\Pcre\\' => 35,
             'RectorPrefix20211208\\Clue\\React\\NDJson\\' => 39,
         ),
         'P' => 
@@ -383,6 +384,10 @@ class ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965
         'RectorPrefix20211208\\Composer\\Semver\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/semver/src',
+        ),
+        'RectorPrefix20211208\\Composer\\Pcre\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/composer/pcre/src',
         ),
         'RectorPrefix20211208\\Clue\\React\\NDJson\\' => 
         array (
@@ -724,6 +729,14 @@ class ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965
         'PhpParser\\PrettyPrinter\\Standard' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/PrettyPrinter/Standard.php',
         'RectorPrefix20211208\\Clue\\React\\NDJson\\Decoder' => __DIR__ . '/..' . '/clue/ndjson-react/src/Decoder.php',
         'RectorPrefix20211208\\Clue\\React\\NDJson\\Encoder' => __DIR__ . '/..' . '/clue/ndjson-react/src/Encoder.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\MatchAllResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllResult.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\MatchAllWithOffsetsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllWithOffsetsResult.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\MatchResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchResult.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\MatchWithOffsetsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchWithOffsetsResult.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\PcreException' => __DIR__ . '/..' . '/composer/pcre/src/PcreException.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\Preg' => __DIR__ . '/..' . '/composer/pcre/src/Preg.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\Regex' => __DIR__ . '/..' . '/composer/pcre/src/Regex.php',
+        'RectorPrefix20211208\\Composer\\Pcre\\ReplaceResult' => __DIR__ . '/..' . '/composer/pcre/src/ReplaceResult.php',
         'RectorPrefix20211208\\Composer\\Semver\\Comparator' => __DIR__ . '/..' . '/composer/semver/src/Comparator.php',
         'RectorPrefix20211208\\Composer\\Semver\\CompilingMatcher' => __DIR__ . '/..' . '/composer/semver/src/CompilingMatcher.php',
         'RectorPrefix20211208\\Composer\\Semver\\Constraint\\Bound' => __DIR__ . '/..' . '/composer/semver/src/Constraint/Bound.php',
@@ -2504,6 +2517,9 @@ class ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlQueryMysqlErrorWithLinkRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php',
+        'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
+        'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',
+        'Rector\\Naming\\Contract\\AssignVariableNameResolverInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/AssignVariableNameResolverInterface.php',
         'Rector\\Naming\\Contract\\Guard\\ConflictingNameGuardInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/Guard/ConflictingNameGuardInterface.php',
         'Rector\\Naming\\Contract\\RenameParamValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameParamValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenamePropertyValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenamePropertyValueObjectInterface.php',
@@ -3787,9 +3803,9 @@ class ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit91ed481a3cfa0f01b87aed7ab257e965::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcc88079b4471f6b1f0d0e6807c331b13::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcc88079b4471f6b1f0d0e6807c331b13::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcc88079b4471f6b1f0d0e6807c331b13::$classMap;
 
         }, null, ClassLoader::class);
     }

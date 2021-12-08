@@ -66,9 +66,13 @@ $instance = GeneralUtility::makeInstance(ExtractorRegistry::class);
 CODE_SAMPLE
 , self::EXAMPLE_CONFIGURATION)]);
     }
+    /**
+     * @param mixed[] $configuration
+     */
     public function configure(array $configuration) : void
     {
-        $classes = $configuration[self::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE] ?? [];
+        $classes = $configuration[self::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE] ?? $configuration;
+        \RectorPrefix20211208\Webmozart\Assert\Assert::isArray($classes);
         \RectorPrefix20211208\Webmozart\Assert\Assert::allString($classes);
         $this->classes = $classes;
     }

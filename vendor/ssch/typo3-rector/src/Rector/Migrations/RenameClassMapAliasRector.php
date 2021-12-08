@@ -107,11 +107,11 @@ CODE_SAMPLE
         return $this->classRenamer->renameNode($node, $this->oldToNewClasses);
     }
     /**
-     * @param array<string, array<string, string>> $configuration
+     * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        $classAliasMaps = $configuration[self::CLASS_ALIAS_MAPS] ?? [];
+        $classAliasMaps = $configuration[self::CLASS_ALIAS_MAPS] ?? $configuration;
         foreach ($classAliasMaps as $file) {
             $filePath = new \Symplify\SmartFileSystem\SmartFileInfo($file);
             $classAliasMap = (require $filePath->getRealPath());

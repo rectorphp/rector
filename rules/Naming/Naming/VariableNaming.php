@@ -10,9 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
@@ -21,6 +19,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211208\Symfony\Component\String\UnicodeString;
@@ -36,10 +35,19 @@ final class VariableNaming
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @var \Rector\Naming\Contract\AssignVariableNameResolverInterface[]
+     * @readonly
+     */
+    private $assignVariableNameResolvers;
+    /**
+     * @param AssignVariableNameResolverInterface[] $assignVariableNameResolvers
+     */
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, array $assignVariableNameResolvers)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->assignVariableNameResolvers = $assignVariableNameResolvers;
     }
     public function resolveFromNodeWithScopeCountAndFallbackName(\PhpParser\Node\Expr $expr, ?\PHPStan\Analyser\Scope $scope, string $fallbackName) : string
     {
@@ -100,14 +108,13 @@ final class VariableNaming
     private function resolveBareFromNode(\PhpParser\Node $node) : ?string
     {
         $node = $this->unwrapNode($node);
-        if ($node instanceof \PhpParser\Node\Expr\PropertyFetch) {
-            return $this->resolveFromPropertyFetch($node);
+        foreach ($this->assignVariableNameResolvers as $assignVariableNameResolver) {
+            if ($assignVariableNameResolver->match($node)) {
+                return $assignVariableNameResolver->resolve($node);
+            }
         }
         if ($node !== null && ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall)) {
             return $this->resolveFromMethodCall($node);
-        }
-        if ($node instanceof \PhpParser\Node\Expr\New_) {
-            return $this->resolveFromNew($node);
         }
         if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->resolveFromNode($node->name);
@@ -124,21 +131,6 @@ final class VariableNaming
         }
         return null;
     }
-    private function resolveFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : string
-    {
-        $varName = $this->nodeNameResolver->getName($propertyFetch->var);
-        if (!\is_string($varName)) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
-        }
-        $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
-        if (!\is_string($propertyName)) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
-        }
-        if ($varName === 'this') {
-            return $propertyName;
-        }
-        return $varName . \ucfirst($propertyName);
-    }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
@@ -152,14 +144,6 @@ final class VariableNaming
             return null;
         }
         return $methodName;
-    }
-    private function resolveFromNew(\PhpParser\Node\Expr\New_ $new) : string
-    {
-        $className = $this->nodeNameResolver->getName($new->class);
-        if ($className === null) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
-        }
-        return $this->nodeNameResolver->getShortName($className);
     }
     private function unwrapNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {

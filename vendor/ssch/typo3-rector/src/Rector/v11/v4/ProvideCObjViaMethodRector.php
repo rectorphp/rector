@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use RectorPrefix20211208\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use RectorPrefix20211208\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,6 +27,14 @@ final class ProvideCObjViaMethodRector extends \Rector\Core\Rector\AbstractRecto
      * @var string
      */
     private const COBJ = 'cObj';
+    /**
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    {
+        $this->visibilityManipulator = $visibilityManipulator;
+    }
     /**
      * @return array<class-string<Node>>
      */
