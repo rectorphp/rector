@@ -8,7 +8,6 @@ use Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -18,41 +17,21 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
-use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Stringy\Stringy;
+use Symfony\Component\String\UnicodeString;
 
 final class VariableNaming
 {
     public function __construct(
         private readonly NodeNameResolver $nodeNameResolver,
-        private readonly ValueResolver $valueResolver,
         private readonly NodeTypeResolver $nodeTypeResolver,
     ) {
-    }
-
-    public function resolveFromNodeAndType(Node $node, Type $type): ?string
-    {
-        $variableName = $this->resolveBareFromNode($node);
-        if ($variableName === null) {
-            return null;
-        }
-
-        // adjust static to specific class
-        if ($variableName === 'this' && $type instanceof ThisType) {
-            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
-            $variableName = lcfirst($shortClassName);
-        }
-
-        $stringy = new Stringy($variableName);
-        return (string) $stringy->camelize();
     }
 
     public function resolveFromNodeWithScopeCountAndFallbackName(
@@ -105,7 +84,27 @@ final class VariableNaming
         return $this->createCountedValueName($bareName, $scope);
     }
 
-    public function resolveFromNode(Node $node): ?string
+    public function resolveFromNodeAndType(Node $node, Type $type): ?string
+    {
+        $variableName = $this->resolveBareFromNode($node);
+        if ($variableName === null) {
+            return null;
+        }
+
+        // adjust static to specific class
+        if ($variableName === 'this' && $type instanceof ThisType) {
+            $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
+            $variableName = lcfirst($shortClassName);
+        } else {
+            $variableName = $this->nodeNameResolver->getShortName($variableName);
+        }
+
+        $variableNameUnicodeString = new UnicodeString($variableName);
+        return $variableNameUnicodeString->camel()
+            ->toString();
+    }
+
+    private function resolveFromNode(Node $node): ?string
     {
         $nodeType = $this->nodeTypeResolver->getType($node);
         return $this->resolveFromNodeAndType($node, $nodeType);
@@ -114,10 +113,6 @@ final class VariableNaming
     private function resolveBareFromNode(Node $node): ?string
     {
         $node = $this->unwrapNode($node);
-
-        if ($node instanceof ArrayDimFetch) {
-            return $this->resolveParamNameFromArrayDimFetch($node);
-        }
 
         if ($node instanceof PropertyFetch) {
             return $this->resolveFromPropertyFetch($node);
@@ -149,25 +144,6 @@ final class VariableNaming
         }
 
         return null;
-    }
-
-    private function resolveParamNameFromArrayDimFetch(ArrayDimFetch $arrayDimFetch): ?string
-    {
-        while ($arrayDimFetch instanceof ArrayDimFetch) {
-            if ($arrayDimFetch->dim instanceof Scalar) {
-                $valueName = $this->nodeNameResolver->getName($arrayDimFetch->var);
-                $dimName = $this->valueResolver->getValue($arrayDimFetch->dim);
-
-                $stringy = new Stringy($dimName);
-                $dimName = (string) $stringy->upperCamelize();
-
-                return $valueName . $dimName;
-            }
-
-            $arrayDimFetch = $arrayDimFetch->var;
-        }
-
-        return $this->resolveBareFromNode($arrayDimFetch);
     }
 
     private function resolveFromPropertyFetch(PropertyFetch $propertyFetch): string

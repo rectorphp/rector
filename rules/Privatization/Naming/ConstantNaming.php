@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Rector\Privatization\Naming;
 
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Stringy\Stringy;
+use Symfony\Component\String\UnicodeString;
 
 final class ConstantNaming
 {
@@ -15,12 +16,29 @@ final class ConstantNaming
     ) {
     }
 
-    public function createFromProperty(PropertyProperty $propertyProperty): string
+    public function createFromProperty(PropertyProperty|Variable $propertyProperty): string
     {
+        /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($propertyProperty);
+        return $this->createUnderscoreUppercaseString($propertyName);
+    }
 
-        $stringy = new Stringy($propertyName);
-        return (string) $stringy->underscored()
-            ->toUpperCase();
+    public function createFromVariable(Variable $variable): string|null
+    {
+        $variableName = $this->nodeNameResolver->getName($variable);
+        if ($variableName === null) {
+            return null;
+        }
+
+        return $this->createUnderscoreUppercaseString($variableName);
+    }
+
+    private function createUnderscoreUppercaseString(string $propertyName): string
+    {
+        $propertyNameUnicodeString = new UnicodeString($propertyName);
+
+        return $propertyNameUnicodeString->snake()
+            ->upper()
+            ->toString();
     }
 }

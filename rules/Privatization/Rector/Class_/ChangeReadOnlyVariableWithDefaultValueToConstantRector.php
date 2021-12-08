@@ -20,7 +20,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PostRector\Collector\PropertyToAddCollector;
-use Stringy\Stringy;
+use Rector\Privatization\Naming\ConstantNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -32,7 +32,8 @@ final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends Abstr
     public function __construct(
         private readonly ClassMethodAssignManipulator $classMethodAssignManipulator,
         private readonly VarAnnotationManipulator $varAnnotationManipulator,
-        private readonly PropertyToAddCollector $propertyToAddCollector
+        private readonly PropertyToAddCollector $propertyToAddCollector,
+        private readonly ConstantNaming $constantNaming,
     ) {
     }
 
@@ -225,7 +226,10 @@ CODE_SAMPLE
 
     private function createPrivateClassConst(Variable $variable, Expr $expr): ClassConst
     {
-        $constantName = $this->createConstantNameFromVariable($variable);
+        $constantName = $this->constantNaming->createFromVariable($variable);
+        if ($constantName === null) {
+            throw new ShouldNotHappenException();
+        }
 
         $const = new Const_($constantName, $expr);
 
@@ -265,17 +269,5 @@ CODE_SAMPLE
             // replace with constant fetch
             return new ClassConstFetch(new Name('self'), new Identifier($constantName));
         });
-    }
-
-    private function createConstantNameFromVariable(Variable $variable): string
-    {
-        $variableName = $this->getName($variable);
-        if ($variableName === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $stringy = new Stringy($variableName);
-        return (string) $stringy->underscored()
-            ->toUpperCase();
     }
 }

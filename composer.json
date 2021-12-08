@@ -13,7 +13,6 @@
         "clue/ndjson-react": "^1.2",
         "composer/semver": "^3.2",
         "composer/xdebug-handler": "^2.0",
-        "danielstjules/stringy": "^3.1",
         "doctrine/inflector": "^2.0",
         "ergebnis/json-printer": "^3.1",
         "idiosyncratic/editorconfig": "^0.1.3",
@@ -44,6 +43,7 @@
         "symfony/deprecation-contracts": "^2.4",
         "symfony/finder": "^5.4|^6.0",
         "symfony/process": "^5.4|^6.0",
+        "symfony/string": "^5.4|^6.0",
         "symfony/yaml": "^5.4|^6.0",
         "symplify/astral": "^10.0-beta17",
         "symplify/autowire-array-parameter": "^10.0-beta17",
@@ -69,7 +69,7 @@
         "phpstan/phpstan-webmozart-assert": "^1.0",
         "phpunit/phpunit": "^9.5",
         "rector/phpstan-rules": "^0.4.15",
-        "rector/rector-generator": "^0.4.4",
+        "rector/rector-generator": "^0.4.7",
         "spatie/enum": "^3.10",
         "symplify/coding-standard": "^10.0",
         "symplify/easy-ci": "^10.0",
@@ -152,9 +152,6 @@
     },
     "extra": {
         "patches": {
-            "danielstjules/stringy": [
-                "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/danielstjules-stringy-src-stringy-php.patch"
-            ],
             "helmich/typo3-typoscript-parser": [
                 "https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/helmich-typo3-typoscript-parser-parser-tokenstream-php.patch"
             ],

@@ -615,3 +615,10 @@ parameters:
                 - rules/Arguments/Rector/ClassMethod/ArgumentAdderRector.php
                 - rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php
                 - rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php
+
+        # fixed in symplify dev-main
+        -
+            message: '#Do not use chained method calls\. Put each on separated lines#'
+            paths:
+                - rules/Privatization/Naming/ConstantNaming.php
+                - rules/Naming/Naming/VariableNaming.php
