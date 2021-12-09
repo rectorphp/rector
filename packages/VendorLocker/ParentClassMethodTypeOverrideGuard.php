@@ -113,7 +113,7 @@ final class ParentClassMethodTypeOverrideGuard
         $inferedType = $this->paramTypeInferer->inferParam($classMethod->params[$position]);
         return \get_class($inferedType) !== \get_class($currentType);
     }
-    private function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
+    public function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
     {
         $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

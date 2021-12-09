@@ -2621,6 +2621,7 @@ return array(
     'Rector\\Php80\\NodeResolver\\SwitchExprsResolver' => $baseDir . '/rules/Php80/NodeResolver/SwitchExprsResolver.php',
     'Rector\\Php80\\PhpDoc\\PhpDocNodeFinder' => $baseDir . '/rules/Php80/PhpDoc/PhpDocNodeFinder.php',
     'Rector\\Php80\\Rector\\Catch_\\RemoveUnusedVariableInCatchRector' => $baseDir . '/rules/Php80/Rector/Catch_/RemoveUnusedVariableInCatchRector.php',
+    'Rector\\Php80\\Rector\\ClassMethod\\AddParamBasedOnParentClassMethodRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/AddParamBasedOnParentClassMethodRector.php',
     'Rector\\Php80\\Rector\\ClassMethod\\FinalPrivateToPrivateVisibilityRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/FinalPrivateToPrivateVisibilityRector.php',
     'Rector\\Php80\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
     'Rector\\Php80\\Rector\\ClassMethod\\SetStateToStaticRector' => $baseDir . '/rules/Php80/Rector/ClassMethod/SetStateToStaticRector.php',

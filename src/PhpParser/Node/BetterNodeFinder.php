@@ -393,6 +393,21 @@ final class BetterNodeFinder
         return \false;
     }
     /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    public function findFirstInFunctionLikeScoped($functionLike, callable $filter) : ?\PhpParser\Node
+    {
+        $foundNode = $this->findFirst((array) $functionLike->stmts, $filter);
+        if (!$foundNode instanceof \PhpParser\Node) {
+            return null;
+        }
+        $parentFunctionLike = $this->findParentByTypes($foundNode, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class]);
+        if ($parentFunctionLike !== $functionLike) {
+            return null;
+        }
+        return $foundNode;
+    }
+    /**
      * @template T of Node
      * @param mixed[]|\PhpParser\Node $nodes
      * @param class-string<T> $type

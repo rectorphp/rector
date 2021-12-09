@@ -11,6 +11,7 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
+use Rector\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector;
 use Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector;
 use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Php80\Rector\ClassMethod\SetStateToStaticRector;
@@ -51,4 +52,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector::class);
     $services->set(\Rector\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector::class)->configure([new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge'), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'lte', 'le'), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, '', '!='), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, '!', '!='), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'g', 'gt'), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'l', 'lt'), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge'), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'lte', 'le'), new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'n', 'ne')]);
     $services->set(\Rector\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector::class);
+    $services->set(\Rector\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector::class);
 };

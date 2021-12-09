@@ -424,6 +424,11 @@ final class PhpVersionFeature
      */
     public const PHP8_RESOURCE_TO_OBJECT = \Rector\Core\ValueObject\PhpVersion::PHP_80;
     /**
+     * @see https://wiki.php.net/rfc/lsp_errors
+     * @var int
+     */
+    public const FATAL_ERROR_ON_INCOMPATIBLE_METHOD_SIGNATURE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
      * @see https://www.php.net/manual/en/migration81.incompatible.php#migration81.incompatible.resource2object
      * @var int
      */
