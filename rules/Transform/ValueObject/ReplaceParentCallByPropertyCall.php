@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class ReplaceParentCallByPropertyCall
 {
@@ -13,6 +14,7 @@ final class ReplaceParentCallByPropertyCall
         private readonly string $method,
         private readonly string $property
     ) {
+        RectorAssert::className($class);
     }
 
     public function getObjectType(): ObjectType

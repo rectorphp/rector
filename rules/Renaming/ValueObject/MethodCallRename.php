@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 
 final class MethodCallRename implements MethodCallRenameInterface
@@ -14,6 +15,7 @@ final class MethodCallRename implements MethodCallRenameInterface
         private readonly string $oldMethod,
         private readonly string $newMethod
     ) {
+        RectorAssert::className($class);
     }
 
     public function getClass(): string

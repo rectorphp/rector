@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\Validation\RectorAssert;
 
 final class AddReturnTypeDeclaration
 {
@@ -14,6 +15,7 @@ final class AddReturnTypeDeclaration
         private readonly string $method,
         private readonly Type $returnType
     ) {
+        RectorAssert::className($class);
     }
 
     public function getClass(): string

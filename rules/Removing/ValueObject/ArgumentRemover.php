@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Removing\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 
 final class ArgumentRemover
 {
@@ -17,6 +18,7 @@ final class ArgumentRemover
         private readonly int $position,
         private $value
     ) {
+        RectorAssert::className($class);
     }
 
     public function getObjectType(): ObjectType

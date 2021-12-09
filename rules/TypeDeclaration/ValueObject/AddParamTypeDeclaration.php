@@ -10,6 +10,9 @@ use Rector\Core\Validation\RectorAssert;
 
 final class AddParamTypeDeclaration
 {
+    /**
+     * @param int<0, max> $position
+     */
     public function __construct(
         private readonly string $className,
         private readonly string $methodName,

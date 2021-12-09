@@ -19,7 +19,6 @@ use PhpParser\NodeVisitorAbstract;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
@@ -93,8 +92,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     protected NodeRemover $nodeRemover;
 
-    protected RectorChangeCollector $rectorChangeCollector;
-
     protected NodeComparator $nodeComparator;
 
     protected NodesToRemoveCollector $nodesToRemoveCollector;
@@ -134,7 +131,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     public function autowire(
         NodesToRemoveCollector $nodesToRemoveCollector,
         NodesToAddCollector $nodesToAddCollector,
-        RectorChangeCollector $rectorChangeCollector,
         NodeRemover $nodeRemover,
         RemovedAndAddedFilesCollector $removedAndAddedFilesCollector,
         BetterStandardPrinter $betterStandardPrinter,
@@ -161,7 +157,6 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
-        $this->rectorChangeCollector = $rectorChangeCollector;
         $this->nodeRemover = $nodeRemover;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->betterStandardPrinter = $betterStandardPrinter;

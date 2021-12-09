@@ -6,6 +6,7 @@ namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
+use Rector\Core\Validation\RectorAssert;
 
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
@@ -15,6 +16,7 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
     final public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
 
     /**
+     * @param int<0, max> $position
      * @param mixed $valueBefore
      * @param mixed $valueAfter
      */
@@ -25,6 +27,7 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
         private $valueBefore,
         private $valueAfter
     ) {
+        RectorAssert::className($class);
     }
 
     public function getObjectType(): ObjectType

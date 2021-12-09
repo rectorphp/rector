@@ -103,7 +103,9 @@ CODE_SAMPLE
     public function configure(array $configuration): void
     {
         $replacedArguments = $configuration[self::REPLACED_ARGUMENTS] ?? $configuration;
+        Assert::isArray($replacedArguments);
         Assert::allIsAOf($replacedArguments, ReplaceArgumentDefaultValue::class);
+
         $this->replacedArguments = $replacedArguments;
     }
 }
