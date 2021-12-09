@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\Collector;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use ReflectionClass;
+use ReflectionClassConstant;
 use RectorPrefix20211209\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20211209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
@@ -51,8 +53,17 @@ final class ConfigureCallValuesCollector
             if (\is_array($configureValue) && \count($configureValue) === 1) {
                 \reset($configureValue);
                 $firstKey = \key($configureValue);
-                if (\is_array($configureValue[$firstKey])) {
-                    $configureValue = $configureValue[$firstKey];
+                if (\is_string($firstKey) && \is_array($configureValue[$firstKey])) {
+                    // has class some public constants?
+                    // fixes bug when 1 item is unwrapped and treated as constant key, without rule having public constant
+                    $classReflection = new \ReflectionClass($rectorClass);
+                    $constantNamesToValues = $classReflection->getConstants(\ReflectionClassConstant::IS_PUBLIC);
+                    foreach ($constantNamesToValues as $constantNameToValue) {
+                        if ($constantNameToValue === $firstKey) {
+                            $configureValue = $configureValue[$firstKey];
+                            break;
+                        }
+                    }
                 }
             }
             if (!isset($this->configureCallValuesByRectorClass[$rectorClass])) {
