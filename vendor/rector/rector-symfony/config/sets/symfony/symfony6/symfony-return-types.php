@@ -105,31 +105,11 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\HttpKernel\\HttpKernelBrowser', 'getScript', new \PHPStan\Type\StringType()),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\HttpKernel\\Log\\DebugLoggerInterface', 'getLogs', $arrayType),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\HttpKernel\\Log\\DebugLoggerInterface', 'countErrors', new \PHPStan\Type\IntegerType()),
-        //            new AddReturnTypeDeclaration(
-        //                'Symfony\Component\OptionsResolver\OptionsResolver',
-        //                'setNormalizer',
-        //                new StaticType()
-        //            ),
-        //            new AddReturnTypeDeclaration(
-        //                'Symfony\Component\OptionsResolver\OptionsResolver',
-        //                'setAllowedValues',
-        //                new StaticType()
-        //            ),
-        //            new AddReturnTypeDeclaration(
-        //                'Symfony\Component\OptionsResolver\OptionsResolver',
-        //                'addAllowedValues',
-        //                new StaticType()
-        //            ),
-        //            new AddReturnTypeDeclaration(
-        //                'Symfony\Component\OptionsResolver\OptionsResolver',
-        //                'setAllowedTypes',
-        //                new StaticType()
-        //            ),
-        //            new AddReturnTypeDeclaration(
-        //                'Symfony\Component\OptionsResolver\OptionsResolver',
-        //                'addAllowedTypes',
-        //                new StaticType()
-        //            ),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\OptionsResolver\\OptionsResolver', 'setNormalizer', new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType('Symfony\\Component\\OptionsResolver\\OptionsResolver')),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\OptionsResolver\\OptionsResolver', 'setAllowedValues', new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType('Symfony\\Component\\OptionsResolver\\OptionsResolver')),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\OptionsResolver\\OptionsResolver', 'addAllowedValues', new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType('Symfony\\Component\\OptionsResolver\\OptionsResolver')),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\OptionsResolver\\OptionsResolver', 'setAllowedTypes', new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType('Symfony\\Component\\OptionsResolver\\OptionsResolver')),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\OptionsResolver\\OptionsResolver', 'addAllowedTypes', new \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType('Symfony\\Component\\OptionsResolver\\OptionsResolver')),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\PropertyAccess\\PropertyPathInterface', 'getLength', new \PHPStan\Type\IntegerType()),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\PropertyAccess\\PropertyPathInterface', 'getParent', new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), new \PHPStan\Type\ObjectType('Symfony\\Component\\PropertyAccess\\PropertyPathInterface')])),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\PropertyAccess\\PropertyPathInterface', 'getElements', $arrayType),
