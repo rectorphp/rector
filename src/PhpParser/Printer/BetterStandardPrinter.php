@@ -147,6 +147,11 @@ final class BetterStandardPrinter extends \PhpParser\PrettyPrinter\Standard
         $content = $this->pStmts($fileWithoutNamespace->stmts, \false);
         return \ltrim($content);
     }
+    protected function p(\PhpParser\Node $node, $parentFormatPreserved = \false) : string
+    {
+        $content = parent::p($node, $parentFormatPreserved);
+        return $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
+    }
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */

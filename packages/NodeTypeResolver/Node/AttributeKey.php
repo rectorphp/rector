@@ -187,4 +187,8 @@ final class AttributeKey
      * @var string
      */
     public const HAS_NEW_INHERITED_TYPE = 'has_new_inherited_type';
+    /**
+     * @var string
+     */
+    public const WRAPPED_IN_PARENTHESES = 'wrapped_in_parentheses';
 }

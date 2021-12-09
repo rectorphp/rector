@@ -5,6 +5,7 @@ namespace RectorPrefix20211209;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
@@ -45,6 +46,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // Nette
         new \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation('Nette\\DI\\Attributes\\Inject', 'inject'),
     ]);
+    $services->set(\Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector::class);
