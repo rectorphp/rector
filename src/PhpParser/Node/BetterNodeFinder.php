@@ -424,7 +424,7 @@ final class BetterNodeFinder
                 continue;
             }
 
-            $parentFunctionLike = $this->findParentType($foundNode, $functionLike::class);
+            $parentFunctionLike = $this->findParentByTypes($foundNode, [ClassMethod::class, Function_::class]);
             if ($parentFunctionLike === $functionLike) {
                 return true;
             }
