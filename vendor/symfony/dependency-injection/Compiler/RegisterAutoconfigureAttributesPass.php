@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * Reads #[Autoconfigure] attributes on definitions that are autoconfigured
  * and don't have the "container.ignore_attributes" tag.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20211208\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     private static $registerForAutoconfiguration;
     /**
@@ -55,15 +55,15 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20211208
             self::registerForAutoconfiguration($container, $class, $attribute);
         }
     }
-    private static function registerForAutoconfiguration(\RectorPrefix20211208\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute)
+    private static function registerForAutoconfiguration(\RectorPrefix20211209\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute)
     {
         if (self::$registerForAutoconfiguration) {
             return (self::$registerForAutoconfiguration)($container, $class, $attribute);
         }
-        $parseDefinitions = new \ReflectionMethod(\RectorPrefix20211208\Symfony\Component\DependencyInjection\Loader\YamlFileLoader::class, 'parseDefinitions');
+        $parseDefinitions = new \ReflectionMethod(\RectorPrefix20211209\Symfony\Component\DependencyInjection\Loader\YamlFileLoader::class, 'parseDefinitions');
         $parseDefinitions->setAccessible(\true);
         $yamlLoader = $parseDefinitions->getDeclaringClass()->newInstanceWithoutConstructor();
-        self::$registerForAutoconfiguration = static function (\RectorPrefix20211208\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute) use($parseDefinitions, $yamlLoader) {
+        self::$registerForAutoconfiguration = static function (\RectorPrefix20211209\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class, \ReflectionAttribute $attribute) use($parseDefinitions, $yamlLoader) {
             $attribute = (array) $attribute->newInstance();
             foreach ($attribute['tags'] ?? [] as $i => $tag) {
                 if (\is_array($tag) && [0] === \array_keys($tag)) {

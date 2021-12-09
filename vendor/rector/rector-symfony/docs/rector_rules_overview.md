@@ -156,10 +156,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(ChangeFileLoaderInExtensionAndKernelRector::class)
-        ->call('configure', [[
+        ->configure([
             ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
             ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
-        ]]);
+        ]);
 };
 ```
 

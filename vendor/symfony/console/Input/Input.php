@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Input;
+namespace RectorPrefix20211209\Symfony\Component\Console\Input;
 
-use RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211208\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * Input is the base class for all concrete Input classes.
  *
@@ -23,17 +23,17 @@ use RectorPrefix20211208\Symfony\Component\Console\Exception\RuntimeException;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\Input\InputInterface, \RectorPrefix20211208\Symfony\Component\Console\Input\StreamableInputInterface
+abstract class Input implements \RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface, \RectorPrefix20211209\Symfony\Component\Console\Input\StreamableInputInterface
 {
     protected $definition;
     protected $stream;
     protected $options = [];
     protected $arguments = [];
     protected $interactive = \true;
-    public function __construct(\RectorPrefix20211208\Symfony\Component\Console\Input\InputDefinition $definition = null)
+    public function __construct(\RectorPrefix20211209\Symfony\Component\Console\Input\InputDefinition $definition = null)
     {
         if (null === $definition) {
-            $this->definition = new \RectorPrefix20211208\Symfony\Component\Console\Input\InputDefinition();
+            $this->definition = new \RectorPrefix20211209\Symfony\Component\Console\Input\InputDefinition();
         } else {
             $this->bind($definition);
             $this->validate();
@@ -65,13 +65,13 @@ abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\
             return !\array_key_exists($argument, $givenArguments) && $definition->getArgument($argument)->isRequired();
         });
         if (\count($missingArguments) > 0) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\RuntimeException(\sprintf('Not enough arguments (missing: "%s").', \implode(', ', $missingArguments)));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\RuntimeException(\sprintf('Not enough arguments (missing: "%s").', \implode(', ', $missingArguments)));
         }
     }
     /**
      * {@inheritdoc}
      */
-    public function isInteractive()
+    public function isInteractive() : bool
     {
         return $this->interactive;
     }
@@ -86,29 +86,31 @@ abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\
     /**
      * {@inheritdoc}
      */
-    public function getArguments()
+    public function getArguments() : array
     {
         return \array_merge($this->definition->getArgumentDefaults(), $this->arguments);
     }
     /**
      * {@inheritdoc}
+     * @return mixed
      * @param string $name
      */
     public function getArgument($name)
     {
         if (!$this->definition->hasArgument($name)) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
         }
         return $this->arguments[$name] ?? $this->definition->getArgument($name)->getDefault();
     }
     /**
      * {@inheritdoc}
+     * @param mixed $value
      * @param string $name
      */
     public function setArgument($name, $value)
     {
         if (!$this->definition->hasArgument($name)) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" argument does not exist.', $name));
         }
         $this->arguments[$name] = $value;
     }
@@ -116,19 +118,20 @@ abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\
      * {@inheritdoc}
      * @param string $name
      */
-    public function hasArgument($name)
+    public function hasArgument($name) : bool
     {
         return $this->definition->hasArgument($name);
     }
     /**
      * {@inheritdoc}
      */
-    public function getOptions()
+    public function getOptions() : array
     {
         return \array_merge($this->definition->getOptionDefaults(), $this->options);
     }
     /**
      * {@inheritdoc}
+     * @return mixed
      * @param string $name
      */
     public function getOption($name)
@@ -140,12 +143,13 @@ abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\
             return !$value;
         }
         if (!$this->definition->hasOption($name)) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" option does not exist.', $name));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" option does not exist.', $name));
         }
         return \array_key_exists($name, $this->options) ? $this->options[$name] : $this->definition->getOption($name)->getDefault();
     }
     /**
      * {@inheritdoc}
+     * @param mixed $value
      * @param string $name
      */
     public function setOption($name, $value)
@@ -154,7 +158,7 @@ abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\
             $this->options[$this->definition->negationToName($name)] = !$value;
             return;
         } elseif (!$this->definition->hasOption($name)) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" option does not exist.', $name));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "%s" option does not exist.', $name));
         }
         $this->options[$name] = $value;
     }
@@ -162,17 +166,15 @@ abstract class Input implements \RectorPrefix20211208\Symfony\Component\Console\
      * {@inheritdoc}
      * @param string $name
      */
-    public function hasOption($name)
+    public function hasOption($name) : bool
     {
         return $this->definition->hasOption($name) || $this->definition->hasNegation($name);
     }
     /**
      * Escapes a token through escapeshellarg if it contains unsafe chars.
-     *
-     * @return string
      * @param string $token
      */
-    public function escapeToken($token)
+    public function escapeToken($token) : string
     {
         return \preg_match('{^[\\w-]+$}', $token) ? $token : \escapeshellarg($token);
     }

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20211209\Symfony\Component\Finder\Iterator;
 
 /**
  * ExcludeDirectoryFilterIterator filters out directories.
@@ -20,9 +20,21 @@ namespace RectorPrefix20211208\Symfony\Component\Finder\Iterator;
  */
 class ExcludeDirectoryFilterIterator extends \FilterIterator implements \RecursiveIterator
 {
+    /**
+     * @var \Iterator
+     */
     private $iterator;
+    /**
+     * @var bool
+     */
     private $isRecursive;
+    /**
+     * @var mixed[]
+     */
     private $excludedDirs = [];
+    /**
+     * @var string|null
+     */
     private $excludedPattern;
     /**
      * @param \Iterator $iterator    The Iterator to filter
@@ -48,11 +60,8 @@ class ExcludeDirectoryFilterIterator extends \FilterIterator implements \Recursi
     }
     /**
      * Filters the iterator values.
-     *
-     * @return bool
      */
-    #[\ReturnTypeWillChange]
-    public function accept()
+    public function accept() : bool
     {
         if ($this->isRecursive && isset($this->excludedDirs[$this->getFilename()]) && $this->isDir()) {
             return \false;
@@ -64,19 +73,11 @@ class ExcludeDirectoryFilterIterator extends \FilterIterator implements \Recursi
         }
         return \true;
     }
-    /**
-     * @return bool
-     */
-    #[\ReturnTypeWillChange]
-    public function hasChildren()
+    public function hasChildren() : bool
     {
         return $this->isRecursive && $this->iterator->hasChildren();
     }
-    /**
-     * @return self
-     */
-    #[\ReturnTypeWillChange]
-    public function getChildren()
+    public function getChildren() : self
     {
         $children = new self($this->iterator->getChildren(), []);
         $children->excludedDirs = $this->excludedDirs;

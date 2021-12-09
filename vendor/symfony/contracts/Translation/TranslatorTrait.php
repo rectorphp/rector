@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Contracts\Translation;
+namespace RectorPrefix20211209\Symfony\Contracts\Translation;
 
-use RectorPrefix20211208\Symfony\Component\Translation\Exception\InvalidArgumentException;
+use RectorPrefix20211209\Symfony\Component\Translation\Exception\InvalidArgumentException;
 /**
  * A trait to help implement TranslatorInterface and LocaleAwareInterface.
  *
@@ -108,8 +108,8 @@ EOF;
                 return \strtr($standardRules[0], $parameters);
             }
             $message = \sprintf('Unable to choose a translation for "%s" with locale "%s" for value "%d". Double check that this translation has the correct plural options (e.g. "There is one apple|There are %%count%% apples").', $id, $locale, $number);
-            if (\class_exists(\RectorPrefix20211208\Symfony\Component\Translation\Exception\InvalidArgumentException::class)) {
-                throw new \RectorPrefix20211208\Symfony\Component\Translation\Exception\InvalidArgumentException($message);
+            if (\class_exists(\RectorPrefix20211209\Symfony\Component\Translation\Exception\InvalidArgumentException::class)) {
+                throw new \RectorPrefix20211209\Symfony\Component\Translation\Exception\InvalidArgumentException($message);
             }
             throw new \InvalidArgumentException($message);
         }

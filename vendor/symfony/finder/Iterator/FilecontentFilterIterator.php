@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20211209\Symfony\Component\Finder\Iterator;
 
 /**
  * FilecontentFilterIterator filters files by their contents using patterns (regexps or strings).
@@ -18,15 +18,12 @@ namespace RectorPrefix20211208\Symfony\Component\Finder\Iterator;
  *
  * @extends MultiplePcreFilterIterator<string, \SplFileInfo>
  */
-class FilecontentFilterIterator extends \RectorPrefix20211208\Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
+class FilecontentFilterIterator extends \RectorPrefix20211209\Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
 {
     /**
      * Filters the iterator values.
-     *
-     * @return bool
      */
-    #[\ReturnTypeWillChange]
-    public function accept()
+    public function accept() : bool
     {
         if (!$this->matchRegexps && !$this->noMatchRegexps) {
             return \true;
@@ -45,10 +42,8 @@ class FilecontentFilterIterator extends \RectorPrefix20211208\Symfony\Component\
      * Converts string to regexp if necessary.
      *
      * @param string $str Pattern: string or regexp
-     *
-     * @return string
      */
-    protected function toRegex($str)
+    protected function toRegex($str) : string
     {
         return $this->isRegex($str) ? $str : '/' . \preg_quote($str, '/') . '/';
     }

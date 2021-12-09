@@ -5,6 +5,7 @@ namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use Rector\Core\Validation\RectorAssert;
 final class ArgumentAdder
 {
     /**
@@ -54,6 +55,7 @@ final class ArgumentAdder
         $this->argumentDefaultValue = $argumentDefaultValue;
         $this->argumentType = $argumentType;
         $this->scope = $scope;
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

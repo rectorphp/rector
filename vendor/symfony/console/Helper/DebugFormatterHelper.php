@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Helper;
+namespace RectorPrefix20211209\Symfony\Component\Console\Helper;
 
 /**
  * Helps outputting debug information when running an external program from a command.
@@ -17,35 +17,37 @@ namespace RectorPrefix20211208\Symfony\Component\Console\Helper;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DebugFormatterHelper extends \RectorPrefix20211208\Symfony\Component\Console\Helper\Helper
+class DebugFormatterHelper extends \RectorPrefix20211209\Symfony\Component\Console\Helper\Helper
 {
     private const COLORS = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white', 'default'];
+    /**
+     * @var mixed[]
+     */
     private $started = [];
+    /**
+     * @var int
+     */
     private $count = -1;
     /**
      * Starts a debug formatting session.
-     *
-     * @return string
      * @param string $id
      * @param string $message
      * @param string $prefix
      */
-    public function start($id, $message, $prefix = 'RUN')
+    public function start($id, $message, $prefix = 'RUN') : string
     {
         $this->started[$id] = ['border' => ++$this->count % \count(self::COLORS)];
         return \sprintf("%s<bg=blue;fg=white> %s </> <fg=blue>%s</>\n", $this->getBorder($id), $prefix, $message);
     }
     /**
      * Adds progress to a formatting session.
-     *
-     * @return string
      * @param string $id
      * @param string $buffer
      * @param bool $error
      * @param string $prefix
      * @param string $errorPrefix
      */
-    public function progress($id, $buffer, $error = \false, $prefix = 'OUT', $errorPrefix = 'ERR')
+    public function progress($id, $buffer, $error = \false, $prefix = 'OUT', $errorPrefix = 'ERR') : string
     {
         $message = '';
         if ($error) {
@@ -73,14 +75,12 @@ class DebugFormatterHelper extends \RectorPrefix20211208\Symfony\Component\Conso
     }
     /**
      * Stops a formatting session.
-     *
-     * @return string
      * @param string $id
      * @param string $message
      * @param bool $successful
      * @param string $prefix
      */
-    public function stop($id, $message, $successful, $prefix = 'RES')
+    public function stop($id, $message, $successful, $prefix = 'RES') : string
     {
         $trailingEOL = isset($this->started[$id]['out']) || isset($this->started[$id]['err']) ? "\n" : '';
         if ($successful) {
@@ -97,7 +97,7 @@ class DebugFormatterHelper extends \RectorPrefix20211208\Symfony\Component\Conso
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName() : string
     {
         return 'debug_formatter';
     }

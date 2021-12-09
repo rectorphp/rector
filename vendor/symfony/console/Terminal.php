@@ -8,19 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console;
+namespace RectorPrefix20211209\Symfony\Component\Console;
 
 class Terminal
 {
+    /**
+     * @var int|null
+     */
     private static $width;
+    /**
+     * @var int|null
+     */
     private static $height;
+    /**
+     * @var bool|null
+     */
     private static $stty;
     /**
      * Gets the terminal width.
-     *
-     * @return int
      */
-    public function getWidth()
+    public function getWidth() : int
     {
         $width = \getenv('COLUMNS');
         if (\false !== $width) {
@@ -33,10 +40,8 @@ class Terminal
     }
     /**
      * Gets the terminal height.
-     *
-     * @return int
      */
-    public function getHeight()
+    public function getHeight() : int
     {
         $height = \getenv('LINES');
         if (\false !== $height) {

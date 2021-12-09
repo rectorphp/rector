@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Process;
+namespace RectorPrefix20211209\Symfony\Component\Process;
 
-use RectorPrefix20211208\Symfony\Component\Process\Exception\RuntimeException;
+use RectorPrefix20211209\Symfony\Component\Process\Exception\RuntimeException;
 /**
  * Provides a way to continuously write to the input of a Process until the InputStream is closed.
  *
@@ -33,20 +33,20 @@ class InputStream implements \IteratorAggregate
         $this->onEmpty = $onEmpty;
     }
     /**
-     * Appends an input to the write buffer.
-     *
-     * @param resource|string|int|float|bool|\Traversable|null $input The input to append as scalar,
-     *                                                                stream resource or \Traversable
-     */
+    * Appends an input to the write buffer.
+    *
+     * @param mixed $input The input to append as scalar,
+                                                              stream resource or \Traversable
+    */
     public function write($input)
     {
         if (null === $input) {
             return;
         }
         if ($this->isClosed()) {
-            throw new \RectorPrefix20211208\Symfony\Component\Process\Exception\RuntimeException(\sprintf('"%s" is closed.', static::class));
+            throw new \RectorPrefix20211209\Symfony\Component\Process\Exception\RuntimeException(\sprintf('"%s" is closed.', static::class));
         }
-        $this->input[] = \RectorPrefix20211208\Symfony\Component\Process\ProcessUtils::validateInput(__METHOD__, $input);
+        $this->input[] = \RectorPrefix20211209\Symfony\Component\Process\ProcessUtils::validateInput(__METHOD__, $input);
     }
     /**
      * Closes the write buffer.
@@ -62,11 +62,7 @@ class InputStream implements \IteratorAggregate
     {
         return !$this->open;
     }
-    /**
-     * @return \Traversable<int, string>
-     */
-    #[\ReturnTypeWillChange]
-    public function getIterator()
+    public function getIterator() : \Traversable
     {
         $this->open = \true;
         while ($this->open || $this->input) {

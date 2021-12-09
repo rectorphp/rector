@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Output;
+namespace RectorPrefix20211209\Symfony\Component\Console\Output;
 
-use RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * OutputInterface is the interface implemented by all Output classes.
  *
@@ -29,16 +29,14 @@ interface OutputInterface
     /**
      * Writes a message to the output.
      *
-     * @param string|iterable $messages The message as an iterable of strings or a single string
-     * @param bool            $newline  Whether to add a newline
-     * @param int             $options  A bitmask of options (one of the OUTPUT or VERBOSITY constants), 0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
+     * @param $newline Whether to add a newline
+     * @param $options A bitmask of options (one of the OUTPUT or VERBOSITY constants), 0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
      */
     public function write($messages, bool $newline = \false, int $options = 0);
     /**
      * Writes a message to the output and adds a newline at the end.
      *
-     * @param string|iterable $messages The message as an iterable of strings or a single string
-     * @param int             $options  A bitmask of options (one of the OUTPUT or VERBOSITY constants), 0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
+     * @param $options A bitmask of options (one of the OUTPUT or VERBOSITY constants), 0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
      */
     public function writeln($messages, int $options = 0);
     /**
@@ -47,49 +45,35 @@ interface OutputInterface
     public function setVerbosity(int $level);
     /**
      * Gets the current verbosity of the output.
-     *
-     * @return int
      */
-    public function getVerbosity();
+    public function getVerbosity() : int;
     /**
      * Returns whether verbosity is quiet (-q).
-     *
-     * @return bool
      */
-    public function isQuiet();
+    public function isQuiet() : bool;
     /**
      * Returns whether verbosity is verbose (-v).
-     *
-     * @return bool
      */
-    public function isVerbose();
+    public function isVerbose() : bool;
     /**
      * Returns whether verbosity is very verbose (-vv).
-     *
-     * @return bool
      */
-    public function isVeryVerbose();
+    public function isVeryVerbose() : bool;
     /**
      * Returns whether verbosity is debug (-vvv).
-     *
-     * @return bool
      */
-    public function isDebug();
+    public function isDebug() : bool;
     /**
      * Sets the decorated flag.
      */
     public function setDecorated(bool $decorated);
     /**
      * Gets the decorated flag.
-     *
-     * @return bool
      */
-    public function isDecorated();
-    public function setFormatter(\RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter);
+    public function isDecorated() : bool;
+    public function setFormatter(\RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter);
     /**
      * Returns current output formatter instance.
-     *
-     * @return OutputFormatterInterface
      */
-    public function getFormatter();
+    public function getFormatter() : \RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 final class PropertyAssignToMethodCall
 {
     /**
@@ -26,6 +27,7 @@ final class PropertyAssignToMethodCall
         $this->class = $class;
         $this->oldPropertyName = $oldPropertyName;
         $this->newMethodName = $newMethodName;
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

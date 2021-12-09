@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeCollector\ValueObject;
 
 use PhpParser\Node\Expr;
+use Rector\Core\Validation\RectorAssert;
 final class ArrayCallableDynamicMethod
 {
     /**
@@ -26,6 +27,7 @@ final class ArrayCallableDynamicMethod
         $this->callerExpr = $callerExpr;
         $this->class = $class;
         $this->method = $method;
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getClass() : string
     {

@@ -32,12 +32,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211208\\Idiosyncratic\\EditorConfig\\": "src"
+            "RectorPrefix20211209\\Idiosyncratic\\EditorConfig\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20211208\\Idiosyncratic\\EditorConfig\\": "tests"
+            "RectorPrefix20211209\\Idiosyncratic\\EditorConfig\\": "tests"
         }
     }
 }

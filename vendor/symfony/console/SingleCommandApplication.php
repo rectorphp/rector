@@ -8,24 +8,33 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console;
+namespace RectorPrefix20211209\Symfony\Component\Console;
 
-use RectorPrefix20211208\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211208\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211208\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class SingleCommandApplication extends \RectorPrefix20211208\Symfony\Component\Console\Command\Command
+class SingleCommandApplication extends \RectorPrefix20211209\Symfony\Component\Console\Command\Command
 {
+    /**
+     * @var string
+     */
     private $version = 'UNKNOWN';
+    /**
+     * @var bool
+     */
     private $autoExit = \true;
+    /**
+     * @var bool
+     */
     private $running = \false;
     /**
      * @return $this
      * @param string $version
      */
-    public function setVersion($version) : self
+    public function setVersion($version)
     {
         $this->version = $version;
         return $this;
@@ -36,7 +45,7 @@ class SingleCommandApplication extends \RectorPrefix20211208\Symfony\Component\C
      * @return $this
      * @param bool $autoExit
      */
-    public function setAutoExit($autoExit) : self
+    public function setAutoExit($autoExit)
     {
         $this->autoExit = $autoExit;
         return $this;
@@ -51,7 +60,7 @@ class SingleCommandApplication extends \RectorPrefix20211208\Symfony\Component\C
             return parent::run($input, $output);
         }
         // We use the command name as the application name
-        $application = new \RectorPrefix20211208\Symfony\Component\Console\Application($this->getName() ?: 'UNKNOWN', $this->version);
+        $application = new \RectorPrefix20211209\Symfony\Component\Console\Application($this->getName() ?: 'UNKNOWN', $this->version);
         $application->setAutoExit($this->autoExit);
         // Fix the usage of the command displayed with "--help"
         $this->setName($_SERVER['argv'][0]);

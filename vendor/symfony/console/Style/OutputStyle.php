@@ -8,21 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Style;
+namespace RectorPrefix20211209\Symfony\Component\Console\Style;
 
-use RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix20211208\Symfony\Component\Console\Helper\ProgressBar;
-use RectorPrefix20211208\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix20211208\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix20211209\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Decorates output to add console style guide helpers.
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-abstract class OutputStyle implements \RectorPrefix20211208\Symfony\Component\Console\Output\OutputInterface, \RectorPrefix20211208\Symfony\Component\Console\Style\StyleInterface
+abstract class OutputStyle implements \RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface, \RectorPrefix20211209\Symfony\Component\Console\Style\StyleInterface
 {
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     private $output;
-    public function __construct(\RectorPrefix20211208\Symfony\Component\Console\Output\OutputInterface $output)
+    public function __construct(\RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $this->output = $output;
     }
@@ -33,15 +36,13 @@ abstract class OutputStyle implements \RectorPrefix20211208\Symfony\Component\Co
     {
         $this->output->write(\str_repeat(\PHP_EOL, $count));
     }
-    /**
-     * @return ProgressBar
-     */
-    public function createProgressBar(int $max = 0)
+    public function createProgressBar(int $max = 0) : \RectorPrefix20211209\Symfony\Component\Console\Helper\ProgressBar
     {
-        return new \RectorPrefix20211208\Symfony\Component\Console\Helper\ProgressBar($this->output, $max);
+        return new \RectorPrefix20211209\Symfony\Component\Console\Helper\ProgressBar($this->output, $max);
     }
     /**
      * {@inheritdoc}
+     * @param mixed[]|string $messages
      */
     public function write($messages, bool $newline = \false, int $type = self::OUTPUT_NORMAL)
     {
@@ -49,6 +50,7 @@ abstract class OutputStyle implements \RectorPrefix20211208\Symfony\Component\Co
     }
     /**
      * {@inheritdoc}
+     * @param mixed[]|string $messages
      */
     public function writeln($messages, int $type = self::OUTPUT_NORMAL)
     {
@@ -64,7 +66,7 @@ abstract class OutputStyle implements \RectorPrefix20211208\Symfony\Component\Co
     /**
      * {@inheritdoc}
      */
-    public function getVerbosity()
+    public function getVerbosity() : int
     {
         return $this->output->getVerbosity();
     }
@@ -78,55 +80,55 @@ abstract class OutputStyle implements \RectorPrefix20211208\Symfony\Component\Co
     /**
      * {@inheritdoc}
      */
-    public function isDecorated()
+    public function isDecorated() : bool
     {
         return $this->output->isDecorated();
     }
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         $this->output->setFormatter($formatter);
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter()
+    public function getFormatter() : \RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
         return $this->output->getFormatter();
     }
     /**
      * {@inheritdoc}
      */
-    public function isQuiet()
+    public function isQuiet() : bool
     {
         return $this->output->isQuiet();
     }
     /**
      * {@inheritdoc}
      */
-    public function isVerbose()
+    public function isVerbose() : bool
     {
         return $this->output->isVerbose();
     }
     /**
      * {@inheritdoc}
      */
-    public function isVeryVerbose()
+    public function isVeryVerbose() : bool
     {
         return $this->output->isVeryVerbose();
     }
     /**
      * {@inheritdoc}
      */
-    public function isDebug()
+    public function isDebug() : bool
     {
         return $this->output->isDebug();
     }
     protected function getErrorOutput()
     {
-        if (!$this->output instanceof \RectorPrefix20211208\Symfony\Component\Console\Output\ConsoleOutputInterface) {
+        if (!$this->output instanceof \RectorPrefix20211209\Symfony\Component\Console\Output\ConsoleOutputInterface) {
             return $this->output;
         }
         return $this->output->getErrorOutput();

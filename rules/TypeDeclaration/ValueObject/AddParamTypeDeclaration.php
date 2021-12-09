@@ -19,8 +19,8 @@ final class AddParamTypeDeclaration
      */
     private $methodName;
     /**
-     * @readonly
      * @var int
+     * @readonly
      */
     private $position;
     /**
@@ -28,6 +28,9 @@ final class AddParamTypeDeclaration
      * @var \PHPStan\Type\Type
      */
     private $paramType;
+    /**
+     * @param int<0, max> $position
+     */
     public function __construct(string $className, string $methodName, int $position, \PHPStan\Type\Type $paramType)
     {
         $this->className = $className;

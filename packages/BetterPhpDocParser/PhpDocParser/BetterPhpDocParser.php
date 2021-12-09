@@ -18,7 +18,7 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20211208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20211209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
@@ -44,7 +44,7 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->doctrineAnnotationDecorator = $doctrineAnnotationDecorator;
         parent::__construct($typeParser, $constExprParser);
-        $this->privatesCaller = new \RectorPrefix20211208\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        $this->privatesCaller = new \RectorPrefix20211209\Symplify\PackageBuilder\Reflection\PrivatesCaller();
     }
     /**
      * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokenIterator

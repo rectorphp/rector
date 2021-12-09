@@ -5,6 +5,7 @@ namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
+use Rector\Core\Validation\RectorAssert;
 final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface
 {
     /**
@@ -22,13 +23,14 @@ final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\Re
      */
     private $method;
     /**
-     * @readonly
      * @var int
+     * @readonly
      */
     private $position;
     private $valueBefore;
     private $valueAfter;
     /**
+     * @param int<0, max> $position
      * @param mixed $valueBefore
      * @param mixed $valueAfter
      */
@@ -39,6 +41,7 @@ final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\Re
         $this->position = $position;
         $this->valueBefore = $valueBefore;
         $this->valueAfter = $valueAfter;
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

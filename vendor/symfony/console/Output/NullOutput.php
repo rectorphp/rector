@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Output;
+namespace RectorPrefix20211209\Symfony\Component\Console\Output;
 
-use RectorPrefix20211208\Symfony\Component\Console\Formatter\NullOutputFormatter;
-use RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211209\Symfony\Component\Console\Formatter\NullOutputFormatter;
+use RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * NullOutput suppresses all output.
  *
@@ -20,26 +20,26 @@ use RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInte
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class NullOutput implements \RectorPrefix20211208\Symfony\Component\Console\Output\OutputInterface
+class NullOutput implements \RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface
 {
+    /**
+     * @var \Symfony\Component\Console\Formatter\NullOutputFormatter
+     */
     private $formatter;
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter()
+    public function getFormatter() : \RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
-        if ($this->formatter) {
-            return $this->formatter;
-        }
         // to comply with the interface we must return a OutputFormatterInterface
-        return $this->formatter = new \RectorPrefix20211208\Symfony\Component\Console\Formatter\NullOutputFormatter();
+        return $this->formatter = $this->formatter ?? new \RectorPrefix20211209\Symfony\Component\Console\Formatter\NullOutputFormatter();
     }
     /**
      * {@inheritdoc}
@@ -51,7 +51,7 @@ class NullOutput implements \RectorPrefix20211208\Symfony\Component\Console\Outp
     /**
      * {@inheritdoc}
      */
-    public function isDecorated()
+    public function isDecorated() : bool
     {
         return \false;
     }
@@ -65,40 +65,41 @@ class NullOutput implements \RectorPrefix20211208\Symfony\Component\Console\Outp
     /**
      * {@inheritdoc}
      */
-    public function getVerbosity()
+    public function getVerbosity() : int
     {
         return self::VERBOSITY_QUIET;
     }
     /**
      * {@inheritdoc}
      */
-    public function isQuiet()
+    public function isQuiet() : bool
     {
         return \true;
     }
     /**
      * {@inheritdoc}
      */
-    public function isVerbose()
+    public function isVerbose() : bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function isVeryVerbose()
+    public function isVeryVerbose() : bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function isDebug()
+    public function isDebug() : bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
+     * @param mixed[]|string $messages
      */
     public function writeln($messages, int $options = self::OUTPUT_NORMAL)
     {
@@ -106,6 +107,7 @@ class NullOutput implements \RectorPrefix20211208\Symfony\Component\Console\Outp
     }
     /**
      * {@inheritdoc}
+     * @param mixed[]|string $messages
      */
     public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
     {

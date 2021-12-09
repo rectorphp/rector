@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Helper;
+namespace RectorPrefix20211209\Symfony\Component\Console\Helper;
 
-use RectorPrefix20211208\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix20211208\Symfony\Component\String\UnicodeString;
+use RectorPrefix20211209\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211209\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements \RectorPrefix20211209\Symfony\Component\Console\Helper\HelperInterface
 {
     protected $helperSet = null;
     /**
@@ -31,22 +31,9 @@ abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console
     /**
      * {@inheritdoc}
      */
-    public function getHelperSet()
+    public function getHelperSet() : ?\RectorPrefix20211209\Symfony\Component\Console\Helper\HelperSet
     {
         return $this->helperSet;
-    }
-    /**
-     * Returns the length of a string, using mb_strwidth if it is available.
-     *
-     * @deprecated since Symfony 5.3
-     *
-     * @return int
-     * @param string|null $string
-     */
-    public static function strlen($string)
-    {
-        trigger_deprecation('symfony/console', '5.3', 'Method "%s()" is deprecated and will be removed in Symfony 6.0. Use Helper::width() or Helper::length() instead.', __METHOD__);
-        return self::width($string);
     }
     /**
      * Returns the width of a string, using mb_strwidth if it is available.
@@ -57,7 +44,7 @@ abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20211208\Symfony\Component\String\UnicodeString($string))->width(\false);
+            return (new \RectorPrefix20211209\Symfony\Component\String\UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -73,7 +60,7 @@ abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20211208\Symfony\Component\String\UnicodeString($string))->length();
+            return (new \RectorPrefix20211209\Symfony\Component\String\UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -82,13 +69,11 @@ abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console
     }
     /**
      * Returns the subset of a string, using mb_substr if it is available.
-     *
-     * @return string
      * @param string|null $string
      * @param int $from
      * @param int|null $length
      */
-    public static function substr($string, $from, $length = null)
+    public static function substr($string, $from, $length = null) : string
     {
         $string ?? ($string = '');
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
@@ -96,6 +81,9 @@ abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console
         }
         return \mb_substr($string, $from, $length, $encoding);
     }
+    /**
+     * @param float|int $secs
+     */
     public static function formatTime($secs)
     {
         static $timeFormats = [[0, '< 1 sec'], [1, '1 sec'], [2, 'secs', 1], [60, '1 min'], [120, 'mins', 60], [3600, '1 hr'], [7200, 'hrs', 3600], [86400, '1 day'], [172800, 'days', 86400]];
@@ -125,16 +113,6 @@ abstract class Helper implements \RectorPrefix20211208\Symfony\Component\Console
             return \sprintf('%d KiB', $memory / 1024);
         }
         return \sprintf('%d B', $memory);
-    }
-    /**
-     * @deprecated since Symfony 5.3
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
-     * @param string|null $string
-     */
-    public static function strlenWithoutDecoration($formatter, $string)
-    {
-        trigger_deprecation('symfony/console', '5.3', 'Method "%s()" is deprecated and will be removed in Symfony 6.0. Use Helper::removeDecoration() instead.', __METHOD__);
-        return self::width(self::removeDecoration($formatter, $string));
     }
     /**
      * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter

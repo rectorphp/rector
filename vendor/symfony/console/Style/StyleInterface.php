@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Style;
+namespace RectorPrefix20211209\Symfony\Component\Console\Style;
 
 /**
  * Output style helpers.
@@ -31,38 +31,32 @@ interface StyleInterface
     public function listing(array $elements);
     /**
      * Formats informational text.
-     *
-     * @param string|array $message
+     * @param mixed[]|string $message
      */
     public function text($message);
     /**
      * Formats a success result bar.
-     *
-     * @param string|array $message
+     * @param mixed[]|string $message
      */
     public function success($message);
     /**
      * Formats an error result bar.
-     *
-     * @param string|array $message
+     * @param mixed[]|string $message
      */
     public function error($message);
     /**
      * Formats an warning result bar.
-     *
-     * @param string|array $message
+     * @param mixed[]|string $message
      */
     public function warning($message);
     /**
      * Formats a note admonition.
-     *
-     * @param string|array $message
+     * @param mixed[]|string $message
      */
     public function note($message);
     /**
      * Formats a caution admonition.
-     *
-     * @param string|array $message
+     * @param mixed[]|string $message
      */
     public function caution($message);
     /**
@@ -71,27 +65,21 @@ interface StyleInterface
     public function table(array $headers, array $rows);
     /**
      * Asks a question.
-     *
      * @return mixed
      */
     public function ask(string $question, string $default = null, callable $validator = null);
     /**
      * Asks a question with the user input hidden.
-     *
      * @return mixed
      */
     public function askHidden(string $question, callable $validator = null);
     /**
      * Asks for confirmation.
-     *
-     * @return bool
      */
-    public function confirm(string $question, bool $default = \true);
+    public function confirm(string $question, bool $default = \true) : bool;
     /**
      * Asks a choice question.
-     *
-     * @param string|int|null $default
-     *
+     * @param mixed $default
      * @return mixed
      */
     public function choice(string $question, array $choices, $default = null);

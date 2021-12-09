@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Input;
+namespace RectorPrefix20211209\Symfony\Component\Console\Input;
 
-use RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211208\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a command line option.
  *
@@ -39,15 +39,30 @@ class InputOption
      * The option may have either positive or negative value (e.g. --ansi or --no-ansi).
      */
     public const VALUE_NEGATABLE = 16;
+    /**
+     * @var string
+     */
     private $name;
+    /**
+     * @var mixed[]|string|null
+     */
     private $shortcut;
+    /**
+     * @var int
+     */
     private $mode;
+    /**
+     * @var mixed[]|bool|float|int|string|null
+     */
     private $default;
+    /**
+     * @var string
+     */
     private $description;
     /**
-     * @param string|array|null                $shortcut The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
+     * @param mixed[]|string $shortcut The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
      * @param int|null                         $mode     The option mode: One of the VALUE_* constants
-     * @param string|bool|int|float|array|null $default  The default value (must be null for self::VALUE_NONE)
+     * @param mixed[]|bool|float|int|string $default The default value (must be null for self::VALUE_NONE)
      *
      * @throws InvalidArgumentException If option mode is invalid or incompatible
      */
@@ -57,7 +72,7 @@ class InputOption
             $name = \substr($name, 2);
         }
         if (empty($name)) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException('An option name cannot be empty.');
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException('An option name cannot be empty.');
         }
         if (empty($shortcut)) {
             $shortcut = null;
@@ -70,41 +85,37 @@ class InputOption
             $shortcuts = \array_filter($shortcuts);
             $shortcut = \implode('|', $shortcuts);
             if (empty($shortcut)) {
-                throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException('An option shortcut cannot be empty.');
+                throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException('An option shortcut cannot be empty.');
             }
         }
         if (null === $mode) {
             $mode = self::VALUE_NONE;
         } elseif ($mode >= self::VALUE_NEGATABLE << 1 || $mode < 1) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Option mode "%s" is not valid.', $mode));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Option mode "%s" is not valid.', $mode));
         }
         $this->name = $name;
         $this->shortcut = $shortcut;
         $this->mode = $mode;
         $this->description = $description;
         if ($this->isArray() && !$this->acceptValue()) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException('Impossible to have an option mode VALUE_IS_ARRAY if the option does not accept a value.');
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException('Impossible to have an option mode VALUE_IS_ARRAY if the option does not accept a value.');
         }
         if ($this->isNegatable() && $this->acceptValue()) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException('Impossible to have an option mode VALUE_NEGATABLE if the option also accepts a value.');
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException('Impossible to have an option mode VALUE_NEGATABLE if the option also accepts a value.');
         }
         $this->setDefault($default);
     }
     /**
      * Returns the option shortcut.
-     *
-     * @return string|null
      */
-    public function getShortcut()
+    public function getShortcut() : ?string
     {
         return $this->shortcut;
     }
     /**
      * Returns the option name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -113,7 +124,7 @@ class InputOption
      *
      * @return bool true if value mode is not self::VALUE_NONE, false otherwise
      */
-    public function acceptValue()
+    public function acceptValue() : bool
     {
         return $this->isValueRequired() || $this->isValueOptional();
     }
@@ -122,7 +133,7 @@ class InputOption
      *
      * @return bool true if value mode is self::VALUE_REQUIRED, false otherwise
      */
-    public function isValueRequired()
+    public function isValueRequired() : bool
     {
         return self::VALUE_REQUIRED === (self::VALUE_REQUIRED & $this->mode);
     }
@@ -131,7 +142,7 @@ class InputOption
      *
      * @return bool true if value mode is self::VALUE_OPTIONAL, false otherwise
      */
-    public function isValueOptional()
+    public function isValueOptional() : bool
     {
         return self::VALUE_OPTIONAL === (self::VALUE_OPTIONAL & $this->mode);
     }
@@ -140,7 +151,7 @@ class InputOption
      *
      * @return bool true if mode is self::VALUE_IS_ARRAY, false otherwise
      */
-    public function isArray()
+    public function isArray() : bool
     {
         return self::VALUE_IS_ARRAY === (self::VALUE_IS_ARRAY & $this->mode);
     }
@@ -149,18 +160,18 @@ class InputOption
         return self::VALUE_NEGATABLE === (self::VALUE_NEGATABLE & $this->mode);
     }
     /**
-     * @param string|bool|int|float|array|null $default
+     * @param mixed[]|bool|float|int|string $default
      */
     public function setDefault($default = null)
     {
         if (self::VALUE_NONE === (self::VALUE_NONE & $this->mode) && null !== $default) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\LogicException('Cannot set a default value when using InputOption::VALUE_NONE mode.');
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException('Cannot set a default value when using InputOption::VALUE_NONE mode.');
         }
         if ($this->isArray()) {
             if (null === $default) {
                 $default = [];
             } elseif (!\is_array($default)) {
-                throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\LogicException('A default value for an array option must be an array.');
+                throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException('A default value for an array option must be an array.');
             }
         }
         $this->default = $this->acceptValue() || $this->isNegatable() ? $default : \false;
@@ -176,20 +187,16 @@ class InputOption
     }
     /**
      * Returns the description text.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription() : string
     {
         return $this->description;
     }
     /**
      * Checks whether the given option equals this one.
-     *
-     * @return bool
      * @param $this $option
      */
-    public function equals($option)
+    public function equals($option) : bool
     {
         return $option->getName() === $this->getName() && $option->getShortcut() === $this->getShortcut() && $option->getDefault() === $this->getDefault() && $option->isNegatable() === $this->isNegatable() && $option->isArray() === $this->isArray() && $option->isValueRequired() === $this->isValueRequired() && $option->isValueOptional() === $this->isValueOptional();
     }

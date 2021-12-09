@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\String_;
 
-use RectorPrefix20211208\Nette\Utils\Strings;
+use RectorPrefix20211209\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -70,7 +70,7 @@ CODE_SAMPLE
     public function getExistingClasses(\PhpParser\Node\Scalar\String_ $string) : array
     {
         /** @var mixed[] $matches */
-        $matches = \RectorPrefix20211208\Nette\Utils\Strings::matchAll($string->value, self::CLASS_BEFORE_STATIC_ACCESS_REGEX, \PREG_PATTERN_ORDER);
+        $matches = \RectorPrefix20211209\Nette\Utils\Strings::matchAll($string->value, self::CLASS_BEFORE_STATIC_ACCESS_REGEX, \PREG_PATTERN_ORDER);
         if (!isset($matches['class_name'])) {
             return [];
         }
@@ -91,7 +91,7 @@ CODE_SAMPLE
     {
         $quotedClassNames = \array_map('preg_quote', $classNames);
         // @see https://regex101.com/r/8nGS0F/1
-        $parts = \RectorPrefix20211208\Nette\Utils\Strings::split($string->value, '#(' . \implode('|', $quotedClassNames) . ')#');
+        $parts = \RectorPrefix20211209\Nette\Utils\Strings::split($string->value, '#(' . \implode('|', $quotedClassNames) . ')#');
         return \array_filter($parts, function (string $className) : bool {
             return $className !== '';
         });

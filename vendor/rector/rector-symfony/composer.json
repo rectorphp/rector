@@ -32,7 +32,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Symfony\\Tests\\": "tests"
+            "Rector\\Symfony\\Tests\\": "tests",
+            "Rector\\Symfony\\Utils\\": "utils"
         },
         "classmap": [
             "stubs"
@@ -44,7 +45,7 @@
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
         "docs": [
-            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi",
+            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi --configure-method",
             "vendor\/bin\/ecs check-markdown docs\/rector_rules_overview.md --ansi --fix"
         ]
     },

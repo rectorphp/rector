@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRename implements \Rector\Renaming\Contract\MethodCallRenameInterface
 {
@@ -27,6 +28,7 @@ final class MethodCallRename implements \Rector\Renaming\Contract\MethodCallRena
         $this->class = $class;
         $this->oldMethod = $oldMethod;
         $this->newMethod = $newMethod;
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getClass() : string
     {

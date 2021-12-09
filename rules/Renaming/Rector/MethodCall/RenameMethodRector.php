@@ -20,7 +20,7 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211208\Webmozart\Assert\Assert;
+use RectorPrefix20211209\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
  */
@@ -101,7 +101,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? $configuration;
-        \RectorPrefix20211208\Webmozart\Assert\Assert::allIsAOf($methodCallRenames, \Rector\Renaming\Contract\MethodCallRenameInterface::class);
+        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($methodCallRenames, \Rector\Renaming\Contract\MethodCallRenameInterface::class);
         $this->methodCallRenames = $methodCallRenames;
         $this->methodCallRenameCollector->addMethodCallRenames($methodCallRenames);
     }

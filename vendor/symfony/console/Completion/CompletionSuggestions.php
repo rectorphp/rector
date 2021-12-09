@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Completion;
+namespace RectorPrefix20211209\Symfony\Component\Console\Completion;
 
-use RectorPrefix20211208\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20211209\Symfony\Component\Console\Input\InputOption;
 /**
  * Stores all completion suggestions for the current input.
  *
@@ -23,13 +23,12 @@ final class CompletionSuggestions
     /**
      * Add a suggested value for an input option or argument.
      *
-     * @param string|Suggestion $value
-     *
      * @return $this
+     * @param string|\Symfony\Component\Console\Completion\Suggestion $value
      */
-    public function suggestValue($value) : self
+    public function suggestValue($value)
     {
-        $this->valueSuggestions[] = !$value instanceof \RectorPrefix20211208\Symfony\Component\Console\Completion\Suggestion ? new \RectorPrefix20211208\Symfony\Component\Console\Completion\Suggestion($value) : $value;
+        $this->valueSuggestions[] = !$value instanceof \RectorPrefix20211209\Symfony\Component\Console\Completion\Suggestion ? new \RectorPrefix20211209\Symfony\Component\Console\Completion\Suggestion($value) : $value;
         return $this;
     }
     /**
@@ -39,7 +38,7 @@ final class CompletionSuggestions
      *
      * @return $this
      */
-    public function suggestValues(array $values) : self
+    public function suggestValues(array $values)
     {
         foreach ($values as $value) {
             $this->suggestValue($value);
@@ -51,7 +50,7 @@ final class CompletionSuggestions
      *
      * @return $this
      */
-    public function suggestOption(\RectorPrefix20211208\Symfony\Component\Console\Input\InputOption $option) : self
+    public function suggestOption(\RectorPrefix20211209\Symfony\Component\Console\Input\InputOption $option)
     {
         $this->optionSuggestions[] = $option;
         return $this;
@@ -63,7 +62,7 @@ final class CompletionSuggestions
      *
      * @return $this
      */
-    public function suggestOptions(array $options) : self
+    public function suggestOptions(array $options)
     {
         foreach ($options as $option) {
             $this->suggestOption($option);

@@ -16,13 +16,11 @@
         }
     ],
     "require": {
-        "php": ">=7.2.5",
-        "symfony\/deprecation-contracts": "^2.1|^3",
-        "symfony\/polyfill-php80": "^1.16"
+        "php": ">=8.0.2"
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211208\\Symfony\\Component\\Finder\\": ""
+            "RectorPrefix20211209\\Symfony\\Component\\Finder\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

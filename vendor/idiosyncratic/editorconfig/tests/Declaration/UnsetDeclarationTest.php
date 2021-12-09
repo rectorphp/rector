@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211208\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211209\Idiosyncratic\EditorConfig\Declaration;
 
 use DomainException;
 use ErrorException;
-use RectorPrefix20211208\PHPUnit\Framework\TestCase;
+use RectorPrefix20211209\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class UnsetDeclarationTest extends \RectorPrefix20211208\PHPUnit\Framework\TestCase
+class UnsetDeclarationTest extends \RectorPrefix20211209\PHPUnit\Framework\TestCase
 {
     public function testDeclaration()
     {
-        $declaration = new \RectorPrefix20211208\Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration('indent_style');
+        $declaration = new \RectorPrefix20211209\Idiosyncratic\EditorConfig\Declaration\UnsetDeclaration('indent_style');
         $this->assertEquals('indent_style', $declaration->getName());
         $this->assertNull($declaration->getValue());
         $this->assertEquals('indent_style=unset', (string) $declaration);

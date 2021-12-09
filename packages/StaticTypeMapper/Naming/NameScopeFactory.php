@@ -16,7 +16,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211208\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211209\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Analyser/NameScope.php#L32
  */

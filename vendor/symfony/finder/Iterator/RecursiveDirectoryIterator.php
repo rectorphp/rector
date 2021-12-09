@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20211209\Symfony\Component\Finder\Iterator;
 
-use RectorPrefix20211208\Symfony\Component\Finder\Exception\AccessDeniedException;
-use RectorPrefix20211208\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix20211209\Symfony\Component\Finder\Exception\AccessDeniedException;
+use RectorPrefix20211209\Symfony\Component\Finder\SplFileInfo;
 /**
  * Extends the \RecursiveDirectoryIterator to support relative paths.
  *
@@ -24,12 +24,21 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
      */
     private $ignoreUnreadableDirs;
     /**
-     * @var bool
+     * @var bool|null
      */
     private $rewindable;
     // these 3 properties take part of the performance optimization to avoid redoing the same work in all iterations
+    /**
+     * @var string
+     */
     private $rootPath;
+    /**
+     * @var string
+     */
     private $subPath;
+    /**
+     * @var string
+     */
     private $directorySeparator = '/';
     /**
      * @throws \RuntimeException
@@ -48,16 +57,14 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     }
     /**
      * Return an instance of SplFileInfo with support for relative paths.
-     *
-     * @return SplFileInfo
      */
-    #[\ReturnTypeWillChange]
-    public function current()
+    public function current() : \RectorPrefix20211209\Symfony\Component\Finder\SplFileInfo
     {
         // the logic here avoids redoing the same work in all iterations
-        if (null === ($subPathname = $this->subPath)) {
-            $subPathname = $this->subPath = $this->getSubPath();
+        if (!isset($this->subPath)) {
+            $this->subPath = $this->getSubPath();
         }
+        $subPathname = $this->subPath;
         if ('' !== $subPathname) {
             $subPathname .= $this->directorySeparator;
         }
@@ -65,15 +72,9 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         if ('/' !== ($basePath = $this->rootPath)) {
             $basePath .= $this->directorySeparator;
         }
-        return new \RectorPrefix20211208\Symfony\Component\Finder\SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
+        return new \RectorPrefix20211209\Symfony\Component\Finder\SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
     }
-    /**
-     * @param bool $allowLinks
-     *
-     * @return bool
-     */
-    #[\ReturnTypeWillChange]
-    public function hasChildren($allowLinks = \false)
+    public function hasChildren(bool $allowLinks = \false) : bool
     {
         $hasChildren = parent::hasChildren($allowLinks);
         if (!$hasChildren || !$this->ignoreUnreadableDirs) {
@@ -88,12 +89,9 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         }
     }
     /**
-     * @return \RecursiveDirectoryIterator
-     *
      * @throws AccessDeniedException
      */
-    #[\ReturnTypeWillChange]
-    public function getChildren()
+    public function getChildren() : \RecursiveDirectoryIterator
     {
         try {
             $children = parent::getChildren();
@@ -106,16 +104,13 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
             }
             return $children;
         } catch (\UnexpectedValueException $e) {
-            throw new \RectorPrefix20211208\Symfony\Component\Finder\Exception\AccessDeniedException($e->getMessage(), $e->getCode(), $e);
+            throw new \RectorPrefix20211209\Symfony\Component\Finder\Exception\AccessDeniedException($e->getMessage(), $e->getCode(), $e);
         }
     }
     /**
      * Do nothing for non rewindable stream.
-     *
-     * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function rewind()
+    public function rewind() : void
     {
         if (\false === $this->isRewindable()) {
             return;
@@ -124,10 +119,8 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     }
     /**
      * Checks if the stream is rewindable.
-     *
-     * @return bool
      */
-    public function isRewindable()
+    public function isRewindable() : bool
     {
         if (null !== $this->rewindable) {
             return $this->rewindable;

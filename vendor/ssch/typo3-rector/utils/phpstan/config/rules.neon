@@ -1,11 +1,11 @@
 services:
     -
-        class: Ssch\TYPO3Rector\PHPStan\Rules\AddChangelogDocBlockForRectorClass
+        class: Ssch\TYPO3Rector\PHPStan\Rules\AddChangelogDocBlockForRectorClassRule
         tags:
             - phpstan.rules.rule
 
     -
-        class: Ssch\TYPO3Rector\PHPStan\Rules\AddCodeCoverageIgnoreForRectorDefinition
+        class: Ssch\TYPO3Rector\PHPStan\Rules\AddCodeCoverageIgnoreForRectorDefinitionRule
         tags:
             - phpstan.rules.rule
 

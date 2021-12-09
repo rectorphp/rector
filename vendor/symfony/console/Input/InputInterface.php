@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Input;
+namespace RectorPrefix20211209\Symfony\Component\Console\Input;
 
-use RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211208\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * InputInterface is the interface implemented by all input classes.
  *
@@ -21,10 +21,8 @@ interface InputInterface
 {
     /**
      * Returns the first argument from the raw parameters (not parsed).
-     *
-     * @return string|null
      */
-    public function getFirstArgument();
+    public function getFirstArgument() : ?string;
     /**
      * Returns true if the raw parameters (not parsed) contain a value.
      *
@@ -35,10 +33,8 @@ interface InputInterface
      *
      * @param string|array $values     The values to look for in the raw parameters (can be an array)
      * @param bool         $onlyParams Only check real parameters, skip those following an end of options (--) signal
-     *
-     * @return bool
      */
-    public function hasParameterOption($values, $onlyParams = \false);
+    public function hasParameterOption($values, $onlyParams = \false) : bool;
     /**
      * Returns the value of a raw option (not parsed).
      *
@@ -72,7 +68,7 @@ interface InputInterface
      *
      * @return array<string|bool|int|float|array|null>
      */
-    public function getArguments();
+    public function getArguments() : array;
     /**
      * Returns the argument value for a given argument name.
      *
@@ -85,25 +81,22 @@ interface InputInterface
     /**
      * Sets an argument value by name.
      *
-     * @param mixed $value The argument value
-     *
      * @throws InvalidArgumentException When argument given doesn't exist
+     * @param mixed $value
      * @param string $name
      */
     public function setArgument($name, $value);
     /**
      * Returns true if an InputArgument object exists by name or position.
-     *
-     * @return bool
      * @param string $name
      */
-    public function hasArgument($name);
+    public function hasArgument($name) : bool;
     /**
      * Returns all the given options merged with the default values.
      *
      * @return array<string|bool|int|float|array|null>
      */
-    public function getOptions();
+    public function getOptions() : array;
     /**
      * Returns the option value for a given option name.
      *
@@ -116,25 +109,20 @@ interface InputInterface
     /**
      * Sets an option value by name.
      *
-     * @param mixed $value The option value
-     *
      * @throws InvalidArgumentException When option given doesn't exist
+     * @param mixed $value
      * @param string $name
      */
     public function setOption($name, $value);
     /**
      * Returns true if an InputOption object exists by name.
-     *
-     * @return bool
      * @param string $name
      */
-    public function hasOption($name);
+    public function hasOption($name) : bool;
     /**
      * Is this input means interactive?
-     *
-     * @return bool
      */
-    public function isInteractive();
+    public function isInteractive() : bool;
     /**
      * Sets the input interactivity.
      * @param bool $interactive

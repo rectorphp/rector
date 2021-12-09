@@ -2,6 +2,8 @@ parameters:
     inferPrivatePropertyTypeFromConstructor: true
 
 services:
+    - Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver
+
     -
         class: Ssch\TYPO3Rector\PHPStan\Type\GeneralUtilityDynamicReturnTypeExtension
         tags: [phpstan.broker.dynamicStaticMethodReturnTypeExtension]
@@ -17,4 +19,3 @@ services:
     -
         class: Ssch\TYPO3Rector\PHPStan\Type\ValidatorResolverDynamicReturnTypeExtension
         tags: [phpstan.broker.dynamicMethodReturnTypeExtension]
-

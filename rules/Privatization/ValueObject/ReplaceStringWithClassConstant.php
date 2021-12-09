@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Privatization\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 final class ReplaceStringWithClassConstant
 {
     /**
@@ -41,6 +42,7 @@ final class ReplaceStringWithClassConstant
         $this->argPosition = $argPosition;
         $this->classWithConstants = $classWithConstants;
         $this->caseInsensitive = $caseInsensitive;
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getObjectType() : \PHPStan\Type\ObjectType
     {

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20211209\Symfony\Component\Finder\Iterator;
 
 /**
  * FileTypeFilterIterator only keeps files, directories, or both.
@@ -21,6 +21,9 @@ class FileTypeFilterIterator extends \FilterIterator
 {
     public const ONLY_FILES = 1;
     public const ONLY_DIRECTORIES = 2;
+    /**
+     * @var int
+     */
     private $mode;
     /**
      * @param \Iterator $iterator The Iterator to filter
@@ -33,11 +36,8 @@ class FileTypeFilterIterator extends \FilterIterator
     }
     /**
      * Filters the iterator values.
-     *
-     * @return bool
      */
-    #[\ReturnTypeWillChange]
-    public function accept()
+    public function accept() : bool
     {
         $fileinfo = $this->current();
         if (self::ONLY_DIRECTORIES === (self::ONLY_DIRECTORIES & $this->mode) && $fileinfo->isFile()) {

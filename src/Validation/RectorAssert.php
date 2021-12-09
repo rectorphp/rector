@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Validation;
 
 use Rector\Core\Util\StringUtils;
-use RectorPrefix20211208\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix20211209\Webmozart\Assert\InvalidArgumentException;
 /**
  * @see \Rector\Core\Tests\Validation\RectorAssertTest
  */
@@ -25,6 +25,6 @@ final class RectorAssert
             return;
         }
         $errorMessage = $className . ' is not a valid class name';
-        throw new \RectorPrefix20211208\Webmozart\Assert\InvalidArgumentException($errorMessage);
+        throw new \RectorPrefix20211209\Webmozart\Assert\InvalidArgumentException($errorMessage);
     }
 }

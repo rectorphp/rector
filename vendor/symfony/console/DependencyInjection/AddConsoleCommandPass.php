@@ -8,60 +8,46 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\DependencyInjection;
+namespace RectorPrefix20211209\Symfony\Component\Console\DependencyInjection;
 
-use RectorPrefix20211208\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211208\Symfony\Component\Console\Command\LazyCommand;
-use RectorPrefix20211208\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20211208\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix20211209\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211209\Symfony\Component\Console\Command\LazyCommand;
+use RectorPrefix20211209\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers console commands.
  *
  * @author Grégoire Pineau <lyrixx@lyrixx.info>
  */
-class AddConsoleCommandPass implements \RectorPrefix20211208\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
+class AddConsoleCommandPass implements \RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
-    private $commandLoaderServiceId;
-    private $commandTag;
-    private $noPreloadTag;
-    private $privateTagName;
-    public function __construct(string $commandLoaderServiceId = 'console.command_loader', string $commandTag = 'console.command', string $noPreloadTag = 'container.no_preload', string $privateTagName = 'container.private')
-    {
-        if (0 < \func_num_args()) {
-            trigger_deprecation('symfony/console', '5.3', 'Configuring "%s" is deprecated.', __CLASS__);
-        }
-        $this->commandLoaderServiceId = $commandLoaderServiceId;
-        $this->commandTag = $commandTag;
-        $this->noPreloadTag = $noPreloadTag;
-        $this->privateTagName = $privateTagName;
-    }
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
     public function process($container)
     {
-        $commandServices = $container->findTaggedServiceIds($this->commandTag, \true);
+        $commandServices = $container->findTaggedServiceIds('console.command', \true);
         $lazyCommandMap = [];
         $lazyCommandRefs = [];
         $serviceIds = [];
         foreach ($commandServices as $id => $tags) {
             $definition = $container->getDefinition($id);
-            $definition->addTag($this->noPreloadTag);
+            $definition->addTag('container.no_preload');
             $class = $container->getParameterBag()->resolveValue($definition->getClass());
             if (isset($tags[0]['command'])) {
                 $aliases = $tags[0]['command'];
             } else {
                 if (!($r = $container->getReflectionClass($class))) {
-                    throw new \RectorPrefix20211208\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
+                    throw new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
                 }
-                if (!$r->isSubclassOf(\RectorPrefix20211208\Symfony\Component\Console\Command\Command::class)) {
-                    throw new \RectorPrefix20211208\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The service "%s" tagged "%s" must be a subclass of "%s".', $id, $this->commandTag, \RectorPrefix20211208\Symfony\Component\Console\Command\Command::class));
+                if (!$r->isSubclassOf(\RectorPrefix20211209\Symfony\Component\Console\Command\Command::class)) {
+                    throw new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The service "%s" tagged "%s" must be a subclass of "%s".', $id, 'console.command', \RectorPrefix20211209\Symfony\Component\Console\Command\Command::class));
                 }
                 $aliases = $class::getDefaultName();
             }
@@ -71,7 +57,7 @@ class AddConsoleCommandPass implements \RectorPrefix20211208\Symfony\Component\D
                 $commandName = \array_shift($aliases);
             }
             if (null === $commandName) {
-                if (!$definition->isPublic() || $definition->isPrivate() || $definition->hasTag($this->privateTagName)) {
+                if (!$definition->isPublic() || $definition->isPrivate() || $definition->hasTag('container.private')) {
                     $commandId = 'console.command.public_alias.' . $id;
                     $container->setAlias($commandId, $id)->setPublic(\true);
                     $id = $commandId;
@@ -82,7 +68,7 @@ class AddConsoleCommandPass implements \RectorPrefix20211208\Symfony\Component\D
             $description = $tags[0]['description'] ?? null;
             unset($tags[0]);
             $lazyCommandMap[$commandName] = $id;
-            $lazyCommandRefs[$id] = new \RectorPrefix20211208\Symfony\Component\DependencyInjection\TypedReference($id, $class);
+            $lazyCommandRefs[$id] = new \RectorPrefix20211209\Symfony\Component\DependencyInjection\TypedReference($id, $class);
             foreach ($aliases as $alias) {
                 $lazyCommandMap[$alias] = $id;
             }
@@ -102,20 +88,20 @@ class AddConsoleCommandPass implements \RectorPrefix20211208\Symfony\Component\D
             }
             if (!$description) {
                 if (!($r = $container->getReflectionClass($class))) {
-                    throw new \RectorPrefix20211208\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
+                    throw new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Class "%s" used for service "%s" cannot be found.', $class, $id));
                 }
-                if (!$r->isSubclassOf(\RectorPrefix20211208\Symfony\Component\Console\Command\Command::class)) {
-                    throw new \RectorPrefix20211208\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The service "%s" tagged "%s" must be a subclass of "%s".', $id, $this->commandTag, \RectorPrefix20211208\Symfony\Component\Console\Command\Command::class));
+                if (!$r->isSubclassOf(\RectorPrefix20211209\Symfony\Component\Console\Command\Command::class)) {
+                    throw new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('The service "%s" tagged "%s" must be a subclass of "%s".', $id, 'console.command', \RectorPrefix20211209\Symfony\Component\Console\Command\Command::class));
                 }
                 $description = $class::getDefaultDescription();
             }
             if ($description) {
                 $definition->addMethodCall('setDescription', [$description]);
-                $container->register('.' . $id . '.lazy', \RectorPrefix20211208\Symfony\Component\Console\Command\LazyCommand::class)->setArguments([$commandName, $aliases, $description, $isHidden, new \RectorPrefix20211208\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($lazyCommandRefs[$id])]);
-                $lazyCommandRefs[$id] = new \RectorPrefix20211208\Symfony\Component\DependencyInjection\Reference('.' . $id . '.lazy');
+                $container->register('.' . $id . '.lazy', \RectorPrefix20211209\Symfony\Component\Console\Command\LazyCommand::class)->setArguments([$commandName, $aliases, $description, $isHidden, new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($lazyCommandRefs[$id])]);
+                $lazyCommandRefs[$id] = new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Reference('.' . $id . '.lazy');
             }
         }
-        $container->register($this->commandLoaderServiceId, \RectorPrefix20211208\Symfony\Component\Console\CommandLoader\ContainerCommandLoader::class)->setPublic(\true)->addTag($this->noPreloadTag)->setArguments([\RectorPrefix20211208\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass::register($container, $lazyCommandRefs), $lazyCommandMap]);
+        $container->register('console.command_loader', \RectorPrefix20211209\Symfony\Component\Console\CommandLoader\ContainerCommandLoader::class)->setPublic(\true)->addTag('container.no_preload')->setArguments([\RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass::register($container, $lazyCommandRefs), $lazyCommandMap]);
         $container->setParameter('console.command.ids', $serviceIds);
     }
 }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211208\Symfony\Component\Console\Input;
+namespace RectorPrefix20211209\Symfony\Component\Console\Input;
 
-use RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20211208\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a command line argument.
  *
@@ -22,15 +22,27 @@ class InputArgument
     public const REQUIRED = 1;
     public const OPTIONAL = 2;
     public const IS_ARRAY = 4;
+    /**
+     * @var string
+     */
     private $name;
+    /**
+     * @var int
+     */
     private $mode;
+    /**
+     * @var mixed[]|bool|float|int|string|null
+     */
     private $default;
+    /**
+     * @var string
+     */
     private $description;
     /**
      * @param string                           $name        The argument name
      * @param int|null                         $mode        The argument mode: self::REQUIRED or self::OPTIONAL
      * @param string                           $description A description text
-     * @param string|bool|int|float|array|null $default     The default value (for self::OPTIONAL mode only)
+     * @param mixed[]|bool|float|int|string $default The default value (for self::OPTIONAL mode only)
      *
      * @throws InvalidArgumentException When argument mode is not valid
      */
@@ -39,7 +51,7 @@ class InputArgument
         if (null === $mode) {
             $mode = self::OPTIONAL;
         } elseif ($mode > 7 || $mode < 1) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
         }
         $this->name = $name;
         $this->mode = $mode;
@@ -48,10 +60,8 @@ class InputArgument
     }
     /**
      * Returns the argument name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -60,7 +70,7 @@ class InputArgument
      *
      * @return bool true if parameter mode is self::REQUIRED, false otherwise
      */
-    public function isRequired()
+    public function isRequired() : bool
     {
         return self::REQUIRED === (self::REQUIRED & $this->mode);
     }
@@ -69,27 +79,26 @@ class InputArgument
      *
      * @return bool true if mode is self::IS_ARRAY, false otherwise
      */
-    public function isArray()
+    public function isArray() : bool
     {
         return self::IS_ARRAY === (self::IS_ARRAY & $this->mode);
     }
     /**
      * Sets the default value.
      *
-     * @param string|bool|int|float|array|null $default
-     *
      * @throws LogicException When incorrect default value is given
+     * @param mixed[]|bool|float|int|string $default
      */
     public function setDefault($default = null)
     {
         if (self::REQUIRED === $this->mode && null !== $default) {
-            throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
+            throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
         }
         if ($this->isArray()) {
             if (null === $default) {
                 $default = [];
             } elseif (!\is_array($default)) {
-                throw new \RectorPrefix20211208\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
+                throw new \RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
             }
         }
         $this->default = $default;
@@ -105,10 +114,8 @@ class InputArgument
     }
     /**
      * Returns the description text.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription() : string
     {
         return $this->description;
     }
