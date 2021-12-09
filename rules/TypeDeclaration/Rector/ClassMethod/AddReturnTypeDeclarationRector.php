@@ -10,6 +10,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
@@ -96,7 +97,7 @@ CODE_SAMPLE
     private function processClassMethodNodeWithTypehints(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $newType) : void
     {
         // remove it
-        if ($newType instanceof \PHPStan\Type\MixedType) {
+        if ($newType instanceof \PHPStan\Type\MixedType && !$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::MIXED_TYPE)) {
             $classMethod->returnType = null;
             return;
         }

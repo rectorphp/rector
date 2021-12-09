@@ -73,11 +73,19 @@ final class SymfonySetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
+    public const SYMFONY_53 = __DIR__ . '/../../config/sets/symfony/symfony53.php';
+    /**
+     * @var string
+     */
     public const SYMFONY_54 = __DIR__ . '/../../config/sets/symfony/symfony54.php';
     /**
      * @var string
      */
     public const SYMFONY_52_VALIDATOR_ATTRIBUTES = __DIR__ . '/../../config/sets/symfony/symfony52-validator-attributes.php';
+    /**
+     * @var string
+     */
+    public const SYMFONY_60 = __DIR__ . '/../../config/sets/symfony/symfony60.php';
     /**
      * @var string
      */

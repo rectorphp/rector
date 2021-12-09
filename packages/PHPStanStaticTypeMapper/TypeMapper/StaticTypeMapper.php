@@ -15,6 +15,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
+use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 /**
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
  *
@@ -52,6 +53,10 @@ final class StaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
      */
     public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
     {
+        // special case, for autocomplete of return type
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType) {
+            return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::STATIC()->getValue());
+        }
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType) {
             return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF()->getValue());
         }

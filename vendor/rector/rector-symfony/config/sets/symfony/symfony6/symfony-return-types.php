@@ -176,5 +176,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\DependencyInjection\\Container', 'getParameter', new \PHPStan\Type\UnionType($scalarTypes)),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\DependencyInjection\\ContainerInterface', 'getParameter', new \PHPStan\Type\UnionType($scalarTypes)),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface', 'normalize', new \PHPStan\Type\UnionType(\array_merge($scalarTypes, [new \PHPStan\Type\ObjectType('ArrayObject')]))),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Security\\Http\\Authenticator\\AuthenticatorInterface', 'authenticate', new \PHPStan\Type\ObjectType('Symfony\\Component\\Security\\Http\\Authenticator\\Passport\\Passport')),
     ]);
 };

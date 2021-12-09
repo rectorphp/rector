@@ -453,4 +453,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATE_DYNAMIC_PROPERTIES = \Rector\Core\ValueObject\PhpVersion::PHP_82;
+    /**
+     * @see https://wiki.php.net/rfc/mixed_type_v2
+     * @var int
+     */
+    public const MIXED_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
 }
