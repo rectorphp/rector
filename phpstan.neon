@@ -622,3 +622,6 @@ parameters:
             paths:
                 - rules/Privatization/Naming/ConstantNaming.php
                 - rules/Naming/Naming/VariableNaming.php
+
+        # skipped on purpose, as ctor overrie
+        - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
