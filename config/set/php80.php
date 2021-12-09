@@ -10,6 +10,7 @@ use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Php80\Rector\Class_\StringableForToStringRector;
+use Rector\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector;
 use Rector\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector;
 use Rector\Php80\Rector\ClassMethod\OptionalParametersAfterRequiredRector;
 use Rector\Php80\Rector\ClassMethod\SetStateToStaticRector;
@@ -100,4 +101,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(Php8ResourceReturnToObjectRector::class);
+    $services->set(AddParamBasedOnParentClassMethodRector::class);
 };

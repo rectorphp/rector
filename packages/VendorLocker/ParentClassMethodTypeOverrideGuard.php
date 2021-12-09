@@ -112,7 +112,7 @@ final class ParentClassMethodTypeOverrideGuard
         return $inferedType::class !== $currentType::class;
     }
 
-    private function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
+    public function getParentClassMethod(ClassMethod $classMethod): ?MethodReflection
     {
         $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
