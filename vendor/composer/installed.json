@@ -3030,17 +3030,17 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "v5.4.0",
-            "version_normalized": "5.4.0.0",
+            "version": "v5.4.1",
+            "version_normalized": "5.4.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "69c398723857bb19fdea78496cedea0f756decab"
+                "reference": "9bd1ef389a2fe05fea7306b6155403e8a960d73d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/69c398723857bb19fdea78496cedea0f756decab",
-                "reference": "69c398723857bb19fdea78496cedea0f756decab",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/9bd1ef389a2fe05fea7306b6155403e8a960d73d",
+                "reference": "9bd1ef389a2fe05fea7306b6155403e8a960d73d",
                 "shasum": ""
             },
             "require": {
@@ -3074,7 +3074,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2021-11-29T15:30:56+00:00",
+            "time": "2021-12-01T16:25:34+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -3107,7 +3107,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v5.4.0"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v5.4.1"
             },
             "funding": [
                 {
@@ -3124,92 +3124,6 @@
                 }
             ],
             "install-path": "..\/symfony\/dependency-injection"
-        },
-        {
-            "name": "symfony\/event-dispatcher",
-            "version": "v6.0.0",
-            "version_normalized": "6.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/event-dispatcher.git",
-                "reference": "2774908d5ae32fd94e363e7cbbd87462712c4576"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/event-dispatcher\/zipball\/2774908d5ae32fd94e363e7cbbd87462712c4576",
-                "reference": "2774908d5ae32fd94e363e7cbbd87462712c4576",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0.2",
-                "symfony\/event-dispatcher-contracts": "^2|^3"
-            },
-            "conflict": {
-                "symfony\/dependency-injection": "<5.4"
-            },
-            "provide": {
-                "psr\/event-dispatcher-implementation": "1.0",
-                "symfony\/event-dispatcher-implementation": "2.0|3.0"
-            },
-            "require-dev": {
-                "psr\/log": "^1|^2|^3",
-                "symfony\/config": "^5.4|^6.0",
-                "symfony\/dependency-injection": "^5.4|^6.0",
-                "symfony\/error-handler": "^5.4|^6.0",
-                "symfony\/expression-language": "^5.4|^6.0",
-                "symfony\/http-foundation": "^5.4|^6.0",
-                "symfony\/service-contracts": "^1.1|^2|^3",
-                "symfony\/stopwatch": "^5.4|^6.0"
-            },
-            "suggest": {
-                "symfony\/dependency-injection": "",
-                "symfony\/http-kernel": ""
-            },
-            "time": "2021-11-23T19:05:29+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\": ""
-                },
-                "exclude-from-classmap": [
-                    "\/Tests\/"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Provides tools that allow your application components to communicate with each other by dispatching events and listening to them",
-            "homepage": "https:\/\/symfony.com",
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/event-dispatcher\/tree\/v6.0.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/event-dispatcher"
         },
         {
             "name": "symfony\/filesystem",

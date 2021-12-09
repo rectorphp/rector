@@ -22,18 +22,12 @@ use RectorPrefix20211209\Symfony\Component\EventDispatcher\EventSubscriberInterf
  */
 class ErrorListener implements \RectorPrefix20211209\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface|null
-     */
-    private $logger;
+    private ?\RectorPrefix20211209\Psr\Log\LoggerInterface $logger;
     public function __construct(\RectorPrefix20211209\Psr\Log\LoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }
-    /**
-     * @param \Symfony\Component\Console\Event\ConsoleErrorEvent $event
-     */
-    public function onConsoleError($event)
+    public function onConsoleError(\RectorPrefix20211209\Symfony\Component\Console\Event\ConsoleErrorEvent $event)
     {
         if (null === $this->logger) {
             return;
@@ -45,10 +39,7 @@ class ErrorListener implements \RectorPrefix20211209\Symfony\Component\EventDisp
         }
         $this->logger->critical('Error thrown while running command "{command}". Message: "{message}"', ['exception' => $error, 'command' => $inputString, 'message' => $error->getMessage()]);
     }
-    /**
-     * @param \Symfony\Component\Console\Event\ConsoleTerminateEvent $event
-     */
-    public function onConsoleTerminate($event)
+    public function onConsoleTerminate(\RectorPrefix20211209\Symfony\Component\Console\Event\ConsoleTerminateEvent $event)
     {
         if (null === $this->logger) {
             return;

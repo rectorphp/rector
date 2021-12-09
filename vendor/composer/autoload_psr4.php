@@ -48,7 +48,6 @@ return array(
     'RectorPrefix20211209\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix20211209\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix20211209\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
-    'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\' => array($vendorDir . '/symfony/event-dispatcher'),
     'RectorPrefix20211209\\Symfony\\Component\\DependencyInjection\\' => array($vendorDir . '/symfony/dependency-injection'),
     'RectorPrefix20211209\\Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'RectorPrefix20211209\\Symfony\\Component\\Config\\' => array($vendorDir . '/symfony/config'),

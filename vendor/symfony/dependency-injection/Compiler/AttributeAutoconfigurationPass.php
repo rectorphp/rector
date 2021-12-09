@@ -14,6 +14,7 @@ use RectorPrefix20211209\Symfony\Component\DependencyInjection\ChildDefinition;
 use RectorPrefix20211209\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20211209\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 /**
  * @author Alexander M. Turek <me@derrabus.de>
  */
@@ -87,11 +88,18 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony
                 }
             }
         }
-        if ($this->parameterAttributeConfigurators && ($constructorReflector = $this->getConstructor($value, \false))) {
-            foreach ($constructorReflector->getParameters() as $parameterReflector) {
-                foreach ([] as $attribute) {
-                    if ($configurator = $this->parameterAttributeConfigurators[$attribute->getName()] ?? null) {
-                        $configurator($conditionals, $attribute->newInstance(), $parameterReflector);
+        if ($this->parameterAttributeConfigurators) {
+            try {
+                $constructorReflector = $this->getConstructor($value, \false);
+            } catch (\RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
+                $constructorReflector = null;
+            }
+            if ($constructorReflector) {
+                foreach ($constructorReflector->getParameters() as $parameterReflector) {
+                    foreach ([] as $attribute) {
+                        if ($configurator = $this->parameterAttributeConfigurators[$attribute->getName()] ?? null) {
+                            $configurator($conditionals, $attribute->newInstance(), $parameterReflector);
+                        }
                     }
                 }
             }

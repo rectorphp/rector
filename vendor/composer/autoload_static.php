@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033
+class ComposerStaticInit7dab3ea274a2c732ea9bd5e773bca998
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -71,7 +71,6 @@ class ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033
             'RectorPrefix20211209\\Symfony\\Component\\Process\\' => 47,
             'RectorPrefix20211209\\Symfony\\Component\\Finder\\' => 46,
             'RectorPrefix20211209\\Symfony\\Component\\Filesystem\\' => 50,
-            'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\' => 55,
             'RectorPrefix20211209\\Symfony\\Component\\DependencyInjection\\' => 59,
             'RectorPrefix20211209\\Symfony\\Component\\Console\\' => 47,
             'RectorPrefix20211209\\Symfony\\Component\\Config\\' => 46,
@@ -277,10 +276,6 @@ class ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033
         'RectorPrefix20211209\\Symfony\\Component\\Filesystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/filesystem',
-        ),
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
         ),
         'RectorPrefix20211209\\Symfony\\Component\\DependencyInjection\\' => 
         array (
@@ -1408,16 +1403,6 @@ class ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033
         'RectorPrefix20211209\\Symfony\\Component\\DependencyInjection\\TaggedContainerInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/TaggedContainerInterface.php',
         'RectorPrefix20211209\\Symfony\\Component\\DependencyInjection\\TypedReference' => __DIR__ . '/..' . '/symfony/dependency-injection/TypedReference.php',
         'RectorPrefix20211209\\Symfony\\Component\\DependencyInjection\\Variable' => __DIR__ . '/..' . '/symfony/dependency-injection/Variable.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\Attribute\\AsEventListener' => __DIR__ . '/..' . '/symfony/event-dispatcher/Attribute/AsEventListener.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\Debug\\TraceableEventDispatcher' => __DIR__ . '/..' . '/symfony/event-dispatcher/Debug/TraceableEventDispatcher.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\Debug\\WrappedListener' => __DIR__ . '/..' . '/symfony/event-dispatcher/Debug/WrappedListener.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\DependencyInjection\\AddEventAliasesPass' => __DIR__ . '/..' . '/symfony/event-dispatcher/DependencyInjection/AddEventAliasesPass.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\DependencyInjection\\RegisterListenersPass' => __DIR__ . '/..' . '/symfony/event-dispatcher/DependencyInjection/RegisterListenersPass.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\EventDispatcher' => __DIR__ . '/..' . '/symfony/event-dispatcher/EventDispatcher.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\EventDispatcherInterface' => __DIR__ . '/..' . '/symfony/event-dispatcher/EventDispatcherInterface.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\EventSubscriberInterface' => __DIR__ . '/..' . '/symfony/event-dispatcher/EventSubscriberInterface.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\GenericEvent' => __DIR__ . '/..' . '/symfony/event-dispatcher/GenericEvent.php',
-        'RectorPrefix20211209\\Symfony\\Component\\EventDispatcher\\ImmutableEventDispatcher' => __DIR__ . '/..' . '/symfony/event-dispatcher/ImmutableEventDispatcher.php',
         'RectorPrefix20211209\\Symfony\\Component\\Filesystem\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/filesystem/Exception/ExceptionInterface.php',
         'RectorPrefix20211209\\Symfony\\Component\\Filesystem\\Exception\\FileNotFoundException' => __DIR__ . '/..' . '/symfony/filesystem/Exception/FileNotFoundException.php',
         'RectorPrefix20211209\\Symfony\\Component\\Filesystem\\Exception\\IOException' => __DIR__ . '/..' . '/symfony/filesystem/Exception/IOException.php',
@@ -3805,9 +3790,9 @@ class ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbe7a6bdf1d1e6913bf2d2b35b0e7b033::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7dab3ea274a2c732ea9bd5e773bca998::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7dab3ea274a2c732ea9bd5e773bca998::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7dab3ea274a2c732ea9bd5e773bca998::$classMap;
 
         }, null, ClassLoader::class);
     }

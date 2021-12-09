@@ -23,9 +23,8 @@ final class ConsoleCommandEvent extends \RectorPrefix20211209\Symfony\Component\
     public const RETURN_CODE_DISABLED = 113;
     /**
      * Indicates if the command should be run or skipped.
-     * @var bool
      */
-    private $commandShouldRun = \true;
+    private bool $commandShouldRun = \true;
     /**
      * Disables the command, so it won't be run.
      */
