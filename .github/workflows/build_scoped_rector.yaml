@@ -49,7 +49,6 @@ jobs:
             # somehow psr/http-message needed now when downgrading ssch/typo3-rector
             -   run: |
                     composer require psr/http-message
-                    composer require symfony/event-dispatcher
                     composer update --no-dev --ansi
 
             # early downgrade individual functions
@@ -83,7 +82,7 @@ jobs:
                     php-version: 7.1
                     coverage: none
             -   run: composer create-project php-parallel-lint/php-parallel-lint php-parallel-lint --ansi
-            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/symfony/console/Tester
+            -   run: php-parallel-lint/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/rector/rector-nette/tests --exclude rector-prefixed-downgraded/vendor/symfony/polyfill-mbstring/bootstrap80.php --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/symfony/console/Event --exclude rector-prefixed-downgraded/vendor/symfony/console/EventListener --exclude rector-prefixed-downgraded/vendor/symfony/console/Tester
 
             # 5. copy repository meta files
             -   run: |

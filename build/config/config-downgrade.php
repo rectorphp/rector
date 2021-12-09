@@ -108,6 +108,9 @@ final class DowngradeRectorConfig
 
         // use relative paths, so files are excluded on nested directory too
         'vendor/symfony/cache/*',
+        // no event-dispatcher used
+        'vendor/symfony/console/Event/*',
+        'vendor/symfony/console/EventListener/*',
         // only for composer patches on composer install - not needed in final package
         'vendor/cweagans/*',
         'nette/caching/src/Bridges/*',
@@ -119,6 +122,7 @@ final class DowngradeRectorConfig
         'vendor/symfony/dependency-injection/ExpressionLanguage.php',
         'vendor/symfony/dependency-injection/ExpressionLanguageProvider.php',
         'vendor/symfony/var-dumper/Caster/*',
+        'vendor/symfony/console/Tester/*',
         'vendor/symfony/console/Tester/*',
         'vendor/symfony/contracts/Cache/*',
         // depends on PHPUnit, that is only in dev deps
