@@ -625,3 +625,6 @@ parameters:
 
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
+
+        # complex detection
+        - '#Cognitive complexity for "Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector\:\:addConfigureCallValues\(\)" is \d+, keep it under 10#'
