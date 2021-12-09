@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Php74\Rector\Function_;
+namespace Rector\Transform\Rector\Function_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
@@ -19,7 +19,7 @@ use Webmozart\Assert\Assert;
 
 /**
  * @changelog https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
- * @see \Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\ReservedFnFunctionRectorTest
+ * @see \Rector\Tests\Transform\Rector\Function_\ReservedFnFunctionRector\ReservedFnFunctionRectorTest
  */
 final class ReservedFnFunctionRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {

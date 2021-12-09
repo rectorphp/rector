@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector;
+namespace Rector\Tests\Transform\Rector\Function_\ReservedFnFunctionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;

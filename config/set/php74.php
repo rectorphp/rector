@@ -11,7 +11,6 @@ use Rector\Php74\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector;
 use Rector\Php74\Rector\FuncCall\FilterVarToAddSlashesRector;
 use Rector\Php74\Rector\FuncCall\GetCalledClassToStaticClassRector;
 use Rector\Php74\Rector\FuncCall\MbStrrposEncodingArgumentPositionRector;
-use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
 use Rector\Php74\Rector\LNumber\AddLiteralSeparatorToNumberRector;
 use Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector;
 use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
@@ -48,8 +47,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RealToFloatTypeCastRector::class);
 
     $services->set(NullCoalescingOperatorRector::class);
-
-    $services->set(ReservedFnFunctionRector::class);
 
     $services->set(ClosureToArrowFunctionRector::class);
 
