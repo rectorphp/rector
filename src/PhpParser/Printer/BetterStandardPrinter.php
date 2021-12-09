@@ -162,6 +162,15 @@ final class BetterStandardPrinter extends Standard
         return ltrim($content);
     }
 
+    protected function p(Node $node, $parentFormatPreserved = false): string
+    {
+        $content = parent::p($node, $parentFormatPreserved);
+
+        return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === true
+            ? ('(' . $content . ')')
+            : $content;
+    }
+
     /**
      * This allows to use both spaces and tabs vs. original space-only
      */

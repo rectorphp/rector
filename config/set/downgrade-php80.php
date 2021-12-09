@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Rector\Core\Configuration\Option;
 
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector;
 use Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector;
@@ -52,6 +53,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new DowngradeAttributeToAnnotation('Nette\DI\Attributes\Inject', 'inject'),
         ]);
 
+    $services->set(DowngradeDereferenceableOperationRector::class);
     $services->set(DowngradeUnionTypeTypedPropertyRector::class);
     $services->set(DowngradeUnionTypeDeclarationRector::class);
     $services->set(DowngradeMixedTypeDeclarationRector::class);
