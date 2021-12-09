@@ -34,7 +34,6 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use Symplify\SmartFileSystem\SmartFileSystem;
 
 /**
  * The nodes provided by this resolver is for read-only analysis only!
@@ -60,7 +59,6 @@ final class AstResolver
 
     public function __construct(
         private readonly SmartPhpParser $smartPhpParser,
-        private readonly SmartFileSystem $smartFileSystem,
         private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeNameResolver $nodeNameResolver,
@@ -142,7 +140,6 @@ final class AstResolver
             return null;
         }
 
-        $fileContent = $this->smartFileSystem->readFile($fileName);
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
         if ($nodes === null) {
             return null;
