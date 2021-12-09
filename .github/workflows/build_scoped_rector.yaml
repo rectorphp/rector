@@ -49,6 +49,7 @@ jobs:
             # somehow psr/http-message needed now when downgrading ssch/typo3-rector
             -   run: |
                     composer require psr/http-message
+                    composer require symfony/event-dispatcher
                     composer update --no-dev --ansi
 
             # early downgrade individual functions

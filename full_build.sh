@@ -18,6 +18,7 @@ composer clear-cache
 
 # somehow needed now when downgrading ssch/typo3-rector
 composer require psr/http-message
+composer require symfony/event-dispatcher
 composer update --no-dev --ansi
 
 rsync --exclude rector-build -av * rector-build --quiet
