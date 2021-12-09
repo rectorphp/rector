@@ -26,9 +26,6 @@ class ConsoleLogger extends \RectorPrefix20211209\Psr\Log\AbstractLogger
 {
     public const INFO = 'info';
     public const ERROR = 'error';
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
     private $output;
     /**
      * @var mixed[]

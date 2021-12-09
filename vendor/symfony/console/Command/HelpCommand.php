@@ -25,9 +25,6 @@ use RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface;
  */
 class HelpCommand extends \RectorPrefix20211209\Symfony\Component\Console\Command\Command
 {
-    /**
-     * @var \Symfony\Component\Console\Command\Command
-     */
     private $command;
     /**
      * {@inheritdoc}

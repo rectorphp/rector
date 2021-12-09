@@ -19,9 +19,6 @@ use RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface;
 class ProgressIndicator
 {
     private const FORMATS = ['normal' => ' %indicator% %message%', 'normal_no_ansi' => ' %message%', 'verbose' => ' %indicator% %message% (%elapsed:6s%)', 'verbose_no_ansi' => ' %message% (%elapsed:6s%)', 'very_verbose' => ' %indicator% %message% (%elapsed:6s%, %memory:6s%)', 'very_verbose_no_ansi' => ' %message% (%elapsed:6s%, %memory:6s%)'];
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
     private $output;
     /**
      * @var int

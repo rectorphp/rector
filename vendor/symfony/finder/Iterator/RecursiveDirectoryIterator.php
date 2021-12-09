@@ -74,7 +74,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
         }
         return new \RectorPrefix20211209\Symfony\Component\Finder\SplFileInfo($basePath . $subPathname, $this->subPath, $subPathname);
     }
-    public function hasChildren(bool $allowLinks = \false) : bool
+    public function hasChildren($allowLinks = \false) : bool
     {
         $hasChildren = parent::hasChildren($allowLinks);
         if (!$hasChildren || !$this->ignoreUnreadableDirs) {

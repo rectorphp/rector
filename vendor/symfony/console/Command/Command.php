@@ -42,10 +42,7 @@ class Command
      * @var string|null The default command description
      */
     protected static $defaultDescription;
-    /**
-     * @var \Symfony\Component\Console\Application|null
-     */
-    private $application;
+    private $application = null;
     /**
      * @var string|null
      */
@@ -58,9 +55,6 @@ class Command
      * @var mixed[]
      */
     private $aliases = [];
-    /**
-     * @var \Symfony\Component\Console\Input\InputDefinition
-     */
     private $definition;
     /**
      * @var bool
@@ -74,10 +68,7 @@ class Command
      * @var string
      */
     private $description = '';
-    /**
-     * @var \Symfony\Component\Console\Input\InputDefinition|null
-     */
-    private $fullDefinition;
+    private $fullDefinition = null;
     /**
      * @var bool
      */
@@ -94,10 +85,7 @@ class Command
      * @var mixed[]
      */
     private $usages = [];
-    /**
-     * @var \Symfony\Component\Console\Helper\HelperSet|null
-     */
-    private $helperSet;
+    private $helperSet = null;
     public static function getDefaultName() : ?string
     {
         $class = static::class;

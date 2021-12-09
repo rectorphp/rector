@@ -19,17 +19,8 @@ use RectorPrefix20211209\Symfony\Component\VarDumper\Dumper\CliDumper;
  */
 final class Dumper
 {
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
     private $output;
-    /**
-     * @var \Symfony\Component\VarDumper\Dumper\CliDumper|null
-     */
     private $dumper;
-    /**
-     * @var \Symfony\Component\VarDumper\Cloner\ClonerInterface|null
-     */
     private $cloner;
     /**
      * @var \Closure

@@ -76,10 +76,7 @@ class Application implements \RectorPrefix20211209\Symfony\Contracts\Service\Res
      * @var bool
      */
     private $wantHelps = \false;
-    /**
-     * @var \Symfony\Component\Console\Command\Command|null
-     */
-    private $runningCommand;
+    private $runningCommand = null;
     /**
      * @var string
      */
@@ -88,10 +85,7 @@ class Application implements \RectorPrefix20211209\Symfony\Contracts\Service\Res
      * @var string
      */
     private $version;
-    /**
-     * @var \Symfony\Component\Console\CommandLoader\CommandLoaderInterface|null
-     */
-    private $commandLoader;
+    private $commandLoader = null;
     /**
      * @var bool
      */
@@ -100,21 +94,9 @@ class Application implements \RectorPrefix20211209\Symfony\Contracts\Service\Res
      * @var bool
      */
     private $autoExit = \true;
-    /**
-     * @var \Symfony\Component\Console\Input\InputDefinition
-     */
     private $definition;
-    /**
-     * @var \Symfony\Component\Console\Helper\HelperSet
-     */
     private $helperSet;
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface|null
-     */
-    private $dispatcher;
-    /**
-     * @var \Symfony\Component\Console\Terminal
-     */
+    private $dispatcher = null;
     private $terminal;
     /**
      * @var string
@@ -128,9 +110,6 @@ class Application implements \RectorPrefix20211209\Symfony\Contracts\Service\Res
      * @var bool
      */
     private $initialized = \false;
-    /**
-     * @var \Symfony\Component\Console\SignalRegistry\SignalRegistry
-     */
     private $signalRegistry;
     /**
      * @var mixed[]

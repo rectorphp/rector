@@ -12,7 +12,6 @@ namespace RectorPrefix20211209\Symfony\Component\Console\Command;
 
 use RectorPrefix20211209\Symfony\Component\Console\Exception\LogicException;
 use RectorPrefix20211209\Symfony\Component\Lock\LockFactory;
-use RectorPrefix20211209\Symfony\Component\Lock\LockInterface;
 use RectorPrefix20211209\Symfony\Component\Lock\Store\FlockStore;
 use RectorPrefix20211209\Symfony\Component\Lock\Store\SemaphoreStore;
 /**
@@ -22,10 +21,7 @@ use RectorPrefix20211209\Symfony\Component\Lock\Store\SemaphoreStore;
  */
 trait LockableTrait
 {
-    /**
-     * @var \Symfony\Component\Lock\LockInterface|null
-     */
-    private $lock;
+    private $lock = null;
     /**
      * Locks a command.
      */

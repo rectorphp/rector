@@ -33,7 +33,6 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20211209\Symplify\Astral\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211209\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
  * They are not part of node tree processed by Rector, so any changes will not make effect in final printed file.
@@ -59,11 +58,6 @@ final class AstResolver
      * @var \Symplify\Astral\PhpParser\SmartPhpParser
      */
     private $smartPhpParser;
-    /**
-     * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
-     */
-    private $smartFileSystem;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
@@ -99,10 +93,9 @@ final class AstResolver
      * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
     private $classLikeAstResolver;
-    public function __construct(\RectorPrefix20211209\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \RectorPrefix20211209\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
+    public function __construct(\RectorPrefix20211209\Symplify\Astral\PhpParser\SmartPhpParser $smartPhpParser, \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->smartPhpParser = $smartPhpParser;
-        $this->smartFileSystem = $smartFileSystem;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -174,7 +167,6 @@ final class AstResolver
         if ($fileName === null) {
             return null;
         }
-        $fileContent = $this->smartFileSystem->readFile($fileName);
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
         if ($nodes === null) {
             return null;

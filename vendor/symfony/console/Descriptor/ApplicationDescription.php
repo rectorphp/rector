@@ -21,9 +21,6 @@ use RectorPrefix20211209\Symfony\Component\Console\Exception\CommandNotFoundExce
 class ApplicationDescription
 {
     public const GLOBAL_NAMESPACE = '_global';
-    /**
-     * @var \Symfony\Component\Console\Application
-     */
     private $application;
     /**
      * @var string|null

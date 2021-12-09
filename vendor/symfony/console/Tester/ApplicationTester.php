@@ -25,7 +25,7 @@ use RectorPrefix20211209\Symfony\Component\Console\Input\ArrayInput;
 class ApplicationTester
 {
     use TesterTrait;
-    private \RectorPrefix20211209\Symfony\Component\Console\Application $application;
+    private $application;
     public function __construct(\RectorPrefix20211209\Symfony\Component\Console\Application $application)
     {
         $this->application = $application;

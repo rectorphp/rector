@@ -27,9 +27,6 @@ class OutputFormatter implements \RectorPrefix20211209\Symfony\Component\Console
      * @var mixed[]
      */
     private $styles = [];
-    /**
-     * @var \Symfony\Component\Console\Formatter\OutputFormatterStyleStack
-     */
     private $styleStack;
     public function __clone()
     {

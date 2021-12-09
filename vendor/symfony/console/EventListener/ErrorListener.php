@@ -22,7 +22,7 @@ use RectorPrefix20211209\Symfony\Component\EventDispatcher\EventSubscriberInterf
  */
 class ErrorListener implements \RectorPrefix20211209\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
-    private ?\RectorPrefix20211209\Psr\Log\LoggerInterface $logger;
+    private $logger;
     public function __construct(\RectorPrefix20211209\Psr\Log\LoggerInterface $logger = null)
     {
         $this->logger = $logger;

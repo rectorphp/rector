@@ -22,9 +22,6 @@ use RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface;
  */
 final class LazyCommand extends \RectorPrefix20211209\Symfony\Component\Console\Command\Command
 {
-    /**
-     * @var \Closure|\Symfony\Component\Console\Command\Command
-     */
     private $command;
     /**
      * @var bool|null

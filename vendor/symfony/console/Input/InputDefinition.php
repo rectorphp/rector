@@ -34,14 +34,8 @@ class InputDefinition
      * @var int
      */
     private $requiredCount = 0;
-    /**
-     * @var \Symfony\Component\Console\Input\InputArgument|null
-     */
-    private $lastArrayArgument;
-    /**
-     * @var \Symfony\Component\Console\Input\InputArgument|null
-     */
-    private $lastOptionalArgument;
+    private $lastArrayArgument = null;
+    private $lastOptionalArgument = null;
     /**
      * @var mixed[]
      */

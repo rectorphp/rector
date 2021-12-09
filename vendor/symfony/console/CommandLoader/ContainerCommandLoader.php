@@ -20,9 +20,6 @@ use RectorPrefix20211209\Symfony\Component\Console\Exception\CommandNotFoundExce
  */
 class ContainerCommandLoader implements \RectorPrefix20211209\Symfony\Component\Console\CommandLoader\CommandLoaderInterface
 {
-    /**
-     * @var \Psr\Container\ContainerInterface
-     */
     private $container;
     /**
      * @var mixed[]

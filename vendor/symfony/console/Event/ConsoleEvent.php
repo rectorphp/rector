@@ -22,8 +22,8 @@ use RectorPrefix20211209\Symfony\Contracts\EventDispatcher\Event;
 class ConsoleEvent extends \RectorPrefix20211209\Symfony\Contracts\EventDispatcher\Event
 {
     protected $command;
-    private \RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface $input;
-    private \RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface $output;
+    private $input;
+    private $output;
     public function __construct(?\RectorPrefix20211209\Symfony\Component\Console\Command\Command $command, \RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $this->command = $command;

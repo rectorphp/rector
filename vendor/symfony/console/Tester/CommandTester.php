@@ -21,7 +21,7 @@ use RectorPrefix20211209\Symfony\Component\Console\Input\ArrayInput;
 class CommandTester
 {
     use TesterTrait;
-    private \RectorPrefix20211209\Symfony\Component\Console\Command\Command $command;
+    private $command;
     public function __construct(\RectorPrefix20211209\Symfony\Component\Console\Command\Command $command)
     {
         $this->command = $command;

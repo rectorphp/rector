@@ -76,9 +76,6 @@ final class ProgressBar
      * @var float
      */
     private $maxSecondsBetweenRedraws = 1;
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
     private $output;
     /**
      * @var int
@@ -112,17 +109,11 @@ final class ProgressBar
      * @var bool
      */
     private $overwrite = \true;
-    /**
-     * @var \Symfony\Component\Console\Terminal
-     */
     private $terminal;
     /**
      * @var string|null
      */
     private $previousMessage;
-    /**
-     * @var \Symfony\Component\Console\Cursor
-     */
     private $cursor;
     /**
      * @var mixed[]

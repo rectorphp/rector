@@ -61,13 +61,7 @@ class Table
      * @var int
      */
     private $numberOfColumns;
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
     private $output;
-    /**
-     * @var \Symfony\Component\Console\Helper\TableStyle
-     */
     private $style;
     /**
      * @var mixed[]

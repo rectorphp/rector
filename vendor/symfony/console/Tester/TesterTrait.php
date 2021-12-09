@@ -21,10 +21,10 @@ use RectorPrefix20211209\Symfony\Component\Console\Tester\Constraint\CommandIsSu
  */
 trait TesterTrait
 {
-    private \RectorPrefix20211209\Symfony\Component\Console\Output\StreamOutput $output;
+    private $output;
     private array $inputs = [];
     private bool $captureStreamsIndependently = \false;
-    private \RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface $input;
+    private $input;
     private int $statusCode;
     /**
      * Gets the display returned by the last execution of the command or application.
