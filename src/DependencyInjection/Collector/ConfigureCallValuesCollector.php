@@ -72,7 +72,11 @@ final class ConfigureCallValuesCollector
                     foreach ($constantNamesToValues as $constantName => $constantValue) {
                         if ($constantValue === $firstKey) {
                             $reflectionConstant = $classReflection->getReflectionConstant($constantName);
-                            if (! str_contains($reflectionConstant->getDocComment(), '@deprecated')) {
+                            if ($reflectionConstant === false) {
+                                continue;
+                            }
+
+                            if (! str_contains((string) $reflectionConstant->getDocComment(), '@deprecated')) {
                                 continue;
                             }
 
