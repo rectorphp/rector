@@ -23,6 +23,7 @@ final class ReservedFnFunctionRector extends \Rector\Core\Rector\AbstractRector 
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const RESERVED_NAMES_TO_NEW_ONES = '$reservedNamesToNewOnes';

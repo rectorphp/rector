@@ -20,6 +20,7 @@ final class ToStringToMethodCallRector extends \Rector\Core\Rector\AbstractRecto
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';

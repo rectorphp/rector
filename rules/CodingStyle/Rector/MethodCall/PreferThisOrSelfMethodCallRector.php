@@ -23,6 +23,7 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const TYPE_TO_PREFERENCE = 'type_to_preference';

@@ -28,6 +28,7 @@ final class StringClassNameToClassConstantRector extends \Rector\Core\Rector\Abs
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const CLASSES_TO_SKIP = 'classes_to_skip';

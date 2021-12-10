@@ -20,6 +20,7 @@ final class RemoveFuncCallRector extends \Rector\Core\Rector\AbstractRector impl
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const REMOVE_FUNC_CALLS = 'remove_func_calls';

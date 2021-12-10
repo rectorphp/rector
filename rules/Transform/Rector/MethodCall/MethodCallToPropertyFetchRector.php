@@ -17,6 +17,7 @@ final class MethodCallToPropertyFetchRector extends \Rector\Core\Rector\Abstract
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const METHOD_CALL_TO_PROPERTY_FETCHES = 'method_call_to_property_fetch_collection';

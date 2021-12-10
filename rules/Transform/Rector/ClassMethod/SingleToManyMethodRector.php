@@ -24,6 +24,7 @@ final class SingleToManyMethodRector extends \Rector\Core\Rector\AbstractRector 
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     public const SINGLES_TO_MANY_METHODS = 'singles_to_many_methods';
