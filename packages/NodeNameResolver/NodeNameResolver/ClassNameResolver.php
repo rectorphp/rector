@@ -30,9 +30,9 @@ final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
         return \PhpParser\Node\Stmt\ClassLike::class;
     }
     /**
-     * @param ClassLike $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve($node) : ?string
     {
         if (\property_exists($node, 'namespacedName') && $node->namespacedName instanceof \PhpParser\Node\Name) {
             return $node->namespacedName->toString();

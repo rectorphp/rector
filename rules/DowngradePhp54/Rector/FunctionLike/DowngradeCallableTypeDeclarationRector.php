@@ -59,9 +59,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param ClassMethod|Closure|Function_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $callableType = new \PHPStan\Type\CallableType();
         foreach ($node->getParams() as $param) {

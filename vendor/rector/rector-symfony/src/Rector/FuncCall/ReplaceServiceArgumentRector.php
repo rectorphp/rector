@@ -44,9 +44,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor($node)
     {
         if (!$this->isName($node, 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\service')) {
             return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Symfony\ValueObject\ReplaceServiceArgument::class);
         $this->replaceServiceArguments = $configuration;

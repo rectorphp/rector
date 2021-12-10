@@ -45,9 +45,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\String_::class, \PhpParser\Node\Scalar\Encapsed::class];
     }
     /**
-     * @param Encapsed|String_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $stringKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
         if (!\in_array($stringKind, self::HERENOW_DOC_KINDS, \true)) {

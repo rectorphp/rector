@@ -76,9 +76,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\List_::class, \PhpParser\Node\Expr\Array_::class];
     }
     /**
-     * @param List_|Array_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;
@@ -102,8 +102,9 @@ CODE_SAMPLE
      * If all of them can be removed, then directly remove `list()`.
      * @return List_|Array_|null
      * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr\List_ $node
+     * @param int $rightSideRemovableParamsCount
      */
-    public function removeStaleParams($node, int $rightSideRemovableParamsCount) : ?\PhpParser\Node
+    public function removeStaleParams($node, $rightSideRemovableParamsCount) : ?\PhpParser\Node
     {
         $nodeItemsCount = \count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {

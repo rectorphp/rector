@@ -46,9 +46,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\While_::class];
     }
     /**
-     * @param Do_|For_|Foreach_|While_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->stmts !== []) {
             return null;

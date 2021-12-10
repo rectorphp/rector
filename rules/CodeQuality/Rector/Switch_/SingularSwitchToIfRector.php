@@ -66,10 +66,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Switch_::class];
     }
     /**
-     * @param Switch_ $node
+     * @param \PhpParser\Node $node
      * @return Node\Stmt[]|If_|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor($node)
     {
         if (\count($node->cases) !== 1) {
             return null;

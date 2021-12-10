@@ -74,10 +74,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param Return_ $node
+     * @param \PhpParser\Node $node
      * @return null|Node[]
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor($node) : ?array
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return null;

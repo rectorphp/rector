@@ -28,9 +28,9 @@ final class DowngradeExponentialAssignmentOperatorRector extends \Rector\Core\Re
         return [\PhpParser\Node\Expr\AssignOp\Pow::class];
     }
     /**
-     * @param Pow $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Assign
+    public function refactor($node) : \PhpParser\Node\Expr\Assign
     {
         $powFuncCall = $this->nodeFactory->createFuncCall('pow', [$node->var, $node->expr]);
         return new \PhpParser\Node\Expr\Assign($node->var, $powFuncCall);

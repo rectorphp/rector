@@ -61,9 +61,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
-     * @param ArrowFunction $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Closure
+    public function refactor($node) : \PhpParser\Node\Expr\Closure
     {
         $stmts = [new \PhpParser\Node\Stmt\Return_($node->expr)];
         return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);

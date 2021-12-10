@@ -79,9 +79,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param PropertyFetch|Assign $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Assign) {
             if ($node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {

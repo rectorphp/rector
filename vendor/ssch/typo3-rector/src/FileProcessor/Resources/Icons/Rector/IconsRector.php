@@ -33,7 +33,10 @@ final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Reso
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->smartFileSystem = $smartFileSystem;
     }
-    public function refactorFile(\Rector\Core\ValueObject\Application\File $file) : void
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    public function refactorFile($file) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $newFullPath = $this->createIconPath($file);

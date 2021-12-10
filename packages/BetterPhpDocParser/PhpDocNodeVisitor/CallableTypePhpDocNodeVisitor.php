@@ -20,7 +20,10 @@ final class CallableTypePhpDocNodeVisitor extends \RectorPrefix20211210\Symplify
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode) {
             return null;

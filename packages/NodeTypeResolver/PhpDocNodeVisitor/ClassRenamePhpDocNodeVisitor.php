@@ -36,13 +36,19 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20211210\Symplify\
         $this->staticTypeMapper = $staticTypeMapper;
         $this->currentNodeProvider = $currentNodeProvider;
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function beforeTraverse($node) : void
     {
         if ($this->oldToNewTypes === []) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('Configure "$oldToNewClasses" first');
         }
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return null;
@@ -73,7 +79,7 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20211210\Symplify\
     /**
      * @param OldToNewType[] $oldToNewTypes
      */
-    public function setOldToNewTypes(array $oldToNewTypes) : void
+    public function setOldToNewTypes($oldToNewTypes) : void
     {
         $this->oldToNewTypes = $oldToNewTypes;
     }

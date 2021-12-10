@@ -49,9 +49,9 @@ final class IsIterableRector extends \Rector\Core\Rector\AbstractRector implemen
         return [\PhpParser\Node\Expr\BinaryOp\BooleanOr::class];
     }
     /**
-     * @param BooleanOr $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip()) {
             return null;

@@ -34,9 +34,9 @@ final class RandomFunctionRector extends \Rector\Core\Rector\AbstractRector impl
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor($node) : \PhpParser\Node\Expr\FuncCall
     {
         foreach (self::OLD_TO_NEW_FUNCTION_NAMES as $oldFunctionName => $newFunctionName) {
             if ($this->isName($node, $oldFunctionName)) {

@@ -87,7 +87,10 @@ CODE_SAMPLE
     {
         return [\PhpParser\Node::class];
     }
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    /**
+     * @param \PhpParser\Node $node
+     */
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;

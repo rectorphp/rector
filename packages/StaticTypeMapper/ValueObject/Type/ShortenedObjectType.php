@@ -21,7 +21,10 @@ final class ShortenedObjectType extends \PHPStan\Type\ObjectType
         $this->fullyQualifiedName = $fullyQualifiedName;
         parent::__construct($shortName);
     }
-    public function isSuperTypeOf(\PHPStan\Type\Type $type) : \PHPStan\TrinaryLogic
+    /**
+     * @param \PHPStan\Type\Type $type
+     */
+    public function isSuperTypeOf($type) : \PHPStan\TrinaryLogic
     {
         $fullyQualifiedObjectType = new \PHPStan\Type\ObjectType($this->fullyQualifiedName);
         return $fullyQualifiedObjectType->isSuperTypeOf($type);

@@ -50,9 +50,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp\LogicalAnd::class];
     }
     /**
-     * @param LogicalAnd $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$node->left instanceof \PhpParser\Node\Expr\Assign) {
             return null;

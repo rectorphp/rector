@@ -28,13 +28,19 @@ use RectorPrefix20211210\Webmozart\Assert\Assert;
 final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated Use self::UNSAFE_TYPES_TO_METHODS instead
      * @var string
      */
     public const SAFE_TYPES = 'safe_types';
     /**
+     * @deprecated Use self::UNSAFE_TYPES_TO_METHODS instead
      * @var string
      */
     public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
+    /**
+     * @var string
+     */
+    public const UNSAFE_TYPES_TO_METHODS = 'unsafe_types_to_methods';
     /**
      * @var string[]
      */
@@ -43,6 +49,10 @@ final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\Abs
      * @var array<string, string[]>
      */
     private $safeTypesToMethods = [];
+    /**
+     * @var array<string, string[]>
+     */
+    private $unsafeTypesToMethods = [];
     /**
      * @readonly
      * @var \Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator
@@ -113,7 +123,7 @@ final class SomeClass implements SomeInterface
     }
 }
 CODE_SAMPLE
-, [self::SAFE_TYPES => [], self::SAFE_TYPES_TO_METHODS => []])]);
+, [self::SAFE_TYPES => [], self::SAFE_TYPES_TO_METHODS => [], self::UNSAFE_TYPES_TO_METHODS => []])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -123,9 +133,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
@@ -141,7 +151,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($safeTypes);
@@ -154,6 +164,13 @@ CODE_SAMPLE
             \RectorPrefix20211210\Webmozart\Assert\Assert::allString($value);
         }
         $this->safeTypesToMethods = $safeTypesToMethods;
+        $unsafeTypesToMethods = $configuration[self::UNSAFE_TYPES_TO_METHODS] ?? [];
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($unsafeTypesToMethods);
+        foreach ($unsafeTypesToMethods as $key => $value) {
+            \RectorPrefix20211210\Webmozart\Assert\Assert::string($key);
+            \RectorPrefix20211210\Webmozart\Assert\Assert::allString($value);
+        }
+        $this->unsafeTypesToMethods = $unsafeTypesToMethods;
     }
     private function shouldSkip(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
@@ -232,6 +249,18 @@ CODE_SAMPLE
             // skip self too
             if ($classReflectionName === $safeType) {
                 return \true;
+            }
+        }
+        foreach ($this->unsafeTypesToMethods as $unsafeType => $unsafeMethods) {
+            if (!$this->isNames($classMethod, $unsafeMethods)) {
+                continue;
+            }
+            if ($classReflection->isSubclassOf($unsafeType)) {
+                return \false;
+            }
+            // skip self too
+            if ($classReflectionName === $unsafeType) {
+                return \false;
             }
         }
         return \false;

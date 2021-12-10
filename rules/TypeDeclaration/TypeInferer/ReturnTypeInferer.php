@@ -5,9 +5,12 @@ namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ClassReflection;
@@ -129,8 +132,9 @@ final class ReturnTypeInferer
     }
     private function resolveTypeWithVoidHandling(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
-        if ($resolvedType instanceof \PHPStan\Type\VoidType) {
-            $hasReturnValue = (bool) $this->betterNodeFinder->findFirst((array) $functionLike->getStmts(), function (\PhpParser\Node $subNode) : bool {
+        if ($resolvedType instanceof \PHPStan\Type\VoidType && !$functionLike instanceof \PhpParser\Node\Expr\ArrowFunction) {
+            /** @var ClassMethod|Function_|Closure $functionLike */
+            $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, function (\PhpParser\Node $subNode) : bool {
                 if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
                     return \false;
                 }

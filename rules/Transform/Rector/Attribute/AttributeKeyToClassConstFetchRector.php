@@ -59,9 +59,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Attribute::class];
     }
     /**
-     * @param Attribute $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         foreach ($this->attributeKeysToClassConstFetches as $attributeKeyToClassConstFetch) {
             if (!$this->isName($node->name, $attributeKeyToClassConstFetch->getAttributeClass())) {
@@ -89,7 +89,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($attributeKeysToClassConstFetches, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);

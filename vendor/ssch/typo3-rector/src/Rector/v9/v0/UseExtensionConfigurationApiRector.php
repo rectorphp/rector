@@ -40,9 +40,9 @@ final class UseExtensionConfigurationApiRector extends \Rector\Core\Rector\Abstr
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\ArrayDimFetch::class];
     }
     /**
-     * @param FuncCall|ArrayDimFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\FuncCall && !$this->isName($node->name, 'unserialize')) {
             return null;

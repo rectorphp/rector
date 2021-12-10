@@ -45,7 +45,10 @@ return [
 CODE_SAMPLE
 )]);
     }
-    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrl) : void
+    /**
+     * @param \PhpParser\Node\Expr\Array_ $ctrl
+     */
+    protected function refactorCtrl($ctrl) : void
     {
         $nodeToRemove = $this->extractArrayItemByKey($ctrl, 'dividers2tabs');
         if (null !== $nodeToRemove) {

@@ -63,9 +63,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Namespace_::class];
     }
     /**
-     * @param Namespace_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $class = $this->betterNodeFinder->findFirstInstanceOf($node->stmts, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
@@ -84,7 +84,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $useImportsToRestore = $configuration[self::USE_IMPORTS_TO_RESTORE] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($useImportsToRestore, \Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation::class);

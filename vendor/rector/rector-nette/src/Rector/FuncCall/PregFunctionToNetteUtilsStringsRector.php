@@ -65,9 +65,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param FuncCall|Identical $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return $this->refactorIdentical($node);
@@ -81,7 +81,10 @@ CODE_SAMPLE
     {
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BinaryOp\Identical::class];
     }
-    public function refactorIdentical(\PhpParser\Node\Expr\BinaryOp\Identical $identical) : ?\PhpParser\Node\Expr\Cast\Bool_
+    /**
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical $identical
+     */
+    public function refactorIdentical($identical) : ?\PhpParser\Node\Expr\Cast\Bool_
     {
         $parent = $identical->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parent instanceof \PhpParser\Node) {
@@ -103,8 +106,9 @@ CODE_SAMPLE
     }
     /**
      * @return FuncCall|StaticCall|Assign|null
+     * @param \PhpParser\Node\Expr\FuncCall $funcCall
      */
-    public function refactorFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr
+    public function refactorFuncCall($funcCall) : ?\PhpParser\Node\Expr
     {
         $methodName = $this->nodeNameResolver->matchNameFromMap($funcCall, self::FUNCTION_NAME_TO_METHOD_NAME);
         if ($methodName === null) {

@@ -5,5 +5,8 @@ namespace Rector\Core\Contract\Rector;
 
 interface NonPhpRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
-    public function refactorFileContent(string $fileContent) : string;
+    /**
+     * @param string $fileContent
+     */
+    public function refactorFileContent($fileContent) : string;
 }

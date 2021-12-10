@@ -58,9 +58,9 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
-     * @param FuncCall|ClassConst $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
             return $this->processsClassConst($node);

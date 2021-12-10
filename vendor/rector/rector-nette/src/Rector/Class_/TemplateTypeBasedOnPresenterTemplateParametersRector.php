@@ -105,7 +105,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         if (isset($configuration[self::TEMPLATE_CLASS_PARENT])) {
             $templateClassParent = $configuration[self::TEMPLATE_CLASS_PARENT];
@@ -119,9 +119,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param Class_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor($node)
     {
         if (!$this->nodeTypeResolver->isObjectType($node, new \PHPStan\Type\ObjectType('Nette\\Application\\UI\\Presenter'))) {
             return null;

@@ -109,9 +109,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\For_::class];
     }
     /**
-     * @param For_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $this->reset();
         $this->matchInit($node->init);

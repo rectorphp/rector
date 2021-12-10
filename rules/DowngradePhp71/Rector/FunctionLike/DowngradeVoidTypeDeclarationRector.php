@@ -59,9 +59,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param ClassMethod|Function_|Closure $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $voidType = new \PHPStan\Type\VoidType();
         if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $voidType)) {

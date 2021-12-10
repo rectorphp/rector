@@ -78,9 +78,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $varType = $this->nodeTypeResolver->getType($node->var);
         if (!$varType instanceof \PHPStan\Type\TypeWithClassName) {

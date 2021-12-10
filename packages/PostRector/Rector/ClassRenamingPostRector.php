@@ -30,7 +30,10 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         // must be run before name importing, so new names are imported
         return 650;
     }
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    /**
+     * @param \PhpParser\Node $node
+     */
+    public function enterNode($node) : ?\PhpParser\Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses === []) {

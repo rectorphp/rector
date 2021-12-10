@@ -49,9 +49,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Stmt\Unset_::class];
     }
     /**
-     * @param Isset_|Unset_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         foreach ($node->vars as $arrayDimFetch) {
             if (!$arrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
@@ -72,7 +72,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $issetUnsetToMethodCalls = $configuration[self::ISSET_UNSET_TO_METHOD_CALL] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($issetUnsetToMethodCalls);

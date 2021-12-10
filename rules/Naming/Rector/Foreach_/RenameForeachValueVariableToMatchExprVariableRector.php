@@ -79,9 +79,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
-     * @param Foreach_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $isPropertyFetch = $this->propertyFetchAnalyzer->isPropertyFetch($node->expr);
         if (!$node->expr instanceof \PhpParser\Node\Expr\Variable && !$isPropertyFetch) {

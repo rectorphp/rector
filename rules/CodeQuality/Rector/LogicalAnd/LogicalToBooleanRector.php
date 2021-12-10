@@ -40,9 +40,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp\LogicalOr::class, \PhpParser\Node\Expr\BinaryOp\LogicalAnd::class];
     }
     /**
-     * @param LogicalOr|LogicalAnd $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         return $this->refactorLogicalToBoolean($node);
     }

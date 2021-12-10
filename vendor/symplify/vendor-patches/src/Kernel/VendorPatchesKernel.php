@@ -11,7 +11,7 @@ final class VendorPatchesKernel extends \RectorPrefix20211210\Symplify\SymplifyK
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20211210\Psr\Container\ContainerInterface
+    public function createFromConfigs($configFiles) : \RectorPrefix20211210\Psr\Container\ContainerInterface
     {
         $configFiles[] = __DIR__ . '/../../config/config.php';
         $configFiles[] = \RectorPrefix20211210\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;

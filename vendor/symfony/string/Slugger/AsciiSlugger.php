@@ -46,8 +46,9 @@ class AsciiSlugger implements \RectorPrefix20211210\Symfony\Component\String\Slu
     }
     /**
      * {@inheritdoc}
+     * @param string $locale
      */
-    public function setLocale(string $locale)
+    public function setLocale($locale)
     {
         $this->defaultLocale = $locale;
     }
@@ -60,8 +61,11 @@ class AsciiSlugger implements \RectorPrefix20211210\Symfony\Component\String\Slu
     }
     /**
      * {@inheritdoc}
+     * @param string $string
+     * @param string $separator
+     * @param string|null $locale
      */
-    public function slug(string $string, string $separator = '-', string $locale = null) : \RectorPrefix20211210\Symfony\Component\String\AbstractUnicodeString
+    public function slug($string, $separator = '-', $locale = null) : \RectorPrefix20211210\Symfony\Component\String\AbstractUnicodeString
     {
         $locale = $locale ?? $this->defaultLocale;
         $transliterator = [];

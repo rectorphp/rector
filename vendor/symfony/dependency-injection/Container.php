@@ -99,15 +99,17 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @return array|bool|string|int|float|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
+     * @param string $name
      */
-    public function getParameter(string $name)
+    public function getParameter($name)
     {
         return $this->parameterBag->get($name);
     }
     /**
      * @return bool
+     * @param string $name
      */
-    public function hasParameter(string $name)
+    public function hasParameter($name)
     {
         return $this->parameterBag->has($name);
     }
@@ -117,7 +119,7 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @param string                           $name  The parameter name
      * @param array|bool|string|int|float|null $value The parameter value
      */
-    public function setParameter(string $name, $value)
+    public function setParameter($name, $value)
     {
         $this->parameterBag->set($name, $value);
     }

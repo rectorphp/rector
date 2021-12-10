@@ -69,6 +69,10 @@ final class ConfigureCallValuesCollector
                     $constantNamesToValues = $classReflection->getConstants(\ReflectionClassConstant::IS_PUBLIC);
                     foreach ($constantNamesToValues as $constantName => $constantValue) {
                         if ($constantValue === $firstKey) {
+                            $reflectionConstant = $classReflection->getReflectionConstant($constantName);
+                            if (\strpos($reflectionConstant->getDocComment(), '@deprecated') === \false) {
+                                continue;
+                            }
                             $warningMessage = \sprintf('The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.', $rectorClass, $constantName, \PHP_EOL);
                             $this->symfonyStyle->warning($warningMessage);
                             $configureValue = $configureValue[$firstKey];

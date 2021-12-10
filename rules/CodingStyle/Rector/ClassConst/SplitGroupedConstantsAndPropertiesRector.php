@@ -56,10 +56,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassConst::class, \PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param ClassConst|Property $node
+     * @param \PhpParser\Node $node
      * @return Node[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor($node) : ?array
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
             if (\count($node->consts) < 2) {

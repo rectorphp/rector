@@ -23,7 +23,10 @@ final class RenamePackageComposerRector implements \Rector\Composer\Contract\Rec
      * @var RenamePackage[]
      */
     private $renamePackages = [];
-    public function refactor(\RectorPrefix20211210\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    /**
+     * @param \Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson
+     */
+    public function refactor($composerJson) : void
     {
         foreach ($this->renamePackages as $renamePackage) {
             if ($composerJson->hasRequiredPackage($renamePackage->getOldPackageName())) {
@@ -57,7 +60,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $renamePackages = $configuration[self::RENAME_PACKAGES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($renamePackages, \Rector\Composer\ValueObject\RenamePackage::class);

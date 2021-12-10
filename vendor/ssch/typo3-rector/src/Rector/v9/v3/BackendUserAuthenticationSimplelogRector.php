@@ -18,9 +18,9 @@ use RectorPrefix20211210\TYPO3\CMS\Core\Authentication\BackendUserAuthentication
 final class BackendUserAuthenticationSimplelogRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @param MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Authentication\\BackendUserAuthentication'))) {
             return null;

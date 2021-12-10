@@ -7,5 +7,8 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
 interface FluidRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
-    public function transform(\Rector\Core\ValueObject\Application\File $file) : void;
+    /**
+     * @param \Rector\Core\ValueObject\Application\File $file
+     */
+    public function transform($file) : void;
 }

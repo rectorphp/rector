@@ -56,9 +56,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp::class];
     }
     /**
-     * @param BinaryOp $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $duplicatedInstanceOfs = $this->resolveDuplicatedInstancesOf($node);
         if ($duplicatedInstanceOfs === []) {

@@ -74,9 +74,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\FunctionLike::class];
     }
     /**
-     * @param FunctionLike $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\FunctionLike
+    public function refactor($node) : ?\PhpParser\Node\FunctionLike
     {
         if ($this->shouldSkip($node)) {
             return null;

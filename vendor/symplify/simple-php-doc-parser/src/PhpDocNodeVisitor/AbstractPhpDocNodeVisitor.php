@@ -10,24 +10,32 @@ use RectorPrefix20211210\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorI
  */
 abstract class AbstractPhpDocNodeVisitor implements \RectorPrefix20211210\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface
 {
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function beforeTraverse($node) : void
     {
     }
     /**
      * @return int|Node|null
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
      */
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function enterNode($node)
     {
         return null;
     }
     /**
      * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return)
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
      */
-    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node)
+    public function leaveNode($node)
     {
         return null;
     }
-    public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    /**
+     * @param \PHPStan\PhpDocParser\Ast\Node $node
+     */
+    public function afterTraverse($node) : void
     {
     }
 }

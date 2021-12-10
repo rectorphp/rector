@@ -35,9 +35,9 @@ final class MockVariableToPropertyFetchRector extends \Rector\PhpSpecToPHPUnit\R
         return [\PhpParser\Node\Expr\Variable::class];
     }
     /**
-     * @param Variable $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {

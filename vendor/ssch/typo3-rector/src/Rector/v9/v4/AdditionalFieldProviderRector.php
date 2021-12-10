@@ -27,9 +27,9 @@ final class AdditionalFieldProviderRector extends \Rector\Core\Rector\AbstractRe
         return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param Class_|PropertyFetch|MethodCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\Class_) {
             return $this->refactorClass($node);

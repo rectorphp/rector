@@ -26,9 +26,9 @@ final class SimplifyInArrayValuesRector extends \Rector\Core\Rector\AbstractRect
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param FuncCall $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'in_array')) {
             return null;

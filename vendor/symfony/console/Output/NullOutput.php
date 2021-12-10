@@ -25,8 +25,9 @@ class NullOutput implements \RectorPrefix20211210\Symfony\Component\Console\Outp
     private $formatter;
     /**
      * {@inheritdoc}
+     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      */
-    public function setFormatter(\RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
+    public function setFormatter($formatter)
     {
         // do nothing
     }
@@ -40,8 +41,9 @@ class NullOutput implements \RectorPrefix20211210\Symfony\Component\Console\Outp
     }
     /**
      * {@inheritdoc}
+     * @param bool $decorated
      */
-    public function setDecorated(bool $decorated)
+    public function setDecorated($decorated)
     {
         // do nothing
     }
@@ -54,8 +56,9 @@ class NullOutput implements \RectorPrefix20211210\Symfony\Component\Console\Outp
     }
     /**
      * {@inheritdoc}
+     * @param int $level
      */
-    public function setVerbosity(int $level)
+    public function setVerbosity($level)
     {
         // do nothing
     }
@@ -97,16 +100,19 @@ class NullOutput implements \RectorPrefix20211210\Symfony\Component\Console\Outp
     /**
      * {@inheritdoc}
      * @param mixed[]|string $messages
+     * @param int $options
      */
-    public function writeln($messages, int $options = self::OUTPUT_NORMAL)
+    public function writeln($messages, $options = self::OUTPUT_NORMAL)
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
      * @param mixed[]|string $messages
+     * @param bool $newline
+     * @param int $options
      */
-    public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
+    public function write($messages, $newline = \false, $options = self::OUTPUT_NORMAL)
     {
         // do nothing
     }

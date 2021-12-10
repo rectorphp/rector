@@ -46,9 +46,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param Function_|ClassMethod $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         // exception handle has 1 param exactly
         if (\count($node->params) !== 1) {

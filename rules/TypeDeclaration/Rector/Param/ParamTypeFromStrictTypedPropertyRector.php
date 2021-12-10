@@ -70,9 +70,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Param::class];
     }
     /**
-     * @param Param $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parent instanceof \PhpParser\Node\FunctionLike) {
@@ -80,7 +80,11 @@ CODE_SAMPLE
         }
         return $this->decorateParamWithType($parent, $node);
     }
-    public function decorateParamWithType(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node\Param $param) : ?\PhpParser\Node\Param
+    /**
+     * @param \PhpParser\Node\FunctionLike $functionLike
+     * @param \PhpParser\Node\Param $param
+     */
+    public function decorateParamWithType($functionLike, $param) : ?\PhpParser\Node\Param
     {
         if ($param->type !== null) {
             return null;

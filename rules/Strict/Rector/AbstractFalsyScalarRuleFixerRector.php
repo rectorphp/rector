@@ -23,7 +23,7 @@ abstract class AbstractFalsyScalarRuleFixerRector extends \Rector\Core\Rector\Ab
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $treatAsNonEmpty = $configuration[self::TREAT_AS_NON_EMPTY] ?? \false;
         \RectorPrefix20211210\Webmozart\Assert\Assert::boolean($treatAsNonEmpty);

@@ -42,9 +42,9 @@ final class SimplifyEmptyArrayCheckRector extends \Rector\Core\Rector\AbstractRe
         return [\PhpParser\Node\Expr\BinaryOp\BooleanAnd::class];
     }
     /**
-     * @param BooleanAnd $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode(
             $node,

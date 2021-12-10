@@ -51,10 +51,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\TryCatch::class];
     }
     /**
-     * @param TryCatch $node
+     * @param \PhpParser\Node $node
      * @return Stmt[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor($node) : ?array
     {
         if (\count($node->catches) !== 1) {
             return null;

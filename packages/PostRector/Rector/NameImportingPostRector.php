@@ -71,7 +71,10 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->currentFileProvider = $currentFileProvider;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    /**
+     * @param \PhpParser\Node $node
+     */
+    public function enterNode($node) : ?\PhpParser\Node
     {
         if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
             return null;

@@ -26,9 +26,9 @@ final class TimeTrackerInsteadOfNullTimeTrackerRector extends \Rector\Core\Recto
         return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\New_::class];
     }
     /**
-     * @param MethodCall|StaticCall|New_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\New_) {
             return $this->renameClassIfNeeded($node);

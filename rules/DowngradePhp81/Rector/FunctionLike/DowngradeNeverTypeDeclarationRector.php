@@ -53,9 +53,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param ClassMethod|Closure|Function_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $neverType = new \PHPStan\Type\NeverType();
         if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $neverType)) {

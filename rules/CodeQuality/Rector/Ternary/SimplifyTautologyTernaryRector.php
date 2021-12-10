@@ -38,9 +38,9 @@ final class SimplifyTautologyTernaryRector extends \Rector\Core\Rector\AbstractR
         return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param Ternary $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if (!$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical && !$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             return null;

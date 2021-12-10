@@ -29,9 +29,9 @@ final class PropertyNameResolver implements \Rector\NodeNameResolver\Contract\No
         return \PhpParser\Node\Stmt\Property::class;
     }
     /**
-     * @param Property $node
+     * @param \PhpParser\Node $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve($node) : ?string
     {
         if ($node->props === []) {
             return null;

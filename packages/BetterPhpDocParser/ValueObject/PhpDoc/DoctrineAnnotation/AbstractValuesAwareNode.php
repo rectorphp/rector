@@ -47,7 +47,10 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
         $this->silentKey = $silentKey;
         $this->originalValues = $values;
     }
-    public function removeValue(string $key) : void
+    /**
+     * @param string $key
+     */
+    public function removeValue($key) : void
     {
         $quotedKey = '"' . $key . '"';
         // isset?
@@ -80,8 +83,9 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     }
     /**
      * @param mixed $value
+     * @param string $key
      */
-    public function changeValue(string $key, $value) : void
+    public function changeValue($key, $value) : void
     {
         // is quoted?
         if (isset($this->values[$key]) && \is_string($this->values[$key]) && \Rector\Core\Util\StringUtils::isMatch($this->values[$key], self::UNQUOTED_VALUE_REGEX)) {
@@ -178,7 +182,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
      * @param mixed[] $values
      * @return array<int|string, mixed>
      */
-    protected function removeQuotesFromArray(array $values) : array
+    protected function removeQuotesFromArray($values) : array
     {
         $unquotedArray = [];
         foreach ($values as $key => $value) {
@@ -191,7 +195,7 @@ abstract class AbstractValuesAwareNode implements \PHPStan\PhpDocParser\Ast\PhpD
     /**
      * @param mixed[] $values
      */
-    protected function printValuesContent(array $values) : string
+    protected function printValuesContent($values) : string
     {
         $itemContents = '';
         \end($values);

@@ -87,9 +87,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param String_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $classLikeName = $node->value;
         // remove leading slash
@@ -106,7 +106,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         $classesToSkip = $configuration[self::CLASSES_TO_SKIP] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($classesToSkip);

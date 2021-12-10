@@ -38,9 +38,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param Assign $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\AssignOp\Coalesce
+    public function refactor($node) : ?\PhpParser\Node\Expr\AssignOp\Coalesce
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
             return null;

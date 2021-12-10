@@ -93,9 +93,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param If_|ElseIf_|Ternary $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         // skip short ternary
         if ($node instanceof \PhpParser\Node\Expr\Ternary && $node->if === null) {

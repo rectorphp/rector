@@ -203,8 +203,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     }
     /**
      * @return Node[]|null
+     * @param mixed[] $nodes
      */
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse($nodes) : ?array
     {
         $this->previousAppliedClass = null;
         // workaround for file around refactor()
@@ -217,8 +218,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     }
     /**
      * @return Node|int|null
+     * @param \PhpParser\Node $node
      */
-    public final function enterNode(\PhpParser\Node $node)
+    public final function enterNode($node)
     {
         $nodeClass = \get_class($node);
         if (!$this->isMatchingNodeType($nodeClass)) {
@@ -274,43 +276,58 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
      * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+     * @param \PhpParser\Node $node
      */
-    public function leaveNode(\PhpParser\Node $node)
+    public function leaveNode($node)
     {
         $objectHash = \spl_object_hash($node);
         // update parents relations!!!
         return $this->nodesToReturn[$objectHash] ?? $node;
     }
-    protected function isName(\PhpParser\Node $node, string $name) : bool
+    /**
+     * @param \PhpParser\Node $node
+     * @param string $name
+     */
+    protected function isName($node, $name) : bool
     {
         return $this->nodeNameResolver->isName($node, $name);
     }
     /**
      * @param string[] $names
+     * @param \PhpParser\Node $node
      */
-    protected function isNames(\PhpParser\Node $node, array $names) : bool
+    protected function isNames($node, $names) : bool
     {
         return $this->nodeNameResolver->isNames($node, $names);
     }
-    protected function getName(\PhpParser\Node $node) : ?string
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function getName($node) : ?string
     {
         return $this->nodeNameResolver->getName($node);
     }
-    protected function isObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType) : bool
+    /**
+     * @param \PhpParser\Node $node
+     * @param \PHPStan\Type\ObjectType $objectType
+     */
+    protected function isObjectType($node, $objectType) : bool
     {
         return $this->nodeTypeResolver->isObjectType($node, $objectType);
     }
     /**
      * Use this method for getting expr|node type
+     * @param \PhpParser\Node $node
      */
-    protected function getType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    protected function getType($node) : \PHPStan\Type\Type
     {
         return $this->nodeTypeResolver->getType($node);
     }
     /**
      * @param mixed[]|\PhpParser\Node $nodes
+     * @param callable $callable
      */
-    protected function traverseNodesWithCallable($nodes, callable $callable) : void
+    protected function traverseNodesWithCallable($nodes, $callable) : void
     {
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, $callable);
     }
@@ -321,7 +338,11 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     {
         return $this->betterStandardPrinter->print($node);
     }
-    protected function mirrorComments(\PhpParser\Node $newNode, \PhpParser\Node $oldNode) : void
+    /**
+     * @param \PhpParser\Node $newNode
+     * @param \PhpParser\Node $oldNode
+     */
+    protected function mirrorComments($newNode, $oldNode) : void
     {
         $newNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO));
         $newNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $oldNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
@@ -329,8 +350,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @deprecated Return array of stmts directly
      * @param Stmt[] $stmts
+     * @param \PhpParser\Node $node
      */
-    protected function unwrapStmts(array $stmts, \PhpParser\Node $node) : void
+    protected function unwrapStmts($stmts, $node) : void
     {
         // move /* */ doc block from if to first element to keep it
         $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -348,7 +370,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      * @param Arg[] $appendingArgs
      * @return Arg[]
      */
-    protected function appendArgs(array $currentArgs, array $appendingArgs) : array
+    protected function appendArgs($currentArgs, $appendingArgs) : array
     {
         foreach ($appendingArgs as $appendingArg) {
             $currentArgs[] = new \PhpParser\Node\Arg($appendingArg->value);
@@ -357,8 +379,9 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Stmt
+     * @param \PhpParser\Node\Stmt $stmt
      */
-    protected function unwrapExpression(\PhpParser\Node\Stmt $stmt)
+    protected function unwrapExpression($stmt)
     {
         if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return $stmt->expr;
@@ -368,48 +391,58 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
     /**
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
      * @param Node[] $newNodes
+     * @param \PhpParser\Node $positionNode
      */
-    protected function addNodesAfterNode(array $newNodes, \PhpParser\Node $positionNode) : void
+    protected function addNodesAfterNode($newNodes, $positionNode) : void
     {
         $this->nodesToAddCollector->addNodesAfterNode($newNodes, $positionNode);
     }
     /**
      * @param Node[] $newNodes
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
+     * @param \PhpParser\Node $positionNode
      */
-    protected function addNodesBeforeNode(array $newNodes, \PhpParser\Node $positionNode) : void
+    protected function addNodesBeforeNode($newNodes, $positionNode) : void
     {
         $this->nodesToAddCollector->addNodesBeforeNode($newNodes, $positionNode);
     }
     /**
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
+     * @param \PhpParser\Node $newNode
+     * @param \PhpParser\Node $positionNode
      */
-    protected function addNodeAfterNode(\PhpParser\Node $newNode, \PhpParser\Node $positionNode) : void
+    protected function addNodeAfterNode($newNode, $positionNode) : void
     {
         $this->nodesToAddCollector->addNodeAfterNode($newNode, $positionNode);
     }
     /**
      * @deprecated Use refactor() return of [] or directly $nodesToAddCollector
+     * @param \PhpParser\Node $newNode
+     * @param \PhpParser\Node $positionNode
      */
-    protected function addNodeBeforeNode(\PhpParser\Node $newNode, \PhpParser\Node $positionNode) : void
+    protected function addNodeBeforeNode($newNode, $positionNode) : void
     {
         $this->nodesToAddCollector->addNodeBeforeNode($newNode, $positionNode);
     }
-    protected function removeNode(\PhpParser\Node $node) : void
+    /**
+     * @param \PhpParser\Node $node
+     */
+    protected function removeNode($node) : void
     {
         $this->nodeRemover->removeNode($node);
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $nodeWithStatements
+     * @param \PhpParser\Node $toBeRemovedNode
      */
-    protected function removeNodeFromStatements($nodeWithStatements, \PhpParser\Node $toBeRemovedNode) : void
+    protected function removeNodeFromStatements($nodeWithStatements, $toBeRemovedNode) : void
     {
         $this->nodeRemover->removeNodeFromStatements($nodeWithStatements, $toBeRemovedNode);
     }
     /**
      * @param Node[] $nodes
      */
-    protected function removeNodes(array $nodes) : void
+    protected function removeNodes($nodes) : void
     {
         $this->nodeRemover->removeNodes($nodes);
     }

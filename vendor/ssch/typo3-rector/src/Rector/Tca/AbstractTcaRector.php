@@ -49,9 +49,9 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
-     * @param Array_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $this->resetInnerState();
         $this->hasAstBeenChanged = \false;
@@ -96,7 +96,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      *
      * @param Array_ $columns a list of TCA definitions for columns
      */
-    protected function refactorColumnList(\PhpParser\Node\Expr\Array_ $columns) : void
+    protected function refactorColumnList($columns) : void
     {
         foreach ($columns->items as $columnArrayItem) {
             if (!$columnArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
@@ -112,8 +112,9 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
     }
     /**
      * @return bool whether or not the given Array_ is a full TCA definition for a Table
+     * @param \PhpParser\Node\Expr\Array_ $possibleTcaArray
      */
-    protected function isFullTcaDefinition(\PhpParser\Node\Expr\Array_ $possibleTcaArray) : bool
+    protected function isFullTcaDefinition($possibleTcaArray) : bool
     {
         $columns = $this->extractSubArrayByKey($possibleTcaArray, 'columns');
         $ctrl = $this->extractArrayItemByKey($possibleTcaArray, 'ctrl');
@@ -121,8 +122,9 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
     }
     /**
      * @return bool whether the given array item is the TCA definition of a single column
+     * @param \PhpParser\Node\Expr\ArrayItem $arrayItem
      */
-    protected function isSingleTcaColumn(\PhpParser\Node\Expr\ArrayItem $arrayItem) : bool
+    protected function isSingleTcaColumn($arrayItem) : bool
     {
         $labelNode = $this->extractArrayItemByKey($arrayItem->value, self::LABEL);
         if (!$labelNode instanceof \PhpParser\Node\Expr\ArrayItem) {
@@ -143,15 +145,16 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      * @param Expr $columnName the key in above example (typically String_('column_name'))
      * @param Expr $columnTca the value in above example (typically an associative Array with stuff like 'label', 'config', 'exclude', ...)
      */
-    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn($columnName, $columnTca) : void
     {
         // override this as needed in child-classes
     }
     /**
      * refactors an TCA types array such as [ '0' => [ 'showitem' => 'field_a,field_b' ], '1' => [ 'showitem' =>
      * 'field_a'] ]
+     * @param \PhpParser\Node\Expr\Array_ $types
      */
-    protected function refactorTypes(\PhpParser\Node\Expr\Array_ $types) : void
+    protected function refactorTypes($types) : void
     {
         foreach ($types->items as $typeItem) {
             if (!$typeItem instanceof \PhpParser\Node\Expr\ArrayItem) {
@@ -168,15 +171,18 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
     /**
      * refactors a single TCA type item with key `typeKey` such as [ 'showitem' => 'field_a,field_b' ], '1' => [
      * 'showitem' => 'field_a']
+     * @param \PhpParser\Node\Expr $typeKey
+     * @param \PhpParser\Node\Expr $typeConfig
      */
-    protected function refactorType(\PhpParser\Node\Expr $typeKey, \PhpParser\Node\Expr $typeConfig) : void
+    protected function refactorType($typeKey, $typeConfig) : void
     {
         // override this as needed in child-classes
     }
     /**
      * refactors an TCA ctrl section such as ['label' => 'foo', 'tstamp' => 'tstamp', 'crdate' => 'crdate']
+     * @param \PhpParser\Node\Expr\Array_ $ctrl
      */
-    protected function refactorCtrl(\PhpParser\Node\Expr\Array_ $ctrl) : void
+    protected function refactorCtrl($ctrl) : void
     {
         // override this as needed in child-classes
     }
@@ -185,7 +191,7 @@ abstract class AbstractTcaRector extends \Rector\Core\Rector\AbstractRector
      * @param ArrayItem $newItem The item to be inserted
      * @param string $key The key after which the ArrayItem should be inserted
      */
-    protected function insertItemAfterKey(\PhpParser\Node\Expr\Array_ $array, \PhpParser\Node\Expr\ArrayItem $newItem, string $key) : void
+    protected function insertItemAfterKey($array, $newItem, $key) : void
     {
         $positionOfTypeInConfig = 0;
         foreach ($array->items as $configNode) {

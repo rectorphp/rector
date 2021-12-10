@@ -34,9 +34,9 @@ final class DowngradeObjectTypeDeclarationRector extends \Rector\Core\Rector\Abs
         return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
-     * @param Function_|ClassMethod $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         $objectWithoutClassType = new \PHPStan\Type\ObjectWithoutClassType();
         foreach ($node->params as $param) {

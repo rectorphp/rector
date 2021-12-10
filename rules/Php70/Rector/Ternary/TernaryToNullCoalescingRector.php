@@ -32,9 +32,9 @@ final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRe
         return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param Ternary $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->cond instanceof \PhpParser\Node\Expr\Isset_) {
             return $this->processTernaryWithIsset($node, $node->cond);

@@ -18,7 +18,10 @@ final class RemoveCmsPackageDirFromExtraComposerRector implements \Rector\Compos
      * @var string
      */
     private const TYPO3_CMS = 'typo3/cms';
-    public function refactor(\RectorPrefix20211210\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    /**
+     * @param \Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson
+     */
+    public function refactor($composerJson) : void
     {
         $extra = $composerJson->getExtra();
         if (!isset($extra[self::TYPO3_CMS])) {
@@ -30,7 +33,10 @@ final class RemoveCmsPackageDirFromExtraComposerRector implements \Rector\Compos
         unset($extra[self::TYPO3_CMS]['cms-package-dir']);
         $composerJson->setExtra($extra);
     }
-    public function configure(array $configuration) : void
+    /**
+     * @param mixed[] $configuration
+     */
+    public function configure($configuration) : void
     {
         throw new \BadMethodCallException('Not allowed. No configuration option available');
     }

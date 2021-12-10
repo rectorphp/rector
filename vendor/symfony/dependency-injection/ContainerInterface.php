@@ -63,17 +63,19 @@ interface ContainerInterface extends \RectorPrefix20211210\Psr\Container\Contain
      * @return array|bool|string|int|float|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
+     * @param string $name
      */
-    public function getParameter(string $name);
+    public function getParameter($name);
     /**
      * @return bool
+     * @param string $name
      */
-    public function hasParameter(string $name);
+    public function hasParameter($name);
     /**
      * Sets a parameter.
      *
      * @param string                           $name  The parameter name
      * @param array|bool|string|int|float|null $value The parameter value
      */
-    public function setParameter(string $name, $value);
+    public function setParameter($name, $value);
 }

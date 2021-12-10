@@ -52,7 +52,10 @@ final class AliasedObjectType extends \PHPStan\Type\ObjectType
         $use->type = \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION;
         return $use;
     }
-    public function equals(\PHPStan\Type\Type $type) : bool
+    /**
+     * @param \PHPStan\Type\Type $type
+     */
+    public function equals($type) : bool
     {
         // compare with FQN classes
         if ($type instanceof \PHPStan\Type\TypeWithClassName) {

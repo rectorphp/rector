@@ -20,8 +20,9 @@ final class CallableNodeVisitor extends \PhpParser\NodeVisitorAbstract
     }
     /**
      * @return int|Node|null
+     * @param \PhpParser\Node $node
      */
-    public function enterNode(\PhpParser\Node $node)
+    public function enterNode($node)
     {
         $originalNode = $node;
         $callable = $this->callable;

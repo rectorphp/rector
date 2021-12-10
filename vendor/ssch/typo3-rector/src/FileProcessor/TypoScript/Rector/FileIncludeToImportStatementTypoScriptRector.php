@@ -24,7 +24,10 @@ final class FileIncludeToImportStatementTypoScriptRector extends \Ssch\TYPO3Rect
     {
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
+    /**
+     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
+     */
+    public function enterNode($statement) : void
     {
         if (!$statement instanceof \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\AST\FileIncludeStatement) {
             return;

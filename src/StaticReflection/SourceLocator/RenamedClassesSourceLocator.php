@@ -27,7 +27,11 @@ final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\Sou
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function locateIdentifier(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\Identifier $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
+    /**
+     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
+     * @param \PHPStan\BetterReflection\Identifier\Identifier $identifier
+     */
+    public function locateIdentifier($reflector, $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
     {
         foreach ($this->renamedClassesDataCollector->getOldClasses() as $oldClass) {
             if ($identifier->getName() !== $oldClass) {
@@ -40,8 +44,10 @@ final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\Sou
     }
     /**
      * @return Reflection[]
+     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
+     * @param \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType
      */
-    public function locateIdentifiersByType(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType) : array
+    public function locateIdentifiersByType($reflector, $identifierType) : array
     {
         return [];
     }

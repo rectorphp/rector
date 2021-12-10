@@ -13,7 +13,10 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenderTypeFlexFormRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\FlexForms\Rector\FlexFormRectorInterface
 {
-    public function transform(\DOMDocument $domDocument) : bool
+    /**
+     * @param \DOMDocument $domDocument
+     */
+    public function transform($domDocument) : bool
     {
         $xpath = new \DOMXPath($domDocument);
         /** @var DOMNodeList<DOMElement> $elements */

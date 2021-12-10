@@ -22,8 +22,10 @@ abstract class AbstractSymplifyKernel implements \RectorPrefix20211210\Symplify\
     private $container = null;
     /**
      * @param string[] $configFiles
+     * @param mixed[] $extensions
+     * @param mixed[] $compilerPasses
      */
-    public function create(array $extensions, array $compilerPasses, array $configFiles) : \RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerInterface
+    public function create($extensions, $compilerPasses, $configFiles) : \RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerInterface
     {
         $containerBuilderFactory = new \RectorPrefix20211210\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20211210\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
         $compilerPasses[] = new \RectorPrefix20211210\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();

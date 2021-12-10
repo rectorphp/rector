@@ -49,7 +49,7 @@ CODE_SAMPLE
      * @param Expr $columnName the key in above example (typically String_('column_name'))
      * @param Expr $columnTca the value in above example (typically an associative Array with stuff like 'label', 'config', 'exclude', ...)
      */
-    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
+    protected function refactorColumn($columnName, $columnTca) : void
     {
         if (!$columnTca instanceof \PhpParser\Node\Expr\Array_) {
             return;
@@ -79,8 +79,9 @@ CODE_SAMPLE
      * won't contain a 'type' field.
      *
      * @inheritdoc
+     * @param \PhpParser\Node\Expr\ArrayItem $arrayItem
      */
-    protected function isSingleTcaColumn(\PhpParser\Node\Expr\ArrayItem $arrayItem) : bool
+    protected function isSingleTcaColumn($arrayItem) : bool
     {
         $labelNode = $this->extractArrayItemByKey($arrayItem->value, 'label');
         return null !== $labelNode;

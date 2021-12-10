@@ -34,9 +34,9 @@ final class RemoveLangCsConvObjAndParserFactoryRector extends \Rector\Core\Recto
         return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param MethodCall|PropertyFetch $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;

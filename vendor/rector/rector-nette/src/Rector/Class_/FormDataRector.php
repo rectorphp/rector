@@ -111,7 +111,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure(array $configuration) : void
+    public function configure($configuration) : void
     {
         if (isset($configuration[self::FORM_DATA_CLASS_PARENT])) {
             $formDataClassParent = $configuration[self::FORM_DATA_CLASS_PARENT];
@@ -126,9 +126,9 @@ CODE_SAMPLE
         }
     }
     /**
-     * @param Class_ $node
+     * @param \PhpParser\Node $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor($node) : ?\PhpParser\Node
     {
         if ($node->name === null) {
             return null;
