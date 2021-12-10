@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -14,19 +15,25 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/deprecate_dynamic_properties
  *
  * @see \Rector\Tests\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector\AddAllowDynamicPropertiesAttributeRectorTest
  */
-final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
      */
     private const ATTRIBUTE = 'AllowDynamicProperties';
+    public const TRANSFORM_ON_NAMESPACES = 'transform_on_namespaces';
+    /**
+     * @var array<array-key, string>
+     */
+    private $transformOnNamespaces = [];
     /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
@@ -56,18 +63,22 @@ final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add the `AllowDynamicProperties` attribute to all classes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add the `AllowDynamicProperties` attribute to all classes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+namespace Example\Domain;
+
 class SomeObject {
     public string $someProperty = 'hello world';
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+namespace Example\Domain;
+
 #[AllowDynamicProperties]
 class SomeObject {
     public string $someProperty = 'hello world';
 }
 CODE_SAMPLE
-)]);
+, [\Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector::TRANSFORM_ON_NAMESPACES => ['Example\\*']])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -75,6 +86,13 @@ CODE_SAMPLE
     public function getNodeTypes() : array
     {
         return [\PhpParser\Node\Stmt\Class_::class];
+    }
+    public function configure(array $configuration) : void
+    {
+        $transformOnNamespaces = $configuration[self::TRANSFORM_ON_NAMESPACES] ?? $configuration;
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($transformOnNamespaces);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($transformOnNamespaces);
+        $this->transformOnNamespaces = $transformOnNamespaces;
     }
     /**
      * @param Class_ $node
@@ -117,6 +135,14 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
+        if (\count($this->transformOnNamespaces) !== 0) {
+            $className = (string) $this->nodeNameResolver->getName($class);
+            foreach ($this->transformOnNamespaces as $transformOnNamespace) {
+                if (!$this->nodeNameResolver->isStringName($className, $transformOnNamespace)) {
+                    return \true;
+                }
+            }
+        }
         if ($this->isDescendantOfStdclass($class)) {
             return \true;
         }
