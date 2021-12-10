@@ -292,6 +292,6 @@ CODE_SAMPLE
             }
         }
 
-        return false;
+        return true;
     }
 }
