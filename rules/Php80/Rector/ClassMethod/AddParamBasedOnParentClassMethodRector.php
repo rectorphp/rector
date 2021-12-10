@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
@@ -160,10 +163,17 @@ CODE_SAMPLE
                 return null;
             }
 
+            $paramDefault = $parentClassMethodParam->default;
+
+            if ($paramDefault instanceof Expr) {
+                $printParamDefault = $this->print($paramDefault);
+                $paramDefault = new ConstFetch(new Name($printParamDefault));
+            }
+
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
             $node->params[$key] = new Param(
                 new Variable($paramName),
-                $parentClassMethodParam->default,
+                $paramDefault,
                 $parentClassMethodParam->type,
                 $parentClassMethodParam->byRef,
                 $parentClassMethodParam->variadic,
