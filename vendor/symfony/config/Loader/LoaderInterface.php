@@ -25,8 +25,9 @@ interface LoaderInterface
      * @return mixed
      *
      * @throws \Exception If something went wrong
+     * @param string|null $type
      */
-    public function load($resource, string $type = null);
+    public function load($resource, $type = null);
     /**
      * Returns whether this class supports the given resource.
      *
