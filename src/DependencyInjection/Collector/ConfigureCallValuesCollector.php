@@ -71,6 +71,11 @@ final class ConfigureCallValuesCollector
                     $constantNamesToValues = $classReflection->getConstants(ReflectionClassConstant::IS_PUBLIC);
                     foreach ($constantNamesToValues as $constantName => $constantValue) {
                         if ($constantValue === $firstKey) {
+                            $reflectionConstant = $classReflection->getReflectionConstant($constantName);
+                            if (! str_contains($reflectionConstant->getDocComment(), '@deprecated')) {
+                                continue;
+                            }
+
                             $warningMessage = sprintf(
                                 'The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.',
                                 $rectorClass,
