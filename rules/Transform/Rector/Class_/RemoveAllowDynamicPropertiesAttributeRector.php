@@ -25,15 +25,13 @@ final class RemoveAllowDynamicPropertiesAttributeRector extends AbstractRector i
      */
     private const ATTRIBUTE = 'AllowDynamicProperties';
 
-    public const TRANSFORM_ON_NAMESPACES = 'transform_on_namespaces';
-
     /**
      * @var array<array-key, string>
      */
     private array $transformOnNamespaces = [];
 
     public function __construct(
-        private PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
     ) {
     }
 
@@ -48,20 +46,17 @@ namespace Example\Domain;
 class SomeObject {
     public string $someProperty = 'hello world';
 }
-CODE_SAMPLE,
-
+CODE_SAMPLE
+,
                 <<<'CODE_SAMPLE'
 namespace Example\Domain;
 
 class SomeObject {
     public string $someProperty = 'hello world';
 }
-CODE_SAMPLE,
-                [
-                    RemoveAllowDynamicPropertiesAttributeRector::TRANSFORM_ON_NAMESPACES => [
-                        'Example\*'
-                    ]
-                ]
+CODE_SAMPLE
+,
+                ['Example\*']
             ),
         ]);
     }
@@ -76,9 +71,8 @@ CODE_SAMPLE,
 
     public function configure(array $configuration): void
     {
-        $transformOnNamespaces = $configuration[self::TRANSFORM_ON_NAMESPACES] ?? $configuration;
+        $transformOnNamespaces = $configuration;
 
-        Assert::isArray($transformOnNamespaces);
         Assert::allString($transformOnNamespaces);
 
         $this->transformOnNamespaces = $transformOnNamespaces;
@@ -106,18 +100,20 @@ CODE_SAMPLE,
                     $newAttrs[] = $attribute;
                 }
             }
+
             $attrGroup->attrs = $newAttrs;
-            if (count($attrGroup->attrs) !== 0) {
+            if ($attrGroup->attrs !== []) {
                 $newAttrGroups[] = $attrGroup;
             }
         }
+
         $class->attrGroups = $newAttrGroups;
         return $class;
     }
 
     private function shouldRemove(Class_ $class): bool
     {
-        if (count($this->transformOnNamespaces) !== 0) {
+        if ($this->transformOnNamespaces !== []) {
             $className = (string) $this->nodeNameResolver->getName($class);
             foreach ($this->transformOnNamespaces as $transformOnNamespace) {
                 if (! $this->nodeNameResolver->isStringName($className, $transformOnNamespace)) {

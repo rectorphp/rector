@@ -32,8 +32,6 @@ final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector impl
      */
     private const ATTRIBUTE = 'AllowDynamicProperties';
 
-    public const TRANSFORM_ON_NAMESPACES = 'transform_on_namespaces';
-
     /**
      * @var array<array-key, string>
      */
@@ -57,7 +55,8 @@ namespace Example\Domain;
 class SomeObject {
     public string $someProperty = 'hello world';
 }
-CODE_SAMPLE,
+CODE_SAMPLE
+,
                 <<<'CODE_SAMPLE'
 namespace Example\Domain;
 
@@ -65,12 +64,9 @@ namespace Example\Domain;
 class SomeObject {
     public string $someProperty = 'hello world';
 }
-CODE_SAMPLE,
-                [
-                    AddAllowDynamicPropertiesAttributeRector::TRANSFORM_ON_NAMESPACES => [
-                        'Example\*',
-                    ]
-                ],
+CODE_SAMPLE
+,
+                ['Example\*'],
             ),
         ]);
     }
@@ -83,12 +79,10 @@ CODE_SAMPLE,
         return [Class_::class];
     }
 
-
     public function configure(array $configuration): void
     {
-        $transformOnNamespaces = $configuration[self::TRANSFORM_ON_NAMESPACES] ?? $configuration;
+        $transformOnNamespaces = $configuration;
 
-        Assert::isArray($transformOnNamespaces);
         Assert::allString($transformOnNamespaces);
 
         $this->transformOnNamespaces = $transformOnNamespaces;
@@ -145,7 +139,7 @@ CODE_SAMPLE,
 
     private function shouldSkip(Class_ $class): bool
     {
-        if (count($this->transformOnNamespaces) !== 0) {
+        if ($this->transformOnNamespaces !== []) {
             $className = (string) $this->nodeNameResolver->getName($class);
             foreach ($this->transformOnNamespaces as $transformOnNamespace) {
                 if (! $this->nodeNameResolver->isStringName($className, $transformOnNamespace)) {
