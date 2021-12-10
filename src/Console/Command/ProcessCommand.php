@@ -130,11 +130,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->addOption(\Rector\Core\Configuration\Option::OUTPUT_FORMAT, \Rector\Core\Configuration\Option::OUTPUT_FORMAT_SHORT, \RectorPrefix20211210\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, $description, \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME);
         parent::configure();
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function execute($input, $output) : int
+    protected function execute(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
         if ($exitCode !== null) {
@@ -174,11 +170,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->invalidateCacheChangedFiles($processResult);
         return $this->resolveReturnCode($processResult, $configuration);
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function initialize($input, $output) : void
+    protected function initialize(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         $application = $this->getApplication();
         if (!$application instanceof \RectorPrefix20211210\Symfony\Component\Console\Application) {

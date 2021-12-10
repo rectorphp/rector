@@ -61,10 +61,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Expression $node
      * @return Node[]|Node|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($this->hasGetMagic($node)) {
             return null;

@@ -47,9 +47,9 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
@@ -211,7 +211,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $additionalValuesToBeRemoved = $configuration[self::ADDITIONAL_VALUES_TO_BE_REMOVED] ?? [];
         $this->valuesToBeRemoved = \array_merge($this->valuesToBeRemoved, $additionalValuesToBeRemoved);

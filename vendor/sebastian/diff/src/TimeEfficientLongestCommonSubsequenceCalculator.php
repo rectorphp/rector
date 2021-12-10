@@ -19,10 +19,8 @@ final class TimeEfficientLongestCommonSubsequenceCalculator implements \RectorPr
 {
     /**
      * {@inheritdoc}
-     * @param mixed[] $from
-     * @param mixed[] $to
      */
-    public function calculate($from, $to) : array
+    public function calculate(array $from, array $to) : array
     {
         $common = [];
         $fromLength = \count($from);

@@ -59,10 +59,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall|BooleanNot $node
      * @return Identical|NotIdentical|null The refactored node.
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         $funcCall = $this->matchStrContainsOrNotStrContains($node);
         if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {

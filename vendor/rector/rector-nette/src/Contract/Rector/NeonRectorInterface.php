@@ -15,8 +15,8 @@ interface NeonRectorInterface extends \Rector\Core\Contract\Rector\RectorInterfa
      */
     public function getNodeType() : string;
     /**
-     * @param \Nette\Neon\Node $node
+     * @param TNode $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode($node);
+    public function enterNode(\RectorPrefix20211210\Nette\Neon\Node $node);
 }

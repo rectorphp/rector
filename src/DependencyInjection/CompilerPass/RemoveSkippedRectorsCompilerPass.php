@@ -13,10 +13,7 @@ use RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class RemoveSkippedRectorsCompilerPass implements \RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-     */
-    public function process($containerBuilder) : void
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
         $skippedRectorClasses = $this->resolveSkippedRectorClasses($containerBuilder);
         foreach ($containerBuilder->getDefinitions() as $id => $definition) {

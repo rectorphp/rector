@@ -64,9 +64,9 @@ final class NameNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParse
         return \PhpParser\Node\Name::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Name $node
      */
-    public function mapToPHPStan($node) : \PHPStan\Type\Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $name = $node->toString();
         if ($this->isExistingClass($name)) {

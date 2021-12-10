@@ -68,19 +68,13 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211210\Symplif
         $this->currentFileProvider = $currentFileProvider;
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
-     */
-    public function beforeTraverse($node) : void
+    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
         if ($this->currentPhpParserNode === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('Set "$currentPhpParserNode" first');
         }
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
-     */
-    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if ($node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
             return $this->enterSpacelessPhpDocTagNode($node);
@@ -109,10 +103,7 @@ final class NameImportingPhpDocNodeVisitor extends \RectorPrefix20211210\Symplif
         }
         return $this->processFqnNameImport($this->currentPhpParserNode, $node, $staticType, $file);
     }
-    /**
-     * @param PhpParserNode $phpParserNode
-     */
-    public function setCurrentNode($phpParserNode) : void
+    public function setCurrentNode(\PhpParser\Node $phpParserNode) : void
     {
         $this->currentPhpParserNode = $phpParserNode;
     }

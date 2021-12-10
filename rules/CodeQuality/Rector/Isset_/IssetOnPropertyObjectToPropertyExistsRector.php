@@ -76,9 +76,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Isset_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Isset_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $newNodes = [];
         foreach ($node->vars as $issetVar) {

@@ -23,9 +23,8 @@ class RemoveUnusedDefinitionsPass extends \RectorPrefix20211210\Symfony\Componen
     private $connectedIds = [];
     /**
      * Processes the ContainerBuilder to remove unused definitions.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         try {
             $this->enableExpressionProcessing();
@@ -67,9 +66,8 @@ class RemoveUnusedDefinitionsPass extends \RectorPrefix20211210\Symfony\Componen
     }
     /**
      * {@inheritdoc}
-     * @param bool $isRoot
      */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if (!$value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Reference) {
             return parent::processValue($value, $isRoot);

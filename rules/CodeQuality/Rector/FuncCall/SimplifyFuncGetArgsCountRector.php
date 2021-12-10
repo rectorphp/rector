@@ -26,9 +26,9 @@ final class SimplifyFuncGetArgsCountRector extends \Rector\Core\Rector\AbstractR
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'count')) {
             return null;

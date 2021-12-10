@@ -25,18 +25,16 @@ final class ParentStaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
         return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType::class;
     }
     /**
-     * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
+     * @param ParentStaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
     }
     /**
-     * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
+     * @param ParentStaticType $type
      */
-    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
         return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT()->getValue());
     }

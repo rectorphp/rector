@@ -73,10 +73,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Expression|Return_ $node
      * @return Node|Node[]|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($node instanceof \PhpParser\Node\Stmt\Return_) {
             return $this->refactorReturn($node);

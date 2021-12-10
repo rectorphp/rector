@@ -20,28 +20,16 @@ abstract class AbstractTypoScriptRector implements \RectorPrefix20211210\Helmich
      * @var \Helmich\TypoScriptParser\Parser\AST\Statement|null
      */
     protected $newStatement;
-    /**
-     * @param mixed[] $statements
-     */
-    public function enterTree($statements) : void
+    public function enterTree(array $statements) : void
     {
     }
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
-     */
-    public function enterNode($statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
-     */
-    public function exitNode($statement) : void
+    public function exitNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
     }
-    /**
-     * @param mixed[] $statements
-     */
-    public function exitTree($statements) : void
+    public function exitTree(array $statements) : void
     {
     }
     public function hasChanged() : bool

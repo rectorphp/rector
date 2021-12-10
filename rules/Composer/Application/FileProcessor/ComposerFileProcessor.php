@@ -49,10 +49,8 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
      */
-    public function process($file, $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
         $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         if ($this->composerRectors === []) {
@@ -76,11 +74,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] = [$fileDiff];
         return $systemErrorsAndFileDiffs;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function supports($file, $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->isJsonInTests($smartFileInfo)) {

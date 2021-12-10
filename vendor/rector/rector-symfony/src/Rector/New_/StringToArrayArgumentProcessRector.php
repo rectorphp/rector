@@ -59,9 +59,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param New_|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $expr = $node instanceof \PhpParser\Node\Expr\New_ ? $node->class : $node->var;
         if ($this->isObjectType($expr, new \PHPStan\Type\ObjectType('Symfony\\Component\\Process\\Process'))) {

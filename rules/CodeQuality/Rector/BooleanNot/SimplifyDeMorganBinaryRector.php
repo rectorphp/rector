@@ -47,9 +47,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param BooleanNot $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return null;

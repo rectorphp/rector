@@ -62,9 +62,8 @@ class ChoiceQuestion extends \RectorPrefix20211210\Symfony\Component\Console\Que
      * When multiselect is set to true, multiple choices can be answered.
      *
      * @return $this
-     * @param bool $multiselect
      */
-    public function setMultiselect($multiselect)
+    public function setMultiselect(bool $multiselect)
     {
         $this->multiselect = $multiselect;
         $this->setValidator($this->getDefaultValidator());
@@ -88,9 +87,8 @@ class ChoiceQuestion extends \RectorPrefix20211210\Symfony\Component\Console\Que
      * Sets the prompt for choices.
      *
      * @return $this
-     * @param string $prompt
      */
-    public function setPrompt($prompt)
+    public function setPrompt(string $prompt)
     {
         $this->prompt = $prompt;
         return $this;
@@ -101,9 +99,8 @@ class ChoiceQuestion extends \RectorPrefix20211210\Symfony\Component\Console\Que
      * The error message has a string placeholder (%s) for the invalid value.
      *
      * @return $this
-     * @param string $errorMessage
      */
-    public function setErrorMessage($errorMessage)
+    public function setErrorMessage(string $errorMessage)
     {
         $this->errorMessage = $errorMessage;
         $this->setValidator($this->getDefaultValidator());

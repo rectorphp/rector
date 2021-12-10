@@ -10,7 +10,6 @@ interface PropertyTypeInfererInterface extends \Rector\TypeDeclaration\Contract\
     /**
      * Return null if no type can be inferred.
      * Return MixedType if unknown type is inferred.
-     * @param \PhpParser\Node\Stmt\Property $property
      */
-    public function inferProperty($property) : ?\PHPStan\Type\Type;
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type;
 }

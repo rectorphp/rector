@@ -50,9 +50,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign|Property $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $defaultExpr = $this->resolveDefaultValueExpr($node);
         if (!$defaultExpr instanceof \PhpParser\Node\Expr) {

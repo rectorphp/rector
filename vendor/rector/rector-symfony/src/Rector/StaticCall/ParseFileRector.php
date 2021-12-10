@@ -49,9 +49,9 @@ final class ParseFileRector extends \Rector\Core\Rector\AbstractRector
     /**
      * Process Node of matched type
      *
-     * @param \PhpParser\Node $node
+     * @param StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->name, 'parse')) {
             return null;

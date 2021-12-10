@@ -37,7 +37,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
     /**
      * @param int[] $types
      */
-    public function isNextTokenTypes($types) : bool
+    public function isNextTokenTypes(array $types) : bool
     {
         foreach ($types as $type) {
             if ($this->isNextTokenType($type)) {
@@ -49,7 +49,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
     /**
      * @param int[] $tokenTypes
      */
-    public function isCurrentTokenTypes($tokenTypes) : bool
+    public function isCurrentTokenTypes(array $tokenTypes) : bool
     {
         foreach ($tokenTypes as $tokenType) {
             if ($this->isCurrentTokenType($tokenType)) {
@@ -58,11 +58,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
         }
         return \false;
     }
-    /**
-     * @param int $tokenType
-     * @param int $position
-     */
-    public function isTokenTypeOnPosition($tokenType, $position) : bool
+    public function isTokenTypeOnPosition(int $tokenType, int $position) : bool
     {
         $tokens = $this->getTokens();
         $token = $tokens[$position] ?? null;
@@ -71,21 +67,14 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
         }
         return $token[1] === $tokenType;
     }
-    /**
-     * @param int $tokenType
-     */
-    public function isNextTokenType($tokenType) : bool
+    public function isNextTokenType(int $tokenType) : bool
     {
         if ($this->nextTokenType() === null) {
             return \false;
         }
         return $this->nextTokenType() === $tokenType;
     }
-    /**
-     * @param int $from
-     * @param int $to
-     */
-    public function printFromTo($from, $to) : string
+    public function printFromTo(int $from, int $to) : string
     {
         if ($to < $from) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('Arguments are flipped');
@@ -142,10 +131,8 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
     }
     /**
      * @return mixed[]
-     * @param int $start
-     * @param int $end
      */
-    public function partialTokens($start, $end) : array
+    public function partialTokens(int $start, int $end) : array
     {
         $tokens = $this->getTokens();
         $chunkTokens = [];
@@ -154,10 +141,7 @@ final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterat
         }
         return $chunkTokens;
     }
-    /**
-     * @param int $type
-     */
-    public function containsTokenType($type) : bool
+    public function containsTokenType(int $type) : bool
     {
         foreach ($this->getTokens() as $token) {
             if ($token[1] === $type) {

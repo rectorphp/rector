@@ -20,7 +20,7 @@ final class ArrayItemNode extends \RectorPrefix20211210\Nette\Neon\Node
         $this->startPos = $this->endPos = $pos;
     }
     /** @param  self[]  $items */
-    public static function itemsToArray($items) : array
+    public static function itemsToArray(array $items) : array
     {
         $res = [];
         foreach ($items as $item) {
@@ -33,7 +33,7 @@ final class ArrayItemNode extends \RectorPrefix20211210\Nette\Neon\Node
         return $res;
     }
     /** @param  self[]  $items */
-    public static function itemsToInlineString($items) : string
+    public static function itemsToInlineString(array $items) : string
     {
         $res = '';
         foreach ($items as $item) {
@@ -42,7 +42,7 @@ final class ArrayItemNode extends \RectorPrefix20211210\Nette\Neon\Node
         return $res;
     }
     /** @param  self[]  $items */
-    public static function itemsToBlockString($items) : string
+    public static function itemsToBlockString(array $items) : string
     {
         $res = '';
         foreach ($items as $item) {

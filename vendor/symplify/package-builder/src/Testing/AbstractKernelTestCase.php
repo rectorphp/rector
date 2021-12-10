@@ -35,7 +35,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211210\PHPUnit\Fram
      * @param string[]|SmartFileInfo[] $configs
      * @return \Symfony\Component\HttpKernel\KernelInterface|\Symplify\SymplifyKernel\Contract\LightKernelInterface
      */
-    protected function bootKernelWithConfigs($kernelClass, $configs)
+    protected function bootKernelWithConfigs(string $kernelClass, array $configs)
     {
         // unwrap file infos to real paths
         $configFilePaths = $this->resolveConfigFilePaths($configs);
@@ -53,7 +53,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211210\PHPUnit\Fram
      * @param class-string<T> $type
      * @return object
      */
-    protected function getService($type)
+    protected function getService(string $type)
     {
         if (self::$container === null) {
             throw new \RectorPrefix20211210\Symplify\SymplifyKernel\Exception\ShouldNotHappenException('First, create container with booKernel(KernelClass::class)');
@@ -68,7 +68,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211210\PHPUnit\Fram
     /**
      * @param class-string<KernelInterface|LightKernelInterface> $kernelClass
      */
-    protected function bootKernel($kernelClass) : void
+    protected function bootKernel(string $kernelClass) : void
     {
         if (\is_a($kernelClass, \RectorPrefix20211210\Symplify\SymplifyKernel\Contract\LightKernelInterface::class, \true)) {
             /** @var LightKernelInterface $kernel */
@@ -110,7 +110,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211210\PHPUnit\Fram
     /**
      * @param string[] $configs
      */
-    protected function resolveConfigsHash($configs) : string
+    protected function resolveConfigsHash(array $configs) : string
     {
         $configsHash = '';
         foreach ($configs as $config) {
@@ -122,7 +122,7 @@ abstract class AbstractKernelTestCase extends \RectorPrefix20211210\PHPUnit\Fram
      * @param string[]|SmartFileInfo[] $configs
      * @return string[]
      */
-    protected function resolveConfigFilePaths($configs) : array
+    protected function resolveConfigFilePaths(array $configs) : array
     {
         $configFilePaths = [];
         foreach ($configs as $config) {

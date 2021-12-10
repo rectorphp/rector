@@ -53,10 +53,7 @@ final class Indent
     {
         return $this->string;
     }
-    /**
-     * @param string $content
-     */
-    public static function fromString($content) : self
+    public static function fromString(string $content) : self
     {
         $match = \RectorPrefix20211210\Nette\Utils\Strings::match($content, self::VALID_INDENT_REGEX);
         if ($match === null) {
@@ -64,10 +61,7 @@ final class Indent
         }
         return new self($content);
     }
-    /**
-     * @param int $size
-     */
-    public static function createSpaceWithSize($size) : self
+    public static function createSpaceWithSize(int $size) : self
     {
         return self::fromSizeAndStyle($size, self::SPACE);
     }
@@ -75,11 +69,7 @@ final class Indent
     {
         return self::fromSizeAndStyle(1, self::TAB);
     }
-    /**
-     * @param int $size
-     * @param string $style
-     */
-    public static function fromSizeAndStyle($size, $style) : self
+    public static function fromSizeAndStyle(int $size, string $style) : self
     {
         if ($size < self::MINIMUM_SIZE) {
             throw \Rector\FileFormatter\Exception\InvalidIndentSizeException::fromSizeAndMinimumSize($size, self::MINIMUM_SIZE);
@@ -90,10 +80,7 @@ final class Indent
         $value = \str_repeat(self::CHARACTERS[$style], $size);
         return new self($value);
     }
-    /**
-     * @param string $content
-     */
-    public static function fromContent($content) : self
+    public static function fromContent(string $content) : self
     {
         $match = \RectorPrefix20211210\Nette\Utils\Strings::match($content, self::PARSE_INDENT_REGEX);
         if (isset($match['indent'])) {

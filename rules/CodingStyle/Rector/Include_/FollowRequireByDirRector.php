@@ -47,9 +47,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Include_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Include_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Concat && $node->expr->left instanceof \PhpParser\Node\Scalar\String_ && $this->isRefactorableStringPath($node->expr->left)) {
             $node->expr->left = $this->prefixWithDir($node->expr->left);

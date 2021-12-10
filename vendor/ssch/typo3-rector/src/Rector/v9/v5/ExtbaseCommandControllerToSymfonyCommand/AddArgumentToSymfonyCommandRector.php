@@ -64,9 +64,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ([] === $this->commandInputArguments) {
             return null;
@@ -82,7 +82,7 @@ CODE_SAMPLE
     /**
      * @param array<string, mixed> $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $commandInputArguments = $configuration[self::INPUT_ARGUMENTS] ?? [];
         $this->commandInputArguments = $commandInputArguments;

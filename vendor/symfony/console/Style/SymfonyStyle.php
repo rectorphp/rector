@@ -56,13 +56,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     /**
      * Formats a message as a block of text.
      * @param mixed[]|string $messages
-     * @param string|null $type
-     * @param string|null $style
-     * @param string $prefix
-     * @param bool $padding
-     * @param bool $escape
      */
-    public function block($messages, $type = null, $style = null, $prefix = ' ', $padding = \false, $escape = \true)
+    public function block($messages, ?string $type = null, string $style = null, string $prefix = ' ', bool $padding = \false, bool $escape = \true)
     {
         $messages = \is_array($messages) ? \array_values($messages) : [$messages];
         $this->autoPrependBlock();
@@ -71,9 +66,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param string $message
      */
-    public function title($message)
+    public function title(string $message)
     {
         $this->autoPrependBlock();
         $this->writeln([\sprintf('<comment>%s</>', \RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatter::escapeTrailingBackslash($message)), \sprintf('<comment>%s</>', \str_repeat('=', \RectorPrefix20211210\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20211210\Symfony\Component\Console\Helper\Helper::removeDecoration($this->getFormatter(), $message))))]);
@@ -81,9 +75,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param string $message
      */
-    public function section($message)
+    public function section(string $message)
     {
         $this->autoPrependBlock();
         $this->writeln([\sprintf('<comment>%s</>', \RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatter::escapeTrailingBackslash($message)), \sprintf('<comment>%s</>', \str_repeat('-', \RectorPrefix20211210\Symfony\Component\Console\Helper\Helper::width(\RectorPrefix20211210\Symfony\Component\Console\Helper\Helper::removeDecoration($this->getFormatter(), $message))))]);
@@ -91,9 +84,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param mixed[] $elements
      */
-    public function listing($elements)
+    public function listing(array $elements)
     {
         $this->autoPrependText();
         $elements = \array_map(function ($element) {
@@ -172,20 +164,16 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param mixed[] $headers
-     * @param mixed[] $rows
      */
-    public function table($headers, $rows)
+    public function table(array $headers, array $rows)
     {
         $this->createTable()->setHeaders($headers)->setRows($rows)->render();
         $this->newLine();
     }
     /**
      * Formats a horizontal table.
-     * @param mixed[] $headers
-     * @param mixed[] $rows
      */
-    public function horizontalTable($headers, $rows)
+    public function horizontalTable(array $headers, array $rows)
     {
         $this->createTable()->setHorizontal(\true)->setHeaders($headers)->setRows($rows)->render();
         $this->newLine();
@@ -225,11 +213,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     /**
      * {@inheritdoc}
      * @return mixed
-     * @param string $question
-     * @param string|null $default
-     * @param callable|null $validator
      */
-    public function ask($question, $default = null, $validator = null)
+    public function ask(string $question, string $default = null, callable $validator = null)
     {
         $question = new \RectorPrefix20211210\Symfony\Component\Console\Question\Question($question, $default);
         $question->setValidator($validator);
@@ -238,10 +223,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     /**
      * {@inheritdoc}
      * @return mixed
-     * @param string $question
-     * @param callable|null $validator
      */
-    public function askHidden($question, $validator = null)
+    public function askHidden(string $question, callable $validator = null)
     {
         $question = new \RectorPrefix20211210\Symfony\Component\Console\Question\Question($question);
         $question->setHidden(\true);
@@ -250,10 +233,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param string $question
-     * @param bool $default
      */
-    public function confirm($question, $default = \true) : bool
+    public function confirm(string $question, bool $default = \true) : bool
     {
         return $this->askQuestion(new \RectorPrefix20211210\Symfony\Component\Console\Question\ConfirmationQuestion($question, $default));
     }
@@ -261,10 +242,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
      * {@inheritdoc}
      * @param mixed $default
      * @return mixed
-     * @param string $question
-     * @param mixed[] $choices
      */
-    public function choice($question, $choices, $default = null)
+    public function choice(string $question, array $choices, $default = null)
     {
         if (null !== $default) {
             $values = \array_flip($choices);
@@ -274,18 +253,16 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param int $max
      */
-    public function progressStart($max = 0)
+    public function progressStart(int $max = 0)
     {
         $this->progressBar = $this->createProgressBar($max);
         $this->progressBar->start();
     }
     /**
      * {@inheritdoc}
-     * @param int $step
      */
-    public function progressAdvance($step = 1)
+    public function progressAdvance(int $step = 1)
     {
         $this->getProgressBar()->advance($step);
     }
@@ -300,9 +277,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param int $max
      */
-    public function createProgressBar($max = 0) : \RectorPrefix20211210\Symfony\Component\Console\Helper\ProgressBar
+    public function createProgressBar(int $max = 0) : \RectorPrefix20211210\Symfony\Component\Console\Helper\ProgressBar
     {
         $progressBar = parent::createProgressBar($max);
         if ('\\' !== \DIRECTORY_SEPARATOR || 'Hyper' === \getenv('TERM_PROGRAM')) {
@@ -316,19 +292,16 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * @see ProgressBar::iterate()
-     * @param mixed[] $iterable
-     * @param int|null $max
      */
-    public function progressIterate($iterable, $max = null) : iterable
+    public function progressIterate(iterable $iterable, int $max = null) : iterable
     {
         yield from $this->createProgressBar()->iterate($iterable, $max);
         $this->newLine(2);
     }
     /**
      * @return mixed
-     * @param \Symfony\Component\Console\Question\Question $question
      */
-    public function askQuestion($question)
+    public function askQuestion(\RectorPrefix20211210\Symfony\Component\Console\Question\Question $question)
     {
         if ($this->input->isInteractive()) {
             $this->autoPrependBlock();
@@ -344,9 +317,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     /**
      * {@inheritdoc}
      * @param mixed[]|string $messages
-     * @param int $type
      */
-    public function writeln($messages, $type = self::OUTPUT_NORMAL)
+    public function writeln($messages, int $type = self::OUTPUT_NORMAL)
     {
         if (!\is_iterable($messages)) {
             $messages = [$messages];
@@ -359,10 +331,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     /**
      * {@inheritdoc}
      * @param mixed[]|string $messages
-     * @param bool $newline
-     * @param int $type
      */
-    public function write($messages, $newline = \false, $type = self::OUTPUT_NORMAL)
+    public function write($messages, bool $newline = \false, int $type = self::OUTPUT_NORMAL)
     {
         if (!\is_iterable($messages)) {
             $messages = [$messages];
@@ -374,9 +344,8 @@ class SymfonyStyle extends \RectorPrefix20211210\Symfony\Component\Console\Style
     }
     /**
      * {@inheritdoc}
-     * @param int $count
      */
-    public function newLine($count = 1)
+    public function newLine(int $count = 1)
     {
         parent::newLine($count);
         $this->bufferedOutput->write(\str_repeat("\n", $count));

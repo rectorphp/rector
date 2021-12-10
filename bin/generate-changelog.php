@@ -52,11 +52,7 @@ final class GenerateChangelogCommand extends \RectorPrefix20211210\Symfony\Compo
         $this->addArgument(self::OPTION_FROM_COMMIT, \RectorPrefix20211210\Symfony\Component\Console\Input\InputArgument::REQUIRED);
         $this->addArgument(self::OPTION_TO_COMMIT, \RectorPrefix20211210\Symfony\Component\Console\Input\InputArgument::REQUIRED);
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function execute($input, $output) : int
+    protected function execute(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $fromCommit = (string) $input->getArgument(self::OPTION_FROM_COMMIT);
         $toCommit = (string) $input->getArgument(self::OPTION_TO_COMMIT);

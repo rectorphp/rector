@@ -54,9 +54,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ArrowFunction|ClassMethod|Closure|Function_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($node->getParams() as $param) {
             if (!$param->type instanceof \PhpParser\Node\IntersectionType) {

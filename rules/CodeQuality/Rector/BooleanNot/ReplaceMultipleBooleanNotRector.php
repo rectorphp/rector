@@ -32,9 +32,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param BooleanNot $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $depth = 0;
         $expr = $node->expr;

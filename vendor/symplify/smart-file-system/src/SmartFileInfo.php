@@ -52,7 +52,7 @@ final class SmartFileInfo extends \RectorPrefix20211210\Symfony\Component\Finder
     /**
      * @param string[] $suffixes
      */
-    public function hasSuffixes($suffixes) : bool
+    public function hasSuffixes(array $suffixes) : bool
     {
         return \in_array($this->getSuffix(), $suffixes, \true);
     }
@@ -68,10 +68,7 @@ final class SmartFileInfo extends \RectorPrefix20211210\Symfony\Component\Finder
     {
         return $this->getRelativePath();
     }
-    /**
-     * @param string $directory
-     */
-    public function getRelativeFilePathFromDirectory($directory) : string
+    public function getRelativeFilePathFromDirectory(string $directory) : string
     {
         if (!\file_exists($directory)) {
             throw new \RectorPrefix20211210\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException(\sprintf('Directory "%s" was not found in %s.', $directory, self::class));
@@ -91,17 +88,11 @@ final class SmartFileInfo extends \RectorPrefix20211210\Symfony\Component\Finder
     {
         return $this->getRelativeFilePathFromDirectory(\getcwd());
     }
-    /**
-     * @param string $string
-     */
-    public function endsWith($string) : bool
+    public function endsWith(string $string) : bool
     {
         return \substr_compare($this->getNormalizedRealPath(), $string, -\strlen($string)) === 0;
     }
-    /**
-     * @param string $string
-     */
-    public function doesFnmatch($string) : bool
+    public function doesFnmatch(string $string) : bool
     {
         $normalizedPath = $this->normalizePath($string);
         if (\fnmatch($normalizedPath, $this->getNormalizedRealPath())) {
@@ -119,10 +110,7 @@ final class SmartFileInfo extends \RectorPrefix20211210\Symfony\Component\Finder
     {
         return \dirname($this->getRealPath());
     }
-    /**
-     * @param string $partialPath
-     */
-    public function startsWith($partialPath) : bool
+    public function startsWith(string $partialPath) : bool
     {
         return \strncmp($this->getNormalizedRealPath(), $partialPath, \strlen($partialPath)) === 0;
     }

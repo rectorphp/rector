@@ -23,10 +23,7 @@ final class DatabaseConnectionExecTruncateTableRefactoring implements \Ssch\TYPO
         $this->connectionCallFactory = $connectionCallFactory;
         $this->nodeFactory = $nodeFactory;
     }
-    /**
-     * @param \PhpParser\Node\Expr\MethodCall $oldNode
-     */
-    public function refactor($oldNode) : array
+    public function refactor(\PhpParser\Node\Expr\MethodCall $oldNode) : array
     {
         $tableArgument = \array_shift($oldNode->args);
         if (!$tableArgument instanceof \PhpParser\Node\Arg) {
@@ -36,10 +33,7 @@ final class DatabaseConnectionExecTruncateTableRefactoring implements \Ssch\TYPO
         $connectionInsertCall = $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('connection'), 'truncate', [$tableArgument->value]);
         return [$connectionAssignment, $connectionInsertCall];
     }
-    /**
-     * @param string $methodName
-     */
-    public function canHandle($methodName) : bool
+    public function canHandle(string $methodName) : bool
     {
         return 'exec_TRUNCATEquery' === $methodName;
     }

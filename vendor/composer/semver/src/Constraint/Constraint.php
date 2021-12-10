@@ -97,7 +97,7 @@ class Constraint implements \RectorPrefix20211210\Composer\Semver\Constraint\Con
      *
      * @return bool
      */
-    public function matches($provider)
+    public function matches(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $provider)
     {
         if ($provider instanceof self) {
             return $this->matchSpecific($provider);
@@ -250,7 +250,7 @@ class Constraint implements \RectorPrefix20211210\Composer\Semver\Constraint\Con
      *
      * @return bool
      */
-    public function matchSpecific($provider, $compareBranches = \false)
+    public function matchSpecific(\RectorPrefix20211210\Composer\Semver\Constraint\Constraint $provider, $compareBranches = \false)
     {
         $noEqualOp = \str_replace('=', '', self::$transOpInt[$this->operator]);
         $providerNoEqualOp = \str_replace('=', '', self::$transOpInt[$provider->operator]);

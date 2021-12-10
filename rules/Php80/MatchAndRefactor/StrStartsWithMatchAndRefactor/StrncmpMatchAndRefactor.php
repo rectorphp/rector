@@ -73,10 +73,7 @@ final class StrncmpMatchAndRefactor implements \Rector\Php80\Contract\StrStartWi
         }
         return $this->strStartsWithFactory->createFromFuncCall($binaryOp->right, $isPositive);
     }
-    /**
-     * @param \Rector\Php80\ValueObject\StrStartsWith $strStartsWith
-     */
-    public function refactorStrStartsWith($strStartsWith) : ?\PhpParser\Node
+    public function refactorStrStartsWith(\Rector\Php80\ValueObject\StrStartsWith $strStartsWith) : ?\PhpParser\Node
     {
         if ($this->isNeedleExprWithStrlen($strStartsWith)) {
             return $this->strStartsWithFuncCallFactory->createStrStartsWith($strStartsWith);

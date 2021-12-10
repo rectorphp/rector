@@ -20,7 +20,7 @@ class BuilderFactory
      *
      * @return Node\Attribute
      */
-    public function attribute($name, $args = []) : \PhpParser\Node\Attribute
+    public function attribute($name, array $args = []) : \PhpParser\Node\Attribute
     {
         return new \PhpParser\Node\Attribute(\PhpParser\BuilderHelpers::normalizeName($name), $this->args($args));
     }
@@ -42,7 +42,7 @@ class BuilderFactory
      *
      * @return Builder\Class_ The created class builder
      */
-    public function class($name) : \PhpParser\Builder\Class_
+    public function class(string $name) : \PhpParser\Builder\Class_
     {
         return new \PhpParser\Builder\Class_($name);
     }
@@ -53,7 +53,7 @@ class BuilderFactory
      *
      * @return Builder\Interface_ The created interface builder
      */
-    public function interface($name) : \PhpParser\Builder\Interface_
+    public function interface(string $name) : \PhpParser\Builder\Interface_
     {
         return new \PhpParser\Builder\Interface_($name);
     }
@@ -64,7 +64,7 @@ class BuilderFactory
      *
      * @return Builder\Trait_ The created trait builder
      */
-    public function trait($name) : \PhpParser\Builder\Trait_
+    public function trait(string $name) : \PhpParser\Builder\Trait_
     {
         return new \PhpParser\Builder\Trait_($name);
     }
@@ -75,7 +75,7 @@ class BuilderFactory
      *
      * @return Builder\Enum_ The created enum builder
      */
-    public function enum($name) : \PhpParser\Builder\Enum_
+    public function enum(string $name) : \PhpParser\Builder\Enum_
     {
         return new \PhpParser\Builder\Enum_($name);
     }
@@ -113,7 +113,7 @@ class BuilderFactory
      *
      * @return Builder\Method The created method builder
      */
-    public function method($name) : \PhpParser\Builder\Method
+    public function method(string $name) : \PhpParser\Builder\Method
     {
         return new \PhpParser\Builder\Method($name);
     }
@@ -124,7 +124,7 @@ class BuilderFactory
      *
      * @return Builder\Param The created parameter builder
      */
-    public function param($name) : \PhpParser\Builder\Param
+    public function param(string $name) : \PhpParser\Builder\Param
     {
         return new \PhpParser\Builder\Param($name);
     }
@@ -135,7 +135,7 @@ class BuilderFactory
      *
      * @return Builder\Property The created property builder
      */
-    public function property($name) : \PhpParser\Builder\Property
+    public function property(string $name) : \PhpParser\Builder\Property
     {
         return new \PhpParser\Builder\Property($name);
     }
@@ -146,7 +146,7 @@ class BuilderFactory
      *
      * @return Builder\Function_ The created function builder
      */
-    public function function($name) : \PhpParser\Builder\Function_
+    public function function(string $name) : \PhpParser\Builder\Function_
     {
         return new \PhpParser\Builder\Function_($name);
     }
@@ -240,7 +240,7 @@ class BuilderFactory
      *
      * @return Arg[]
      */
-    public function args($args) : array
+    public function args(array $args) : array
     {
         $normalizedArgs = [];
         foreach ($args as $key => $arg) {
@@ -262,7 +262,7 @@ class BuilderFactory
      *
      * @return Expr\FuncCall
      */
-    public function funcCall($name, $args = []) : \PhpParser\Node\Expr\FuncCall
+    public function funcCall($name, array $args = []) : \PhpParser\Node\Expr\FuncCall
     {
         return new \PhpParser\Node\Expr\FuncCall(\PhpParser\BuilderHelpers::normalizeNameOrExpr($name), $this->args($args));
     }
@@ -275,7 +275,7 @@ class BuilderFactory
      *
      * @return Expr\MethodCall
      */
-    public function methodCall($var, $name, $args = []) : \PhpParser\Node\Expr\MethodCall
+    public function methodCall(\PhpParser\Node\Expr $var, $name, array $args = []) : \PhpParser\Node\Expr\MethodCall
     {
         return new \PhpParser\Node\Expr\MethodCall($var, \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name), $this->args($args));
     }
@@ -288,7 +288,7 @@ class BuilderFactory
      *
      * @return Expr\StaticCall
      */
-    public function staticCall($class, $name, $args = []) : \PhpParser\Node\Expr\StaticCall
+    public function staticCall($class, $name, array $args = []) : \PhpParser\Node\Expr\StaticCall
     {
         return new \PhpParser\Node\Expr\StaticCall(\PhpParser\BuilderHelpers::normalizeNameOrExpr($class), \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name), $this->args($args));
     }
@@ -300,7 +300,7 @@ class BuilderFactory
      *
      * @return Expr\New_
      */
-    public function new($class, $args = []) : \PhpParser\Node\Expr\New_
+    public function new($class, array $args = []) : \PhpParser\Node\Expr\New_
     {
         return new \PhpParser\Node\Expr\New_(\PhpParser\BuilderHelpers::normalizeNameOrExpr($class), $this->args($args));
     }
@@ -323,7 +323,7 @@ class BuilderFactory
      *
      * @return Expr\PropertyFetch
      */
-    public function propertyFetch($var, $name) : \PhpParser\Node\Expr\PropertyFetch
+    public function propertyFetch(\PhpParser\Node\Expr $var, $name) : \PhpParser\Node\Expr\PropertyFetch
     {
         return new \PhpParser\Node\Expr\PropertyFetch($var, \PhpParser\BuilderHelpers::normalizeIdentifierOrExpr($name));
     }

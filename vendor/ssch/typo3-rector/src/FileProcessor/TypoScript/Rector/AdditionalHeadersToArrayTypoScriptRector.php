@@ -12,10 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
-     */
-    public function enterNode($statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         if (!$statement instanceof \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;

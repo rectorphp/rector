@@ -64,10 +64,10 @@ final class GenericClassMethodParamRector extends \Rector\Core\Rector\AbstractRe
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      * @return \PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {
@@ -118,7 +118,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($makeClassMethodGenerics, \Rector\Generics\ValueObject\GenericClassMethodParam::class);

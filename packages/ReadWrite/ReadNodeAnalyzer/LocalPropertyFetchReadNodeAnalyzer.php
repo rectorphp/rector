@@ -44,17 +44,11 @@ final class LocalPropertyFetchReadNodeAnalyzer implements \Rector\ReadWrite\Cont
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    /**
-     * @param \PhpParser\Node\Expr $expr
-     */
-    public function supports($expr) : bool
+    public function supports(\PhpParser\Node\Expr $expr) : bool
     {
         return $expr instanceof \PhpParser\Node\Expr\PropertyFetch || $expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch;
     }
-    /**
-     * @param \PhpParser\Node\Expr $expr
-     */
-    public function isRead($expr) : bool
+    public function isRead(\PhpParser\Node\Expr $expr) : bool
     {
         $class = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {

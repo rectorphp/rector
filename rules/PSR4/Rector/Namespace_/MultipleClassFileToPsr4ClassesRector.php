@@ -80,9 +80,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Namespace_|FileWithoutNamespace $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->hasAtLeastTwoClassLikes($node)) {
             return null;

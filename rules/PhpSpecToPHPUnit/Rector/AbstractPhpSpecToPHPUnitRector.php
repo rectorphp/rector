@@ -53,10 +53,7 @@ class OrderSpec extends ObjectBehavior
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    protected function isInPhpSpecBehavior($node) : bool
+    protected function isInPhpSpecBehavior(\PhpParser\Node $node) : bool
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
             return $this->isObjectType($node, new \PHPStan\Type\ObjectType('PhpSpec\\ObjectBehavior'));

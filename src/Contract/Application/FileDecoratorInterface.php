@@ -9,5 +9,5 @@ interface FileDecoratorInterface
     /**
      * @param File[] $files
      */
-    public function decorate($files) : void;
+    public function decorate(array $files) : void;
 }

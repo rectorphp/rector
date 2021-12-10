@@ -93,9 +93,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Expr\ArrowFunction::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isSkipped($node)) {
             return null;

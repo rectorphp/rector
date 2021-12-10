@@ -48,9 +48,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall|BooleanNot $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\BooleanNot) {
             return $this->processMarkTruthyNegation($node);

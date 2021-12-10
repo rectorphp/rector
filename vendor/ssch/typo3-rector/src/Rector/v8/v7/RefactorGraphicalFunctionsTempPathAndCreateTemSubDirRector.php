@@ -52,9 +52,9 @@ final class RefactorGraphicalFunctionsTempPathAndCreateTemSubDirRector extends \
         return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall|PropertyFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->refactorMethodCall($node);

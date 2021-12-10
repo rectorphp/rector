@@ -8,10 +8,7 @@ use RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\Compiler
 use RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class MakeRectorsPublicCompilerPass implements \RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-     */
-    public function process($containerBuilder) : void
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
         foreach ($containerBuilder->getDefinitions() as $definition) {
             if ($definition->getClass() === null) {

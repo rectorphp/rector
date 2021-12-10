@@ -9,17 +9,14 @@ use PhpParser\Node\Expr\FuncCall;
 use RectorPrefix20211210\Symplify\Astral\Contract\NodeNameResolverInterface;
 final class FuncCallNodeNameResolver implements \RectorPrefix20211210\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function match($node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\FuncCall;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall $node
      */
-    public function resolve($node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;

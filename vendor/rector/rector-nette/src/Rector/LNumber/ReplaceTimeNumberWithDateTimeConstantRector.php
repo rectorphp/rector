@@ -49,9 +49,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\LNumber::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param LNumber $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $number = $node->value;
         $constantName = self::NUMBER_TO_CONSTANT_NAME[$number] ?? null;

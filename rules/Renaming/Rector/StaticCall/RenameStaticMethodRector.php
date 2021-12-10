@@ -39,9 +39,9 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticMethodRenames as $staticMethodRename) {
             if (!$this->isObjectType($node->class, $staticMethodRename->getOldObjectType())) {
@@ -57,7 +57,7 @@ final class RenameStaticMethodRector extends \Rector\Core\Rector\AbstractRector 
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $oldToNewMethodsByClasses = $configuration[self::OLD_TO_NEW_METHODS_BY_CLASSES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($oldToNewMethodsByClasses, \Rector\Renaming\ValueObject\RenameStaticMethod::class);

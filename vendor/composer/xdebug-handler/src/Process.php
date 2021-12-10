@@ -60,7 +60,7 @@ class Process
      *
      * @return string The escaped command line
      */
-    public static function escapeShellCommand($args)
+    public static function escapeShellCommand(array $args)
     {
         $command = '';
         $module = \array_shift($args);

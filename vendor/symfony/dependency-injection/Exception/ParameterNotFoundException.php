@@ -73,18 +73,12 @@ class ParameterNotFoundException extends \RectorPrefix20211210\Symfony\Component
     {
         return $this->sourceKey;
     }
-    /**
-     * @param string|null $sourceId
-     */
-    public function setSourceId($sourceId)
+    public function setSourceId(?string $sourceId)
     {
         $this->sourceId = $sourceId;
         $this->updateRepr();
     }
-    /**
-     * @param string|null $sourceKey
-     */
-    public function setSourceKey($sourceKey)
+    public function setSourceKey(?string $sourceKey)
     {
         $this->sourceKey = $sourceKey;
         $this->updateRepr();

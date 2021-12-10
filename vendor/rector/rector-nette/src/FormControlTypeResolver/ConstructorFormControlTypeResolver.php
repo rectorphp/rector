@@ -40,9 +40,8 @@ final class ConstructorFormControlTypeResolver implements \Rector\Nette\Contract
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node $node
      */
-    public function resolve($node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
         if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return [];

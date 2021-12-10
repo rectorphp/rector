@@ -45,7 +45,7 @@ final class RectorNodeTraverser extends \PhpParser\NodeTraverser
      * @param TNode[] $nodes
      * @return TNode[]
      */
-    public function traverse($nodes) : array
+    public function traverse(array $nodes) : array
     {
         $this->prepareNodeVisitors();
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, \PhpParser\Node\Stmt\Namespace_::class);

@@ -55,9 +55,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\ArrayDimFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ArrayDimFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->followedByCurlyBracketAnalyzer->isFollowed($this->file, $node)) {
             return null;

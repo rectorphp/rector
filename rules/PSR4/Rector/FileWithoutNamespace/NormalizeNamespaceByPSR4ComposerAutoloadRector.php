@@ -79,9 +79,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $processNode = clone $node;
         if ($this->inlineHTMLAnalyzer->hasInlineHTML($processNode)) {

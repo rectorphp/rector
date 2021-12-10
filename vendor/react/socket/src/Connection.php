@@ -78,11 +78,7 @@ class Connection extends \RectorPrefix20211210\Evenement\EventEmitter implements
     {
         $this->input->resume();
     }
-    /**
-     * @param \React\Stream\WritableStreamInterface $dest
-     * @param mixed[] $options
-     */
-    public function pipe($dest, $options = array())
+    public function pipe(\RectorPrefix20211210\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
         return $this->input->pipe($dest, $options);
     }

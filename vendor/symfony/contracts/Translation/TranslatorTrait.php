@@ -21,9 +21,8 @@ trait TranslatorTrait
     private $locale;
     /**
      * {@inheritdoc}
-     * @param string $locale
      */
-    public function setLocale($locale)
+    public function setLocale(string $locale)
     {
         $this->locale = $locale;
     }
@@ -38,12 +37,8 @@ trait TranslatorTrait
     }
     /**
      * {@inheritdoc}
-     * @param string|null $id
-     * @param mixed[] $parameters
-     * @param string|null $domain
-     * @param string|null $locale
      */
-    public function trans($id, $parameters = [], $domain = null, $locale = null) : string
+    public function trans(?string $id, array $parameters = [], string $domain = null, string $locale = null) : string
     {
         if (null === $id || '' === $id) {
             return '';

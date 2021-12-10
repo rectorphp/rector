@@ -45,7 +45,7 @@ final class EmailFinisherRector implements \Ssch\TYPO3Rector\Contract\FileProces
     /**
      * @param mixed[] $yaml
      */
-    public function refactor($yaml) : array
+    public function refactor(array $yaml) : array
     {
         $appliedForFinishers = \false;
         $appliedForVariants = \false;

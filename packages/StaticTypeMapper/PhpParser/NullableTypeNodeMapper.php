@@ -41,9 +41,9 @@ final class NullableTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\
         return \PhpParser\Node\NullableType::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param NullableType $node
      */
-    public function mapToPHPStan($node) : \PHPStan\Type\Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $types = [];
         $types[] = $this->phpParserNodeMapper->mapToPHPStanType($node->type);

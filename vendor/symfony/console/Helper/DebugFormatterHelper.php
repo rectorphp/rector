@@ -30,24 +30,16 @@ class DebugFormatterHelper extends \RectorPrefix20211210\Symfony\Component\Conso
     private $count = -1;
     /**
      * Starts a debug formatting session.
-     * @param string $id
-     * @param string $message
-     * @param string $prefix
      */
-    public function start($id, $message, $prefix = 'RUN') : string
+    public function start(string $id, string $message, string $prefix = 'RUN') : string
     {
         $this->started[$id] = ['border' => ++$this->count % \count(self::COLORS)];
         return \sprintf("%s<bg=blue;fg=white> %s </> <fg=blue>%s</>\n", $this->getBorder($id), $prefix, $message);
     }
     /**
      * Adds progress to a formatting session.
-     * @param string $id
-     * @param string $buffer
-     * @param bool $error
-     * @param string $prefix
-     * @param string $errorPrefix
      */
-    public function progress($id, $buffer, $error = \false, $prefix = 'OUT', $errorPrefix = 'ERR') : string
+    public function progress(string $id, string $buffer, bool $error = \false, string $prefix = 'OUT', string $errorPrefix = 'ERR') : string
     {
         $message = '';
         if ($error) {
@@ -75,12 +67,8 @@ class DebugFormatterHelper extends \RectorPrefix20211210\Symfony\Component\Conso
     }
     /**
      * Stops a formatting session.
-     * @param string $id
-     * @param string $message
-     * @param bool $successful
-     * @param string $prefix
      */
-    public function stop($id, $message, $successful, $prefix = 'RES') : string
+    public function stop(string $id, string $message, bool $successful, string $prefix = 'RES') : string
     {
         $trailingEOL = isset($this->started[$id]['out']) || isset($this->started[$id]['err']) ? "\n" : '';
         if ($successful) {

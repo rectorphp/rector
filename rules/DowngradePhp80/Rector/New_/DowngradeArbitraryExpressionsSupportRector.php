@@ -62,9 +62,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Instanceof_::class, \PhpParser\Node\Expr\New_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Instanceof_|New_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->class instanceof \PhpParser\Node\Expr) {
             return null;

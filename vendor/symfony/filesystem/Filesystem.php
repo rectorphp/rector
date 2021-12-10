@@ -30,11 +30,8 @@ class Filesystem
      *
      * @throws FileNotFoundException When originFile doesn't exist
      * @throws IOException           When copy fails
-     * @param string $originFile
-     * @param string $targetFile
-     * @param bool $overwriteNewerFiles
      */
-    public function copy($originFile, $targetFile, $overwriteNewerFiles = \false)
+    public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = \false)
     {
         $originIsLocal = \stream_is_local($originFile) || 0 === \stripos($originFile, 'file://');
         if ($originIsLocal && !\is_file($originFile)) {
@@ -75,9 +72,8 @@ class Filesystem
      *
      * @throws IOException On any directory creation failure
      * @param mixed[]|string $dirs
-     * @param int $mode
      */
-    public function mkdir($dirs, $mode = 0777)
+    public function mkdir($dirs, int $mode = 0777)
     {
         foreach ($this->toIterable($dirs) as $dir) {
             if (\is_dir($dir)) {
@@ -114,7 +110,7 @@ class Filesystem
      * @throws IOException When touch fails
      * @param mixed[]|string $files
      */
-    public function touch($files, $time = null, $atime = null)
+    public function touch($files, int $time = null, int $atime = null)
     {
         foreach ($this->toIterable($files) as $file) {
             if (!($time ? self::box('touch', $file, $time, $atime) : self::box('touch', $file))) {
@@ -186,7 +182,7 @@ class Filesystem
      * @throws IOException When the change fails
      * @param mixed[]|string $files
      */
-    public function chmod($files, $mode, $umask = 00, $recursive = \false)
+    public function chmod($files, int $mode, int $umask = 00, bool $recursive = \false)
     {
         foreach ($this->toIterable($files) as $file) {
             if (\is_int($mode) && !self::box('chmod', $file, $mode & ~$umask)) {
@@ -206,7 +202,7 @@ class Filesystem
      * @throws IOException When the change fails
      * @param mixed[]|string $files
      */
-    public function chown($files, $user, $recursive = \false)
+    public function chown($files, $user, bool $recursive = \false)
     {
         foreach ($this->toIterable($files) as $file) {
             if ($recursive && \is_dir($file) && !\is_link($file)) {
@@ -232,7 +228,7 @@ class Filesystem
      * @throws IOException When the change fails
      * @param mixed[]|string $files
      */
-    public function chgrp($files, $group, $recursive = \false)
+    public function chgrp($files, $group, bool $recursive = \false)
     {
         foreach ($this->toIterable($files) as $file) {
             if ($recursive && \is_dir($file) && !\is_link($file)) {
@@ -254,11 +250,8 @@ class Filesystem
      *
      * @throws IOException When target file or directory already exists
      * @throws IOException When origin cannot be renamed
-     * @param string $origin
-     * @param string $target
-     * @param bool $overwrite
      */
-    public function rename($origin, $target, $overwrite = \false)
+    public function rename(string $origin, string $target, bool $overwrite = \false)
     {
         // we check that target does not exist
         if (!$overwrite && $this->isReadable($target)) {
@@ -291,11 +284,8 @@ class Filesystem
      * Creates a symbolic link or copy a directory.
      *
      * @throws IOException When symlink fails
-     * @param string $originDir
-     * @param string $targetDir
-     * @param bool $copyOnWindows
      */
-    public function symlink($originDir, $targetDir, $copyOnWindows = \false)
+    public function symlink(string $originDir, string $targetDir, bool $copyOnWindows = \false)
     {
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $originDir = \strtr($originDir, '/', '\\');
@@ -323,9 +313,8 @@ class Filesystem
      *
      * @throws FileNotFoundException When original file is missing or not a file
      * @throws IOException           When link fails, including if link already exists
-     * @param string $originFile
      */
-    public function hardlink($originFile, $targetFiles)
+    public function hardlink(string $originFile, $targetFiles)
     {
         if (!$this->exists($originFile)) {
             throw new \RectorPrefix20211210\Symfony\Component\Filesystem\Exception\FileNotFoundException(null, 0, null, $originFile);
@@ -367,10 +356,8 @@ class Filesystem
      * With $canonicalize = true
      *      - if $path does not exist, returns null
      *      - if $path exists, returns its absolute fully resolved final version
-     * @param string $path
-     * @param bool $canonicalize
      */
-    public function readlink($path, $canonicalize = \false) : ?string
+    public function readlink(string $path, bool $canonicalize = \false) : ?string
     {
         if (!$canonicalize && !\is_link($path)) {
             return null;
@@ -385,10 +372,8 @@ class Filesystem
     }
     /**
      * Given an existing path, convert it to a path relative to a given starting path.
-     * @param string $endPath
-     * @param string $startPath
      */
-    public function makePathRelative($endPath, $startPath) : string
+    public function makePathRelative(string $endPath, string $startPath) : string
     {
         if (!$this->isAbsolutePath($startPath)) {
             throw new \RectorPrefix20211210\Symfony\Component\Filesystem\Exception\InvalidArgumentException(\sprintf('The start path "%s" is not absolute.', $startPath));
@@ -457,10 +442,8 @@ class Filesystem
      *                                    - $options['delete'] Whether to delete files that are not in the source directory (defaults to false)
      *
      * @throws IOException When file type is unknown
-     * @param string $originDir
-     * @param string $targetDir
      */
-    public function mirror($originDir, $targetDir, $iterator = null, $options = [])
+    public function mirror(string $originDir, string $targetDir, \Traversable $iterator = null, array $options = [])
     {
         $targetDir = \rtrim($targetDir, '/\\');
         $originDir = \rtrim($originDir, '/\\');
@@ -509,9 +492,8 @@ class Filesystem
     }
     /**
      * Returns whether the file path is an absolute path.
-     * @param string $file
      */
-    public function isAbsolutePath($file) : bool
+    public function isAbsolutePath(string $file) : bool
     {
         return '' !== $file && (\strspn($file, '/\\', 0, 1) || \strlen($file) > 3 && \ctype_alpha($file[0]) && ':' === $file[1] && \strspn($file, '/\\', 2, 1) || null !== \parse_url($file, \PHP_URL_SCHEME));
     }
@@ -523,9 +505,8 @@ class Filesystem
      * @param string $suffix The suffix of the generated temporary filename
      *
      * @return string The new temporary filename (with path), or throw an exception on failure
-     * @param string $dir
      */
-    public function tempnam($dir, $prefix, $suffix = '') : string
+    public function tempnam(string $dir, string $prefix, string $suffix = '') : string
     {
         [$scheme, $hierarchy] = $this->getSchemeAndHierarchy($dir);
         // If no scheme or scheme is "file" or "gs" (Google Cloud) create temp file in local filesystem
@@ -560,9 +541,8 @@ class Filesystem
      * @param string|resource $content The data to write into the file
      *
      * @throws IOException if the file cannot be written to
-     * @param string $filename
      */
-    public function dumpFile($filename, $content)
+    public function dumpFile(string $filename, $content)
     {
         if (\is_array($content)) {
             throw new \TypeError(\sprintf('Argument 2 passed to "%s()" must be string or resource, array given.', __METHOD__));
@@ -593,9 +573,8 @@ class Filesystem
      * @param bool            $lock    Whether the file should be locked when writing to it
      *
      * @throws IOException If the file is not writable
-     * @param string $filename
      */
-    public function appendToFile($filename, $content)
+    public function appendToFile(string $filename, $content)
     {
         if (\is_array($content)) {
             throw new \TypeError(\sprintf('Argument 2 passed to "%s()" must be string or resource, array given.', __METHOD__));
@@ -640,10 +619,8 @@ class Filesystem
     }
     /**
      * @internal
-     * @param int $type
-     * @param string $msg
      */
-    public static function handleError($type, $msg)
+    public static function handleError(int $type, string $msg)
     {
         self::$lastError = $msg;
     }

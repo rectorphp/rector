@@ -44,10 +44,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Stmt\TraitUse::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Use_|TraitUse $node
      * @return Use_[]|TraitUse[]|null
      */
-    public function refactor($node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($node instanceof \PhpParser\Node\Stmt\Use_) {
             return $this->refactorUseImport($node);

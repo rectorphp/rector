@@ -120,5 +120,5 @@ interface RequestInterface extends \RectorPrefix20211210\Psr\Http\Message\Messag
      * @param bool $preserveHost Preserve the original state of the Host header.
      * @return static
      */
-    public function withUri($uri, $preserveHost = \false);
+    public function withUri(\RectorPrefix20211210\Psr\Http\Message\UriInterface $uri, $preserveHost = \false);
 }

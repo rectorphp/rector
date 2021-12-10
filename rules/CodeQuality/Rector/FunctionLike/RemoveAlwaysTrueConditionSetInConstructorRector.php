@@ -92,9 +92,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod|Closure $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->stmts === null) {
             return null;

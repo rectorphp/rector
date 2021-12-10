@@ -20,10 +20,7 @@ class InvalidConfigurationException extends \RectorPrefix20211210\Symfony\Compon
 {
     private $path;
     private $containsHints = \false;
-    /**
-     * @param string $path
-     */
-    public function setPath($path)
+    public function setPath(string $path)
     {
         $this->path = $path;
     }
@@ -33,9 +30,8 @@ class InvalidConfigurationException extends \RectorPrefix20211210\Symfony\Compon
     }
     /**
      * Adds extra information that is suffixed to the original exception message.
-     * @param string $hint
      */
-    public function addHint($hint)
+    public function addHint(string $hint)
     {
         if (!$this->containsHints) {
             $this->message .= "\nHint: " . $hint;

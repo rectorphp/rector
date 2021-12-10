@@ -32,7 +32,7 @@ class Unescaper
      *
      * @return string
      */
-    public function unescapeSingleQuotedString($value) : string
+    public function unescapeSingleQuotedString(string $value) : string
     {
         return \str_replace('\'\'', '\'', $value);
     }
@@ -43,7 +43,7 @@ class Unescaper
      *
      * @return string
      */
-    public function unescapeDoubleQuotedString($value) : string
+    public function unescapeDoubleQuotedString(string $value) : string
     {
         $callback = function ($match) {
             return $this->unescapeCharacter($match[0]);

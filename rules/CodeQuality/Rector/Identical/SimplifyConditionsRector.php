@@ -47,9 +47,9 @@ final class SimplifyConditionsRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Expr\BooleanNot::class, \PhpParser\Node\Expr\BinaryOp\Identical::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param BooleanNot|Identical $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\BooleanNot) {
             return $this->processBooleanNot($node);

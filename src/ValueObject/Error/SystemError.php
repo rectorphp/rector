@@ -46,7 +46,7 @@ final class SystemError implements \RectorPrefix20211210\Symplify\EasyParallel\C
     /**
      * @param mixed[] $json
      */
-    public static function decode($json) : \RectorPrefix20211210\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20211210\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json[\Rector\Parallel\ValueObject\Name::LINE], $json[\Rector\Parallel\ValueObject\Name::MESSAGE], $json[\Rector\Parallel\ValueObject\Name::RELATIVE_FILE_PATH]);
     }

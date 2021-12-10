@@ -43,9 +43,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\PropertyProperty::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param PropertyProperty $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // skip typed properties

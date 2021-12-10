@@ -25,7 +25,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
     /**
      * @param string[] $configFiles
      */
-    protected function bootFromConfigFiles($configFiles) : void
+    protected function bootFromConfigFiles(array $configFiles) : void
     {
         $configsHash = $this->createConfigsHash($configFiles);
         if (isset(self::$kernelsByHash[$configsHash])) {
@@ -45,7 +45,7 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      * @param class-string<T> $type
      * @return object
      */
-    protected function getService($type)
+    protected function getService(string $type)
     {
         if (self::$currentContainer === null) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');

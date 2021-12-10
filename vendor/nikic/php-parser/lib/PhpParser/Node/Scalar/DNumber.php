@@ -32,7 +32,7 @@ class DNumber extends \PhpParser\Node\Scalar
      *
      * @return float The parsed number
      */
-    public static function parse($str) : float
+    public static function parse(string $str) : float
     {
         $str = \str_replace('_', '', $str);
         // if string contains any of .eE just cast it to float

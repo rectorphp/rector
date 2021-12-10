@@ -19,19 +19,16 @@ interface StyleInterface
 {
     /**
      * Formats a command title.
-     * @param string $message
      */
-    public function title($message);
+    public function title(string $message);
     /**
      * Formats a section title.
-     * @param string $message
      */
-    public function section($message);
+    public function section(string $message);
     /**
      * Formats a list.
-     * @param mixed[] $elements
      */
-    public function listing($elements);
+    public function listing(array $elements);
     /**
      * Formats informational text.
      * @param mixed[]|string $message
@@ -64,54 +61,40 @@ interface StyleInterface
     public function caution($message);
     /**
      * Formats a table.
-     * @param mixed[] $headers
-     * @param mixed[] $rows
      */
-    public function table($headers, $rows);
+    public function table(array $headers, array $rows);
     /**
      * Asks a question.
      * @return mixed
-     * @param string $question
-     * @param string|null $default
-     * @param callable|null $validator
      */
-    public function ask($question, $default = null, $validator = null);
+    public function ask(string $question, string $default = null, callable $validator = null);
     /**
      * Asks a question with the user input hidden.
      * @return mixed
-     * @param string $question
-     * @param callable|null $validator
      */
-    public function askHidden($question, $validator = null);
+    public function askHidden(string $question, callable $validator = null);
     /**
      * Asks for confirmation.
-     * @param string $question
-     * @param bool $default
      */
-    public function confirm($question, $default = \true) : bool;
+    public function confirm(string $question, bool $default = \true) : bool;
     /**
      * Asks a choice question.
      * @param mixed $default
      * @return mixed
-     * @param string $question
-     * @param mixed[] $choices
      */
-    public function choice($question, $choices, $default = null);
+    public function choice(string $question, array $choices, $default = null);
     /**
      * Add newline(s).
-     * @param int $count
      */
-    public function newLine($count = 1);
+    public function newLine(int $count = 1);
     /**
      * Starts the progress output.
-     * @param int $max
      */
-    public function progressStart($max = 0);
+    public function progressStart(int $max = 0);
     /**
      * Advances the progress output X steps.
-     * @param int $step
      */
-    public function progressAdvance($step = 1);
+    public function progressAdvance(int $step = 1);
     /**
      * Finishes the progress output.
      */

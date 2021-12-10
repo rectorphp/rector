@@ -130,9 +130,8 @@ final class ExtUvLoop implements \RectorPrefix20211210\React\EventLoop\LoopInter
     }
     /**
      * {@inheritdoc}
-     * @param \React\EventLoop\TimerInterface $timer
      */
-    public function cancelTimer($timer)
+    public function cancelTimer(\RectorPrefix20211210\React\EventLoop\TimerInterface $timer)
     {
         if (isset($this->timers[$timer])) {
             @\uv_timer_stop($this->timers[$timer]);

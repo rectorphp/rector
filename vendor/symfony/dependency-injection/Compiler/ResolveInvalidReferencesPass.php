@@ -32,9 +32,8 @@ class ResolveInvalidReferencesPass implements \RectorPrefix20211210\Symfony\Comp
     private $currentId;
     /**
      * Process the ContainerBuilder to resolve invalid references.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->container = $container;
         $this->signalingException = new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\RuntimeException('Invalid reference.');

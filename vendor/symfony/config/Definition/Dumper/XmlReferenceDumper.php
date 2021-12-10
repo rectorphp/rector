@@ -24,19 +24,11 @@ use RectorPrefix20211210\Symfony\Component\Config\Definition\PrototypedArrayNode
 class XmlReferenceDumper
 {
     private $reference;
-    /**
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
-     * @param string|null $namespace
-     */
-    public function dump($configuration, $namespace = null)
+    public function dump(\RectorPrefix20211210\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, string $namespace = null)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree(), $namespace);
     }
-    /**
-     * @param \Symfony\Component\Config\Definition\NodeInterface $node
-     * @param string|null $namespace
-     */
-    public function dumpNode($node, $namespace = null)
+    public function dumpNode(\RectorPrefix20211210\Symfony\Component\Config\Definition\NodeInterface $node, string $namespace = null)
     {
         $this->reference = '';
         $this->writeNode($node, 0, \true, $namespace);

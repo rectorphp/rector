@@ -68,9 +68,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Break_::class, \PhpParser\Node\Stmt\Continue_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Break_|Continue_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->num === null) {
             return null;

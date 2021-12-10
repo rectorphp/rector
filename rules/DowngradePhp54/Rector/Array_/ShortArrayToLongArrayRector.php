@@ -34,9 +34,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Array_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Expr\Array_
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\Array_
     {
         $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
         if ($kind === \PhpParser\Node\Expr\Array_::KIND_LONG) {

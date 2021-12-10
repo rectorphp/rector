@@ -45,9 +45,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Scalar\String_::class, \PhpParser\Node\Expr\Variable::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall|String_|Variable|PropertyFetch|StaticPropertyFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->processForFuncCall($node);

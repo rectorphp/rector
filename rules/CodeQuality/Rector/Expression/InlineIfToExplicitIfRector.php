@@ -68,9 +68,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Expression $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
             return $this->processExplicitIf($node);

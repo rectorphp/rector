@@ -9,8 +9,5 @@ interface NeonNodeVisitorInterface
      * @return class-string<\PhpParser\Node>
      */
     public function getNodeType() : string;
-    /**
-     * @param \Nette\Neon\Node $node
-     */
-    public function enterNode($node) : \RectorPrefix20211210\Nette\Neon\Node;
+    public function enterNode(\RectorPrefix20211210\Nette\Neon\Node $node) : \RectorPrefix20211210\Nette\Neon\Node;
 }

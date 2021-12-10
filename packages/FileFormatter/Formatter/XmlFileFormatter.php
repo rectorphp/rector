@@ -46,19 +46,12 @@ final class XmlFileFormatter implements \Rector\FileFormatter\Contract\Formatter
      * @var bool
      */
     private $preserveWhitespace = \false;
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     */
-    public function supports($file) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return $smartFileInfo->getExtension() === 'xml';
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration
-     */
-    public function format($file, $editorConfigConfiguration) : void
+    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void
     {
         $this->padChar = $editorConfigConfiguration->getIndentStyleCharacter();
         $this->indent = $editorConfigConfiguration->getIndentSize();

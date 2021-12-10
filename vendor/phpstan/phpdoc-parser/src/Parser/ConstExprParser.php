@@ -7,11 +7,7 @@ use PHPStan\PhpDocParser\Ast;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 class ConstExprParser
 {
-    /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     * @param bool $trimStrings
-     */
-    public function parse($tokens, $trimStrings = \false) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
+    public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, bool $trimStrings = \false) : \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
     {
         if ($tokens->isCurrentTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_FLOAT)) {
             $value = $tokens->currentTokenValue();

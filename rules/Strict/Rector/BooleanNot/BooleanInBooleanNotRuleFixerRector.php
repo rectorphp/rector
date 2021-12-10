@@ -68,9 +68,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param BooleanNot $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Expr
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

@@ -5,36 +5,15 @@ namespace Rector\Core\Contract\Console;
 
 interface OutputStyleInterface
 {
-    /**
-     * @param string $message
-     */
-    public function error($message) : void;
-    /**
-     * @param string $message
-     */
-    public function success($message) : void;
-    /**
-     * @param string $message
-     */
-    public function warning($message) : void;
-    /**
-     * @param string $message
-     */
-    public function note($message) : void;
-    /**
-     * @param string $message
-     */
-    public function title($message) : void;
-    /**
-     * @param string $message
-     */
-    public function writeln($message) : void;
-    /**
-     * @param int $count
-     */
-    public function newline($count = 1) : void;
+    public function error(string $message) : void;
+    public function success(string $message) : void;
+    public function warning(string $message) : void;
+    public function note(string $message) : void;
+    public function title(string $message) : void;
+    public function writeln(string $message) : void;
+    public function newline(int $count = 1) : void;
     /**
      * @param string[] $elements
      */
-    public function listing($elements) : void;
+    public function listing(array $elements) : void;
 }

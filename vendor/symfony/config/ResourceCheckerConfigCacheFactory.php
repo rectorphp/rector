@@ -28,10 +28,8 @@ class ResourceCheckerConfigCacheFactory implements \RectorPrefix20211210\Symfony
     }
     /**
      * {@inheritdoc}
-     * @param string $file
-     * @param callable $callable
      */
-    public function cache($file, $callable)
+    public function cache(string $file, callable $callable)
     {
         $cache = new \RectorPrefix20211210\Symfony\Component\Config\ResourceCheckerConfigCache($file, $this->resourceCheckers);
         if (!$cache->isFresh()) {

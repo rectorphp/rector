@@ -33,10 +33,7 @@ final class ExtensionComposerRector implements \Rector\Composer\Contract\Rector\
     {
         $this->currentFileProvider = $currentFileProvider;
     }
-    /**
-     * @param \Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson
-     */
-    public function refactor($composerJson) : void
+    public function refactor(\RectorPrefix20211210\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         if ('typo3-cms-extension' !== $composerJson->getType()) {
             return;
@@ -58,7 +55,7 @@ final class ExtensionComposerRector implements \Rector\Composer\Contract\Rector\
     /**
      * @param array<string, string> $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $this->defaultTypo3VersionConstraint = $configuration[self::TYPO3_VERSION_CONSTRAINT] ?? '*';
     }

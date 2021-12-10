@@ -52,9 +52,9 @@ CODE_SAMPLE
         return [\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\Stmt\Namespace_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FileWithoutNamespace|Namespace_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $appUsesStaticCalls = $this->collectAppUseStaticCalls($node);
         if ($appUsesStaticCalls === []) {

@@ -48,7 +48,7 @@ class ConsoleSectionOutput extends \RectorPrefix20211210\Symfony\Component\Conso
      *
      * @param int $lines Number of lines to clear. If null, then the entire output of this section is cleared
      */
-    public function clear($lines = null)
+    public function clear(int $lines = null)
     {
         if (empty($this->content) || !$this->isDecorated()) {
             return;
@@ -78,9 +78,8 @@ class ConsoleSectionOutput extends \RectorPrefix20211210\Symfony\Component\Conso
     }
     /**
      * @internal
-     * @param string $input
      */
-    public function addContent($input)
+    public function addContent(string $input)
     {
         foreach (\explode(\PHP_EOL, $input) as $lineContent) {
             $this->lines += \ceil($this->getDisplayLength($lineContent) / $this->terminal->getWidth()) ?: 1;
@@ -90,10 +89,8 @@ class ConsoleSectionOutput extends \RectorPrefix20211210\Symfony\Component\Conso
     }
     /**
      * {@inheritdoc}
-     * @param string $message
-     * @param bool $newline
      */
-    protected function doWrite($message, $newline)
+    protected function doWrite(string $message, bool $newline)
     {
         if (!$this->isDecorated()) {
             parent::doWrite($message, $newline);

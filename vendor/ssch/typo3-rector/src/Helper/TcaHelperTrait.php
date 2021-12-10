@@ -11,20 +11,13 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\Return_;
 trait TcaHelperTrait
 {
-    /**
-     * @param \PhpParser\Node\Stmt\Return_ $node
-     */
-    protected function isFullTca($node) : bool
+    protected function isFullTca(\PhpParser\Node\Stmt\Return_ $node) : bool
     {
         $ctrl = $this->extractCtrl($node);
         $columns = $this->extractColumns($node);
         return null !== $ctrl && null !== $columns;
     }
-    /**
-     * @param \PhpParser\Node|null $node
-     * @param string $key
-     */
-    protected function extractArrayItemByKey($node, $key) : ?\PhpParser\Node\Expr\ArrayItem
+    protected function extractArrayItemByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr\ArrayItem
     {
         if (null === $node) {
             return null;
@@ -46,11 +39,7 @@ trait TcaHelperTrait
         }
         return null;
     }
-    /**
-     * @param \PhpParser\Node|null $node
-     * @param string $key
-     */
-    protected function extractSubArrayByKey($node, $key) : ?\PhpParser\Node\Expr\Array_
+    protected function extractSubArrayByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr\Array_
     {
         if (null === $node) {
             return null;
@@ -65,19 +54,11 @@ trait TcaHelperTrait
         }
         return $columnItems;
     }
-    /**
-     * @param \PhpParser\Node|null $node
-     * @param string $key
-     */
-    protected function extractArrayValueByKey($node, $key) : ?\PhpParser\Node\Expr
+    protected function extractArrayValueByKey(?\PhpParser\Node $node, string $key) : ?\PhpParser\Node\Expr
     {
         return ($extractArrayItemByKey = $this->extractArrayItemByKey($node, $key)) ? $extractArrayItemByKey->value : null;
     }
-    /**
-     * @param \PhpParser\Node\Expr\Array_ $configValue
-     * @param string $configKey
-     */
-    protected function hasKey($configValue, $configKey) : bool
+    protected function hasKey(\PhpParser\Node\Expr\Array_ $configValue, string $configKey) : bool
     {
         foreach ($configValue->items as $configItemValue) {
             if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
@@ -92,12 +73,7 @@ trait TcaHelperTrait
         }
         return \false;
     }
-    /**
-     * @param \PhpParser\Node\Expr\Array_ $configValue
-     * @param string $configKey
-     * @param string $expectedValue
-     */
-    protected function hasKeyValuePair($configValue, $configKey, $expectedValue) : bool
+    protected function hasKeyValuePair(\PhpParser\Node\Expr\Array_ $configValue, string $configKey, string $expectedValue) : bool
     {
         foreach ($configValue->items as $configItemValue) {
             if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {

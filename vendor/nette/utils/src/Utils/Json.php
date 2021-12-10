@@ -22,9 +22,8 @@ final class Json
      * and Json::ESCAPE_UNICODE for ASCII output.
      * @param  mixed  $value
      * @throws JsonException
-     * @param int $flags
      */
-    public static function encode($value, $flags = 0) : string
+    public static function encode($value, int $flags = 0) : string
     {
         $flags = ($flags & self::ESCAPE_UNICODE ? 0 : \JSON_UNESCAPED_UNICODE) | \JSON_UNESCAPED_SLASHES | ($flags & self::PRETTY ? \JSON_PRETTY_PRINT : 0) | (\defined('JSON_PRESERVE_ZERO_FRACTION') ? \JSON_PRESERVE_ZERO_FRACTION : 0);
         // since PHP 5.6.6 & PECL JSON-C 1.3.7
@@ -38,10 +37,8 @@ final class Json
      * Parses JSON to PHP value. The flag can be Json::FORCE_ARRAY, which forces an array instead of an object as the return value.
      * @return mixed
      * @throws JsonException
-     * @param string $json
-     * @param int $flags
      */
-    public static function decode($json, $flags = 0)
+    public static function decode(string $json, int $flags = 0)
     {
         $forceArray = (bool) ($flags & self::FORCE_ARRAY);
         $value = \json_decode($json, $forceArray, 512, \JSON_BIGINT_AS_STRING);

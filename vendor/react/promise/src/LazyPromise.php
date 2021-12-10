@@ -13,42 +13,23 @@ class LazyPromise implements \RectorPrefix20211210\React\Promise\ExtendedPromise
     {
         $this->factory = $factory;
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function then($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         return $this->promise()->then($onFulfilled, $onRejected, $onProgress);
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function done($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         return $this->promise()->done($onFulfilled, $onRejected, $onProgress);
     }
-    /**
-     * @param callable $onRejected
-     */
-    public function otherwise($onRejected)
+    public function otherwise(callable $onRejected)
     {
         return $this->promise()->otherwise($onRejected);
     }
-    /**
-     * @param callable $onFulfilledOrRejected
-     */
-    public function always($onFulfilledOrRejected)
+    public function always(callable $onFulfilledOrRejected)
     {
         return $this->promise()->always($onFulfilledOrRejected);
     }
-    /**
-     * @param callable $onProgress
-     */
-    public function progress($onProgress)
+    public function progress(callable $onProgress)
     {
         return $this->promise()->progress($onProgress);
     }

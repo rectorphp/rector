@@ -165,10 +165,7 @@ class Exporter
         }
         return $values;
     }
-    /**
-     * @param string $indent
-     */
-    public static function export($value, $indent = '')
+    public static function export($value, string $indent = '')
     {
         switch (\true) {
             case \is_int($value) || \is_float($value) || $value instanceof \RectorPrefix20211210\UnitEnum:

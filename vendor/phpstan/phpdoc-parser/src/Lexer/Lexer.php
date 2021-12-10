@@ -48,10 +48,7 @@ class Lexer
     private $regexp;
     /** @var int[]|null */
     private $types;
-    /**
-     * @param string $s
-     */
-    public function tokenize($s) : array
+    public function tokenize(string $s) : array
     {
         if ($this->regexp === null || $this->types === null) {
             $this->initialize();

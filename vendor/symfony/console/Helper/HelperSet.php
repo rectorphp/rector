@@ -31,11 +31,7 @@ class HelperSet implements \IteratorAggregate
             $this->set($helper, \is_int($alias) ? null : $alias);
         }
     }
-    /**
-     * @param \Symfony\Component\Console\Helper\HelperInterface $helper
-     * @param string|null $alias
-     */
-    public function set($helper, $alias = null)
+    public function set(\RectorPrefix20211210\Symfony\Component\Console\Helper\HelperInterface $helper, string $alias = null)
     {
         $this->helpers[$helper->getName()] = $helper;
         if (null !== $alias) {
@@ -45,9 +41,8 @@ class HelperSet implements \IteratorAggregate
     }
     /**
      * Returns true if the helper if defined.
-     * @param string $name
      */
-    public function has($name) : bool
+    public function has(string $name) : bool
     {
         return isset($this->helpers[$name]);
     }
@@ -55,9 +50,8 @@ class HelperSet implements \IteratorAggregate
      * Gets a helper value.
      *
      * @throws InvalidArgumentException if the helper is not defined
-     * @param string $name
      */
-    public function get($name) : \RectorPrefix20211210\Symfony\Component\Console\Helper\HelperInterface
+    public function get(string $name) : \RectorPrefix20211210\Symfony\Component\Console\Helper\HelperInterface
     {
         if (!$this->has($name)) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The helper "%s" is not defined.', $name));

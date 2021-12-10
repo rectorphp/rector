@@ -52,9 +52,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Identical|NotIdentical $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $funcCallAndExpr = $this->binaryOpAnalyzer->matchFuncCallAndOtherExpr($node, self::SUBSTR);
         if (!$funcCallAndExpr instanceof \Rector\Nette\ValueObject\FuncCallAndExpr) {

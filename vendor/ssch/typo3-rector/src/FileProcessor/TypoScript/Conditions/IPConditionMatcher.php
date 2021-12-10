@@ -11,10 +11,7 @@ final class IPConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcess
      * @var string
      */
     private const TYPE = 'IP';
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         \preg_match('#' . self::TYPE . '\\s*=\\s*(.*)#', $condition, $matches);
         if (!\is_array($matches)) {
@@ -23,10 +20,7 @@ final class IPConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcess
         $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('ip("%s")', \implode(',', $values));
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         if (\strpos($condition, self::CONTAINS_CONSTANT) !== \false) {
             return \false;

@@ -82,9 +82,8 @@ class XmlFileLoader extends \RectorPrefix20211210\Symfony\Component\DependencyIn
     }
     /**
      * {@inheritdoc}
-     * @param string|null $type
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, string $type = null)
     {
         if (!\is_string($resource)) {
             return \false;
@@ -498,9 +497,8 @@ class XmlFileLoader extends \RectorPrefix20211210\Symfony\Component\DependencyIn
      * @return bool
      *
      * @throws RuntimeException When extension references a non-existent XSD file
-     * @param \DOMDocument $dom
      */
-    public function validateSchema($dom)
+    public function validateSchema(\DOMDocument $dom)
     {
         $schemaLocations = ['http://symfony.com/schema/dic/services' => \str_replace('\\', '/', __DIR__ . '/schema/dic/services/services-1.0.xsd')];
         if ($element = $dom->documentElement->getAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'schemaLocation')) {
@@ -661,7 +659,7 @@ EOF;
      *
      * @return mixed
      */
-    public static function convertDomElementToArray($element)
+    public static function convertDomElementToArray(\DOMElement $element)
     {
         return \RectorPrefix20211210\Symfony\Component\Config\Util\XmlUtils::convertDomElementToArray($element);
     }

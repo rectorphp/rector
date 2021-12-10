@@ -39,9 +39,9 @@ final class ConsoleExceptionToErrorEventConstantRector extends \Rector\Core\Rect
         return [\PhpParser\Node\Expr\ClassConstFetch::class, \PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassConstFetch|String_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\ClassConstFetch && ($this->isObjectType($node->class, $this->consoleEventsObjectType) && $this->isName($node->name, 'EXCEPTION'))) {
             return $this->nodeFactory->createClassConstFetch($this->consoleEventsObjectType->getClassName(), 'ERROR');

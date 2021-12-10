@@ -60,10 +60,7 @@ class ParentTestService
     public function aParentService() : \RectorPrefix20211210\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir1\Service1
     {
     }
-    /**
-     * @param \Psr\Container\ContainerInterface $container
-     */
-    public function setContainer($container)
+    public function setContainer(\RectorPrefix20211210\Psr\Container\ContainerInterface $container)
     {
         return $container;
     }

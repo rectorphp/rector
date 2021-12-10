@@ -29,9 +29,8 @@ interface ParameterBagInterface
      * Adds parameters to the service container parameters.
      *
      * @throws LogicException if the parameter cannot be added
-     * @param mixed[] $parameters
      */
-    public function add($parameters);
+    public function add(array $parameters);
     /**
      * Gets the service container parameters.
      *
@@ -44,30 +43,26 @@ interface ParameterBagInterface
      * @return array|bool|string|int|float|null
      *
      * @throws ParameterNotFoundException if the parameter is not defined
-     * @param string $name
      */
-    public function get($name);
+    public function get(string $name);
     /**
      * Removes a parameter.
-     * @param string $name
      */
-    public function remove($name);
+    public function remove(string $name);
     /**
      * Sets a service container parameter.
      *
      * @param array|bool|string|int|float|null $value The parameter value
      *
      * @throws LogicException if the parameter cannot be set
-     * @param string $name
      */
-    public function set($name, $value);
+    public function set(string $name, $value);
     /**
      * Returns true if a parameter name is defined.
      *
      * @return bool
-     * @param string $name
      */
-    public function has($name);
+    public function has(string $name);
     /**
      * Replaces parameter placeholders (%name%) by their values for all parameters.
      */

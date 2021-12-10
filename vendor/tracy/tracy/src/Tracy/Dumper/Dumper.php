@@ -35,9 +35,8 @@ class Dumper
     /**
      * Dumps variable to the output.
      * @return mixed  variable
-     * @param mixed[] $options
      */
-    public static function dump($var, $options = [])
+    public static function dump($var, array $options = [])
     {
         if (\RectorPrefix20211210\Tracy\Helpers::isCli()) {
             $useColors = self::$terminalColors && \RectorPrefix20211210\Tracy\Helpers::detectColors();
@@ -56,25 +55,22 @@ class Dumper
     }
     /**
      * Dumps variable to HTML.
-     * @param mixed[] $options
      */
-    public static function toHtml($var, $options = [], $key = null) : string
+    public static function toHtml($var, array $options = [], $key = null) : string
     {
         return (new self($options))->asHtml($var, $key);
     }
     /**
      * Dumps variable to plain text.
-     * @param mixed[] $options
      */
-    public static function toText($var, $options = []) : string
+    public static function toText($var, array $options = []) : string
     {
         return (new self($options))->asTerminal($var);
     }
     /**
      * Dumps variable to x-terminal.
-     * @param mixed[] $options
      */
-    public static function toTerminal($var, $options = []) : string
+    public static function toTerminal($var, array $options = []) : string
     {
         return (new self($options))->asTerminal($var, self::$terminalColors);
     }
@@ -153,10 +149,7 @@ class Dumper
         $model = $this->describer->describe($var);
         return $this->renderer->renderAsText($model, $colors);
     }
-    /**
-     * @param mixed[] $snapshot
-     */
-    public static function formatSnapshotAttribute(&$snapshot) : string
+    public static function formatSnapshotAttribute(array &$snapshot) : string
     {
         $res = "'" . \RectorPrefix20211210\Tracy\Dumper\Renderer::jsonEncode($snapshot[0] ?? []) . "'";
         $snapshot = [];

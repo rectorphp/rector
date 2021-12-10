@@ -61,9 +61,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $patterns = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
         if ($patterns === []) {

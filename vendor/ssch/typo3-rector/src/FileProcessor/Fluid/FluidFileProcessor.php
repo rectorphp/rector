@@ -23,20 +23,12 @@ final class FluidFileProcessor implements \Rector\Core\Contract\Processor\FilePr
     {
         $this->fluidRectors = $fluidRectors;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function supports($file, $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return \in_array($smartFileInfo->getExtension(), $this->getSupportedFileExtensions(), \true);
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function process($file, $configuration) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         if ([] === $this->fluidRectors) {
             return;

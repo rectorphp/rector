@@ -60,9 +60,8 @@ final class EditorConfigFile
     }
     /**
      * @return array<string, mixed>
-     * @param string $path
      */
-    public function getConfigForPath($path) : array
+    public function getConfigForPath(string $path) : array
     {
         $configuration = [];
         foreach ($this->sections as $section) {

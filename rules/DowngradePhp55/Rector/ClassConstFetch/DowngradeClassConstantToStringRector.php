@@ -54,9 +54,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\ClassConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassConstFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->name instanceof \PhpParser\Node\Identifier) {
             return null;

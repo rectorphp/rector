@@ -43,7 +43,7 @@ class PathFilterIterator extends \RectorPrefix20211210\Symfony\Component\Finder\
      *
      * @param string $str Pattern: regexp or dirname
      */
-    protected function toRegex($str) : string
+    protected function toRegex(string $str) : string
     {
         return $this->isRegex($str) ? $str : '/' . \preg_quote($str, '/') . '/';
     }

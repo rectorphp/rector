@@ -105,9 +105,8 @@ class PhpDumper extends \RectorPrefix20211210\Symfony\Component\DependencyInject
     }
     /**
      * Sets the dumper to be used when dumping proxies in the generated container.
-     * @param ProxyDumper $proxyDumper
      */
-    public function setProxyDumper($proxyDumper)
+    public function setProxyDumper(\RectorPrefix20211210\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface $proxyDumper)
     {
         $this->proxyDumper = $proxyDumper;
     }
@@ -124,9 +123,8 @@ class PhpDumper extends \RectorPrefix20211210\Symfony\Component\DependencyInject
      * @return string|array A PHP class representing the service container or an array of PHP files if the "as_files" option is set
      *
      * @throws EnvParameterException When an env var exists but has not been dumped
-     * @param mixed[] $options
      */
-    public function dump($options = [])
+    public function dump(array $options = [])
     {
         $this->locatedIds = [];
         $this->targetDirRegex = null;

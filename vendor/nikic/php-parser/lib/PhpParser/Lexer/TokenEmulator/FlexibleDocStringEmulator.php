@@ -15,36 +15,21 @@ REGEX;
     {
         return \PhpParser\Lexer\Emulative::PHP_7_3;
     }
-    /**
-     * @param string $code
-     */
-    public function isEmulationNeeded($code) : bool
+    public function isEmulationNeeded(string $code) : bool
     {
         return \strpos($code, '<<<') !== \false;
     }
-    /**
-     * @param string $code
-     * @param mixed[] $tokens
-     */
-    public function emulate($code, $tokens) : array
+    public function emulate(string $code, array $tokens) : array
     {
         // Handled by preprocessing + fixup.
         return $tokens;
     }
-    /**
-     * @param string $code
-     * @param mixed[] $tokens
-     */
-    public function reverseEmulate($code, $tokens) : array
+    public function reverseEmulate(string $code, array $tokens) : array
     {
         // Not supported.
         return $tokens;
     }
-    /**
-     * @param string $code
-     * @param mixed[] $patches
-     */
-    public function preprocessCode($code, &$patches) : string
+    public function preprocessCode(string $code, array &$patches) : string
     {
         if (!\preg_match_all(self::FLEXIBLE_DOC_STRING_REGEX, $code, $matches, \PREG_SET_ORDER | \PREG_OFFSET_CAPTURE)) {
             // No heredoc/nowdoc found

@@ -105,15 +105,8 @@ class PriorityTaggedServiceUtil
 {
     /**
      * @return string|int|null
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $serviceId
-     * @param string $class
-     * @param string $defaultMethod
-     * @param string $tagName
-     * @param string|null $indexAttribute
-     * @param bool $checkTaggedItem
      */
-    public static function getDefault($container, $serviceId, $class, $defaultMethod, $tagName, $indexAttribute, $checkTaggedItem)
+    public static function getDefault(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $serviceId, string $class, string $defaultMethod, string $tagName, ?string $indexAttribute, bool $checkTaggedItem)
     {
         if (!($r = $container->getReflectionClass($class)) || !$checkTaggedItem && !$r->hasMethod($defaultMethod)) {
             return null;

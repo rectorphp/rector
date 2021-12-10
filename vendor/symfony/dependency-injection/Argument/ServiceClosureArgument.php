@@ -33,9 +33,8 @@ class ServiceClosureArgument implements \RectorPrefix20211210\Symfony\Component\
     }
     /**
      * {@inheritdoc}
-     * @param mixed[] $values
      */
-    public function setValues($values)
+    public function setValues(array $values)
     {
         if ([0] !== \array_keys($values) || !($values[0] instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Reference || null === $values[0])) {
             throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one Reference.');

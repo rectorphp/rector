@@ -44,9 +44,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Unset_|Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Assign) {
             if ($node->expr instanceof \PhpParser\Node\Expr\Cast\Unset_) {

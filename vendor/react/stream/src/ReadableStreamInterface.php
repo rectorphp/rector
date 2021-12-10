@@ -318,7 +318,7 @@ interface ReadableStreamInterface extends \RectorPrefix20211210\Evenement\EventE
      * @param array $options
      * @return WritableStreamInterface $dest stream as-is
      */
-    public function pipe($dest, $options = array());
+    public function pipe(\RectorPrefix20211210\React\Stream\WritableStreamInterface $dest, array $options = array());
     /**
      * Closes the stream (forcefully).
      *

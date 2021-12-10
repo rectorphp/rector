@@ -38,7 +38,7 @@ class LNumber extends \PhpParser\Node\Scalar
      *
      * @return LNumber The constructed LNumber, including kind attribute
      */
-    public static function fromString($str, $attributes = [], $allowInvalidOctal = \false) : \PhpParser\Node\Scalar\LNumber
+    public static function fromString(string $str, array $attributes = [], bool $allowInvalidOctal = \false) : \PhpParser\Node\Scalar\LNumber
     {
         $str = \str_replace('_', '', $str);
         if ('0' !== $str[0] || '0' === $str) {

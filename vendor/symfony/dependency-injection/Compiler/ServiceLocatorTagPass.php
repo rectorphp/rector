@@ -27,10 +27,7 @@ use RectorPrefix20211210\Symfony\Component\DependencyInjection\ServiceLocator;
 final class ServiceLocatorTagPass extends \RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     use PriorityTaggedServiceTrait;
-    /**
-     * @param bool $isRoot
-     */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if ($value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
             if ($value->getTaggedIteratorArgument()) {
@@ -82,10 +79,8 @@ final class ServiceLocatorTagPass extends \RectorPrefix20211210\Symfony\Componen
     }
     /**
      * @param Reference[] $refMap
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string|null $callerId
      */
-    public static function register($container, $refMap, $callerId = null) : \RectorPrefix20211210\Symfony\Component\DependencyInjection\Reference
+    public static function register(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $refMap, string $callerId = null) : \RectorPrefix20211210\Symfony\Component\DependencyInjection\Reference
     {
         foreach ($refMap as $id => $ref) {
             if (!$ref instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Reference) {

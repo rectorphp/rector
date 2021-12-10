@@ -44,9 +44,9 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
         return [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Stmt\ClassLike::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param PropertyFetch|ClassLike $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
             return $this->processFromClassLike($node);
@@ -56,7 +56,7 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);

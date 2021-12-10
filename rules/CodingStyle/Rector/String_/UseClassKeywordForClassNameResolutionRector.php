@@ -49,9 +49,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param String_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $classNames = $this->getExistingClasses($node);
         if ($classNames === []) {
@@ -66,9 +66,8 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node\Scalar\String_ $string
      */
-    public function getExistingClasses($string) : array
+    public function getExistingClasses(\PhpParser\Node\Scalar\String_ $string) : array
     {
         /** @var mixed[] $matches */
         $matches = \RectorPrefix20211210\Nette\Utils\Strings::matchAll($string->value, self::CLASS_BEFORE_STATIC_ACCESS_REGEX, \PREG_PATTERN_ORDER);
@@ -87,9 +86,8 @@ CODE_SAMPLE
     /**
      * @param string[] $classNames
      * @return mixed[]
-     * @param \PhpParser\Node\Scalar\String_ $string
      */
-    public function getParts($string, $classNames) : array
+    public function getParts(\PhpParser\Node\Scalar\String_ $string, array $classNames) : array
     {
         $quotedClassNames = \array_map('preg_quote', $classNames);
         // @see https://regex101.com/r/8nGS0F/1

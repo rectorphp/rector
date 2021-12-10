@@ -87,10 +87,7 @@ final class StrictUnifiedDiffOutputBuilder implements \RectorPrefix20211210\Seba
         $this->commonLineThreshold = $options['commonLineThreshold'];
         $this->contextLines = $options['contextLines'];
     }
-    /**
-     * @param mixed[] $diff
-     */
-    public function getDiff($diff) : string
+    public function getDiff(array $diff) : string
     {
         if (0 === \count($diff)) {
             return '';

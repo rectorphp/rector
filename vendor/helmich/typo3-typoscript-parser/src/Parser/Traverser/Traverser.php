@@ -29,7 +29,7 @@ class Traverser
     /**
      * @param Visitor $visitor
      */
-    public function addVisitor($visitor) : void
+    public function addVisitor(\RectorPrefix20211210\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
     {
         $this->visitors->addVisitor($visitor);
     }

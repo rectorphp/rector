@@ -43,9 +43,9 @@ final class VariableTypeResolver implements \Rector\NodeTypeResolver\Contract\No
         return [\PhpParser\Node\Expr\Variable::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Variable $node
      */
-    public function resolve($node) : \PHPStan\Type\Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $variableName = $this->nodeNameResolver->getName($node);
         if ($variableName === null) {

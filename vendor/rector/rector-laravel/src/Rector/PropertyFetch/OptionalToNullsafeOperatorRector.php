@@ -82,9 +82,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall|PropertyFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->var instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
@@ -121,7 +121,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $excludeMethods = $configuration[self::EXCLUDE_METHODS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($excludeMethods);

@@ -53,9 +53,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Include_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Include_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Scalar\String_) {
             return null;

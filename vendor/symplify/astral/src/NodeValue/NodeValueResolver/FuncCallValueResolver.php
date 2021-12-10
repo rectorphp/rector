@@ -35,11 +35,10 @@ final class FuncCallValueResolver implements \RectorPrefix20211210\Symplify\Astr
         return \PhpParser\Node\Expr\FuncCall::class;
     }
     /**
-     * @param \PhpParser\Node\Expr $expr
+     * @param FuncCall $expr
      * @return mixed
-     * @param string $currentFilePath
      */
-    public function resolve($expr, $currentFilePath)
+    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath)
     {
         if ($this->simpleNameResolver->isName($expr, 'getcwd')) {
             return \dirname($currentFilePath);

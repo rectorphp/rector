@@ -14,17 +14,11 @@ final class RetryExecutor implements \RectorPrefix20211210\React\Dns\Query\Execu
         $this->executor = $executor;
         $this->retries = $retries;
     }
-    /**
-     * @param \React\Dns\Query\Query $query
-     */
-    public function query($query)
+    public function query(\RectorPrefix20211210\React\Dns\Query\Query $query)
     {
         return $this->tryQuery($query, $this->retries);
     }
-    /**
-     * @param \React\Dns\Query\Query $query
-     */
-    public function tryQuery($query, $retries)
+    public function tryQuery(\RectorPrefix20211210\React\Dns\Query\Query $query, $retries)
     {
         $deferred = new \RectorPrefix20211210\React\Promise\Deferred(function () use(&$promise) {
             if ($promise instanceof \RectorPrefix20211210\React\Promise\CancellablePromiseInterface || !\interface_exists('RectorPrefix20211210\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {

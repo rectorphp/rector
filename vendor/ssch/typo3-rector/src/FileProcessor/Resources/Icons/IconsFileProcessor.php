@@ -42,21 +42,13 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
         $this->smartFileSystem = $smartFileSystem;
         $this->iconsRector = $iconsRector;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function process($file, $configuration) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         foreach ($this->iconsRector as $iconRector) {
             $iconRector->refactorFile($file);
         }
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function supports($file, $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->shouldSkip($smartFileInfo->getFilenameWithoutExtension())) {

@@ -20,7 +20,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function emergency($message, $context = [])
+    public function emergency($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::EMERGENCY, $message, $context);
     }
@@ -35,7 +35,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function alert($message, $context = [])
+    public function alert($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::ALERT, $message, $context);
     }
@@ -49,7 +49,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function critical($message, $context = [])
+    public function critical($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::CRITICAL, $message, $context);
     }
@@ -62,7 +62,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function error($message, $context = [])
+    public function error($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::ERROR, $message, $context);
     }
@@ -77,7 +77,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function warning($message, $context = [])
+    public function warning($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::WARNING, $message, $context);
     }
@@ -89,7 +89,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function notice($message, $context = [])
+    public function notice($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::NOTICE, $message, $context);
     }
@@ -103,7 +103,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function info($message, $context = [])
+    public function info($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::INFO, $message, $context);
     }
@@ -115,7 +115,7 @@ trait LoggerTrait
      *
      * @return void
      */
-    public function debug($message, $context = [])
+    public function debug($message, array $context = [])
     {
         $this->log(\RectorPrefix20211210\Psr\Log\LogLevel::DEBUG, $message, $context);
     }
@@ -130,5 +130,5 @@ trait LoggerTrait
      *
      * @throws \Psr\Log\InvalidArgumentException
      */
-    public abstract function log($level, $message, $context = []);
+    public abstract function log($level, $message, array $context = []);
 }

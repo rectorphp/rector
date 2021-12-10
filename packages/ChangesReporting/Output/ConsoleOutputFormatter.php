@@ -37,11 +37,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         $this->outputStyle = $outputStyle;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
-    /**
-     * @param \Rector\Core\ValueObject\ProcessResult $processResult
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function report($processResult, $configuration) : void
+    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());

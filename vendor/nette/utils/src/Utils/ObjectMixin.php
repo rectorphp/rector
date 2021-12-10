@@ -15,10 +15,8 @@ use RectorPrefix20211210\Nette;
 final class ObjectMixin
 {
     use Nette\StaticClass;
-    /** @deprecated  use ObjectHelpers::getSuggestion()
-     * @param mixed[] $possibilities
-     * @param string $value */
-    public static function getSuggestion($possibilities, $value) : ?string
+    /** @deprecated  use ObjectHelpers::getSuggestion() */
+    public static function getSuggestion(array $possibilities, string $value) : ?string
     {
         \trigger_error(__METHOD__ . '() has been renamed to Nette\\Utils\\ObjectHelpers::getSuggestion()', \E_USER_DEPRECATED);
         return \RectorPrefix20211210\Nette\Utils\ObjectHelpers::getSuggestion($possibilities, $value);

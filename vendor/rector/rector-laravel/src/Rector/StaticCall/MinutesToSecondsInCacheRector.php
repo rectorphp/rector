@@ -72,9 +72,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param StaticCall|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->typeToTimeMethodsAndPositions as $typeToTimeMethodAndPosition) {
             if (!$this->isObjectType($node instanceof \PhpParser\Node\Expr\MethodCall ? $node->var : $node->class, $typeToTimeMethodAndPosition->getObjectType())) {

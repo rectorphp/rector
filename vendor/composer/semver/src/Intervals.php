@@ -50,10 +50,8 @@ class Intervals
      * Checks whether $candidate is a subset of $constraint
      *
      * @return bool
-     * @param \Composer\Semver\Constraint\ConstraintInterface $candidate
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
      */
-    public static function isSubsetOf($candidate, $constraint)
+    public static function isSubsetOf(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $candidate, \RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $constraint)
     {
         if ($constraint instanceof \RectorPrefix20211210\Composer\Semver\Constraint\MatchAllConstraint) {
             return \true;
@@ -94,10 +92,8 @@ class Intervals
      * Checks whether $a and $b have any intersection, equivalent to $a->matches($b)
      *
      * @return bool
-     * @param \Composer\Semver\Constraint\ConstraintInterface $a
-     * @param \Composer\Semver\Constraint\ConstraintInterface $b
      */
-    public static function haveIntersections($a, $b)
+    public static function haveIntersections(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $a, \RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $b)
     {
         if ($a instanceof \RectorPrefix20211210\Composer\Semver\Constraint\MatchAllConstraint || $b instanceof \RectorPrefix20211210\Composer\Semver\Constraint\MatchAllConstraint) {
             return \true;
@@ -117,9 +113,8 @@ class Intervals
      * to match the same intervals.
      *
      * @return ConstraintInterface
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
      */
-    public static function compactConstraint($constraint)
+    public static function compactConstraint(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $constraint)
     {
         if (!$constraint instanceof \RectorPrefix20211210\Composer\Semver\Constraint\MultiConstraint) {
             return $constraint;
@@ -230,9 +225,8 @@ class Intervals
      *
      * @return array
      * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
-     * @param \Composer\Semver\Constraint\ConstraintInterface $constraint
      */
-    public static function get($constraint)
+    public static function get(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $constraint)
     {
         $key = (string) $constraint;
         if (!isset(self::$intervalsCache[$key])) {

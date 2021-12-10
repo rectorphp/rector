@@ -43,7 +43,7 @@ class Semver
      *
      * @return string[]
      */
-    public static function satisfiedBy($versions, $constraints)
+    public static function satisfiedBy(array $versions, $constraints)
     {
         $versions = \array_filter($versions, function ($version) use($constraints) {
             return \RectorPrefix20211210\Composer\Semver\Semver::satisfies($version, $constraints);
@@ -57,7 +57,7 @@ class Semver
      *
      * @return string[]
      */
-    public static function sort($versions)
+    public static function sort(array $versions)
     {
         return self::usort($versions, self::SORT_ASC);
     }
@@ -68,7 +68,7 @@ class Semver
      *
      * @return string[]
      */
-    public static function rsort($versions)
+    public static function rsort(array $versions)
     {
         return self::usort($versions, self::SORT_DESC);
     }

@@ -67,9 +67,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Property $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Stmt\Property
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Property
     {
         if ($node->type !== null) {
             return null;

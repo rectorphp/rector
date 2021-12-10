@@ -67,9 +67,8 @@ class ApplicationDescription
     }
     /**
      * @throws CommandNotFoundException
-     * @param string $name
      */
-    public function getCommand($name) : \RectorPrefix20211210\Symfony\Component\Console\Command\Command
+    public function getCommand(string $name) : \RectorPrefix20211210\Symfony\Component\Console\Command\Command
     {
         if (!isset($this->commands[$name]) && !isset($this->aliases[$name])) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\CommandNotFoundException(\sprintf('Command "%s" does not exist.', $name));

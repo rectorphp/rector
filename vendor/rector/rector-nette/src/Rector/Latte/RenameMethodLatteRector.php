@@ -46,10 +46,7 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param string $content
-     */
-    public function changeContent($content) : string
+    public function changeContent(string $content) : string
     {
         $typesToVariables = $this->findTypesForVariables($content);
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {

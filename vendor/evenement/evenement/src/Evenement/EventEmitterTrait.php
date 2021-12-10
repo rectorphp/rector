@@ -16,10 +16,7 @@ trait EventEmitterTrait
 {
     protected $listeners = [];
     protected $onceListeners = [];
-    /**
-     * @param callable $listener
-     */
-    public function on($event, $listener)
+    public function on($event, callable $listener)
     {
         if ($event === null) {
             throw new \InvalidArgumentException('event name must not be null');
@@ -30,10 +27,7 @@ trait EventEmitterTrait
         $this->listeners[$event][] = $listener;
         return $this;
     }
-    /**
-     * @param callable $listener
-     */
-    public function once($event, $listener)
+    public function once($event, callable $listener)
     {
         if ($event === null) {
             throw new \InvalidArgumentException('event name must not be null');
@@ -44,10 +38,7 @@ trait EventEmitterTrait
         $this->onceListeners[$event][] = $listener;
         return $this;
     }
-    /**
-     * @param callable $listener
-     */
-    public function removeListener($event, $listener)
+    public function removeListener($event, callable $listener)
     {
         if ($event === null) {
             throw new \InvalidArgumentException('event name must not be null');
@@ -96,10 +87,7 @@ trait EventEmitterTrait
         }
         return \array_merge(isset($this->listeners[$event]) ? $this->listeners[$event] : [], isset($this->onceListeners[$event]) ? $this->onceListeners[$event] : []);
     }
-    /**
-     * @param mixed[] $arguments
-     */
-    public function emit($event, $arguments = [])
+    public function emit($event, array $arguments = [])
     {
         if ($event === null) {
             throw new \InvalidArgumentException('event name must not be null');

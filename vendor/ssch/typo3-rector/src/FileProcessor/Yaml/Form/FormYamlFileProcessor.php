@@ -34,11 +34,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $this->currentFileProvider = $currentFileProvider;
         $this->transformer = $transformer;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function process($file, $configuration) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         // Prevent unnecessary processing
         if ([] === $this->transformer) {
@@ -61,11 +57,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $newFileContent = \RectorPrefix20211210\Symfony\Component\Yaml\Yaml::dump($newYaml, 99);
         $file->changeFileContent($newFileContent);
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function supports($file, $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         return \substr_compare($smartFileInfo->getFilename(), 'yaml', -\strlen('yaml')) === 0;

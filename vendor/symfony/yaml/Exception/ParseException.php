@@ -47,9 +47,8 @@ class ParseException extends \RectorPrefix20211210\Symfony\Component\Yaml\Except
     }
     /**
      * Sets the snippet of code near the error.
-     * @param string $snippet
      */
-    public function setSnippet($snippet)
+    public function setSnippet(string $snippet)
     {
         $this->snippet = $snippet;
         $this->updateRepr();
@@ -67,9 +66,8 @@ class ParseException extends \RectorPrefix20211210\Symfony\Component\Yaml\Except
     }
     /**
      * Sets the filename where the error occurred.
-     * @param string $parsedFile
      */
-    public function setParsedFile($parsedFile)
+    public function setParsedFile(string $parsedFile)
     {
         $this->parsedFile = $parsedFile;
         $this->updateRepr();
@@ -85,9 +83,8 @@ class ParseException extends \RectorPrefix20211210\Symfony\Component\Yaml\Except
     }
     /**
      * Sets the line where the error occurred.
-     * @param int $parsedLine
      */
-    public function setParsedLine($parsedLine)
+    public function setParsedLine(int $parsedLine)
     {
         $this->parsedLine = $parsedLine;
         $this->updateRepr();

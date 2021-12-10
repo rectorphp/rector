@@ -18,11 +18,7 @@ final class EnumTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmul
     {
         return \T_ENUM;
     }
-    /**
-     * @param mixed[] $tokens
-     * @param int $pos
-     */
-    protected function isKeywordContext($tokens, $pos) : bool
+    protected function isKeywordContext(array $tokens, int $pos) : bool
     {
         return parent::isKeywordContext($tokens, $pos) && isset($tokens[$pos + 2]) && $tokens[$pos + 1][0] === \T_WHITESPACE && $tokens[$pos + 2][0] === \T_STRING;
     }

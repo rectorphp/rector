@@ -20,10 +20,7 @@ final class ParamPhpDocNodeVisitor extends \RectorPrefix20211210\Symplify\Simple
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
-     */
-    public function enterNode($node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
         if (!$node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
             return null;

@@ -58,9 +58,9 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
         return [\PhpParser\Node\Stmt\Namespace_::class, \PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Name::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Namespace_|Use_|Name $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $name = $this->getName($node);
         if ($name === null) {
@@ -100,7 +100,7 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));

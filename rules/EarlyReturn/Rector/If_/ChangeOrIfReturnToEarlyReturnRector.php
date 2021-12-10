@@ -70,10 +70,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param If_ $node
      * @return null|If_[]
      */
-    public function refactor($node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if (!$this->ifManipulator->isIfWithOnly($node, \PhpParser\Node\Stmt\Return_::class)) {
             return null;

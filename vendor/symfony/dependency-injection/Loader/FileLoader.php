@@ -45,10 +45,8 @@ abstract class FileLoader extends \RectorPrefix20211210\Symfony\Component\Config
      * {@inheritdoc}
      *
      * @param bool|string $ignoreErrors Whether errors should be ignored; pass "not_found" to ignore only when the loaded resource is not found
-     * @param string|null $type
-     * @param string|null $sourceResource
      */
-    public function import($resource, $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null)
+    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null)
     {
         $args = \func_get_args();
         if ($ignoreNotFound = 'not_found' === $ignoreErrors) {
@@ -81,7 +79,7 @@ abstract class FileLoader extends \RectorPrefix20211210\Symfony\Component\Config
      * @param string               $resource  The directory to look for classes, glob-patterns allowed
      * @param string|string[]|null $exclude   A globbed path of files to exclude or an array of globbed paths of files to exclude
      */
-    public function registerClasses($prototype, $namespace, $resource, $exclude = null)
+    public function registerClasses(\RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition $prototype, string $namespace, string $resource, $exclude = null)
     {
         if (\substr_compare($namespace, '\\', -\strlen('\\')) !== 0) {
             throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Namespace prefix must end with a "\\": "%s".', $namespace));
@@ -136,10 +134,8 @@ abstract class FileLoader extends \RectorPrefix20211210\Symfony\Component\Config
     }
     /**
      * Registers a definition in the container with its instanceof-conditionals.
-     * @param string $id
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
      */
-    protected function setDefinition($id, $definition)
+    protected function setDefinition(string $id, \RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition $definition)
     {
         $this->container->removeBindings($id);
         if ($this->isLoadingInstanceof) {

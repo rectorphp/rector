@@ -28,9 +28,8 @@ class CheckCircularReferencesPass implements \RectorPrefix20211210\Symfony\Compo
     private $checkedNodes;
     /**
      * Checks the ContainerBuilder object for circular references.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $graph = $container->getCompiler()->getServiceReferenceGraph();
         $this->checkedNodes = [];

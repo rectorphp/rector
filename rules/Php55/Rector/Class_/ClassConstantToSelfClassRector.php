@@ -48,9 +48,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\MagicConst\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : \PhpParser\Node\Expr\ClassConstFetch
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\ClassConstFetch
     {
         return $this->nodeFactory->createSelfFetchConstant('class', $node);
     }

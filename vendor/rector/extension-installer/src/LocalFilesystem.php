@@ -6,17 +6,11 @@ namespace Rector\RectorInstaller;
 use UnexpectedValueException;
 final class LocalFilesystem implements \Rector\RectorInstaller\Filesystem
 {
-    /**
-     * @param string $pathToFile
-     */
-    public function isFile($pathToFile) : bool
+    public function isFile(string $pathToFile) : bool
     {
         return \is_file($pathToFile);
     }
-    /**
-     * @param string $pathToFile
-     */
-    public function hashFile($pathToFile) : string
+    public function hashFile(string $pathToFile) : string
     {
         $fileHash = \md5_file($pathToFile);
         if ($fileHash === \false) {
@@ -24,22 +18,14 @@ final class LocalFilesystem implements \Rector\RectorInstaller\Filesystem
         }
         return $fileHash;
     }
-    /**
-     * @param string $pathToFile
-     * @param string $contents
-     */
-    public function writeFile($pathToFile, $contents) : void
+    public function writeFile(string $pathToFile, string $contents) : void
     {
         $bytes = \file_put_contents($pathToFile, $contents);
         if ($bytes === \false) {
             throw new \UnexpectedValueException(\sprintf('Could not write contents to file %s', $pathToFile));
         }
     }
-    /**
-     * @param string $hash
-     * @param string $content
-     */
-    public function hashEquals($hash, $content) : bool
+    public function hashEquals(string $hash, string $content) : bool
     {
         return $hash === \md5($content);
     }

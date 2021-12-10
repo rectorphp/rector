@@ -169,12 +169,12 @@ class Process implements \IteratorAggregate
      * @param string|null    $cwd     The working directory or null to use the working dir of the current PHP process
      * @param array|null     $env     The environment variables or null to use the same environment as the current PHP process
      * @param mixed          $input   The input as stream resource, scalar or \Traversable, or null for no input
-     * @param float|null $timeout The timeout in seconds or null to disable
+     * @param int|float|null $timeout The timeout in seconds or null to disable
      *
      * @throws LogicException When proc_open is not installed
      * @return $this
      */
-    public static function fromShellCommandline($command, $cwd = null, $env = null, $input = null, $timeout = 60)
+    public static function fromShellCommandline(string $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
     {
         $process = new static([], $cwd, $env, $input, $timeout);
         $process->commandline = $command;
@@ -222,9 +222,8 @@ class Process implements \IteratorAggregate
      * @throws LogicException           In case a callback is provided and output has been disabled
      *
      * @final
-     * @param mixed[] $env
      */
-    public function run($callback = null, $env = []) : int
+    public function run(callable $callback = null, array $env = []) : int
     {
         $this->start($callback, $env);
         return $this->wait();
@@ -240,10 +239,8 @@ class Process implements \IteratorAggregate
      * @throws ProcessFailedException if the process didn't terminate successfully
      *
      * @final
-     * @param callable|null $callback
-     * @param mixed[] $env
      */
-    public function mustRun($callback = null, $env = [])
+    public function mustRun(callable $callback = null, array $env = [])
     {
         if (0 !== $this->run($callback, $env)) {
             throw new \RectorPrefix20211210\Symfony\Component\Process\Exception\ProcessFailedException($this);
@@ -268,9 +265,8 @@ class Process implements \IteratorAggregate
      * @throws RuntimeException When process can't be launched
      * @throws RuntimeException When process is already running
      * @throws LogicException   In case a callback is provided and output has been disabled
-     * @param mixed[] $env
      */
-    public function start($callback = null, $env = [])
+    public function start(callable $callback = null, array $env = [])
     {
         if ($this->isRunning()) {
             throw new \RectorPrefix20211210\Symfony\Component\Process\Exception\RuntimeException('Process is already running.');
@@ -343,9 +339,8 @@ class Process implements \IteratorAggregate
      *
      * @final
      * @return $this
-     * @param mixed[] $env
      */
-    public function restart($callback = null, $env = [])
+    public function restart(callable $callback = null, array $env = [])
     {
         if ($this->isRunning()) {
             throw new \RectorPrefix20211210\Symfony\Component\Process\Exception\RuntimeException('Process is already running.');
@@ -369,7 +364,7 @@ class Process implements \IteratorAggregate
      * @throws ProcessSignaledException When process stopped after receiving signal
      * @throws LogicException           When process is not yet started
      */
-    public function wait($callback = null) : int
+    public function wait(callable $callback = null) : int
     {
         $this->requireProcessIsStarted(__FUNCTION__);
         $this->updateStatus(\false);
@@ -404,9 +399,8 @@ class Process implements \IteratorAggregate
      * @throws RuntimeException         When process timed out
      * @throws LogicException           When process is not yet started
      * @throws ProcessTimedOutException In case the timeout was reached
-     * @param callable $callback
      */
-    public function waitUntil($callback) : bool
+    public function waitUntil(callable $callback) : bool
     {
         $this->requireProcessIsStarted(__FUNCTION__);
         $this->updateStatus(\false);
@@ -456,7 +450,7 @@ class Process implements \IteratorAggregate
      * @throws RuntimeException In case --enable-sigchild is activated and the process can't be killed
      * @throws RuntimeException In case of failure
      */
-    public function signal($signal)
+    public function signal(int $signal)
     {
         $this->doSignal($signal, \true);
         return $this;
@@ -764,12 +758,12 @@ class Process implements \IteratorAggregate
     /**
      * Stops the process.
      *
-     * @param float $timeout The timeout in seconds
+     * @param int|float $timeout The timeout in seconds
      * @param int       $signal  A POSIX signal to send in case the process has not stop at timeout, default is SIGKILL (9)
      *
      * @return int|null The exit-code of the process or null if it's not running
      */
-    public function stop($timeout = 10, $signal = null) : ?int
+    public function stop(float $timeout = 10, int $signal = null) : ?int
     {
         $timeoutMicro = \microtime(\true) + $timeout;
         if ($this->isRunning()) {
@@ -797,9 +791,8 @@ class Process implements \IteratorAggregate
      * Adds a line to the STDOUT stream.
      *
      * @internal
-     * @param string $line
      */
-    public function addOutput($line)
+    public function addOutput(string $line)
     {
         $this->lastOutputTime = \microtime(\true);
         \fseek($this->stdout, 0, \SEEK_END);
@@ -810,9 +803,8 @@ class Process implements \IteratorAggregate
      * Adds a line to the STDERR stream.
      *
      * @internal
-     * @param string $line
      */
-    public function addErrorOutput($line)
+    public function addErrorOutput(string $line)
     {
         $this->lastOutputTime = \microtime(\true);
         \fseek($this->stderr, 0, \SEEK_END);
@@ -855,9 +847,8 @@ class Process implements \IteratorAggregate
      * @return $this
      *
      * @throws InvalidArgumentException if the timeout is negative
-     * @param float|null $timeout
      */
-    public function setTimeout($timeout)
+    public function setTimeout(?float $timeout)
     {
         $this->timeout = $this->validateTimeout($timeout);
         return $this;
@@ -871,9 +862,8 @@ class Process implements \IteratorAggregate
      *
      * @throws LogicException           if the output is disabled
      * @throws InvalidArgumentException if the timeout is negative
-     * @param float|null $timeout
      */
-    public function setIdleTimeout($timeout)
+    public function setIdleTimeout(?float $timeout)
     {
         if (null !== $timeout && $this->outputDisabled) {
             throw new \RectorPrefix20211210\Symfony\Component\Process\Exception\LogicException('Idle timeout cannot be set while the output is disabled.');
@@ -887,9 +877,8 @@ class Process implements \IteratorAggregate
      * @return $this
      *
      * @throws RuntimeException In case the TTY mode is not supported
-     * @param bool $tty
      */
-    public function setTty($tty)
+    public function setTty(bool $tty)
     {
         if ('\\' === \DIRECTORY_SEPARATOR && $tty) {
             throw new \RectorPrefix20211210\Symfony\Component\Process\Exception\RuntimeException('TTY mode is not supported on Windows platform.');
@@ -911,9 +900,8 @@ class Process implements \IteratorAggregate
      * Sets PTY mode.
      *
      * @return $this
-     * @param bool $bool
      */
-    public function setPty($bool)
+    public function setPty(bool $bool)
     {
         $this->pty = $bool;
         return $this;
@@ -941,9 +929,8 @@ class Process implements \IteratorAggregate
      * Sets the current working directory.
      *
      * @return $this
-     * @param string $cwd
      */
-    public function setWorkingDirectory($cwd)
+    public function setWorkingDirectory(string $cwd)
     {
         $this->cwd = $cwd;
         return $this;
@@ -962,7 +949,7 @@ class Process implements \IteratorAggregate
      *
      * @return $this
      */
-    public function setEnv($env)
+    public function setEnv(array $env)
     {
         $this->env = $env;
         return $this;
@@ -1034,9 +1021,8 @@ class Process implements \IteratorAggregate
      *
      * Enabling the "create_new_console" option allows a subprocess to continue
      * to run after the main process exited, on both Windows and *nix
-     * @param mixed[] $options
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         if ($this->isRunning()) {
             throw new \RectorPrefix20211210\Symfony\Component\Process\Exception\RuntimeException('Setting options while the process is running is not possible.');
@@ -1099,7 +1085,7 @@ class Process implements \IteratorAggregate
      *
      * @param callable|null $callback The user defined PHP callback
      */
-    protected function buildCallback($callback = null) : \Closure
+    protected function buildCallback(callable $callback = null) : \Closure
     {
         if ($this->outputDisabled) {
             return function ($type, $data) use($callback) : bool {
@@ -1121,7 +1107,7 @@ class Process implements \IteratorAggregate
      *
      * @param bool $blocking Whether to use a blocking read call
      */
-    protected function updateStatus($blocking)
+    protected function updateStatus(bool $blocking)
     {
         if (self::STATUS_STARTED !== $this->status) {
             return;

@@ -36,10 +36,7 @@ class PrintableNewAnonClassNode extends \PhpParser\Node\Expr
         $this->implements = $implements;
         $this->stmts = $stmts;
     }
-    /**
-     * @param \PhpParser\Node\Expr\New_ $newNode
-     */
-    public static function fromNewNode($newNode)
+    public static function fromNewNode(\PhpParser\Node\Expr\New_ $newNode)
     {
         $class = $newNode->class;
         \assert($class instanceof \PhpParser\Node\Stmt\Class_);

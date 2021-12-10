@@ -17,10 +17,8 @@ abstract class AbstractChunkOutputBuilder implements \RectorPrefix20211210\Sebas
     /**
      * Takes input of the diff array and returns the common parts.
      * Iterates through diff line by line.
-     * @param mixed[] $diff
-     * @param int $lineThreshold
      */
-    protected function getCommonChunks($diff, $lineThreshold = 5) : array
+    protected function getCommonChunks(array $diff, int $lineThreshold = 5) : array
     {
         $diffSize = \count($diff);
         $capturing = \false;

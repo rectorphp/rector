@@ -59,9 +59,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Node\Expr\StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticCallsToNews as $staticCallToNew) {
             if (!$this->isName($node->class, $staticCallToNew->getClass())) {
@@ -81,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);

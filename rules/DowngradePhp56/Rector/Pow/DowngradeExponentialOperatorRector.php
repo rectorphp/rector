@@ -28,9 +28,9 @@ final class DowngradeExponentialOperatorRector extends \Rector\Core\Rector\Abstr
         return [\PhpParser\Node\Expr\BinaryOp\Pow::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Pow $node
      */
-    public function refactor($node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         return $this->nodeFactory->createFuncCall('pow', [$node->left, $node->right]);
     }

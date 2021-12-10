@@ -69,9 +69,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\CallLike::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param CallLike $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $args = $node->getArgs();
         if ($this->shouldSkip($args)) {

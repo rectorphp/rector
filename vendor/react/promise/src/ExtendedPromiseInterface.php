@@ -19,7 +19,7 @@ interface ExtendedPromiseInterface extends \RectorPrefix20211210\React\Promise\P
      * @param callable|null $onProgress This argument is deprecated and should not be used anymore.
      * @return void
      */
-    public function done($onFulfilled = null, $onRejected = null, $onProgress = null);
+    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null);
     /**
      * Registers a rejection handler for promise. It is a shortcut for:
      *
@@ -33,7 +33,7 @@ interface ExtendedPromiseInterface extends \RectorPrefix20211210\React\Promise\P
      * @param callable $onRejected
      * @return ExtendedPromiseInterface
      */
-    public function otherwise($onRejected);
+    public function otherwise(callable $onRejected);
     /**
      * Allows you to execute "cleanup" type tasks in a promise chain.
      *
@@ -79,7 +79,7 @@ interface ExtendedPromiseInterface extends \RectorPrefix20211210\React\Promise\P
      * @param callable $onFulfilledOrRejected
      * @return ExtendedPromiseInterface
      */
-    public function always($onFulfilledOrRejected);
+    public function always(callable $onFulfilledOrRejected);
     /**
      * Registers a handler for progress updates from promise. It is a shortcut for:
      *
@@ -91,5 +91,5 @@ interface ExtendedPromiseInterface extends \RectorPrefix20211210\React\Promise\P
      * @return ExtendedPromiseInterface
      * @deprecated 2.6.0 Progress support is deprecated and should not be used anymore.
      */
-    public function progress($onProgress);
+    public function progress(callable $onProgress);
 }

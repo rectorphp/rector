@@ -9,22 +9,14 @@ use PHPStan\PhpDocParser\Ast\Node;
  */
 interface PhpDocNodeVisitorInterface
 {
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
-     */
-    public function beforeTraverse($node) : void;
+    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void;
     /**
      * @return int|Node|null
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
      */
-    public function enterNode($node);
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node);
     /**
      * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return)
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
      */
-    public function leaveNode($node);
-    /**
-     * @param \PHPStan\PhpDocParser\Ast\Node $node
-     */
-    public function afterTraverse($node) : void;
+    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node);
+    public function afterTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void;
 }

@@ -37,9 +37,9 @@ final class MultiDirnameRector extends \Rector\Core\Rector\AbstractRector implem
         return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->nestingLevel = 0;
         if (!$this->isName($node, self::DIRNAME)) {

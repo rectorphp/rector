@@ -35,10 +35,7 @@ class PrettyPrinter implements \RectorPrefix20211210\Helmich\TypoScriptParser\Pa
     {
         $this->prettyPrinterConfiguration = $prettyPrinterConfiguration ?? \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration::create();
     }
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration
-     */
-    public function setPrettyPrinterConfiguration($prettyPrinterConfiguration) : void
+    public function setPrettyPrinterConfiguration(\RectorPrefix20211210\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterConfiguration $prettyPrinterConfiguration) : void
     {
         $this->prettyPrinterConfiguration = $prettyPrinterConfiguration;
     }
@@ -47,7 +44,7 @@ class PrettyPrinter implements \RectorPrefix20211210\Helmich\TypoScriptParser\Pa
      * @param OutputInterface $output
      * @return void
      */
-    public function printStatements($statements, $output) : void
+    public function printStatements(array $statements, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         $this->printStatementList($statements, $output, 0);
     }

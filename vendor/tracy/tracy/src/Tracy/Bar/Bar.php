@@ -21,10 +21,8 @@ class Bar
     /**
      * Add custom panel.
      * @return static
-     * @param \Tracy\IBarPanel $panel
-     * @param string|null $id
      */
-    public function addPanel($panel, $id = null) : self
+    public function addPanel(\RectorPrefix20211210\Tracy\IBarPanel $panel, string $id = null) : self
     {
         if ($id === null) {
             $c = 0;
@@ -37,9 +35,8 @@ class Bar
     }
     /**
      * Returns panel with given id
-     * @param string $id
      */
-    public function getPanel($id) : ?\RectorPrefix20211210\Tracy\IBarPanel
+    public function getPanel(string $id) : ?\RectorPrefix20211210\Tracy\IBarPanel
     {
         return $this->panels[$id] ?? null;
     }

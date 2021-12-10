@@ -41,9 +41,9 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
         return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Assign $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;

@@ -36,10 +36,8 @@ final class AddCodeCoverageIgnoreForRectorDefinitionRule implements \PHPStan\Rul
     }
     /**
      * @return string[]
-     * @param \PhpParser\Node $node
-     * @param \PHPStan\Analyser\Scope $scope
      */
-    public function processNode($node, $scope) : array
+    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
     {
         if (!$scope->isInClass()) {
             throw new \PHPStan\ShouldNotHappenException();

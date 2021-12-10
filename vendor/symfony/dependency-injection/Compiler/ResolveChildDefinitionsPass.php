@@ -26,10 +26,7 @@ use RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\Service
 class ResolveChildDefinitionsPass extends \RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     private $currentPath;
-    /**
-     * @param bool $isRoot
-     */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if (!$value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition) {
             return parent::processValue($value, $isRoot);

@@ -59,9 +59,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp\Identical::class, \PhpParser\Node\Expr\BinaryOp\NotIdentical::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Identical|NotIdentical $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $funcCall = $this->matchIdenticalOrNotIdenticalToFalse($node);
         if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {

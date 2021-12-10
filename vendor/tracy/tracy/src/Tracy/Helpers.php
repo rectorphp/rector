@@ -14,10 +14,8 @@ class Helpers
 {
     /**
      * Returns HTML link to editor.
-     * @param string $file
-     * @param int|null $line
      */
-    public static function editorLink($file, $line = null) : string
+    public static function editorLink(string $file, int $line = null) : string
     {
         $file = \strtr($origFile = $file, \RectorPrefix20211210\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
@@ -35,13 +33,8 @@ class Helpers
     }
     /**
      * Returns link to editor.
-     * @param string $file
-     * @param int|null $line
-     * @param string $action
-     * @param string $search
-     * @param string $replace
      */
-    public static function editorUri($file, $line = null, $action = 'open', $search = '', $replace = '') : ?string
+    public static function editorUri(string $file, int $line = null, string $action = 'open', string $search = '', string $replace = '') : ?string
     {
         if (\RectorPrefix20211210\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
@@ -50,10 +43,7 @@ class Helpers
         }
         return null;
     }
-    /**
-     * @param string $mask
-     */
-    public static function formatHtml($mask) : string
+    public static function formatHtml(string $mask) : string
     {
         $args = \func_get_args();
         return \preg_replace_callback('#%#', function () use(&$args, &$count) : string {
@@ -64,11 +54,7 @@ class Helpers
     {
         return \htmlspecialchars((string) $s, \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5, 'UTF-8');
     }
-    /**
-     * @param mixed[] $trace
-     * @param int|null $index
-     */
-    public static function findTrace($trace, $method, &$index = null) : ?array
+    public static function findTrace(array $trace, $method, int &$index = null) : ?array
     {
         $m = \is_array($method) ? $method : \explode('::', $method);
         foreach ($trace as $i => $item) {
@@ -83,9 +69,8 @@ class Helpers
     {
         return \explode("\0", \get_class($obj))[0];
     }
-    /** @internal
-     * @param \Throwable $exception */
-    public static function fixStack($exception) : \Throwable
+    /** @internal */
+    public static function fixStack(\Throwable $exception) : \Throwable
     {
         if (\function_exists('xdebug_get_function_stack')) {
             $stack = [];
@@ -106,9 +91,8 @@ class Helpers
         }
         return $exception;
     }
-    /** @internal
-     * @param int $type */
-    public static function errorTypeToString($type) : string
+    /** @internal */
+    public static function errorTypeToString(int $type) : string
     {
         $types = [\E_ERROR => 'Fatal Error', \E_USER_ERROR => 'User Error', \E_RECOVERABLE_ERROR => 'Recoverable Error', \E_CORE_ERROR => 'Core Error', \E_COMPILE_ERROR => 'Compile Error', \E_PARSE => 'Parse Error', \E_WARNING => 'Warning', \E_CORE_WARNING => 'Core Warning', \E_COMPILE_WARNING => 'Compile Warning', \E_USER_WARNING => 'User Warning', \E_NOTICE => 'Notice', \E_USER_NOTICE => 'User Notice', \E_STRICT => 'Strict standards', \E_DEPRECATED => 'Deprecated', \E_USER_DEPRECATED => 'User Deprecated'];
         return $types[$type] ?? 'Unknown error';
@@ -124,9 +108,8 @@ class Helpers
             return \PHP_SAPI;
         }
     }
-    /** @internal
-     * @param \Throwable $e */
-    public static function improveException($e) : void
+    /** @internal */
+    public static function improveException(\Throwable $e) : void
     {
         $message = $e->getMessage();
         if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211210\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
@@ -168,10 +151,8 @@ class Helpers
             $e->tracyAction = ['link' => self::editorUri($e->getFile(), $e->getLine(), 'fix', $replace[0], $replace[1]), 'label' => 'fix it'];
         }
     }
-    /** @internal
-     * @param string $message
-     * @param mixed[] $context */
-    public static function improveError($message, $context = []) : string
+    /** @internal */
+    public static function improveError(string $message, array $context = []) : string
     {
         if (\preg_match('#^Undefined variable:? \\$?(\\w+)#', $message, $m) && $context) {
             $hint = self::getSuggestion(\array_keys($context), $m[1]);
@@ -186,9 +167,8 @@ class Helpers
         }
         return $message;
     }
-    /** @internal
-     * @param string $class */
-    public static function guessClassFile($class) : ?string
+    /** @internal */
+    public static function guessClassFile(string $class) : ?string
     {
         $segments = \explode('\\', $class);
         $res = null;
@@ -211,10 +191,8 @@ class Helpers
     /**
      * Finds the best suggestion.
      * @internal
-     * @param mixed[] $items
-     * @param string $value
      */
-    public static function getSuggestion($items, $value) : ?string
+    public static function getSuggestion(array $items, string $value) : ?string
     {
         $best = null;
         $min = (\strlen($value) / 4 + 1) * 10 + 0.1;
@@ -261,9 +239,8 @@ class Helpers
     }
     /**
      * Captures PHP output into a string.
-     * @param callable $func
      */
-    public static function capture($func) : string
+    public static function capture(callable $func) : string
     {
         \ob_start(function () {
         });
@@ -275,11 +252,8 @@ class Helpers
             throw $e;
         }
     }
-    /** @internal
-     * @param string $s
-     * @param int|null $maxLength
-     * @param bool $showWhitespaces */
-    public static function encodeString($s, $maxLength = null, $showWhitespaces = \true) : string
+    /** @internal */
+    public static function encodeString(string $s, int $maxLength = null, bool $showWhitespaces = \true) : string
     {
         $utf8 = self::isUtf8($s);
         $len = $utf8 ? self::utf8Length($s) : \strlen($s);
@@ -309,23 +283,18 @@ class Helpers
             return ($ord0 << 18) + (\ord($c[1]) << 12) + (\ord($c[2]) << 6) + \ord($c[3]) - 0x3c82080;
         }
     }
-    /** @internal
-     * @param string $s */
-    public static function utf8Length($s) : int
+    /** @internal */
+    public static function utf8Length(string $s) : int
     {
         return \strlen(\utf8_decode($s));
     }
-    /** @internal
-     * @param string $s */
-    public static function isUtf8($s) : bool
+    /** @internal */
+    public static function isUtf8(string $s) : bool
     {
         return (bool) \preg_match('##u', $s);
     }
-    /** @internal
-     * @param string $s
-     * @param int $len
-     * @param bool $utf */
-    public static function truncateString($s, $len, $utf) : string
+    /** @internal */
+    public static function truncateString(string $s, int $len, bool $utf) : string
     {
         if (!$utf) {
             return $len < 0 ? \substr($s, $len) : \substr($s, 0, $len);
@@ -336,9 +305,8 @@ class Helpers
             return $m[0];
         }
     }
-    /** @internal
-     * @param string $s */
-    public static function minifyJs($s) : string
+    /** @internal */
+    public static function minifyJs(string $s) : string
     {
         // author: Jakub Vrana https://php.vrana.cz/minifikace-javascriptu.php
         $last = '';
@@ -375,9 +343,8 @@ XX
             return $result;
         }, $s . "\n");
     }
-    /** @internal
-     * @param string $s */
-    public static function minifyCss($s) : string
+    /** @internal */
+    public static function minifyCss(string $s) : string
     {
         $last = '';
         return \preg_replace_callback(<<<'XX'
@@ -427,10 +394,7 @@ XX
         };
         return self::isCli() && \getenv('NO_COLOR') === \false && (\getenv('FORCE_COLOR') || @$streamIsatty(\STDOUT) || (\defined('PHP_WINDOWS_VERSION_BUILD') && (\function_exists('sapi_windows_vt100_support') && \sapi_windows_vt100_support(\STDOUT)) || \getenv('ConEmuANSI') === 'ON' || \getenv('ANSICON') !== \false || \getenv('term') === 'xterm' || \getenv('term') === 'xterm-256color'));
     }
-    /**
-     * @param \Throwable $ex
-     */
-    public static function getExceptionChain($ex) : array
+    public static function getExceptionChain(\Throwable $ex) : array
     {
         $res = [$ex];
         while (($ex = $ex->getPrevious()) && !\in_array($ex, $res, \true)) {

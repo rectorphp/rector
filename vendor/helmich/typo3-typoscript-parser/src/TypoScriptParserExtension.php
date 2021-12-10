@@ -26,7 +26,7 @@ class TypoScriptParserExtension implements \RectorPrefix20211210\Symfony\Compone
      * @api
      * @psalm-suppress MissingReturnType Signature is determined by Symfony DI -- nothing to fix, here
      */
-    public function load($configs, $container)
+    public function load(array $configs, \RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $loader = new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\YamlFileLoader($container, new \RectorPrefix20211210\Symfony\Component\Config\FileLocator(__DIR__ . '/../config'));
         $loader->load('services.yml');

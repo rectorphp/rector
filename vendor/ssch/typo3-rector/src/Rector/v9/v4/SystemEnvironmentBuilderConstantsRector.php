@@ -28,9 +28,9 @@ final class SystemEnvironmentBuilderConstantsRector extends \Rector\Core\Rector\
         return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ConstFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $constantsName = $this->getName($node);
         if (null === $constantsName) {

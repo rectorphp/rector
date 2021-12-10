@@ -39,7 +39,7 @@ class Parser implements \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\Pa
      * @param string $stream The stream resource.
      * @return Statement[] The syntax tree.
      */
-    public function parseStream($stream) : array
+    public function parseStream(string $stream) : array
     {
         $content = \file_get_contents($stream);
         if ($content === \false) {
@@ -53,7 +53,7 @@ class Parser implements \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\Pa
      * @param string $string The string to parse.
      * @return Statement[] The syntax tree.
      */
-    public function parseString($string) : array
+    public function parseString(string $string) : array
     {
         $tokens = $this->tokenizer->tokenizeString($string);
         return $this->parseTokens($tokens);
@@ -64,7 +64,7 @@ class Parser implements \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\Pa
      * @param TokenInterface[] $tokens The token stream to parse.
      * @return Statement[] The syntax tree.
      */
-    public function parseTokens($tokens) : array
+    public function parseTokens(array $tokens) : array
     {
         $stream = (new \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\TokenStream($tokens))->normalized();
         $state = new \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\ParserState($stream);

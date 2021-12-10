@@ -33,12 +33,7 @@ final class UsesClassNameImportSkipVoter implements \Rector\CodingStyle\Contract
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
-     * @param \PhpParser\Node $node
-     */
-    public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
+    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
     {
         $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file, $node);
         foreach ($useImportTypes as $useImportType) {

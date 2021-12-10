@@ -46,9 +46,9 @@ final class ChangeSetParametersArrayToArrayCollectionRector extends \Rector\Core
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipMethodCall($node)) {
             return null;

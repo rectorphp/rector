@@ -74,11 +74,7 @@ You can also exclude one or more specific files:
 EOF
 );
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function execute($input, $output)
+    protected function execute(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output)
     {
         $io = new \RectorPrefix20211210\Symfony\Component\Console\Style\SymfonyStyle($input, $output);
         $filenames = (array) $input->getArgument('filename');
@@ -228,11 +224,7 @@ EOF
         }
         return $default($fileOrDirectory);
     }
-    /**
-     * @param \Symfony\Component\Console\Completion\CompletionInput $input
-     * @param \Symfony\Component\Console\Completion\CompletionSuggestions $suggestions
-     */
-    public function complete($input, $suggestions) : void
+    public function complete(\RectorPrefix20211210\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20211210\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
         if ($input->mustSuggestOptionValuesFor('format')) {
             $suggestions->suggestValues(['txt', 'json', 'github']);

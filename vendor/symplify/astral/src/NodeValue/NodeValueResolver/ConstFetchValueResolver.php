@@ -27,11 +27,10 @@ final class ConstFetchValueResolver implements \RectorPrefix20211210\Symplify\As
         return \PhpParser\Node\Expr\ConstFetch::class;
     }
     /**
-     * @param \PhpParser\Node\Expr $expr
+     * @param ConstFetch $expr
      * @return null|mixed
-     * @param string $currentFilePath
      */
-    public function resolve($expr, $currentFilePath)
+    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath)
     {
         $constFetchName = $this->simpleNameResolver->getName($expr);
         if ($constFetchName === null) {

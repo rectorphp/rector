@@ -37,9 +37,9 @@ final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\G
         $this->typeUnwrapper = $typeUnwrapper;
     }
     /**
-     * @param \Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject
+     * @param PropertyRename $renameValueObject
      */
-    public function isConflicting($renameValueObject) : bool
+    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
     {
         return $this->isDateTimeAtNamingConvention($renameValueObject);
     }

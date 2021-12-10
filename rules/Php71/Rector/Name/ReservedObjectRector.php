@@ -57,9 +57,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Identifier::class, \PhpParser\Node\Name::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Identifier|Name $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Identifier) {
             return $this->processIdentifier($node);
@@ -69,7 +69,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($reservedKeywordsToReplacements);

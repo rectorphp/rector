@@ -43,11 +43,7 @@ CODE_SAMPLE
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr $columnName
-     * @param \PhpParser\Node\Expr $columnTca
-     */
-    protected function refactorColumn($columnName, $columnTca) : void
+    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
         $config = $this->extractSubArrayByKey($columnTca, self::CONFIG);
         if (!$config instanceof \PhpParser\Node\Expr\Array_) {

@@ -40,17 +40,11 @@ class StreamEncryption
             }
         }
     }
-    /**
-     * @param \React\Socket\Connection $stream
-     */
-    public function enable($stream)
+    public function enable(\RectorPrefix20211210\React\Socket\Connection $stream)
     {
         return $this->toggle($stream, \true);
     }
-    /**
-     * @param \React\Socket\Connection $stream
-     */
-    public function toggle($stream, $toggle)
+    public function toggle(\RectorPrefix20211210\React\Socket\Connection $stream, $toggle)
     {
         // pause actual stream instance to continue operation on raw stream socket
         $stream->pause();
@@ -87,10 +81,7 @@ class StreamEncryption
             throw $error;
         });
     }
-    /**
-     * @param \React\Promise\Deferred $deferred
-     */
-    public function toggleCrypto($socket, $deferred, $toggle, $method)
+    public function toggleCrypto($socket, \RectorPrefix20211210\React\Promise\Deferred $deferred, $toggle, $method)
     {
         $error = null;
         \set_error_handler(function ($_, $errstr) use(&$error) {

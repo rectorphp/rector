@@ -16,7 +16,7 @@ final class RectorServiceConfigurator extends \RectorPrefix20211210\Symfony\Comp
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : self
+    public function configure(array $configuration) : self
     {
         $this->ensureClassIsConfigurable($this->id);
         // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config

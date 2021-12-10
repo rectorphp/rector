@@ -136,10 +136,7 @@ class ExtEvLoop implements \RectorPrefix20211210\React\EventLoop\LoopInterface
         $this->timers->attach($timer, $event);
         return $timer;
     }
-    /**
-     * @param \React\EventLoop\TimerInterface $timer
-     */
-    public function cancelTimer($timer)
+    public function cancelTimer(\RectorPrefix20211210\React\EventLoop\TimerInterface $timer)
     {
         if (!isset($this->timers[$timer])) {
             return;

@@ -151,7 +151,7 @@ class Process extends \RectorPrefix20211210\Evenement\EventEmitter
      * @param float          $interval    Interval to periodically monitor process state (seconds)
      * @throws \RuntimeException If the process is already running or fails to start
      */
-    public function start($loop = null, $interval = 0.1)
+    public function start(\RectorPrefix20211210\React\EventLoop\LoopInterface $loop = null, $interval = 0.1)
     {
         if ($this->isRunning()) {
             throw new \RuntimeException('Process is already running');

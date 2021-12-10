@@ -17,11 +17,7 @@ use Symplify\SmartFileSystem\SmartFileInfo;
  */
 trait DirectoryAssertableTrait
 {
-    /**
-     * @param string $expectedDirectory
-     * @param string $outputDirectory
-     */
-    protected function assertDirectoryEquals($expectedDirectory, $outputDirectory) : void
+    protected function assertDirectoryEquals(string $expectedDirectory, string $outputDirectory) : void
     {
         $expectedFileInfos = $this->findFileInfosInDirectory($expectedDirectory);
         $outputFileInfos = $this->findFileInfosInDirectory($outputDirectory);

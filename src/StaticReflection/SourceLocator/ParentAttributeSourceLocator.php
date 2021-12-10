@@ -45,11 +45,7 @@ final class ParentAttributeSourceLocator implements \PHPStan\BetterReflection\So
     {
         $this->astResolver = $astResolver;
     }
-    /**
-     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
-     * @param \PHPStan\BetterReflection\Identifier\Identifier $identifier
-     */
-    public function locateIdentifier($reflector, $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
+    public function locateIdentifier(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\Identifier $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
     {
         if ($identifier->getName() === 'Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure' && $this->reflectionProvider->hasClass($identifier->getName())) {
             $classReflection = $this->reflectionProvider->getClass($identifier->getName());
@@ -66,10 +62,8 @@ final class ParentAttributeSourceLocator implements \PHPStan\BetterReflection\So
     }
     /**
      * @return Reflection[]
-     * @param \PHPStan\BetterReflection\Reflector\Reflector $reflector
-     * @param \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType
      */
-    public function locateIdentifiersByType($reflector, $identifierType) : array
+    public function locateIdentifiersByType(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType) : array
     {
         return [];
     }

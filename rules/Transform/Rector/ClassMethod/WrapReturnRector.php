@@ -58,9 +58,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->typeMethodWraps as $typeMethodWrap) {
             if (!$this->isObjectType($node, $typeMethodWrap->getObjectType())) {
@@ -79,7 +79,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $typeMethodWraps = $configuration[self::TYPE_METHOD_WRAPS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($typeMethodWraps, \Rector\Transform\ValueObject\WrapReturn::class);

@@ -16,7 +16,7 @@ abstract class Declaration implements \PhpParser\Builder
      *
      * @return $this The builder instance (for fluid interface)
      */
-    public function addStmts($stmts)
+    public function addStmts(array $stmts)
     {
         foreach ($stmts as $stmt) {
             $this->addStmt($stmt);

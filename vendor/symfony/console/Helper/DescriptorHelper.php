@@ -41,10 +41,8 @@ class DescriptorHelper extends \RectorPrefix20211210\Symfony\Component\Console\H
      *
      * @throws InvalidArgumentException when the given format is not supported
      * @param object|null $object
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param mixed[] $options
      */
-    public function describe($output, $object, $options = [])
+    public function describe(\RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output, $object, array $options = [])
     {
         $options = \array_merge(['raw_text' => \false, 'format' => 'txt'], $options);
         if (!isset($this->descriptors[$options['format']])) {
@@ -57,10 +55,8 @@ class DescriptorHelper extends \RectorPrefix20211210\Symfony\Component\Console\H
      * Registers a descriptor.
      *
      * @return $this
-     * @param string $format
-     * @param \Symfony\Component\Console\Descriptor\DescriptorInterface $descriptor
      */
-    public function register($format, $descriptor)
+    public function register(string $format, \RectorPrefix20211210\Symfony\Component\Console\Descriptor\DescriptorInterface $descriptor)
     {
         $this->descriptors[$format] = $descriptor;
         return $this;

@@ -48,9 +48,8 @@ final class Type
     }
     /**
      * Creates the Type object according to the text notation.
-     * @param string $type
      */
-    public static function fromString($type) : self
+    public static function fromString(string $type) : self
     {
         if (!\preg_match('#(?:
 			\\?([\\w\\\\]+)|
@@ -70,9 +69,8 @@ final class Type
     /**
      * Resolves 'self', 'static' and 'parent' to the actual class name.
      * @param  \ReflectionFunctionAbstract|\ReflectionParameter|\ReflectionProperty  $reflection
-     * @param string $type
      */
-    public static function resolve($type, $reflection) : string
+    public static function resolve(string $type, $reflection) : string
     {
         $lower = \strtolower($type);
         if ($reflection instanceof \ReflectionFunction) {
@@ -168,9 +166,8 @@ final class Type
     }
     /**
      * Verifies type compatibility. For example, it checks if a value of a certain type could be passed as a parameter.
-     * @param string $type
      */
-    public function allows($type) : bool
+    public function allows(string $type) : bool
     {
         if ($this->types === ['mixed']) {
             return \true;

@@ -68,11 +68,9 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
         return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode::class;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-     * @param \PhpParser\Node $node
-     * @param \PHPStan\Analyser\NameScope $nameScope
+     * @param IdentifierTypeNode $typeNode
      */
-    public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
     {
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeNode->name);
         if (!$type instanceof \PHPStan\Type\MixedType) {

@@ -9,5 +9,5 @@ interface ConfigurableRectorInterface extends \Symplify\RuleDocGenerator\Contrac
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void;
+    public function configure(array $configuration) : void;
 }

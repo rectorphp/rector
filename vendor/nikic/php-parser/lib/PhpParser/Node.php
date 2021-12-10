@@ -96,14 +96,14 @@ interface Node
      *
      * @param Comment\Doc $docComment Doc comment to set
      */
-    public function setDocComment($docComment);
+    public function setDocComment(\PhpParser\Comment\Doc $docComment);
     /**
      * Sets an attribute on a node.
      *
      * @param string $key
      * @param mixed  $value
      */
-    public function setAttribute($key, $value);
+    public function setAttribute(string $key, $value);
     /**
      * Returns whether an attribute exists.
      *
@@ -111,7 +111,7 @@ interface Node
      *
      * @return bool
      */
-    public function hasAttribute($key) : bool;
+    public function hasAttribute(string $key) : bool;
     /**
      * Returns the value of an attribute.
      *
@@ -120,7 +120,7 @@ interface Node
      *
      * @return mixed
      */
-    public function getAttribute($key, $default = null);
+    public function getAttribute(string $key, $default = null);
     /**
      * Returns all the attributes of this node.
      *
@@ -132,5 +132,5 @@ interface Node
      *
      * @param array $attributes
      */
-    public function setAttributes($attributes);
+    public function setAttributes(array $attributes);
 }

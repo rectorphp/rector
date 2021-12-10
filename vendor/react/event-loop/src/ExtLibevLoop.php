@@ -114,10 +114,7 @@ final class ExtLibevLoop implements \RectorPrefix20211210\React\EventLoop\LoopIn
         $this->loop->add($event);
         return $timer;
     }
-    /**
-     * @param \React\EventLoop\TimerInterface $timer
-     */
-    public function cancelTimer($timer)
+    public function cancelTimer(\RectorPrefix20211210\React\EventLoop\TimerInterface $timer)
     {
         if (isset($this->timerEvents[$timer])) {
             $this->loop->remove($this->timerEvents[$timer]);

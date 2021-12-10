@@ -10,17 +10,11 @@ final class BrowserConditionMatcher implements \Ssch\TYPO3Rector\Contract\FilePr
      * @var string
      */
     private const TYPE = 'browser';
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         return $condition;
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         return \strncmp($condition, self::TYPE, \strlen(self::TYPE)) === 0;
     }

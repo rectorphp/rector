@@ -55,9 +55,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->classManipulator->hasTrait($node, 'Gedmo\\Timestampable\\Traits\\TimestampableEntity')) {
             return null;

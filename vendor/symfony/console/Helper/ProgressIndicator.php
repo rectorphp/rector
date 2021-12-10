@@ -80,18 +80,16 @@ class ProgressIndicator
     }
     /**
      * Sets the current indicator message.
-     * @param string|null $message
      */
-    public function setMessage($message)
+    public function setMessage(?string $message)
     {
         $this->message = $message;
         $this->display();
     }
     /**
      * Starts the indicator output.
-     * @param string $message
      */
-    public function start($message)
+    public function start(string $message)
     {
         if ($this->started) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\LogicException('Progress indicator already started.');
@@ -127,7 +125,7 @@ class ProgressIndicator
      *
      * @param $message
      */
-    public function finish($message)
+    public function finish(string $message)
     {
         if (!$this->started) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\LogicException('Progress indicator has not yet been started.');
@@ -139,9 +137,8 @@ class ProgressIndicator
     }
     /**
      * Gets the format for a given name.
-     * @param string $name
      */
-    public static function getFormatDefinition($name) : ?string
+    public static function getFormatDefinition(string $name) : ?string
     {
         return self::FORMATS[$name] ?? null;
     }
@@ -149,19 +146,16 @@ class ProgressIndicator
      * Sets a placeholder formatter for a given name.
      *
      * This method also allow you to override an existing placeholder.
-     * @param string $name
-     * @param callable $callable
      */
-    public static function setPlaceholderFormatterDefinition($name, $callable)
+    public static function setPlaceholderFormatterDefinition(string $name, callable $callable)
     {
         self::$formatters = self::$formatters ?? self::initPlaceholderFormatters();
         self::$formatters[$name] = $callable;
     }
     /**
      * Gets the placeholder formatter for a given name (including the delimiter char like %).
-     * @param string $name
      */
-    public static function getPlaceholderFormatterDefinition($name) : ?callable
+    public static function getPlaceholderFormatterDefinition(string $name) : ?callable
     {
         self::$formatters = self::$formatters ?? self::initPlaceholderFormatters();
         return self::$formatters[$name] ?? null;

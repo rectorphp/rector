@@ -51,10 +51,7 @@ final class NewLine
     {
         return $this->string;
     }
-    /**
-     * @param string $content
-     */
-    public static function fromSingleCharacter($content) : self
+    public static function fromSingleCharacter(string $content) : self
     {
         $matches = \RectorPrefix20211210\Nette\Utils\Strings::match($content, self::VALID_NEWLINE_REGEX);
         if ($matches === null) {
@@ -62,10 +59,7 @@ final class NewLine
         }
         return new self($content);
     }
-    /**
-     * @param string $content
-     */
-    public static function fromContent($content) : self
+    public static function fromContent(string $content) : self
     {
         $match = \RectorPrefix20211210\Nette\Utils\Strings::match($content, self::NEWLINE_REGEX);
         if (isset($match['newLine'])) {
@@ -73,10 +67,7 @@ final class NewLine
         }
         return self::fromSingleCharacter(\PHP_EOL);
     }
-    /**
-     * @param string $endOfLine
-     */
-    public static function fromEditorConfig($endOfLine) : self
+    public static function fromEditorConfig(string $endOfLine) : self
     {
         if (!\array_key_exists($endOfLine, self::ALLOWED_END_OF_LINE)) {
             $allowedEndOfLineValues = \array_keys(self::ALLOWED_END_OF_LINE);

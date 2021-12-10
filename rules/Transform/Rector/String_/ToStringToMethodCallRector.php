@@ -50,9 +50,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Cast\String_::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param String_|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\Cast\String_) {
             return $this->processStringNode($node);
@@ -62,7 +62,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $methodNamesByType = $configuration[self::METHOD_NAMES_BY_TYPE] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($methodNamesByType));

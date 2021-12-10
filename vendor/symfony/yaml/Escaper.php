@@ -33,7 +33,7 @@ class Escaper
      *
      * @param string $value A PHP value
      */
-    public static function requiresDoubleQuoting($value) : bool
+    public static function requiresDoubleQuoting(string $value) : bool
     {
         return 0 < \preg_match('/' . self::REGEX_CHARACTER_TO_ESCAPE . '/u', $value);
     }
@@ -42,7 +42,7 @@ class Escaper
      *
      * @param string $value A PHP value
      */
-    public static function escapeWithDoubleQuotes($value) : string
+    public static function escapeWithDoubleQuotes(string $value) : string
     {
         return \sprintf('"%s"', \str_replace(self::ESCAPEES, self::ESCAPED, $value));
     }
@@ -51,7 +51,7 @@ class Escaper
      *
      * @param string $value A PHP value
      */
-    public static function requiresSingleQuoting($value) : bool
+    public static function requiresSingleQuoting(string $value) : bool
     {
         // Determines if a PHP value is entirely composed of a value that would
         // require single quoting in YAML.
@@ -67,7 +67,7 @@ class Escaper
      *
      * @param string $value A PHP value
      */
-    public static function escapeWithSingleQuotes($value) : string
+    public static function escapeWithSingleQuotes(string $value) : string
     {
         return \sprintf("'%s'", \str_replace('\'', '\'\'', $value));
     }

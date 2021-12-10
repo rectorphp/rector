@@ -62,9 +62,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\For_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param For_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $countInCond = null;
         $variableName = null;

@@ -99,11 +99,7 @@ final class ThroughStream extends \RectorPrefix20211210\Evenement\EventEmitter i
         }
         $this->paused = \false;
     }
-    /**
-     * @param \React\Stream\WritableStreamInterface $dest
-     * @param mixed[] $options
-     */
-    public function pipe($dest, $options = array())
+    public function pipe(\RectorPrefix20211210\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
         return \RectorPrefix20211210\React\Stream\Util::pipe($this, $dest, $options);
     }

@@ -47,9 +47,9 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod|ClassConst $node
      */
-    public function resolve($node) : \PHPStan\Type\Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {

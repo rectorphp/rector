@@ -38,9 +38,9 @@ final class PropertyTypeResolver implements \Rector\NodeTypeResolver\Contract\No
         return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Property $node
      */
-    public function resolve($node) : \PHPStan\Type\Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         // fake property to local PropertyFetch → PHPStan understands that
         $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), (string) $node->props[0]->name);

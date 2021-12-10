@@ -9,17 +9,14 @@ use PhpParser\Node\Param;
 use RectorPrefix20211210\Symplify\Astral\Contract\NodeNameResolverInterface;
 final class ParamNodeNameResolver implements \RectorPrefix20211210\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function match($node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
         return $node instanceof \PhpParser\Node\Param;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Param $node
      */
-    public function resolve($node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         $paramName = $node->var->name;
         if ($paramName instanceof \PhpParser\Node\Expr) {

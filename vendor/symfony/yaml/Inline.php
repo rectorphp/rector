@@ -29,12 +29,7 @@ class Inline
     private static $objectSupport = \false;
     private static $objectForMap = \false;
     private static $constantSupport = \false;
-    /**
-     * @param int $flags
-     * @param int|null $parsedLineNumber
-     * @param string|null $parsedFilename
-     */
-    public static function initialize($flags, $parsedLineNumber = null, $parsedFilename = null)
+    public static function initialize(int $flags, int $parsedLineNumber = null, string $parsedFilename = null)
     {
         self::$exceptionOnInvalidType = (bool) (\RectorPrefix20211210\Symfony\Component\Yaml\Yaml::PARSE_EXCEPTION_ON_INVALID_TYPE & $flags);
         self::$objectSupport = (bool) (\RectorPrefix20211210\Symfony\Component\Yaml\Yaml::PARSE_OBJECT & $flags);
@@ -56,7 +51,7 @@ class Inline
      *
      * @throws ParseException
      */
-    public static function parse($value = null, $flags = 0, &$references = [])
+    public static function parse(string $value = null, int $flags = 0, array &$references = [])
     {
         self::initialize($flags);
         $value = \trim($value);
@@ -106,7 +101,7 @@ class Inline
      *
      * @throws DumpException When trying to dump PHP resource
      */
-    public static function dump($value, $flags = 0) : string
+    public static function dump($value, int $flags = 0) : string
     {
         switch (\true) {
             case \is_resource($value):
@@ -241,15 +236,8 @@ class Inline
      * @return mixed
      *
      * @throws ParseException When malformed inline YAML string is parsed
-     * @param string $scalar
-     * @param int $flags
-     * @param mixed[]|null $delimiters
-     * @param int $i
-     * @param bool $evaluate
-     * @param mixed[] $references
-     * @param bool|null $isQuoted
      */
-    public static function parseScalar($scalar, $flags = 0, $delimiters = null, &$i = 0, $evaluate = \true, &$references = [], &$isQuoted = null)
+    public static function parseScalar(string $scalar, int $flags = 0, array $delimiters = null, int &$i = 0, bool $evaluate = \true, array &$references = [], bool &$isQuoted = null)
     {
         if (\in_array($scalar[$i], ['"', "'"], \true)) {
             // quoted scalar
@@ -665,10 +653,7 @@ class Inline
         }
         throw new \RectorPrefix20211210\Symfony\Component\Yaml\Exception\ParseException(\sprintf('Tags support is not enabled. Enable the "Yaml::PARSE_CUSTOM_TAGS" flag to use "!%s".', $tag), self::$parsedLineNumber + 1, $value, self::$parsedFilename);
     }
-    /**
-     * @param string $scalar
-     */
-    public static function evaluateBinaryScalar($scalar) : string
+    public static function evaluateBinaryScalar(string $scalar) : string
     {
         $parsedBinaryData = self::parseScalar(\preg_replace('/\\s/', '', $scalar));
         if (0 !== \strlen($parsedBinaryData) % 4) {

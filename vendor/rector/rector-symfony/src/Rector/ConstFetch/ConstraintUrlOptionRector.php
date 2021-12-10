@@ -35,9 +35,9 @@ final class ConstraintUrlOptionRector extends \Rector\Core\Rector\AbstractRector
         return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ConstFetch $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->valueResolver->isTrue($node)) {
             return null;

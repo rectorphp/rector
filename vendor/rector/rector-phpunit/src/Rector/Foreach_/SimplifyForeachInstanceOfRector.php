@@ -42,9 +42,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Foreach_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var MethodCall|StaticCall|null $matchedNode */
         $matchedNode = $this->foreachManipulator->matchOnlyStmt($node, function (\PhpParser\Node $node, \PhpParser\Node\Stmt\Foreach_ $foreachNode) : ?Node {

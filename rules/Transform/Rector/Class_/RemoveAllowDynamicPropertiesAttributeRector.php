@@ -61,19 +61,16 @@ CODE_SAMPLE
     {
         return [\PhpParser\Node\Stmt\Class_::class];
     }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $transformOnNamespaces = $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allString($transformOnNamespaces);
         $this->transformOnNamespaces = $transformOnNamespaces;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldRemove($node)) {
             return $this->removeAllowDynamicPropertiesAttribute($node);

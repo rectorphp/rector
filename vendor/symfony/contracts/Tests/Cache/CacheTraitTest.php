@@ -79,31 +79,19 @@ class TestPool implements \RectorPrefix20211210\Psr\Cache\CacheItemPoolInterface
     public function deleteItem($key) : bool
     {
     }
-    /**
-     * @param mixed[] $keys
-     */
-    public function deleteItems($keys = []) : bool
+    public function deleteItems(array $keys = []) : bool
     {
     }
     public function getItem($key) : \RectorPrefix20211210\Psr\Cache\CacheItemInterface
     {
     }
-    /**
-     * @param mixed[] $key
-     */
-    public function getItems($key = []) : iterable
+    public function getItems(array $key = []) : iterable
     {
     }
-    /**
-     * @param \Psr\Cache\CacheItemInterface $item
-     */
-    public function saveDeferred($item) : bool
+    public function saveDeferred(\RectorPrefix20211210\Psr\Cache\CacheItemInterface $item) : bool
     {
     }
-    /**
-     * @param \Psr\Cache\CacheItemInterface $item
-     */
-    public function save($item) : bool
+    public function save(\RectorPrefix20211210\Psr\Cache\CacheItemInterface $item) : bool
     {
     }
     public function commit() : bool

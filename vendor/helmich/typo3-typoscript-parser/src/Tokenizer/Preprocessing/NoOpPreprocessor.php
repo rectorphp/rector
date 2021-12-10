@@ -14,7 +14,7 @@ class NoOpPreprocessor implements \RectorPrefix20211210\Helmich\TypoScriptParser
      * @param string $contents Un-processed Typoscript contents
      * @return string Processed TypoScript contents
      */
-    public function preprocess($contents) : string
+    public function preprocess(string $contents) : string
     {
         return $contents;
     }

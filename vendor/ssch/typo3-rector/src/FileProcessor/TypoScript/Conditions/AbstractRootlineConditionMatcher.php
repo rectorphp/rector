@@ -7,10 +7,7 @@ use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptCond
 use Ssch\TYPO3Rector\Helper\ArrayUtility;
 abstract class AbstractRootlineConditionMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         \preg_match('#' . $this->getType() . self::ZERO_ONE_OR_MORE_WHITESPACES . '=' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(.*)#', $condition, $matches);
         if (!\is_array($matches)) {
@@ -23,10 +20,7 @@ abstract class AbstractRootlineConditionMatcher implements \Ssch\TYPO3Rector\Con
         }
         return \implode(' || ', $newConditions);
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         if (\strpos($condition, self::CONTAINS_CONSTANT) !== \false) {
             return \false;

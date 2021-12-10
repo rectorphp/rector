@@ -15,8 +15,6 @@ interface LongestCommonSubsequenceCalculator
 {
     /**
      * Calculates the longest common subsequence of two arrays.
-     * @param mixed[] $from
-     * @param mixed[] $to
      */
-    public function calculate($from, $to) : array;
+    public function calculate(array $from, array $to) : array;
 }

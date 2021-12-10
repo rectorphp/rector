@@ -26,9 +26,8 @@ final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3R
     }
     /**
      * @return Expr[]
-     * @param \PhpParser\Node\Expr\MethodCall $oldNode
      */
-    public function refactor($oldNode) : array
+    public function refactor(\PhpParser\Node\Expr\MethodCall $oldNode) : array
     {
         $tableArgument = \array_shift($oldNode->args);
         $dataArgument = \array_shift($oldNode->args);
@@ -39,10 +38,7 @@ final class DatabaseConnectionExecInsertQueryRefactoring implements \Ssch\TYPO3R
         $connectionInsertCall = $this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('connection'), 'insert', [$tableArgument->value, $dataArgument->value]);
         return [$connectionAssignment, $connectionInsertCall];
     }
-    /**
-     * @param string $methodName
-     */
-    public function canHandle($methodName) : bool
+    public function canHandle(string $methodName) : bool
     {
         return 'exec_INSERTquery' === $methodName;
     }

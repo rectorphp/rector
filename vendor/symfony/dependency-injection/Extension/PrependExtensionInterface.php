@@ -15,7 +15,6 @@ interface PrependExtensionInterface
 {
     /**
      * Allow an extension to prepend the extension configurations.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function prepend($container);
+    public function prepend(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container);
 }

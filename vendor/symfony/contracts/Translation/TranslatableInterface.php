@@ -15,9 +15,5 @@ namespace RectorPrefix20211210\Symfony\Contracts\Translation;
  */
 interface TranslatableInterface
 {
-    /**
-     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
-     * @param string|null $locale
-     */
-    public function trans($translator, $locale = null) : string;
+    public function trans(\RectorPrefix20211210\Symfony\Contracts\Translation\TranslatorInterface $translator, string $locale = null) : string;
 }

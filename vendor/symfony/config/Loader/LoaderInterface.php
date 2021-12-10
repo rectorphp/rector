@@ -25,18 +25,16 @@ interface LoaderInterface
      * @return mixed
      *
      * @throws \Exception If something went wrong
-     * @param string|null $type
      */
-    public function load($resource, $type = null);
+    public function load($resource, string $type = null);
     /**
      * Returns whether this class supports the given resource.
      *
      * @param mixed $resource A resource
      *
      * @return bool
-     * @param string|null $type
      */
-    public function supports($resource, $type = null);
+    public function supports($resource, string $type = null);
     /**
      * Gets the loader resolver.
      *
@@ -45,7 +43,6 @@ interface LoaderInterface
     public function getResolver();
     /**
      * Sets the loader resolver.
-     * @param \Symfony\Component\Config\Loader\LoaderResolverInterface $resolver
      */
-    public function setResolver($resolver);
+    public function setResolver(\RectorPrefix20211210\Symfony\Component\Config\Loader\LoaderResolverInterface $resolver);
 }

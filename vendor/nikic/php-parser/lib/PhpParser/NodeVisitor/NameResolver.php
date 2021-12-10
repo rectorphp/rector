@@ -47,18 +47,12 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
     {
         return $this->nameContext;
     }
-    /**
-     * @param mixed[] $nodes
-     */
-    public function beforeTraverse($nodes)
+    public function beforeTraverse(array $nodes)
     {
         $this->nameContext->startNamespace();
         return null;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node)
+    public function enterNode(\PhpParser\Node $node)
     {
         if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
             $this->nameContext->startNamespace($node->name);
@@ -195,7 +189,7 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
      *
      * @return Name Resolved name, or original name with attribute
      */
-    protected function resolveName($name, $type) : \PhpParser\Node\Name
+    protected function resolveName(\PhpParser\Node\Name $name, int $type) : \PhpParser\Node\Name
     {
         if (!$this->replaceNodes) {
             $resolvedName = $this->nameContext->getResolvedName($name, $type);
@@ -221,24 +215,15 @@ class NameResolver extends \PhpParser\NodeVisitorAbstract
         $name->setAttribute('namespacedName', \PhpParser\Node\Name\FullyQualified::concat($this->nameContext->getNamespace(), $name, $name->getAttributes()));
         return $name;
     }
-    /**
-     * @param \PhpParser\Node\Name $name
-     */
-    protected function resolveClassName($name)
+    protected function resolveClassName(\PhpParser\Node\Name $name)
     {
         return $this->resolveName($name, \PhpParser\Node\Stmt\Use_::TYPE_NORMAL);
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    protected function addNamespacedName($node)
+    protected function addNamespacedName(\PhpParser\Node $node)
     {
         $node->namespacedName = \PhpParser\Node\Name::concat($this->nameContext->getNamespace(), (string) $node->name);
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    protected function resolveAttrGroups($node)
+    protected function resolveAttrGroups(\PhpParser\Node $node)
     {
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {

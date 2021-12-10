@@ -10,10 +10,7 @@ final class AdminUserConditionMatcher implements \Ssch\TYPO3Rector\Contract\File
      * @var string
      */
     private const TYPE = 'adminUser';
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         \preg_match('#^' . self::TYPE . '\\s*=\\s*(?<value>[0-1])$#iUm', $condition, $matches);
         if (!\is_string($matches['value'])) {
@@ -25,10 +22,7 @@ final class AdminUserConditionMatcher implements \Ssch\TYPO3Rector\Contract\File
         }
         return 'backend.user.isAdmin == 0';
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         return \strncmp($condition, self::TYPE, \strlen(self::TYPE)) === 0;
     }

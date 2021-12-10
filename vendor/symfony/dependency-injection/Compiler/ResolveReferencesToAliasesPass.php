@@ -22,9 +22,8 @@ class ResolveReferencesToAliasesPass extends \RectorPrefix20211210\Symfony\Compo
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         parent::process($container);
         foreach ($container->getAliases() as $id => $alias) {
@@ -37,9 +36,8 @@ class ResolveReferencesToAliasesPass extends \RectorPrefix20211210\Symfony\Compo
     }
     /**
      * {@inheritdoc}
-     * @param bool $isRoot
      */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if (!$value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Reference) {
             return parent::processValue($value, $isRoot);

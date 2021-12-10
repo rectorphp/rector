@@ -54,11 +54,7 @@ class Emulative extends \PhpParser\Lexer
             }
         }
     }
-    /**
-     * @param string $code
-     * @param \PhpParser\ErrorHandler|null $errorHandler
-     */
-    public function startLexing($code, $errorHandler = null)
+    public function startLexing(string $code, \PhpParser\ErrorHandler $errorHandler = null)
     {
         $emulators = \array_filter($this->emulators, function ($emulator) use($code) {
             return $emulator->isEmulationNeeded($code);

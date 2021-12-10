@@ -99,17 +99,15 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @return array|bool|string|int|float|null
      *
      * @throws InvalidArgumentException if the parameter is not defined
-     * @param string $name
      */
-    public function getParameter($name)
+    public function getParameter(string $name)
     {
         return $this->parameterBag->get($name);
     }
     /**
      * @return bool
-     * @param string $name
      */
-    public function hasParameter($name)
+    public function hasParameter(string $name)
     {
         return $this->parameterBag->has($name);
     }
@@ -119,7 +117,7 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @param string                           $name  The parameter name
      * @param array|bool|string|int|float|null $value The parameter value
      */
-    public function setParameter($name, $value)
+    public function setParameter(string $name, $value)
     {
         $this->parameterBag->set($name, $value);
     }
@@ -129,9 +127,8 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * Setting a synthetic service to null resets it: has() returns false and get()
      * behaves in the same way as if the service was never created.
      * @param object|null $service
-     * @param string $id
      */
-    public function set($id, $service)
+    public function set(string $id, $service)
     {
         // Runs the internal initializer; used by the dumped container to include always-needed files
         if (isset($this->privates['service_container']) && $this->privates['service_container'] instanceof \Closure) {
@@ -169,7 +166,7 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      *
      * @return bool
      */
-    public function has($id)
+    public function has(string $id)
     {
         if (isset($this->aliases[$id])) {
             $id = $this->aliases[$id];
@@ -192,10 +189,8 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @throws \Exception                        if an exception has been thrown when the service has been resolved
      *
      * @see Reference
-     * @param string $id
-     * @param int $invalidBehavior
      */
-    public function get($id, $invalidBehavior = 1)
+    public function get(string $id, int $invalidBehavior = 1)
     {
         return $this->services[$id] ?? $this->services[$id = $this->aliases[$id] ?? $id] ?? ('service_container' === $id ? $this : ($this->factories[$id] ?? [$this, 'make'])($id, $invalidBehavior));
     }
@@ -250,9 +245,8 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * Returns true if the given service has actually been initialized.
      *
      * @return bool
-     * @param string $id
      */
-    public function initialized($id)
+    public function initialized(string $id)
     {
         if (isset($this->aliases[$id])) {
             $id = $this->aliases[$id];
@@ -301,9 +295,8 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * Camelizes a string.
      *
      * @return string
-     * @param string $id
      */
-    public static function camelize($id)
+    public static function camelize(string $id)
     {
         return \strtr(\ucwords(\strtr($id, ['_' => ' ', '.' => '_ ', '\\' => '_ '])), [' ' => '']);
     }
@@ -311,17 +304,15 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * A string to underscore.
      *
      * @return string
-     * @param string $id
      */
-    public static function underscore($id)
+    public static function underscore(string $id)
     {
         return \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], ['\\1_\\2', '\\1_\\2'], \str_replace('_', '.', $id)));
     }
     /**
      * Creates a service by requiring its factory file.
-     * @param string $file
      */
-    protected function load($file)
+    protected function load(string $file)
     {
         return require $file;
     }
@@ -331,9 +322,8 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @return mixed
      *
      * @throws EnvNotFoundException When the environment variable is not found and has no default value
-     * @param string $name
      */
-    protected function getEnv($name)
+    protected function getEnv(string $name)
     {
         if (isset($this->resolving[$envName = "env({$name})"])) {
             throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($this->resolving));
@@ -370,10 +360,8 @@ class Container implements \RectorPrefix20211210\Symfony\Component\DependencyInj
      * @return mixed
      *
      * @internal
-     * @param string $id
-     * @param string|null $method
      */
-    protected final function getService($registry, $id, $method, $load)
+    protected final function getService($registry, string $id, ?string $method, $load)
     {
         if ('service_container' === $id) {
             return $this;

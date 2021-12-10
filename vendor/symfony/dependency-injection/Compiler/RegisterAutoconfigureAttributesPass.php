@@ -25,9 +25,8 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20211210
     private static $registerForAutoconfiguration;
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         if (80000 > \PHP_VERSION_ID) {
             return;
@@ -38,18 +37,11 @@ final class RegisterAutoconfigureAttributesPass implements \RectorPrefix20211210
             }
         }
     }
-    /**
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
-     */
-    public function accept($definition) : bool
+    public function accept(\RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition $definition) : bool
     {
         return 80000 <= \PHP_VERSION_ID && $definition->isAutoconfigured() && !$definition->hasTag('container.ignore_attributes');
     }
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param \ReflectionClass $class
-     */
-    public function processClass($container, $class)
+    public function processClass(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container, \ReflectionClass $class)
     {
         foreach ([] as $attribute) {
             self::registerForAutoconfiguration($container, $class, $attribute);

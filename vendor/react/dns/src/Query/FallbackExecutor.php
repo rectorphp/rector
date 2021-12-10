@@ -12,10 +12,7 @@ final class FallbackExecutor implements \RectorPrefix20211210\React\Dns\Query\Ex
         $this->executor = $executor;
         $this->fallback = $fallback;
     }
-    /**
-     * @param \React\Dns\Query\Query $query
-     */
-    public function query($query)
+    public function query(\RectorPrefix20211210\React\Dns\Query\Query $query)
     {
         $cancelled = \false;
         $fallback = $this->fallback;

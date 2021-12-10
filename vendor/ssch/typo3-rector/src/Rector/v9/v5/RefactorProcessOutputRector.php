@@ -36,9 +36,9 @@ final class RefactorProcessOutputRector extends \Rector\Core\Rector\AbstractRect
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->typo3NodeResolver->isMethodCallOnGlobals($node, 'processOutput', \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)) {
             $this->refactorToNewMethodCalls($node);

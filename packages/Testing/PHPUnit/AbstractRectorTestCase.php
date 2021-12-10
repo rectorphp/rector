@@ -84,10 +84,8 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     }
     /**
      * @return Iterator<SmartFileInfo>
-     * @param string $directory
-     * @param string $suffix
      */
-    protected function yieldFilesFromDirectory($directory, $suffix = '*.php.inc') : \Iterator
+    protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : \Iterator
     {
         return \RectorPrefix20211210\Symplify\EasyTesting\DataProvider\StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
@@ -95,11 +93,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         return \strncasecmp(\PHP_OS, 'WIN', 3) === 0;
     }
-    /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
-     * @param bool $allowMatches
-     */
-    protected function doTestFileInfo($fixtureFileInfo, $allowMatches = \true) : void
+    protected function doTestFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void
     {
         $inputFileInfoAndExpectedFileInfo = \RectorPrefix20211210\Symplify\EasyTesting\StaticFixtureSplitter::splitFileInfoToLocalInputAndExpectedFileInfos($fixtureFileInfo);
         $inputFileInfo = $inputFileInfoAndExpectedFileInfo->getInputFileInfo();

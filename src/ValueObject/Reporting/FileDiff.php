@@ -113,7 +113,7 @@ final class FileDiff implements \RectorPrefix20211210\Symplify\EasyParallel\Cont
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode($json) : \RectorPrefix20211210\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20211210\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json[self::KEY_RELATIVE_FILE_PATH], $json[self::KEY_DIFF], $json[self::KEY_DIFF_CONSOLE_FORMATTED], $json[self::KEY_RECTORS_WITH_LINE_CHANGES]);
     }

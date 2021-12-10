@@ -24,9 +24,8 @@ class EnvPlaceholderParameterBag extends \RectorPrefix20211210\Symfony\Component
     private static $counter = 0;
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (\strncmp($name, 'env(', \strlen('env(')) === 0 && \substr_compare($name, ')', -\strlen(')')) === 0 && 'env()' !== $name) {
             $env = \substr($name, 4, -1);
@@ -88,9 +87,8 @@ class EnvPlaceholderParameterBag extends \RectorPrefix20211210\Symfony\Component
     }
     /**
      * Merges the env placeholders of another EnvPlaceholderParameterBag.
-     * @param $this $bag
      */
-    public function mergeEnvPlaceholders($bag)
+    public function mergeEnvPlaceholders(self $bag)
     {
         if ($newPlaceholders = $bag->getEnvPlaceholders()) {
             $this->envPlaceholders += $newPlaceholders;
@@ -107,9 +105,8 @@ class EnvPlaceholderParameterBag extends \RectorPrefix20211210\Symfony\Component
     }
     /**
      * Maps env prefixes to their corresponding PHP types.
-     * @param mixed[] $providedTypes
      */
-    public function setProvidedTypes($providedTypes)
+    public function setProvidedTypes(array $providedTypes)
     {
         $this->providedTypes = $providedTypes;
     }

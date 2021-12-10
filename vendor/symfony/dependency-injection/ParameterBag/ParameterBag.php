@@ -35,9 +35,8 @@ class ParameterBag implements \RectorPrefix20211210\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @param mixed[] $parameters
      */
-    public function add($parameters)
+    public function add(array $parameters)
     {
         foreach ($parameters as $key => $value) {
             $this->set($key, $value);
@@ -52,9 +51,8 @@ class ParameterBag implements \RectorPrefix20211210\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function get($name)
+    public function get(string $name)
     {
         if (!\array_key_exists($name, $this->parameters)) {
             if (!$name) {
@@ -87,25 +85,22 @@ class ParameterBag implements \RectorPrefix20211210\Symfony\Component\Dependency
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function set($name, $value)
+    public function set(string $name, $value)
     {
         $this->parameters[$name] = $value;
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function has($name)
+    public function has(string $name)
     {
         return \array_key_exists($name, $this->parameters);
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function remove($name)
+    public function remove(string $name)
     {
         unset($this->parameters[$name]);
     }
@@ -142,7 +137,7 @@ class ParameterBag implements \RectorPrefix20211210\Symfony\Component\Dependency
      * @throws ParameterCircularReferenceException if a circular reference if detected
      * @throws RuntimeException                    when a given parameter has a type problem
      */
-    public function resolveValue($value, $resolving = [])
+    public function resolveValue($value, array $resolving = [])
     {
         if (\is_array($value)) {
             $args = [];
@@ -166,9 +161,8 @@ class ParameterBag implements \RectorPrefix20211210\Symfony\Component\Dependency
      * @throws ParameterNotFoundException          if a placeholder references a parameter that does not exist
      * @throws ParameterCircularReferenceException if a circular reference if detected
      * @throws RuntimeException                    when a given parameter has a type problem
-     * @param string $value
      */
-    public function resolveString($value, $resolving = [])
+    public function resolveString(string $value, array $resolving = [])
     {
         // we do this to deal with non string values (Boolean, integer, ...)
         // as the preg_replace_callback throw an exception when trying

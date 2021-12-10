@@ -32,9 +32,8 @@ class ServiceLocator extends \RectorPrefix20211210\Symfony\Component\DependencyI
      * {@inheritdoc}
      *
      * @return mixed
-     * @param string $id
      */
-    public function get($id)
+    public function get(string $id)
     {
         return isset($this->serviceMap[$id]) ? ($this->factory)(...$this->serviceMap[$id]) : parent::get($id);
     }

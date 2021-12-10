@@ -47,10 +47,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Do_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Do_ $node
      * @return mixed[]|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         if (!$this->valueResolver->isFalse($node->cond)) {
             return null;

@@ -58,10 +58,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Empty_::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Empty_|BooleanNot $node
      * @return \PhpParser\Node\Expr|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

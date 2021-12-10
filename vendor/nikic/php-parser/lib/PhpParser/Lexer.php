@@ -61,7 +61,7 @@ class Lexer
      * @param ErrorHandler|null $errorHandler Error handler to use for lexing errors. Defaults to
      *                                        ErrorHandler\Throwing
      */
-    public function startLexing($code, $errorHandler = null)
+    public function startLexing(string $code, \PhpParser\ErrorHandler $errorHandler = null)
     {
         if (null === $errorHandler) {
             $errorHandler = new \PhpParser\ErrorHandler\Throwing();
@@ -106,10 +106,7 @@ class Lexer
     {
         return ($token[0] === \T_COMMENT || $token[0] === \T_DOC_COMMENT) && \substr($token[1], 0, 2) === '/*' && \substr($token[1], -2) !== '*/';
     }
-    /**
-     * @param \PhpParser\ErrorHandler $errorHandler
-     */
-    protected function postprocessTokens($errorHandler)
+    protected function postprocessTokens(\PhpParser\ErrorHandler $errorHandler)
     {
         // PHP's error handling for token_get_all() is rather bad, so if we want detailed
         // error information we need to compute it ourselves. Invalid character errors are

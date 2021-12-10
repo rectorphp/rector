@@ -55,9 +55,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\New_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param New_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->class, 'Illuminate\\Auth\\Events\\Login')) {
             return null;

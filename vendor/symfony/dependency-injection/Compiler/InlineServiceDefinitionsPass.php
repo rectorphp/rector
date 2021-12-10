@@ -33,10 +33,7 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20211210\Symfony\Compone
     {
         $this->analyzingPass = $analyzingPass;
     }
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->container = $container;
         if ($this->analyzingPass) {
@@ -99,9 +96,8 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20211210\Symfony\Compone
     }
     /**
      * {@inheritdoc}
-     * @param bool $isRoot
      */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if ($value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
             // References found in ArgumentInterface::getValues() are not inlineable

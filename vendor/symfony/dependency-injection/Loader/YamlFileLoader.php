@@ -102,9 +102,8 @@ class YamlFileLoader extends \RectorPrefix20211210\Symfony\Component\DependencyI
     }
     /**
      * {@inheritdoc}
-     * @param string|null $type
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, string $type = null)
     {
         if (!\is_string($resource)) {
             return \false;
@@ -552,9 +551,8 @@ class YamlFileLoader extends \RectorPrefix20211210\Symfony\Component\DependencyI
      * @return array|null
      *
      * @throws InvalidArgumentException when the given file is not a local file or when it does not exist
-     * @param string $file
      */
-    protected function loadFile($file)
+    protected function loadFile(string $file)
     {
         if (!\class_exists(\RectorPrefix20211210\Symfony\Component\Yaml\Parser::class)) {
             throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\RuntimeException('Unable to load YAML config files as the Symfony Yaml Component is not installed.');

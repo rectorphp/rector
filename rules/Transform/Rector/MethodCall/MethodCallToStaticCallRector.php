@@ -69,9 +69,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->methodCallsToStaticCalls as $methodCallToStaticCall) {
             if (!$this->isObjectType($node->var, $methodCallToStaticCall->getOldObjectType())) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($methodCallsToStaticCalls);

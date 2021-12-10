@@ -35,9 +35,8 @@ class Alias
      * Sets if this Alias is public.
      *
      * @return $this
-     * @param bool $boolean
      */
-    public function setPublic($boolean)
+    public function setPublic(bool $boolean)
     {
         $this->public = $boolean;
         return $this;
@@ -48,9 +47,8 @@ class Alias
      * @return $this
      *
      * @deprecated since Symfony 5.2, use setPublic() instead
-     * @param bool $boolean
      */
-    public function setPrivate($boolean)
+    public function setPrivate(bool $boolean)
     {
         trigger_deprecation('symfony/dependency-injection', '5.2', 'The "%s()" method is deprecated, use "setPublic()" instead.', __METHOD__);
         return $this->setPublic(!$boolean);
@@ -110,9 +108,8 @@ class Alias
     }
     /**
      * @deprecated since Symfony 5.1, use "getDeprecation()" instead.
-     * @param string $id
      */
-    public function getDeprecationMessage($id) : string
+    public function getDeprecationMessage(string $id) : string
     {
         trigger_deprecation('symfony/dependency-injection', '5.1', 'The "%s()" method is deprecated, use "getDeprecation()" instead.', __METHOD__);
         return $this->getDeprecation($id)['message'];
@@ -120,7 +117,7 @@ class Alias
     /**
      * @param string $id Service id relying on this definition
      */
-    public function getDeprecation($id) : array
+    public function getDeprecation(string $id) : array
     {
         return ['package' => $this->deprecation['package'], 'version' => $this->deprecation['version'], 'message' => \str_replace('%alias_id%', $id, $this->deprecation['message'])];
     }

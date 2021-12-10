@@ -15,10 +15,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
      * @var string
      */
     private const VALUE = 'value';
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         \preg_match('#' . self::TYPE . '\\s*=\\s*(?<subCondition>.*)#', $condition, $subConditions);
         if (!\is_string($subConditions['subCondition'])) {
@@ -94,10 +91,7 @@ final class GlobalVarConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\Ty
         }
         return \implode(' || ', $newConditions);
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         return \strncmp($condition, self::TYPE, \strlen(self::TYPE)) === 0;
     }

@@ -10,10 +10,7 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
      * @var string
      */
     private const TYPE = 'globalString';
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         \preg_match('#' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<subCondition>.*)#', $condition, $subConditions);
         if (!\is_string($subConditions['subCondition'])) {
@@ -50,10 +47,7 @@ final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor
         }
         return \implode(' || ', $newConditions);
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         if (\strpos($condition, self::CONTAINS_CONSTANT) !== \false) {
             return \false;

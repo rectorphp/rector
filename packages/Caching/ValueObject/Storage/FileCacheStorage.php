@@ -30,11 +30,7 @@ final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Sto
         $this->directory = $directory;
         $this->smartFileSystem = $smartFileSystem;
     }
-    /**
-     * @param string $key
-     * @param string $variableKey
-     */
-    public function load($key, $variableKey)
+    public function load(string $key, string $variableKey)
     {
         return (function (string $key, string $variableKey) {
             $cacheFilePaths = $this->getCacheFilePaths($key);
@@ -52,11 +48,7 @@ final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Sto
             return $cacheItem->getData();
         })($key, $variableKey);
     }
-    /**
-     * @param string $key
-     * @param string $variableKey
-     */
-    public function save($key, $variableKey, $data) : void
+    public function save(string $key, string $variableKey, $data) : void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->smartFileSystem->mkdir($cacheFilePaths->getFirstDirectory());
@@ -80,10 +72,7 @@ final class FileCacheStorage implements \Rector\Caching\Contract\ValueObject\Sto
             throw new \Rector\Core\Exception\Cache\CachingException(\sprintf('Could not write data to cache file %s.', $path));
         }
     }
-    /**
-     * @param string $key
-     */
-    public function clean($key) : void
+    public function clean(string $key) : void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->processRemoveCacheFilePath($cacheFilePaths);

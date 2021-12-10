@@ -20,7 +20,7 @@ class RemoveTrailingWhitespacePreprocessor implements \RectorPrefix20211210\Helm
      * @param string $contents Un-processed Typoscript contents
      * @return string Processed TypoScript contents
      */
-    public function preprocess($contents) : string
+    public function preprocess(string $contents) : string
     {
         // Remove trailing whitespaces.
         $lines = \explode($this->eolCharacter, $contents);

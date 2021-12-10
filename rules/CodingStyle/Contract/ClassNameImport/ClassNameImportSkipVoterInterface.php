@@ -8,10 +8,5 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 interface ClassNameImportSkipVoterInterface
 {
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
-     * @param \PhpParser\Node $node
-     */
-    public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool;
+    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool;
 }

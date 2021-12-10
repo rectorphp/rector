@@ -47,9 +47,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Expr\Empty_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Isset_|Empty_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;

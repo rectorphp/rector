@@ -100,10 +100,7 @@ class ArrayCache implements \RectorPrefix20211210\React\Cache\CacheInterface
         unset($this->data[$key], $this->expires[$key]);
         return \RectorPrefix20211210\React\Promise\resolve(\true);
     }
-    /**
-     * @param mixed[] $keys
-     */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple(array $keys, $default = null)
     {
         $values = array();
         foreach ($keys as $key) {
@@ -111,20 +108,14 @@ class ArrayCache implements \RectorPrefix20211210\React\Cache\CacheInterface
         }
         return \RectorPrefix20211210\React\Promise\all($values);
     }
-    /**
-     * @param mixed[] $values
-     */
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple(array $values, $ttl = null)
     {
         foreach ($values as $key => $value) {
             $this->set($key, $value, $ttl);
         }
         return \RectorPrefix20211210\React\Promise\resolve(\true);
     }
-    /**
-     * @param mixed[] $keys
-     */
-    public function deleteMultiple($keys)
+    public function deleteMultiple(array $keys)
     {
         foreach ($keys as $key) {
             unset($this->data[$key], $this->expires[$key]);

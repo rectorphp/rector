@@ -67,9 +67,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param BinaryOp|MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->processMethodCall($node);

@@ -92,41 +92,23 @@ BODY
 ', ['NAMESPACE' => $this->namespace, 'REQUIRE' => $require, 'USE' => $use, 'CLASS' => $this->getName(), 'IMPLEMENTS' => $implements, 'BODY' => $body]);
         return $content;
     }
-    /**
-     * @param $this $class
-     */
-    public function addRequire($class) : void
+    public function addRequire(self $class) : void
     {
         $this->require[] = $class;
     }
-    /**
-     * @param string $class
-     */
-    public function addUse($class) : void
+    public function addUse(string $class) : void
     {
         $this->use[$class] = \true;
     }
-    /**
-     * @param string $interface
-     */
-    public function addImplements($interface) : void
+    public function addImplements(string $interface) : void
     {
         $this->implements[] = '\\' . \ltrim($interface, '\\');
     }
-    /**
-     * @param string $name
-     * @param string $body
-     * @param mixed[] $params
-     */
-    public function addMethod($name, $body, $params = []) : void
+    public function addMethod(string $name, string $body, array $params = []) : void
     {
         $this->methods[] = new \RectorPrefix20211210\Symfony\Component\Config\Builder\Method(\strtr($body, ['NAME' => $this->camelCase($name)] + $params));
     }
-    /**
-     * @param string $name
-     * @param string|null $classType
-     */
-    public function addProperty($name, $classType = null) : \RectorPrefix20211210\Symfony\Component\Config\Builder\Property
+    public function addProperty(string $name, string $classType = null) : \RectorPrefix20211210\Symfony\Component\Config\Builder\Property
     {
         $property = new \RectorPrefix20211210\Symfony\Component\Config\Builder\Property($name, '_' !== $name[0] ? $this->camelCase($name) : $name);
         if (null !== $classType) {
@@ -157,10 +139,7 @@ BODY
     {
         return '\\' . $this->namespace . '\\' . $this->name;
     }
-    /**
-     * @param bool $allowExtraKeys
-     */
-    public function setAllowExtraKeys($allowExtraKeys) : void
+    public function setAllowExtraKeys(bool $allowExtraKeys) : void
     {
         $this->allowExtraKeys = $allowExtraKeys;
     }

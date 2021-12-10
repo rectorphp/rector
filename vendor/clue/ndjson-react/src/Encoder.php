@@ -113,9 +113,8 @@ class Encoder extends \RectorPrefix20211210\Evenement\EventEmitter implements \R
     {
         $this->emit('drain');
     }
-    /** @internal
-     * @param \Exception $error */
-    public function handleError($error)
+    /** @internal */
+    public function handleError(\Exception $error)
     {
         $this->emit('error', array($error));
         $this->close();

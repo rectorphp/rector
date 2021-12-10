@@ -40,7 +40,7 @@ class String_ extends \PhpParser\Node\Scalar
      *
      * @return string The parsed string
      */
-    public static function parse($str, $parseUnicodeEscape = \true) : string
+    public static function parse(string $str, bool $parseUnicodeEscape = \true) : string
     {
         $bLength = 0;
         if ('b' === $str[0] || 'B' === $str[0]) {
@@ -63,7 +63,7 @@ class String_ extends \PhpParser\Node\Scalar
      *
      * @return string String with escape sequences parsed
      */
-    public static function parseEscapeSequences($str, $quote, $parseUnicodeEscape = \true) : string
+    public static function parseEscapeSequences(string $str, $quote, bool $parseUnicodeEscape = \true) : string
     {
         if (null !== $quote) {
             $str = \str_replace('\\' . $quote, $quote, $str);

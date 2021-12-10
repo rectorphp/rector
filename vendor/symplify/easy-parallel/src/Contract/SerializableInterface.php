@@ -9,5 +9,5 @@ interface SerializableInterface extends \JsonSerializable
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode($json) : self;
+    public static function decode(array $json) : self;
 }

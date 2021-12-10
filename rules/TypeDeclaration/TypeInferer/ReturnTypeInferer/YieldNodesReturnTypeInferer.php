@@ -40,10 +40,7 @@ final class YieldNodesReturnTypeInferer implements \Rector\TypeDeclaration\Contr
         $this->typeFactory = $typeFactory;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    /**
-     * @param \PhpParser\Node\FunctionLike $functionLike
-     */
-    public function inferFunctionLike($functionLike) : \PHPStan\Type\Type
+    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         $yieldNodes = $this->findCurrentScopeYieldNodes($functionLike);
         if ($yieldNodes === []) {

@@ -20,12 +20,7 @@ class Promise implements \RectorPrefix20211210\React\Promise\ExtendedPromiseInte
         $resolver = $canceller = null;
         $this->call($cb);
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function then($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null !== $this->result) {
             return $this->result->then($onFulfilled, $onRejected, $onProgress);
@@ -47,12 +42,7 @@ class Promise implements \RectorPrefix20211210\React\Promise\ExtendedPromiseInte
             $parent = null;
         });
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function done($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null !== $this->result) {
             return $this->result->done($onFulfilled, $onRejected, $onProgress);
@@ -64,10 +54,7 @@ class Promise implements \RectorPrefix20211210\React\Promise\ExtendedPromiseInte
             $this->progressHandlers[] = $onProgress;
         }
     }
-    /**
-     * @param callable $onRejected
-     */
-    public function otherwise($onRejected)
+    public function otherwise(callable $onRejected)
     {
         return $this->then(null, static function ($reason) use($onRejected) {
             if (!_checkTypehint($onRejected, $reason)) {
@@ -76,10 +63,7 @@ class Promise implements \RectorPrefix20211210\React\Promise\ExtendedPromiseInte
             return $onRejected($reason);
         });
     }
-    /**
-     * @param callable $onFulfilledOrRejected
-     */
-    public function always($onFulfilledOrRejected)
+    public function always(callable $onFulfilledOrRejected)
     {
         return $this->then(static function ($value) use($onFulfilledOrRejected) {
             return resolve($onFulfilledOrRejected())->then(function () use($value) {
@@ -91,10 +75,7 @@ class Promise implements \RectorPrefix20211210\React\Promise\ExtendedPromiseInte
             });
         });
     }
-    /**
-     * @param callable $onProgress
-     */
-    public function progress($onProgress)
+    public function progress(callable $onProgress)
     {
         return $this->then(null, null, $onProgress);
     }

@@ -54,9 +54,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\BinaryOp\Concat::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Concat $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->nodeReplacementIsRestricted = \false;
         if (!$this->isTopMostConcatNode($node)) {

@@ -40,9 +40,8 @@ class BlueScreen
     /**
      * Add custom panel as function (?\Throwable $e): ?array
      * @return static
-     * @param callable $panel
      */
-    public function addPanel($panel) : self
+    public function addPanel(callable $panel) : self
     {
         if (!\in_array($panel, $this->panels, \true)) {
             $this->panels[] = $panel;
@@ -52,18 +51,16 @@ class BlueScreen
     /**
      * Add action.
      * @return static
-     * @param callable $action
      */
-    public function addAction($action) : self
+    public function addAction(callable $action) : self
     {
         $this->actions[] = $action;
         return $this;
     }
     /**
      * Renders blue screen.
-     * @param \Throwable $exception
      */
-    public function render($exception) : void
+    public function render(\Throwable $exception) : void
     {
         if (\RectorPrefix20211210\Tracy\Helpers::isAjax() && \session_status() === \PHP_SESSION_ACTIVE) {
             $_SESSION['_tracy']['bluescreen'][$_SERVER['HTTP_X_TRACY_AJAX']] = ['content' => \RectorPrefix20211210\Tracy\Helpers::capture(function () use($exception) {
@@ -78,10 +75,8 @@ class BlueScreen
     }
     /**
      * Renders blue screen to file (if file exists, it will not be overwritten).
-     * @param \Throwable $exception
-     * @param string $file
      */
-    public function renderToFile($exception, $file) : bool
+    public function renderToFile(\Throwable $exception, string $file) : bool
     {
         if ($handle = @\fopen($file, 'x')) {
             \ob_start();
@@ -185,11 +180,8 @@ class BlueScreen
     }
     /**
      * Returns syntax highlighted source code.
-     * @param string $file
-     * @param int $line
-     * @param int $lines
      */
-    public static function highlightFile($file, $line, $lines = 15) : ?string
+    public static function highlightFile(string $file, int $line, int $lines = 15) : ?string
     {
         $source = @\file_get_contents($file);
         // @ file may not exist
@@ -204,11 +196,8 @@ class BlueScreen
     }
     /**
      * Returns syntax highlighted source code.
-     * @param string $source
-     * @param int $line
-     * @param int $lines
      */
-    public static function highlightPhp($source, $line, $lines = 15) : string
+    public static function highlightPhp(string $source, int $line, int $lines = 15) : string
     {
         if (\function_exists('ini_set')) {
             \ini_set('highlight.comment', '#998; font-style: italic');
@@ -229,11 +218,8 @@ class BlueScreen
     }
     /**
      * Returns highlighted line in HTML code.
-     * @param string $html
-     * @param int $line
-     * @param int $lines
      */
-    public static function highlightLine($html, $line, $lines = 15) : string
+    public static function highlightLine(string $html, int $line, int $lines = 15) : string
     {
         $source = \explode("\n", "\n" . \str_replace("\r\n", "\n", $html));
         $out = '';
@@ -267,11 +253,8 @@ class BlueScreen
     }
     /**
      * Returns syntax highlighted source code to Terminal.
-     * @param string $file
-     * @param int $line
-     * @param int $lines
      */
-    public static function highlightPhpCli($file, $line, $lines = 15) : ?string
+    public static function highlightPhpCli(string $file, int $line, int $lines = 15) : ?string
     {
         $source = @\file_get_contents($file);
         // @ file may not exist
@@ -295,9 +278,8 @@ class BlueScreen
     /**
      * Should a file be collapsed in stack trace?
      * @internal
-     * @param string $file
      */
-    public function isCollapsed($file) : bool
+    public function isCollapsed(string $file) : bool
     {
         $file = \strtr($file, '\\', '/') . '/';
         foreach ($this->collapsePaths as $path) {
@@ -315,10 +297,7 @@ class BlueScreen
             return \RectorPrefix20211210\Tracy\Dumper::toHtml($v, [\RectorPrefix20211210\Tracy\Dumper::DEPTH => $this->maxDepth, \RectorPrefix20211210\Tracy\Dumper::TRUNCATE => $this->maxLength, \RectorPrefix20211210\Tracy\Dumper::SNAPSHOT => &$this->snapshot, \RectorPrefix20211210\Tracy\Dumper::LOCATION => \RectorPrefix20211210\Tracy\Dumper::LOCATION_CLASS, \RectorPrefix20211210\Tracy\Dumper::SCRUBBER => $this->scrubber, \RectorPrefix20211210\Tracy\Dumper::KEYS_TO_HIDE => $this->keysToHide], $k);
         };
     }
-    /**
-     * @param \Throwable $exception
-     */
-    public function formatMessage($exception) : string
+    public function formatMessage(\Throwable $exception) : string
     {
         $msg = \RectorPrefix20211210\Tracy\Helpers::encodeString(\trim((string) $exception->getMessage()), self::MAX_MESSAGE_LENGTH, \false);
         // highlight 'string'

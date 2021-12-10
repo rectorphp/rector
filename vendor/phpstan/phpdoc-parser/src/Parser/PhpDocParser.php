@@ -18,10 +18,7 @@ class PhpDocParser
         $this->typeParser = $typeParser;
         $this->constantExprParser = $constantExprParser;
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     */
-    public function parse($tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
+    public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
     {
         $tokens->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_OPEN_PHPDOC);
         $tokens->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL);
@@ -73,21 +70,14 @@ class PhpDocParser
         }
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode(\trim($text, " \t"));
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     */
-    public function parseTag($tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
+    public function parseTag(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
         $tag = $tokens->currentTokenValue();
         $tokens->next();
         $value = $this->parseTagValue($tokens, $tag);
         return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($tag, $value);
     }
-    /**
-     * @param \PHPStan\PhpDocParser\Parser\TokenIterator $tokens
-     * @param string $tag
-     */
-    public function parseTagValue($tokens, $tag) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
+    public function parseTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, string $tag) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode
     {
         try {
             $tokens->pushSavePoint();

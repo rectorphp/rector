@@ -16,10 +16,8 @@ final class MemoryCacheStorage implements \Rector\Caching\Contract\ValueObject\S
     private $storage = [];
     /**
      * @return null|mixed
-     * @param string $key
-     * @param string $variableKey
      */
-    public function load($key, $variableKey)
+    public function load(string $key, string $variableKey)
     {
         if (!isset($this->storage[$key])) {
             return null;
@@ -30,18 +28,11 @@ final class MemoryCacheStorage implements \Rector\Caching\Contract\ValueObject\S
         }
         return $item->getData();
     }
-    /**
-     * @param string $key
-     * @param string $variableKey
-     */
-    public function save($key, $variableKey, $data) : void
+    public function save(string $key, string $variableKey, $data) : void
     {
         $this->storage[$key] = new \Rector\Caching\ValueObject\CacheItem($variableKey, $data);
     }
-    /**
-     * @param string $key
-     */
-    public function clean($key) : void
+    public function clean(string $key) : void
     {
         if (!isset($this->storage[$key])) {
             return;

@@ -12,6 +12,6 @@ interface LightKernelInterface
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs($configFiles) : \RectorPrefix20211210\Psr\Container\ContainerInterface;
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20211210\Psr\Container\ContainerInterface;
     public function getContainer() : \RectorPrefix20211210\Psr\Container\ContainerInterface;
 }

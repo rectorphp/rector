@@ -34,9 +34,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\LNumber::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param LNumber $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Scalar\LNumber
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Scalar\LNumber
     {
         $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
         if ($kind !== \PhpParser\Node\Scalar\LNumber::KIND_BIN) {

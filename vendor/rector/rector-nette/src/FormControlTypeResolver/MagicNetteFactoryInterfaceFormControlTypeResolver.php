@@ -55,9 +55,8 @@ final class MagicNetteFactoryInterfaceFormControlTypeResolver implements \Rector
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node $node
      */
-    public function resolve($node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
         if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
             return [];

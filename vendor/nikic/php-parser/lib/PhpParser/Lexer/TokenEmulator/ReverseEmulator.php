@@ -18,34 +18,19 @@ final class ReverseEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
     {
         return $this->emulator->getPhpVersion();
     }
-    /**
-     * @param string $code
-     */
-    public function isEmulationNeeded($code) : bool
+    public function isEmulationNeeded(string $code) : bool
     {
         return $this->emulator->isEmulationNeeded($code);
     }
-    /**
-     * @param string $code
-     * @param mixed[] $tokens
-     */
-    public function emulate($code, $tokens) : array
+    public function emulate(string $code, array $tokens) : array
     {
         return $this->emulator->reverseEmulate($code, $tokens);
     }
-    /**
-     * @param string $code
-     * @param mixed[] $tokens
-     */
-    public function reverseEmulate($code, $tokens) : array
+    public function reverseEmulate(string $code, array $tokens) : array
     {
         return $this->emulator->emulate($code, $tokens);
     }
-    /**
-     * @param string $code
-     * @param mixed[] $patches
-     */
-    public function preprocessCode($code, &$patches) : string
+    public function preprocessCode(string $code, array &$patches) : string
     {
         return $code;
     }

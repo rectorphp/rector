@@ -32,9 +32,8 @@ class ContainerBag extends \RectorPrefix20211210\Symfony\Component\DependencyInj
      * {@inheritdoc}
      *
      * @return array|bool|string|int|float|null
-     * @param string $name
      */
-    public function get($name)
+    public function get(string $name)
     {
         return $this->container->getParameter($name);
     }
@@ -42,9 +41,8 @@ class ContainerBag extends \RectorPrefix20211210\Symfony\Component\DependencyInj
      * {@inheritdoc}
      *
      * @return bool
-     * @param string $name
      */
-    public function has($name)
+    public function has(string $name)
     {
         return $this->container->hasParameter($name);
     }

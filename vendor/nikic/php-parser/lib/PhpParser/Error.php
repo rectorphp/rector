@@ -65,7 +65,7 @@ class Error extends \RuntimeException
      *
      * @param array $attributes
      */
-    public function setAttributes($attributes)
+    public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
         $this->updateMessage();
@@ -75,7 +75,7 @@ class Error extends \RuntimeException
      *
      * @param string $message Error message
      */
-    public function setRawMessage($message)
+    public function setRawMessage(string $message)
     {
         $this->rawMessage = $message;
         $this->updateMessage();
@@ -85,7 +85,7 @@ class Error extends \RuntimeException
      *
      * @param int $line Error start line
      */
-    public function setStartLine($line)
+    public function setStartLine(int $line)
     {
         $this->attributes['startLine'] = $line;
         $this->updateMessage();
@@ -107,7 +107,7 @@ class Error extends \RuntimeException
      * @param string $code Source code of the file
      * @return int
      */
-    public function getStartColumn($code) : int
+    public function getStartColumn(string $code) : int
     {
         if (!$this->hasColumnInfo()) {
             throw new \RuntimeException('Error does not have column information');
@@ -120,7 +120,7 @@ class Error extends \RuntimeException
      * @param string $code Source code of the file
      * @return int
      */
-    public function getEndColumn($code) : int
+    public function getEndColumn(string $code) : int
     {
         if (!$this->hasColumnInfo()) {
             throw new \RuntimeException('Error does not have column information');
@@ -134,7 +134,7 @@ class Error extends \RuntimeException
      *
      * @return string Formatted message
      */
-    public function getMessageWithColumnInfo($code) : string
+    public function getMessageWithColumnInfo(string $code) : string
     {
         return \sprintf('%s from %d:%d to %d:%d', $this->getRawMessage(), $this->getStartLine(), $this->getStartColumn($code), $this->getEndLine(), $this->getEndColumn($code));
     }

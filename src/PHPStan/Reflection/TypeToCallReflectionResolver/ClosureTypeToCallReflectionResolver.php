@@ -14,18 +14,14 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
  */
 final class ClosureTypeToCallReflectionResolver implements \Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToCallReflectionResolverInterface
 {
-    /**
-     * @param \PHPStan\Type\Type $type
-     */
-    public function supports($type) : bool
+    public function supports(\PHPStan\Type\Type $type) : bool
     {
         return $type instanceof \PHPStan\Type\ClosureType;
     }
     /**
-     * @param \PHPStan\Type\Type $type
-     * @param \PHPStan\Analyser\Scope $scope
+     * @param ClosureType $type
      */
-    public function resolve($type, $scope) : \PHPStan\Reflection\Native\NativeFunctionReflection
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope) : \PHPStan\Reflection\Native\NativeFunctionReflection
     {
         return new \PHPStan\Reflection\Native\NativeFunctionReflection('{closure}', $type->getCallableParametersAcceptors($scope), null, \PHPStan\TrinaryLogic::createMaybe(), \false);
     }

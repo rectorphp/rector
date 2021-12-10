@@ -18,7 +18,7 @@ class ScannerLine
      * @param string $pattern
      * @return array|false
      */
-    public function scan($pattern)
+    public function scan(string $pattern)
     {
         if (\preg_match($pattern, $this->line, $matches)) {
             $this->line = \substr($this->line, \strlen($matches[0])) ?: "";
@@ -30,7 +30,7 @@ class ScannerLine
      * @param string $pattern
      * @return string[]|false
      */
-    public function peek($pattern)
+    public function peek(string $pattern)
     {
         if (\preg_match($pattern, $this->line, $matches)) {
             return $matches;

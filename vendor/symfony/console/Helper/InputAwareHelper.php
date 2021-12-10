@@ -22,9 +22,8 @@ abstract class InputAwareHelper extends \RectorPrefix20211210\Symfony\Component\
     protected $input;
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputInterface $input
      */
-    public function setInput($input)
+    public function setInput(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input)
     {
         $this->input = $input;
     }

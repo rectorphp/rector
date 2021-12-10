@@ -20,21 +20,16 @@ class FormatterHelper extends \RectorPrefix20211210\Symfony\Component\Console\He
 {
     /**
      * Formats a message within a section.
-     * @param string $section
-     * @param string $message
-     * @param string $style
      */
-    public function formatSection($section, $message, $style = 'info') : string
+    public function formatSection(string $section, string $message, string $style = 'info') : string
     {
         return \sprintf('<%s>[%s]</%s> %s', $style, $section, $style, $message);
     }
     /**
      * Formats a message as a block of text.
      * @param mixed[]|string $messages
-     * @param string $style
-     * @param bool $large
      */
-    public function formatBlock($messages, $style, $large = \false) : string
+    public function formatBlock($messages, string $style, bool $large = \false) : string
     {
         if (!\is_array($messages)) {
             $messages = [$messages];
@@ -60,11 +55,8 @@ class FormatterHelper extends \RectorPrefix20211210\Symfony\Component\Console\He
     }
     /**
      * Truncates a message to the given length.
-     * @param string $message
-     * @param int $length
-     * @param string $suffix
      */
-    public function truncate($message, $length, $suffix = '...') : string
+    public function truncate(string $message, int $length, string $suffix = '...') : string
     {
         $computedLength = $length - self::width($suffix);
         if ($computedLength > self::width($message)) {

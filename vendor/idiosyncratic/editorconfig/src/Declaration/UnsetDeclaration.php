@@ -12,9 +12,8 @@ final class UnsetDeclaration extends \RectorPrefix20211210\Idiosyncratic\EditorC
     }
     /**
      * @return mixed
-     * @param string $value
      */
-    protected function getTypedValue($value)
+    protected function getTypedValue(string $value)
     {
         return null;
     }

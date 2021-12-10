@@ -69,9 +69,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->extends === null) {
             return null;
@@ -94,7 +94,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $parentClassToTraits = $configuration[self::PARENT_CLASS_TO_TRAITS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($parentClassToTraits, \Rector\Transform\ValueObject\ParentClassToTraits::class);

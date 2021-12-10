@@ -24,10 +24,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211210\Symfony
     private $methodAttributeConfigurators = [];
     private $propertyAttributeConfigurators = [];
     private $parameterAttributeConfigurators = [];
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    public function process($container) : void
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container) : void
     {
         if (80000 > \PHP_VERSION_ID || !$container->getAutoconfiguredAttributes()) {
             return;
@@ -71,10 +68,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211210\Symfony
         }
         parent::process($container);
     }
-    /**
-     * @param bool $isRoot
-     */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if (!$value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition || !$value->isAutoconfigured() || $value->isAbstract() || $value->hasTag('container.ignore_attributes') || !($classReflector = $this->container->getReflectionClass($value->getClass(), \false))) {
             return parent::processValue($value, $isRoot);

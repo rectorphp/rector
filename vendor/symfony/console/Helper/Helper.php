@@ -22,9 +22,8 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
     protected $helperSet = null;
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Helper\HelperSet|null $helperSet
      */
-    public function setHelperSet($helperSet = null)
+    public function setHelperSet(\RectorPrefix20211210\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
@@ -38,9 +37,8 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
     /**
      * Returns the width of a string, using mb_strwidth if it is available.
      * The width is how many characters positions the string will use.
-     * @param string|null $string
      */
-    public static function width($string) : int
+    public static function width(?string $string) : int
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
@@ -54,9 +52,8 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
     /**
      * Returns the length of a string, using mb_strlen if it is available.
      * The length is related to how many bytes the string will use.
-     * @param string|null $string
      */
-    public static function length($string) : int
+    public static function length(?string $string) : int
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
@@ -69,11 +66,8 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
     }
     /**
      * Returns the subset of a string, using mb_substr if it is available.
-     * @param string|null $string
-     * @param int $from
-     * @param int|null $length
      */
-    public static function substr($string, $from, $length = null) : string
+    public static function substr(?string $string, int $from, int $length = null) : string
     {
         $string ?? ($string = '');
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
@@ -98,10 +92,7 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
             }
         }
     }
-    /**
-     * @param int $memory
-     */
-    public static function formatMemory($memory)
+    public static function formatMemory(int $memory)
     {
         if ($memory >= 1024 * 1024 * 1024) {
             return \sprintf('%.1f GiB', $memory / 1024 / 1024 / 1024);
@@ -114,11 +105,7 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
         }
         return \sprintf('%d B', $memory);
     }
-    /**
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
-     * @param string|null $string
-     */
-    public static function removeDecoration($formatter, $string)
+    public static function removeDecoration(\RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();
         $formatter->setDecorated(\false);

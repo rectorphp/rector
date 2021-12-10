@@ -27,7 +27,7 @@ class MultilineTokenBuilder
      * @param int    $line   Starting line in source code
      * @param int    $column Starting column in source code
      */
-    public function startMultilineToken($type, $value, $line, $column) : void
+    public function startMultilineToken(string $type, string $value, int $line, int $column) : void
     {
         $this->type = $type;
         $this->value = $value;
@@ -37,7 +37,7 @@ class MultilineTokenBuilder
     /**
      * @param string $append Token content to append
      */
-    public function appendToToken($append) : void
+    public function appendToToken(string $append) : void
     {
         if ($this->value === null) {
             $this->value = "";
@@ -48,7 +48,7 @@ class MultilineTokenBuilder
      * @param string $append Token content to append
      * @return TokenInterface
      */
-    public function endMultilineToken($append = '') : \RectorPrefix20211210\Helmich\TypoScriptParser\Tokenizer\TokenInterface
+    public function endMultilineToken(string $append = '') : \RectorPrefix20211210\Helmich\TypoScriptParser\Tokenizer\TokenInterface
     {
         $value = ($this->value ?? "") . $append;
         $type = $this->type;

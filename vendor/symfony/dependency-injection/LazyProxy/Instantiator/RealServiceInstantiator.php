@@ -23,12 +23,8 @@ class RealServiceInstantiator implements \RectorPrefix20211210\Symfony\Component
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param \Symfony\Component\DependencyInjection\Definition $definition
-     * @param string $id
-     * @param callable $realInstantiator
      */
-    public function instantiateProxy($container, $definition, $id, $realInstantiator)
+    public function instantiateProxy(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerInterface $container, \RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition $definition, string $id, callable $realInstantiator)
     {
         return $realInstantiator();
     }

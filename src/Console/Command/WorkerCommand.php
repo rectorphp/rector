@@ -37,11 +37,7 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
         $this->setDescription('(Internal) Support for parallel process');
         parent::configure();
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function execute($input, $output) : int
+    protected function execute(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $configuration = $this->configurationFactory->createFromInput($input);
         $streamSelectLoop = new \RectorPrefix20211210\React\EventLoop\StreamSelectLoop();

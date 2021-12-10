@@ -81,9 +81,9 @@ final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeT
         return [\PhpParser\Node\Param::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Param $node
      */
-    public function resolve($node) : \PHPStan\Type\Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $paramType = $this->resolveFromParamType($node);
         if (!$paramType instanceof \PHPStan\Type\MixedType) {

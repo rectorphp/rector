@@ -84,11 +84,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->typoScriptRectors = $typoScriptRectors;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function supports($file, $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         if ([] === $this->typoScriptRectors) {
             return \false;
@@ -96,11 +92,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
         $smartFileInfo = $file->getSmartFileInfo();
         return \in_array($smartFileInfo->getExtension(), $this->allowedFileExtensions, \true);
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function process($file, $configuration) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $this->processFile($file);
         $this->convertTypoScriptToPhpFiles();
@@ -115,7 +107,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $allowedFileExtensions = $configuration[self::ALLOWED_FILE_EXTENSIONS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($allowedFileExtensions);

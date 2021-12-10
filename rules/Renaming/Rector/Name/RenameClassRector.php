@@ -82,9 +82,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Name::class, \PhpParser\Node\Stmt\Property::class, \PhpParser\Node\FunctionLike::class, \PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\ClassLike::class, \PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class, \PhpParser\Node\Stmt\Use_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace|Use_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if (!$node instanceof \PhpParser\Node\Stmt\Use_) {
@@ -98,7 +98,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($oldToNewClasses);

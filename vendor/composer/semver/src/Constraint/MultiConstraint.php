@@ -95,7 +95,7 @@ class MultiConstraint implements \RectorPrefix20211210\Composer\Semver\Constrain
      *
      * @return bool
      */
-    public function matches($provider)
+    public function matches(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $provider)
     {
         if (\false === $this->conjunctive) {
             foreach ($this->constraints as $constraint) {
@@ -182,7 +182,7 @@ class MultiConstraint implements \RectorPrefix20211210\Composer\Semver\Constrain
      *
      * @return ConstraintInterface
      */
-    public static function create($constraints, $conjunctive = \true)
+    public static function create(array $constraints, $conjunctive = \true)
     {
         if (0 === \count($constraints)) {
             return new \RectorPrefix20211210\Composer\Semver\Constraint\MatchAllConstraint();

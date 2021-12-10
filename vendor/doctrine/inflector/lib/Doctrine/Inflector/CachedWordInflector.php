@@ -13,10 +13,7 @@ class CachedWordInflector implements \RectorPrefix20211210\Doctrine\Inflector\Wo
     {
         $this->wordInflector = $wordInflector;
     }
-    /**
-     * @param string $word
-     */
-    public function inflect($word) : string
+    public function inflect(string $word) : string
     {
         return $this->cache[$word] ?? ($this->cache[$word] = $this->wordInflector->inflect($word));
     }

@@ -28,12 +28,7 @@ final class AliasClassNameImportSkipVoter implements \Rector\CodingStyle\Contrac
     {
         $this->aliasUsesResolver = $aliasUsesResolver;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType
-     * @param \PhpParser\Node $node
-     */
-    public function shouldSkip($file, $fullyQualifiedObjectType, $node) : bool
+    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
     {
         $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node);
         $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();

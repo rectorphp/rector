@@ -22,10 +22,8 @@ interface ExtensionInterface
      * Loads a specific configuration.
      *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
-     * @param mixed[] $configs
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function load($configs, $container);
+    public function load(array $configs, \RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container);
     /**
      * Returns the namespace to be used for this extension (XML namespace).
      *

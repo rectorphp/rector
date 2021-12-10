@@ -40,7 +40,7 @@ final class RectorKernel implements \RectorPrefix20211210\Symplify\SymplifyKerne
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs($configFiles) : \RectorPrefix20211210\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20211210\Psr\Container\ContainerInterface
     {
         $defaultConfigFiles = $this->createDefaultConfigFiles();
         $configFiles = \array_merge($defaultConfigFiles, $configFiles);

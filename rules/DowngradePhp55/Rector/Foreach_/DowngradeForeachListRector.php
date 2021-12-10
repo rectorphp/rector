@@ -53,9 +53,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Foreach_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$node->valueVar instanceof \PhpParser\Node\Expr\List_) {
             return null;

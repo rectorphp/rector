@@ -29,10 +29,7 @@ final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     {
         return [\PhpParser\Node\Scalar::class];
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function resolve($node) : \PHPStan\Type\Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         if ($node instanceof \PhpParser\Node\Scalar\DNumber) {
             return new \PHPStan\Type\Constant\ConstantFloatType($node->value);

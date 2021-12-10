@@ -79,17 +79,12 @@ class Logger implements \RectorPrefix20211210\Tracy\ILogger
     }
     /**
      * @param  mixed  $message
-     * @param string|null $exceptionFile
      */
-    public static function formatLogLine($message, $exceptionFile = null) : string
+    public static function formatLogLine($message, string $exceptionFile = null) : string
     {
         return \implode(' ', [\date('[Y-m-d H-i-s]'), \preg_replace('#\\s*\\r?\\n\\s*#', ' ', static::formatMessage($message)), ' @  ' . \RectorPrefix20211210\Tracy\Helpers::getSource(), $exceptionFile ? ' @@  ' . \basename($exceptionFile) : null]);
     }
-    /**
-     * @param \Throwable $exception
-     * @param string $level
-     */
-    public function getExceptionFile($exception, $level = self::EXCEPTION) : string
+    public function getExceptionFile(\Throwable $exception, string $level = self::EXCEPTION) : string
     {
         foreach (\RectorPrefix20211210\Tracy\Helpers::getExceptionChain($exception) as $exception) {
             $data[] = [\get_class($exception), $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(), \array_map(function (array $item) : array {
@@ -109,10 +104,8 @@ class Logger implements \RectorPrefix20211210\Tracy\ILogger
     /**
      * Logs exception to the file if file doesn't exist.
      * @return string logged error filename
-     * @param \Throwable $exception
-     * @param string|null $file
      */
-    protected function logException($exception, $file = null) : string
+    protected function logException(\Throwable $exception, string $file = null) : string
     {
         $file = $file ?: $this->getExceptionFile($exception);
         $bs = $this->blueScreen ?: new \RectorPrefix20211210\Tracy\BlueScreen();
@@ -133,9 +126,8 @@ class Logger implements \RectorPrefix20211210\Tracy\ILogger
      * Default mailer.
      * @param  mixed  $message
      * @internal
-     * @param string $email
      */
-    public function defaultMailer($message, $email) : void
+    public function defaultMailer($message, string $email) : void
     {
         $host = \preg_replace('#[^\\w.-]+#', '', $_SERVER['SERVER_NAME'] ?? \php_uname('n'));
         $parts = \str_replace(["\r\n", "\n"], ["\n", \PHP_EOL], ['headers' => \implode("\n", ['From: ' . ($this->fromEmail ?: "noreply@{$host}"), 'X-Mailer: Tracy', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: 8bit']) . "\n", 'subject' => "PHP: An error occurred on the server {$host}", 'body' => static::formatMessage($message) . "\n\nsource: " . \RectorPrefix20211210\Tracy\Helpers::getSource()]);

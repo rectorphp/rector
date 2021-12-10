@@ -21,8 +21,5 @@ interface ArgumentInterface
      * @return array
      */
     public function getValues();
-    /**
-     * @param mixed[] $values
-     */
-    public function setValues($values);
+    public function setValues(array $values);
 }

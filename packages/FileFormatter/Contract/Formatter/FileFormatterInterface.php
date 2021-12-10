@@ -8,14 +8,7 @@ use Rector\FileFormatter\ValueObject\EditorConfigConfiguration;
 use Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 interface FileFormatterInterface
 {
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     */
-    public function supports($file) : bool;
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration
-     */
-    public function format($file, $editorConfigConfiguration) : void;
+    public function supports(\Rector\Core\ValueObject\Application\File $file) : bool;
+    public function format(\Rector\Core\ValueObject\Application\File $file, \Rector\FileFormatter\ValueObject\EditorConfigConfiguration $editorConfigConfiguration) : void;
     public function createDefaultEditorConfigConfigurationBuilder() : \Rector\FileFormatter\ValueObjectFactory\EditorConfigConfigurationBuilder;
 }

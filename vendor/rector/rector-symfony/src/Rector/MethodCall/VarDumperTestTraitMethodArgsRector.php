@@ -29,9 +29,9 @@ final class VarDumperTestTraitMethodArgsRector extends \Rector\Core\Rector\Abstr
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\VarDumper\\Test\\VarDumperTestTrait'))) {
             return null;

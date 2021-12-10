@@ -39,12 +39,8 @@ class GithubActionReporter
      * Output an error using the Github annotations format.
      *
      * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-an-error-message
-     * @param string $message
-     * @param string|null $file
-     * @param int|null $line
-     * @param int|null $col
      */
-    public function error($message, $file = null, $line = null, $col = null) : void
+    public function error(string $message, string $file = null, int $line = null, int $col = null) : void
     {
         $this->log('error', $message, $file, $line, $col);
     }
@@ -52,12 +48,8 @@ class GithubActionReporter
      * Output a warning using the Github annotations format.
      *
      * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-a-warning-message
-     * @param string $message
-     * @param string|null $file
-     * @param int|null $line
-     * @param int|null $col
      */
-    public function warning($message, $file = null, $line = null, $col = null) : void
+    public function warning(string $message, string $file = null, int $line = null, int $col = null) : void
     {
         $this->log('warning', $message, $file, $line, $col);
     }
@@ -65,12 +57,8 @@ class GithubActionReporter
      * Output a debug log using the Github annotations format.
      *
      * @see https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#setting-a-debug-message
-     * @param string $message
-     * @param string|null $file
-     * @param int|null $line
-     * @param int|null $col
      */
-    public function debug($message, $file = null, $line = null, $col = null) : void
+    public function debug(string $message, string $file = null, int $line = null, int $col = null) : void
     {
         $this->log('debug', $message, $file, $line, $col);
     }

@@ -14,9 +14,8 @@ interface NodeValueResolverInterface
      */
     public function getType() : string;
     /**
-     * @param \PhpParser\Node\Expr $expr
+     * @param TExpr $expr
      * @return mixed
-     * @param string $currentFilePath
      */
-    public function resolve($expr, $currentFilePath);
+    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath);
 }

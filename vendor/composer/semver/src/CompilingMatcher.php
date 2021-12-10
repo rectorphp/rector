@@ -38,7 +38,7 @@ class CompilingMatcher
      *
      * @return mixed
      */
-    public static function match($constraint, $operator, $version)
+    public static function match(\RectorPrefix20211210\Composer\Semver\Constraint\ConstraintInterface $constraint, $operator, $version)
     {
         if (self::$enabled === null) {
             self::$enabled = !\in_array('eval', \explode(',', (string) \ini_get('disable_functions')), \true);

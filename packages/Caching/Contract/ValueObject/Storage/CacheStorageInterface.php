@@ -11,19 +11,12 @@ interface CacheStorageInterface
 {
     /**
      * @return mixed|null
-     * @param string $key
-     * @param string $variableKey
      */
-    public function load($key, $variableKey);
+    public function load(string $key, string $variableKey);
     /**
      * @param mixed $data
-     * @param string $key
-     * @param string $variableKey
      */
-    public function save($key, $variableKey, $data) : void;
-    /**
-     * @param string $key
-     */
-    public function clean($key) : void;
+    public function save(string $key, string $variableKey, $data) : void;
+    public function clean(string $key) : void;
     public function clear() : void;
 }

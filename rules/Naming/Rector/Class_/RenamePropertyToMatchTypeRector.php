@@ -92,9 +92,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_|Interface_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->refactorClassProperties($node);
         $this->propertyPromotionRenamer->renamePropertyPromotion($node);

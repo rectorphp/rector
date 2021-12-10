@@ -70,9 +70,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->methodCallRenames as $methodCallRename) {
             $implementsInterface = $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getObjectType(), $methodCallRename->getOldMethod(), $methodCallRename->getNewMethod());
@@ -99,7 +99,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $methodCallRenames = $configuration[self::METHOD_CALL_RENAMES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($methodCallRenames, \Rector\Renaming\Contract\MethodCallRenameInterface::class);

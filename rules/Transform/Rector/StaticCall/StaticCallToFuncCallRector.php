@@ -46,9 +46,9 @@ final class StaticCallToFuncCallRector extends \Rector\Core\Rector\AbstractRecto
         return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         foreach ($this->staticCallsToFunctions as $staticCallToFunction) {
             if (!$this->isObjectType($node->class, $staticCallToFunction->getObjectType())) {
@@ -64,7 +64,7 @@ final class StaticCallToFuncCallRector extends \Rector\Core\Rector\AbstractRecto
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $staticCallsToFunctions = $configuration[self::STATIC_CALLS_TO_FUNCTIONS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($staticCallsToFunctions);

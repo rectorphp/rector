@@ -40,25 +40,22 @@ class FrozenParameterBag extends \RectorPrefix20211210\Symfony\Component\Depende
     }
     /**
      * {@inheritdoc}
-     * @param mixed[] $parameters
      */
-    public function add($parameters)
+    public function add(array $parameters)
     {
         throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call add() on a frozen ParameterBag.');
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function set($name, $value)
+    public function set(string $name, $value)
     {
         throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call set() on a frozen ParameterBag.');
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function remove($name)
+    public function remove(string $name)
     {
         throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\LogicException('Impossible to call remove() on a frozen ParameterBag.');
     }

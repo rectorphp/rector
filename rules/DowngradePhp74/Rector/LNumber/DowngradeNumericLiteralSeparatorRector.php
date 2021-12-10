@@ -49,9 +49,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\LNumber::class, \PhpParser\Node\Scalar\DNumber::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param LNumber|DNumber $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->shouldRefactor($node)) {
             return null;

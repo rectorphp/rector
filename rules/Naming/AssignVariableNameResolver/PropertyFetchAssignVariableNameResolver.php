@@ -22,17 +22,14 @@ final class PropertyFetchAssignVariableNameResolver implements \Rector\Naming\Co
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function match($node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\PropertyFetch;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param PropertyFetch $node
      */
-    public function resolve($node) : string
+    public function resolve(\PhpParser\Node $node) : string
     {
         $varName = $this->nodeNameResolver->getName($node->var);
         if (!\is_string($varName)) {

@@ -10,18 +10,11 @@ class ExplicitOctalEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
     {
         return \PhpParser\Lexer\Emulative::PHP_8_1;
     }
-    /**
-     * @param string $code
-     */
-    public function isEmulationNeeded($code) : bool
+    public function isEmulationNeeded(string $code) : bool
     {
         return \strpos($code, '0o') !== \false || \strpos($code, '0O') !== \false;
     }
-    /**
-     * @param string $code
-     * @param mixed[] $tokens
-     */
-    public function emulate($code, $tokens) : array
+    public function emulate(string $code, array $tokens) : array
     {
         for ($i = 0, $c = \count($tokens); $i < $c; ++$i) {
             if ($tokens[$i][0] == \T_LNUMBER && $tokens[$i][1] === '0' && isset($tokens[$i + 1]) && $tokens[$i + 1][0] == \T_STRING && \preg_match('/[oO][0-7]+(?:_[0-7]+)*/', $tokens[$i + 1][1])) {
@@ -39,11 +32,7 @@ class ExplicitOctalEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
         $num = \octdec($str);
         return \is_float($num) ? \T_DNUMBER : \T_LNUMBER;
     }
-    /**
-     * @param string $code
-     * @param mixed[] $tokens
-     */
-    public function reverseEmulate($code, $tokens) : array
+    public function reverseEmulate(string $code, array $tokens) : array
     {
         // Explicit octals were not legal code previously, don't bother.
         return $tokens;

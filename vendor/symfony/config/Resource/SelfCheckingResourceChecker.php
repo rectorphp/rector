@@ -26,18 +26,14 @@ class SelfCheckingResourceChecker implements \RectorPrefix20211210\Symfony\Compo
     // and the container have their own cache. But they may check the very same
     // resources
     private static $cache = [];
-    /**
-     * @param \Symfony\Component\Config\Resource\ResourceInterface $metadata
-     */
-    public function supports($metadata)
+    public function supports(\RectorPrefix20211210\Symfony\Component\Config\Resource\ResourceInterface $metadata)
     {
         return $metadata instanceof \RectorPrefix20211210\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
     }
     /**
      * @param SelfCheckingResourceInterface $resource
-     * @param int $timestamp
      */
-    public function isFresh($resource, $timestamp)
+    public function isFresh(\RectorPrefix20211210\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp)
     {
         $key = "{$resource}:{$timestamp}";
         return self::$cache[$key] ?? (self::$cache[$key] = $resource->isFresh($timestamp));

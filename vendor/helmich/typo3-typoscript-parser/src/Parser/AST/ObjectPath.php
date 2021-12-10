@@ -59,7 +59,7 @@ class ObjectPath
      * @param string $name
      * @return self
      */
-    public function append($name) : self
+    public function append(string $name) : self
     {
         if ($name[0] === '.') {
             return new self($this->absoluteName . $name, $name);

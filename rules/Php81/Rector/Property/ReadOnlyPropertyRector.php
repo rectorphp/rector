@@ -77,9 +77,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Param::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Property|Param $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Param) {
             return $this->refactorParam($node);

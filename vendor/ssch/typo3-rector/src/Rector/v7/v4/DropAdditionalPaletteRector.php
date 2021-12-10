@@ -55,11 +55,7 @@ return [
 CODE_SAMPLE
 )]);
     }
-    /**
-     * @param \PhpParser\Node\Expr $typeKey
-     * @param \PhpParser\Node\Expr $typeConfig
-     */
-    protected function refactorType($typeKey, $typeConfig) : void
+    protected function refactorType(\PhpParser\Node\Expr $typeKey, \PhpParser\Node\Expr $typeConfig) : void
     {
         if (!$typeConfig instanceof \PhpParser\Node\Expr\Array_) {
             return;

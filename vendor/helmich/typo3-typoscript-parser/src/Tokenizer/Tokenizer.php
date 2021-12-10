@@ -66,7 +66,7 @@ class Tokenizer implements \RectorPrefix20211210\Helmich\TypoScriptParser\Tokeni
      * @throws TokenizerException
      * @return TokenInterface[]
      */
-    public function tokenizeString($inputString) : array
+    public function tokenizeString(string $inputString) : array
     {
         $inputString = $this->preprocessor->preprocess($inputString);
         $tokens = new \RectorPrefix20211210\Helmich\TypoScriptParser\Tokenizer\TokenStreamBuilder();
@@ -109,7 +109,7 @@ class Tokenizer implements \RectorPrefix20211210\Helmich\TypoScriptParser\Tokeni
      * @param string $inputStream
      * @return TokenInterface[]
      */
-    public function tokenizeStream($inputStream) : array
+    public function tokenizeStream(string $inputStream) : array
     {
         $content = \file_get_contents($inputStream);
         if ($content === \false) {

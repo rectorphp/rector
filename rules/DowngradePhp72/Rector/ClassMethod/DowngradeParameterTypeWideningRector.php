@@ -133,9 +133,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
@@ -151,7 +151,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($safeTypes);
@@ -263,6 +263,6 @@ CODE_SAMPLE
                 return \false;
             }
         }
-        return \false;
+        return \true;
     }
 }

@@ -136,7 +136,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      * @return Node\Stmt[]|null Array of statements (or null non-throwing error handler is used and
      *                          the parser was unable to recover from an error).
      */
-    public function parse($code, $errorHandler = null)
+    public function parse(string $code, \PhpParser\ErrorHandler $errorHandler = null)
     {
         $this->errorHandler = $errorHandler ?: new \PhpParser\ErrorHandler\Throwing();
         $this->lexer->startLexing($code, $this->errorHandler);
@@ -309,10 +309,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
         }
         throw new \RuntimeException('Reached end of parser loop');
     }
-    /**
-     * @param \PhpParser\Error $error
-     */
-    protected function emitError($error)
+    protected function emitError(\PhpParser\Error $error)
     {
         $this->errorHandler->handleError($error);
     }
@@ -324,7 +321,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return string Formatted error message
      */
-    protected function getErrorMessage($symbol, $state) : string
+    protected function getErrorMessage(int $symbol, int $state) : string
     {
         $expectedString = '';
         if ($expected = $this->getExpectedTokens($state)) {
@@ -339,7 +336,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return string[] Expected tokens. If too many, an empty array is returned.
      */
-    protected function getExpectedTokens($state) : array
+    protected function getExpectedTokens(int $state) : array
     {
         $expected = [];
         $base = $this->actionBase[$state];
@@ -399,7 +396,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      * @param Node\Stmt[] $stmts
      * @return Node\Stmt[]
      */
-    protected function handleNamespaces($stmts) : array
+    protected function handleNamespaces(array $stmts) : array
     {
         $hasErrored = \false;
         $style = $this->getNamespacingStyle($stmts);
@@ -522,7 +519,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return Expr\StaticCall
      */
-    protected function fixupPhp5StaticPropCall($prop, $args, $attributes) : \PhpParser\Node\Expr\StaticCall
+    protected function fixupPhp5StaticPropCall($prop, array $args, array $attributes) : \PhpParser\Node\Expr\StaticCall
     {
         if ($prop instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
             $name = $prop->name instanceof \PhpParser\Node\VarLikeIdentifier ? $prop->name->toString() : $prop->name;
@@ -549,11 +546,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             throw new \Exception();
         }
     }
-    /**
-     * @param \PhpParser\Node $to
-     * @param \PhpParser\Node $from
-     */
-    protected function fixupStartAttributes($to, $from)
+    protected function fixupStartAttributes(\PhpParser\Node $to, \PhpParser\Node $from)
     {
         $startAttributes = ['startLine', 'startFilePos', 'startTokenPos'];
         foreach ($startAttributes as $startAttribute) {
@@ -562,10 +555,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    /**
-     * @param \PhpParser\Node\Name $name
-     */
-    protected function handleBuiltinTypes($name)
+    protected function handleBuiltinTypes(\PhpParser\Node\Name $name)
     {
         $builtinTypes = ['bool' => \true, 'int' => \true, 'float' => \true, 'string' => \true, 'iterable' => \true, 'void' => \true, 'object' => \true, 'null' => \true, 'false' => \true, 'mixed' => \true, 'never' => \true];
         if (!$name->isUnqualified()) {
@@ -584,14 +574,11 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return array Combined start and end attributes
      */
-    protected function getAttributesAt($pos) : array
+    protected function getAttributesAt(int $pos) : array
     {
         return $this->startAttributeStack[$pos] + $this->endAttributeStack[$pos];
     }
-    /**
-     * @param string $cast
-     */
-    protected function getFloatCastKind($cast) : int
+    protected function getFloatCastKind(string $cast) : int
     {
         $cast = \strtolower($cast);
         if (\strpos($cast, 'float') !== \false) {
@@ -620,7 +607,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      *
      * @return LNumber|String_ Integer or string node.
      */
-    protected function parseNumString($str, $attributes)
+    protected function parseNumString(string $str, array $attributes)
     {
         if (!\preg_match('/^(?:0|-?[1-9][0-9]*)$/', $str)) {
             return new \PhpParser\Node\Scalar\String_($str, $attributes);
@@ -631,15 +618,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
         }
         return new \PhpParser\Node\Scalar\LNumber($num, $attributes);
     }
-    /**
-     * @param string $string
-     * @param int $indentLen
-     * @param string $indentChar
-     * @param bool $newlineAtStart
-     * @param bool $newlineAtEnd
-     * @param mixed[] $attributes
-     */
-    protected function stripIndentation($string, $indentLen, $indentChar, $newlineAtStart, $newlineAtEnd, $attributes)
+    protected function stripIndentation(string $string, int $indentLen, string $indentChar, bool $newlineAtStart, bool $newlineAtEnd, array $attributes)
     {
         if ($indentLen === 0) {
             return $string;
@@ -657,14 +636,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             return \substr($matches[0], \strlen($prefix));
         }, $string);
     }
-    /**
-     * @param string $startToken
-     * @param string $endToken
-     * @param mixed[] $attributes
-     * @param mixed[] $endTokenAttributes
-     * @param bool $parseUnicodeEscape
-     */
-    protected function parseDocString($startToken, $contents, $endToken, $attributes, $endTokenAttributes, $parseUnicodeEscape)
+    protected function parseDocString(string $startToken, $contents, string $endToken, array $attributes, array $endTokenAttributes, bool $parseUnicodeEscape)
     {
         $kind = \strpos($startToken, "'") === \false ? \PhpParser\Node\Scalar\String_::KIND_HEREDOC : \PhpParser\Node\Scalar\String_::KIND_NOWDOC;
         $regex = '/\\A[bB]?<<<[ \\t]*[\'"]?([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)[\'"]?(?:\\r\\n|\\n|\\r)\\z/';
@@ -726,7 +698,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
      * @param Comment[] $comments
      * @return array
      */
-    protected function createCommentNopAttributes($comments)
+    protected function createCommentNopAttributes(array $comments)
     {
         $comment = $comments[\count($comments) - 1];
         $commentEndLine = $comment->getEndLine();
@@ -757,28 +729,19 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $this->emitError($error);
         }
     }
-    /**
-     * @param \PhpParser\Node\Param $node
-     */
-    protected function checkParam($node)
+    protected function checkParam(\PhpParser\Node\Param $node)
     {
         if ($node->variadic && null !== $node->default) {
             $this->emitError(new \PhpParser\Error('Variadic parameter cannot have a default value', $node->default->getAttributes()));
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\TryCatch $node
-     */
-    protected function checkTryCatch($node)
+    protected function checkTryCatch(\PhpParser\Node\Stmt\TryCatch $node)
     {
         if (empty($node->catches) && null === $node->finally) {
             $this->emitError(new \PhpParser\Error('Cannot use try without catch or finally', $node->getAttributes()));
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Namespace_ $node
-     */
-    protected function checkNamespace($node)
+    protected function checkNamespace(\PhpParser\Node\Stmt\Namespace_ $node)
     {
         if (null !== $node->stmts) {
             foreach ($node->stmts as $stmt) {
@@ -802,10 +765,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             }
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Class_ $node
-     */
-    protected function checkClass($node, $namePos)
+    protected function checkClass(\PhpParser\Node\Stmt\Class_ $node, $namePos)
     {
         $this->checkClassName($node->name, $namePos);
         if ($node->extends && $node->extends->isSpecialClassName()) {
@@ -813,26 +773,17 @@ abstract class ParserAbstract implements \PhpParser\Parser
         }
         $this->checkImplementedInterfaces($node->implements);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Interface_ $node
-     */
-    protected function checkInterface($node, $namePos)
+    protected function checkInterface(\PhpParser\Node\Stmt\Interface_ $node, $namePos)
     {
         $this->checkClassName($node->name, $namePos);
         $this->checkImplementedInterfaces($node->extends);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Enum_ $node
-     */
-    protected function checkEnum($node, $namePos)
+    protected function checkEnum(\PhpParser\Node\Stmt\Enum_ $node, $namePos)
     {
         $this->checkClassName($node->name, $namePos);
         $this->checkImplementedInterfaces($node->implements);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod $node
-     */
-    protected function checkClassMethod($node, $modifierPos)
+    protected function checkClassMethod(\PhpParser\Node\Stmt\ClassMethod $node, $modifierPos)
     {
         if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC) {
             switch ($node->name->toLowerString()) {
@@ -851,10 +802,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $this->emitError(new \PhpParser\Error(\sprintf('Method %s() cannot be readonly', $node->name), $this->getAttributesAt($modifierPos)));
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassConst $node
-     */
-    protected function checkClassConst($node, $modifierPos)
+    protected function checkClassConst(\PhpParser\Node\Stmt\ClassConst $node, $modifierPos)
     {
         if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC) {
             $this->emitError(new \PhpParser\Error("Cannot use 'static' as constant modifier", $this->getAttributesAt($modifierPos)));
@@ -866,10 +814,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $this->emitError(new \PhpParser\Error("Cannot use 'readonly' as constant modifier", $this->getAttributesAt($modifierPos)));
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Property $node
-     */
-    protected function checkProperty($node, $modifierPos)
+    protected function checkProperty(\PhpParser\Node\Stmt\Property $node, $modifierPos)
     {
         if ($node->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT) {
             $this->emitError(new \PhpParser\Error('Properties cannot be declared abstract', $this->getAttributesAt($modifierPos)));
@@ -878,10 +823,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
             $this->emitError(new \PhpParser\Error('Properties cannot be declared final', $this->getAttributesAt($modifierPos)));
         }
     }
-    /**
-     * @param \PhpParser\Node\Stmt\UseUse $node
-     */
-    protected function checkUseUse($node, $namePos)
+    protected function checkUseUse(\PhpParser\Node\Stmt\UseUse $node, $namePos)
     {
         if ($node->alias && $node->alias->isSpecialClassName()) {
             $this->emitError(new \PhpParser\Error(\sprintf('Cannot use %s as %s because \'%2$s\' is a special class name', $node->name, $node->alias), $this->getAttributesAt($namePos)));

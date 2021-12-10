@@ -40,9 +40,9 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         return \PhpParser\Node\Name\FullyQualified::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FullyQualified $node
      */
-    public function mapToPHPStan($node) : \PHPStan\Type\Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($this->isParamTyped($node, $parent)) {

@@ -38,10 +38,9 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
         return \PHPStan\Type\ObjectWithoutClassType::class;
     }
     /**
-     * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
+     * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode($type, $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('parent');
@@ -53,10 +52,9 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
     }
     /**
-     * @param \PHPStan\Type\Type $type
-     * @param \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind
+     * @param ObjectWithoutClassType $type
      */
-    public function mapToPhpParserNode($type, $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind $typeKind) : ?\PhpParser\Node
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::OBJECT_TYPE)) {
             return null;

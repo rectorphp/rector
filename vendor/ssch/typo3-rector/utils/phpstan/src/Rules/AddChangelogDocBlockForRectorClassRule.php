@@ -51,11 +51,10 @@ final class AddChangelogDocBlockForRectorClassRule implements \PHPStan\Rules\Rul
         return \PhpParser\Node\Stmt\Class_::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      * @return string[]
-     * @param \PHPStan\Analyser\Scope $scope
      */
-    public function processNode($node, $scope) : array
+    public function processNode(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : array
     {
         $className = $node->name;
         if (!$className instanceof \PhpParser\Node\Identifier) {

@@ -15,12 +15,7 @@ class FulfilledPromise implements \RectorPrefix20211210\React\Promise\ExtendedPr
         }
         $this->value = $value;
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function then($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null === $onFulfilled) {
             return $this;
@@ -33,12 +28,7 @@ class FulfilledPromise implements \RectorPrefix20211210\React\Promise\ExtendedPr
             return new \RectorPrefix20211210\React\Promise\RejectedPromise($exception);
         }
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function done($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null === $onFulfilled) {
             return;
@@ -48,17 +38,11 @@ class FulfilledPromise implements \RectorPrefix20211210\React\Promise\ExtendedPr
             $result->done();
         }
     }
-    /**
-     * @param callable $onRejected
-     */
-    public function otherwise($onRejected)
+    public function otherwise(callable $onRejected)
     {
         return $this;
     }
-    /**
-     * @param callable $onFulfilledOrRejected
-     */
-    public function always($onFulfilledOrRejected)
+    public function always(callable $onFulfilledOrRejected)
     {
         return $this->then(function ($value) use($onFulfilledOrRejected) {
             return resolve($onFulfilledOrRejected())->then(function () use($value) {
@@ -66,10 +50,7 @@ class FulfilledPromise implements \RectorPrefix20211210\React\Promise\ExtendedPr
             });
         });
     }
-    /**
-     * @param callable $onProgress
-     */
-    public function progress($onProgress)
+    public function progress(callable $onProgress)
     {
         return $this;
     }

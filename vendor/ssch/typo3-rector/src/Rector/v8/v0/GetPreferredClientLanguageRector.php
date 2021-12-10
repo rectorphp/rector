@@ -28,9 +28,9 @@ final class GetPreferredClientLanguageRector extends \Rector\Core\Rector\Abstrac
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isCharsetConverterMethodCall($node) && !$this->isCallFromTypoScriptFrontendController($node)) {
             return null;

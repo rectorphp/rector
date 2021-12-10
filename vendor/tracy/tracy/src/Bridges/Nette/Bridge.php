@@ -27,10 +27,7 @@ class Bridge
         $blueScreen->addAction([self::class, 'renderMemberAccessException']);
         $blueScreen->addPanel([self::class, 'renderNeonError']);
     }
-    /**
-     * @param \Throwable|null $e
-     */
-    public static function renderLatteError($e) : ?array
+    public static function renderLatteError(?\Throwable $e) : ?array
     {
         if ($e instanceof \RectorPrefix20211210\Latte\CompileException && $e->sourceName) {
             return ['tab' => 'Template', 'panel' => (\preg_match('#\\n|\\?#', $e->sourceName) ? '' : '<p>' . (@\is_file($e->sourceName) ? '<b>File:</b> ' . \RectorPrefix20211210\Tracy\Helpers::editorLink($e->sourceName, $e->sourceLine) : '<b>' . \htmlspecialchars($e->sourceName . ($e->sourceLine ? ':' . $e->sourceLine : '')) . '</b>') . '</p>') . '<pre class=code><div>' . \RectorPrefix20211210\Tracy\BlueScreen::highlightLine(\htmlspecialchars($e->sourceCode, \ENT_IGNORE, 'UTF-8'), $e->sourceLine) . '</div></pre>'];
@@ -45,20 +42,14 @@ class Bridge
         }
         return null;
     }
-    /**
-     * @param \Throwable|null $e
-     */
-    public static function renderLatteUnknownMacro($e) : ?array
+    public static function renderLatteUnknownMacro(?\Throwable $e) : ?array
     {
         if ($e instanceof \RectorPrefix20211210\Latte\CompileException && $e->sourceName && @\is_file($e->sourceName) && (\preg_match('#Unknown macro (\\{\\w+)\\}, did you mean (\\{\\w+)\\}\\?#A', $e->getMessage(), $m) || \preg_match('#Unknown attribute (n:\\w+), did you mean (n:\\w+)\\?#A', $e->getMessage(), $m))) {
             return ['link' => \RectorPrefix20211210\Tracy\Helpers::editorUri($e->sourceName, $e->sourceLine, 'fix', $m[1], $m[2]), 'label' => 'fix it'];
         }
         return null;
     }
-    /**
-     * @param \Throwable|null $e
-     */
-    public static function renderMemberAccessException($e) : ?array
+    public static function renderMemberAccessException(?\Throwable $e) : ?array
     {
         if (!$e instanceof \RectorPrefix20211210\Nette\MemberAccessException && !$e instanceof \LogicException) {
             return null;
@@ -72,10 +63,7 @@ class Bridge
         }
         return null;
     }
-    /**
-     * @param \Throwable|null $e
-     */
-    public static function renderNeonError($e) : ?array
+    public static function renderNeonError(?\Throwable $e) : ?array
     {
         if (!$e instanceof \RectorPrefix20211210\Nette\Neon\Exception || !\preg_match('#line (\\d+)#', $e->getMessage(), $m)) {
             return null;

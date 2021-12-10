@@ -22,16 +22,12 @@ class Gitignore
      * Returns a regexp which is the equivalent of the gitignore pattern.
      *
      * Format specification: https://git-scm.com/docs/gitignore#_pattern_format
-     * @param string $gitignoreFileContent
      */
-    public static function toRegex($gitignoreFileContent) : string
+    public static function toRegex(string $gitignoreFileContent) : string
     {
         return self::buildRegex($gitignoreFileContent, \false);
     }
-    /**
-     * @param string $gitignoreFileContent
-     */
-    public static function toRegexMatchingNegatedPatterns($gitignoreFileContent) : string
+    public static function toRegexMatchingNegatedPatterns(string $gitignoreFileContent) : string
     {
         return self::buildRegex($gitignoreFileContent, \true);
     }

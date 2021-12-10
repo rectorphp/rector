@@ -46,9 +46,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Coalesce $node
      */
-    public function refactor($node) : \PhpParser\Node\Expr\Ternary
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\Ternary
     {
         $if = $node->left;
         $else = $node->right;

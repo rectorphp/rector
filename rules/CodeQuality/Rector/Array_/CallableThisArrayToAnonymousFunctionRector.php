@@ -92,9 +92,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Array_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Array_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
         if (!$arrayCallable instanceof \Rector\NodeCollector\ValueObject\ArrayCallable) {

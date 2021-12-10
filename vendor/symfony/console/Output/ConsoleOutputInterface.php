@@ -22,9 +22,6 @@ interface ConsoleOutputInterface extends \RectorPrefix20211210\Symfony\Component
      * Gets the OutputInterface for errors.
      */
     public function getErrorOutput() : \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface;
-    /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $error
-     */
-    public function setErrorOutput($error);
+    public function setErrorOutput(\RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $error);
     public function section() : \RectorPrefix20211210\Symfony\Component\Console\Output\ConsoleSectionOutput;
 }

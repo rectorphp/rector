@@ -16,9 +16,9 @@ final class EmptyNameResolver implements \Rector\NodeNameResolver\Contract\NodeN
         return \PhpParser\Node\Expr\Empty_::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Empty_ $node
      */
-    public function resolve($node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         return 'empty';
     }

@@ -90,7 +90,7 @@ CODE_SAMPLE
      * @param Node[] $nodes
      * @return Node[]|null
      */
-    public function beforeTraverse($nodes) : ?array
+    public function beforeTraverse(array $nodes) : ?array
     {
         $this->classes = [];
         return parent::beforeTraverse($nodes);
@@ -99,7 +99,7 @@ CODE_SAMPLE
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function afterTraverse($nodes)
+    public function afterTraverse(array $nodes)
     {
         if ($this->classes === []) {
             return $nodes;
@@ -107,9 +107,9 @@ CODE_SAMPLE
         return \array_merge($nodes, $this->classes);
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param New_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->classAnalyzer->isAnonymousClass($node->class)) {
             return null;

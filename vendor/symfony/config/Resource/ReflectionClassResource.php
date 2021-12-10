@@ -33,9 +33,8 @@ class ReflectionClassResource implements \RectorPrefix20211210\Symfony\Component
     }
     /**
      * {@inheritdoc}
-     * @param int $timestamp
      */
-    public function isFresh($timestamp) : bool
+    public function isFresh(int $timestamp) : bool
     {
         if (null === $this->hash) {
             $this->hash = $this->computeHash();

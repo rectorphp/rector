@@ -33,9 +33,8 @@ final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nett
     }
     /**
      * @return array<string, string>
-     * @param \PhpParser\Node $node
      */
-    public function resolve($node) : array
+    public function resolve(\PhpParser\Node $node) : array
     {
         if (!$node instanceof \PhpParser\Node\Expr\Variable) {
             return [];

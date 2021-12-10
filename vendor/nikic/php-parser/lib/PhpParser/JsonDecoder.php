@@ -7,10 +7,7 @@ class JsonDecoder
 {
     /** @var \ReflectionClass[] Node type to reflection class map */
     private $reflectionClassCache;
-    /**
-     * @param string $json
-     */
-    public function decode($json)
+    public function decode(string $json)
     {
         $value = \json_decode($json, \true);
         if (\json_last_error()) {

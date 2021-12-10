@@ -20,10 +20,7 @@ class Patterns
         }, $this->patterns);
         $this->regex = '/^(?:' . \implode('|', $patterns) . ')$/i';
     }
-    /**
-     * @param string $word
-     */
-    public function matches($word) : bool
+    public function matches(string $word) : bool
     {
         return \preg_match($this->regex, $word, $regs) === 1;
     }

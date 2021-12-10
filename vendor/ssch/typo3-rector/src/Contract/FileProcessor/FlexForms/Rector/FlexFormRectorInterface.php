@@ -7,8 +7,5 @@ use DOMDocument;
 use Rector\Core\Contract\Rector\RectorInterface;
 interface FlexFormRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
-    /**
-     * @param \DOMDocument $domDocument
-     */
-    public function transform($domDocument) : bool;
+    public function transform(\DOMDocument $domDocument) : bool;
 }

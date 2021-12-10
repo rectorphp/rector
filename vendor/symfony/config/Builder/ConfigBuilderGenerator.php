@@ -37,9 +37,8 @@ class ConfigBuilderGenerator implements \RectorPrefix20211210\Symfony\Component\
     }
     /**
      * @return \Closure that will return the root config class
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
      */
-    public function build($configuration) : \Closure
+    public function build(\RectorPrefix20211210\Symfony\Component\Config\Definition\ConfigurationInterface $configuration) : \Closure
     {
         $this->classes = [];
         $rootNode = $configuration->getConfigTreeBuilder()->buildTree();

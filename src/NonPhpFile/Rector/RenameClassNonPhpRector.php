@@ -56,10 +56,7 @@ services:
 CODE_SAMPLE
 , ['SomeOldClass' => 'SomeNewClass'])]);
     }
-    /**
-     * @param string $fileContent
-     */
-    public function refactorFileContent($fileContent) : string
+    public function refactorFileContent(string $fileContent) : string
     {
         $classRenames = $this->getRenameClasses();
         return $this->renameClasses($fileContent, $classRenames);
@@ -67,7 +64,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $renameClasses = $configuration[self::RENAME_CLASSES] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($renameClasses);

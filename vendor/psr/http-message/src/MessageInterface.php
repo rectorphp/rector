@@ -173,5 +173,5 @@ interface MessageInterface
      * @return static
      * @throws \InvalidArgumentException When the body is not valid.
      */
-    public function withBody($body);
+    public function withBody(\RectorPrefix20211210\Psr\Http\Message\StreamInterface $body);
 }

@@ -30,9 +30,9 @@ final class IntersectionTypeNodeMapper implements \Rector\StaticTypeMapper\Contr
         return \PhpParser\Node\IntersectionType::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Node\IntersectionType $node
      */
-    public function mapToPHPStan($node) : \PHPStan\Type\Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $types = [];
         foreach ($node->types as $intersectionedType) {

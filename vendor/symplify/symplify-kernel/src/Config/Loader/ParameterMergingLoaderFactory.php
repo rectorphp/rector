@@ -12,11 +12,7 @@ use RectorPrefix20211210\Symplify\PackageBuilder\DependencyInjection\FileLoader\
 use RectorPrefix20211210\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
 final class ParameterMergingLoaderFactory implements \RectorPrefix20211210\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-     * @param string $currentWorkingDirectory
-     */
-    public function create($containerBuilder, $currentWorkingDirectory) : \RectorPrefix20211210\Symfony\Component\Config\Loader\LoaderInterface
+    public function create(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : \RectorPrefix20211210\Symfony\Component\Config\Loader\LoaderInterface
     {
         $fileLocator = new \RectorPrefix20211210\Symfony\Component\Config\FileLocator([$currentWorkingDirectory]);
         $loaders = [new \RectorPrefix20211210\Symfony\Component\Config\Loader\GlobFileLoader($fileLocator), new \RectorPrefix20211210\Symplify\PackageBuilder\DependencyInjection\FileLoader\ParameterMergingPhpFileLoader($containerBuilder, $fileLocator)];

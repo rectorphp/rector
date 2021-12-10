@@ -23,11 +23,7 @@ interface TyposcriptConditionMatcher
     public const CONTAINS_CONSTANT = '{$';
     /**
      * If we return null it means conditions can be removed
-     * @param string $condition
      */
-    public function change($condition) : ?string;
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool;
+    public function change(string $condition) : ?string;
+    public function shouldApply(string $condition) : bool;
 }

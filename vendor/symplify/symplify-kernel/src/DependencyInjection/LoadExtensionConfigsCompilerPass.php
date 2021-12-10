@@ -11,10 +11,7 @@ use RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 final class LoadExtensionConfigsCompilerPass extends \RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-     */
-    public function process($containerBuilder) : void
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : void
     {
         $extensionNames = \array_keys($containerBuilder->getExtensions());
         foreach ($extensionNames as $extensionName) {

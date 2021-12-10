@@ -22,17 +22,14 @@ final class NewAssignVariableNameResolver implements \Rector\Naming\Contract\Ass
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function match($node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
         return $node instanceof \PhpParser\Node\Expr\New_;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param New_ $node
      */
-    public function resolve($node) : string
+    public function resolve(\PhpParser\Node $node) : string
     {
         $className = $this->nodeNameResolver->getName($node->class);
         if ($className === null) {

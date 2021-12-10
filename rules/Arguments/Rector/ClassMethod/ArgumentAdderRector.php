@@ -93,10 +93,10 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall|StaticCall|ClassMethod $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function refactor($node)
+    public function refactor(\PhpParser\Node $node)
     {
         $this->haveArgumentsChanged = \false;
         foreach ($this->addedArguments as $addedArgument) {
@@ -116,7 +116,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($addedArguments, \Rector\Arguments\ValueObject\ArgumentAdder::class);

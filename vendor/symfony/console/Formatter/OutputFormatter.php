@@ -37,9 +37,8 @@ class OutputFormatter implements \RectorPrefix20211210\Symfony\Component\Console
     }
     /**
      * Escapes "<" special char in given text.
-     * @param string $text
      */
-    public static function escape($text) : string
+    public static function escape(string $text) : string
     {
         $text = \preg_replace('/([^\\\\]?)</', '$1\\<', $text);
         return self::escapeTrailingBackslash($text);
@@ -48,9 +47,8 @@ class OutputFormatter implements \RectorPrefix20211210\Symfony\Component\Console
      * Escapes trailing "\" in given text.
      *
      * @internal
-     * @param string $text
      */
-    public static function escapeTrailingBackslash($text) : string
+    public static function escapeTrailingBackslash(string $text) : string
     {
         if (\substr_compare($text, '\\', -\strlen('\\')) === 0) {
             $len = \strlen($text);
@@ -79,9 +77,8 @@ class OutputFormatter implements \RectorPrefix20211210\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param bool $decorated
      */
-    public function setDecorated($decorated)
+    public function setDecorated(bool $decorated)
     {
         $this->decorated = $decorated;
     }
@@ -94,26 +91,22 @@ class OutputFormatter implements \RectorPrefix20211210\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param string $name
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style
      */
-    public function setStyle($name, $style)
+    public function setStyle(string $name, \RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style)
     {
         $this->styles[\strtolower($name)] = $style;
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function hasStyle($name) : bool
+    public function hasStyle(string $name) : bool
     {
         return isset($this->styles[\strtolower($name)]);
     }
     /**
      * {@inheritdoc}
-     * @param string $name
      */
-    public function getStyle($name) : \RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function getStyle(string $name) : \RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
     {
         if (!$this->hasStyle($name)) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Undefined style: "%s".', $name));
@@ -122,18 +115,15 @@ class OutputFormatter implements \RectorPrefix20211210\Symfony\Component\Console
     }
     /**
      * {@inheritdoc}
-     * @param string|null $message
      */
-    public function format($message) : ?string
+    public function format(?string $message) : ?string
     {
         return $this->formatAndWrap($message, 0);
     }
     /**
      * {@inheritdoc}
-     * @param string|null $message
-     * @param int $width
      */
-    public function formatAndWrap($message, $width)
+    public function formatAndWrap(?string $message, int $width)
     {
         $offset = 0;
         $output = '';

@@ -66,9 +66,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         // skip methods with no bodies (e.g interface methods)
         if ($node->stmts === null) {

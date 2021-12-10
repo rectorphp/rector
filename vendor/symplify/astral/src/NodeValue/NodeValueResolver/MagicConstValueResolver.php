@@ -20,10 +20,9 @@ final class MagicConstValueResolver implements \RectorPrefix20211210\Symplify\As
         return \PhpParser\Node\Scalar\MagicConst::class;
     }
     /**
-     * @param \PhpParser\Node\Expr $expr
-     * @param string $currentFilePath
+     * @param MagicConst $expr
      */
-    public function resolve($expr, $currentFilePath) : ?string
+    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath) : ?string
     {
         if ($expr instanceof \PhpParser\Node\Scalar\MagicConst\Dir) {
             return \dirname($currentFilePath);

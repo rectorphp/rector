@@ -57,9 +57,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\List_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param List_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node) {

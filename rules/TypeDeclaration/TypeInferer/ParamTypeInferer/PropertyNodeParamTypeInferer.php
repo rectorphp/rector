@@ -59,10 +59,7 @@ final class PropertyNodeParamTypeInferer implements \Rector\TypeDeclaration\Cont
         $this->typeFactory = $typeFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    public function inferParam($param) : \PHPStan\Type\Type
+    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         $classLike = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {

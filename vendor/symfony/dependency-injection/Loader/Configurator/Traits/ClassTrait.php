@@ -16,9 +16,8 @@ trait ClassTrait
      * Sets the service class.
      *
      * @return $this
-     * @param string|null $class
      */
-    public final function class($class) : self
+    public final function class(?string $class) : self
     {
         $this->definition->setClass($class);
         return $this;

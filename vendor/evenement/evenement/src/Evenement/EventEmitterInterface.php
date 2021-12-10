@@ -13,22 +13,10 @@ namespace RectorPrefix20211210\Evenement;
 
 interface EventEmitterInterface
 {
-    /**
-     * @param callable $listener
-     */
-    public function on($event, $listener);
-    /**
-     * @param callable $listener
-     */
-    public function once($event, $listener);
-    /**
-     * @param callable $listener
-     */
-    public function removeListener($event, $listener);
+    public function on($event, callable $listener);
+    public function once($event, callable $listener);
+    public function removeListener($event, callable $listener);
     public function removeAllListeners($event = null);
     public function listeners($event = null);
-    /**
-     * @param mixed[] $arguments
-     */
-    public function emit($event, $arguments = []);
+    public function emit($event, array $arguments = []);
 }

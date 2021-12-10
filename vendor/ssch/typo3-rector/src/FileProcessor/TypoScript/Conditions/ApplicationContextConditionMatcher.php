@@ -11,10 +11,7 @@ final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Cont
      * @var string
      */
     private const TYPE = 'applicationContext';
-    /**
-     * @param string $condition
-     */
-    public function change($condition) : ?string
+    public function change(string $condition) : ?string
     {
         \preg_match('#' . self::TYPE . self::ZERO_ONE_OR_MORE_WHITESPACES . '=' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(.*)#', $condition, $matches);
         if (!\is_array($matches)) {
@@ -31,10 +28,7 @@ final class ApplicationContextConditionMatcher implements \Ssch\TYPO3Rector\Cont
         }
         return \implode(' || ', $newConditions);
     }
-    /**
-     * @param string $condition
-     */
-    public function shouldApply($condition) : bool
+    public function shouldApply(string $condition) : bool
     {
         if (\strpos($condition, self::CONTAINS_CONSTANT) !== \false) {
             return \false;

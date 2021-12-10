@@ -120,10 +120,7 @@ final class ExtLibeventLoop implements \RectorPrefix20211210\React\EventLoop\Loo
         $this->scheduleTimer($timer);
         return $timer;
     }
-    /**
-     * @param \React\EventLoop\TimerInterface $timer
-     */
-    public function cancelTimer($timer)
+    public function cancelTimer(\RectorPrefix20211210\React\EventLoop\TimerInterface $timer)
     {
         if ($this->timerEvents->contains($timer)) {
             $event = $this->timerEvents[$timer];

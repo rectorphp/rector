@@ -47,10 +47,10 @@ CODE_SAMPLE
         return \Rector\Nette\NeonParser\Node\Service_\SetupMethodCall::class;
     }
     /**
-     * @param \Nette\Neon\Node $node
+     * @param SetupMethodCall $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode($node)
+    public function enterNode(\RectorPrefix20211210\Nette\Neon\Node $node)
     {
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             if (!\is_a($node->className, $methodCallRename->getClass(), \true)) {

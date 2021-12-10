@@ -17,9 +17,8 @@ trait AbstractTrait
      * template for other definitions.
      *
      * @return $this
-     * @param bool $abstract
      */
-    public final function abstract($abstract = \true) : self
+    public final function abstract(bool $abstract = \true) : self
     {
         $this->definition->setAbstract($abstract);
         return $this;

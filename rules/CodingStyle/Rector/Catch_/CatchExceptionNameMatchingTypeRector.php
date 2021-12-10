@@ -62,9 +62,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Catch_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Catch_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (\count($node->types) !== 1) {
             return null;

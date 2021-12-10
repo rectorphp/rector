@@ -24,9 +24,9 @@ final class UnifiedFileNameValidatorRector extends \Rector\Core\Rector\AbstractR
         return [\PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ConstFetch|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;

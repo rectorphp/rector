@@ -67,9 +67,9 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Spaceship $node
      */
-    public function refactor($node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
     {
         $leftVariableParam = new \PhpParser\Node\Expr\Variable('left');
         $rightVariableParam = new \PhpParser\Node\Expr\Variable('right');

@@ -24,10 +24,7 @@ final class StringNode extends \RectorPrefix20211210\Nette\Neon\Node
     {
         return $this->value;
     }
-    /**
-     * @param string $s
-     */
-    public static function parse($s) : string
+    public static function parse(string $s) : string
     {
         if (\preg_match('#^...\\n++([\\t ]*+)#', $s, $m)) {
             // multiline

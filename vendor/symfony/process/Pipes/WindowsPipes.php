@@ -114,10 +114,8 @@ class WindowsPipes extends \RectorPrefix20211210\Symfony\Component\Process\Pipes
     }
     /**
      * {@inheritdoc}
-     * @param bool $blocking
-     * @param bool $close
      */
-    public function readAndWrite($blocking, $close = \false) : array
+    public function readAndWrite(bool $blocking, bool $close = \false) : array
     {
         $this->unblock();
         $w = $this->write();

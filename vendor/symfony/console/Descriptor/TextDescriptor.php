@@ -28,10 +28,8 @@ class TextDescriptor extends \RectorPrefix20211210\Symfony\Component\Console\Des
 {
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputArgument $argument
-     * @param mixed[] $options
      */
-    protected function describeInputArgument($argument, $options = [])
+    protected function describeInputArgument(\RectorPrefix20211210\Symfony\Component\Console\Input\InputArgument $argument, array $options = [])
     {
         if (null !== $argument->getDefault() && (!\is_array($argument->getDefault()) || \count($argument->getDefault()))) {
             $default = \sprintf('<comment> [default: %s]</comment>', $this->formatDefaultValue($argument->getDefault()));
@@ -51,10 +49,8 @@ class TextDescriptor extends \RectorPrefix20211210\Symfony\Component\Console\Des
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputOption $option
-     * @param mixed[] $options
      */
-    protected function describeInputOption($option, $options = [])
+    protected function describeInputOption(\RectorPrefix20211210\Symfony\Component\Console\Input\InputOption $option, array $options = [])
     {
         if ($option->acceptValue() && null !== $option->getDefault() && (!\is_array($option->getDefault()) || \count($option->getDefault()))) {
             $default = \sprintf('<comment> [default: %s]</comment>', $this->formatDefaultValue($option->getDefault()));
@@ -83,10 +79,8 @@ class TextDescriptor extends \RectorPrefix20211210\Symfony\Component\Console\Des
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
-     * @param mixed[] $options
      */
-    protected function describeInputDefinition($definition, $options = [])
+    protected function describeInputDefinition(\RectorPrefix20211210\Symfony\Component\Console\Input\InputDefinition $definition, array $options = [])
     {
         $totalWidth = $this->calculateTotalWidthForOptions($definition->getOptions());
         foreach ($definition->getArguments() as $argument) {
@@ -122,10 +116,8 @@ class TextDescriptor extends \RectorPrefix20211210\Symfony\Component\Console\Des
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Command\Command $command
-     * @param mixed[] $options
      */
-    protected function describeCommand($command, $options = [])
+    protected function describeCommand(\RectorPrefix20211210\Symfony\Component\Console\Command\Command $command, array $options = [])
     {
         $command->mergeApplicationDefinition(\false);
         if ($description = $command->getDescription()) {
@@ -157,10 +149,8 @@ class TextDescriptor extends \RectorPrefix20211210\Symfony\Component\Console\Des
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Application $application
-     * @param mixed[] $options
      */
-    protected function describeApplication($application, $options = [])
+    protected function describeApplication(\RectorPrefix20211210\Symfony\Component\Console\Application $application, array $options = [])
     {
         $describedNamespace = $options['namespace'] ?? null;
         $description = new \RectorPrefix20211210\Symfony\Component\Console\Descriptor\ApplicationDescription($application, $describedNamespace);

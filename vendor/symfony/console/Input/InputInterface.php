@@ -34,7 +34,7 @@ interface InputInterface
      * @param string|array $values     The values to look for in the raw parameters (can be an array)
      * @param bool         $onlyParams Only check real parameters, skip those following an end of options (--) signal
      */
-    public function hasParameterOption($values, $onlyParams = \false) : bool;
+    public function hasParameterOption($values, bool $onlyParams = \false) : bool;
     /**
      * Returns the value of a raw option (not parsed).
      *
@@ -49,14 +49,13 @@ interface InputInterface
      *
      * @return mixed
      */
-    public function getParameterOption($values, $default = \false, $onlyParams = \false);
+    public function getParameterOption($values, $default = \false, bool $onlyParams = \false);
     /**
      * Binds the current Input instance with the given arguments and options.
      *
      * @throws RuntimeException
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
      */
-    public function bind($definition);
+    public function bind(\RectorPrefix20211210\Symfony\Component\Console\Input\InputDefinition $definition);
     /**
      * Validates the input.
      *
@@ -75,22 +74,19 @@ interface InputInterface
      * @return mixed
      *
      * @throws InvalidArgumentException When argument given doesn't exist
-     * @param string $name
      */
-    public function getArgument($name);
+    public function getArgument(string $name);
     /**
      * Sets an argument value by name.
      *
      * @throws InvalidArgumentException When argument given doesn't exist
      * @param mixed $value
-     * @param string $name
      */
-    public function setArgument($name, $value);
+    public function setArgument(string $name, $value);
     /**
      * Returns true if an InputArgument object exists by name or position.
-     * @param string $name
      */
-    public function hasArgument($name) : bool;
+    public function hasArgument(string $name) : bool;
     /**
      * Returns all the given options merged with the default values.
      *
@@ -103,29 +99,25 @@ interface InputInterface
      * @return mixed
      *
      * @throws InvalidArgumentException When option given doesn't exist
-     * @param string $name
      */
-    public function getOption($name);
+    public function getOption(string $name);
     /**
      * Sets an option value by name.
      *
      * @throws InvalidArgumentException When option given doesn't exist
      * @param mixed $value
-     * @param string $name
      */
-    public function setOption($name, $value);
+    public function setOption(string $name, $value);
     /**
      * Returns true if an InputOption object exists by name.
-     * @param string $name
      */
-    public function hasOption($name) : bool;
+    public function hasOption(string $name) : bool;
     /**
      * Is this input means interactive?
      */
     public function isInteractive() : bool;
     /**
      * Sets the input interactivity.
-     * @param bool $interactive
      */
-    public function setInteractive($interactive);
+    public function setInteractive(bool $interactive);
 }

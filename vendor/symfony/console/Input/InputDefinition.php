@@ -57,9 +57,8 @@ class InputDefinition
     }
     /**
      * Sets the definition of the input.
-     * @param mixed[] $definition
      */
-    public function setDefinition($definition)
+    public function setDefinition(array $definition)
     {
         $arguments = [];
         $options = [];
@@ -78,7 +77,7 @@ class InputDefinition
      *
      * @param InputArgument[] $arguments An array of InputArgument objects
      */
-    public function setArguments($arguments = [])
+    public function setArguments(array $arguments = [])
     {
         $this->arguments = [];
         $this->requiredCount = 0;
@@ -91,7 +90,7 @@ class InputDefinition
      *
      * @param InputArgument[] $arguments An array of InputArgument objects
      */
-    public function addArguments($arguments = [])
+    public function addArguments(?array $arguments = [])
     {
         if (null !== $arguments) {
             foreach ($arguments as $argument) {
@@ -101,9 +100,8 @@ class InputDefinition
     }
     /**
      * @throws LogicException When incorrect argument is given
-     * @param \Symfony\Component\Console\Input\InputArgument $argument
      */
-    public function addArgument($argument)
+    public function addArgument(\RectorPrefix20211210\Symfony\Component\Console\Input\InputArgument $argument)
     {
         if (isset($this->arguments[$argument->getName()])) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\LogicException(\sprintf('An argument with name "%s" already exists.', $argument->getName()));
@@ -186,7 +184,7 @@ class InputDefinition
      *
      * @param InputOption[] $options An array of InputOption objects
      */
-    public function setOptions($options = [])
+    public function setOptions(array $options = [])
     {
         $this->options = [];
         $this->shortcuts = [];
@@ -198,7 +196,7 @@ class InputDefinition
      *
      * @param InputOption[] $options An array of InputOption objects
      */
-    public function addOptions($options = [])
+    public function addOptions(array $options = [])
     {
         foreach ($options as $option) {
             $this->addOption($option);
@@ -206,9 +204,8 @@ class InputDefinition
     }
     /**
      * @throws LogicException When option given already exist
-     * @param \Symfony\Component\Console\Input\InputOption $option
      */
-    public function addOption($option)
+    public function addOption(\RectorPrefix20211210\Symfony\Component\Console\Input\InputOption $option)
     {
         if (isset($this->options[$option->getName()]) && !$option->equals($this->options[$option->getName()])) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\LogicException(\sprintf('An option named "%s" already exists.', $option->getName()));
@@ -241,9 +238,8 @@ class InputDefinition
      * Returns an InputOption by name.
      *
      * @throws InvalidArgumentException When option given doesn't exist
-     * @param string $name
      */
-    public function getOption($name) : \RectorPrefix20211210\Symfony\Component\Console\Input\InputOption
+    public function getOption(string $name) : \RectorPrefix20211210\Symfony\Component\Console\Input\InputOption
     {
         if (!$this->hasOption($name)) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $name));
@@ -255,9 +251,8 @@ class InputDefinition
      *
      * This method can't be used to check if the user included the option when
      * executing the command (use getOption() instead).
-     * @param string $name
      */
-    public function hasOption($name) : bool
+    public function hasOption(string $name) : bool
     {
         return isset($this->options[$name]);
     }
@@ -272,25 +267,22 @@ class InputDefinition
     }
     /**
      * Returns true if an InputOption object exists by shortcut.
-     * @param string $name
      */
-    public function hasShortcut($name) : bool
+    public function hasShortcut(string $name) : bool
     {
         return isset($this->shortcuts[$name]);
     }
     /**
      * Returns true if an InputOption object exists by negated name.
-     * @param string $name
      */
-    public function hasNegation($name) : bool
+    public function hasNegation(string $name) : bool
     {
         return isset($this->negations[$name]);
     }
     /**
      * Gets an InputOption by shortcut.
-     * @param string $shortcut
      */
-    public function getOptionForShortcut($shortcut) : \RectorPrefix20211210\Symfony\Component\Console\Input\InputOption
+    public function getOptionForShortcut(string $shortcut) : \RectorPrefix20211210\Symfony\Component\Console\Input\InputOption
     {
         return $this->getOption($this->shortcutToName($shortcut));
     }
@@ -311,9 +303,8 @@ class InputDefinition
      * @throws InvalidArgumentException When option given does not exist
      *
      * @internal
-     * @param string $shortcut
      */
-    public function shortcutToName($shortcut) : string
+    public function shortcutToName(string $shortcut) : string
     {
         if (!isset($this->shortcuts[$shortcut])) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "-%s" option does not exist.', $shortcut));
@@ -326,9 +317,8 @@ class InputDefinition
      * @throws InvalidArgumentException When option given does not exist
      *
      * @internal
-     * @param string $negation
      */
-    public function negationToName($negation) : string
+    public function negationToName(string $negation) : string
     {
         if (!isset($this->negations[$negation])) {
             throw new \RectorPrefix20211210\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('The "--%s" option does not exist.', $negation));
@@ -337,9 +327,8 @@ class InputDefinition
     }
     /**
      * Gets the synopsis.
-     * @param bool $short
      */
-    public function getSynopsis($short = \false) : string
+    public function getSynopsis(bool $short = \false) : string
     {
         $elements = [];
         if ($short && $this->getOptions()) {

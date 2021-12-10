@@ -15,7 +15,7 @@ class NodeFinder
      *
      * @return Node[] Found nodes satisfying the filter callback
      */
-    public function find($nodes, $filter) : array
+    public function find($nodes, callable $filter) : array
     {
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
@@ -34,7 +34,7 @@ class NodeFinder
      *
      * @return Node[] Found nodes (all instances of $class)
      */
-    public function findInstanceOf($nodes, $class) : array
+    public function findInstanceOf($nodes, string $class) : array
     {
         return $this->find($nodes, function ($node) use($class) {
             return $node instanceof $class;
@@ -48,7 +48,7 @@ class NodeFinder
      *
      * @return null|Node Found node (or null if none found)
      */
-    public function findFirst($nodes, $filter)
+    public function findFirst($nodes, callable $filter)
     {
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
@@ -67,7 +67,7 @@ class NodeFinder
      *
      * @return null|Node Found node, which is an instance of $class (or null if none found)
      */
-    public function findFirstInstanceOf($nodes, $class)
+    public function findFirstInstanceOf($nodes, string $class)
     {
         return $this->findFirst($nodes, function ($node) use($class) {
             return $node instanceof $class;

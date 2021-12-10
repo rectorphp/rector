@@ -69,9 +69,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $toStringClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::TO_STRING);
         if (!$toStringClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {

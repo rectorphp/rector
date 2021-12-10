@@ -59,7 +59,7 @@ final class SystemError implements \RectorPrefix20211210\Symplify\EasyParallel\C
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode($json) : \RectorPrefix20211210\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20211210\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json['message'], $json['relative_file_path'], $json['line'], $json['rector_class']);
     }

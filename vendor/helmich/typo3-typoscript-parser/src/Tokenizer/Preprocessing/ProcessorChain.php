@@ -16,7 +16,7 @@ class ProcessorChain implements \RectorPrefix20211210\Helmich\TypoScriptParser\T
      * @param Preprocessor $next
      * @return self
      */
-    public function with($next) : self
+    public function with(\RectorPrefix20211210\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor $next) : self
     {
         $new = new self();
         $new->processors = \array_merge($this->processors, [$next]);
@@ -26,7 +26,7 @@ class ProcessorChain implements \RectorPrefix20211210\Helmich\TypoScriptParser\T
      * @param string $contents Un-processed Typoscript contents
      * @return string Processed TypoScript contents
      */
-    public function preprocess($contents) : string
+    public function preprocess(string $contents) : string
     {
         foreach ($this->processors as $p) {
             $contents = $p->preprocess($contents);

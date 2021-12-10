@@ -7,8 +7,5 @@ use PhpParser\Node\Param;
 use PHPStan\Type\Type;
 interface ParamTypeInfererInterface
 {
-    /**
-     * @param \PhpParser\Node\Param $param
-     */
-    public function inferParam($param) : \PHPStan\Type\Type;
+    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type;
 }

@@ -45,9 +45,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Expr\StaticCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\StaticCall
     {
         if ($this->shouldSkip($node)) {
             return null;

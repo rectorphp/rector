@@ -38,11 +38,7 @@ final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FilePro
         $this->formatPreservingNeonPrinter = $formatPreservingNeonPrinter;
         $this->neonRectors = $neonRectors;
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function process($file, $configuration) : void
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         if ($this->neonRectors === []) {
             return;
@@ -62,11 +58,7 @@ final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FilePro
         }
         $file->changeFileContent($changedFileContent);
     }
-    /**
-     * @param \Rector\Core\ValueObject\Application\File $file
-     * @param \Rector\Core\ValueObject\Configuration $configuration
-     */
-    public function supports($file, $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $fileInfo = $file->getSmartFileInfo();
         return $fileInfo->hasSuffixes($this->getSupportedFileExtensions());

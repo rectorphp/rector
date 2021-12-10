@@ -27,9 +27,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Set the parent node.
      *
      * @return $this
-     * @param \Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface|null $parent
      */
-    public function setParent($parent = null)
+    public function setParent(\RectorPrefix20211210\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface $parent = null)
     {
         $this->parent = $parent;
         return $this;
@@ -38,9 +37,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child array node.
      *
      * @return ArrayNodeDefinition
-     * @param string $name
      */
-    public function arrayNode($name)
+    public function arrayNode(string $name)
     {
         return $this->node($name, 'array');
     }
@@ -48,9 +46,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child scalar node.
      *
      * @return ScalarNodeDefinition
-     * @param string $name
      */
-    public function scalarNode($name)
+    public function scalarNode(string $name)
     {
         return $this->node($name, 'scalar');
     }
@@ -58,9 +55,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child Boolean node.
      *
      * @return BooleanNodeDefinition
-     * @param string $name
      */
-    public function booleanNode($name)
+    public function booleanNode(string $name)
     {
         return $this->node($name, 'boolean');
     }
@@ -68,9 +64,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child integer node.
      *
      * @return IntegerNodeDefinition
-     * @param string $name
      */
-    public function integerNode($name)
+    public function integerNode(string $name)
     {
         return $this->node($name, 'integer');
     }
@@ -78,9 +73,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child float node.
      *
      * @return FloatNodeDefinition
-     * @param string $name
      */
-    public function floatNode($name)
+    public function floatNode(string $name)
     {
         return $this->node($name, 'float');
     }
@@ -88,9 +82,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child EnumNode.
      *
      * @return EnumNodeDefinition
-     * @param string $name
      */
-    public function enumNode($name)
+    public function enumNode(string $name)
     {
         return $this->node($name, 'enum');
     }
@@ -98,9 +91,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      * Creates a child variable node.
      *
      * @return VariableNodeDefinition
-     * @param string $name
      */
-    public function variableNode($name)
+    public function variableNode(string $name)
     {
         return $this->node($name, 'variable');
     }
@@ -120,10 +112,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      *
      * @throws \RuntimeException When the node type is not registered
      * @throws \RuntimeException When the node class is not found
-     * @param string|null $name
-     * @param string $type
      */
-    public function node($name, $type)
+    public function node(?string $name, string $type)
     {
         $class = $this->getNodeClass($type);
         $node = new $class($name);
@@ -144,9 +134,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      *     ;
      *
      * @return $this
-     * @param \Symfony\Component\Config\Definition\Builder\NodeDefinition $node
      */
-    public function append($node)
+    public function append(\RectorPrefix20211210\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
     {
         if ($node instanceof \RectorPrefix20211210\Symfony\Component\Config\Definition\Builder\BuilderAwareInterface) {
             $builder = clone $this;
@@ -168,7 +157,7 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      *
      * @return $this
      */
-    public function setNodeClass($type, $class)
+    public function setNodeClass(string $type, string $class)
     {
         $this->nodeMapping[\strtolower($type)] = $class;
         return $this;
@@ -180,9 +169,8 @@ class NodeBuilder implements \RectorPrefix20211210\Symfony\Component\Config\Defi
      *
      * @throws \RuntimeException When the node type is not registered
      * @throws \RuntimeException When the node class is not found
-     * @param string $type
      */
-    protected function getNodeClass($type)
+    protected function getNodeClass(string $type)
     {
         $type = \strtolower($type);
         if (!isset($this->nodeMapping[$type])) {

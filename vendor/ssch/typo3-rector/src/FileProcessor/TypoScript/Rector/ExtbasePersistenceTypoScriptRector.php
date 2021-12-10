@@ -46,10 +46,7 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
         $this->filename = \getcwd() . '/Configuration_Extbase_Persistence_Classes.php';
         $this->fileTemplate = $templateFinder->getExtbasePersistenceConfiguration();
     }
-    /**
-     * @param \Helmich\TypoScriptParser\Parser\AST\Statement $statement
-     */
-    public function enterNode($statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
         if (!$statement instanceof \RectorPrefix20211210\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
@@ -101,10 +98,7 @@ CODE_SAMPLE
     {
         return 'We have converted from TypoScript extbase persistence to a PHP File';
     }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $filename = $configuration[self::FILENAME] ?? null;
         if (null !== $filename) {

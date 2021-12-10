@@ -149,7 +149,7 @@ class Preg
      * @param int    $flags PREG_OFFSET_CAPTURE or PREG_UNMATCHED_AS_NULL, only available on PHP 7.4+
      * @return string
      */
-    public static function replaceCallbackArray($pattern, $subject, $limit = -1, &$count = null, $flags = 0)
+    public static function replaceCallbackArray(array $pattern, $subject, $limit = -1, &$count = null, $flags = 0)
     {
         if (\is_array($subject)) {
             // @phpstan-ignore-line
@@ -208,7 +208,7 @@ class Preg
      * @param int      $flags PREG_GREP_INVERT
      * @return array<T>
      */
-    public static function grep($pattern, $array, $flags = 0)
+    public static function grep($pattern, array $array, $flags = 0)
     {
         $result = \preg_grep($pattern, $array, $flags);
         if ($result === \false) {

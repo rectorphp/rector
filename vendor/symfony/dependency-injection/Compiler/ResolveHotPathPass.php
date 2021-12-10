@@ -32,9 +32,8 @@ class ResolveHotPathPass extends \RectorPrefix20211210\Symfony\Component\Depende
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container)
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         try {
             parent::process($container);
@@ -45,9 +44,8 @@ class ResolveHotPathPass extends \RectorPrefix20211210\Symfony\Component\Depende
     }
     /**
      * {@inheritdoc}
-     * @param bool $isRoot
      */
-    protected function processValue($value, $isRoot = \false)
+    protected function processValue($value, bool $isRoot = \false)
     {
         if ($value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
             return $value;

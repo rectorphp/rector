@@ -143,7 +143,7 @@ class Name extends \PhpParser\NodeAbstract
      *
      * @return static|null Sliced name
      */
-    public function slice($offset, $length = null)
+    public function slice(int $offset, int $length = null)
     {
         $numParts = \count($this->parts);
         $realOffset = $offset < 0 ? $offset + $numParts : $offset;
@@ -181,7 +181,7 @@ class Name extends \PhpParser\NodeAbstract
      *
      * @return static|null Concatenated name
      */
-    public static function concat($name1, $name2, $attributes = [])
+    public static function concat($name1, $name2, array $attributes = [])
     {
         if (null === $name1 && null === $name2) {
             return null;

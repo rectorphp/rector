@@ -31,10 +31,8 @@ class ConfigCacheFactory implements \RectorPrefix20211210\Symfony\Component\Conf
     }
     /**
      * {@inheritdoc}
-     * @param string $file
-     * @param callable $callback
      */
-    public function cache($file, $callback)
+    public function cache(string $file, callable $callback)
     {
         $cache = new \RectorPrefix20211210\Symfony\Component\Config\ConfigCache($file, $this->debug);
         if (!$cache->isFresh()) {

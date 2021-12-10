@@ -91,9 +91,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Class_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isKernelOrExtensionClass($node)) {
             return null;
@@ -113,10 +113,7 @@ CODE_SAMPLE
         });
         return $node;
     }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $this->from = $configuration[self::FROM];
         $this->to = $configuration[self::TO];

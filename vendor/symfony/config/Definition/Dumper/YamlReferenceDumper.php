@@ -27,18 +27,11 @@ use RectorPrefix20211210\Symfony\Component\Yaml\Inline;
 class YamlReferenceDumper
 {
     private $reference;
-    /**
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
-     */
-    public function dump($configuration)
+    public function dump(\RectorPrefix20211210\Symfony\Component\Config\Definition\ConfigurationInterface $configuration)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree());
     }
-    /**
-     * @param \Symfony\Component\Config\Definition\ConfigurationInterface $configuration
-     * @param string $path
-     */
-    public function dumpAtPath($configuration, $path)
+    public function dumpAtPath(\RectorPrefix20211210\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, string $path)
     {
         $rootNode = $node = $configuration->getConfigTreeBuilder()->buildTree();
         foreach (\explode('.', $path) as $step) {
@@ -57,10 +50,7 @@ class YamlReferenceDumper
         }
         return $this->dumpNode($node);
     }
-    /**
-     * @param \Symfony\Component\Config\Definition\NodeInterface $node
-     */
-    public function dumpNode($node)
+    public function dumpNode(\RectorPrefix20211210\Symfony\Component\Config\Definition\NodeInterface $node)
     {
         $this->reference = '';
         $this->writeNode($node);

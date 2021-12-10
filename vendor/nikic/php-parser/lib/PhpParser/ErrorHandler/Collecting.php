@@ -14,10 +14,7 @@ class Collecting implements \PhpParser\ErrorHandler
 {
     /** @var Error[] Collected errors */
     private $errors = [];
-    /**
-     * @param \PhpParser\Error $error
-     */
-    public function handleError($error)
+    public function handleError(\PhpParser\Error $error)
     {
         $this->errors[] = $error;
     }

@@ -58,7 +58,7 @@ class ConstExprEvaluator
      *
      * @throws ConstExprEvaluationException if the expression cannot be evaluated or an error occurred
      */
-    public function evaluateSilently($expr)
+    public function evaluateSilently(\PhpParser\Node\Expr $expr)
     {
         \set_error_handler(function ($num, $str, $file, $line) {
             throw new \ErrorException($str, 0, $num, $file, $line);
@@ -91,7 +91,7 @@ class ConstExprEvaluator
      *
      * @throws ConstExprEvaluationException if the expression cannot be evaluated
      */
-    public function evaluateDirectly($expr)
+    public function evaluateDirectly(\PhpParser\Node\Expr $expr)
     {
         return $this->evaluate($expr);
     }

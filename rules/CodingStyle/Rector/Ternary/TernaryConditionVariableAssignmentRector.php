@@ -40,9 +40,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Ternary $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $nodeIf = $node->if;
         $nodeElse = $node->else;

@@ -60,9 +60,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Ternary $node
      */
-    public function refactor($node) : ?\PhpParser\Node\Expr\Ternary
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\Ternary
     {
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         if (!$scope instanceof \PHPStan\Analyser\Scope) {

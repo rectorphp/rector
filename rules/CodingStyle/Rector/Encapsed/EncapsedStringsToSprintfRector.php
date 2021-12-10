@@ -68,9 +68,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Scalar\Encapsed::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Encapsed $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->sprintfFormat = '';
         $this->argumentVariables = [];

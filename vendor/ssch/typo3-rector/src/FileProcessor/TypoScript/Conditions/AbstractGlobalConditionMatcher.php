@@ -19,12 +19,7 @@ abstract class AbstractGlobalConditionMatcher implements \Ssch\TYPO3Rector\Contr
      * @var array<string, string>
      */
     public const USER_PROPERTY_MAPPING = ['uid' => 'userId'];
-    /**
-     * @param string $property
-     * @param string $operator
-     * @param string $value
-     */
-    protected function refactorTsfe($property, $operator, $value) : string
+    protected function refactorTsfe(string $property, string $operator, string $value) : string
     {
         if (\strncmp($property, 'page', \strlen('page')) === 0) {
             $parameters = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property, \true);
@@ -32,21 +27,11 @@ abstract class AbstractGlobalConditionMatcher implements \Ssch\TYPO3Rector\Contr
         }
         return \sprintf('getTSFE().%s %s %s', $property, self::OPERATOR_MAPPING[$operator], $value);
     }
-    /**
-     * @param string $property
-     * @param string $operator
-     * @param string $value
-     */
-    protected function createEnvCondition($property, $operator, $value) : string
+    protected function createEnvCondition(string $property, string $operator, string $value) : string
     {
         return \sprintf('getenv("%s") %s "%s"', $property, self::OPERATOR_MAPPING[$operator], $value);
     }
-    /**
-     * @param string $property
-     * @param string $operator
-     * @param string $value
-     */
-    protected function createIndependentCondition($property, $operator, $value) : string
+    protected function createIndependentCondition(string $property, string $operator, string $value) : string
     {
         $condition = 'ERROR not implemented';
         if (\array_key_exists($property, self::IENV_MAPPING_NORMALIZED)) {

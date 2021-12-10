@@ -40,9 +40,9 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
         return \PhpParser\Node\UnionType::class;
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param UnionType $node
      */
-    public function mapToPHPStan($node) : \PHPStan\Type\Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $types = [];
         foreach ($node->types as $unionedType) {

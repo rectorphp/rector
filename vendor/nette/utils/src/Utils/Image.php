@@ -111,12 +111,8 @@ class Image
     private $image;
     /**
      * Returns RGB color (0..255) and transparency (0..127).
-     * @param int $red
-     * @param int $green
-     * @param int $blue
-     * @param int $transparency
      */
-    public static function rgb($red, $green, $blue, $transparency = 0) : array
+    public static function rgb(int $red, int $green, int $blue, int $transparency = 0) : array
     {
         return ['red' => \max(0, \min(255, $red)), 'green' => \max(0, \min(255, $green)), 'blue' => \max(0, \min(255, $blue)), 'alpha' => \max(0, \min(127, $transparency))];
     }
@@ -125,10 +121,8 @@ class Image
      * @throws Nette\NotSupportedException if gd extension is not loaded
      * @throws UnknownImageFileException if file not found or file type is not known
      * @return static
-     * @param string $file
-     * @param int|null $type
      */
-    public static function fromFile($file, &$type = null)
+    public static function fromFile(string $file, int &$type = null)
     {
         if (!\extension_loaded('gd')) {
             throw new \RectorPrefix20211210\Nette\NotSupportedException('PHP extension GD is not loaded.');
@@ -147,10 +141,8 @@ class Image
      * @return static
      * @throws Nette\NotSupportedException if gd extension is not loaded
      * @throws ImageException
-     * @param string $s
-     * @param int|null $type
      */
-    public static function fromString($s, &$type = null)
+    public static function fromString(string $s, int &$type = null)
     {
         if (!\extension_loaded('gd')) {
             throw new \RectorPrefix20211210\Nette\NotSupportedException('PHP extension GD is not loaded.');
@@ -167,11 +159,8 @@ class Image
      * Creates a new true color image of the given dimensions. The default color is black.
      * @return static
      * @throws Nette\NotSupportedException if gd extension is not loaded
-     * @param int $width
-     * @param int $height
-     * @param mixed[]|null $color
      */
-    public static function fromBlank($width, $height, $color = null)
+    public static function fromBlank(int $width, int $height, array $color = null)
     {
         if (!\extension_loaded('gd')) {
             throw new \RectorPrefix20211210\Nette\NotSupportedException('PHP extension GD is not loaded.');
@@ -191,9 +180,8 @@ class Image
     }
     /**
      * Returns the type of image from file.
-     * @param string $file
      */
-    public static function detectTypeFromFile($file) : ?int
+    public static function detectTypeFromFile(string $file) : ?int
     {
         $type = @\getimagesize($file)[2];
         // @ - files smaller than 12 bytes causes read error
@@ -201,9 +189,8 @@ class Image
     }
     /**
      * Returns the type of image from string.
-     * @param string $s
      */
-    public static function detectTypeFromString($s) : ?int
+    public static function detectTypeFromString(string $s) : ?int
     {
         $type = @\getimagesizefromstring($s)[2];
         // @ - strings smaller than 12 bytes causes read error
@@ -211,9 +198,8 @@ class Image
     }
     /**
      * Returns the file extension for the given `Image::XXX` constant.
-     * @param int $type
      */
-    public static function typeToExtension($type) : string
+    public static function typeToExtension(int $type) : string
     {
         if (!isset(self::FORMATS[$type])) {
             throw new \RectorPrefix20211210\Nette\InvalidArgumentException("Unsupported image type '{$type}'.");
@@ -222,9 +208,8 @@ class Image
     }
     /**
      * Returns the mime type for the given `Image::XXX` constant.
-     * @param int $type
      */
-    public static function typeToMimeType($type) : string
+    public static function typeToMimeType(int $type) : string
     {
         return 'image/' . self::typeToExtension($type);
     }
@@ -277,9 +262,8 @@ class Image
      * @param  int|string|null  $width in pixels or percent
      * @param  int|string|null  $height in pixels or percent
      * @return static
-     * @param int $flags
      */
-    public function resize($width, $height, $flags = self::FIT)
+    public function resize($width, $height, int $flags = self::FIT)
     {
         if ($flags & self::EXACT) {
             return $this->resize($width, $height, self::FILL)->crop('50%', '50%', $width, $height);
@@ -300,11 +284,8 @@ class Image
      * Calculates dimensions of resized image.
      * @param  int|string|null  $newWidth in pixels or percent
      * @param  int|string|null  $newHeight in pixels or percent
-     * @param int $srcWidth
-     * @param int $srcHeight
-     * @param int $flags
      */
-    public static function calculateSize($srcWidth, $srcHeight, $newWidth, $newHeight, $flags = self::FIT) : array
+    public static function calculateSize(int $srcWidth, int $srcHeight, $newWidth, $newHeight, int $flags = self::FIT) : array
     {
         if ($newWidth === null) {
         } elseif (self::isPercent($newWidth)) {
@@ -382,10 +363,8 @@ class Image
      * @param  int|string  $top in pixels or percent
      * @param  int|string  $newWidth in pixels or percent
      * @param  int|string  $newHeight in pixels or percent
-     * @param int $srcWidth
-     * @param int $srcHeight
      */
-    public static function calculateCutout($srcWidth, $srcHeight, $left, $top, $newWidth, $newHeight) : array
+    public static function calculateCutout(int $srcWidth, int $srcHeight, $left, $top, $newWidth, $newHeight) : array
     {
         if (self::isPercent($newWidth)) {
             $newWidth = (int) \round($srcWidth / 100 * $newWidth);
@@ -431,9 +410,8 @@ class Image
      * @param  int|string  $top in pixels or percent
      * @param  int  $opacity 0..100
      * @return static
-     * @param $this $image
      */
-    public function place($image, $left = 0, $top = 0, $opacity = 100)
+    public function place(self $image, $left = 0, $top = 0, int $opacity = 100)
     {
         $opacity = \max(0, \min(100, $opacity));
         if ($opacity === 0) {
@@ -475,11 +453,8 @@ class Image
     /**
      * Saves image to the file. Quality is in the range 0..100 for JPEG (default 85) and WEBP (default 80) and 0..9 for PNG (default 9).
      * @throws ImageException
-     * @param string $file
-     * @param int|null $quality
-     * @param int|null $type
      */
-    public function save($file, $quality = null, $type = null) : void
+    public function save(string $file, int $quality = null, int $type = null) : void
     {
         if ($type === null) {
             $extensions = \array_flip(self::FORMATS) + ['jpg' => self::JPEG];
@@ -493,10 +468,8 @@ class Image
     }
     /**
      * Outputs image to string. Quality is in the range 0..100 for JPEG (default 85) and WEBP (default 80) and 0..9 for PNG (default 9).
-     * @param int $type
-     * @param int|null $quality
      */
-    public function toString($type = self::JPEG, $quality = null) : string
+    public function toString(int $type = self::JPEG, int $quality = null) : string
     {
         return \RectorPrefix20211210\Nette\Utils\Helpers::capture(function () use($type, $quality) {
             $this->output($type, $quality);
@@ -520,10 +493,8 @@ class Image
     /**
      * Outputs image to browser. Quality is in the range 0..100 for JPEG (default 85) and WEBP (default 80) and 0..9 for PNG (default 9).
      * @throws ImageException
-     * @param int $type
-     * @param int|null $quality
      */
-    public function send($type = self::JPEG, $quality = null) : void
+    public function send(int $type = self::JPEG, int $quality = null) : void
     {
         \header('Content-Type: ' . self::typeToMimeType($type));
         $this->output($type, $quality);

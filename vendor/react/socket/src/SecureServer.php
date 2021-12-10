@@ -159,9 +159,8 @@ final class SecureServer extends \RectorPrefix20211210\Evenement\EventEmitter im
     {
         return $this->tcp->close();
     }
-    /** @internal
-     * @param \React\Socket\ConnectionInterface $connection */
-    public function handleConnection($connection)
+    /** @internal */
+    public function handleConnection(\RectorPrefix20211210\React\Socket\ConnectionInterface $connection)
     {
         if (!$connection instanceof \RectorPrefix20211210\React\Socket\Connection) {
             $this->emit('error', array(new \UnexpectedValueException('Base server does not use internal Connection class exposing stream resource')));

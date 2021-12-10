@@ -22,7 +22,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
      * @param  array<T>  $array
      * @return static
      */
-    public static function from($array)
+    public static function from(array $array)
     {
         if (!\RectorPrefix20211210\Nette\Utils\Arrays::isList($array)) {
             throw new \RectorPrefix20211210\Nette\InvalidArgumentException('Array is not valid list.');

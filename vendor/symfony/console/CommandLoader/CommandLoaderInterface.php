@@ -21,14 +21,12 @@ interface CommandLoaderInterface
      * Loads a command.
      *
      * @throws CommandNotFoundException
-     * @param string $name
      */
-    public function get($name) : \RectorPrefix20211210\Symfony\Component\Console\Command\Command;
+    public function get(string $name) : \RectorPrefix20211210\Symfony\Component\Console\Command\Command;
     /**
      * Checks if a command exists.
-     * @param string $name
      */
-    public function has($name) : bool;
+    public function has(string $name) : bool;
     /**
      * @return string[]
      */

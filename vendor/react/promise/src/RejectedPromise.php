@@ -15,12 +15,7 @@ class RejectedPromise implements \RectorPrefix20211210\React\Promise\ExtendedPro
         }
         $this->reason = $reason;
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function then($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null === $onRejected) {
             return $this;
@@ -33,12 +28,7 @@ class RejectedPromise implements \RectorPrefix20211210\React\Promise\ExtendedPro
             return new \RectorPrefix20211210\React\Promise\RejectedPromise($exception);
         }
     }
-    /**
-     * @param callable|null $onFulfilled
-     * @param callable|null $onRejected
-     * @param callable|null $onProgress
-     */
-    public function done($onFulfilled = null, $onRejected = null, $onProgress = null)
+    public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
     {
         if (null === $onRejected) {
             throw \RectorPrefix20211210\React\Promise\UnhandledRejectionException::resolve($this->reason);
@@ -51,20 +41,14 @@ class RejectedPromise implements \RectorPrefix20211210\React\Promise\ExtendedPro
             $result->done();
         }
     }
-    /**
-     * @param callable $onRejected
-     */
-    public function otherwise($onRejected)
+    public function otherwise(callable $onRejected)
     {
         if (!_checkTypehint($onRejected, $this->reason)) {
             return $this;
         }
         return $this->then(null, $onRejected);
     }
-    /**
-     * @param callable $onFulfilledOrRejected
-     */
-    public function always($onFulfilledOrRejected)
+    public function always(callable $onFulfilledOrRejected)
     {
         return $this->then(null, function ($reason) use($onFulfilledOrRejected) {
             return resolve($onFulfilledOrRejected())->then(function () use($reason) {
@@ -72,10 +56,7 @@ class RejectedPromise implements \RectorPrefix20211210\React\Promise\ExtendedPro
             });
         });
     }
-    /**
-     * @param callable $onProgress
-     */
-    public function progress($onProgress)
+    public function progress(callable $onProgress)
     {
         return $this;
     }

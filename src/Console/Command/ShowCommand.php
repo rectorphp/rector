@@ -35,11 +35,7 @@ final class ShowCommand extends \RectorPrefix20211210\Symfony\Component\Console\
     {
         $this->setDescription('Show loaded Rectors with their configuration');
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function execute($input, $output) : int
+    protected function execute(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $this->outputStyle->title('Loaded Rector rules');
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {

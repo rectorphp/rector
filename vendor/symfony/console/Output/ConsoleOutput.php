@@ -60,27 +60,24 @@ class ConsoleOutput extends \RectorPrefix20211210\Symfony\Component\Console\Outp
     }
     /**
      * {@inheritdoc}
-     * @param bool $decorated
      */
-    public function setDecorated($decorated)
+    public function setDecorated(bool $decorated)
     {
         parent::setDecorated($decorated);
         $this->stderr->setDecorated($decorated);
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter
      */
-    public function setFormatter($formatter)
+    public function setFormatter(\RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         parent::setFormatter($formatter);
         $this->stderr->setFormatter($formatter);
     }
     /**
      * {@inheritdoc}
-     * @param int $level
      */
-    public function setVerbosity($level)
+    public function setVerbosity(int $level)
     {
         parent::setVerbosity($level);
         $this->stderr->setVerbosity($level);
@@ -94,9 +91,8 @@ class ConsoleOutput extends \RectorPrefix20211210\Symfony\Component\Console\Outp
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Output\OutputInterface $error
      */
-    public function setErrorOutput($error)
+    public function setErrorOutput(\RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $error)
     {
         $this->stderr = $error;
     }

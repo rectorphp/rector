@@ -6,10 +6,7 @@ namespace Rector\FileFormatter\Exception;
 use UnexpectedValueException;
 final class ParseIndentException extends \UnexpectedValueException
 {
-    /**
-     * @param string $string
-     */
-    public static function fromString($string) : self
+    public static function fromString(string $string) : self
     {
         $message = \sprintf('The content "%s" could not be parsed', $string);
         return new self($message);

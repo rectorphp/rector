@@ -76,9 +76,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param MethodCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $factoryMethod = $this->matchTypeAndMethodName($node);
         if (!$factoryMethod instanceof \Rector\CakePHP\ValueObject\FactoryMethod) {
@@ -95,7 +95,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $arraysToFluentCalls = $configuration[self::ARRAYS_TO_FLUENT_CALLS] ?? [];
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($arraysToFluentCalls);

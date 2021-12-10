@@ -71,11 +71,7 @@ CODE_SAMPLE
     {
         $this->defaultExtrasFromColumns = [];
     }
-    /**
-     * @param \PhpParser\Node\Expr $columnName
-     * @param \PhpParser\Node\Expr $columnTca
-     */
-    protected function refactorColumn($columnName, $columnTca) : void
+    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
         if (!$columnTca instanceof \PhpParser\Node\Expr\Array_) {
             return;
@@ -86,11 +82,7 @@ CODE_SAMPLE
         }
         $this->defaultExtrasFromColumns[$this->valueResolver->getValue($columnName)] = $this->valueResolver->getValue($defaultExtras);
     }
-    /**
-     * @param \PhpParser\Node\Expr $typeKey
-     * @param \PhpParser\Node\Expr $typeConfiguration
-     */
-    protected function refactorType($typeKey, $typeConfiguration) : void
+    protected function refactorType(\PhpParser\Node\Expr $typeKey, \PhpParser\Node\Expr $typeConfiguration) : void
     {
         if (!$typeConfiguration instanceof \PhpParser\Node\Expr\Array_) {
             return;

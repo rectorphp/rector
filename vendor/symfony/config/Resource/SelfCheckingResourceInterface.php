@@ -25,5 +25,5 @@ interface SelfCheckingResourceInterface extends \RectorPrefix20211210\Symfony\Co
      *
      * @return bool
      */
-    public function isFresh($timestamp);
+    public function isFresh(int $timestamp);
 }

@@ -17,10 +17,7 @@ final class CreatedByRuleNodeVisitor extends \PhpParser\NodeVisitorAbstract
     {
         $this->rectorClass = $rectorClass;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node)
+    public function enterNode(\PhpParser\Node $node)
     {
         $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE, $this->rectorClass);
         return $node;

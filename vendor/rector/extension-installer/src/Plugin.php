@@ -11,31 +11,16 @@ use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 final class Plugin implements \Composer\Plugin\PluginInterface, \Composer\EventDispatcher\EventSubscriberInterface
 {
-    /**
-     * @param \Composer\Composer $composer
-     * @param \Composer\IO\IOInterface $io
-     */
-    public function activate($composer, $io) : void
+    public function activate(\Composer\Composer $composer, \Composer\IO\IOInterface $io) : void
     {
     }
-    /**
-     * @param \Composer\Composer $composer
-     * @param \Composer\IO\IOInterface $io
-     */
-    public function deactivate($composer, $io) : void
+    public function deactivate(\Composer\Composer $composer, \Composer\IO\IOInterface $io) : void
     {
     }
-    /**
-     * @param \Composer\Composer $composer
-     * @param \Composer\IO\IOInterface $io
-     */
-    public function uninstall($composer, $io) : void
+    public function uninstall(\Composer\Composer $composer, \Composer\IO\IOInterface $io) : void
     {
     }
-    /**
-     * @param \Composer\Script\Event $event
-     */
-    public function process($event) : void
+    public function process(\Composer\Script\Event $event) : void
     {
         $io = $event->getIO();
         $composer = $event->getComposer();

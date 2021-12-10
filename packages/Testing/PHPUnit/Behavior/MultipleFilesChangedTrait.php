@@ -8,11 +8,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 trait MultipleFilesChangedTrait
 {
-    /**
-     * @param \Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo
-     * @param bool $allowMatches
-     */
-    protected function doTestFileInfoWithAdditionalChanges($fixtureFileInfo, $allowMatches = \true) : void
+    protected function doTestFileInfoWithAdditionalChanges(\Symplify\SmartFileSystem\SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void
     {
         $separator = '-----';
         [$originalContent, $expectedContent, $additionalInfo] = \explode($separator, $fixtureFileInfo->getContents(), 3);

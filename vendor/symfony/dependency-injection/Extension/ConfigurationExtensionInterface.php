@@ -23,8 +23,6 @@ interface ConfigurationExtensionInterface
      * Returns extension configuration.
      *
      * @return ConfigurationInterface|null
-     * @param mixed[] $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function getConfiguration($config, $container);
+    public function getConfiguration(array $config, \RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container);
 }

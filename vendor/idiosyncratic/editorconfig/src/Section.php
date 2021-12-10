@@ -46,10 +46,7 @@ final class Section
     {
         return $this->declarations;
     }
-    /**
-     * @param string $path
-     */
-    public function matches($path) : bool
+    public function matches(string $path) : bool
     {
         // normalize path to unix-style directory separator,
         // because the glob pattern assumes linux-style directory separators

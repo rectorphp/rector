@@ -27,11 +27,7 @@ final class DumpCompletionCommand extends \RectorPrefix20211210\Symfony\Componen
 {
     protected static $defaultName = 'completion';
     protected static $defaultDescription = 'Dump the shell completion script';
-    /**
-     * @param \Symfony\Component\Console\Completion\CompletionInput $input
-     * @param \Symfony\Component\Console\Completion\CompletionSuggestions $suggestions
-     */
-    public function complete($input, $suggestions) : void
+    public function complete(\RectorPrefix20211210\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20211210\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
         if ($input->mustSuggestArgumentValuesFor('shell')) {
             $suggestions->suggestValues($this->getSupportedShells());
@@ -72,11 +68,7 @@ Add this add the end of your shell configuration file (e.g. <info>"~/.bashrc"</>
 EOH
 )->addArgument('shell', \RectorPrefix20211210\Symfony\Component\Console\Input\InputArgument::OPTIONAL, 'The shell type (e.g. "bash"), the value of the "$SHELL" env var will be used if this is not given')->addOption('debug', null, \RectorPrefix20211210\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Tail the completion debug log');
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     */
-    protected function execute($input, $output) : int
+    protected function execute(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $commandName = \basename($_SERVER['argv'][0]);
         if ($input->getOption('debug')) {

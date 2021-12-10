@@ -16,9 +16,8 @@ trait AutowireTrait
      * Enables/disables autowiring.
      *
      * @return $this
-     * @param bool $autowired
      */
-    public final function autowire($autowired = \true) : self
+    public final function autowire(bool $autowired = \true) : self
     {
         $this->definition->setAutowired($autowired);
         return $this;

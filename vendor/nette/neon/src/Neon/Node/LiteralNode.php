@@ -28,10 +28,8 @@ final class LiteralNode extends \RectorPrefix20211210\Nette\Neon\Node
     {
         return $this->value;
     }
-    /** @return mixed
-     * @param string $value
-     * @param bool $isKey */
-    public static function parse($value, $isKey = \false)
+    /** @return mixed */
+    public static function parse(string $value, bool $isKey = \false)
     {
         if (!$isKey && \array_key_exists($value, self::SIMPLE_TYPES)) {
             if (isset(self::DEPRECATED_TYPES[$value])) {

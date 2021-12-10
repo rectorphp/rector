@@ -37,10 +37,8 @@ final class CompletionInput extends \RectorPrefix20211210\Symfony\Component\Cons
      * Converts a terminal string into tokens.
      *
      * This is required for shell completions without COMP_WORDS support.
-     * @param string $inputStr
-     * @param int $currentIndex
      */
-    public static function fromString($inputStr, $currentIndex) : self
+    public static function fromString(string $inputStr, int $currentIndex) : self
     {
         \preg_match_all('/(?<=^|\\s)([\'"]?)(.+?)(?<!\\\\)\\1(?=$|\\s)/', $inputStr, $tokens);
         return self::fromTokens($tokens[0], $currentIndex);
@@ -51,7 +49,7 @@ final class CompletionInput extends \RectorPrefix20211210\Symfony\Component\Cons
      * @param string[] $tokens       the set of split tokens (e.g. COMP_WORDS or argv)
      * @param          $currentIndex the index of the cursor (e.g. COMP_CWORD)
      */
-    public static function fromTokens($tokens, $currentIndex) : self
+    public static function fromTokens(array $tokens, int $currentIndex) : self
     {
         $input = new self($tokens);
         $input->tokens = $tokens;
@@ -60,9 +58,8 @@ final class CompletionInput extends \RectorPrefix20211210\Symfony\Component\Cons
     }
     /**
      * {@inheritdoc}
-     * @param \Symfony\Component\Console\Input\InputDefinition $definition
      */
-    public function bind($definition) : void
+    public function bind(\RectorPrefix20211210\Symfony\Component\Console\Input\InputDefinition $definition) : void
     {
         parent::bind($definition);
         $relevantToken = $this->getRelevantToken();
@@ -150,25 +147,15 @@ final class CompletionInput extends \RectorPrefix20211210\Symfony\Component\Cons
     {
         return $this->completionValue;
     }
-    /**
-     * @param string $optionName
-     */
-    public function mustSuggestOptionValuesFor($optionName) : bool
+    public function mustSuggestOptionValuesFor(string $optionName) : bool
     {
         return self::TYPE_OPTION_VALUE === $this->getCompletionType() && $optionName === $this->getCompletionName();
     }
-    /**
-     * @param string $argumentName
-     */
-    public function mustSuggestArgumentValuesFor($argumentName) : bool
+    public function mustSuggestArgumentValuesFor(string $argumentName) : bool
     {
         return self::TYPE_ARGUMENT_VALUE === $this->getCompletionType() && $argumentName === $this->getCompletionName();
     }
-    /**
-     * @param string $token
-     * @param bool $parseOptions
-     */
-    protected function parseToken($token, $parseOptions) : bool
+    protected function parseToken(string $token, bool $parseOptions) : bool
     {
         try {
             return parent::parseToken($token, $parseOptions);

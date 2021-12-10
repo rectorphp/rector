@@ -20,7 +20,6 @@ interface CompilerPassInterface
 {
     /**
      * You can modify the container here before it is dumped to PHP code.
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process($container);
+    public function process(\RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder $container);
 }

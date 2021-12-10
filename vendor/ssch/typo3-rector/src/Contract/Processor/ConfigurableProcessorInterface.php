@@ -9,5 +9,5 @@ interface ConfigurableProcessorInterface extends \Rector\Core\Contract\Processor
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void;
+    public function configure(array $configuration) : void;
 }

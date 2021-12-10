@@ -40,9 +40,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\Use_::class, \PhpParser\Node\Expr\ConstFetch::class, \PhpParser\Node\Expr\FuncCall::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param Use_|ConstFetch|FuncCall $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\Use_) {
             $this->refactorUse($node);

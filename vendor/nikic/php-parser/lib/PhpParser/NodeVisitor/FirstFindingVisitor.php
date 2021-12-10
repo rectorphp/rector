@@ -31,18 +31,12 @@ class FirstFindingVisitor extends \PhpParser\NodeVisitorAbstract
     {
         return $this->foundNode;
     }
-    /**
-     * @param mixed[] $nodes
-     */
-    public function beforeTraverse($nodes)
+    public function beforeTraverse(array $nodes)
     {
         $this->foundNode = null;
         return null;
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node)
+    public function enterNode(\PhpParser\Node $node)
     {
         $filterCallback = $this->filterCallback;
         if ($filterCallback($node)) {

@@ -32,9 +32,8 @@ class SingleCommandApplication extends \RectorPrefix20211210\Symfony\Component\C
     private $running = \false;
     /**
      * @return $this
-     * @param string $version
      */
-    public function setVersion($version)
+    public function setVersion(string $version)
     {
         $this->version = $version;
         return $this;
@@ -43,18 +42,13 @@ class SingleCommandApplication extends \RectorPrefix20211210\Symfony\Component\C
      * @final
      *
      * @return $this
-     * @param bool $autoExit
      */
-    public function setAutoExit($autoExit)
+    public function setAutoExit(bool $autoExit)
     {
         $this->autoExit = $autoExit;
         return $this;
     }
-    /**
-     * @param \Symfony\Component\Console\Input\InputInterface|null $input
-     * @param \Symfony\Component\Console\Output\OutputInterface|null $output
-     */
-    public function run($input = null, $output = null) : int
+    public function run(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input = null, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output = null) : int
     {
         if ($this->running) {
             return parent::run($input, $output);

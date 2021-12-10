@@ -26,9 +26,9 @@ final class MoveLanguageFilesFromLocallangToResourcesRector extends \Rector\Core
         return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param String_ $node
      */
-    public function refactor($node) : ?\PhpParser\Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $value = $this->valueResolver->getValue($node);
         foreach (self::MAPPING_OLD_TO_NEW_PATHS as $oldPath => $newPath) {

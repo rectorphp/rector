@@ -43,7 +43,7 @@ final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\Va
     /**
      * @param string[] $classNames
      */
-    public function hasClassNames($classNames) : bool
+    public function hasClassNames(array $classNames) : bool
     {
         foreach ($classNames as $className) {
             if ($this->hasClassName($className)) {
@@ -52,10 +52,7 @@ final class DoctrineAnnotationTagValueNode extends \Rector\BetterPhpDocParser\Va
         }
         return \false;
     }
-    /**
-     * @param string $className
-     */
-    public function hasClassName($className) : bool
+    public function hasClassName(string $className) : bool
     {
         $annotationName = \trim($this->identifierTypeNode->name, '@');
         if ($annotationName === $className) {

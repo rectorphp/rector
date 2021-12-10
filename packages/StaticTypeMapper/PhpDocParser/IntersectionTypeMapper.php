@@ -33,11 +33,9 @@ final class IntersectionTypeMapper implements \Rector\StaticTypeMapper\Contract\
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
     /**
-     * @param \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode
-     * @param \PhpParser\Node $node
-     * @param \PHPStan\Analyser\NameScope $nameScope
+     * @param IntersectionTypeNode $typeNode
      */
-    public function mapToPHPStanType($typeNode, $node, $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
     {
         $intersectionedTypes = [];
         foreach ($typeNode->types as $intersectionedTypeNode) {

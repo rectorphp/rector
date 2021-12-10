@@ -54,9 +54,9 @@ CODE_SAMPLE
         return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
-     * @param \PhpParser\Node $node
+     * @param ClassMethod $node
      */
-    public function refactor($node) : \PhpParser\Node\Stmt\ClassMethod
+    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\ClassMethod
     {
         foreach ($this->addedArguments as $addedArgument) {
             if (!$this->nodeTypeResolver->isObjectType($node, $addedArgument->getObjectType())) {
@@ -80,7 +80,7 @@ CODE_SAMPLE
     /**
      * @param mixed[] $configuration
      */
-    public function configure($configuration) : void
+    public function configure(array $configuration) : void
     {
         $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($addedArguments);

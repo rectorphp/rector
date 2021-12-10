@@ -20,7 +20,6 @@ interface InputAwareInterface
 {
     /**
      * Sets the Console Input.
-     * @param \Symfony\Component\Console\Input\InputInterface $input
      */
-    public function setInput($input);
+    public function setInput(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input);
 }

@@ -59,10 +59,7 @@ final class FullQualifiedNamePostRector extends \Rector\PostRector\Rector\Abstra
         $this->fileInfoMatcher = $fileInfoMatcher;
         $this->changeNameImportingPostRectorSkipConfiguration($this->parameterProvider);
     }
-    /**
-     * @param \PhpParser\Node $node
-     */
-    public function enterNode($node) : ?\PhpParser\Node
+    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $file = $this->currentFileProvider->getFile();
         if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
