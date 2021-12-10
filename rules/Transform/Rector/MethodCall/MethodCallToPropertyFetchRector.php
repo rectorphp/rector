@@ -19,6 +19,7 @@ final class MethodCallToPropertyFetchRector extends AbstractRector implements Co
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const METHOD_CALL_TO_PROPERTY_FETCHES = 'method_call_to_property_fetch_collection';

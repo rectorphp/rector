@@ -27,6 +27,7 @@ final class StaticCallToMethodCallRector extends AbstractRector implements Confi
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const STATIC_CALLS_TO_METHOD_CALLS = 'static_calls_to_method_calls';

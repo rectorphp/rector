@@ -24,6 +24,7 @@ final class MergeInterfacesRector extends AbstractRector implements Configurable
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const OLD_TO_NEW_INTERFACES = 'old_to_new_interfaces';

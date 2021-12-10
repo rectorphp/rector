@@ -25,6 +25,7 @@ final class CompleteImportForPartialAnnotationRector extends AbstractRector impl
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const USE_IMPORTS_TO_RESTORE = '$useImportsToRestore';

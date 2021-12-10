@@ -22,6 +22,7 @@ final class ToStringToMethodCallRector extends AbstractRector implements Configu
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const METHOD_NAMES_BY_TYPE = 'method_names_by_type';

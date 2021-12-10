@@ -25,6 +25,7 @@ final class ReservedFnFunctionRector extends AbstractRector implements Configura
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const RESERVED_NAMES_TO_NEW_ONES = '$reservedNamesToNewOnes';

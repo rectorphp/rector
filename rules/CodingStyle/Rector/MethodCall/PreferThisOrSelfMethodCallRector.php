@@ -25,6 +25,7 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
 {
     /**
      * @api
+     * @deprecated
      * @var string
      */
     final public const TYPE_TO_PREFERENCE = 'type_to_preference';
