@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const FUNC_CALL_TO_CLASS_METHOD_CALL = 'function_to_class_to_method_call';

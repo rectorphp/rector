@@ -23,6 +23,7 @@ use Webmozart\Assert\Assert;
 final class ArgumentRemoverRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const REMOVED_ARGUMENTS = 'removed_arguments';

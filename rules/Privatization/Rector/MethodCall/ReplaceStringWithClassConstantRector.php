@@ -21,6 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceStringWithClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const REPLACE_STRING_WITH_CLASS_CONSTANT = 'replace_string_with_class_constant';

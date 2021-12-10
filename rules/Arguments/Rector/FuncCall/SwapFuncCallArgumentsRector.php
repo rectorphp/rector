@@ -20,6 +20,7 @@ use Webmozart\Assert\Assert;
 final class SwapFuncCallArgumentsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const FUNCTION_ARGUMENT_SWAPS = 'new_argument_positions_by_function_name';

@@ -33,6 +33,7 @@ use Webmozart\Assert\Assert;
 final class ArgumentFuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const FUNCTIONS_TO_METHOD_CALLS = 'functions_to_method_calls';

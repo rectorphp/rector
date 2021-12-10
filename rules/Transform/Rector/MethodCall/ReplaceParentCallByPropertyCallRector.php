@@ -19,6 +19,7 @@ use Webmozart\Assert\Assert;
 final class ReplaceParentCallByPropertyCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const PARENT_CALLS_TO_PROPERTIES = 'parent_calls_to_properties';

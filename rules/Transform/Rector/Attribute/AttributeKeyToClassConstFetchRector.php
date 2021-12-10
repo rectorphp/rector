@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class AttributeKeyToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES = 'attribute_keys_to_class_const_fetches';

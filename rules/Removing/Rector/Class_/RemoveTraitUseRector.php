@@ -20,6 +20,7 @@ use Webmozart\Assert\Assert;
 final class RemoveTraitUseRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const TRAITS_TO_REMOVE = 'traits_to_remove';

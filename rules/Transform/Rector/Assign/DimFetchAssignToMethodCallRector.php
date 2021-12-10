@@ -23,6 +23,7 @@ use Webmozart\Assert\Assert;
 final class DimFetchAssignToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const DIM_FETCH_ASSIGN_TO_METHOD_CALL = 'dim_fetch_assign_to_method_call';

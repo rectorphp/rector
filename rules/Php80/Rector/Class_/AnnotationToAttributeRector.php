@@ -41,6 +41,7 @@ use Webmozart\Assert\Assert;
 final class AnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const ANNOTATION_TO_ATTRIBUTE = 'annotations_to_attributes';

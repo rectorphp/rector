@@ -21,6 +21,7 @@ use Webmozart\Assert\Assert;
 final class ChangeConstantVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const CLASS_CONSTANT_VISIBILITY_CHANGES = 'class_constant_visibility_changes';

@@ -24,6 +24,7 @@ use Webmozart\Assert\Assert;
 final class RenameAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const RENAMED_ANNOTATIONS = 'renamed_annotations';

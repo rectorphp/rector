@@ -30,6 +30,7 @@ use Webmozart\Assert\Assert;
 final class DowngradeAttributeToAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const ATTRIBUTE_TO_ANNOTATION = 'attribute_to_annotation';

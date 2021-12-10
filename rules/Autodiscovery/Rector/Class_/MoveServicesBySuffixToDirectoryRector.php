@@ -26,6 +26,7 @@ use Webmozart\Assert\Assert;
 final class MoveServicesBySuffixToDirectoryRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const GROUP_NAMES_BY_SUFFIX = 'group_names_by_suffix';

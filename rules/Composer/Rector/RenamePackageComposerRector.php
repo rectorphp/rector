@@ -17,6 +17,7 @@ use Webmozart\Assert\Assert;
 final class RenamePackageComposerRector implements ComposerRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const RENAME_PACKAGES = 'rename_packages';

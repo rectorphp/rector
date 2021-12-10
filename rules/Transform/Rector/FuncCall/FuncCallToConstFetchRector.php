@@ -20,6 +20,7 @@ use Webmozart\Assert\Assert;
 final class FuncCallToConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const FUNCTIONS_TO_CONSTANTS = 'functions_to_constants';

@@ -29,6 +29,7 @@ use Webmozart\Assert\Assert;
 final class NewToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const TYPES_TO_CONSTRUCTOR_INJECTION = 'types_to_constructor_injection';

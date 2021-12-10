@@ -16,6 +16,7 @@ use Webmozart\Assert\Assert;
 final class RemovePackageComposerRector implements ComposerRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const PACKAGE_NAMES = 'package_names';

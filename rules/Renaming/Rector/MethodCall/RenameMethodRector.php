@@ -29,6 +29,7 @@ use Webmozart\Assert\Assert;
 final class RenameMethodRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const METHOD_CALL_RENAMES = 'method_call_renames';

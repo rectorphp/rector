@@ -7,7 +7,9 @@ namespace Rector\Core\DependencyInjection\Collector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use ReflectionClass;
 use ReflectionClassConstant;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Definition;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 
 final class ConfigureCallValuesCollector
@@ -19,9 +21,13 @@ final class ConfigureCallValuesCollector
 
     private readonly ParametersMerger $parametersMerger;
 
+    private readonly SymfonyStyle $symfonyStyle;
+
     public function __construct()
     {
         $this->parametersMerger = new ParametersMerger();
+        $symfonyStyleFactory = new SymfonyStyleFactory();
+        $this->symfonyStyle = $symfonyStyleFactory->create();
     }
 
     /**
@@ -63,8 +69,16 @@ final class ConfigureCallValuesCollector
                     $classReflection = new ReflectionClass($rectorClass);
 
                     $constantNamesToValues = $classReflection->getConstants(ReflectionClassConstant::IS_PUBLIC);
-                    foreach ($constantNamesToValues as $constantNameToValue) {
-                        if ($constantNameToValue === $firstKey) {
+                    foreach ($constantNamesToValues as $constantName => $constantValue) {
+                        if ($constantValue === $firstKey) {
+                            $warningMessage = sprintf(
+                                'The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.',
+                                $rectorClass,
+                                $constantName,
+                                PHP_EOL
+                            );
+                            $this->symfonyStyle->warning($warningMessage);
+
                             $configureValue = $configureValue[$firstKey];
                             break;
                         }

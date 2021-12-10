@@ -24,6 +24,7 @@ use Webmozart\Assert\Assert;
 final class AddMethodParentCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const METHODS_BY_PARENT_TYPES = 'methods_by_parent_type';

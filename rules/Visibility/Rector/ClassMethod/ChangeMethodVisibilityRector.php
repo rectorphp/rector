@@ -24,6 +24,7 @@ use Webmozart\Assert\Assert;
 final class ChangeMethodVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const METHOD_VISIBILITIES = 'method_visibilities';

@@ -27,6 +27,7 @@ use Webmozart\Assert\Assert;
 final class NewToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const NEWS_TO_METHOD_CALLS = 'news_to_method_calls';

@@ -19,6 +19,7 @@ use Webmozart\Assert\Assert;
 final class FuncCallToStaticCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const FUNC_CALLS_TO_STATIC_CALLS = 'func_calls_to_static_calls';

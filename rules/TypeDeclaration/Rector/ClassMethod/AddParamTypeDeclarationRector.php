@@ -28,6 +28,7 @@ use Webmozart\Assert\Assert;
 final class AddParamTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const PARAMETER_TYPEHINTS = 'parameter_typehints';

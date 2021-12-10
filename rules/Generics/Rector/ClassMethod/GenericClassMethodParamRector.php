@@ -29,6 +29,7 @@ use Webmozart\Assert\Assert;
 final class GenericClassMethodParamRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const GENERIC_CLASS_METHOD_PARAMS = 'generic_class_method_params';

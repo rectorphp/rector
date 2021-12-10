@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class AddInterfaceByParentRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const INTERFACE_BY_PARENT = 'interface_by_parent';

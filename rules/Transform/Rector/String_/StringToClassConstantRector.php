@@ -19,6 +19,7 @@ use Webmozart\Assert\Assert;
 final class StringToClassConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';

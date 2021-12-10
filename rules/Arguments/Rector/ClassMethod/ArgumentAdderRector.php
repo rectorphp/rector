@@ -34,6 +34,7 @@ use Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const ADDED_ARGUMENTS = 'added_arguments';

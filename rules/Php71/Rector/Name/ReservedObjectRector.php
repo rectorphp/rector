@@ -25,6 +25,7 @@ use Webmozart\Assert\Assert;
 final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';

@@ -23,6 +23,7 @@ use Webmozart\Assert\Assert;
 final class StaticCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const STATIC_CALLS_TO_NEWS = 'static_calls_to_news';

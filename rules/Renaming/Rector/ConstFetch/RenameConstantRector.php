@@ -19,6 +19,7 @@ use Webmozart\Assert\Assert;
 final class RenameConstantRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const OLD_TO_NEW_CONSTANTS = 'old_to_new_constants';

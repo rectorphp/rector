@@ -20,6 +20,7 @@ use Webmozart\Assert\Assert;
 final class RemoveFuncCallArgRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const REMOVED_FUNCTION_ARGUMENTS = 'removed_function_arguments';

@@ -43,11 +43,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set(ReturnArrayClassMethodToYieldRector::class)
-        ->configure([
-            ReturnArrayClassMethodToYieldRector::METHODS_TO_YIELDS => [
-                new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
-            ],
-        ]);
+        ->configure([new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*')]);
 
     $parameters = $containerConfigurator->parameters();
 

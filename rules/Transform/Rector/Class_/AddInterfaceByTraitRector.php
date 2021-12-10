@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class AddInterfaceByTraitRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const INTERFACE_BY_TRAIT = 'interface_by_trait';

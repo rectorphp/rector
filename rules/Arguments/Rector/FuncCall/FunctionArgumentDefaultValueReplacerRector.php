@@ -23,6 +23,7 @@ use Webmozart\Assert\Assert;
 final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const REPLACED_ARGUMENTS = 'replaced_arguments';

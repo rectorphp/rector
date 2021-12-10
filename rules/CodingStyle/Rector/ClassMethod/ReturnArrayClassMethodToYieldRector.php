@@ -30,6 +30,7 @@ use Webmozart\Assert\Assert;
 final class ReturnArrayClassMethodToYieldRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const METHODS_TO_YIELDS = 'methods_to_yields';

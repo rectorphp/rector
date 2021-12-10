@@ -25,6 +25,7 @@ use Webmozart\Assert\Assert;
 final class AddReturnTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const METHOD_RETURN_TYPES = 'method_return_types';

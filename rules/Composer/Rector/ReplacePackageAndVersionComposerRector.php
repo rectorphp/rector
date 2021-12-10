@@ -18,6 +18,7 @@ use Webmozart\Assert\Assert;
 final class ReplacePackageAndVersionComposerRector implements ComposerRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';

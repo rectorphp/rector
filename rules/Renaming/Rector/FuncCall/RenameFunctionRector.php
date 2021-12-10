@@ -21,6 +21,7 @@ use Webmozart\Assert\Assert;
 final class RenameFunctionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const OLD_FUNCTION_TO_NEW_FUNCTION = 'old_function_to_new_function';

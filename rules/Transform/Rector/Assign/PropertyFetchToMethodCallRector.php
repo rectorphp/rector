@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class PropertyFetchToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const PROPERTIES_TO_METHOD_CALLS = 'properties_to_method_calls';

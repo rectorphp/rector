@@ -27,6 +27,7 @@ use Webmozart\Assert\Assert;
 final class RenameNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';

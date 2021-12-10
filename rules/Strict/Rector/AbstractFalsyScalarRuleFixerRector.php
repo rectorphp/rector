@@ -14,6 +14,7 @@ use Webmozart\Assert\Assert;
 abstract class AbstractFalsyScalarRuleFixerRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const TREAT_AS_NON_EMPTY = 'treat_as_non_empty';

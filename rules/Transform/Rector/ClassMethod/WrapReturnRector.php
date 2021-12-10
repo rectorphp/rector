@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class WrapReturnRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const TYPE_METHOD_WRAPS = 'type_method_wraps';

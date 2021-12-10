@@ -22,6 +22,7 @@ use Webmozart\Assert\Assert;
 final class ReplaceArgumentDefaultValueRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const REPLACED_ARGUMENTS = 'replaced_arguments';

@@ -17,6 +17,7 @@ use Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements NonPhpRectorInterface, ConfigurableRuleInterface, ConfigurableRectorInterface, ComplementaryRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const RENAME_CLASSES = 'rename_classes';

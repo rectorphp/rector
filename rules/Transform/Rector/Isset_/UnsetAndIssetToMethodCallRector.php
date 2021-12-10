@@ -21,6 +21,7 @@ use Webmozart\Assert\Assert;
 final class UnsetAndIssetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const ISSET_UNSET_TO_METHOD_CALL = 'isset_unset_to_method_call';

@@ -20,6 +20,7 @@ use Webmozart\Assert\Assert;
 final class RenameStringRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const STRING_CHANGES = 'string_changes';

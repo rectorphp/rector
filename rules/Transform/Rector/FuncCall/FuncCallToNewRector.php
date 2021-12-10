@@ -20,6 +20,7 @@ use Webmozart\Assert\Assert;
 final class FuncCallToNewRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const FUNCTIONS_TO_NEWS = 'functions_to_news';

@@ -25,6 +25,7 @@ use Webmozart\Assert\Assert;
 final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const PARENT_CLASS_TO_TRAITS = 'parent_class_to_traits';

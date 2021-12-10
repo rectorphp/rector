@@ -26,6 +26,7 @@ use Webmozart\Assert\Assert;
 final class RenamePropertyRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const RENAMED_PROPERTIES = 'old_to_new_property_by_types';

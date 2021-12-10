@@ -25,6 +25,7 @@ use Webmozart\Assert\Assert;
 final class CallableInMethodCallToVariableRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const CALLABLE_IN_METHOD_CALL_TO_VARIABLE = 'callable_in_method_call_to_variable';

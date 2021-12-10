@@ -18,6 +18,7 @@ use Webmozart\Assert\Assert;
 final class RemoveInterfacesRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const INTERFACES_TO_REMOVE = 'interfaces_to_remove';

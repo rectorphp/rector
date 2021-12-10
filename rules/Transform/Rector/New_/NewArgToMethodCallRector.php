@@ -23,6 +23,7 @@ use Webmozart\Assert\Assert;
 final class NewArgToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     final public const NEW_ARGS_TO_METHOD_CALLS = 'new_args_to_method_calls';
