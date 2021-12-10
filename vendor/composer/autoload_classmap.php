@@ -2952,7 +2952,6 @@ return array(
     'Rector\\Transform\\Rector\\Class_\\ChangeSingletonToServiceRector' => $baseDir . '/rules/Transform/Rector/Class_/ChangeSingletonToServiceRector.php',
     'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => $baseDir . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
     'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => $baseDir . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
-    'Rector\\Transform\\Rector\\Class_\\RemoveAllowDynamicPropertiesAttributeRector' => $baseDir . '/rules/Transform/Rector/Class_/RemoveAllowDynamicPropertiesAttributeRector.php',
     'Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector' => $baseDir . '/rules/Transform/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php',
     'Rector\\Transform\\Rector\\FuncCall\\FuncCallToConstFetchRector' => $baseDir . '/rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php',
     'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => $baseDir . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',

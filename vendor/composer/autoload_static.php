@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit83a74bf56cfcabb04172fc7da306ef8f
+class ComposerStaticInit694b2e1fe5a3807eb1aeaafc13dede9f
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -3342,7 +3342,6 @@ class ComposerStaticInit83a74bf56cfcabb04172fc7da306ef8f
         'Rector\\Transform\\Rector\\Class_\\ChangeSingletonToServiceRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ChangeSingletonToServiceRector.php',
         'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
         'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
-        'Rector\\Transform\\Rector\\Class_\\RemoveAllowDynamicPropertiesAttributeRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/RemoveAllowDynamicPropertiesAttributeRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\ArgumentFuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToConstFetchRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToConstFetchRector.php',
         'Rector\\Transform\\Rector\\FuncCall\\FuncCallToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/FuncCall/FuncCallToMethodCallRector.php',
@@ -3795,9 +3794,9 @@ class ComposerStaticInit83a74bf56cfcabb04172fc7da306ef8f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit83a74bf56cfcabb04172fc7da306ef8f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit83a74bf56cfcabb04172fc7da306ef8f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit83a74bf56cfcabb04172fc7da306ef8f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit694b2e1fe5a3807eb1aeaafc13dede9f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit694b2e1fe5a3807eb1aeaafc13dede9f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit694b2e1fe5a3807eb1aeaafc13dede9f::$classMap;
 
         }, null, ClassLoader::class);
     }
