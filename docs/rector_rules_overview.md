@@ -1,4 +1,4 @@
-# 501 Rules Overview
+# 505 Rules Overview
 
 <br>
 
@@ -38,7 +38,7 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (21)
+- [DowngradePhp80](#downgradephp80) (23)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -74,9 +74,9 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (15)
+- [Php74](#php74) (14)
 
-- [Php80](#php80) (17)
+- [Php80](#php80) (18)
 
 - [Php81](#php81) (8)
 
@@ -96,7 +96,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (35)
+- [Transform](#transform) (37)
 
 - [TypeDeclaration](#typedeclaration) (22)
 
@@ -346,11 +346,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(MoveValueObjectsToValueObjectDirectoryRector::class)
         ->configure([
             MoveValueObjectsToValueObjectDirectoryRector::TYPES => ['ValueObjectInterfaceClassName'],
-        ])
-        ->configure([
             MoveValueObjectsToValueObjectDirectoryRector::SUFFIXES => ['Search'],
-        ])
-        ->configure([
             MoveValueObjectsToValueObjectDirectoryRector::ENABLE_VALUE_OBJECT_GUESSING => true,
         ]);
 };
@@ -2143,10 +2139,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(OrderAttributesRector::class)
-        ->configure(['First'])
-        ->configure([
-            1 => 'Second',
-        ]);
+        ->configure(['First', 'Second']);
 };
 ```
 
@@ -4602,8 +4595,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->configure([
             DowngradeParameterTypeWideningRector::SAFE_TYPES => [],
-        ])
-        ->configure([
             DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [],
         ]);
 };
@@ -5184,6 +5175,22 @@ Change `$object::class` to get_class($object)
 
 <br>
 
+### DowngradeDereferenceableOperationRector
+
+Add parentheses around non-dereferenceable expressions.
+
+- class: [`Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector`](../rules/DowngradePhp80/Rector/ArrayDimFetch/DowngradeDereferenceableOperationRector.php)
+
+```diff
+ function getFirstChar(string $str, string $suffix = '')
+ {
+-    return "$str$suffix"[0];
++    return ("$str$suffix")[0];
+ }
+```
+
+<br>
+
 ### DowngradeMatchToSwitchRector
 
 Downgrade `match()` to `switch()`
@@ -5356,6 +5363,25 @@ Change constructor property promotion to property asssign
 +    public function __construct(float $value = 0.0)
      {
 +        $this->value = $value;
+     }
+ }
+```
+
+<br>
+
+### DowngradeRecursiveDirectoryIteratorHasChildrenRector
+
+Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLinks parameter
+
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIteratorHasChildrenRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeRecursiveDirectoryIteratorHasChildrenRector.php)
+
+```diff
+ class RecursiveDirectoryIteratorChild extends \RecursiveDirectoryIterator
+ {
+-    public function hasChildren(bool $allowLinks = false): bool
++    public function hasChildren($allowLinks = false): bool
+     {
+         return true;
      }
  }
 ```
@@ -6574,10 +6600,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(StringClassNameToClassConstantRector::class)
-        ->configure(['ClassName'])
-        ->configure([
-            1 => 'AnotherClassName',
-        ]);
+        ->configure(['ClassName', 'AnotherClassName']);
 };
 ```
 
@@ -7115,8 +7138,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ReservedObjectRector::class)
         ->configure([
             'ReservedObject' => 'SmartObject',
-        ])
-        ->configure([
             'Object' => 'AnotherSmartObject',
         ]);
 };
@@ -7706,49 +7727,6 @@ Change deprecated (real) to (float)
 
 <br>
 
-### ReservedFnFunctionRector
-
-Change `fn()` function name, since it will be reserved keyword
-
-:wrench: **configure it!**
-
-- class: [`Rector\Php74\Rector\Function_\ReservedFnFunctionRector`](../rules/Php74/Rector/Function_/ReservedFnFunctionRector.php)
-
-```php
-use Rector\Php74\Rector\Function_\ReservedFnFunctionRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(ReservedFnFunctionRector::class)
-        ->configure([
-            'fn' => 'someFunctionName',
-        ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        function fn($value)
-+        function f($value)
-         {
-             return $value;
-         }
-
--        fn(5);
-+        f(5);
-     }
- }
-```
-
-<br>
-
 ### RestoreDefaultNullToNullableTypePropertyRector
 
 Add null default to properties with PHP 7.4 property nullable type
@@ -7783,8 +7761,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TypedPropertyRector::class)
         ->configure([
             TypedPropertyRector::CLASS_LIKE_TYPE_ONLY => false,
-        ])
-        ->configure([
             TypedPropertyRector::PRIVATE_PROPERTY_ONLY => false,
         ]);
 };
@@ -7806,6 +7782,30 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 <br>
 
 ## Php80
+
+### AddParamBasedOnParentClassMethodRector
+
+Add missing parameter based on parent class method
+
+- class: [`Rector\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector`](../rules/Php80/Rector/ClassMethod/AddParamBasedOnParentClassMethodRector.php)
+
+```diff
+ class A
+ {
+     public function execute($foo)
+     {
+     }
+ }
+
+ class B extends A{
+-    public function execute()
++    public function execute($foo)
+     {
+     }
+ }
+```
+
+<br>
 
 ### AnnotationToAttributeRector
 
@@ -9407,10 +9407,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RenameClassConstFetchRector::class)
-        ->configure([new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT')])
-        ->configure([
-            1 => new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT'),
-        ]);
+        ->configure(
+            [new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'), new RenameClassAndConstFetch(
+                'SomeClass',
+                'OTHER_OLD_CONSTANT',
+                'DifferentClass',
+                'NEW_CONSTANT'
+            )]
+        );
 };
 ```
 
@@ -9486,8 +9490,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RenameConstantRector::class)
         ->configure([
             'MYSQL_ASSOC' => 'MYSQLI_ASSOC',
-        ])
-        ->configure([
             'OLD_CONSTANT' => 'NEW_CONSTANT',
         ]);
 };
@@ -10017,9 +10019,27 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 Add the `AllowDynamicProperties` attribute to all classes
 
+:wrench: **configure it!**
+
 - class: [`Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector`](../rules/Transform/Rector/Class_/AddAllowDynamicPropertiesAttributeRector.php)
 
+```php
+use Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(AddAllowDynamicPropertiesAttributeRector::class)
+        ->configure(['Example\*']);
+};
+```
+
+↓
+
 ```diff
+ namespace Example\Domain;
+
 +#[AllowDynamicProperties]
  class SomeObject {
      public string $someProperty = 'hello world';
@@ -10911,10 +10931,22 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(PropertyFetchToMethodCallRector::class)
-        ->configure([new PropertyFetchToMethodCall('SomeObject', 'property', 'getProperty', 'setProperty', [])])
-        ->configure([
-            1 => new PropertyFetchToMethodCall('SomeObject', 'bareProperty', 'getConfig', ['someArg']),
-        ]);
+        ->configure(
+            [new PropertyFetchToMethodCall(
+                'SomeObject',
+                'property',
+                'getProperty',
+                'setProperty',
+                [
+            ]), new PropertyFetchToMethodCall(
+                'SomeObject',
+                'bareProperty',
+                'getConfig',
+                [
+                'someArg',
+
+            ])]
+        );
 };
 ```
 
@@ -10928,6 +10960,39 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 -$bare = $object->bareProperty;
 +$bare = $object->getConfig('someArg');
+```
+
+<br>
+
+### RemoveAllowDynamicPropertiesAttributeRector
+
+Remove the `AllowDynamicProperties` attribute from all classes
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\Class_\RemoveAllowDynamicPropertiesAttributeRector`](../rules/Transform/Rector/Class_/RemoveAllowDynamicPropertiesAttributeRector.php)
+
+```php
+use Rector\Transform\Rector\Class_\RemoveAllowDynamicPropertiesAttributeRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(RemoveAllowDynamicPropertiesAttributeRector::class)
+        ->configure(['Example\*']);
+};
+```
+
+↓
+
+```diff
+ namespace Example\Domain;
+
+-#[AllowDynamicProperties]
+ class SomeObject {
+     public string $someProperty = 'hello world';
+ }
 ```
 
 <br>
@@ -10962,6 +11027,49 @@ return static function (ContainerConfigurator $containerConfigurator): void {
      {
 -        $someTypeToReplace->someMethodCall();
 +        $this->someProperty->someMethodCall();
+     }
+ }
+```
+
+<br>
+
+### ReservedFnFunctionRector
+
+Change `fn()` function name, since it will be reserved keyword
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\Function_\ReservedFnFunctionRector`](../rules/Transform/Rector/Function_/ReservedFnFunctionRector.php)
+
+```php
+use Rector\Transform\Rector\Function_\ReservedFnFunctionRector;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReservedFnFunctionRector::class)
+        ->configure([
+            'fn' => 'someFunctionName',
+        ]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        function fn($value)
++        function f($value)
+         {
+             return $value;
+         }
+
+-        fn(5);
++        f(5);
      }
  }
 ```

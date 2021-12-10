@@ -29,7 +29,6 @@ final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector
      * @var string
      */
     private const ATTRIBUTE = 'AllowDynamicProperties';
-    public const TRANSFORM_ON_NAMESPACES = 'transform_on_namespaces';
     /**
      * @var array<array-key, string>
      */
@@ -78,7 +77,7 @@ class SomeObject {
     public string $someProperty = 'hello world';
 }
 CODE_SAMPLE
-, [\Rector\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector::TRANSFORM_ON_NAMESPACES => ['Example\\*']])]);
+, ['Example\\*'])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -89,8 +88,7 @@ CODE_SAMPLE
     }
     public function configure(array $configuration) : void
     {
-        $transformOnNamespaces = $configuration[self::TRANSFORM_ON_NAMESPACES] ?? $configuration;
-        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($transformOnNamespaces);
+        $transformOnNamespaces = $configuration;
         \RectorPrefix20211210\Webmozart\Assert\Assert::allString($transformOnNamespaces);
         $this->transformOnNamespaces = $transformOnNamespaces;
     }
@@ -135,7 +133,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
-        if (\count($this->transformOnNamespaces) !== 0) {
+        if ($this->transformOnNamespaces !== []) {
             $className = (string) $this->nodeNameResolver->getName($class);
             foreach ($this->transformOnNamespaces as $transformOnNamespace) {
                 if (!$this->nodeNameResolver->isStringName($className, $transformOnNamespace)) {
