@@ -70,7 +70,10 @@ final class ConfigureCallValuesCollector
                     foreach ($constantNamesToValues as $constantName => $constantValue) {
                         if ($constantValue === $firstKey) {
                             $reflectionConstant = $classReflection->getReflectionConstant($constantName);
-                            if (\strpos($reflectionConstant->getDocComment(), '@deprecated') === \false) {
+                            if ($reflectionConstant === \false) {
+                                continue;
+                            }
+                            if (\strpos((string) $reflectionConstant->getDocComment(), '@deprecated') === \false) {
                                 continue;
                             }
                             $warningMessage = \sprintf('The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.', $rectorClass, $constantName, \PHP_EOL);
