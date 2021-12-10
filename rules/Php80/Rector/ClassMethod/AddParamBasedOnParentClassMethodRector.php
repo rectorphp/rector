@@ -4,7 +4,10 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
@@ -133,8 +136,13 @@ CODE_SAMPLE
                 $node->params = $originalParams;
                 return null;
             }
+            $paramDefault = $parentClassMethodParam->default;
+            if ($paramDefault instanceof \PhpParser\Node\Expr) {
+                $printParamDefault = $this->print($paramDefault);
+                $paramDefault = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($printParamDefault));
+            }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
-            $node->params[$key] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), $parentClassMethodParam->default, $parentClassMethodParam->type, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
+            $node->params[$key] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), $paramDefault, $parentClassMethodParam->type, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
         }
         return $node;
     }
