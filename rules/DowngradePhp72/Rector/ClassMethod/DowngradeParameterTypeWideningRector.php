@@ -8,7 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp72\NodeAnalyzer\BuiltInMethodAnalyzer;
@@ -25,12 +25,8 @@ use RectorPrefix20211210\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\DowngradeParameterTypeWideningRectorTest
  */
-final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class DowngradeParameterTypeWideningRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
 {
-    /**
-     * @var string
-     */
-    public const UNSAFE_TYPES_TO_METHODS = 'unsafe_types_to_methods';
     /**
      * @var array<string, string[]>
      */
@@ -105,7 +101,7 @@ final class SomeClass implements SomeInterface
     }
 }
 CODE_SAMPLE
-, [self::UNSAFE_TYPES_TO_METHODS => []])]);
+, ['ContainerInterface' => ['set', 'get', 'has', 'initialized'], 'SomeContainerInterface' => ['set', 'has']])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -135,8 +131,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $unsafeTypesToMethods = $configuration[self::UNSAFE_TYPES_TO_METHODS] ?? [];
-        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($unsafeTypesToMethods);
+        $unsafeTypesToMethods = $configuration;
         foreach ($unsafeTypesToMethods as $key => $value) {
             \RectorPrefix20211210\Webmozart\Assert\Assert::string($key);
             \RectorPrefix20211210\Webmozart\Assert\Assert::allString($value);
@@ -200,6 +195,9 @@ CODE_SAMPLE
     }
     private function isSafeType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
+        if ($this->unsafeTypesToMethods === []) {
+            return \false;
+        }
         $classReflectionName = $classReflection->getName();
         foreach ($this->unsafeTypesToMethods as $unsafeType => $unsafeMethods) {
             if (!$this->isNames($classMethod, $unsafeMethods)) {
