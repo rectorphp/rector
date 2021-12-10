@@ -38,10 +38,6 @@ final class StaticEasyPrefixer
 
         // this is public API of a Rector rule
         'Symplify\RuleDocGenerator\*',
-
-        // not needed since Rector 0.12.7, but keep for BC layer for couple of months
-        // for configuring sets with ValueObjectInliner
-        'Symplify\SymfonyPhpConfig\*',
     ];
 
     /**

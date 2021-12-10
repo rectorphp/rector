@@ -30,31 +30,9 @@ use Webmozart\Assert\Assert;
 final class DowngradeParameterTypeWideningRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @deprecated Use self::UNSAFE_TYPES_TO_METHODS instead
-     * @var string
-     */
-    final public const SAFE_TYPES = 'safe_types';
-
-    /**
-     * @deprecated Use self::UNSAFE_TYPES_TO_METHODS instead
-     * @var string
-     */
-    final public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
-
-    /**
      * @var string
      */
     final public const UNSAFE_TYPES_TO_METHODS = 'unsafe_types_to_methods';
-
-    /**
-     * @var string[]
-     */
-    private array $safeTypes = [];
-
-    /**
-     * @var array<string, string[]>
-     */
-    private array $safeTypesToMethods = [];
 
     /**
      * @var array<string, string[]>
@@ -107,8 +85,6 @@ final class SomeClass implements SomeInterface
 CODE_SAMPLE
             ,
                 [
-                    self::SAFE_TYPES => [],
-                    self::SAFE_TYPES_TO_METHODS => [],
                     self::UNSAFE_TYPES_TO_METHODS => [],
                 ]
             ),
@@ -152,20 +128,6 @@ CODE_SAMPLE
      */
     public function configure(array $configuration): void
     {
-        $safeTypes = $configuration[self::SAFE_TYPES] ?? [];
-        Assert::isArray($safeTypes);
-        Assert::allString($safeTypes);
-        $this->safeTypes = $safeTypes;
-
-        $safeTypesToMethods = $configuration[self::SAFE_TYPES_TO_METHODS] ?? [];
-        Assert::isArray($safeTypesToMethods);
-        foreach ($safeTypesToMethods as $key => $value) {
-            Assert::string($key);
-            Assert::allString($value);
-        }
-
-        $this->safeTypesToMethods = $safeTypesToMethods;
-
         $unsafeTypesToMethods = $configuration[self::UNSAFE_TYPES_TO_METHODS] ?? [];
         Assert::isArray($unsafeTypesToMethods);
         foreach ($unsafeTypesToMethods as $key => $value) {
@@ -251,32 +213,6 @@ CODE_SAMPLE
     private function isSafeType(ClassReflection $classReflection, ClassMethod $classMethod): bool
     {
         $classReflectionName = $classReflection->getName();
-        foreach ($this->safeTypes as $safeType) {
-            if ($classReflection->isSubclassOf($safeType)) {
-                return true;
-            }
-
-            // skip self too
-            if ($classReflectionName === $safeType) {
-                return true;
-            }
-        }
-
-        foreach ($this->safeTypesToMethods as $safeType => $safeMethods) {
-            if (! $this->isNames($classMethod, $safeMethods)) {
-                continue;
-            }
-
-            if ($classReflection->isSubclassOf($safeType)) {
-                return true;
-            }
-
-            // skip self too
-            if ($classReflectionName === $safeType) {
-                return true;
-            }
-        }
-
         foreach ($this->unsafeTypesToMethods as $unsafeType => $unsafeMethods) {
             if (! $this->isNames($classMethod, $unsafeMethods)) {
                 continue;

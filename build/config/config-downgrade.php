@@ -6,6 +6,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
+use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -30,9 +31,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->configure([
             DowngradeParameterTypeWideningRector::UNSAFE_TYPES_TO_METHODS => [
-                LoaderInterface::class => [
-                    'load'
-                ],
+                LoaderInterface::class => ['load'],
+                Loader::class => ['import']
             ],
         ]);
 };

@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
+use Rector\Tests\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector\Fixture\SomeContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -12,9 +12,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->configure([
-            DowngradeParameterTypeWideningRector::SAFE_TYPES => [RectorInterface::class],
-            DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
-                ContainerInterface::class => ['setParameter', 'getParameter', 'hasParameter'],
+            DowngradeParameterTypeWideningRector::UNSAFE_TYPES_TO_METHODS => [
+                ContainerInterface::class => ['set', 'get', 'has', 'initialized'],
+                SomeContainerInterface::class => ['set', 'has'],
             ],
         ]);
 };

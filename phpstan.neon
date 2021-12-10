@@ -130,23 +130,6 @@ parameters:
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
         - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
 
-        -
-            message: '#"(getComments|getDocComment|setDocComment)\(\)" call on "PhpParser\\Node" type is not allowed#'
-            paths:
-                - src/PhpParser/NodeTransformer.php
-                - src/Rector/AbstractRector.php
-                - src/Exclusion/ExclusionManager.php
-                # playing around with doc block format
-                - packages/Comments/CommentRemover.php
-                - rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php
-                - rules/CodeQuality/Rector/Return_/SimplifyUselessVariableRector.php
-                - rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php
-                - rules/DeadCode/Rector/Node/RemoveNonExistingVarAnnotationRector.php
-                - rules/PhpSpecToPHPUnit/Rector/MethodCall/PhpSpecMocksToPHPUnitMocksRector.php
-                - packages/BetterPhpDocParser/Comment/CommentsMerger.php
-                - packages/Comments/NodeDocBlock/DocBlockUpdater.php
-                - packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoFactory.php
-
         # false positives checked in another method
         -
             message: '#If condition is always false#'
@@ -237,11 +220,6 @@ parameters:
 
         - '#Method Rector\\Core\\PhpParser\\Node\\BetterNodeFinder\:\:findParentType\(\) should return T of PhpParser\\Node\|null but returns class\-string<T of PhpParser\\Node\>\|T of PhpParser\\Node#'
 
-        -
-            message: '#"%s" in sprintf\(\) format must be quoted#'
-            paths:
-                - packages/BetterPhpDocParser/ValueObject/PhpDoc/VariadicAwareParamTagValueNode.php
-
         - '#Property Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap\:\:\$binaryOpToAssignClasses \(array<class\-string<PhpParser\\Node\\Expr\\BinaryOp\>, class\-string<PhpParser\\Node\\Expr\\BinaryOp\>\>\) does not accept array#'
 
         -
@@ -252,7 +230,6 @@ parameters:
                 - packages/NodeNameResolver/NodeNameResolver.php
                 - packages/NodeNameResolver/NodeNameResolver/ClassNameResolver.php
                 - packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php
-                - src/Validation/Collector/EmptyConfigurableRectorCollector.php
 
         # known types
         - '#Call to an undefined method PHPStan\\Type\\ConstantType\:\:getValue\(\)#'
@@ -381,10 +358,6 @@ parameters:
                 - packages/Caching/ValueObject/Storage/FileCacheStorage.php
         -
             message: '#"@\\rename\(\$tmpPath, \$path\)" is forbidden to use#'
-            paths:
-                - packages/Caching/ValueObject/Storage/FileCacheStorage.php
-        -
-            message: '#"%s" in sprintf\(\) format must be quoted#'
             paths:
                 - packages/Caching/ValueObject/Storage/FileCacheStorage.php
         -
@@ -601,10 +574,6 @@ parameters:
                  - src/Application/*Processor.php
                  - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
 
-        -
-            message: '#Method Rector\\Core\\Application\\ApplicationFileProcessor\:\:processFiles\(\) should return array\{system_errors\: array<Rector\\Core\\ValueObject\\Application\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} but returns array#'
-            path: src/Application/ApplicationFileProcessor.php
-
         - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'
 
         # code sample configuration
@@ -616,24 +585,8 @@ parameters:
                 - rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php
                 - rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php
 
-        # fixed in symplify dev-main
-        -
-            message: '#Do not use chained method calls\. Put each on separated lines#'
-            paths:
-                - rules/Privatization/Naming/ConstantNaming.php
-                - rules/Naming/Naming/VariableNaming.php
-
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
 
         # complex detection
         - '#Cognitive complexity for "Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector\:\:addConfigureCallValues\(\)" is \d+, keep it under 10#'
-
-        # will be removed soon
-        -
-             message: '#Class cognitive complexity is 31, keep it under 30#'
-             path: rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php
-
-        -
-             message: '#Cognitive complexity for "Rector\\DowngradePhp72\\Rector\\ClassMethod\\DowngradeParameterTypeWideningRector\:\:isSafeType\(\)" is 14, keep it under 10#'
-             path: rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php
