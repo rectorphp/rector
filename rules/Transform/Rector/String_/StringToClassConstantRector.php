@@ -10,13 +10,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StringToClassConstant;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
  */
 final class StringToClassConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const STRINGS_TO_CLASS_CONSTANTS = 'strings_to_class_constants';
@@ -72,8 +73,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $stringToClassConstants = $configuration[self::STRINGS_TO_CLASS_CONSTANTS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($stringToClassConstants);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($stringToClassConstants, \Rector\Transform\ValueObject\StringToClassConstant::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($stringToClassConstants);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($stringToClassConstants, \Rector\Transform\ValueObject\StringToClassConstant::class);
         $this->stringsToClassConstants = $stringToClassConstants;
     }
 }

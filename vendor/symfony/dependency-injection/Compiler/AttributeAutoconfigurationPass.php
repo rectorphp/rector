@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20211209\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix20211209\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211209\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20211210\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix20211210\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 /**
  * @author Alexander M. Turek <me@derrabus.de>
  */
-final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+final class AttributeAutoconfigurationPass extends \RectorPrefix20211210\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     private $classAttributeConfigurators = [];
     private $methodAttributeConfigurators = [];
@@ -48,7 +48,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony
             } elseif ($parameterType instanceof \ReflectionNamedType) {
                 $types[] = $parameterType->getName();
             } else {
-                throw new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('Argument "$%s" of attribute autoconfigurator should have a type, use one or more of "\\ReflectionClass|\\ReflectionMethod|\\ReflectionProperty|\\ReflectionParameter|\\Reflector" in "%s" on line "%d".', $reflectorParameter->getName(), $callableReflector->getFileName(), $callableReflector->getStartLine()));
+                throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('Argument "$%s" of attribute autoconfigurator should have a type, use one or more of "\\ReflectionClass|\\ReflectionMethod|\\ReflectionProperty|\\ReflectionParameter|\\Reflector" in "%s" on line "%d".', $reflectorParameter->getName(), $callableReflector->getFileName(), $callableReflector->getStartLine()));
             }
             try {
                 $attributeReflector = new \ReflectionClass($attributeName);
@@ -63,7 +63,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony
                         continue;
                     }
                     if (!($targets & \constant('Attribute::TARGET_' . \strtoupper($symbol)))) {
-                        throw new \RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('Invalid type "Reflection%s" on argument "$%s": attribute "%s" cannot target a ' . $symbol . ' in "%s" on line "%d".', \ucfirst($symbol), $reflectorParameter->getName(), $attributeName, $callableReflector->getFileName(), $callableReflector->getStartLine()));
+                        throw new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\LogicException(\sprintf('Invalid type "Reflection%s" on argument "$%s": attribute "%s" cannot target a ' . $symbol . ' in "%s" on line "%d".', \ucfirst($symbol), $reflectorParameter->getName(), $attributeName, $callableReflector->getFileName(), $callableReflector->getStartLine()));
                     }
                 }
                 $this->{$symbol . 'AttributeConfigurators'}[$attributeName] = $callable;
@@ -76,11 +76,11 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony
      */
     protected function processValue($value, $isRoot = \false)
     {
-        if (!$value instanceof \RectorPrefix20211209\Symfony\Component\DependencyInjection\Definition || !$value->isAutoconfigured() || $value->isAbstract() || $value->hasTag('container.ignore_attributes') || !($classReflector = $this->container->getReflectionClass($value->getClass(), \false))) {
+        if (!$value instanceof \RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition || !$value->isAutoconfigured() || $value->isAbstract() || $value->hasTag('container.ignore_attributes') || !($classReflector = $this->container->getReflectionClass($value->getClass(), \false))) {
             return parent::processValue($value, $isRoot);
         }
         $instanceof = $value->getInstanceofConditionals();
-        $conditionals = $instanceof[$classReflector->getName()] ?? new \RectorPrefix20211209\Symfony\Component\DependencyInjection\ChildDefinition('');
+        $conditionals = $instanceof[$classReflector->getName()] ?? new \RectorPrefix20211210\Symfony\Component\DependencyInjection\ChildDefinition('');
         if ($this->classAttributeConfigurators) {
             foreach ([] as $attribute) {
                 if ($configurator = $this->classAttributeConfigurators[$attribute->getName()] ?? null) {
@@ -91,7 +91,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony
         if ($this->parameterAttributeConfigurators) {
             try {
                 $constructorReflector = $this->getConstructor($value, \false);
-            } catch (\RectorPrefix20211209\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
+            } catch (\RectorPrefix20211210\Symfony\Component\DependencyInjection\Exception\RuntimeException $e) {
                 $constructorReflector = null;
             }
             if ($constructorReflector) {
@@ -139,7 +139,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211209\Symfony
                 }
             }
         }
-        if (!isset($instanceof[$classReflector->getName()]) && new \RectorPrefix20211209\Symfony\Component\DependencyInjection\ChildDefinition('') != $conditionals) {
+        if (!isset($instanceof[$classReflector->getName()]) && new \RectorPrefix20211210\Symfony\Component\DependencyInjection\ChildDefinition('') != $conditionals) {
             $instanceof[$classReflector->getName()] = $conditionals;
             $value->setInstanceofConditionals($instanceof);
         }

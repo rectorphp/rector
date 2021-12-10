@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/doctrine/dbal/blob/3.1.x/src/Types/Types.php
  *
@@ -20,6 +20,7 @@ use RectorPrefix20211209\Webmozart\Assert\Assert;
 final class AttributeKeyToClassConstFetchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES = 'attribute_keys_to_class_const_fetches';
@@ -91,7 +92,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $attributeKeysToClassConstFetches = $configuration[self::ATTRIBUTE_KEYS_TO_CLASS_CONST_FETCHES] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($attributeKeysToClassConstFetches, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($attributeKeysToClassConstFetches, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);
         $this->attributeKeysToClassConstFetches = $attributeKeysToClassConstFetches;
     }
 }

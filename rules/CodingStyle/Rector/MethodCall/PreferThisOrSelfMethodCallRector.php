@@ -15,7 +15,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector\PreferThisOrSelfMethodCallRectorTest
  */
@@ -91,9 +91,9 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $typeToPreference = $configuration[self::TYPE_TO_PREFERENCE] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($typeToPreference);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_keys($typeToPreference));
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($typeToPreference, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($typeToPreference);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($typeToPreference));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($typeToPreference, \Rector\CodingStyle\Enum\PreferenceSelfThis::class);
         $this->typeToPreference = $typeToPreference;
     }
     /**

@@ -12,13 +12,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\FuncCall\RenameFunctionRector\RenameFunctionRectorTest
  */
 final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const OLD_FUNCTION_TO_NEW_FUNCTION = 'old_function_to_new_function';
@@ -62,9 +63,9 @@ final class RenameFunctionRector extends \Rector\Core\Rector\AbstractRector impl
     public function configure(array $configuration) : void
     {
         $oldFunctionToNewFunction = $configuration[self::OLD_FUNCTION_TO_NEW_FUNCTION] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($oldFunctionToNewFunction);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_values($oldFunctionToNewFunction));
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($oldFunctionToNewFunction);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($oldFunctionToNewFunction);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_values($oldFunctionToNewFunction));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($oldFunctionToNewFunction);
         $this->oldFunctionToNewFunction = $oldFunctionToNewFunction;
     }
     private function createName(string $newFunction) : \PhpParser\Node\Name

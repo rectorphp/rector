@@ -20,13 +20,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Generics\Rector\ClassMethod\GenericClassMethodParamRector\GenericClassMethodParamRectorTest
  */
 final class GenericClassMethodParamRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const GENERIC_CLASS_METHOD_PARAMS = 'generic_class_method_params';
@@ -120,7 +121,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $makeClassMethodGenerics = $configuration[self::GENERIC_CLASS_METHOD_PARAMS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($makeClassMethodGenerics, \Rector\Generics\ValueObject\GenericClassMethodParam::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($makeClassMethodGenerics, \Rector\Generics\ValueObject\GenericClassMethodParam::class);
         $this->genericClassMethodParams = $makeClassMethodGenerics;
     }
     private function refactorParam(\PhpParser\Node\Stmt\ClassMethod $classMethod, \Rector\Generics\ValueObject\GenericClassMethodParam $genericClassMethodParam) : void

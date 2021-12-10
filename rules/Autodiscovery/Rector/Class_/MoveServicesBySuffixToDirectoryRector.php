@@ -15,7 +15,7 @@ use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * Inspiration @see https://github.com/rectorphp/rector/pull/1865/files#diff-0d18e660cdb626958662641b491623f8
  *
@@ -24,6 +24,7 @@ use RectorPrefix20211209\Webmozart\Assert\Assert;
 final class MoveServicesBySuffixToDirectoryRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const GROUP_NAMES_BY_SUFFIX = 'group_names_by_suffix';
@@ -89,8 +90,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $groupNamesBySuffix = $configuration[self::GROUP_NAMES_BY_SUFFIX] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($groupNamesBySuffix);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($groupNamesBySuffix);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($groupNamesBySuffix);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($groupNamesBySuffix);
         $this->groupNamesBySuffix = $groupNamesBySuffix;
     }
     /**

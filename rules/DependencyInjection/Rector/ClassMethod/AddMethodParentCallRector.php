@@ -15,13 +15,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
 final class AddMethodParentCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const METHODS_BY_PARENT_TYPES = 'methods_by_parent_type';
@@ -92,8 +93,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_keys($methodsByParentTypes));
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($methodsByParentTypes);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($methodsByParentTypes));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($methodsByParentTypes);
         /** @var array<string, string> $methodsByParentTypes */
         $this->methodByParentTypes = $methodsByParentTypes;
     }

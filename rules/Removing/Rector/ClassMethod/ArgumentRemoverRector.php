@@ -14,13 +14,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
 final class ArgumentRemoverRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const REMOVED_ARGUMENTS = 'removed_arguments';
@@ -70,7 +71,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $removedArguments = $configuration[self::REMOVED_ARGUMENTS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($removedArguments, \Rector\Removing\ValueObject\ArgumentRemover::class);
         $this->removedArguments = $removedArguments;
     }
     /**

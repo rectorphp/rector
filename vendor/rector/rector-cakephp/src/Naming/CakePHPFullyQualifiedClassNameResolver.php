@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CakePHP\Naming;
 
-use RectorPrefix20211209\Nette\Utils\Strings;
+use RectorPrefix20211210\Nette\Utils\Strings;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CakePHP\ImplicitNameResolver;
 use Rector\Core\Util\StringUtils;
@@ -54,7 +54,7 @@ final class CakePHPFullyQualifiedClassNameResolver
         // Chop Lib out as locations moves those files to the top level.
         // But only if Lib is not the last folder.
         if (\Rector\Core\Util\StringUtils::isMatch($pseudoNamespace, self::LIB_NAMESPACE_PART_REGEX)) {
-            $pseudoNamespace = \RectorPrefix20211209\Nette\Utils\Strings::replace($pseudoNamespace, '#\\\\Lib#', '');
+            $pseudoNamespace = \RectorPrefix20211210\Nette\Utils\Strings::replace($pseudoNamespace, '#\\\\Lib#', '');
         }
         // B. is Cake native class?
         $cakePhpVersion = 'Cake\\' . $pseudoNamespace . '\\' . $shortClass;
@@ -69,6 +69,6 @@ final class CakePHPFullyQualifiedClassNameResolver
     }
     private function normalizeFileSystemSlashes(string $pseudoNamespace) : string
     {
-        return \RectorPrefix20211209\Nette\Utils\Strings::replace($pseudoNamespace, self::SLASH_REGEX, '\\');
+        return \RectorPrefix20211210\Nette\Utils\Strings::replace($pseudoNamespace, self::SLASH_REGEX, '\\');
     }
 }

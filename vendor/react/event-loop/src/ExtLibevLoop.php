@@ -1,14 +1,14 @@
 <?php
 
-namespace RectorPrefix20211209\React\EventLoop;
+namespace RectorPrefix20211210\React\EventLoop;
 
 use BadMethodCallException;
-use RectorPrefix20211209\libev\EventLoop;
-use RectorPrefix20211209\libev\IOEvent;
-use RectorPrefix20211209\libev\SignalEvent;
-use RectorPrefix20211209\libev\TimerEvent;
-use RectorPrefix20211209\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix20211209\React\EventLoop\Timer\Timer;
+use RectorPrefix20211210\libev\EventLoop;
+use RectorPrefix20211210\libev\IOEvent;
+use RectorPrefix20211210\libev\SignalEvent;
+use RectorPrefix20211210\libev\TimerEvent;
+use RectorPrefix20211210\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix20211210\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * [Deprecated] An `ext-libev` based event loop.
@@ -25,7 +25,7 @@ use SplObjectStorage;
  * @see https://gist.github.com/1688204
  * @deprecated 1.2.0, use [`ExtEvLoop`](#extevloop) instead.
  */
-final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopInterface
+final class ExtLibevLoop implements \RectorPrefix20211210\React\EventLoop\LoopInterface
 {
     private $loop;
     private $futureTickQueue;
@@ -37,13 +37,13 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
     private $signalEvents = array();
     public function __construct()
     {
-        if (!\class_exists('RectorPrefix20211209\\libev\\EventLoop', \false)) {
+        if (!\class_exists('RectorPrefix20211210\\libev\\EventLoop', \false)) {
             throw new \BadMethodCallException('Cannot create ExtLibevLoop, ext-libev extension missing');
         }
-        $this->loop = new \RectorPrefix20211209\libev\EventLoop();
-        $this->futureTickQueue = new \RectorPrefix20211209\React\EventLoop\Tick\FutureTickQueue();
+        $this->loop = new \RectorPrefix20211210\libev\EventLoop();
+        $this->futureTickQueue = new \RectorPrefix20211210\React\EventLoop\Tick\FutureTickQueue();
         $this->timerEvents = new \SplObjectStorage();
-        $this->signals = new \RectorPrefix20211209\React\EventLoop\SignalsHandler();
+        $this->signals = new \RectorPrefix20211210\React\EventLoop\SignalsHandler();
     }
     public function addReadStream($stream, $listener)
     {
@@ -53,7 +53,7 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
         $callback = function () use($stream, $listener) {
             \call_user_func($listener, $stream);
         };
-        $event = new \RectorPrefix20211209\libev\IOEvent($callback, $stream, \RectorPrefix20211209\libev\IOEvent::READ);
+        $event = new \RectorPrefix20211210\libev\IOEvent($callback, $stream, \RectorPrefix20211210\libev\IOEvent::READ);
         $this->loop->add($event);
         $this->readEvents[(int) $stream] = $event;
     }
@@ -65,7 +65,7 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
         $callback = function () use($stream, $listener) {
             \call_user_func($listener, $stream);
         };
-        $event = new \RectorPrefix20211209\libev\IOEvent($callback, $stream, \RectorPrefix20211209\libev\IOEvent::WRITE);
+        $event = new \RectorPrefix20211210\libev\IOEvent($callback, $stream, \RectorPrefix20211210\libev\IOEvent::WRITE);
         $this->loop->add($event);
         $this->writeEvents[(int) $stream] = $event;
     }
@@ -89,7 +89,7 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
     }
     public function addTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20211209\React\EventLoop\Timer\Timer($interval, $callback, \false);
+        $timer = new \RectorPrefix20211210\React\EventLoop\Timer\Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timerEvents;
         $callback = function () use($timer, $timers, $that) {
@@ -98,18 +98,18 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
                 $that->cancelTimer($timer);
             }
         };
-        $event = new \RectorPrefix20211209\libev\TimerEvent($callback, $timer->getInterval());
+        $event = new \RectorPrefix20211210\libev\TimerEvent($callback, $timer->getInterval());
         $this->timerEvents->attach($timer, $event);
         $this->loop->add($event);
         return $timer;
     }
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20211209\React\EventLoop\Timer\Timer($interval, $callback, \true);
+        $timer = new \RectorPrefix20211210\React\EventLoop\Timer\Timer($interval, $callback, \true);
         $callback = function () use($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
-        $event = new \RectorPrefix20211209\libev\TimerEvent($callback, $interval, $interval);
+        $event = new \RectorPrefix20211210\libev\TimerEvent($callback, $interval, $interval);
         $this->timerEvents->attach($timer, $event);
         $this->loop->add($event);
         return $timer;
@@ -133,7 +133,7 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
         $this->signals->add($signal, $listener);
         if (!isset($this->signalEvents[$signal])) {
             $signals = $this->signals;
-            $this->signalEvents[$signal] = new \RectorPrefix20211209\libev\SignalEvent(function () use($signals, $signal) {
+            $this->signalEvents[$signal] = new \RectorPrefix20211210\libev\SignalEvent(function () use($signals, $signal) {
                 $signals->call($signal);
             }, $signal);
             $this->loop->add($this->signalEvents[$signal]);
@@ -153,9 +153,9 @@ final class ExtLibevLoop implements \RectorPrefix20211209\React\EventLoop\LoopIn
         $this->running = \true;
         while ($this->running) {
             $this->futureTickQueue->tick();
-            $flags = \RectorPrefix20211209\libev\EventLoop::RUN_ONCE;
+            $flags = \RectorPrefix20211210\libev\EventLoop::RUN_ONCE;
             if (!$this->running || !$this->futureTickQueue->isEmpty()) {
-                $flags |= \RectorPrefix20211209\libev\EventLoop::RUN_NOWAIT;
+                $flags |= \RectorPrefix20211210\libev\EventLoop::RUN_NOWAIT;
             } elseif (!$this->readEvents && !$this->writeEvents && !$this->timerEvents->count() && $this->signals->isEmpty()) {
                 break;
             }

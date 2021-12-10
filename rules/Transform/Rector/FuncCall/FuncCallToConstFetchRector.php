@@ -11,13 +11,14 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
  */
 final class FuncCallToConstFetchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const FUNCTIONS_TO_CONSTANTS = 'functions_to_constants';
@@ -74,9 +75,9 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $functionsToConstants = $configuration[self::FUNCTIONS_TO_CONSTANTS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($functionsToConstants);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($functionsToConstants);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_keys($functionsToConstants));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($functionsToConstants);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($functionsToConstants);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($functionsToConstants));
         /** @var array<string, string> $functionsToConstants */
         $this->functionsToConstants = $functionsToConstants;
     }

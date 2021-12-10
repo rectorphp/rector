@@ -10,13 +10,14 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\MethodCallToStaticCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToStaticCallRector\MethodCallToStaticCallRectorTest
  */
 final class MethodCallToStaticCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const METHOD_CALLS_TO_STATIC_CALLS = 'method_calls_to_static_calls';
@@ -89,8 +90,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodCallsToStaticCalls = $configuration[self::METHOD_CALLS_TO_STATIC_CALLS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($methodCallsToStaticCalls);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($methodCallsToStaticCalls, \Rector\Transform\ValueObject\MethodCallToStaticCall::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($methodCallsToStaticCalls);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($methodCallsToStaticCalls, \Rector\Transform\ValueObject\MethodCallToStaticCall::class);
         $this->methodCallsToStaticCalls = $methodCallsToStaticCalls;
     }
 }

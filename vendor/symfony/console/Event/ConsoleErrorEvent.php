@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211209\Symfony\Component\Console\Event;
+namespace RectorPrefix20211210\Symfony\Component\Console\Event;
 
-use RectorPrefix20211209\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211210\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Allows to handle throwables thrown while running a command.
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-final class ConsoleErrorEvent extends \RectorPrefix20211209\Symfony\Component\Console\Event\ConsoleEvent
+final class ConsoleErrorEvent extends \RectorPrefix20211210\Symfony\Component\Console\Event\ConsoleEvent
 {
     private \Throwable $error;
     private int $exitCode;
-    public function __construct(\RectorPrefix20211209\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211209\Symfony\Component\Console\Output\OutputInterface $output, \Throwable $error, \RectorPrefix20211209\Symfony\Component\Console\Command\Command $command = null)
+    public function __construct(\RectorPrefix20211210\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211210\Symfony\Component\Console\Output\OutputInterface $output, \Throwable $error, \RectorPrefix20211210\Symfony\Component\Console\Command\Command $command = null)
     {
         parent::__construct($command, $input, $output);
         $this->error = $error;

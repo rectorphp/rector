@@ -15,13 +15,14 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */
 final class ChangeMethodVisibilityRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const METHOD_VISIBILITIES = 'method_visibilities';
@@ -116,8 +117,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodVisibilities = $configuration[self::METHOD_VISIBILITIES] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($methodVisibilities);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($methodVisibilities, \Rector\Visibility\ValueObject\ChangeMethodVisibility::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($methodVisibilities);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($methodVisibilities, \Rector\Visibility\ValueObject\ChangeMethodVisibility::class);
         $this->methodVisibilities = $methodVisibilities;
     }
 }

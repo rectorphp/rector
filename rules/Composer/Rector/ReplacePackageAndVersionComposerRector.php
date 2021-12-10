@@ -6,16 +6,17 @@ namespace Rector\Composer\Rector;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Composer\Guard\VersionGuard;
 use Rector\Composer\ValueObject\ReplacePackageAndVersion;
-use RectorPrefix20211209\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20211210\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Composer\Rector\ReplacePackageAndVersionComposerRector\ReplacePackageAndVersionComposerRectorTest
  */
 final class ReplacePackageAndVersionComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const REPLACE_PACKAGES_AND_VERSIONS = 'replace_packages_and_versions';
@@ -32,7 +33,7 @@ final class ReplacePackageAndVersionComposerRector implements \Rector\Composer\C
     {
         $this->versionGuard = $versionGuard;
     }
-    public function refactor(\RectorPrefix20211209\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20211210\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         foreach ($this->replacePackagesAndVersions as $replacePackageAndVersion) {
             $composerJson->replacePackage($replacePackageAndVersion->getOldPackageName(), $replacePackageAndVersion->getNewPackageName(), $replacePackageAndVersion->getVersion());
@@ -62,7 +63,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $replacePackagesAndVersions = $configuration[self::REPLACE_PACKAGES_AND_VERSIONS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($replacePackagesAndVersions, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($replacePackagesAndVersions, \Rector\Composer\ValueObject\ReplacePackageAndVersion::class);
         $this->versionGuard->validate($replacePackagesAndVersions);
         $this->replacePackagesAndVersions = $replacePackagesAndVersions;
     }

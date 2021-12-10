@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\NewArgToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symfony/symfony/pull/35308
  *
@@ -21,6 +21,7 @@ use RectorPrefix20211209\Webmozart\Assert\Assert;
 final class NewArgToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const NEW_ARGS_TO_METHOD_CALLS = 'new_args_to_method_calls';
@@ -88,8 +89,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $newArgsToMethodCalls = $configuration[self::NEW_ARGS_TO_METHOD_CALLS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($newArgsToMethodCalls);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($newArgsToMethodCalls, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($newArgsToMethodCalls);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($newArgsToMethodCalls, \Rector\Transform\ValueObject\NewArgToMethodCall::class);
         $this->newArgsToMethodCalls = $newArgsToMethodCalls;
     }
 }

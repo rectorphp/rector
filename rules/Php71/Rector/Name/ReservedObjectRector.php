@@ -14,7 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/object-typehint https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
  *
@@ -23,6 +23,7 @@ use RectorPrefix20211209\Webmozart\Assert\Assert;
 final class ReservedObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const RESERVED_KEYWORDS_TO_REPLACEMENTS = 'reserved_keywords_to_replacements';
@@ -71,9 +72,9 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $reservedKeywordsToReplacements = $configuration[self::RESERVED_KEYWORDS_TO_REPLACEMENTS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::isArray($reservedKeywordsToReplacements);
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_keys($reservedKeywordsToReplacements));
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($reservedKeywordsToReplacements);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::isArray($reservedKeywordsToReplacements);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($reservedKeywordsToReplacements));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($reservedKeywordsToReplacements);
         $this->reservedKeywordsToReplacements = $reservedKeywordsToReplacements;
     }
     private function processIdentifier(\PhpParser\Node\Identifier $identifier) : \PhpParser\Node\Identifier

@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/symfony/symfony/pull/35308
  *
@@ -21,6 +21,7 @@ use RectorPrefix20211209\Webmozart\Assert\Assert;
 final class StaticCallToNewRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const STATIC_CALLS_TO_NEWS = 'static_calls_to_news';
@@ -83,7 +84,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $staticCallsToNews = $configuration[self::STATIC_CALLS_TO_NEWS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allIsAOf($staticCallsToNews, \Rector\Transform\ValueObject\StaticCallToNew::class);
         $this->staticCallsToNews = $staticCallsToNews;
     }
 }

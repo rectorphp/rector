@@ -9,7 +9,7 @@ declare (strict_types=1);
  *
  * @see https://github.com/ergebnis/json-printer
  */
-namespace RectorPrefix20211209\Ergebnis\Json\Printer;
+namespace RectorPrefix20211210\Ergebnis\Json\Printer;
 
 interface PrinterInterface
 {

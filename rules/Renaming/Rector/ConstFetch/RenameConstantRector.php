@@ -10,13 +10,14 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\ConstFetch\RenameConstantRector\RenameConstantRectorTest
  */
 final class RenameConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const OLD_TO_NEW_CONSTANTS = 'old_to_new_constants';
@@ -73,8 +74,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $oldToNewConstants = $configuration[self::OLD_TO_NEW_CONSTANTS] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_keys($oldToNewConstants));
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($oldToNewConstants);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($oldToNewConstants));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($oldToNewConstants);
         /** @var array<string, string> $oldToNewConstants */
         $this->oldToNewConstants = $oldToNewConstants;
     }

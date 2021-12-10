@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\Rector\Namespace_;
 
-use RectorPrefix20211209\Nette\Utils\Strings;
+use RectorPrefix20211210\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
@@ -18,13 +18,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Renaming\ValueObject\RenamedNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211209\Webmozart\Assert\Assert;
+use RectorPrefix20211210\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Namespace_\RenameNamespaceRector\RenameNamespaceRectorTest
  */
 final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
+     * @deprecated
      * @var string
      */
     public const OLD_TO_NEW_NAMESPACES = 'old_to_new_namespaces';
@@ -102,8 +103,8 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
     public function configure(array $configuration) : void
     {
         $oldToNewNamespaces = $configuration[self::OLD_TO_NEW_NAMESPACES] ?? $configuration;
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
-        \RectorPrefix20211209\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString(\array_keys($oldToNewNamespaces));
+        \RectorPrefix20211210\Webmozart\Assert\Assert::allString($oldToNewNamespaces);
         /** @var array<string, string> $oldToNewNamespaces */
         $this->oldToNewNamespaces = $oldToNewNamespaces;
     }
@@ -152,7 +153,7 @@ final class RenameNamespaceRector extends \Rector\Core\Rector\AbstractRector imp
     {
         $nameInNewNamespace = $renamedNamespace->getNameInNewNamespace();
         // first dummy implementation - improve
-        $cutOffFromTheLeft = \RectorPrefix20211209\Nette\Utils\Strings::length($nameInNewNamespace) - \RectorPrefix20211209\Nette\Utils\Strings::length($name->toString());
-        return \RectorPrefix20211209\Nette\Utils\Strings::substring($nameInNewNamespace, $cutOffFromTheLeft);
+        $cutOffFromTheLeft = \RectorPrefix20211210\Nette\Utils\Strings::length($nameInNewNamespace) - \RectorPrefix20211210\Nette\Utils\Strings::length($name->toString());
+        return \RectorPrefix20211210\Nette\Utils\Strings::substring($nameInNewNamespace, $cutOffFromTheLeft);
     }
 }

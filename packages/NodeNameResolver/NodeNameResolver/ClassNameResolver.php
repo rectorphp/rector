@@ -8,7 +8,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20211209\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211210\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<ClassLike>
  */
