@@ -30,14 +30,21 @@ use Webmozart\Assert\Assert;
 final class DowngradeParameterTypeWideningRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @deprecated Use self::UNSAFE_TYPES_TO_METHODS instead
      * @var string
      */
     final public const SAFE_TYPES = 'safe_types';
 
     /**
+     * @deprecated Use self::UNSAFE_TYPES_TO_METHODS instead
      * @var string
      */
     final public const SAFE_TYPES_TO_METHODS = 'safe_types_to_methods';
+
+    /**
+     * @var string
+     */
+    final public const UNSAFE_TYPES_TO_METHODS = 'unsafe_types_to_methods';
 
     /**
      * @var string[]
@@ -48,6 +55,11 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
      * @var array<string, string[]>
      */
     private array $safeTypesToMethods = [];
+
+    /**
+     * @var array<string, string[]>
+     */
+    private array $unsafeTypesToMethods = [];
 
     public function __construct(
         private readonly NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator,
@@ -97,6 +109,7 @@ CODE_SAMPLE
                 [
                     self::SAFE_TYPES => [],
                     self::SAFE_TYPES_TO_METHODS => [],
+                    self::UNSAFE_TYPES_TO_METHODS => [],
                 ]
             ),
         ]);
@@ -152,6 +165,15 @@ CODE_SAMPLE
         }
 
         $this->safeTypesToMethods = $safeTypesToMethods;
+
+        $unsafeTypesToMethods = $configuration[self::UNSAFE_TYPES_TO_METHODS] ?? [];
+        Assert::isArray($unsafeTypesToMethods);
+        foreach ($unsafeTypesToMethods as $key => $value) {
+            Assert::string($key);
+            Assert::allString($value);
+        }
+
+        $this->unsafeTypesToMethods = $unsafeTypesToMethods;
     }
 
     private function shouldSkip(ClassReflection $classReflection, ClassMethod $classMethod): bool
@@ -252,6 +274,21 @@ CODE_SAMPLE
             // skip self too
             if ($classReflectionName === $safeType) {
                 return true;
+            }
+        }
+
+        foreach ($this->unsafeTypesToMethods as $unsafeType => $unsafeMethods) {
+            if (! $this->isNames($classMethod, $unsafeMethods)) {
+                continue;
+            }
+
+            if ($classReflection->isSubclassOf($unsafeType)) {
+                return false;
+            }
+
+            // skip self too
+            if ($classReflectionName === $unsafeType) {
+                return false;
             }
         }
 

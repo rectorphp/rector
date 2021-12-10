@@ -14,6 +14,7 @@ use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
+use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -37,50 +38,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(DowngradeLevelSetList::DOWN_TO_PHP_71);
 
     $services = $containerConfigurator->services();
+
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->configure([
-            DowngradeParameterTypeWideningRector::SAFE_TYPES => [
-                // phsptan
-                Type::class,
-                RectorInterface::class,
-                // php-parser
-                NodeVisitorAbstract::class,
-                NodeVisitor::class,
-                ConfigurableRectorInterface::class,
-                OutputInterface::class,
-                StyleInterface::class,
-                PhpDocNodeVisitorInterface::class,
-                Node::class,
-                NodeNameResolverInterface::class,
-                // phpstan
-                SourceLocator::class,
-                \PHPStan\PhpDocParser\Ast\Node::class,
-                \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode::class,
-                \PHPStan\PhpDocParser\Ast\NodeAttributes::class,
-                \PhpParser\Parser::class,
-                \Rector\Naming\Contract\RenameParamValueObjectInterface::class,
-                \Symplify\RuleDocGenerator\Contract\RuleCodeSamplePrinterInterface::class,
-                \Symplify\RuleDocGenerator\Contract\Category\CategoryInfererInterface::class,
-                \PhpParser\PrettyPrinterAbstract::class,
-                \Helmich\TypoScriptParser\Parser\Traverser\Visitor::class,
-                \Symplify\SymplifyKernel\Contract\LightKernelInterface::class,
-                \Symfony\Component\String\Slugger\SluggerInterface::class,
-                \Psr\Log\LoggerInterface::class,
-                // phsptan
-                \PHPStan\Type\DynamicStaticMethodReturnTypeExtension::class,
-                \PHPStan\Type\DynamicFunctionReturnTypeExtension::class,
-                \PHPStan\Type\DynamicFunctionThrowTypeExtension::class,
-                \PHPStan\Type\DynamicMethodReturnTypeExtension::class,
-                \PHPStan\Type\DynamicMethodThrowTypeExtension::class,
-                \PHPStan\Type\DynamicReturnTypeExtensionRegistry::class,
-                \PHPStan\Type\DynamicStaticMethodReturnTypeExtension::class,
-                \PHPStan\Type\DynamicStaticMethodThrowTypeExtension::class,
-            ],
-            DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [
-                ContainerInterface::class => [
-                    'setParameter',
-                    'getParameter',
-                    'hasParameter',
+            DowngradeParameterTypeWideningRector::UNSAFE_TYPES_TO_METHODS => [
+                Loader::class => [
+                    'load'
                 ],
             ],
         ]);

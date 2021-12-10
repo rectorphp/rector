@@ -628,3 +628,12 @@ parameters:
 
         # complex detection
         - '#Cognitive complexity for "Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector\:\:addConfigureCallValues\(\)" is \d+, keep it under 10#'
+
+        # will be removed soon
+        -
+             message: '#Class cognitive complexity is 31, keep it under 30#'
+             path: rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php
+
+        -
+             message: '#Cognitive complexity for "Rector\\DowngradePhp72\\Rector\\ClassMethod\\DowngradeParameterTypeWideningRector\:\:isSafeType\(\)" is 14, keep it under 10#'
+             path: rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php
