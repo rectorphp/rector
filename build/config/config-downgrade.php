@@ -2,24 +2,12 @@
 
 declare(strict_types=1);
 
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
-use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\Type\Type;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Stubs\PHPStanStubLoader;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\Set\ValueObject\DowngradeLevelSetList;
-use Symfony\Component\Config\Loader\Loader;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\StyleInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
 
 $phpStanStubLoader = new PHPStanStubLoader();
 $phpStanStubLoader->loadStubs();
@@ -42,7 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->configure([
             DowngradeParameterTypeWideningRector::UNSAFE_TYPES_TO_METHODS => [
-                Loader::class => [
+                LoaderInterface::class => [
                     'load'
                 ],
             ],
