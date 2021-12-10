@@ -45,8 +45,10 @@ abstract class FileLoader extends \RectorPrefix20211210\Symfony\Component\Config
      * {@inheritdoc}
      *
      * @param bool|string $ignoreErrors Whether errors should be ignored; pass "not_found" to ignore only when the loaded resource is not found
+     * @param string|null $type
+     * @param string|null $sourceResource
      */
-    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null)
+    public function import($resource, $type = null, $ignoreErrors = \false, $sourceResource = null, $exclude = null)
     {
         $args = \func_get_args();
         if ($ignoreNotFound = 'not_found' === $ignoreErrors) {

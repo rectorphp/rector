@@ -1293,6 +1293,8 @@ return array(
     'RectorPrefix20211210\\Symplify\\SmartFileSystem\\Normalizer\\PathNormalizer' => $vendorDir . '/symplify/smart-file-system/src/Normalizer/PathNormalizer.php',
     'RectorPrefix20211210\\Symplify\\SmartFileSystem\\SmartFileInfo' => $vendorDir . '/symplify/smart-file-system/src/SmartFileInfo.php',
     'RectorPrefix20211210\\Symplify\\SmartFileSystem\\SmartFileSystem' => $vendorDir . '/symplify/smart-file-system/src/SmartFileSystem.php',
+    'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\Reflection\\ArgumentAndParameterFactory' => $vendorDir . '/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php',
+    'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\ValueObjectInliner' => $vendorDir . '/symplify/symfony-php-config/src/ValueObjectInliner.php',
     'RectorPrefix20211210\\Symplify\\SymplifyKernel\\Config\\Loader\\ParameterMergingLoaderFactory' => $vendorDir . '/symplify/symplify-kernel/src/Config/Loader/ParameterMergingLoaderFactory.php',
     'RectorPrefix20211210\\Symplify\\SymplifyKernel\\ContainerBuilderFactory' => $vendorDir . '/symplify/symplify-kernel/src/ContainerBuilderFactory.php',
     'RectorPrefix20211210\\Symplify\\SymplifyKernel\\Contract\\Config\\LoaderFactoryInterface' => $vendorDir . '/symplify/symplify-kernel/src/Contract/Config/LoaderFactoryInterface.php',
@@ -3396,8 +3398,6 @@ return array(
     'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ConfiguredCodeSample.php',
     'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ExtraFileCodeSample' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ExtraFileCodeSample.php',
     'Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/ValueObject/RuleDefinition.php',
-    'Symplify\\SymfonyPhpConfig\\Reflection\\ArgumentAndParameterFactory' => $vendorDir . '/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php',
-    'Symplify\\SymfonyPhpConfig\\ValueObjectInliner' => $vendorDir . '/symplify/symfony-php-config/src/ValueObjectInliner.php',
     'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );

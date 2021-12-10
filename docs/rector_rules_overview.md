@@ -4594,8 +4594,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(DowngradeParameterTypeWideningRector::class)
         ->configure([
-            DowngradeParameterTypeWideningRector::SAFE_TYPES => [],
-            DowngradeParameterTypeWideningRector::SAFE_TYPES_TO_METHODS => [],
+            DowngradeParameterTypeWideningRector::UNSAFE_TYPES_TO_METHODS => [],
         ]);
 };
 ```

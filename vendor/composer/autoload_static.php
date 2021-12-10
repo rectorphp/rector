@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
+class ComposerStaticInit9376101442cfdedff9d89618d681e8c3
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -26,7 +26,6 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
     public static $prefixLengthsPsr4 = array (
         'S' => 
         array (
-            'Symplify\\SymfonyPhpConfig\\' => 26,
             'Symplify\\RuleDocGenerator\\' => 26,
             'Ssch\\TYPO3Rector\\PHPStan\\' => 25,
             'Ssch\\TYPO3Rector\\' => 17,
@@ -48,6 +47,7 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
             'RectorPrefix20211210\\Webmozart\\Assert\\' => 38,
             'RectorPrefix20211210\\Symplify\\VendorPatches\\' => 44,
             'RectorPrefix20211210\\Symplify\\SymplifyKernel\\' => 45,
+            'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\' => 47,
             'RectorPrefix20211210\\Symplify\\SmartFileSystem\\' => 46,
             'RectorPrefix20211210\\Symplify\\Skipper\\' => 38,
             'RectorPrefix20211210\\Symplify\\SimplePhpDocParser\\' => 49,
@@ -107,10 +107,6 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
     );
 
     public static $prefixDirsPsr4 = array (
-        'Symplify\\SymfonyPhpConfig\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/symfony-php-config/src',
-        ),
         'Symplify\\RuleDocGenerator\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src',
@@ -184,6 +180,10 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
         'RectorPrefix20211210\\Symplify\\SymplifyKernel\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/symplify-kernel/src',
+        ),
+        'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symplify/symfony-php-config/src',
         ),
         'RectorPrefix20211210\\Symplify\\SmartFileSystem\\' => 
         array (
@@ -1683,6 +1683,8 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
         'RectorPrefix20211210\\Symplify\\SmartFileSystem\\Normalizer\\PathNormalizer' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Normalizer/PathNormalizer.php',
         'RectorPrefix20211210\\Symplify\\SmartFileSystem\\SmartFileInfo' => __DIR__ . '/..' . '/symplify/smart-file-system/src/SmartFileInfo.php',
         'RectorPrefix20211210\\Symplify\\SmartFileSystem\\SmartFileSystem' => __DIR__ . '/..' . '/symplify/smart-file-system/src/SmartFileSystem.php',
+        'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\Reflection\\ArgumentAndParameterFactory' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php',
+        'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\ValueObjectInliner' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/ValueObjectInliner.php',
         'RectorPrefix20211210\\Symplify\\SymplifyKernel\\Config\\Loader\\ParameterMergingLoaderFactory' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Config/Loader/ParameterMergingLoaderFactory.php',
         'RectorPrefix20211210\\Symplify\\SymplifyKernel\\ContainerBuilderFactory' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ContainerBuilderFactory.php',
         'RectorPrefix20211210\\Symplify\\SymplifyKernel\\Contract\\Config\\LoaderFactoryInterface' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/Contract/Config/LoaderFactoryInterface.php',
@@ -3786,8 +3788,6 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
         'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ConfiguredCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ConfiguredCodeSample.php',
         'Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\ExtraFileCodeSample' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/CodeSample/ExtraFileCodeSample.php',
         'Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/ValueObject/RuleDefinition.php',
-        'Symplify\\SymfonyPhpConfig\\Reflection\\ArgumentAndParameterFactory' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php',
-        'Symplify\\SymfonyPhpConfig\\ValueObjectInliner' => __DIR__ . '/..' . '/symplify/symfony-php-config/src/ValueObjectInliner.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
@@ -3795,9 +3795,9 @@ class ComposerStaticInitd3a015248a046c6488ba7b9bd0822867
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd3a015248a046c6488ba7b9bd0822867::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd3a015248a046c6488ba7b9bd0822867::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd3a015248a046c6488ba7b9bd0822867::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9376101442cfdedff9d89618d681e8c3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9376101442cfdedff9d89618d681e8c3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9376101442cfdedff9d89618d681e8c3::$classMap;
 
         }, null, ClassLoader::class);
     }

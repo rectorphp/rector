@@ -6,7 +6,6 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Symplify\\SymfonyPhpConfig\\' => array($vendorDir . '/symplify/symfony-php-config/src'),
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
     'Ssch\\TYPO3Rector\\PHPStan\\' => array($vendorDir . '/ssch/typo3-rector/utils/phpstan/src'),
     'Ssch\\TYPO3Rector\\' => array($vendorDir . '/ssch/typo3-rector/src'),
@@ -25,6 +24,7 @@ return array(
     'RectorPrefix20211210\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix20211210\\Symplify\\VendorPatches\\' => array($vendorDir . '/symplify/vendor-patches/src'),
     'RectorPrefix20211210\\Symplify\\SymplifyKernel\\' => array($vendorDir . '/symplify/symplify-kernel/src'),
+    'RectorPrefix20211210\\Symplify\\SymfonyPhpConfig\\' => array($vendorDir . '/symplify/symfony-php-config/src'),
     'RectorPrefix20211210\\Symplify\\SmartFileSystem\\' => array($vendorDir . '/symplify/smart-file-system/src'),
     'RectorPrefix20211210\\Symplify\\Skipper\\' => array($vendorDir . '/symplify/skipper/src'),
     'RectorPrefix20211210\\Symplify\\SimplePhpDocParser\\' => array($vendorDir . '/symplify/simple-php-doc-parser/src'),

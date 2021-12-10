@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\SymfonyPhpConfig;
+namespace RectorPrefix20211210\Symplify\SymfonyPhpConfig;
 
 use ReflectionClass;
 use ReflectionMethod;
@@ -9,7 +9,7 @@ use RectorPrefix20211210\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
 use RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 use RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
-use Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
+use RectorPrefix20211210\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory;
 /**
  * @api
  */
@@ -25,9 +25,9 @@ final class ValueObjectInliner
         $propertyValues = self::resolvePropertyValues($reflectionClass, $object);
         // create fake factory with private accessor, as properties are different
         // @see https://symfony.com/doc/current/service_container/factories.html#passing-arguments-to-the-factory-method
-        $servicesConfigurator->set(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class);
+        $servicesConfigurator->set(\RectorPrefix20211210\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class);
         $argumentValues = self::resolveArgumentValues($reflectionClass, $object);
-        $servicesConfigurator->set($className)->factory([new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator(\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
+        $servicesConfigurator->set($className)->factory([new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator(\RectorPrefix20211210\Symplify\SymfonyPhpConfig\Reflection\ArgumentAndParameterFactory::class), 'create'])->args([$className, $argumentValues, $propertyValues]);
         return new \RectorPrefix20211210\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator($className);
     }
     /**
