@@ -8,7 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\ObjectType;
@@ -112,7 +112,7 @@ final class VarTagRemover
     }
     private function isArrayTypeNode(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $varTagValueNode) : bool
     {
-        return $varTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
+        return \in_array(\get_class($varTagValueNode->type), [\Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode::class, \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode::class], \true);
     }
     private function isArrayOfClass(\PhpParser\Node $node, \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode $spacingAwareArrayTypeNode) : bool
     {
