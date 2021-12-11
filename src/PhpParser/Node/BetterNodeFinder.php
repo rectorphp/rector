@@ -393,6 +393,38 @@ final class BetterNodeFinder
         return \false;
     }
     /**
+     * @template T of Node
+     * @param array<class-string<T>>|class-string<T> $types
+     * @return T[]
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    public function findInstancesOfInFunctionLikeScoped($functionLike, $types) : array
+    {
+        if (\is_string($types)) {
+            $types = [$types];
+        }
+        /** @var T[] $foundNodes */
+        $foundNodes = [];
+        foreach ($types as $type) {
+            /** @var T[] $nodes */
+            $nodes = $this->findInstanceOf((array) $functionLike->stmts, $type);
+            if ($nodes === []) {
+                continue;
+            }
+            foreach ($nodes as $key => $node) {
+                $parentFunctionLike = $this->findParentByTypes($node, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class]);
+                if ($parentFunctionLike !== $functionLike) {
+                    unset($nodes[$key]);
+                }
+            }
+            if ($nodes === []) {
+                continue;
+            }
+            $foundNodes = \array_merge($foundNodes, $nodes);
+        }
+        return $foundNodes;
+    }
+    /**
      * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     public function findFirstInFunctionLikeScoped($functionLike, callable $filter) : ?\PhpParser\Node

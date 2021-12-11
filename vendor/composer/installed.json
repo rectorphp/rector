@@ -2240,12 +2240,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-generator.git",
-                "reference": "6b8d24c5429f28d5ceecf82760d608db18ec1eab"
+                "reference": "b74964fa665c4438191895626562a369e629845c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/6b8d24c5429f28d5ceecf82760d608db18ec1eab",
-                "reference": "6b8d24c5429f28d5ceecf82760d608db18ec1eab",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/b74964fa665c4438191895626562a369e629845c",
+                "reference": "b74964fa665c4438191895626562a369e629845c",
                 "shasum": ""
             },
             "require": {
@@ -2275,7 +2275,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-11T13:56:29+00:00",
+            "time": "2021-12-11T15:11:02+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2300,7 +2300,7 @@
             "homepage": "https:\/\/getrector.org",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-generator\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-generator\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-generator\/tree\/0.5.0"
             },
             "funding": [
                 {
