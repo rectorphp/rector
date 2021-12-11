@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -16,6 +18,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -208,10 +211,12 @@ CODE_SAMPLE
             }
 
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
+            $paramType = $this->resolveParamType($parentClassMethodParam);
+
             $node->params[$key] = new Param(
                 new Variable($paramName),
                 $paramDefault,
-                $parentClassMethodParam->type,
+                $paramType,
                 $parentClassMethodParam->byRef,
                 $parentClassMethodParam->variadic,
                 [],
@@ -221,6 +226,18 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function resolveParamType(Param $param): null|Identifier|Name|ComplexType
+    {
+        if ($param->type === null) {
+            return null;
+        }
+
+        $paramType = $param->type;
+        $paramType->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+
+        return $paramType;
     }
 
     /**
