@@ -191,8 +191,8 @@ CODE_SAMPLE
 
     private function shouldSkipExactlyReturnDateTime(ClassMethod $classMethod): bool
     {
-        $return = $this->betterNodeFinder->findFirst(
-            (array) $classMethod->stmts,
+        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped(
+            $classMethod,
             fn (Node $node): bool => $node instanceof Return_
         );
         if (! $return instanceof Return_) {
