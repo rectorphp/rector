@@ -57,14 +57,6 @@ final class RectorRecipe
      */
     private $setFilePath;
     /**
-     * @var string|null
-     */
-    private $extraFileName;
-    /**
-     * @var string|null
-     */
-    private $extraFileContent;
-    /**
      * @var string
      */
     private $description;
@@ -128,19 +120,11 @@ final class RectorRecipe
         return $this->setFilePath;
     }
     /**
-     * @return array<string, mixed>
+     * @return mixed[]
      */
     public function getConfiguration() : array
     {
         return $this->configuration;
-    }
-    public function getExtraFileName() : ?string
-    {
-        return $this->extraFileName;
-    }
-    public function getExtraFileContent() : ?string
-    {
-        return $this->extraFileContent;
     }
     public function isRectorRepository() : bool
     {
@@ -152,15 +136,7 @@ final class RectorRecipe
     }
     /**
      * @api
-     */
-    public function addExtraFile(string $extraFileName, string $extraFileContent) : void
-    {
-        $this->extraFileName = $extraFileName;
-        $this->extraFileContent = $this->normalizeCode($extraFileContent);
-    }
-    /**
-     * @api
-     * @param array<string, mixed> $configuration
+     * @param mixed[] $configuration
      */
     public function setConfiguration(array $configuration) : void
     {

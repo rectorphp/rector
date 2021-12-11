@@ -26,7 +26,6 @@
         "symplify\/phpstan-rules": "^10.0",
         "symplify\/easy-testing": "^10.0",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/phpstan-rules": "^0.4.15",
         "symplify\/monorepo-builder": "^10.0",
         "symplify\/vendor-patches": "^10.0",
         "phpstan\/phpstan-strict-rules": "^1.1",

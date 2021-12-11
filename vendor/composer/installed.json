@@ -2240,12 +2240,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-generator.git",
-                "reference": "16d8c6bcc70e044604271fec9e1f1ca804265a54"
+                "reference": "9625d8dd860dc29b27eb746f4d5eee2e7c7eee61"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/16d8c6bcc70e044604271fec9e1f1ca804265a54",
-                "reference": "16d8c6bcc70e044604271fec9e1f1ca804265a54",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/9625d8dd860dc29b27eb746f4d5eee2e7c7eee61",
+                "reference": "9625d8dd860dc29b27eb746f4d5eee2e7c7eee61",
                 "shasum": ""
             },
             "require": {
@@ -2267,7 +2267,6 @@
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.4.15",
                 "rector\/rector-src": "dev-main",
                 "symplify\/coding-standard": "^10.0",
                 "symplify\/easy-coding-standard": "^10.0",
@@ -2277,7 +2276,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-10T12:41:31+00:00",
+            "time": "2021-12-11T12:37:20+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

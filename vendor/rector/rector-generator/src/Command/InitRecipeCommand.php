@@ -25,7 +25,7 @@ final class InitRecipeCommand extends \RectorPrefix20211211\Symfony\Component\Co
     }
     protected function execute(\RectorPrefix20211211\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211211\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $this->templateInitializer->initialize(__DIR__ . '/../../templates/rector-recipe.php.dist', 'rector-recipe.php');
+        $this->templateInitializer->initialize(__DIR__ . '/../../templates/rector-recipe.php', 'rector-recipe.php');
         return self::SUCCESS;
     }
 }

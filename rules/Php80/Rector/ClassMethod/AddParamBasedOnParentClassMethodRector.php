@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -15,6 +17,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -169,9 +172,22 @@ CODE_SAMPLE
                 $paramDefault = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($printParamDefault));
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
-            $node->params[$key] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), $paramDefault, $parentClassMethodParam->type, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
+            $paramType = $this->resolveParamType($parentClassMethodParam);
+            $node->params[$key] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
         }
         return $node;
+    }
+    /**
+     * @return \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null
+     */
+    private function resolveParamType(\PhpParser\Node\Param $param)
+    {
+        if ($param->type === null) {
+            return null;
+        }
+        $paramType = $param->type;
+        $paramType->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        return $paramType;
     }
     /**
      * @return string[]
