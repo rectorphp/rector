@@ -173,7 +173,7 @@ CODE_SAMPLE
     }
     private function shouldSkipExactlyReturnDateTime(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $return = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) : bool {
+        $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (\PhpParser\Node $node) : bool {
             return $node instanceof \PhpParser\Node\Stmt\Return_;
         });
         if (!$return instanceof \PhpParser\Node\Stmt\Return_) {
