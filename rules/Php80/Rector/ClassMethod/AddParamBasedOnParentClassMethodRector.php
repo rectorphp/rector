@@ -110,16 +110,53 @@ CODE_SAMPLE
         $currentClassMethodParams = $node->getParams();
         $parentClassMethodParams = $parentClassMethod->getParams();
 
-        if (count($currentClassMethodParams) >= count($parentClassMethodParams)) {
+        $countCurrentClassMethodParams = count($currentClassMethodParams);
+        $countParentClassMethodParams = count($parentClassMethodParams);
+
+        if ($countCurrentClassMethodParams === $countParentClassMethodParams) {
             return null;
         }
 
-        return $this->processReplaceClassMethodParams(
-            $node,
-            $parentClassMethod,
-            $currentClassMethodParams,
-            $parentClassMethodParams
-        );
+        if ($countCurrentClassMethodParams < $countParentClassMethodParams) {
+            return $this->processReplaceClassMethodParams(
+                $node,
+                $parentClassMethod,
+                $currentClassMethodParams,
+                $parentClassMethodParams
+            );
+        }
+
+        return $this->processAddNullDefaultParam($node, $currentClassMethodParams, $parentClassMethodParams);
+    }
+
+    /**
+     * @param Param[] $currentClassMethodParams
+     * @param Param[] $parentClassMethodParams
+     */
+    private function processAddNullDefaultParam(
+        ClassMethod $classMethod,
+        array $currentClassMethodParams,
+        array $parentClassMethodParams
+    ): ?ClassMethod {
+        $hasChanged = false;
+        foreach ($currentClassMethodParams as $key => $currentClassMethodParam) {
+            if (isset($parentClassMethodParams[$key])) {
+                continue;
+            }
+
+            if ($currentClassMethodParam->default instanceof Expr) {
+                continue;
+            }
+
+            $currentClassMethodParams[$key]->default = $this->nodeFactory->createNull();
+            $hasChanged = true;
+        }
+
+        if (! $hasChanged) {
+            return null;
+        }
+
+        return $classMethod;
     }
 
     /**

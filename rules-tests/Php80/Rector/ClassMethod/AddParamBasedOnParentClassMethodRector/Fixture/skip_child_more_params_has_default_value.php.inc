@@ -4,9 +4,9 @@ namespace Rector\Tests\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethod
 
 use Rector\Tests\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector\Source\ParentWithParam;
 
-// ref https://3v4l.org/op5lE
-class SkipChildMoreParams extends ParentWithParam{
-    public function execute($foo, $bar)
+// ref https://3v4l.org/gOHV0
+class SkipChildMoreParamsHasDefaultValue extends ParentWithParam{
+    public function execute($foo, $bar = false)
     {
     }
 }
