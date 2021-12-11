@@ -438,6 +438,51 @@ final class BetterNodeFinder
         return false;
     }
 
+    /**
+     * @template T of Node
+     * @param array<class-string<T>>|class-string<T> $types
+     * @return T[]
+     */
+    public function findInstancesOfInFunctionLikeScoped(
+        ClassMethod | Function_ | Closure $functionLike,
+        string|array $types
+    ): array {
+        if (is_string($types)) {
+            $types = [$types];
+        }
+
+        /** @var T[] $foundNodes */
+        $foundNodes = [];
+
+        foreach ($types as $type) {
+            /** @var T[] $nodes */
+            $nodes = $this->findInstanceOf((array) $functionLike->stmts, $type);
+
+            if ($nodes === []) {
+                continue;
+            }
+
+            foreach ($nodes as $key => $node) {
+                $parentFunctionLike = $this->findParentByTypes(
+                    $node,
+                    [ClassMethod::class, Function_::class, Closure::class]
+                );
+
+                if ($parentFunctionLike !== $functionLike) {
+                    unset($nodes[$key]);
+                }
+            }
+
+            if ($nodes === []) {
+                continue;
+            }
+
+            $foundNodes = array_merge($foundNodes, $nodes);
+        }
+
+        return $foundNodes;
+    }
+
     public function findFirstInFunctionLikeScoped(
         ClassMethod | Function_ | Closure $functionLike,
         callable $filter
