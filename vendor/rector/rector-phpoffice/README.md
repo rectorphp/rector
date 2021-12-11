@@ -17,7 +17,7 @@ composer require rector/rector --dev
 To add a set to your config, use `Rector\PHPOffice\Set\PHPOfficeSetList` class and pick one of constants:
 
 ```php
-use Rector\Doctrine\Set\PHPOfficeSetList;
+use Rector\PHPOffice\Set\PHPOfficeSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

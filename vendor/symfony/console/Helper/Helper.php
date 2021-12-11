@@ -8,29 +8,29 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211210\Symfony\Component\Console\Helper;
+namespace RectorPrefix20211211\Symfony\Component\Console\Helper;
 
-use RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix20211210\Symfony\Component\String\UnicodeString;
+use RectorPrefix20211211\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20211211\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console\Helper\HelperInterface
+abstract class Helper implements \RectorPrefix20211211\Symfony\Component\Console\Helper\HelperInterface
 {
     protected $helperSet = null;
     /**
      * {@inheritdoc}
      */
-    public function setHelperSet(\RectorPrefix20211210\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
+    public function setHelperSet(\RectorPrefix20211211\Symfony\Component\Console\Helper\HelperSet $helperSet = null)
     {
         $this->helperSet = $helperSet;
     }
     /**
      * {@inheritdoc}
      */
-    public function getHelperSet() : ?\RectorPrefix20211210\Symfony\Component\Console\Helper\HelperSet
+    public function getHelperSet() : ?\RectorPrefix20211211\Symfony\Component\Console\Helper\HelperSet
     {
         return $this->helperSet;
     }
@@ -42,7 +42,7 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20211210\Symfony\Component\String\UnicodeString($string))->width(\false);
+            return (new \RectorPrefix20211211\Symfony\Component\String\UnicodeString($string))->width(\false);
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -57,7 +57,7 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
     {
         $string ?? ($string = '');
         if (\preg_match('//u', $string)) {
-            return (new \RectorPrefix20211210\Symfony\Component\String\UnicodeString($string))->length();
+            return (new \RectorPrefix20211211\Symfony\Component\String\UnicodeString($string))->length();
         }
         if (\false === ($encoding = \mb_detect_encoding($string, null, \true))) {
             return \strlen($string);
@@ -105,7 +105,7 @@ abstract class Helper implements \RectorPrefix20211210\Symfony\Component\Console
         }
         return \sprintf('%d B', $memory);
     }
-    public static function removeDecoration(\RectorPrefix20211210\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
+    public static function removeDecoration(\RectorPrefix20211211\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();
         $formatter->setDecorated(\false);

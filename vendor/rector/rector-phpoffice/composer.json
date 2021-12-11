@@ -16,7 +16,7 @@
         "symplify\/easy-coding-standard": "^10.0",
         "symplify\/rule-doc-generator": "^10.0",
         "rector\/rector-src": "dev-main",
-        "rector\/rector-generator": "^0.4",
+        "rector\/rector-generator": "dev-main",
         "phpstan\/phpstan-strict-rules": "^1.1",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "symplify\/vendor-patches": "^10.0",
