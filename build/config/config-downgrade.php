@@ -76,5 +76,7 @@ final class DowngradeRectorConfig
         'vendor/symfony/contracts/Cache/*',
         // depends on PHPUnit, that is only in dev deps
         'vendor/myclabs/php-enum/src/PHPUnit/Comparator.php',
+
+        'vendor/rector/rector-generator/templates',
     ];
 }
