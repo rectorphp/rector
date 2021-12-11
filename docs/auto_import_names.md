@@ -60,7 +60,7 @@ $parameters->set(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY, true);
 
 ## How to Remove Unused Imports?
 
-To remove imports, use [ECS](github.com/symplify/easy-coding-standard) with [`NoUnusedImportsFixer`](https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/2.18/doc/rules/import/no_unused_imports.rst) rule:
+To remove imports, use [ECS](https://github.com/symplify/easy-coding-standard) with [`NoUnusedImportsFixer`](https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/2.18/doc/rules/import/no_unused_imports.rst) rule:
 
 ```php
 // ecs.php
