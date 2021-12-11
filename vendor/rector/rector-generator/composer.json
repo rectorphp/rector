@@ -12,8 +12,7 @@
         "symfony\/dependency-injection": "^5.4|^6.0",
         "symfony\/finder": "^5.4|^6.0",
         "symplify\/astral": "^10.0",
-        "symplify\/package-builder": "^10.0",
-        "symfony\/string": "^6.0"
+        "symplify\/package-builder": "^10.0"
     },
     "require-dev": {
         "rector\/rector-src": "dev-main",

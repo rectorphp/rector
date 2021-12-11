@@ -2240,12 +2240,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-generator.git",
-                "reference": "9625d8dd860dc29b27eb746f4d5eee2e7c7eee61"
+                "reference": "6b8d24c5429f28d5ceecf82760d608db18ec1eab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/9625d8dd860dc29b27eb746f4d5eee2e7c7eee61",
-                "reference": "9625d8dd860dc29b27eb746f4d5eee2e7c7eee61",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/6b8d24c5429f28d5ceecf82760d608db18ec1eab",
+                "reference": "6b8d24c5429f28d5ceecf82760d608db18ec1eab",
                 "shasum": ""
             },
             "require": {
@@ -2255,7 +2255,6 @@
                 "symfony\/console": "^5.4|^6.0",
                 "symfony\/dependency-injection": "^5.4|^6.0",
                 "symfony\/finder": "^5.4|^6.0",
-                "symfony\/string": "^6.0",
                 "symplify\/astral": "^10.0",
                 "symplify\/package-builder": "^10.0"
             },
@@ -2276,7 +2275,7 @@
                 "symplify\/phpstan-rules": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-11T12:37:20+00:00",
+            "time": "2021-12-11T13:56:29+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

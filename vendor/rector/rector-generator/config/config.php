@@ -8,6 +8,7 @@ use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
 use RectorPrefix20211211\Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function RectorPrefix20211211\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix20211211\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix20211211\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20211211\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -16,7 +17,6 @@ use RectorPrefix20211211\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20211211\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use RectorPrefix20211211\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use RectorPrefix20211211\Symplify\SmartFileSystem\SmartFileSystem;
-use function RectorPrefix20211211\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(__DIR__ . '/parameters.php');
     $services = $containerConfigurator->services();

@@ -6,9 +6,6 @@ namespace Rector\RectorGenerator;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\RectorGenerator\NodeFactory\ConfigurationNodeFactory;
 use Rector\RectorGenerator\NodeFactory\ConfigureClassMethodFactory;
@@ -17,10 +14,6 @@ use Rector\RectorGenerator\ValueObject\NamePattern;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 final class TemplateVariablesFactory
 {
-    /**
-     * @var string
-     */
-    private const SELF = 'self';
     /**
      * @var string
      */
@@ -66,11 +59,8 @@ final class TemplateVariablesFactory
         $data = [self::VARIABLE_PACKAGE => $rectorRecipe->getPackage(), '__Category__' => $rectorRecipe->getCategory(), '__Description__' => $rectorRecipe->getDescription(), '__Name__' => $rectorRecipe->getName(), '__CodeBefore__' => \trim($rectorRecipe->getCodeBefore()) . \PHP_EOL, '__CodeBeforeExample__' => $this->createCodeForDefinition($rectorRecipe->getCodeBefore()), '__CodeAfter__' => \trim($rectorRecipe->getCodeAfter()) . \PHP_EOL, '__CodeAfterExample__' => $this->createCodeForDefinition($rectorRecipe->getCodeAfter()), '__Resources__' => $this->createSourceDocBlock($rectorRecipe->getResources())];
         $rectorClass = $this->templateFactory->create(\Rector\RectorGenerator\ValueObject\NamePattern::RECTOR_FQN_NAME_PATTERN, $data);
         if ($rectorRecipe->getConfiguration() !== []) {
-            $data['__TestRuleConfiguration__'] = $this->createRuleConfiguration($rectorClass, $rectorRecipe->getConfiguration());
-            $data['__RuleConfiguration__'] = $this->createRuleConfiguration(self::SELF, $rectorRecipe->getConfiguration());
-            $data['__ConfigurationProperties__'] = $this->createConfigurationProperty($rectorRecipe->getConfiguration());
-            $data['__ConfigurationConstants__'] = $this->createConfigurationConstants($rectorRecipe->getConfiguration());
-            $data['__ConfigureClassMethod__'] = $this->createConfigureClassMethod($rectorRecipe->getConfiguration());
+            $configurationData = $this->createConfigurationData($rectorRecipe);
+            $data = \array_merge($data, $configurationData);
         }
         $data['__NodeTypesPhp__'] = $this->createNodeTypePhp($rectorRecipe);
         $data['__NodeTypesDoc__'] = '\\' . \implode('|\\', $rectorRecipe->getNodeTypes());
@@ -103,19 +93,12 @@ final class TemplateVariablesFactory
     /**
      * @param array<string, mixed> $configuration
      */
-    private function createRuleConfiguration(string $rectorClass, array $configuration) : string
+    private function createRuleConfiguration(array $configuration) : string
     {
         $arrayItems = [];
-        foreach ($configuration as $constantName => $variableConfiguration) {
-            $constantName = \strtoupper($constantName);
-            $class = $rectorClass === self::SELF ? new \PhpParser\Node\Name(self::SELF) : new \PhpParser\Node\Name\FullyQualified($rectorClass);
-            $classConstFetch = new \PhpParser\Node\Expr\ClassConstFetch($class, $constantName);
-            if (\is_array($variableConfiguration)) {
-                $variableConfiguration = $this->nodeFactory->createArray($variableConfiguration);
-            } else {
-                $variableConfiguration = \PhpParser\BuilderHelpers::normalizeValue($variableConfiguration);
-            }
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($variableConfiguration, $classConstFetch);
+        foreach ($configuration as $mainConfiguration) {
+            $mainConfiguration = \PhpParser\BuilderHelpers::normalizeValue($mainConfiguration);
+            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($mainConfiguration);
         }
         $array = new \PhpParser\Node\Expr\Array_($arrayItems);
         return $this->standard->prettyPrintExpr($array);
@@ -127,14 +110,6 @@ final class TemplateVariablesFactory
     {
         $properties = $this->configurationNodeFactory->createProperties($ruleConfiguration);
         return $this->standard->prettyPrint($properties);
-    }
-    /**
-     * @param array<string, mixed> $ruleConfiguration
-     */
-    private function createConfigurationConstants(array $ruleConfiguration) : string
-    {
-        $configurationConstants = $this->configurationNodeFactory->createConfigurationConstants($ruleConfiguration);
-        return $this->standard->prettyPrint($configurationConstants);
     }
     /**
      * @param array<string, mixed> $ruleConfiguration
@@ -152,5 +127,17 @@ final class TemplateVariablesFactory
         }
         $array = $this->nodeFactory->createArray($referencingClassConsts);
         return $this->standard->prettyPrintExpr($array);
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    private function createConfigurationData(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe) : array
+    {
+        $configurationData = [];
+        $configurationData['__TestRuleConfiguration__'] = $this->createRuleConfiguration($rectorRecipe->getConfiguration());
+        $configurationData['__RuleConfiguration__'] = $this->createRuleConfiguration($rectorRecipe->getConfiguration());
+        $configurationData['__ConfigurationProperties__'] = $this->createConfigurationProperty($rectorRecipe->getConfiguration());
+        $configurationData['__ConfigureClassMethod__'] = $this->createConfigureClassMethod($rectorRecipe->getConfiguration());
+        return $configurationData;
     }
 }

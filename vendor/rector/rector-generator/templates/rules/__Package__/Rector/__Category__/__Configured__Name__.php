@@ -16,8 +16,6 @@ __Resources__
  */
 final class __Name__ extends AbstractRector implements ConfigurableRectorInterface
 {
-    __ConfigurationConstants__
-
     __ConfigurationProperties__
 
     public function getRuleDefinition(): RuleDefinition
