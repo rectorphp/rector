@@ -6,7 +6,7 @@ namespace Rector\RectorGenerator;
 final class TemplateFactory
 {
     /**
-     * @param mixed[] $variables
+     * @param array<string, string> $variables
      */
     public function create(string $content, array $variables) : string
     {

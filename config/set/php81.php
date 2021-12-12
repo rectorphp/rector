@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211211;
+namespace RectorPrefix20211212;
 
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;

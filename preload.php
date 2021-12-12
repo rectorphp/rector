@@ -252,6 +252,7 @@ require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/Parser/Tokens.php
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/ParserFactory.php';
 require_once __DIR__ . '/vendor/nikic/php-parser/lib/PhpParser/PrettyPrinter/Standard.php';
 require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/Reflection/ArgumentAndParameterFactory.php';
+require_once __DIR__ . '/vendor/symplify/symfony-php-config/src/ValueObjectInliner.php';
 require_once __DIR__ . '/vendor/symfony/dependency-injection/Loader/Configurator/AbstractConfigurator.php';
 require_once __DIR__ . '/vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php';
 require_once __DIR__ . '/vendor/symfony/contracts/Deprecation/function.php';

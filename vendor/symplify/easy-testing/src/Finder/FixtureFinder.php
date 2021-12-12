@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211211\Symplify\EasyTesting\Finder;
+namespace RectorPrefix20211212\Symplify\EasyTesting\Finder;
 
-use RectorPrefix20211211\Symfony\Component\Finder\Finder;
-use RectorPrefix20211211\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20211212\Symfony\Component\Finder\Finder;
+use RectorPrefix20211212\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class FixtureFinder
 {
@@ -12,7 +12,7 @@ final class FixtureFinder
      * @var \Symplify\SmartFileSystem\Finder\FinderSanitizer
      */
     private $finderSanitizer;
-    public function __construct(\RectorPrefix20211211\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer)
+    public function __construct(\RectorPrefix20211212\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer)
     {
         $this->finderSanitizer = $finderSanitizer;
     }
@@ -21,7 +21,7 @@ final class FixtureFinder
      */
     public function find(array $sources) : array
     {
-        $finder = new \RectorPrefix20211211\Symfony\Component\Finder\Finder();
+        $finder = new \RectorPrefix20211212\Symfony\Component\Finder\Finder();
         $finder->files()->in($sources)->name('*.php.inc')->path('Fixture')->sortByName();
         return $this->finderSanitizer->sanitize($finder);
     }

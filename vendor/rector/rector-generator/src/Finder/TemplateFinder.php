@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\RectorGenerator\Finder;
 
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix20211211\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20211211\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20211212\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20211212\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFinder
 {
@@ -23,7 +23,7 @@ final class TemplateFinder
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
-    public function __construct(\RectorPrefix20211211\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20211211\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
+    public function __construct(\RectorPrefix20211212\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20211212\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
     {
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemGuard = $fileSystemGuard;
@@ -35,7 +35,7 @@ final class TemplateFinder
     {
         $filePaths = [];
         $filePaths = $this->addRuleAndTestCase($rectorRecipe, $filePaths);
-        $filePaths[] = $this->resolveFixtureFilePath();
+        $filePaths[] = __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/Fixture/some_class.php.inc';
         $this->ensureFilePathsExists($filePaths);
         return $this->finderSanitizer->sanitize($filePaths);
     }
@@ -47,7 +47,11 @@ final class TemplateFinder
      */
     private function addRuleAndTestCase(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, array $filePaths) : array
     {
-        $filePaths[] = __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/config/configured_rule.php';
+        if ($rectorRecipe->getConfiguration() !== []) {
+            $filePaths[] = __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/config/__Configuredconfigured_rule.php';
+        } else {
+            $filePaths[] = __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/config/configured_rule.php';
+        }
         $filePaths[] = __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/__Name__Test.php.inc';
         if ($rectorRecipe->getConfiguration() !== []) {
             $filePaths[] = __DIR__ . '/../../templates/rules/__Package__/Rector/__Category__/__Configured__Name__.php';
@@ -55,10 +59,6 @@ final class TemplateFinder
             $filePaths[] = __DIR__ . '/../../templates/rules/__Package__/Rector/__Category__/__Name__.php';
         }
         return $filePaths;
-    }
-    private function resolveFixtureFilePath() : string
-    {
-        return __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/Fixture/some_class.php.inc';
     }
     /**
      * @param string[] $filePaths

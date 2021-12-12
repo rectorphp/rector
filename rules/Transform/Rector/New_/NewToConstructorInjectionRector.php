@@ -20,7 +20,7 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211211\Webmozart\Assert\Assert;
+use RectorPrefix20211212\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToConstructorInjectionRector\NewToConstructorInjectionRectorTest
  */
@@ -124,7 +124,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $typesToConstructorInjections = $configuration[self::TYPES_TO_CONSTRUCTOR_INJECTION] ?? $configuration;
-        \RectorPrefix20211211\Webmozart\Assert\Assert::isArray($typesToConstructorInjections);
+        \RectorPrefix20211212\Webmozart\Assert\Assert::isArray($typesToConstructorInjections);
         foreach ($typesToConstructorInjections as $typeToConstructorInjection) {
             $this->constructorInjectionObjectTypes[] = new \PHPStan\Type\ObjectType($typeToConstructorInjection);
         }

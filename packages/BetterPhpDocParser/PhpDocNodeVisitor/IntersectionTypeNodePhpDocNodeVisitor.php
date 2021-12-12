@@ -8,8 +8,8 @@ use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
-use RectorPrefix20211211\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class IntersectionTypeNodePhpDocNodeVisitor extends \RectorPrefix20211211\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
+use RectorPrefix20211212\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class IntersectionTypeNodePhpDocNodeVisitor extends \RectorPrefix20211212\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @readonly
