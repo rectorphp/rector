@@ -105,7 +105,7 @@ CODE_SAMPLE
     private function resolveReturnPropertyType(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, \PhpParser\Node\Stmt\Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, \PhpParser\Node\Stmt\Return_::class);
         $propertyTypes = [];
         foreach ($returns as $return) {
             if ($return->expr === null) {
