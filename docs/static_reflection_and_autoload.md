@@ -90,3 +90,21 @@ In this case you may want to try one of the following solutions:
         //          as much as you can or you will slow down each run
     ]);
 ```
+
+Other solution is by register the path of the class to composer.json's `"files"` config, eg:
+
+```javascript
+    "autoload-dev": {
+        "files": [
+            "vendor/acme/my-custom-dependency/src/Your/Own/Namespace/TheAffectedClass.php"
+        ]
+    }
+```
+
+After that, run:
+
+```bash
+composer dump-autoload
+```
+
+and re-run the rector.
