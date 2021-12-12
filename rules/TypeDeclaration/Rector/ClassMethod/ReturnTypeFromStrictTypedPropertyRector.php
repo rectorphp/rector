@@ -112,7 +112,7 @@ CODE_SAMPLE
     private function resolveReturnPropertyType(ClassMethod $classMethod): array
     {
         /** @var Return_[] $returns */
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
 
         $propertyTypes = [];
 
