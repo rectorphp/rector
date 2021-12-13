@@ -5,14 +5,20 @@ declare(strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,7 +36,8 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
     private const STRINGABLE = 'Stringable';
 
     public function __construct(
-        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer
+        private readonly FamilyRelationsAnalyzer $familyRelationsAnalyzer,
+        private readonly ReturnTypeInferer $returnTypeInferer
     ) {
     }
 
@@ -95,6 +102,11 @@ CODE_SAMPLE
             return null;
         }
 
+        $returnType = $this->returnTypeInferer->inferFunctionLike($toStringClassMethod);
+        if (! $returnType instanceof StringType) {
+            $this->processNotStringType($toStringClassMethod);
+        }
+
         // add interface
         $node->implements[] = new FullyQualified(self::STRINGABLE);
 
@@ -105,5 +117,39 @@ CODE_SAMPLE
         }
 
         return $node;
+    }
+
+    private function processNotStringType(ClassMethod $toStringClassMethod): void
+    {
+        $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, Return_::class);
+
+        if (! $hasReturn) {
+            $lastKey = array_key_last((array) $toStringClassMethod->stmts);
+            $lastKey = $lastKey === null
+                ? 0
+                : (int) $lastKey + 1;
+
+            $toStringClassMethod->stmts[$lastKey] = new Return_(new String_(''));
+
+            return;
+        }
+
+        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode): void {
+            if (! $subNode instanceof Return_) {
+                return;
+            }
+
+            if (! $subNode->expr instanceof Expr) {
+                $subNode->expr = new String_('');
+                return;
+            }
+
+            $type = $this->nodeTypeResolver->getType($subNode->expr);
+            if ($type instanceof StringType) {
+                return;
+            }
+
+            $subNode->expr = new CastString_($subNode->expr);
+        });
     }
 }
