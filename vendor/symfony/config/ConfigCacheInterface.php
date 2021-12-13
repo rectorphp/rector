@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211212\Symfony\Component\Config;
+namespace RectorPrefix20211213\Symfony\Component\Config;
 
-use RectorPrefix20211212\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix20211213\Symfony\Component\Config\Resource\ResourceInterface;
 /**
  * Interface for ConfigCache.
  *

@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211212\\Symfony\\Contracts\\Cache\\": ""
+            "RectorPrefix20211213\\Symfony\\Contracts\\Cache\\": ""
         }
     },
     "minimum-stability": "dev",

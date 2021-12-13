@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211212\Symplify\VendorPatches\Command;
+namespace RectorPrefix20211213\Symplify\VendorPatches\Command;
 
-use RectorPrefix20211212\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211212\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20211212\Symplify\PackageBuilder\Composer\VendorDirProvider;
-use RectorPrefix20211212\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
-use RectorPrefix20211212\Symplify\PackageBuilder\Console\Command\CommandNaming;
-use RectorPrefix20211212\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater;
-use RectorPrefix20211212\Symplify\VendorPatches\Console\GenerateCommandReporter;
-use RectorPrefix20211212\Symplify\VendorPatches\Differ\PatchDiffer;
-use RectorPrefix20211212\Symplify\VendorPatches\Finder\OldToNewFilesFinder;
-use RectorPrefix20211212\Symplify\VendorPatches\PatchFileFactory;
-final class GenerateCommand extends \RectorPrefix20211212\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
+use RectorPrefix20211213\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211213\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211213\Symplify\PackageBuilder\Composer\VendorDirProvider;
+use RectorPrefix20211213\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand;
+use RectorPrefix20211213\Symplify\PackageBuilder\Console\Command\CommandNaming;
+use RectorPrefix20211213\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater;
+use RectorPrefix20211213\Symplify\VendorPatches\Console\GenerateCommandReporter;
+use RectorPrefix20211213\Symplify\VendorPatches\Differ\PatchDiffer;
+use RectorPrefix20211213\Symplify\VendorPatches\Finder\OldToNewFilesFinder;
+use RectorPrefix20211213\Symplify\VendorPatches\PatchFileFactory;
+final class GenerateCommand extends \RectorPrefix20211213\Symplify\PackageBuilder\Console\Command\AbstractSymplifyCommand
 {
     /**
      * @var \Symplify\VendorPatches\Finder\OldToNewFilesFinder
@@ -39,7 +39,7 @@ final class GenerateCommand extends \RectorPrefix20211212\Symplify\PackageBuilde
      * @var \Symplify\VendorPatches\Console\GenerateCommandReporter
      */
     private $generateCommandReporter;
-    public function __construct(\RectorPrefix20211212\Symplify\VendorPatches\Finder\OldToNewFilesFinder $oldToNewFilesFinder, \RectorPrefix20211212\Symplify\VendorPatches\Differ\PatchDiffer $patchDiffer, \RectorPrefix20211212\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater $composerPatchesConfigurationUpdater, \RectorPrefix20211212\Symplify\PackageBuilder\Composer\VendorDirProvider $vendorDirProvider, \RectorPrefix20211212\Symplify\VendorPatches\PatchFileFactory $patchFileFactory, \RectorPrefix20211212\Symplify\VendorPatches\Console\GenerateCommandReporter $generateCommandReporter)
+    public function __construct(\RectorPrefix20211213\Symplify\VendorPatches\Finder\OldToNewFilesFinder $oldToNewFilesFinder, \RectorPrefix20211213\Symplify\VendorPatches\Differ\PatchDiffer $patchDiffer, \RectorPrefix20211213\Symplify\VendorPatches\Composer\ComposerPatchesConfigurationUpdater $composerPatchesConfigurationUpdater, \RectorPrefix20211213\Symplify\PackageBuilder\Composer\VendorDirProvider $vendorDirProvider, \RectorPrefix20211213\Symplify\VendorPatches\PatchFileFactory $patchFileFactory, \RectorPrefix20211213\Symplify\VendorPatches\Console\GenerateCommandReporter $generateCommandReporter)
     {
         $this->oldToNewFilesFinder = $oldToNewFilesFinder;
         $this->patchDiffer = $patchDiffer;
@@ -51,10 +51,10 @@ final class GenerateCommand extends \RectorPrefix20211212\Symplify\PackageBuilde
     }
     protected function configure() : void
     {
-        $this->setName(\RectorPrefix20211212\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
+        $this->setName(\RectorPrefix20211213\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
         $this->setDescription('Generate patches from /vendor directory');
     }
-    protected function execute(\RectorPrefix20211212\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211212\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20211213\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211213\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $vendorDirectory = $this->vendorDirProvider->provide();
         $oldAndNewFileInfos = $this->oldToNewFilesFinder->find($vendorDirectory);

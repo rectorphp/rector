@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211212;
+namespace RectorPrefix20211213;
 
 use Rector\CakePHP\Rector\MethodCall\RemoveIntermediaryMethodRector;
 use Rector\CakePHP\ValueObject\RemoveIntermediaryMethod;

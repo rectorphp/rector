@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211212;
+namespace RectorPrefix20211213;
 
 use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalGetConditionRector;
 use Rector\PHPOffice\Rector\MethodCall\ChangeConditionalReturnedCellRector;

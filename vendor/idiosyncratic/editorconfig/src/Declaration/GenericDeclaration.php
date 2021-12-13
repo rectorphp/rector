@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211212\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211213\Idiosyncratic\EditorConfig\Declaration;
 
-final class GenericDeclaration extends \RectorPrefix20211212\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class GenericDeclaration extends \RectorPrefix20211213\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function __construct(string $name, string $value)
     {

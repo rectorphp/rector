@@ -5,11 +5,10 @@ namespace Rector\Core\DependencyInjection\Collector;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use ReflectionClass;
-use ReflectionClassConstant;
-use RectorPrefix20211212\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20211212\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211212\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20211212\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20211213\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211213\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211213\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20211213\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
 {
     /**
@@ -28,8 +27,8 @@ final class ConfigureCallValuesCollector
     private $symfonyStyle;
     public function __construct()
     {
-        $this->parametersMerger = new \RectorPrefix20211212\Symplify\PackageBuilder\Yaml\ParametersMerger();
-        $symfonyStyleFactory = new \RectorPrefix20211212\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
+        $this->parametersMerger = new \RectorPrefix20211213\Symplify\PackageBuilder\Yaml\ParametersMerger();
+        $symfonyStyleFactory = new \RectorPrefix20211213\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory();
         $this->symfonyStyle = $symfonyStyleFactory->create();
     }
     /**
@@ -42,7 +41,7 @@ final class ConfigureCallValuesCollector
     /**
      * @param class-string<ConfigurableRectorInterface> $className
      */
-    public function collectFromServiceAndClassName(string $className, \RectorPrefix20211212\Symfony\Component\DependencyInjection\Definition $definition) : void
+    public function collectFromServiceAndClassName(string $className, \RectorPrefix20211213\Symfony\Component\DependencyInjection\Definition $definition) : void
     {
         foreach ($definition->getMethodCalls() as $methodCall) {
             if ($methodCall[0] !== 'configure') {
@@ -66,14 +65,15 @@ final class ConfigureCallValuesCollector
                     // has class some public constants?
                     // fixes bug when 1 item is unwrapped and treated as constant key, without rule having public constant
                     $classReflection = new \ReflectionClass($rectorClass);
-                    $constantNamesToValues = $classReflection->getConstants(\ReflectionClassConstant::IS_PUBLIC);
-                    foreach ($constantNamesToValues as $constantName => $constantValue) {
+                    $reflectionClassConstants = $classReflection->getReflectionConstants();
+                    foreach ($reflectionClassConstants as $reflectionClassConstant) {
+                        if (!$reflectionClassConstant->isPublic()) {
+                            continue;
+                        }
+                        $constantValue = $reflectionClassConstant->getValue();
+                        $constantName = $reflectionClassConstant->getName();
                         if ($constantValue === $firstKey) {
-                            $reflectionConstant = $classReflection->getReflectionConstant($constantName);
-                            if ($reflectionConstant === \false) {
-                                continue;
-                            }
-                            if (\strpos((string) $reflectionConstant->getDocComment(), '@deprecated') === \false) {
+                            if (\strpos((string) $reflectionClassConstant->getDocComment(), '@deprecated') === \false) {
                                 continue;
                             }
                             $warningMessage = \sprintf('The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.', $rectorClass, $constantName, \PHP_EOL);
