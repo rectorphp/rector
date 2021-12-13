@@ -81,10 +81,10 @@ CODE_SAMPLE
             return null;
         }
         /** @var Arg $firstArg */
-        $firstArg = $node->args[0];
+        $firstArg = $node->getArgs()[0];
         $firstArgValue = $firstArg->value;
         /** @var Arg $secondArg */
-        $secondArg = $node->args[1];
+        $secondArg = $node->getArgs()[1];
         $secondArgValue = $secondArg->value;
         if ($firstArgValue instanceof \PhpParser\Node\Scalar\String_) {
             $functionName = $this->valueResolver->getValue($firstArgValue);
