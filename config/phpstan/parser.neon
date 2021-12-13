@@ -1,21 +1,21 @@
-parameters:
-    phpVersion: 80100
-
+# see original config.neon in phpstan.neon - https://github.com/phpstan/phpstan-src/blob/386eb913abb6ac05886c5642fd48b5d99db66a20/conf/config.neon#L1582
+# this file overrides definitions from the config above
 services:
     defaultAnalysisParser:
-        factory: @cachedRectorParser
+        factory: @pathRoutingParser
         arguments!: []
 
-    cachedRectorParser:
-        class: PHPStan\Parser\CachedParser
+    pathRoutingParser:
+        class: PHPStan\Parser\PathRoutingParser
         arguments:
-            originalParser: @rectorParser
-            cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
-        autowired: no
+            currentPhpVersionRichParser: @rectorParser
+            currentPhpVersionSimpleParser: @rectorParser
+            php8Parser: @php8Parser
+        autowired: false
 
     rectorParser:
         class: PHPStan\Parser\RichParser
         arguments:
-            parser: @php8PhpParser
-            lexer: @php8Lexer
+            parser: @currentPhpVersionPhpParser
+            lexer: @currentPhpVersionLexer
         autowired: no
