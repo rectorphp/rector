@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp80\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -29,7 +30,7 @@ final class DowngradeMixedTypeDeclarationRector extends AbstractRector
      */
     public function getNodeTypes(): array
     {
-        return [Function_::class, ClassMethod::class, Closure::class];
+        return [Function_::class, ClassMethod::class, Closure::class, ArrowFunction::class];
     }
 
     public function getRuleDefinition(): RuleDefinition

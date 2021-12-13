@@ -68,7 +68,7 @@ final class PhpDocFromTypeDeclarationDecorator
 
     public function decorateParamWithSpecificType(
         Param $param,
-        ClassMethod | Function_ | Closure $functionLike,
+        ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
         Type $requireType
     ): void {
         if ($param->type === null) {
@@ -87,7 +87,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @return bool True if node was changed
      */
     public function decorateReturnWithSpecificType(
-        ClassMethod | Function_ | Closure $functionLike,
+        ClassMethod | Function_ | Closure | ArrowFunction $functionLike,
         Type $requireType
     ): bool {
         if ($functionLike->returnType === null) {
