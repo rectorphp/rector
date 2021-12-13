@@ -1,6 +1,7 @@
 {
     "require": {
         "php": "7.4.*",
+        "rector/rector": "^0.12.7",
         "ruflin/elastica": "6.1.5"
     },
     "autoload": {
