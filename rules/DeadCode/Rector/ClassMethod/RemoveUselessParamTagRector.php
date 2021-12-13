@@ -68,8 +68,8 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
-        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
-        if ($phpDocInfo->hasChanged()) {
+        $hasChanged = $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
+        if ($hasChanged) {
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
             return $node;
         }

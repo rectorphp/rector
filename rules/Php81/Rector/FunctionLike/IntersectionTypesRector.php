@@ -21,6 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IntersectionTypesRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change docs to intersection types, where possible (properties are covered by TypedPropertyRector (@todo))', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -56,13 +60,17 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $this->hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return null;
         }
         $this->refactorParamTypes($node, $phpDocInfo);
         // $this->refactorReturnType($node, $phpDocInfo);
-        return $node;
+        if ($this->hasChanged) {
+            return $node;
+        }
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
@@ -88,6 +96,7 @@ CODE_SAMPLE
                 continue;
             }
             $param->type = $phpParserIntersectionType;
+            $this->hasChanged = \true;
         }
     }
 }

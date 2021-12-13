@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
@@ -165,6 +166,10 @@ CODE_SAMPLE
         }
         $inferedType = $this->paramTypeInferer->inferParam($param);
         if ($inferedType instanceof \PHPStan\Type\MixedType) {
+            return;
+        }
+        // mixed type cannot be part of union
+        if ($inferedType instanceof \PHPStan\Type\UnionType && $inferedType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
             return;
         }
         if ($inferedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {

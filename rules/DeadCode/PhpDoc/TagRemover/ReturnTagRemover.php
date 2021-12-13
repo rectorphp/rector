@@ -19,17 +19,18 @@ final class ReturnTagRemover
     {
         $this->deadReturnTagValueNodeAnalyzer = $deadReturnTagValueNodeAnalyzer;
     }
-    public function removeReturnTagIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\FunctionLike $functionLike) : void
+    public function removeReturnTagIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
         // remove existing type
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
         if (!$returnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode) {
-            return;
+            return \false;
         }
         $isReturnTagValueDead = $this->deadReturnTagValueNodeAnalyzer->isDead($returnTagValueNode, $functionLike);
         if (!$isReturnTagValueDead) {
-            return;
+            return \false;
         }
         $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class);
+        return \true;
     }
 }

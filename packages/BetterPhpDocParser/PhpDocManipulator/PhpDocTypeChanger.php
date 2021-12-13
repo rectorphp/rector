@@ -75,15 +75,15 @@ final class PhpDocTypeChanger
             $phpDocInfo->addTagValueNode($varTagValueNode);
         }
     }
-    public function changeReturnType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType) : void
+    public function changeReturnType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType) : bool
     {
         // better not touch this, can crash
         if ($phpDocInfo->hasInvalidTag('@return')) {
-            return;
+            return \false;
         }
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->typeComparator->areTypesEqual($phpDocInfo->getReturnType(), $newType)) {
-            return;
+            return \false;
         }
         // override existing type
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN());
@@ -96,6 +96,7 @@ final class PhpDocTypeChanger
             $returnTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
         }
+        return \true;
     }
     public function changeParamType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType, \PhpParser\Node\Param $param, string $paramName) : void
     {

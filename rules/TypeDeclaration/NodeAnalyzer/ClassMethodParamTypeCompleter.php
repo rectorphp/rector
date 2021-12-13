@@ -73,6 +73,10 @@ final class ClassMethodParamTypeCompleter
         if ($argumentStaticType instanceof \PHPStan\Type\MixedType) {
             return \true;
         }
+        // skip mixed in union type
+        if ($argumentStaticType instanceof \PHPStan\Type\UnionType && $argumentStaticType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
+            return \true;
+        }
         if (!isset($classMethod->params[$position])) {
             return \true;
         }

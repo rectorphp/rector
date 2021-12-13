@@ -64,11 +64,11 @@ CODE_SAMPLE
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-        if ($phpDocInfo->hasChanged()) {
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
-            return $node;
+        $hasChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+        if (!$hasChanged) {
+            return null;
         }
-        return null;
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, \true);
+        return $node;
     }
 }
