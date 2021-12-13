@@ -6,7 +6,6 @@ namespace Rector\Core\DependencyInjection\Collector;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use ReflectionClass;
-use ReflectionClassConstant;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Definition;
 use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -68,15 +67,17 @@ final class ConfigureCallValuesCollector
                     // fixes bug when 1 item is unwrapped and treated as constant key, without rule having public constant
                     $classReflection = new ReflectionClass($rectorClass);
 
-                    $constantNamesToValues = $classReflection->getConstants(ReflectionClassConstant::IS_PUBLIC);
-                    foreach ($constantNamesToValues as $constantName => $constantValue) {
-                        if ($constantValue === $firstKey) {
-                            $reflectionConstant = $classReflection->getReflectionConstant($constantName);
-                            if ($reflectionConstant === false) {
-                                continue;
-                            }
+                    $reflectionClassConstants = $classReflection->getReflectionConstants();
+                    foreach ($reflectionClassConstants as $reflectionClassConstant) {
+                        if (! $reflectionClassConstant->isPublic()) {
+                            continue;
+                        }
 
-                            if (! str_contains((string) $reflectionConstant->getDocComment(), '@deprecated')) {
+                        $constantValue = $reflectionClassConstant->getValue();
+                        $constantName = $reflectionClassConstant->getName();
+
+                        if ($constantValue === $firstKey) {
+                            if (! str_contains((string) $reflectionClassConstant->getDocComment(), '@deprecated')) {
                                 continue;
                             }
 
