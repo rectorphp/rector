@@ -2807,7 +2807,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v.0.11.33"
             },
             "funding": [
                 {
