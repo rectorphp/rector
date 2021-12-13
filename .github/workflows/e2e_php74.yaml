@@ -28,5 +28,6 @@ jobs:
                 working-directory: e2e/parse-match-class-on-php74
 
             -
-                run: vendor/bin/rector process --dry-run --ansi
+                run: ../../bin/rector process --dry-run --ansi
                 working-directory: e2e/parse-match-class-on-php74
+
