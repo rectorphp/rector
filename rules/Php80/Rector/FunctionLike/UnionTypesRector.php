@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -144,6 +145,11 @@ CODE_SAMPLE
                 continue;
             }
 
+            // mixed has to be standalone type, cannot be part of union type declaration
+            if ($paramType->isSuperTypeOf(new MixedType())->yes()) {
+                continue;
+            }
+
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $uniqueatedParamType,
                 TypeKind::PARAM()
@@ -188,6 +194,11 @@ CODE_SAMPLE
 
         $uniqueatedReturnType = $this->filterOutDuplicatedArrayTypes($returnType);
         if (! $uniqueatedReturnType instanceof UnionType) {
+            return;
+        }
+
+        // mixed has to be standalone type, cannot be part of union type declaration
+        if ($uniqueatedReturnType->isSuperTypeOf(new MixedType())->yes()) {
             return;
         }
 

@@ -17,19 +17,20 @@ final class ReturnTagRemover
     ) {
     }
 
-    public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): void
+    public function removeReturnTagIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike): bool
     {
         // remove existing type
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
         if (! $returnTagValueNode instanceof ReturnTagValueNode) {
-            return;
+            return false;
         }
 
         $isReturnTagValueDead = $this->deadReturnTagValueNodeAnalyzer->isDead($returnTagValueNode, $functionLike);
         if (! $isReturnTagValueDead) {
-            return;
+            return false;
         }
 
         $phpDocInfo->removeByType(ReturnTagValueNode::class);
+        return true;
     }
 }

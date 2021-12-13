@@ -114,7 +114,15 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->processType($node, $inferedReturnType);
+        if (! $inferedReturnType instanceof UnionType) {
+            return $this->processType($node, $inferedReturnType);
+        }
+
+        if (! $inferedReturnType->isSuperTypeOf(new MixedType())->yes()) {
+            return $this->processType($node, $inferedReturnType);
+        }
+
+        return null;
     }
 
     public function provideMinPhpVersion(): int

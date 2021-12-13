@@ -15,6 +15,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
@@ -36,7 +37,7 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
     /**
      * @var AddParamTypeDeclaration[]
      */
-    private array $parameterTypehints = [];
+    private array $addParamTypeDeclarations = [];
 
     public function __construct(
         private readonly TypeComparator $typeComparator
@@ -90,16 +91,16 @@ CODE_SAMPLE
         /** @var ClassLike $classLike */
         $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
 
-        foreach ($this->parameterTypehints as $parameterTypehint) {
-            if (! $this->isObjectType($classLike, $parameterTypehint->getObjectType())) {
+        foreach ($this->addParamTypeDeclarations as $addParamTypeDeclaration) {
+            if (! $this->isObjectType($classLike, $addParamTypeDeclaration->getObjectType())) {
                 continue;
             }
 
-            if (! $this->isName($node, $parameterTypehint->getMethodName())) {
+            if (! $this->isName($node, $addParamTypeDeclaration->getMethodName())) {
                 continue;
             }
 
-            $this->refactorClassMethodWithTypehintByParameterPosition($node, $parameterTypehint);
+            $this->refactorClassMethodWithTypehintByParameterPosition($node, $addParamTypeDeclaration);
         }
 
         return $node;
@@ -114,7 +115,7 @@ CODE_SAMPLE
         Assert::isArray($parameterTypehints);
         Assert::allIsAOf($parameterTypehints, AddParamTypeDeclaration::class);
 
-        $this->parameterTypehints = $parameterTypehints;
+        $this->addParamTypeDeclarations = $parameterTypehints;
     }
 
     private function shouldSkip(ClassMethod $classMethod): bool
@@ -166,6 +167,7 @@ CODE_SAMPLE
 
     private function refactorParameter(Param $param, AddParamTypeDeclaration $addParamTypeDeclaration): void
     {
+
         // already set → no change
         if ($param->type !== null) {
             $currentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
@@ -174,17 +176,22 @@ CODE_SAMPLE
             }
         }
 
-        // remove it
-        if ($addParamTypeDeclaration->getParamType() instanceof MixedType) {
-            $param->type = null;
-            return;
-        }
-
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
             $addParamTypeDeclaration->getParamType(),
             TypeKind::PARAM()
         );
 
-        $param->type = $returnTypeNode;
+        // remove it
+        if ($addParamTypeDeclaration->getParamType() instanceof MixedType) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::MIXED_TYPE)) {
+                $param->type = $paramTypeNode;
+                return;
+            }
+
+            $param->type = null;
+            return;
+        }
+
+        $param->type = $paramTypeNode;
     }
 }

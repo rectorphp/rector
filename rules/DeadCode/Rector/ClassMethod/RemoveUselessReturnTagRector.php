@@ -71,13 +71,12 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-
-        if ($phpDocInfo->hasChanged()) {
-            $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
-            return $node;
+        $hasChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+        if (! $hasChanged) {
+            return null;
         }
 
-        return null;
+        $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
+        return $node;
     }
 }

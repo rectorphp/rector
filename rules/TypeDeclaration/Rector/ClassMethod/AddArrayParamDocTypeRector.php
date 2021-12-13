@@ -97,6 +97,7 @@ CODE_SAMPLE
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $hasChangedNode = false;
 
         foreach ($node->getParams() as $param) {
             if ($this->shouldSkipParam($param)) {
@@ -117,11 +118,12 @@ CODE_SAMPLE
             }
 
             $paramName = $this->getName($param);
-
             $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
+
+            $hasChangedNode = true;
         }
 
-        if ($phpDocInfo->hasChanged()) {
+        if ($phpDocInfo->hasChanged() && $hasChangedNode) {
             $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
             $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
             return $node;

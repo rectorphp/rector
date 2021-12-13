@@ -23,6 +23,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class IntersectionTypesRector extends AbstractRector implements MinPhpVersionInterface
 {
+    private bool $hasChanged = false;
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -69,6 +71,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        $this->hasChanged = false;
+
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return null;
@@ -77,7 +81,11 @@ CODE_SAMPLE
         $this->refactorParamTypes($node, $phpDocInfo);
         // $this->refactorReturnType($node, $phpDocInfo);
 
-        return $node;
+        if ($this->hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     public function provideMinPhpVersion(): int
@@ -112,6 +120,7 @@ CODE_SAMPLE
             }
 
             $param->type = $phpParserIntersectionType;
+            $this->hasChanged = true;
         }
     }
 }

@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
@@ -154,6 +155,11 @@ CODE_SAMPLE
 
         $inferedType = $this->paramTypeInferer->inferParam($param);
         if ($inferedType instanceof MixedType) {
+            return;
+        }
+
+        // mixed type cannot be part of union
+        if ($inferedType instanceof UnionType && $inferedType->isSuperTypeOf(new MixedType())->yes()) {
             return;
         }
 

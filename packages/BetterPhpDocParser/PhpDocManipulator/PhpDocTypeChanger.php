@@ -66,16 +66,16 @@ final class PhpDocTypeChanger
         }
     }
 
-    public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): void
+    public function changeReturnType(PhpDocInfo $phpDocInfo, Type $newType): bool
     {
         // better not touch this, can crash
         if ($phpDocInfo->hasInvalidTag('@return')) {
-            return;
+            return false;
         }
 
         // make sure the tags are not identical, e.g imported class vs FQN class
         if ($this->typeComparator->areTypesEqual($phpDocInfo->getReturnType(), $newType)) {
-            return;
+            return false;
         }
 
         // override existing type
@@ -94,6 +94,8 @@ final class PhpDocTypeChanger
             $returnTagValueNode = new ReturnTagValueNode($newPHPStanPhpDocType, '');
             $phpDocInfo->addTagValueNode($returnTagValueNode);
         }
+
+        return true;
     }
 
     public function changeParamType(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName): void

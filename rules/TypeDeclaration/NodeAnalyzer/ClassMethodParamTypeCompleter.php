@@ -71,6 +71,11 @@ final class ClassMethodParamTypeCompleter
             return true;
         }
 
+        // skip mixed in union type
+        if ($argumentStaticType instanceof UnionType && $argumentStaticType->isSuperTypeOf(new MixedType())->yes()) {
+            return true;
+        }
+
         if (! isset($classMethod->params[$position])) {
             return true;
         }

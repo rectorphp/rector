@@ -131,15 +131,18 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
-
-        if (! $phpDocInfo->hasChanged()) {
+        $hasChanged = $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $inferredReturnType);
+        if (! $hasChanged) {
             return null;
         }
 
         $node->setAttribute(AttributeKey::HAS_PHP_DOC_INFO_JUST_CHANGED, true);
-        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-        return $node;
+        $hasChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     private function shouldSkip(ClassMethod $classMethod, PhpDocInfo $phpDocInfo): bool
