@@ -25,7 +25,7 @@ rsync --exclude rector-build -av * rector-build --quiet
 # back to original composer.json
 git checkout composer.json
 
-rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests
+rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests rector-build/bin/generate-changelog.php rector-build/bin/validate-phpstan-version.php
 
 sh build/downgrade-rector.sh rector-build
 sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
