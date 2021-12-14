@@ -23,7 +23,7 @@ final class AssertEqualsToSameRector extends \Rector\Core\Rector\AbstractRector
     /**
      * @var array<string, string>
      */
-    private const RENAME_METHODS_MAP = ['assertEquals' => 'assertSame'];
+    private const RENAME_METHODS_MAP = ['assertEquals' => 'assertSame', 'assertNotEquals' => 'assertNotSame'];
     /**
      * We exclude
      * - bool because this is taken care of AssertEqualsParameterToSpecificMethodsTypeRector

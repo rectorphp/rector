@@ -6,14 +6,11 @@ $loader = require_once __DIR__.'/autoload.php';
 
 // Aliases for the whitelisted classes. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/README.md#class-whitelisting
-if (!class_exists('GenerateChangelogCommand', false) && !interface_exists('GenerateChangelogCommand', false) && !trait_exists('GenerateChangelogCommand', false)) {
-    spl_autoload_call('RectorPrefix20211214\GenerateChangelogCommand');
-}
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20211214\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit3bf2b473afb553c1535ffd76db3a79b5', false) && !interface_exists('ComposerAutoloaderInit3bf2b473afb553c1535ffd76db3a79b5', false) && !trait_exists('ComposerAutoloaderInit3bf2b473afb553c1535ffd76db3a79b5', false)) {
-    spl_autoload_call('RectorPrefix20211214\ComposerAutoloaderInit3bf2b473afb553c1535ffd76db3a79b5');
+if (!class_exists('ComposerAutoloaderInitebeac85f86fc2f2af9fcc64f9ec15e7f', false) && !interface_exists('ComposerAutoloaderInitebeac85f86fc2f2af9fcc64f9ec15e7f', false) && !trait_exists('ComposerAutoloaderInitebeac85f86fc2f2af9fcc64f9ec15e7f', false)) {
+    spl_autoload_call('RectorPrefix20211214\ComposerAutoloaderInitebeac85f86fc2f2af9fcc64f9ec15e7f');
 }
 if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
     spl_autoload_call('RectorPrefix20211214\Helmich\TypoScriptParser\Parser\AST\Statement');
@@ -81,9 +78,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20211214\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire3bf2b473afb553c1535ffd76db3a79b5')) {
-    function composerRequire3bf2b473afb553c1535ffd76db3a79b5() {
-        return \RectorPrefix20211214\composerRequire3bf2b473afb553c1535ffd76db3a79b5(...func_get_args());
+if (!function_exists('composerRequireebeac85f86fc2f2af9fcc64f9ec15e7f')) {
+    function composerRequireebeac85f86fc2f2af9fcc64f9ec15e7f() {
+        return \RectorPrefix20211214\composerRequireebeac85f86fc2f2af9fcc64f9ec15e7f(...func_get_args());
     }
 }
 if (!function_exists('scanPath')) {
