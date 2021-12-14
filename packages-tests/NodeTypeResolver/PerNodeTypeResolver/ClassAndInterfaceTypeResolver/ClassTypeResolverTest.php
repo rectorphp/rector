@@ -30,7 +30,7 @@ final class ClassTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 
         /** @var TypeWithClassName $resolvedType */
-        $this->assertEquals($expectedObjectType->getClassName(), $resolvedType->getClassName());
+        $this->assertSame($expectedObjectType->getClassName(), $resolvedType->getClassName());
     }
 
     public function dataProvider(): Iterator

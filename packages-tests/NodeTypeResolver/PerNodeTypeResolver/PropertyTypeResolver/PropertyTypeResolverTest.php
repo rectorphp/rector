@@ -39,7 +39,7 @@ final class PropertyTypeResolverTest extends AbstractNodeTypeResolverTest
         $expectedTypeAsString = $this->getStringFromType($expectedType);
         $resolvedTypeAsString = $this->getStringFromType($resolvedType);
 
-        $this->assertEquals($expectedTypeAsString, $resolvedTypeAsString);
+        $this->assertSame($expectedTypeAsString, $resolvedTypeAsString);
     }
 
     public function provideData(): Iterator

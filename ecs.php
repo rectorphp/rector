@@ -67,15 +67,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         // double to Double false positive
         PhpdocTypesFixer::class => [__DIR__ . '/rules/Php74/Rector/Double/RealToFloatTypeCastRector.php'],
 
-        // assertEquals() on purpose
-        PhpUnitStrictFixer::class => [
-            __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocInfo/PhpDocInfo/PhpDocInfoTest.php',
-            __DIR__ . '/tests/PhpParser/Node/NodeFactoryTest.php',
-            __DIR__ . '/packages-tests/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/StaticDoctrineAnnotationParserTest.php',
-            __DIR__ . '/packages-tests/NameImporting/NodeAnalyzer/UseAnalyzer/UseAnalyzerTest.php',
-            '*TypeResolverTest.php',
-            __DIR__ . '/rules-tests/CodingStyle/Node/UseManipulator/UseManipulatorTest.php',
-        ],
+        // breaking and handled better by Rector PHPUnit code quality set, removed in symplify dev-main
+        PhpUnitStrictFixer::class,
 
         // skip add space on &$variable
         FunctionTypehintSpaceFixer::class => [

@@ -27,7 +27,7 @@ final class VariableTypeResolverTest extends AbstractNodeTypeResolverTest
         $this->assertInstanceOf(TypeWithClassName::class, $resolvedType);
 
         /** @var TypeWithClassName $resolvedType */
-        $this->assertEquals($expectedTypeWithClassName->getClassName(), $resolvedType->getClassName());
+        $this->assertSame($expectedTypeWithClassName->getClassName(), $resolvedType->getClassName());
     }
 
     public function provideData(): Iterator

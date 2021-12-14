@@ -63,7 +63,7 @@
     },
     "require-dev": {
         "brianium/paratest": "^6.3",
-        "friendsofphp/php-cs-fixer": "dev-master as 3.3",
+        "friendsofphp/php-cs-fixer": "^3.4",
         "nategood/httpful": "^0.3.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan-nette": "^1.0",
