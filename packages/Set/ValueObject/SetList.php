@@ -24,12 +24,6 @@ final class SetList implements SetListInterface
     final public const CODE_QUALITY = __DIR__ . '/../../../config/set/code-quality.php';
 
     /**
-     * @deprecated Use only/directly CODE_QUALITY instead
-     * @var string
-     */
-    final public const CODE_QUALITY_STRICT = __DIR__ . '/../../../config/set/code-quality-strict.php';
-
-    /**
      * @var string
      */
     final public const CODING_STYLE = __DIR__ . '/../../../config/set/coding-style.php';

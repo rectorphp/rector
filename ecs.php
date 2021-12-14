@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
 
-    // bleeding edge 16x faster speed
+    // make ECS 16x faster
     $parameters->set(Option::PARALLEL, true);
 
     $parameters->set(Option::PATHS, [
