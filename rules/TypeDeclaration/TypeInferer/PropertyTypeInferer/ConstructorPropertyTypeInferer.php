@@ -29,9 +29,8 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use RectorPrefix20211214\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
+final class ConstructorPropertyTypeInferer
 {
     /**
      * @readonly
@@ -110,10 +109,6 @@ final class ConstructorPropertyTypeInferer implements \Rector\TypeDeclaration\Co
             return $this->resolveFromParamType($param, $classMethod, $propertyName);
         }
         return null;
-    }
-    public function getPriority() : int
-    {
-        return 800;
     }
     private function resolveFromParamType(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : \PHPStan\Type\Type
     {

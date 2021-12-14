@@ -5,15 +5,20 @@ namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
+ * @deprecated Split to smaller specific rules.
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
  */
 final class PropertyTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
@@ -91,6 +96,9 @@ CODE_SAMPLE
         if (!$node->isPrivate() && $type instanceof \PHPStan\Type\NullType) {
             return null;
         }
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
+            return $this->completeTypedProperty($type, $node, $phpDocInfo);
+        }
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         return $node;
     }
@@ -103,5 +111,19 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function completeTypedProperty(\PHPStan\Type\Type $type, \PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : \PhpParser\Node\Stmt\Property
+    {
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
+        if ($propertyTypeNode instanceof \PhpParser\Node\UnionType) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
+                $property->type = $propertyTypeNode;
+                return $property;
+            }
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
+            return $property;
+        }
+        $property->type = $propertyTypeNode;
+        return $property;
     }
 }

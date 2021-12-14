@@ -7,18 +7,18 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
  */
-final class TypedPropertyFromStrictConstructorRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class TypedPropertyFromStrictConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -30,10 +30,16 @@ final class TypedPropertyFromStrictConstructorRector extends \Rector\Core\Rector
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer $constructorPropertyTypeInferer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer $constructorPropertyTypeInferer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->constructorPropertyTypeInferer = $constructorPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -83,13 +89,17 @@ CODE_SAMPLE
         if ($varType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
+            return $node;
+        }
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
         if (!$propertyTypeNode instanceof \PhpParser\Node) {
             return null;
         }
         $node->type = $propertyTypeNode;
         $node->props[0]->default = null;
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
         return $node;
     }

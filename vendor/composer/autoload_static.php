@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1
+class ComposerStaticInit12bb9e769debccf33e537fe22597fd36
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2993,7 +2993,6 @@ class ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
         'Rector\\Php74\\TypeAnalyzer\\ObjectTypeAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/ObjectTypeAnalyzer.php',
-        'Rector\\Php74\\TypeAnalyzer\\PropertyUnionTypeResolver' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/PropertyUnionTypeResolver.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
@@ -3487,7 +3486,6 @@ class ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DoctrineColumnPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineColumnPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DoctrineRelationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineRelationPropertyTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\SingleMethodAssignedNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/SingleMethodAssignedNodePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\VarDocPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/VarDocPropertyTypeInferer.php',
@@ -3823,9 +3821,9 @@ class ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcbee6bf1ebafa9718d4919e8805e81a1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit12bb9e769debccf33e537fe22597fd36::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit12bb9e769debccf33e537fe22597fd36::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit12bb9e769debccf33e537fe22597fd36::$classMap;
 
         }, null, ClassLoader::class);
     }

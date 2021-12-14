@@ -11,10 +11,9 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
-final class GetterTypeDeclarationPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
+final class GetterTypeDeclarationPropertyTypeInferer
 {
     /**
      * @readonly
@@ -66,9 +65,5 @@ final class GetterTypeDeclarationPropertyTypeInferer implements \Rector\TypeDecl
             }
         }
         return null;
-    }
-    public function getPriority() : int
-    {
-        return 630;
     }
 }

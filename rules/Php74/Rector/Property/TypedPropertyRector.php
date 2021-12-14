@@ -6,12 +6,10 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -27,10 +25,8 @@ use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
-use Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -43,23 +39,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ClassLikeTypesOnlyTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\DoctrineTypedPropertyRectorTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
- * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\UnionTypedPropertyRectorTest
  */
 final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
      */
-    public const CLASS_LIKE_TYPE_ONLY = 'class_like_type_only';
-    /**
-     * @var string
-     */
     public const PRIVATE_PROPERTY_ONLY = 'PRIVATE_PROPERTY_ONLY';
-    /**
-     * Useful for refactoring of huge applications. Taking types first narrows scope
-     * @var bool
-     */
-    private $classLikeTypeOnly = \false;
     /**
      * If want to keep BC, it can be set to true
      * @see https://3v4l.org/spl4P
@@ -88,11 +74,6 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
     private $varTagRemover;
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
@@ -108,11 +89,6 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
     private $propertyAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver
-     */
-    private $propertyUnionTypeResolver;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
@@ -121,17 +97,15 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer
      */
     private $objectTypeAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Php74\TypeAnalyzer\PropertyUnionTypeResolver $propertyUnionTypeResolver, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer)
     {
         $this->propertyTypeInferer = $propertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->varTagRemover = $varTagRemover;
-        $this->reflectionProvider = $reflectionProvider;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->propertyAnalyzer = $propertyAnalyzer;
-        $this->propertyUnionTypeResolver = $propertyUnionTypeResolver;
         $this->astResolver = $astResolver;
         $this->objectTypeAnalyzer = $objectTypeAnalyzer;
     }
@@ -152,7 +126,7 @@ final class SomeClass
     private int $count;
 }
 CODE_SAMPLE
-, [self::CLASS_LIKE_TYPE_ONLY => \false, self::PRIVATE_PROPERTY_ONLY => \false])]);
+, [self::PRIVATE_PROPERTY_ONLY => \false])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -185,7 +159,7 @@ CODE_SAMPLE
             return null;
         }
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
-        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node, $varType)) {
+        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
@@ -203,7 +177,6 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        $this->classLikeTypeOnly = $configuration[self::CLASS_LIKE_TYPE_ONLY] ?? \false;
         $this->privatePropertyOnly = $configuration[self::PRIVATE_PROPERTY_ONLY] ?? \false;
     }
     public function provideMinPhpVersion() : int
@@ -213,14 +186,9 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $node
      */
-    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $type) : bool
+    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, \PhpParser\Node\Stmt\Property $property) : bool
     {
         if (!$node instanceof \PhpParser\Node) {
-            return \true;
-        }
-        $type = $this->propertyUnionTypeResolver->resolve($node, $type);
-        // is not class-type and should be skipped
-        if ($this->shouldSkipNonClassLikeType($node, $type)) {
             return \true;
         }
         // false positive
@@ -231,27 +199,6 @@ CODE_SAMPLE
             return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
         }
         return \true;
-    }
-    /**
-     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Name $node
-     */
-    private function shouldSkipNonClassLikeType($node, \PHPStan\Type\Type $type) : bool
-    {
-        // unwrap nullable type
-        if ($node instanceof \PhpParser\Node\NullableType) {
-            $node = $node->type;
-        }
-        $typeName = $this->getName($node);
-        if ($typeName === null) {
-            return \false;
-        }
-        if (!$this->classLikeTypeOnly) {
-            return \false;
-        }
-        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
-            $typeName = $type->getFullyQualifiedName();
-        }
-        return !$this->reflectionProvider->hasClass($typeName);
     }
     private function removeDefaultValueForDoctrineCollection(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $propertyType) : void
     {

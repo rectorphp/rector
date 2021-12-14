@@ -17,6 +17,9 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\PhpDoc\ShortClassExpander;
+/**
+ * @deprecated Move to rector-doctrine, under code quality
+ */
 final class DoctrineRelationPropertyTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface
 {
     /**

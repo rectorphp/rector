@@ -97,7 +97,9 @@ final class TypeComparator
         // normalize bool union types
         $phpParserNodeType = $this->normalizeConstantBooleanType($phpParserNodeType);
         $phpStanDocType = $this->normalizeConstantBooleanType($phpStanDocType);
-        if (!$this->areTypesEqual($phpParserNodeType, $phpStanDocType)) {
+        // is scalar replace by another - remove it?
+        $areDifferentScalarTypes = $this->scalarTypeComparator->areDifferentScalarTypes($phpParserNodeType, $phpStanDocType);
+        if (!$areDifferentScalarTypes && !$this->areTypesEqual($phpParserNodeType, $phpStanDocType)) {
             return \false;
         }
         // special case for non-final $this/self compare; in case of interface/abstract class, it can be another $this

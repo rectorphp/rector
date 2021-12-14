@@ -10,28 +10,40 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector\TypedPropertyFromStrictGetterMethodReturnTypeRectorTest
- * @todo make generic
  */
-final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer
      */
     private $getterTypeDeclarationPropertyTypeInferer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
+     */
+    private $varTagRemover;
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->varTagRemover = $varTagRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -81,6 +93,11 @@ CODE_SAMPLE
         if (!$getterReturnType instanceof \PHPStan\Type\Type) {
             return null;
         }
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $getterReturnType);
+            return $node;
+        }
         // if property is public, it should be nullable
         if ($node->isPublic() && !\PHPStan\Type\TypeCombinator::containsNull($getterReturnType)) {
             $getterReturnType = \PHPStan\Type\TypeCombinator::addNull($getterReturnType);
@@ -91,6 +108,8 @@ CODE_SAMPLE
         }
         $node->type = $propertyType;
         $this->decorateDefaultNull($getterReturnType, $node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
         return $node;
     }
     public function provideMinPhpVersion() : int
