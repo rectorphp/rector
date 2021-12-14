@@ -109,6 +109,9 @@ CODE_SAMPLE
     }
     private function processNotStringType(\PhpParser\Node\Stmt\ClassMethod $toStringClassMethod) : void
     {
+        if ($toStringClassMethod->isAbstract()) {
+            return;
+        }
         $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, \PhpParser\Node\Stmt\Return_::class);
         if (!$hasReturn) {
             $stmts = (array) $toStringClassMethod->stmts;
