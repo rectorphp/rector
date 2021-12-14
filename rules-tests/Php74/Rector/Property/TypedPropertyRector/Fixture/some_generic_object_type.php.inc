@@ -3,17 +3,17 @@
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 /**
- * @template T of object
+ * @template TType of object
  */
 final class SomeGenericObjectType
 {
     /**
-     * @var T
+     * @var TType
      */
     private $command;
 
     /**
-     * @param T $command
+     * @param TType $command
      */
     public function __construct(object $command)
     {
@@ -27,17 +27,17 @@ final class SomeGenericObjectType
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 /**
- * @template T of object
+ * @template TType of object
  */
 final class SomeGenericObjectType
 {
     /**
-     * @var T
+     * @var TType
      */
     private object $command;
 
     /**
-     * @param T $command
+     * @param TType $command
      */
     public function __construct(object $command)
     {

@@ -12,11 +12,10 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 
-final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfererInterface
+final class GetterTypeDeclarationPropertyTypeInferer
 {
     public function __construct(
         private readonly FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,
@@ -59,10 +58,5 @@ final class GetterTypeDeclarationPropertyTypeInferer implements PropertyTypeInfe
         }
 
         return null;
-    }
-
-    public function getPriority(): int
-    {
-        return 630;
     }
 }

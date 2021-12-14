@@ -608,3 +608,8 @@ parameters:
         -
             message: '#Casting to int something that.{1}s already int#'
             path: packages/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php #46
+
+        # will be desolved
+        -
+            path: rules/Php74/Rector/Property/TypedPropertyRector.php
+            message: '#Class cognitive complexity is 31, keep it under 30#'

@@ -30,10 +30,9 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterface
+final class ConstructorPropertyTypeInferer
 {
     public function __construct(
         private readonly ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator,
@@ -73,11 +72,6 @@ final class ConstructorPropertyTypeInferer implements PropertyTypeInfererInterfa
         }
 
         return null;
-    }
-
-    public function getPriority(): int
-    {
-        return 800;
     }
 
     private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName): Type

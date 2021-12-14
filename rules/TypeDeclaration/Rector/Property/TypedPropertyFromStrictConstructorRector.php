@@ -8,23 +8,24 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
-use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
  */
-final class TypedPropertyFromStrictConstructorRector extends AbstractRector implements MinPhpVersionInterface
+final class TypedPropertyFromStrictConstructorRector extends AbstractRector
 {
     public function __construct(
         private readonly ConstructorPropertyTypeInferer $constructorPropertyTypeInferer,
-        private readonly VarTagRemover $varTagRemover
+        private readonly VarTagRemover $varTagRemover,
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
 
@@ -86,8 +87,14 @@ CODE_SAMPLE
             return null;
         }
 
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 
+        if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
+            return $node;
+        }
+
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
         if (! $propertyTypeNode instanceof Node) {
             return null;
         }
@@ -95,7 +102,6 @@ CODE_SAMPLE
         $node->type = $propertyTypeNode;
         $node->props[0]->default = null;
 
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
 
         return $node;

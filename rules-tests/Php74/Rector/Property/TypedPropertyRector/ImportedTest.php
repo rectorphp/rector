@@ -28,6 +28,6 @@ final class ImportedTest extends AbstractRectorTestCase
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/imported_type.php';
+        return __DIR__ . '/config/import_names.php';
     }
 }

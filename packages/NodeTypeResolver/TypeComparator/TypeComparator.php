@@ -86,7 +86,13 @@ final class TypeComparator
         $phpParserNodeType = $this->normalizeConstantBooleanType($phpParserNodeType);
         $phpStanDocType = $this->normalizeConstantBooleanType($phpStanDocType);
 
-        if (! $this->areTypesEqual($phpParserNodeType, $phpStanDocType)) {
+        // is scalar replace by another - remove it?
+        $areDifferentScalarTypes = $this->scalarTypeComparator->areDifferentScalarTypes(
+            $phpParserNodeType,
+            $phpStanDocType
+        );
+
+        if (! $areDifferentScalarTypes && ! $this->areTypesEqual($phpParserNodeType, $phpStanDocType)) {
             return false;
         }
 

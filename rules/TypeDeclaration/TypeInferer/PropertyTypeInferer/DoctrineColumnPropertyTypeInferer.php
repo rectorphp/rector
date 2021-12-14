@@ -19,6 +19,9 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 
+/**
+ * @deprecated Move to rector-doctrine, under code quality
+ */
 final class DoctrineColumnPropertyTypeInferer implements PropertyTypeInfererInterface
 {
     /**

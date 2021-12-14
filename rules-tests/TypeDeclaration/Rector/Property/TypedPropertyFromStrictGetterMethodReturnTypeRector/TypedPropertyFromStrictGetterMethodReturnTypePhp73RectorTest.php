@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 7.4
- */
-final class Php74Test extends AbstractRectorTestCase
+final class TypedPropertyFromStrictGetterMethodReturnTypePhp73RectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,11 +23,11 @@ final class Php74Test extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp74');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp73');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/typed_property.php';
+        return __DIR__ . '/config/rule_php73.php';
     }
 }

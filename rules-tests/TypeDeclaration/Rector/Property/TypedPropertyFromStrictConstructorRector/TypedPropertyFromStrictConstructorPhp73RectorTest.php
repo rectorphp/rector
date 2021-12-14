@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-final class ClassLikeTypesOnlyTest extends AbstractRectorTestCase
+final class TypedPropertyFromStrictConstructorPhp73RectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -23,11 +23,11 @@ final class ClassLikeTypesOnlyTest extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixtureClassLikeTypeOnly');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp73');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/class_types_only.php';
+        return __DIR__ . '/config/configured_php73.php';
     }
 }

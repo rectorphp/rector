@@ -12,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\TemplateObjectWithoutClassType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -49,6 +50,10 @@ final class VarTagRemover
 
     public function removeVarPhpTagValueNodeIfNotComment(Expression | Property | Param $node, Type $type): void
     {
+        if ($type instanceof TemplateObjectWithoutClassType) {
+            return;
+        }
+
         // keep doctrine collection narrow type
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type)) {
             return;
