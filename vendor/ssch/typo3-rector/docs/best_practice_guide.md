@@ -1,3 +1,13 @@
+## Table of Contents
+1. [Examples in action](./examples_in_action.md)
+1. [Overview of all rules](./all_rectors_overview.md)
+1. [Installation](./installation.md)
+1. [Configuration and Processing](./configuration_and_processing.md)
+1. [Best practice guide](./best_practice_guide.md)
+1. [Beyond PHP - Entering the realm of FileProcessors](./beyond_php_file_processors.md)
+1. [Limitations](./limitations.md)
+1. [Contribution](./contribution.md)
+
 # Best practice guide
 
 ## What to use for
