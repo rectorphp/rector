@@ -31,7 +31,7 @@ final class IntersectionTypesRector extends \Rector\Core\Rector\AbstractRector i
 final class SomeClass
 {
     /**
-     * @param string&int $types
+     * @param Foo&Bar $types
      */
     public function process($types)
     {
@@ -41,7 +41,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function process(string&int $types)
+    public function process(Foo&Bar $types)
     {
     }
 }
