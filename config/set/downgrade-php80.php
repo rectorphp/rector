@@ -24,6 +24,7 @@ use Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRecto
 use Rector\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector;
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector;
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRector;
+use Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionPropertyGetDefaultValueRector;
 use Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
@@ -74,4 +75,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradePhp80ResourceReturnToObjectRector::class);
     $services->set(DowngradeReflectionGetAttributesRector::class);
     $services->set(DowngradeRecursiveDirectoryIteratorHasChildrenRector::class);
+    $services->set(DowngradeReflectionPropertyGetDefaultValueRector::class);
 };
