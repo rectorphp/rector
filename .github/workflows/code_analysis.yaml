@@ -41,6 +41,10 @@ jobs:
                         name: 'Active Classes'
                         run: vendor/bin/easy-ci check-active-class bin config src packages rules --ansi
 
+                    -
+                        name: 'Compatible PHPStan versions'
+                        run: php bin/validate-phpstan-version.php
+
                     # see https://github.com/rectorphp/rector-generator
                     -
                         name: 'Rector Generate From Recipe'

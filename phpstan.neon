@@ -42,6 +42,8 @@ parameters:
 
     excludePaths:
         - src/UnusedPrivateConstant.php
+        # too modern code for PHPStan 0.12.2
+        - bin/validate-phpstan-version.php
 
         # temp rule
         - src/Rector/ConfigureRector.php
