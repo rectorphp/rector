@@ -121,6 +121,10 @@ CODE_SAMPLE
 
     private function processNotStringType(ClassMethod $toStringClassMethod): void
     {
+        if ($toStringClassMethod->isAbstract()) {
+            return;
+        }
+
         $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, Return_::class);
 
         if (! $hasReturn) {
