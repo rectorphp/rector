@@ -1,4 +1,4 @@
-# 505 Rules Overview
+# 506 Rules Overview
 
 <br>
 
@@ -38,7 +38,7 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (23)
+- [DowngradePhp80](#downgradephp80) (24)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -5411,6 +5411,25 @@ Remove reflection `getAttributes()` class method code
 
 <br>
 
+### DowngradeReflectionPropertyGetDefaultValueRector
+
+Downgrade `ReflectionProperty->getDefaultValue()`
+
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionPropertyGetDefaultValueRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionPropertyGetDefaultValueRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(ReflectionProperty $reflectionProperty)
+     {
+-        return $reflectionProperty->getDefaultValue();
++        return $reflectionProperty->getDeclaringClass()->getDefaultProperties()[$reflectionProperty->getName()] ?? null;
+     }
+ }
+```
+
+<br>
+
 ### DowngradeStaticTypeDeclarationRector
 
 Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
@@ -7747,25 +7766,7 @@ Add null default to properties with PHP 7.4 property nullable type
 
 Changes property `@var` annotations from annotation to type.
 
-:wrench: **configure it!**
-
 - class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](../rules/Php74/Rector/Property/TypedPropertyRector.php)
-
-```php
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $services = $containerConfigurator->services();
-
-    $services->set(TypedPropertyRector::class)
-        ->configure([
-            TypedPropertyRector::PRIVATE_PROPERTY_ONLY => false,
-        ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -8247,10 +8248,10 @@ Change docs to intersection types, where possible (properties are covered by Typ
  final class SomeClass
  {
 -    /**
--     * @param string&int $types
+-     * @param Foo&Bar $types
 -     */
 -    public function process($types)
-+    public function process(string&int $types)
++    public function process(Foo&Bar $types)
      {
      }
  }
