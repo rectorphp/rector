@@ -594,3 +594,15 @@ parameters:
 
         # return bool on change
         - '#Method "(change|remove)(.*?)" returns bool type, so the name should start with is/has/was#'
+
+        -
+            message: '#Casting to float something that.{1}s already float#'
+            path: packages/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php #38
+
+        -
+            message: '#Casting to string something that.{1}s already string#'
+            path: packages/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php #42
+
+        -
+            message: '#Casting to int something that.{1}s already int#'
+            path: packages/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php #46
