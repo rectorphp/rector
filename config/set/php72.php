@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211213;
+namespace RectorPrefix20211214;
 
 use Rector\Php72\Rector\Assign\ListEachRector;
 use Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector;

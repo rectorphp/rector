@@ -18,7 +18,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use RectorPrefix20211213\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211214\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
@@ -51,7 +51,7 @@ final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contra
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211213\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211214\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;

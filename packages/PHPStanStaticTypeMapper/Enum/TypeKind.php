@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\Enum;
 
-use RectorPrefix20211213\MyCLabs\Enum\Enum;
+use RectorPrefix20211214\MyCLabs\Enum\Enum;
 /**
  * @method static TypeKind PROPERTY()
  * @method static TypeKind RETURN()
  * @method static TypeKind PARAM()
  * @method static TypeKind ANY()
  */
-final class TypeKind extends \RectorPrefix20211213\MyCLabs\Enum\Enum
+final class TypeKind extends \RectorPrefix20211214\MyCLabs\Enum\Enum
 {
     /**
      * @var string

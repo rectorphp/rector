@@ -13,7 +13,7 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
 use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
-use RectorPrefix20211213\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211214\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
  */

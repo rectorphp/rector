@@ -53,7 +53,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20211213\\Symfony\\Component\\Console\\": ""
+            "RectorPrefix20211214\\Symfony\\Component\\Console\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211213;
+namespace RectorPrefix20211214;
 
 use Rector\Symfony\Rector\MethodCall\AddFlashRector;
 use Rector\Symfony\Rector\MethodCall\RedirectToRouteRector;

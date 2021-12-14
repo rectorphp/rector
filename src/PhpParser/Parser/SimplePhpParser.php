@@ -8,7 +8,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use RectorPrefix20211213\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211214\Symplify\SmartFileSystem\SmartFileSystem;
 final class SimplePhpParser
 {
     /**
@@ -21,7 +21,7 @@ final class SimplePhpParser
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20211213\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20211214\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
         $parserFactory = new \PhpParser\ParserFactory();

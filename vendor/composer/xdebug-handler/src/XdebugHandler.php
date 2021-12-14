@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20211213\Composer\XdebugHandler;
+namespace RectorPrefix20211214\Composer\XdebugHandler;
 
-use RectorPrefix20211213\Composer\Pcre\Preg;
-use RectorPrefix20211213\Psr\Log\LoggerInterface;
+use RectorPrefix20211214\Composer\Pcre\Preg;
+use RectorPrefix20211214\Psr\Log\LoggerInterface;
 /**
  * @author John Stevenson <john-stevenson@blueyonder.co.uk>
  *
@@ -80,7 +80,7 @@ class XdebugHandler
         if ($this->cli = \PHP_SAPI === 'cli') {
             $this->debug = (string) \getenv(self::DEBUG);
         }
-        $this->statusWriter = new \RectorPrefix20211213\Composer\XdebugHandler\Status($this->envAllowXdebug, (bool) $this->debug);
+        $this->statusWriter = new \RectorPrefix20211214\Composer\XdebugHandler\Status($this->envAllowXdebug, (bool) $this->debug);
     }
     /**
      * Activates status message output to a PSR3 logger
@@ -89,7 +89,7 @@ class XdebugHandler
      *
      * @return $this
      */
-    public function setLogger(\RectorPrefix20211213\Psr\Log\LoggerInterface $logger)
+    public function setLogger(\RectorPrefix20211214\Psr\Log\LoggerInterface $logger)
     {
         $this->statusWriter->setLogger($logger);
         return $this;
@@ -127,11 +127,11 @@ class XdebugHandler
      */
     public function check()
     {
-        $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::CHECK, $this->loaded . '|' . $this->mode);
+        $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::CHECK, $this->loaded . '|' . $this->mode);
         $envArgs = \explode('|', (string) \getenv($this->envAllowXdebug));
         if (!(bool) $envArgs[0] && $this->requiresRestart(self::$xdebugActive)) {
             // Restart required
-            $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::RESTART);
+            $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::RESTART);
             if ($this->prepareRestart()) {
                 $command = $this->getCommand();
                 $this->restart($command);
@@ -140,8 +140,8 @@ class XdebugHandler
         }
         if (self::RESTART_ID === $envArgs[0] && \count($envArgs) === 5) {
             // Restarted, so unset environment variable and use saved values
-            $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::RESTARTED);
-            \RectorPrefix20211213\Composer\XdebugHandler\Process::setEnv($this->envAllowXdebug);
+            $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::RESTARTED);
+            \RectorPrefix20211214\Composer\XdebugHandler\Process::setEnv($this->envAllowXdebug);
             self::$inRestart = \true;
             if ($this->loaded === null) {
                 // Skipped version is only set if Xdebug is not loaded
@@ -152,7 +152,7 @@ class XdebugHandler
             $this->setEnvRestartSettings($envArgs);
             return;
         }
-        $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::NORESTART);
+        $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::NORESTART);
         $settings = self::getRestartSettings();
         if ($settings !== null) {
             // Called with existing settings, so sync our settings
@@ -258,11 +258,11 @@ class XdebugHandler
     private function doRestart(array $command)
     {
         $this->tryEnableSignals();
-        $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::RESTARTING, \implode(' ', $command));
+        $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::RESTARTING, \implode(' ', $command));
         if (\PHP_VERSION_ID >= 70400) {
             $cmd = $command;
         } else {
-            $cmd = \RectorPrefix20211213\Composer\XdebugHandler\Process::escapeShellCommand($command);
+            $cmd = \RectorPrefix20211214\Composer\XdebugHandler\Process::escapeShellCommand($command);
             if (\defined('PHP_WINDOWS_VERSION_BUILD')) {
                 // Outer quotes required on cmd string below PHP 8
                 $cmd = '"' . $cmd . '"';
@@ -274,13 +274,13 @@ class XdebugHandler
         }
         if (!isset($exitCode)) {
             // Unlikely that php or the default shell cannot be invoked
-            $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::ERROR, 'Unable to restart process');
+            $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::ERROR, 'Unable to restart process');
             $exitCode = -1;
         } else {
-            $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::INFO, 'Restarted process exited ' . $exitCode);
+            $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::INFO, 'Restarted process exited ' . $exitCode);
         }
         if ($this->debug === '2') {
-            $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::INFO, 'Temp ini saved: ' . $this->tmpIni);
+            $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::INFO, 'Temp ini saved: ' . $this->tmpIni);
         } else {
             @\unlink((string) $this->tmpIni);
         }
@@ -318,7 +318,7 @@ class XdebugHandler
             $error = 'Unable to set environment variables';
         }
         if ($error !== null) {
-            $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::ERROR, $error);
+            $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::ERROR, $error);
         }
         return $error === null;
     }
@@ -351,10 +351,10 @@ class XdebugHandler
                 return \false;
             }
             // Check and remove directives after HOST and PATH sections
-            if (\RectorPrefix20211213\Composer\Pcre\Preg::isMatchWithOffsets($sectionRegex, $data, $matches, \PREG_OFFSET_CAPTURE)) {
+            if (\RectorPrefix20211214\Composer\Pcre\Preg::isMatchWithOffsets($sectionRegex, $data, $matches, \PREG_OFFSET_CAPTURE)) {
                 $data = \substr($data, 0, $matches[0][1]);
             }
-            $content .= \RectorPrefix20211213\Composer\Pcre\Preg::replace($xdebugRegex, ';$1', $data) . \PHP_EOL;
+            $content .= \RectorPrefix20211214\Composer\Pcre\Preg::replace($xdebugRegex, ';$1', $data) . \PHP_EOL;
         }
         // Merge loaded settings into our ini content, if it is valid
         $config = \parse_ini_string($content);
@@ -478,7 +478,7 @@ class XdebugHandler
     private function setEnvRestartSettings($envArgs)
     {
         $settings = array(\php_ini_loaded_file(), $envArgs[2], $envArgs[3], $envArgs[4], \getenv($this->envOriginalInis), self::$skipped);
-        \RectorPrefix20211213\Composer\XdebugHandler\Process::setEnv(self::RESTART_SETTINGS, \implode('|', $settings));
+        \RectorPrefix20211214\Composer\XdebugHandler\Process::setEnv(self::RESTART_SETTINGS, \implode('|', $settings));
     }
     /**
      * Syncs settings and the environment if called with existing settings
@@ -492,10 +492,10 @@ class XdebugHandler
     {
         if (\false === \getenv($this->envOriginalInis)) {
             // Called by another app, so make original inis available
-            \RectorPrefix20211213\Composer\XdebugHandler\Process::setEnv($this->envOriginalInis, \implode(\PATH_SEPARATOR, $settings['inis']));
+            \RectorPrefix20211214\Composer\XdebugHandler\Process::setEnv($this->envOriginalInis, \implode(\PATH_SEPARATOR, $settings['inis']));
         }
         self::$skipped = $settings['skipped'];
-        $this->notify(\RectorPrefix20211213\Composer\XdebugHandler\Status::INFO, 'Process called with existing restart settings');
+        $this->notify(\RectorPrefix20211214\Composer\XdebugHandler\Status::INFO, 'Process called with existing restart settings');
     }
     /**
      * Returns true if there are scanned inis and PHP is able to report them
@@ -601,7 +601,7 @@ class XdebugHandler
             $mode = $iniMode !== '' ? $iniMode : 'off';
         }
         // An empty comma-separated list is treated as mode 'off'
-        if (\RectorPrefix20211213\Composer\Pcre\Preg::isMatch('/^,+$/', \str_replace(' ', '', $mode))) {
+        if (\RectorPrefix20211214\Composer\Pcre\Preg::isMatch('/^,+$/', \str_replace(' ', '', $mode))) {
             $mode = 'off';
         }
         return $mode;

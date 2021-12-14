@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
-use RectorPrefix20211213\Nette\Utils\Strings;
+use RectorPrefix20211214\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
@@ -107,7 +107,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $newMethodName = $this->createNewMethodName($oldMethodName);
-                $dataProviderTagValueNode->value->value = \RectorPrefix20211213\Nette\Utils\Strings::replace($oldMethodName, '#' . \preg_quote($oldMethodName, '#') . '#', $newMethodName);
+                $dataProviderTagValueNode->value->value = \RectorPrefix20211214\Nette\Utils\Strings::replace($oldMethodName, '#' . \preg_quote($oldMethodName, '#') . '#', $newMethodName);
                 // invoke reprint
                 $dataProviderTagValueNode->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::START_AND_END, null);
                 $phpDocInfo->markAsChanged();
@@ -130,7 +130,7 @@ CODE_SAMPLE
     }
     private function createNewMethodName(string $oldMethodName) : string
     {
-        $newMethodName = \RectorPrefix20211213\Nette\Utils\Strings::substring($oldMethodName, \strlen('test'));
+        $newMethodName = \RectorPrefix20211214\Nette\Utils\Strings::substring($oldMethodName, \strlen('test'));
         return \lcfirst($newMethodName);
     }
 }

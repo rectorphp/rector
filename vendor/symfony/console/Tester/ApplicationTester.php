@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211213\Symfony\Component\Console\Tester;
+namespace RectorPrefix20211214\Symfony\Component\Console\Tester;
 
-use RectorPrefix20211213\Symfony\Component\Console\Application;
-use RectorPrefix20211213\Symfony\Component\Console\Input\ArrayInput;
+use RectorPrefix20211214\Symfony\Component\Console\Application;
+use RectorPrefix20211214\Symfony\Component\Console\Input\ArrayInput;
 /**
  * Eases the testing of console applications.
  *
@@ -26,7 +26,7 @@ class ApplicationTester
 {
     use TesterTrait;
     private $application;
-    public function __construct(\RectorPrefix20211213\Symfony\Component\Console\Application $application)
+    public function __construct(\RectorPrefix20211214\Symfony\Component\Console\Application $application)
     {
         $this->application = $application;
     }
@@ -44,7 +44,7 @@ class ApplicationTester
      */
     public function run(array $input, array $options = []) : int
     {
-        $this->input = new \RectorPrefix20211213\Symfony\Component\Console\Input\ArrayInput($input);
+        $this->input = new \RectorPrefix20211214\Symfony\Component\Console\Input\ArrayInput($input);
         if (isset($options['interactive'])) {
             $this->input->setInteractive($options['interactive']);
         }

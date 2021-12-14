@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211213\Symfony\Component\Console\Completion\Output;
+namespace RectorPrefix20211214\Symfony\Component\Console\Completion\Output;
 
-use RectorPrefix20211213\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20211213\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211214\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20211214\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-class BashCompletionOutput implements \RectorPrefix20211213\Symfony\Component\Console\Completion\Output\CompletionOutputInterface
+class BashCompletionOutput implements \RectorPrefix20211214\Symfony\Component\Console\Completion\Output\CompletionOutputInterface
 {
-    public function write(\RectorPrefix20211213\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions, \RectorPrefix20211213\Symfony\Component\Console\Output\OutputInterface $output) : void
+    public function write(\RectorPrefix20211214\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions, \RectorPrefix20211214\Symfony\Component\Console\Output\OutputInterface $output) : void
     {
         $values = $suggestions->getValueSuggestions();
         foreach ($suggestions->getOptionSuggestions() as $option) {
