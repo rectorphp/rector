@@ -2,10 +2,13 @@
 
 namespace Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Fixture;
 
-final class SomeClass
+use Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Source\FirstObjectToIntersect;
+use Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Source\SecondObjectToIntersect;
+
+final class SkipScalarTypes
 {
     /**
-     * @param string&int $types
+     * @param FirstObjectToIntersect&SecondObjectToIntersect $types
      */
     public function process($types)
     {
@@ -18,12 +21,15 @@ final class SomeClass
 
 namespace Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Fixture;
 
-final class SomeClass
+use Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Source\FirstObjectToIntersect;
+use Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Source\SecondObjectToIntersect;
+
+final class SkipScalarTypes
 {
     /**
-     * @param string&int $types
+     * @param FirstObjectToIntersect&SecondObjectToIntersect $types
      */
-    public function process(int&string $types)
+    public function process(\Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Source\FirstObjectToIntersect&\Rector\Tests\Php81\Rector\FunctionLike\IntersectionTypesRector\Source\SecondObjectToIntersect $types)
     {
     }
 }

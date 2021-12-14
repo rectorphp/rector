@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -110,6 +111,10 @@ CODE_SAMPLE
                 continue;
             }
 
+            if (! $this->isIntersectionableType($paramType)) {
+                continue;
+            }
+
             $phpParserIntersectionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode(
                 $paramType,
                 TypeKind::PARAM()
@@ -122,5 +127,21 @@ CODE_SAMPLE
             $param->type = $phpParserIntersectionType;
             $this->hasChanged = true;
         }
+    }
+
+    /**
+     * Only class-type are supported https://wiki.php.net/rfc/pure-intersection-types#supported_types
+     */
+    private function isIntersectionableType(IntersectionType $intersectionType): bool
+    {
+        foreach ($intersectionType->getTypes() as $intersectionedType) {
+            if ($intersectionedType instanceof TypeWithClassName) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 }
