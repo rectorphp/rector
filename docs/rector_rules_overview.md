@@ -8248,10 +8248,10 @@ Change docs to intersection types, where possible (properties are covered by Typ
  final class SomeClass
  {
 -    /**
--     * @param string&int $types
+-     * @param Foo&Bar $types
 -     */
 -    public function process($types)
-+    public function process(string&int $types)
++    public function process(Foo&Bar $types)
      {
      }
  }
