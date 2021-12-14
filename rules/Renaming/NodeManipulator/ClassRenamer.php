@@ -6,6 +6,7 @@ namespace Rector\Renaming\NodeManipulator;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -92,6 +93,10 @@ final class ClassRenamer
         if (! $phpDocInfo->hasByTypes(NodeTypes::TYPE_AWARE_NODES) && ! $phpDocInfo->hasByAnnotationClasses(
             NodeTypes::TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES
         )) {
+            return;
+        }
+
+        if ($node instanceof AttributeGroup) {
             return;
         }
 
