@@ -4,13 +4,13 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AssertChoice
+final class AssertChoice
 {
     /**
      * @var string
      * @Assert\Choice({"chalet", "apartment"})
      */
-    public $type;
+    protected $type;
 }
 
 ?>
@@ -21,12 +21,12 @@ namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AssertChoice
+final class AssertChoice
 {
     /**
      * @Assert\Choice({"chalet", "apartment"})
      */
-    public string $type;
+    protected string $type;
 }
 
 ?>

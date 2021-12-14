@@ -2,12 +2,12 @@
 
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
-class IncludeUnionedType
+final class IncludeUnionedType
 {
     /**
      * @var bool|int
      */
-    public $cantTouchThis = true;
+    private $cantTouchThis = true;
 
     public function setNumber()
     {
@@ -29,9 +29,9 @@ class IncludeUnionedType
 
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
-class IncludeUnionedType
+final class IncludeUnionedType
 {
-    public bool|int $cantTouchThis = true;
+    private bool|int $cantTouchThis = true;
 
     public function setNumber()
     {

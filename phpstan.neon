@@ -612,4 +612,4 @@ parameters:
         # will be desolved
         -
             path: rules/Php74/Rector/Property/TypedPropertyRector.php
-            message: '#Class cognitive complexity is 31, keep it under 30#'
+            message: '#Class cognitive complexity is \d+, keep it under 30#'

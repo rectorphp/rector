@@ -11,12 +11,13 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
-use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
@@ -31,7 +32,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
@@ -42,19 +43,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\DoctrineTypedPropertyRectorTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
  */
-final class TypedPropertyRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
+final class TypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
-    /**
-     * @var string
-     */
-    final public const PRIVATE_PROPERTY_ONLY = 'PRIVATE_PROPERTY_ONLY';
-
-    /**
-     * If want to keep BC, it can be set to true
-     * @see https://3v4l.org/spl4P
-     */
-    private bool $privatePropertyOnly = false;
-
     public function __construct(
         private readonly PropertyTypeInferer $propertyTypeInferer,
         private readonly VendorLockResolver $vendorLockResolver,
@@ -73,7 +63,7 @@ final class TypedPropertyRector extends AbstractRector implements AllowEmptyConf
         return new RuleDefinition(
             'Changes property `@var` annotations from annotation to type.',
             [
-                new ConfiguredCodeSample(
+                new CodeSample(
                     <<<'CODE_SAMPLE'
 final class SomeClass
 {
@@ -90,10 +80,6 @@ final class SomeClass
     private int $count;
 }
 CODE_SAMPLE
-                    ,
-                    [
-                        self::PRIVATE_PROPERTY_ONLY => false,
-                    ]
                 ),
             ]
         );
@@ -112,7 +98,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        if ($this->shouldSkipProperty($node)) {
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($this->shouldSkipProperty($node, $scope)) {
             return null;
         }
 
@@ -165,14 +152,6 @@ CODE_SAMPLE
         $node->type = $propertyTypeNode;
 
         return $node;
-    }
-
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration): void
-    {
-        $this->privatePropertyOnly = $configuration[self::PRIVATE_PROPERTY_ONLY] ?? false;
     }
 
     public function provideMinPhpVersion(): int
@@ -234,7 +213,7 @@ CODE_SAMPLE
         $onlyProperty->default = $this->nodeFactory->createNull();
     }
 
-    private function shouldSkipProperty(Property $property): bool
+    private function shouldSkipProperty(Property $property, Scope $scope): bool
     {
         // type is already set → skip
         if ($property->type !== null) {
@@ -246,8 +225,13 @@ CODE_SAMPLE
             return true;
         }
 
-        $trait = $this->betterNodeFinder->findParentType($property, Trait_::class);
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return true;
+        }
+
         // skip trait properties, as they ar unpredictable based on class context they appear in
+        $trait = $this->betterNodeFinder->findParentType($property, Trait_::class);
         if ($trait instanceof Trait_) {
             return true;
         }
@@ -259,15 +243,12 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $this->privatePropertyOnly) {
-            return $this->propertyAnalyzer->hasForbiddenType($property);
-        }
-
         if ($property->isPrivate()) {
             return $this->propertyAnalyzer->hasForbiddenType($property);
         }
 
-        return true;
+        // is we're in final class, the type can be changed
+        return ! ($property->isProtected() && $classReflection->isFinal() && $classReflection->getParents() === []);
     }
 
     private function isModifiedByTrait(ClassLike $classLike, string $propertyName): bool

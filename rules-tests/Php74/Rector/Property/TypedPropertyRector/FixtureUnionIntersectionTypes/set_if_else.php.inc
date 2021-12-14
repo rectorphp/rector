@@ -2,9 +2,9 @@
 
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
-class SetIfElse
+final class SetIfElse
 {
-    public $stringOrInteger = 'hi';
+    protected $stringOrInteger = 'hi';
 
     public function setNumber()
     {
@@ -22,9 +22,9 @@ class SetIfElse
 
 namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
 
-class SetIfElse
+final class SetIfElse
 {
-    public int|string $stringOrInteger = 'hi';
+    protected int|string $stringOrInteger = 'hi';
 
     public function setNumber()
     {
