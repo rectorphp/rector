@@ -44,6 +44,8 @@ final class DowngradeRectorConfig
      * Exclude paths when downgrading a dependency
      */
     public const DEPENDENCY_EXCLUDE_PATHS = [
+        '*/bin/validate-phpstan-version.php',
+
         '*/tests/*',
         // symfony test are parts of package
         '*/Test/*',
