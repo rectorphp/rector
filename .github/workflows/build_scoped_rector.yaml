@@ -100,7 +100,7 @@ jobs:
                     token: ${{ secrets.ACCESS_TOKEN }}
 
             # remove remote files, to avoid piling up dead code in remote repository
-            -   run: rm -rf remote-repository/.github remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages  remote-repository/vendor
+            -   run: rm -rf remote-repository/.github remote-repository/config remote-repository/src remote-repository/rules remote-repository/packages remote-repository/vendor remote-repository/bin/generate-changelog.php
 
             -   run: cp -a rector-prefixed-downgraded/. remote-repository
 
