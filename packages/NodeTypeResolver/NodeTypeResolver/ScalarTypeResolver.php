@@ -32,13 +32,13 @@ final class ScalarTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         if ($node instanceof \PhpParser\Node\Scalar\DNumber) {
-            return new \PHPStan\Type\Constant\ConstantFloatType($node->value);
+            return new \PHPStan\Type\Constant\ConstantFloatType((float) $node->value);
         }
         if ($node instanceof \PhpParser\Node\Scalar\String_) {
-            return new \PHPStan\Type\Constant\ConstantStringType($node->value);
+            return new \PHPStan\Type\Constant\ConstantStringType((string) $node->value);
         }
         if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
-            return new \PHPStan\Type\Constant\ConstantIntegerType($node->value);
+            return new \PHPStan\Type\Constant\ConstantIntegerType((int) $node->value);
         }
         if ($node instanceof \PhpParser\Node\Scalar\MagicConst) {
             return new \PHPStan\Type\Constant\ConstantStringType($node->getName());
