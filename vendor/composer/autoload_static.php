@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c
+class ComposerStaticInitf1e4c44efb56b049f01e6fae2fd31d30
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3430,10 +3430,9 @@ class ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\ConstructorAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/ConstructorAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
+        'Rector\\TypeDeclaration\\Contract\\PriorityAwareInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PriorityAwareInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ParamTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ParamTypeInfererInterface.php',
-        'Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/PriorityAwareTypeInfererInterface.php',
-        'Rector\\TypeDeclaration\\Contract\\TypeInferer\\PropertyTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/PropertyTypeInfererInterface.php',
-        'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
+        'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnInterface.php',
         'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
         'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
         'Rector\\TypeDeclaration\\Matcher\\PropertyAssignMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Matcher/PropertyAssignMatcher.php',
@@ -3474,7 +3473,7 @@ class ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromAssignsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
-        'Rector\\TypeDeclaration\\Sorter\\TypeInfererSorter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Sorter/TypeInfererSorter.php',
+        'Rector\\TypeDeclaration\\Sorter\\PriorityAwareSorter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Sorter/PriorityAwareSorter.php',
         'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
@@ -3825,9 +3824,9 @@ class ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit179611c6f2ea972f3669c2fd86d0857c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf1e4c44efb56b049f01e6fae2fd31d30::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf1e4c44efb56b049f01e6fae2fd31d30::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf1e4c44efb56b049f01e6fae2fd31d30::$classMap;
 
         }, null, ClassLoader::class);
     }

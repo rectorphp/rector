@@ -10,9 +10,9 @@ use PHPStan\Type\Type;
 use Rector\Core\NodeManipulator\FunctionLikeManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
-final class SetterNodeReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
+final class SetterNodeReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface
 {
     /**
      * @readonly

@@ -10,21 +10,13 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer;
 final class PropertyTypeInferer
 {
-    /**
-     * @var PropertyTypeInfererInterface[]
-     */
-    private $propertyTypeInferers = [];
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer
@@ -50,37 +42,19 @@ final class PropertyTypeInferer
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
      */
     private $doctrineTypeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    /**
-     * @param PropertyTypeInfererInterface[] $propertyTypeInferers
-     */
-    public function __construct(\Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, array $propertyTypeInferers)
+    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->typeFactory = $typeFactory;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->propertyTypeInferers = $typeInfererSorter->sort($propertyTypeInferers);
     }
     public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
-        $resolvedTypes = $this->getResolvedTypes($property);
-        $resolvedTypes = $this->typeFactory->uniquateTypes($resolvedTypes);
-        // if nothing is clear from variable use, we use @var doc as fallback
-        if ($resolvedTypes !== []) {
-            $resolvedType = $this->typeFactory->createMixedPassedOrUnionType($resolvedTypes);
-        } else {
-            // void type is not allowed in properties
-            $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);
-            if ($resolvedType instanceof \PHPStan\Type\VoidType) {
-                return new \PHPStan\Type\MixedType();
-            }
+        $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);
+        if ($resolvedType instanceof \PHPStan\Type\VoidType) {
+            return new \PHPStan\Type\MixedType();
         }
         // default value type must be added to each resolved type if set
         $propertyDefaultValue = $property->props[0]->default;
@@ -88,29 +62,6 @@ final class PropertyTypeInferer
             $resolvedType = $this->unionTypeWithDefaultExpr($property, $resolvedType);
         }
         return $this->genericClassStringTypeNormalizer->normalize($resolvedType);
-    }
-    /**
-     * @return Type[]
-     */
-    private function getResolvedTypes(\PhpParser\Node\Stmt\Property $property) : array
-    {
-        $resolvedTypes = [];
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $hasByVarName = $phpDocInfo->hasByName('var');
-        foreach ($this->propertyTypeInferers as $propertyTypeInferer) {
-            $type = $propertyTypeInferer->inferProperty($property);
-            if (!$type instanceof \PHPStan\Type\Type) {
-                continue;
-            }
-            if ($type instanceof \PHPStan\Type\VoidType) {
-                continue;
-            }
-            if ($property->type === null && $type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType && $hasByVarName) {
-                return [];
-            }
-            $resolvedTypes[] = $type;
-        }
-        return $resolvedTypes;
     }
     private function shouldUnionWithDefaultValue(\PHPStan\Type\Type $defaultValueType, \PHPStan\Type\Type $type) : bool
     {

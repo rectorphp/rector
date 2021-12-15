@@ -28,15 +28,15 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\Sorter\TypeInfererSorter;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
+use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
 use RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ReturnTypeInferer
 {
     /**
-     * @var ReturnTypeInfererInterface[]
+     * @var ReturnInterface[]
      */
     private $returnTypeInferers = [];
     /**
@@ -70,9 +70,9 @@ final class ReturnTypeInferer
      */
     private $reflectionProvider;
     /**
-     * @param ReturnTypeInfererInterface[] $returnTypeInferers
+     * @param ReturnInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\TypeInfererSorter $typeInfererSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\PriorityAwareSorter $priorityAwareSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
@@ -80,14 +80,14 @@ final class ReturnTypeInferer
         $this->parameterProvider = $parameterProvider;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionProvider = $reflectionProvider;
-        $this->returnTypeInferers = $typeInfererSorter->sort($returnTypeInferers);
+        $this->returnTypeInferers = $priorityAwareSorter->sort($returnTypeInferers);
     }
     public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
     }
     /**
-     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
+     * @param array<class-string<ReturnInterface>> $excludedInferers
      */
     public function inferFunctionLikeWithExcludedInferers(\PhpParser\Node\FunctionLike $functionLike, array $excludedInferers) : \PHPStan\Type\Type
     {
@@ -180,12 +180,12 @@ final class ReturnTypeInferer
         return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
     }
     /**
-     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
+     * @param array<class-string<ReturnInterface>> $excludedInferers
      */
-    private function shouldSkipExcludedTypeInferer(\Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface $returnTypeInferer, array $excludedInferers) : bool
+    private function shouldSkipExcludedTypeInferer(\Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface $return, array $excludedInferers) : bool
     {
         foreach ($excludedInferers as $excludedInferer) {
-            if (\is_a($returnTypeInferer, $excludedInferer)) {
+            if (\is_a($return, $excludedInferer)) {
                 return \true;
             }
         }

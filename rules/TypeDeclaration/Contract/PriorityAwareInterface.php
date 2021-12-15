@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\Contract\TypeInferer;
+namespace Rector\TypeDeclaration\Contract;
 
-interface PriorityAwareTypeInfererInterface
+interface PriorityAwareInterface
 {
     /**
      * Higher priority goes first.
