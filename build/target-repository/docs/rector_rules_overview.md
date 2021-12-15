@@ -11693,29 +11693,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### CompleteVarDocTypePropertyRector
-
-Complete property `@var` annotations or correct the old ones
-
-- class: [`Rector\TypeDeclaration\Rector\Property\CompleteVarDocTypePropertyRector`](../rules/TypeDeclaration/Rector/Property/CompleteVarDocTypePropertyRector.php)
-
-```diff
- final class SomeClass
- {
-+    /**
-+     * @var EventDispatcher
-+     */
-     private $eventDispatcher;
-
-     public function __construct(EventDispatcher $eventDispatcher)
-     {
-         $this->eventDispatcher = $eventDispatcher;
-     }
- }
-```
-
-<br>
-
 ### FormerNullableArgumentToScalarTypedRector
 
 Change null in argument, that is now not nullable anymore
@@ -11978,6 +11955,27 @@ Add return method return type based on strict typed property
 +    public function getAge(): int
      {
          return $this->age;
+     }
+ }
+```
+
+<br>
+
+### TypedPropertyFromAssignsRector
+
+Add typed property from assigned types
+
+- class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    private $name;
++    private string|null $name = null;
+
+     public function run()
+     {
+         $this->name = 'string';
      }
  }
 ```
