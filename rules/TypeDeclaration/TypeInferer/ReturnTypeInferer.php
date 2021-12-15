@@ -28,7 +28,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -36,7 +36,7 @@ use RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ReturnTypeInferer
 {
     /**
-     * @var ReturnInterface[]
+     * @var ReturnTypeInfererInterface[]
      */
     private $returnTypeInferers = [];
     /**
@@ -70,7 +70,7 @@ final class ReturnTypeInferer
      */
     private $reflectionProvider;
     /**
-     * @param ReturnInterface[] $returnTypeInferers
+     * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
     public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\PriorityAwareSorter $priorityAwareSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
@@ -87,7 +87,7 @@ final class ReturnTypeInferer
         return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
     }
     /**
-     * @param array<class-string<ReturnInterface>> $excludedInferers
+     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
     public function inferFunctionLikeWithExcludedInferers(\PhpParser\Node\FunctionLike $functionLike, array $excludedInferers) : \PHPStan\Type\Type
     {
@@ -180,9 +180,9 @@ final class ReturnTypeInferer
         return $type->getClassName() === \Rector\Core\Enum\ObjectReference::STATIC()->getValue();
     }
     /**
-     * @param array<class-string<ReturnInterface>> $excludedInferers
+     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
-    private function shouldSkipExcludedTypeInferer(\Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface $return, array $excludedInferers) : bool
+    private function shouldSkipExcludedTypeInferer(\Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface $return, array $excludedInferers) : bool
     {
         foreach ($excludedInferers as $excludedInferer) {
             if (\is_a($return, $excludedInferer)) {

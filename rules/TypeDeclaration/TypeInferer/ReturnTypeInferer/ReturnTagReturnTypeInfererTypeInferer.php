@@ -6,8 +6,8 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
-final class ReturnTagReturnTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+final class ReturnTagReturnTypeInfererTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
 {
     /**
      * @readonly
