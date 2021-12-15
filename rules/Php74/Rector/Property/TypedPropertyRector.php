@@ -239,7 +239,7 @@ CODE_SAMPLE
             return $this->propertyAnalyzer->hasForbiddenType($property);
         }
         // is we're in final class, the type can be changed
-        return !($property->isProtected() && $classReflection->isFinal() && $classReflection->getParents() === []);
+        return !$this->isSafeProtectedProperty($property, $classReflection);
     }
     private function isModifiedByTrait(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
     {
@@ -258,5 +258,15 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection) : bool
+    {
+        if (!$property->isProtected()) {
+            return \false;
+        }
+        if (!$classReflection->isFinal()) {
+            return \false;
+        }
+        return $classReflection->getParents() === [];
     }
 }

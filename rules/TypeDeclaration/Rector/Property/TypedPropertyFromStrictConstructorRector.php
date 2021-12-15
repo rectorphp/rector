@@ -98,6 +98,11 @@ CODE_SAMPLE
         if (!$propertyTypeNode instanceof \PhpParser\Node) {
             return null;
         }
+        // public property can be anything
+        if ($node->isPublic()) {
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
+            return $node;
+        }
         $node->type = $propertyTypeNode;
         $node->props[0]->default = null;
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);

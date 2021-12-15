@@ -7,6 +7,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\CallableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyAnalyzer
@@ -42,6 +43,9 @@ final class PropertyAnalyzer
     }
     private function isCallableType(\PHPStan\Type\Type $type) : bool
     {
+        if ($type instanceof \PHPStan\Type\TypeWithClassName) {
+            return $type->getClassName() === 'Closure';
+        }
         return $type instanceof \PHPStan\Type\CallableType;
     }
 }
