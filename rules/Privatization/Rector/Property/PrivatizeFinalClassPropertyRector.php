@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace Rector\Privatization\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -22,6 +26,7 @@ final class PrivatizeFinalClassPropertyRector extends AbstractRector
 {
     public function __construct(
         private readonly VisibilityManipulator $visibilityManipulator,
+        private readonly AstResolver $astResolver
     ) {
     }
 
@@ -111,6 +116,45 @@ CODE_SAMPLE
 
         foreach ($classReflection->getParents() as $parentClassReflection) {
             if ($parentClassReflection->hasProperty($propertyName)) {
+                return true;
+            }
+
+            if ($this->isFoundInParentClassMethods($parentClassReflection, $propertyName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isFoundInParentClassMethods(ClassReflection $parentClassReflection, string $propertyName): bool
+    {
+        $classLike = $this->astResolver->resolveClassFromName($parentClassReflection->getName());
+        if (! $classLike instanceof ClassLike) {
+            return false;
+        }
+
+        $methods = $classLike->getMethods();
+        foreach ($methods as $method) {
+            $isFound = (bool) $this->betterNodeFinder->findFirst((array) $method->stmts, function (Node $subNode) use (
+                $propertyName
+            ): bool {
+                if (! $subNode instanceof PropertyFetch) {
+                    return false;
+                }
+
+                if (! $subNode->var instanceof Variable) {
+                    return false;
+                }
+
+                if (! $this->nodeNameResolver->isName($subNode->var, 'this')) {
+                    return false;
+                }
+
+                return $this->nodeNameResolver->isName($subNode, $propertyName);
+            });
+
+            if ($isFound) {
                 return true;
             }
         }
