@@ -3090,7 +3090,6 @@ return array(
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\ConstructorPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/ConstructorPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
-    'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DoctrineColumnPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineColumnPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DoctrineRelationPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineRelationPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\VarDocPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/VarDocPropertyTypeInferer.php',

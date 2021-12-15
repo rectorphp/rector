@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3124cfb0989bbb45f2e52f527ba9aa91
+class ComposerStaticInitf98a46415524cbcbf0a0503e7dd3f061
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3485,7 +3485,6 @@ class ComposerStaticInit3124cfb0989bbb45f2e52f527ba9aa91
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\ConstructorPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/ConstructorPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DoctrineColumnPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineColumnPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DoctrineRelationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DoctrineRelationPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\VarDocPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/VarDocPropertyTypeInferer.php',
@@ -3821,9 +3820,9 @@ class ComposerStaticInit3124cfb0989bbb45f2e52f527ba9aa91
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3124cfb0989bbb45f2e52f527ba9aa91::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3124cfb0989bbb45f2e52f527ba9aa91::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3124cfb0989bbb45f2e52f527ba9aa91::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf98a46415524cbcbf0a0503e7dd3f061::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf98a46415524cbcbf0a0503e7dd3f061::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf98a46415524cbcbf0a0503e7dd3f061::$classMap;
 
         }, null, ClassLoader::class);
     }
