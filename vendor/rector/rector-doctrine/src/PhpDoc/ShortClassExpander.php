@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\PhpDoc;
+namespace Rector\Doctrine\PhpDoc;
 
 use RectorPrefix20211215\Nette\Utils\Strings;
 use PhpParser\Node;
@@ -33,6 +33,9 @@ final class ShortClassExpander
         $this->reflectionProvider = $reflectionProvider;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
     }
+    /**
+     * @api
+     */
     public function resolveFqnTargetEntity(string $targetEntity, \PhpParser\Node $node) : string
     {
         $targetEntity = $this->getCleanedUpTargetEntity($targetEntity);

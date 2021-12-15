@@ -4,7 +4,7 @@
     "license": "MIT",
     "description": "Rector upgrades rules for Doctrine",
     "require": {
-        "php": ">=8.0"
+        "php": ">=8.1"
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.1",
@@ -41,7 +41,7 @@
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
         "docs": [
-            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi",
+            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi --configure-method",
             "vendor\/bin\/ecs check-markdown docs\/rector_rules_overview.md --ansi --fix"
         ]
     },

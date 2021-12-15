@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp81\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
@@ -17,6 +18,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -87,10 +89,7 @@ CODE_SAMPLE
     private function shouldSkip(\PhpParser\Node\FunctionLike $functionLike) : bool
     {
         foreach ($functionLike->getParams() as $param) {
-            if (!$param->default instanceof \PhpParser\Node\Expr\New_) {
-                continue;
-            }
-            if ($param->type instanceof \PhpParser\Node\IntersectionType) {
+            if ($this->isParamSkipped($param)) {
                 continue;
             }
             return \false;
@@ -105,24 +104,37 @@ CODE_SAMPLE
         $stmts = [new \PhpParser\Node\Stmt\Return_($functionLike->expr)];
         return $this->anonymousFunctionFactory->create($functionLike->params, $stmts, $functionLike->returnType, $functionLike->static);
     }
+    private function isParamSkipped(\PhpParser\Node\Param $param) : bool
+    {
+        if ($param->default === null) {
+            return \true;
+        }
+        $hasNew = (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, \PhpParser\Node\Expr\New_::class);
+        if (!$hasNew) {
+            return \true;
+        }
+        return $param->type instanceof \PhpParser\Node\IntersectionType;
+    }
     private function replaceNewInParams(\PhpParser\Node\FunctionLike $functionLike) : \PhpParser\Node\FunctionLike
     {
         $isConstructor = $functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->isName($functionLike, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
         $stmts = [];
         foreach ($functionLike->getParams() as $param) {
-            if (!$param->default instanceof \PhpParser\Node\Expr\New_) {
+            if ($this->isParamSkipped($param)) {
                 continue;
             }
+            /** @var Expr $default */
+            $default = $param->default;
             // check for property promotion
             if ($isConstructor && $param->flags > 0) {
                 $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $param->var->name);
-                $coalesce = new \PhpParser\Node\Expr\BinaryOp\Coalesce($param->var, $param->default);
+                $coalesce = new \PhpParser\Node\Expr\BinaryOp\Coalesce($param->var, $default);
                 $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $coalesce);
                 if ($param->type !== null) {
                     $param->type = $this->ensureNullableType($param->type);
                 }
             } else {
-                $assign = new \PhpParser\Node\Expr\AssignOp\Coalesce($param->var, $param->default);
+                $assign = new \PhpParser\Node\Expr\AssignOp\Coalesce($param->var, $default);
             }
             $stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
             $param->default = $this->nodeFactory->createNull();

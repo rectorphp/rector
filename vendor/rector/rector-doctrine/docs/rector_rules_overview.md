@@ -1,4 +1,4 @@
-# 24 Rules Overview
+# 28 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -17,17 +17,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddEntityIdByConditionRector::class)
         ->configure([
-AddEntityIdByConditionRector::DETECTED_TRAITS => [
-    'Knp\DoctrineBehaviors\Model\Translatable\Translation',
-    'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
-],
-]]);
+            AddEntityIdByConditionRector::DETECTED_TRAITS => [
+                'Knp\DoctrineBehaviors\Model\Translatable\Translation',
+                'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
+            ],
+        ]);
 };
 ```
 
 ↓
 
 ```diff
++use Doctrine\ORM\Mapping as ORM;
++
  class SomeClass
  {
      use SomeTrait;
@@ -160,6 +162,37 @@ Change array to ArrayCollection in setParameters method of query builder
 
 <br>
 
+## ClassAnnotationToNamedArgumentConstructorRector
+
+Decorate classic array-based class annotation with named parameters
+
+- class: [`Rector\Doctrine\Rector\Class_\ClassAnnotationToNamedArgumentConstructorRector`](../src/Rector/Class_/ClassAnnotationToNamedArgumentConstructorRector.php)
+
+```diff
++use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
++
+ /**
+  * @Annotation
++ * @NamedArgumentConstructor
+  */
+ class SomeAnnotation
+ {
+     /**
+      * @var string
+      */
+     private $foo;
+
+-    public function __construct(array $values)
++    public function __construct(string $foo)
+     {
+-        $this->foo = $values['foo'];
++        $this->foo = $foo;
+     }
+ }
+```
+
+<br>
+
 ## CorrectDefaultTypesOnEntityPropertyRector
 
 Change default value types to match Doctrine annotation type
@@ -201,10 +234,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(EntityAliasToClassConstantReferenceRector::class)
         ->configure([
-EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
-'App' => 'App\Entity',
+            EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
+                'App' => 'App\Entity',
 
-], ]]);
+            ],
+        ]);
 };
 ```
 
@@ -234,9 +268,9 @@ Improve @var, `@param` and `@return` types for Doctrine collections to make them
  class SomeClass
  {
      /**
-      * @ORM\OneToMany(targetEntity=Training::class, mappedBy="trainer")
+      * @ORM\OneToMany(targetEntity=Trainer::class, mappedBy="trainer")
 -     * @var Collection|Trainer[]
-+     * @var Collection<int, Training>|Trainer[]
++     * @var Collection<int, Trainer>|Trainer[]
       */
      private $trainings = [];
  }
@@ -307,7 +341,7 @@ Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 
 Make maker bundle generate DateTime property accept DateTimeInterface too
 
-- class: [`Rector\Doctrine\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector`](../src/Rector/ClassMethod/MakeEntityDateTimePropertyDateTimeInterfaceRector.php)
+- class: [`Rector\Doctrine\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector`](../src/Rector/Property/MakeEntityDateTimePropertyDateTimeInterfaceRector.php)
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
@@ -711,18 +745,9 @@ Change Translation from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
       * @ORM\Column(length=128)
       */
      private $title;
-
-     /**
--     * @Gedmo\Translatable
-      * @ORM\Column(type="text")
-      */
-     private $content;
 -
 -    /**
 -     * @Gedmo\Locale
--     * Used locale to override Translation listener`s locale
--     * this is not a mapped field of entity metadata, just a simple property
--     * and it is not necessary because globally locale can be set in listener
 -     */
 -    private $locale;
 -
@@ -734,16 +759,6 @@ Change Translation from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 -    public function getTitle()
 -    {
 -        return $this->title;
--    }
--
--    public function setContent($content)
--    {
--        $this->content = $content;
--    }
--
--    public function getContent()
--    {
--        return $this->content;
 -    }
 -
 -    public function setTranslatableLocale($locale)
@@ -831,6 +846,70 @@ Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
 -        return $this->parent;
 -    }
 +    use TreeNodeTrait;
+ }
+```
+
+<br>
+
+## TypedPropertyFromColumnTypeRector
+
+Complete `@var` annotations or types based on @ORM\Column
+
+- class: [`Rector\Doctrine\Rector\Property\TypedPropertyFromColumnTypeRector`](../src/Rector/Property/TypedPropertyFromColumnTypeRector.php)
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class SimpleColumn
+ {
+     /**
+      * @ORM\Column(type="string")
+      */
+-    private $name;
++    private string|null $name = null;
+ }
+```
+
+<br>
+
+## TypedPropertyFromToManyRelationTypeRector
+
+Complete `@var` annotations or types based on @ORM\*toMany annotations or attributes
+
+- class: [`Rector\Doctrine\Rector\Property\TypedPropertyFromToManyRelationTypeRector`](../src/Rector/Property/TypedPropertyFromToManyRelationTypeRector.php)
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class SimpleColumn
+ {
+     /**
+      * @ORM\OneToMany(targetEntity="App\Product")
++     * @var \Doctrine\Common\Collections\Collection<\App\Product>
+      */
+-    private $products;
++    private \Doctrine\Common\Collections\Collection $products;
+ }
+```
+
+<br>
+
+## TypedPropertyFromToOneRelationTypeRector
+
+Complete `@var` annotations or types based on @ORM\*toOne annotations or attributes
+
+- class: [`Rector\Doctrine\Rector\Property\TypedPropertyFromToOneRelationTypeRector`](../src/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php)
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class SimpleColumn
+ {
+     /**
+      * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+      */
+-    private $company;
++    private ?\App\Company\Entity\Company $company = null;
  }
 ```
 
