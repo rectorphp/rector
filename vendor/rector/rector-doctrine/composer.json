@@ -17,7 +17,6 @@
         "symplify\/rule-doc-generator": "^10.0",
         "rector\/rector-src": "dev-main",
         "doctrine\/orm": "^2.9",
-        "rector\/rector-generator": "dev-main",
         "symplify\/monorepo-builder": "^10.0",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "phpstan\/phpstan-strict-rules": "^1.1",

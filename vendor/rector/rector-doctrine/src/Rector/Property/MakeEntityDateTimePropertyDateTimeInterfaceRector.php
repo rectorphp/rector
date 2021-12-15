@@ -8,9 +8,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeManipulator\PropertyTypeManipulator;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -24,14 +24,9 @@ final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends \Rector\Co
      * @var \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator
      */
     private $propertyTypeManipulator;
-    /**
-     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
-     */
-    private $propertyTypeInferer;
-    public function __construct(\Rector\Doctrine\NodeManipulator\PropertyTypeManipulator $propertyTypeManipulator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer)
+    public function __construct(\Rector\Doctrine\NodeManipulator\PropertyTypeManipulator $propertyTypeManipulator)
     {
         $this->propertyTypeManipulator = $propertyTypeManipulator;
-        $this->propertyTypeInferer = $propertyTypeInferer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -87,18 +82,18 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $inferredType = $this->propertyTypeInferer->inferProperty($node);
-        if ($inferredType instanceof \PHPStan\Type\UnionType) {
-            $inferredType = \PHPStan\Type\TypeCombinator::removeNull($inferredType);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if ($phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+            $varType = $phpDocInfo->getVarType();
+            if ($varType instanceof \PHPStan\Type\UnionType) {
+                $varType = \PHPStan\Type\TypeCombinator::removeNull($varType);
+            }
+            if (!$varType->equals(new \PHPStan\Type\ObjectType('DateTime'))) {
+                return null;
+            }
+            $this->propertyTypeManipulator->changePropertyType($node, 'DateTime', 'DateTimeInterface');
+            return $node;
         }
-        $dateTimeObjectType = new \PHPStan\Type\ObjectType('DateTimeInterface');
-        if (!$dateTimeObjectType->equals($inferredType)) {
-            return null;
-        }
-        if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('DateTime'))) {
-            return null;
-        }
-        $this->propertyTypeManipulator->changePropertyType($node, 'DateTime', 'DateTimeInterface');
-        return $node;
+        return null;
     }
 }
