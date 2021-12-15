@@ -29,7 +29,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
@@ -38,22 +38,22 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ReturnTypeInferer
 {
     /**
-     * @var ReturnInterface[]
+     * @var ReturnTypeInfererInterface[]
      */
     private array $returnTypeInferers = [];
 
     /**
-     * @param ReturnInterface[] $returnTypeInferers
+     * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
     public function __construct(
         array $returnTypeInferers,
-        private             readonly TypeNormalizer $typeNormalizer,
+        private  readonly TypeNormalizer $typeNormalizer,
         PriorityAwareSorter $priorityAwareSorter,
-        private             readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
-        private             readonly PhpVersionProvider $phpVersionProvider,
-        private             readonly ParameterProvider $parameterProvider,
-        private             readonly BetterNodeFinder $betterNodeFinder,
-        private             readonly ReflectionProvider $reflectionProvider,
+        private  readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
+        private  readonly PhpVersionProvider $phpVersionProvider,
+        private  readonly ParameterProvider $parameterProvider,
+        private  readonly BetterNodeFinder $betterNodeFinder,
+        private  readonly ReflectionProvider $reflectionProvider,
     ) {
         $this->returnTypeInferers = $priorityAwareSorter->sort($returnTypeInferers);
     }
@@ -64,7 +64,7 @@ final class ReturnTypeInferer
     }
 
     /**
-     * @param array<class-string<ReturnInterface>> $excludedInferers
+     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
     public function inferFunctionLikeWithExcludedInferers(FunctionLike $functionLike, array $excludedInferers): Type
     {
@@ -188,9 +188,9 @@ final class ReturnTypeInferer
     }
 
     /**
-     * @param array<class-string<ReturnInterface>> $excludedInferers
+     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
-    private function shouldSkipExcludedTypeInferer(ReturnInterface $return, array $excludedInferers): bool
+    private function shouldSkipExcludedTypeInferer(ReturnTypeInfererInterface $return, array $excludedInferers): bool
     {
         foreach ($excludedInferers as $excludedInferer) {
             if (is_a($return, $excludedInferer)) {
