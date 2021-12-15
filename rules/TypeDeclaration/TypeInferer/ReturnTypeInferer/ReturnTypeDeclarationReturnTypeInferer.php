@@ -8,10 +8,10 @@ use PhpParser\Node\FunctionLike;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
 use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
 
-final class ReturnTypeDeclarationReturnTypeInferer implements ReturnTypeInfererInterface
+final class ReturnTypeDeclarationReturnTypeInferer implements ReturnInterface
 {
     public function __construct(
         private readonly FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver,

@@ -7,9 +7,9 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
 
-final class ReturnTagReturnTypeInferer implements ReturnTypeInfererInterface
+final class ReturnTagReturnTypeInferer implements ReturnInterface
 {
     public function __construct(
         private readonly PhpDocInfoFactory $phpDocInfoFactory

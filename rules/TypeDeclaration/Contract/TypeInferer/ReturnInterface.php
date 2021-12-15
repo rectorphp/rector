@@ -6,8 +6,9 @@ namespace Rector\TypeDeclaration\Contract\TypeInferer;
 
 use PhpParser\Node\FunctionLike;
 use PHPStan\Type\Type;
+use Rector\TypeDeclaration\Contract\PriorityAwareInterface;
 
-interface ReturnTypeInfererInterface extends PriorityAwareTypeInfererInterface
+interface ReturnInterface extends PriorityAwareInterface
 {
     public function inferFunctionLike(FunctionLike $functionLike): Type;
 }

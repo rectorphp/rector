@@ -102,7 +102,8 @@ CODE_SAMPLE
         }
 
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            return $this->completeTypedProperty($type, $node, $phpDocInfo);
+            $this->completeTypedProperty($type, $node);
+            return $node;
         }
 
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
@@ -122,20 +123,24 @@ CODE_SAMPLE
         return false;
     }
 
-    private function completeTypedProperty(Type $type, Property $property, PhpDocInfo $phpDocInfo): Property
+    private function completeTypedProperty(Type $type, Property $property): void
     {
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY());
+        if ($propertyTypeNode === null) {
+            return;
+        }
+
         if ($propertyTypeNode instanceof UnionType) {
             if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 $property->type = $propertyTypeNode;
-                return $property;
+                return;
             }
 
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-            return $property;
+            return;
         }
 
         $property->type = $propertyTypeNode;
-        return $property;
     }
 }

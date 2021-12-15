@@ -29,7 +29,7 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\Testing\PHPUnit\AbstractTestCase;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -45,7 +45,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         TypeToCallReflectionResolverInterface::class,
         PropertyTypeInfererInterface::class,
         ParamTypeInfererInterface::class,
-        ReturnTypeInfererInterface::class,
+        ReturnInterface::class,
         FileProcessorInterface::class,
         ClassNameImportSkipVoterInterface::class,
         StrStartWithMatchAndRefactorInterface::class,

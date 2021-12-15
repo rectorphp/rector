@@ -16,10 +16,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnInterface;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
-final class YieldNodesReturnTypeInferer implements ReturnTypeInfererInterface
+final class YieldNodesReturnTypeInferer implements ReturnInterface
 {
     public function __construct(
         private readonly NodeTypeResolver $nodeTypeResolver,
