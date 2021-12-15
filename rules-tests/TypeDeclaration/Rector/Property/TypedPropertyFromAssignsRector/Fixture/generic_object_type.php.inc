@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 /**
  * @template TType of object
@@ -20,11 +20,12 @@ final class SomeGenericObjectType
         $this->command = $command;
     }
 }
+
 ?>
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 /**
  * @template TType of object
@@ -44,4 +45,5 @@ final class SomeGenericObjectType
         $this->command = $command;
     }
 }
+
 ?>

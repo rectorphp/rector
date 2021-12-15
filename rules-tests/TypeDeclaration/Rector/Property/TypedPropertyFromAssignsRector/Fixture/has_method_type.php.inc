@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
-class HasMethodType
+final class HasMethodType
 {
     public $obj;
 
@@ -20,9 +20,9 @@ class HasMethodType
 -----
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
-class HasMethodType
+final class HasMethodType
 {
     /**
      * @var class-string|object|null

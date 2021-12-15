@@ -7,7 +7,9 @@ namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\UnionType;
+use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
@@ -31,24 +33,42 @@ final class PropertyTypeDecorator
         Property $property,
         PhpDocInfo $phpDocInfo
     ): void {
-        if ($this->unionTypeAnalyzer->isNullable($unionType)) {
-            $property->type = $typeNode;
-
-            $propertyProperty = $property->props[0];
-
-            // add null default
-            if ($propertyProperty->default === null) {
-                $propertyProperty->default = $this->nodeFactory->createNull();
+        if (! $this->unionTypeAnalyzer->isNullable($unionType)) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+                $property->type = $typeNode;
+            } else {
+                $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
             }
 
             return;
         }
 
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-            $property->type = $typeNode;
-            return;
+        $property->type = $typeNode;
+
+        $propertyProperty = $property->props[0];
+
+        // add null default
+        if ($propertyProperty->default === null) {
+            $propertyProperty->default = $this->nodeFactory->createNull();
         }
 
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
+        // has array with defined type? add docs
+        if ($this->isDocBlockRequired($unionType)) {
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
+        }
+    }
+
+    private function isDocBlockRequired(UnionType $unionType): bool
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if ($unionedType instanceof ArrayType) {
+                $describedArray = $unionedType->describe(VerbosityLevel::value());
+                if ($describedArray !== 'array') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

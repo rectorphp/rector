@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureComplexTypes;
 
-final class SetIfElse
+final class IfElse
 {
     protected $stringOrInteger = 'hi';
 
@@ -20,9 +20,9 @@ final class SetIfElse
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\FixtureUnionIntersectionTypes;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\FixtureComplexTypes;
 
-final class SetIfElse
+final class IfElse
 {
     protected int|string $stringOrInteger = 'hi';
 

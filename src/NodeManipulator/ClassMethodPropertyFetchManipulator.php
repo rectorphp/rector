@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -31,7 +32,7 @@ final class ClassMethodPropertyFetchManipulator
      * ↓
      * (SomeType $anotherValue)
      */
-    public function resolveParamForPropertyFetch(ClassMethod $classMethod, string $propertyName): ?Param
+    public function findParamAssignToPropertyName(ClassMethod $classMethod, string $propertyName): ?Param
     {
         $assignedParamName = null;
 
@@ -71,5 +72,56 @@ final class ClassMethodPropertyFetchManipulator
         }
 
         return null;
+    }
+
+    /**
+     * E.g.:
+     * $this->value = 1000;
+     * ↓
+     * (int $value)
+     *
+     * @return Expr[]
+     */
+    public function findAssignsToPropertyName(ClassMethod $classMethod, string $propertyName): array
+    {
+        $assignExprs = [];
+
+        $paramNames = $this->getParamNames($classMethod);
+
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
+            (array) $classMethod->stmts,
+            function (Node $node) use ($propertyName, &$assignExprs, $paramNames): ?int {
+                if (! $node instanceof Assign) {
+                    return null;
+                }
+
+                if (! $this->nodeNameResolver->isName($node->var, $propertyName)) {
+                    return null;
+                }
+
+                // skip param assigns
+                if ($this->nodeNameResolver->isNames($node->expr, $paramNames)) {
+                    return null;
+                }
+
+                $assignExprs[] = $node->expr;
+                return null;
+            }
+        );
+
+        return $assignExprs;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getParamNames(ClassMethod $classMethod): array
+    {
+        $paramNames = [];
+        foreach ($classMethod->getParams() as $param) {
+            $paramNames[] = $this->nodeNameResolver->getName($param);
+        }
+
+        return $paramNames;
     }
 }

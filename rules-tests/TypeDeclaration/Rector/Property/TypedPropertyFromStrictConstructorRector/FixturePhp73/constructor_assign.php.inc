@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\FixturePhp73;
 
-class ConstructorAssign
+final class ConstructorAssign
 {
     private $result;
     private $name;
@@ -18,9 +18,9 @@ class ConstructorAssign
 -----
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\FixturePhp73;
 
-class ConstructorAssign
+final class ConstructorAssign
 {
     /**
      * @var int

@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -25,10 +25,12 @@ final class IncludeNodeVisitor extends NodeVisitorAbstract
         $this->previousStmt = $node;
     }
 }
+
+?>
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -37,6 +39,9 @@ use Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Source\AnotherClass;
 
 final class IncludeNodeVisitor extends NodeVisitorAbstract
 {
+    /**
+     * @var Stmt|null
+     */
     private ?\PhpParser\Node $previousStmt = null;
 
     public function beforeTraverse(array $nodes): ?array
@@ -50,3 +55,5 @@ final class IncludeNodeVisitor extends NodeVisitorAbstract
         $this->previousStmt = $node;
     }
 }
+
+?>

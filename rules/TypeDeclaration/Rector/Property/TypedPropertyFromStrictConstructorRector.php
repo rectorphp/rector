@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($varType instanceof  MixedType) {
+        if ($varType instanceof MixedType) {
             return null;
         }
 
@@ -97,6 +97,12 @@ CODE_SAMPLE
         $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY());
         if (! $propertyTypeNode instanceof Node) {
             return null;
+        }
+
+        // public property can be anything
+        if ($node->isPublic()) {
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
+            return $node;
         }
 
         $node->type = $propertyTypeNode;

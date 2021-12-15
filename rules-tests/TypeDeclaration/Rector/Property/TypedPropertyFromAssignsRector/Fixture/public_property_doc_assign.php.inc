@@ -1,10 +1,10 @@
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 use stdClass;
 
-class PublicVarNullUsed
+final class PublicPropertyDocAssign
 {
     public $config = null;
 
@@ -18,11 +18,11 @@ class PublicVarNullUsed
 -----
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 use stdClass;
 
-class PublicVarNullUsed
+final class PublicPropertyDocAssign
 {
     /**
      * @var stdClass|null

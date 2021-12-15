@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -19,6 +20,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -61,17 +63,37 @@ final class ConstructorPropertyTypeInferer
 
         $propertyName = $this->nodeNameResolver->getName($property);
 
-        $param = $this->classMethodPropertyFetchManipulator->resolveParamForPropertyFetch($classMethod, $propertyName);
-        if (! $param instanceof Param) {
+        // 1. direct property = param assign
+        $param = $this->classMethodPropertyFetchManipulator->findParamAssignToPropertyName($classMethod, $propertyName);
+        if ($param instanceof Param) {
+            if ($param->type !== null) {
+                return $this->resolveFromParamType($param, $classMethod, $propertyName);
+            }
+
             return null;
         }
 
-        // A. infer from type declaration of parameter
-        if ($param->type !== null) {
-            return $this->resolveFromParamType($param, $classMethod, $propertyName);
+        // 2. different assign
+        /** @var Expr[] $assignedExprs */
+        $assignedExprs = $this->classMethodPropertyFetchManipulator->findAssignsToPropertyName(
+            $classMethod,
+            $propertyName
+        );
+
+        $resolvedTypes = [];
+        foreach ($assignedExprs as $assignedExpr) {
+            $resolvedTypes[] = $this->nodeTypeResolver->getType($assignedExpr);
         }
 
-        return null;
+        if ($resolvedTypes === []) {
+            return null;
+        }
+
+        if (count($resolvedTypes) === 1) {
+            return $resolvedTypes[0];
+        }
+
+        return TypeCombinator::union(...$resolvedTypes);
     }
 
     private function resolveFromParamType(Param $param, ClassMethod $classMethod, string $propertyName): Type

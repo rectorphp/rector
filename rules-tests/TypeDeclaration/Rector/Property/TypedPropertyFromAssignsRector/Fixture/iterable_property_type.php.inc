@@ -1,6 +1,6 @@
 <?php
 
-interface HandlerInterface {}
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 final class IterablePropertyType
 {
@@ -22,7 +22,7 @@ final class IterablePropertyType
 -----
 <?php
 
-interface HandlerInterface {}
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\Fixture;
 
 final class IterablePropertyType
 {

@@ -248,7 +248,7 @@ CODE_SAMPLE
         }
 
         // is we're in final class, the type can be changed
-        return ! ($property->isProtected() && $classReflection->isFinal() && $classReflection->getParents() === []);
+        return ! ($this->isSafeProtectedProperty($property, $classReflection));
     }
 
     private function isModifiedByTrait(ClassLike $classLike, string $propertyName): bool
@@ -271,5 +271,18 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    private function isSafeProtectedProperty(Property $property, ClassReflection $classReflection): bool
+    {
+        if (! $property->isProtected()) {
+            return false;
+        }
+
+        if (! $classReflection->isFinal()) {
+            return false;
+        }
+
+        return $classReflection->getParents() === [];
     }
 }

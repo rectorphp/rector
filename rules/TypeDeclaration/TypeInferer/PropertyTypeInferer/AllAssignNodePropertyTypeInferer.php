@@ -9,10 +9,9 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\PropertyTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 
-final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInterface
+final class AllAssignNodePropertyTypeInferer
 {
     public function __construct(
         private readonly AssignToPropertyTypeInferer $assignToPropertyTypeInferer,
@@ -29,12 +28,6 @@ final class AllAssignNodePropertyTypeInferer implements PropertyTypeInfererInter
         }
 
         $propertyName = $this->nodeNameResolver->getName($property);
-
         return $this->assignToPropertyTypeInferer->inferPropertyInClassLike($propertyName, $classLike);
-    }
-
-    public function getPriority(): int
-    {
-        return 1500;
     }
 }

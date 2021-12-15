@@ -1,6 +1,6 @@
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
 final class DoNotAddDefaultValueFilledByConstruct2
 {
@@ -15,11 +15,12 @@ final class DoNotAddDefaultValueFilledByConstruct2
         return self::$result;
     }
 }
+
 ?>
 -----
 <?php
 
-namespace Rector\Tests\Php74\Rector\Property\TypedPropertyRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\Fixture;
 
 final class DoNotAddDefaultValueFilledByConstruct2
 {
@@ -34,4 +35,5 @@ final class DoNotAddDefaultValueFilledByConstruct2
         return self::$result;
     }
 }
+
 ?>
