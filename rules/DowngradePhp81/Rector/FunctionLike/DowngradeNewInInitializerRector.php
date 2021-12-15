@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp81\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
@@ -18,6 +19,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -95,11 +97,7 @@ CODE_SAMPLE
     private function shouldSkip(FunctionLike $functionLike): bool
     {
         foreach ($functionLike->getParams() as $param) {
-            if (! $param->default instanceof New_) {
-                continue;
-            }
-
-            if ($param->type instanceof IntersectionType) {
+            if ($this->isParamSkipped($param)) {
                 continue;
             }
 
@@ -125,27 +123,44 @@ CODE_SAMPLE
         );
     }
 
+    private function isParamSkipped(Param $param): bool
+    {
+        if ($param->default === null) {
+            return true;
+        }
+
+        $hasNew = (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, New_::class);
+        if (! $hasNew) {
+            return true;
+        }
+
+        return $param->type instanceof IntersectionType;
+    }
+
     private function replaceNewInParams(FunctionLike $functionLike): FunctionLike
     {
         $isConstructor = $functionLike instanceof ClassMethod && $this->isName($functionLike, MethodName::CONSTRUCT);
 
         $stmts = [];
         foreach ($functionLike->getParams() as $param) {
-            if (! $param->default instanceof New_) {
+            if ($this->isParamSkipped($param)) {
                 continue;
             }
+
+            /** @var Expr $default */
+            $default = $param->default;
 
             // check for property promotion
             if ($isConstructor && $param->flags > 0) {
                 $propertyFetch = new PropertyFetch(new Variable('this'), $param->var->name);
-                $coalesce = new Coalesce($param->var, $param->default);
+                $coalesce = new Coalesce($param->var, $default);
                 $assign = new Assign($propertyFetch, $coalesce);
 
                 if ($param->type !== null) {
                     $param->type = $this->ensureNullableType($param->type);
                 }
             } else {
-                $assign = new AssignCoalesce($param->var, $param->default);
+                $assign = new AssignCoalesce($param->var, $default);
             }
 
             $stmts[] = new Expression($assign);
