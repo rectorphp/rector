@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211214\Symplify\PackageBuilder\ValueObject;
+namespace RectorPrefix20211215\Symplify\PackageBuilder\ValueObject;
 
 /**
  * @api

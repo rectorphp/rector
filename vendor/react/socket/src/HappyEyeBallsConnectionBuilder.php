@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix20211214\React\Socket;
+namespace RectorPrefix20211215\React\Socket;
 
-use RectorPrefix20211214\React\Dns\Model\Message;
-use RectorPrefix20211214\React\Dns\Resolver\ResolverInterface;
-use RectorPrefix20211214\React\EventLoop\LoopInterface;
-use RectorPrefix20211214\React\EventLoop\TimerInterface;
-use RectorPrefix20211214\React\Promise;
-use RectorPrefix20211214\React\Promise\CancellablePromiseInterface;
+use RectorPrefix20211215\React\Dns\Model\Message;
+use RectorPrefix20211215\React\Dns\Resolver\ResolverInterface;
+use RectorPrefix20211215\React\EventLoop\LoopInterface;
+use RectorPrefix20211215\React\EventLoop\TimerInterface;
+use RectorPrefix20211215\React\Promise;
+use RectorPrefix20211215\React\Promise\CancellablePromiseInterface;
 /**
  * @internal
  */
@@ -32,7 +32,7 @@ final class HappyEyeBallsConnectionBuilder
     public $resolver;
     public $uri;
     public $host;
-    public $resolved = array(\RectorPrefix20211214\React\Dns\Model\Message::TYPE_A => \false, \RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA => \false);
+    public $resolved = array(\RectorPrefix20211215\React\Dns\Model\Message::TYPE_A => \false, \RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA => \false);
     public $resolverPromises = array();
     public $connectionPromises = array();
     public $connectQueue = array();
@@ -45,7 +45,7 @@ final class HappyEyeBallsConnectionBuilder
     public $lastErrorFamily;
     public $lastError6;
     public $lastError4;
-    public function __construct(\RectorPrefix20211214\React\EventLoop\LoopInterface $loop, \RectorPrefix20211214\React\Socket\ConnectorInterface $connector, \RectorPrefix20211214\React\Dns\Resolver\ResolverInterface $resolver, $uri, $host, $parts)
+    public function __construct(\RectorPrefix20211215\React\EventLoop\LoopInterface $loop, \RectorPrefix20211215\React\Socket\ConnectorInterface $connector, \RectorPrefix20211215\React\Dns\Resolver\ResolverInterface $resolver, $uri, $host, $parts)
     {
         $this->loop = $loop;
         $this->connector = $connector;
@@ -58,7 +58,7 @@ final class HappyEyeBallsConnectionBuilder
     {
         $timer = null;
         $that = $this;
-        return new \RectorPrefix20211214\React\Promise\Promise(function ($resolve, $reject) use($that, &$timer) {
+        return new \RectorPrefix20211215\React\Promise\Promise(function ($resolve, $reject) use($that, &$timer) {
             $lookupResolve = function ($type) use($that, $resolve, $reject) {
                 return function (array $ips) use($that, $type, $resolve, $reject) {
                     unset($that->resolverPromises[$type]);
@@ -70,28 +70,28 @@ final class HappyEyeBallsConnectionBuilder
                     }
                 };
             };
-            $that->resolverPromises[\RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA] = $that->resolve(\RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA, $reject)->then($lookupResolve(\RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA));
-            $that->resolverPromises[\RectorPrefix20211214\React\Dns\Model\Message::TYPE_A] = $that->resolve(\RectorPrefix20211214\React\Dns\Model\Message::TYPE_A, $reject)->then(function (array $ips) use($that, &$timer) {
+            $that->resolverPromises[\RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA] = $that->resolve(\RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA, $reject)->then($lookupResolve(\RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA));
+            $that->resolverPromises[\RectorPrefix20211215\React\Dns\Model\Message::TYPE_A] = $that->resolve(\RectorPrefix20211215\React\Dns\Model\Message::TYPE_A, $reject)->then(function (array $ips) use($that, &$timer) {
                 // happy path: IPv6 has resolved already (or could not resolve), continue with IPv4 addresses
-                if ($that->resolved[\RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA] === \true || !$ips) {
+                if ($that->resolved[\RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA] === \true || !$ips) {
                     return $ips;
                 }
                 // Otherwise delay processing IPv4 lookup until short timer passes or IPv6 resolves in the meantime
-                $deferred = new \RectorPrefix20211214\React\Promise\Deferred();
+                $deferred = new \RectorPrefix20211215\React\Promise\Deferred();
                 $timer = $that->loop->addTimer($that::RESOLUTION_DELAY, function () use($deferred, $ips) {
                     $deferred->resolve($ips);
                 });
-                $that->resolverPromises[\RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA]->then(function () use($that, $timer, $deferred, $ips) {
+                $that->resolverPromises[\RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA]->then(function () use($that, $timer, $deferred, $ips) {
                     $that->loop->cancelTimer($timer);
                     $deferred->resolve($ips);
                 });
                 return $deferred->promise();
-            })->then($lookupResolve(\RectorPrefix20211214\React\Dns\Model\Message::TYPE_A));
+            })->then($lookupResolve(\RectorPrefix20211215\React\Dns\Model\Message::TYPE_A));
         }, function ($_, $reject) use($that, &$timer) {
             $reject(new \RuntimeException('Connection to ' . $that->uri . ' cancelled' . (!$that->connectionPromises ? ' during DNS lookup' : '') . ' (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103));
             $_ = $reject = null;
             $that->cleanUp();
-            if ($timer instanceof \RectorPrefix20211214\React\EventLoop\TimerInterface) {
+            if ($timer instanceof \RectorPrefix20211215\React\EventLoop\TimerInterface) {
                 $that->loop->cancelTimer($timer);
             }
         });
@@ -110,7 +110,7 @@ final class HappyEyeBallsConnectionBuilder
         return $that->resolver->resolveAll($that->host, $type)->then(null, function (\Exception $e) use($type, $reject, $that) {
             unset($that->resolverPromises[$type]);
             $that->resolved[$type] = \true;
-            if ($type === \RectorPrefix20211214\React\Dns\Model\Message::TYPE_A) {
+            if ($type === \RectorPrefix20211215\React\Dns\Model\Message::TYPE_A) {
                 $that->lastError4 = $e->getMessage();
                 $that->lastErrorFamily = 4;
             } else {
@@ -173,7 +173,7 @@ final class HappyEyeBallsConnectionBuilder
         });
         // Allow next connection attempt in 100ms: https://tools.ietf.org/html/rfc8305#section-5
         // Only start timer when more IPs are queued or when DNS query is still pending (might add more IPs)
-        if ($this->nextAttemptTimer === null && (\count($this->connectQueue) > 0 || $this->resolved[\RectorPrefix20211214\React\Dns\Model\Message::TYPE_A] === \false || $this->resolved[\RectorPrefix20211214\React\Dns\Model\Message::TYPE_AAAA] === \false)) {
+        if ($this->nextAttemptTimer === null && (\count($this->connectQueue) > 0 || $this->resolved[\RectorPrefix20211215\React\Dns\Model\Message::TYPE_A] === \false || $this->resolved[\RectorPrefix20211215\React\Dns\Model\Message::TYPE_AAAA] === \false)) {
             $this->nextAttemptTimer = $this->loop->addTimer(self::CONNECTION_ATTEMPT_DELAY, function () use($that, $resolve, $reject) {
                 $that->nextAttemptTimer = null;
                 if ($that->connectQueue) {
@@ -187,7 +187,7 @@ final class HappyEyeBallsConnectionBuilder
      */
     public function attemptConnection($ip)
     {
-        $uri = \RectorPrefix20211214\React\Socket\Connector::uri($this->parts, $this->host, $ip);
+        $uri = \RectorPrefix20211215\React\Socket\Connector::uri($this->parts, $this->host, $ip);
         return $this->connector->connect($uri);
     }
     /**
@@ -198,16 +198,16 @@ final class HappyEyeBallsConnectionBuilder
         // clear list of outstanding IPs to avoid creating new connections
         $this->connectQueue = array();
         foreach ($this->connectionPromises as $connectionPromise) {
-            if ($connectionPromise instanceof \RectorPrefix20211214\React\Promise\CancellablePromiseInterface) {
+            if ($connectionPromise instanceof \RectorPrefix20211215\React\Promise\CancellablePromiseInterface) {
                 $connectionPromise->cancel();
             }
         }
         foreach ($this->resolverPromises as $resolverPromise) {
-            if ($resolverPromise instanceof \RectorPrefix20211214\React\Promise\CancellablePromiseInterface) {
+            if ($resolverPromise instanceof \RectorPrefix20211215\React\Promise\CancellablePromiseInterface) {
                 $resolverPromise->cancel();
             }
         }
-        if ($this->nextAttemptTimer instanceof \RectorPrefix20211214\React\EventLoop\TimerInterface) {
+        if ($this->nextAttemptTimer instanceof \RectorPrefix20211215\React\EventLoop\TimerInterface) {
             $this->loop->cancelTimer($this->nextAttemptTimer);
             $this->nextAttemptTimer = null;
         }

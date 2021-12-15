@@ -1,15 +1,15 @@
 <?php
 
-namespace RectorPrefix20211214\Clue\React\NDJson;
+namespace RectorPrefix20211215\Clue\React\NDJson;
 
-use RectorPrefix20211214\Evenement\EventEmitter;
-use RectorPrefix20211214\React\Stream\ReadableStreamInterface;
-use RectorPrefix20211214\React\Stream\Util;
-use RectorPrefix20211214\React\Stream\WritableStreamInterface;
+use RectorPrefix20211215\Evenement\EventEmitter;
+use RectorPrefix20211215\React\Stream\ReadableStreamInterface;
+use RectorPrefix20211215\React\Stream\Util;
+use RectorPrefix20211215\React\Stream\WritableStreamInterface;
 /**
  * The Decoder / Parser reads from a plain stream and emits data objects for each JSON element
  */
-class Decoder extends \RectorPrefix20211214\Evenement\EventEmitter implements \RectorPrefix20211214\React\Stream\ReadableStreamInterface
+class Decoder extends \RectorPrefix20211215\Evenement\EventEmitter implements \RectorPrefix20211215\React\Stream\ReadableStreamInterface
 {
     private $input;
     private $assoc;
@@ -27,7 +27,7 @@ class Decoder extends \RectorPrefix20211214\Evenement\EventEmitter implements \R
      * @param int $maxlength
      * @throws \BadMethodCallException
      */
-    public function __construct(\RectorPrefix20211214\React\Stream\ReadableStreamInterface $input, $assoc = \false, $depth = 512, $options = 0, $maxlength = 65536)
+    public function __construct(\RectorPrefix20211215\React\Stream\ReadableStreamInterface $input, $assoc = \false, $depth = 512, $options = 0, $maxlength = 65536)
     {
         // @codeCoverageIgnoreStart
         if ($options !== 0 && \PHP_VERSION < 5.4) {
@@ -74,9 +74,9 @@ class Decoder extends \RectorPrefix20211214\Evenement\EventEmitter implements \R
     {
         $this->input->resume();
     }
-    public function pipe(\RectorPrefix20211214\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20211215\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        \RectorPrefix20211214\React\Stream\Util::pipe($this, $dest, $options);
+        \RectorPrefix20211215\React\Stream\Util::pipe($this, $dest, $options);
         return $dest;
     }
     /** @internal */

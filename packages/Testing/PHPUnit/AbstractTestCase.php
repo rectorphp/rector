@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix20211214\Psr\Container\ContainerInterface;
+use RectorPrefix20211215\Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Kernel\RectorKernel;
-use RectorPrefix20211214\Webmozart\Assert\Assert;
+use RectorPrefix20211215\Webmozart\Assert\Assert;
 abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -62,8 +62,8 @@ abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
      */
     private function createConfigsHash(array $configFiles) : string
     {
-        \RectorPrefix20211214\Webmozart\Assert\Assert::allFile($configFiles);
-        \RectorPrefix20211214\Webmozart\Assert\Assert::allString($configFiles);
+        \RectorPrefix20211215\Webmozart\Assert\Assert::allFile($configFiles);
+        \RectorPrefix20211215\Webmozart\Assert\Assert::allString($configFiles);
         $configHash = '';
         foreach ($configFiles as $configFile) {
             $configHash .= \md5_file($configFile);

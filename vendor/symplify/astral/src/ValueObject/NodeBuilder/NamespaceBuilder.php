@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211214\Symplify\Astral\ValueObject\NodeBuilder;
+namespace RectorPrefix20211215\Symplify\Astral\ValueObject\NodeBuilder;
 
 use PhpParser\Builder\Namespace_;
 /**

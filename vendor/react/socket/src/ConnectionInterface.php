@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211214\React\Socket;
+namespace RectorPrefix20211215\React\Socket;
 
-use RectorPrefix20211214\React\Stream\DuplexStreamInterface;
+use RectorPrefix20211215\React\Stream\DuplexStreamInterface;
 /**
  * Any incoming and outgoing connection is represented by this interface,
  * such as a normal TCP/IP connection.
@@ -51,7 +51,7 @@ use RectorPrefix20211214\React\Stream\DuplexStreamInterface;
  * @see ServerInterface
  * @see ConnectorInterface
  */
-interface ConnectionInterface extends \RectorPrefix20211214\React\Stream\DuplexStreamInterface
+interface ConnectionInterface extends \RectorPrefix20211215\React\Stream\DuplexStreamInterface
 {
     /**
      * Returns the full remote address (URI) where this connection has been established with
