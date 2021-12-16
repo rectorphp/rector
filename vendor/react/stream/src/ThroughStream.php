@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211215\React\Stream;
+namespace RectorPrefix20211216\React\Stream;
 
-use RectorPrefix20211215\Evenement\EventEmitter;
+use RectorPrefix20211216\Evenement\EventEmitter;
 use InvalidArgumentException;
 /**
  * The `ThroughStream` implements the
@@ -72,7 +72,7 @@ use InvalidArgumentException;
  * @see DuplexStreamInterface::close()
  * @see WritableStreamInterface::pipe()
  */
-final class ThroughStream extends \RectorPrefix20211215\Evenement\EventEmitter implements \RectorPrefix20211215\React\Stream\DuplexStreamInterface
+final class ThroughStream extends \RectorPrefix20211216\Evenement\EventEmitter implements \RectorPrefix20211216\React\Stream\DuplexStreamInterface
 {
     private $readable = \true;
     private $writable = \true;
@@ -99,9 +99,9 @@ final class ThroughStream extends \RectorPrefix20211215\Evenement\EventEmitter i
         }
         $this->paused = \false;
     }
-    public function pipe(\RectorPrefix20211215\React\Stream\WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20211216\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        return \RectorPrefix20211215\React\Stream\Util::pipe($this, $dest, $options);
+        return \RectorPrefix20211216\React\Stream\Util::pipe($this, $dest, $options);
     }
     public function isReadable()
     {

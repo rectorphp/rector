@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211215;
+namespace RectorPrefix20211216;
 
 use Rector\Core\Configuration\Option;
 use Rector\Set\ValueObject\LevelSetList;

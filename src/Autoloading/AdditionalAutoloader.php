@@ -5,9 +5,9 @@ namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
-use RectorPrefix20211215\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20211215\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20211216\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211216\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211216\Symplify\SmartFileSystem\FileSystemGuard;
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
  */
@@ -28,13 +28,13 @@ final class AdditionalAutoloader
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-    public function __construct(\RectorPrefix20211215\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20211215\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    public function __construct(\RectorPrefix20211216\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard, \RectorPrefix20211216\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->fileSystemGuard = $fileSystemGuard;
         $this->parameterProvider = $parameterProvider;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
-    public function autoloadInput(\RectorPrefix20211215\Symfony\Component\Console\Input\InputInterface $input) : void
+    public function autoloadInput(\RectorPrefix20211216\Symfony\Component\Console\Input\InputInterface $input) : void
     {
         if (!$input->hasOption(\Rector\Core\Configuration\Option::AUTOLOAD_FILE)) {
             return;

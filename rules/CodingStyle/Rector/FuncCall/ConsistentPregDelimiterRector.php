@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
-use RectorPrefix20211215\Nette\Utils\Strings;
+use RectorPrefix20211216\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
@@ -33,6 +33,18 @@ final class ConsistentPregDelimiterRector extends \Rector\Core\Rector\AbstractRe
      * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
      */
     private const INNER_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#s';
+    /**
+     * @var string
+     * @see https://regex101.com/r/nnuwUo/1
+     *
+     * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+     */
+    private const INNER_UNICODE_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#u';
+    /**
+     * @var string
+     * @see https://regex101.com/r/KpCzg6/1
+     */
+    private const NEW_LINE_REGEX = '#(\\r|\\n)#';
     /**
      * @var string
      * @see https://regex101.com/r/EyXsV6/6
@@ -126,6 +138,21 @@ CODE_SAMPLE
         }
         return null;
     }
+    private function hasNewLineWithUnicodeModifier(string $string) : bool
+    {
+        $matchInnerRegex = \RectorPrefix20211216\Nette\Utils\Strings::match($string, self::INNER_REGEX);
+        $matchInnerUnionRegex = \RectorPrefix20211216\Nette\Utils\Strings::match($string, self::INNER_UNICODE_REGEX);
+        if (!\is_array($matchInnerRegex)) {
+            return \false;
+        }
+        if (!\is_array($matchInnerUnionRegex)) {
+            return \false;
+        }
+        if ($matchInnerRegex === $matchInnerUnionRegex) {
+            return \false;
+        }
+        return \Rector\Core\Util\StringUtils::isMatch($matchInnerUnionRegex['content'], self::NEW_LINE_REGEX);
+    }
     private function refactorArgument(\PhpParser\Node\Arg $arg) : void
     {
         if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
@@ -133,7 +160,10 @@ CODE_SAMPLE
         }
         /** @var String_ $string */
         $string = $arg->value;
-        $string->value = \RectorPrefix20211215\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
+        if ($this->hasNewLineWithUnicodeModifier($string->value)) {
+            return;
+        }
+        $string->value = \RectorPrefix20211216\Nette\Utils\Strings::replace($string->value, self::INNER_REGEX, function (array $match) use(&$string) : string {
             $printedString = $this->betterStandardPrinter->print($string);
             if (\Rector\Core\Util\StringUtils::isMatch($printedString, self::DOUBLE_QUOTED_REGEX)) {
                 $string->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::IS_REGULAR_PATTERN, \true);

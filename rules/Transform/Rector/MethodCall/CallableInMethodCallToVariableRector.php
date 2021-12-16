@@ -14,7 +14,7 @@ use Rector\Transform\NodeFactory\UnwrapClosureFactory;
 use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211215\Webmozart\Assert\Assert;
+use RectorPrefix20211216\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/nette/caching/commit/5ffe263752af5ccf3866a28305e7b2669ab4da82
  *
@@ -109,8 +109,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $callableInMethodCallToVariable = $configuration[self::CALLABLE_IN_METHOD_CALL_TO_VARIABLE] ?? $configuration;
-        \RectorPrefix20211215\Webmozart\Assert\Assert::isArray($callableInMethodCallToVariable);
-        \RectorPrefix20211215\Webmozart\Assert\Assert::allIsAOf($callableInMethodCallToVariable, \Rector\Transform\ValueObject\CallableInMethodCallToVariable::class);
+        \RectorPrefix20211216\Webmozart\Assert\Assert::isArray($callableInMethodCallToVariable);
+        \RectorPrefix20211216\Webmozart\Assert\Assert::allIsAOf($callableInMethodCallToVariable, \Rector\Transform\ValueObject\CallableInMethodCallToVariable::class);
         $this->callableInMethodCallToVariable = $callableInMethodCallToVariable;
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211215\Symplify\Astral\ValueObject;
+namespace RectorPrefix20211216\Symplify\Astral\ValueObject;
 
 /**
  * @api
