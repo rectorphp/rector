@@ -190,10 +190,12 @@ final class ReturnTypeInferer
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
      */
-    private function shouldSkipExcludedTypeInferer(ReturnTypeInfererInterface $return, array $excludedInferers): bool
-    {
+    private function shouldSkipExcludedTypeInferer(
+        ReturnTypeInfererInterface $returnTypeInferer,
+        array $excludedInferers
+    ): bool {
         foreach ($excludedInferers as $excludedInferer) {
-            if (is_a($return, $excludedInferer)) {
+            if (is_a($returnTypeInferer, $excludedInferer)) {
                 return true;
             }
         }

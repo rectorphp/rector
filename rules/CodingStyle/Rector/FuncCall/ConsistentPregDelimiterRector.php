@@ -39,6 +39,20 @@ final class ConsistentPregDelimiterRector extends AbstractRector implements Allo
 
     /**
      * @var string
+     * @see https://regex101.com/r/nnuwUo/1
+     *
+     * For modifiers see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+     */
+    private const INNER_UNICODE_REGEX = '#(?<content>.*?)(?<close>[imsxeADSUXJu]*)$#u';
+
+    /**
+     * @var string
+     * @see https://regex101.com/r/KpCzg6/1
+     */
+    private const NEW_LINE_REGEX = '#(\\r|\\n)#';
+
+    /**
+     * @var string
      * @see https://regex101.com/r/EyXsV6/6
      */
     private const DOUBLE_QUOTED_REGEX = '#^"(?<delimiter>.{1}).{1,}\k<delimiter>[imsxeADSUXJu]*"$#';
@@ -169,6 +183,26 @@ CODE_SAMPLE
         return null;
     }
 
+    private function hasNewLineWithUnicodeModifier(string $string): bool
+    {
+        $matchInnerRegex = Strings::match($string, self::INNER_REGEX);
+        $matchInnerUnionRegex = Strings::match($string, self::INNER_UNICODE_REGEX);
+
+        if (! is_array($matchInnerRegex)) {
+            return false;
+        }
+
+        if (! is_array($matchInnerUnionRegex)) {
+            return false;
+        }
+
+        if ($matchInnerRegex === $matchInnerUnionRegex) {
+            return false;
+        }
+
+        return StringUtils::isMatch($matchInnerUnionRegex['content'], self::NEW_LINE_REGEX);
+    }
+
     private function refactorArgument(Arg $arg): void
     {
         if (! $arg->value instanceof String_) {
@@ -177,6 +211,11 @@ CODE_SAMPLE
 
         /** @var String_ $string */
         $string = $arg->value;
+
+        if ($this->hasNewLineWithUnicodeModifier($string->value)) {
+            return;
+        }
+
         $string->value = Strings::replace($string->value, self::INNER_REGEX, function (array $match) use (
             &$string
         ): string {
