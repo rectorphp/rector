@@ -6,10 +6,12 @@ namespace Rector\DeadCode\Rector\StaticCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
@@ -38,11 +40,17 @@ final class RemoveParentCallWithoutParentRector extends \Rector\Core\Rector\Abst
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\Core\NodeManipulator\ClassMethodManipulator $classMethodManipulator, \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver $parentClassScopeResolver, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->classMethodManipulator = $classMethodManipulator;
         $this->parentClassScopeResolver = $parentClassScopeResolver;
         $this->classAnalyzer = $classAnalyzer;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -85,6 +93,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            return null;
+        }
+        if ($classLike->extends instanceof \PhpParser\Node\Name\FullyQualified && !$this->reflectionProvider->hasClass($classLike->extends->toString())) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);

@@ -8,8 +8,8 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211216\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20211217\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-class ClosureReferenceConfigurator extends \RectorPrefix20211216\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
+class ClosureReferenceConfigurator extends \RectorPrefix20211217\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator
 {
 }

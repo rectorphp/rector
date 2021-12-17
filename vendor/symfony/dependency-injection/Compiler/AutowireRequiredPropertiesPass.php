@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211216\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20211217\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20211216\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20211216\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20211216\Symfony\Component\DependencyInjection\TypedReference;
-use RectorPrefix20211216\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211217\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20211217\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20211217\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix20211217\Symfony\Contracts\Service\Attribute\Required;
 /**
  * Looks for definitions with autowiring enabled and registers their corresponding "@required" properties.
  *
  * @author Sebastien Morel (Plopix) <morel.seb@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class AutowireRequiredPropertiesPass extends \RectorPrefix20211216\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class AutowireRequiredPropertiesPass extends \RectorPrefix20211217\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * {@inheritdoc}
@@ -31,7 +31,7 @@ class AutowireRequiredPropertiesPass extends \RectorPrefix20211216\Symfony\Compo
             return $value;
         }
         $value = parent::processValue($value, $isRoot);
-        if (!$value instanceof \RectorPrefix20211216\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
+        if (!$value instanceof \RectorPrefix20211217\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
             return $value;
         }
         if (!($reflectionClass = $this->container->getReflectionClass($value->getClass(), \false))) {
@@ -49,7 +49,7 @@ class AutowireRequiredPropertiesPass extends \RectorPrefix20211216\Symfony\Compo
                 continue;
             }
             $type = $type->getName();
-            $value->setProperty($name, new \RectorPrefix20211216\Symfony\Component\DependencyInjection\TypedReference($type, $type, \RectorPrefix20211216\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $name));
+            $value->setProperty($name, new \RectorPrefix20211217\Symfony\Component\DependencyInjection\TypedReference($type, $type, \RectorPrefix20211217\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $name));
         }
         return $value;
     }

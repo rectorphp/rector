@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Autodiscovery\Rector\Class_;
 
-use RectorPrefix20211216\Controller;
+use RectorPrefix20211217\Controller;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
@@ -14,7 +14,7 @@ use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
 use Rector\FileSystemRector\ValueObjectFactory\AddedFileWithNodesFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211216\Webmozart\Assert\Assert;
+use RectorPrefix20211217\Webmozart\Assert\Assert;
 /**
  * Inspiration @see https://github.com/rectorphp/rector/pull/1865/files#diff-0d18e660cdb626958662641b491623f8
  * @wip
@@ -135,15 +135,15 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $types = $configuration[self::TYPES] ?? [];
-        \RectorPrefix20211216\Webmozart\Assert\Assert::isArray($types);
-        \RectorPrefix20211216\Webmozart\Assert\Assert::allString($types);
+        \RectorPrefix20211217\Webmozart\Assert\Assert::isArray($types);
+        \RectorPrefix20211217\Webmozart\Assert\Assert::allString($types);
         $this->types = $types;
         $suffixes = $configuration[self::SUFFIXES] ?? [];
-        \RectorPrefix20211216\Webmozart\Assert\Assert::isArray($suffixes);
-        \RectorPrefix20211216\Webmozart\Assert\Assert::allString($suffixes);
+        \RectorPrefix20211217\Webmozart\Assert\Assert::isArray($suffixes);
+        \RectorPrefix20211217\Webmozart\Assert\Assert::allString($suffixes);
         $this->suffixes = $suffixes;
         $enableValueObjectGuessing = $configuration[self::ENABLE_VALUE_OBJECT_GUESSING] ?? \false;
-        \RectorPrefix20211216\Webmozart\Assert\Assert::boolean($enableValueObjectGuessing);
+        \RectorPrefix20211217\Webmozart\Assert\Assert::boolean($enableValueObjectGuessing);
         $this->enableValueObjectGuessing = $enableValueObjectGuessing;
     }
     private function isValueObjectMatch(\PhpParser\Node\Stmt\Class_ $class) : bool

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211216\Symplify\Skipper\Matcher;
+namespace RectorPrefix20211217\Symplify\Skipper\Matcher;
 
-use RectorPrefix20211216\Symplify\Skipper\FileSystem\FnMatchPathNormalizer;
+use RectorPrefix20211217\Symplify\Skipper\FileSystem\FnMatchPathNormalizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoMatcher
 {
@@ -11,7 +11,7 @@ final class FileInfoMatcher
      * @var \Symplify\Skipper\FileSystem\FnMatchPathNormalizer
      */
     private $fnMatchPathNormalizer;
-    public function __construct(\RectorPrefix20211216\Symplify\Skipper\FileSystem\FnMatchPathNormalizer $fnMatchPathNormalizer)
+    public function __construct(\RectorPrefix20211217\Symplify\Skipper\FileSystem\FnMatchPathNormalizer $fnMatchPathNormalizer)
     {
         $this->fnMatchPathNormalizer = $fnMatchPathNormalizer;
     }
