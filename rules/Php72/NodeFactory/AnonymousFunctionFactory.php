@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
@@ -181,18 +180,21 @@ final class AnonymousFunctionFactory
      */
     private function cleanClosureUses(array $uses): array
     {
-        $variableNames = array_map(
-            fn ($use): string => (string) $this->nodeNameResolver->getName($use->var),
-            $uses,
-            []
-        );
-        $variableNames = array_unique($variableNames);
+        $uniqueUses = [];
+        foreach ($uses as $use) {
+            if (! is_string($use->var->name)) {
+                continue;
+            }
 
-        return array_map(
-            static fn ($variableName): ClosureUse => new ClosureUse(new Variable($variableName)),
-            $variableNames,
-            []
-        );
+            $variableName = $use->var->name;
+            if (array_key_exists($variableName, $uniqueUses)) {
+                continue;
+            }
+
+            $uniqueUses[$variableName] = $use;
+        }
+
+        return array_values($uniqueUses);
     }
 
     private function applyNestedUses(Closure $anonymousFunctionNode, Variable $useVariable): Closure
@@ -254,7 +256,7 @@ final class AnonymousFunctionFactory
             $paramNames[] = $this->nodeNameResolver->getName($paramNode);
         }
 
-        $variableNodes = $this->resolveVariableNodes($nodes);
+        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
 
         /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
@@ -291,26 +293,6 @@ final class AnonymousFunctionFactory
         }
 
         return $filteredVariables;
-    }
-
-    /**
-     * @param Node[] $nodes
-     * @return Variable[]
-     */
-    private function resolveVariableNodes(array $nodes): array
-    {
-        return $this->betterNodeFinder->find($nodes, function (Node $subNode): bool {
-            if (! $subNode instanceof Variable) {
-                return false;
-            }
-
-            $parentArrowFunction = $this->betterNodeFinder->findParentType($subNode, ArrowFunction::class);
-            if ($parentArrowFunction instanceof ArrowFunction) {
-                return ! (bool) $this->betterNodeFinder->findParentType($parentArrowFunction, ArrowFunction::class);
-            }
-
-            return true;
-        });
     }
 
     /**
