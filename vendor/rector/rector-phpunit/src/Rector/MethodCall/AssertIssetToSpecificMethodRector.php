@@ -9,9 +9,14 @@ use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -38,10 +43,20 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->astResolver = $astResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -89,13 +104,28 @@ final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\Abstra
     {
         $resolved = $this->nodeTypeResolver->getType($node);
         if (!$resolved instanceof \PHPStan\Type\TypeWithClassName) {
-            return \false;
+            // object not found, skip
+            return $resolved instanceof \PHPStan\Type\ObjectWithoutClassType;
         }
         $reflection = $resolved->getClassReflection();
         if (!$reflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
-        return $reflection->hasMethod('__isset');
+        if ($reflection->hasMethod('__isset')) {
+            return \true;
+        }
+        // reflection->getParents() got empty array when
+        // extends class not found by PHPStan
+        $className = $reflection->getName();
+        $class = $this->astResolver->resolveClassFromName($className);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        if (!$class->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+            return \false;
+        }
+        // if parent class not detected by PHPStan, assume it has __isset
+        return !$this->reflectionProvider->hasClass($class->extends->toString());
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node

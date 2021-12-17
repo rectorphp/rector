@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
@@ -59,6 +60,34 @@ final class ClassAnnotationMatcher
                 if ($this->reflectionProvider->hasClass($namespacedTag)) {
                     return $namespacedTag;
                 }
+                if (\strpos($tag, '\\') === \false) {
+                    return $this->resolveAsAliased($uses, $tag);
+                }
+            }
+        }
+        return $this->useImportNameMatcher->matchNameWithUses($tag, $uses) ?? $tag;
+    }
+    /**
+     * @param Use_[] $uses
+     */
+    private function resolveAsAliased(array $uses, string $tag) : string
+    {
+        foreach ($uses as $use) {
+            $useUses = $use->uses;
+            // skip group uses or empty
+            if (\count($useUses) !== 1) {
+                continue;
+            }
+            // uses already removed
+            if (!isset($useUses[0])) {
+                continue;
+            }
+            if (!$useUses[0]->alias instanceof \PhpParser\Node\Identifier) {
+                continue;
+            }
+            $alias = $useUses[0]->alias;
+            if ($alias->toString() === $tag) {
+                return $useUses[0]->name->toString();
             }
         }
         return $this->useImportNameMatcher->matchNameWithUses($tag, $uses) ?? $tag;
