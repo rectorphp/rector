@@ -8,7 +8,6 @@ use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
@@ -181,13 +180,18 @@ final class AnonymousFunctionFactory
      */
     private function cleanClosureUses(array $uses) : array
     {
-        $variableNames = \array_map(function ($use) : string {
-            return (string) $this->nodeNameResolver->getName($use->var);
-        }, $uses, []);
-        $variableNames = \array_unique($variableNames);
-        return \array_map(static function ($variableName) : ClosureUse {
-            return new \PhpParser\Node\Expr\ClosureUse(new \PhpParser\Node\Expr\Variable($variableName));
-        }, $variableNames, []);
+        $uniqueUses = [];
+        foreach ($uses as $use) {
+            if (!\is_string($use->var->name)) {
+                continue;
+            }
+            $variableName = $use->var->name;
+            if (\array_key_exists($variableName, $uniqueUses)) {
+                continue;
+            }
+            $uniqueUses[$variableName] = $use;
+        }
+        return \array_values($uniqueUses);
     }
     private function applyNestedUses(\PhpParser\Node\Expr\Closure $anonymousFunctionNode, \PhpParser\Node\Expr\Variable $useVariable) : \PhpParser\Node\Expr\Closure
     {
@@ -237,7 +241,7 @@ final class AnonymousFunctionFactory
         foreach ($paramNodes as $paramNode) {
             $paramNames[] = $this->nodeNameResolver->getName($paramNode);
         }
-        $variableNodes = $this->resolveVariableNodes($nodes);
+        $variableNodes = $this->betterNodeFinder->findInstanceOf($nodes, \PhpParser\Node\Expr\Variable::class);
         /** @var Variable[] $filteredVariables */
         $filteredVariables = [];
         $alreadyAssignedVariables = [];
@@ -263,23 +267,6 @@ final class AnonymousFunctionFactory
             $filteredVariables[$variableName] = $variableNode;
         }
         return $filteredVariables;
-    }
-    /**
-     * @param Node[] $nodes
-     * @return Variable[]
-     */
-    private function resolveVariableNodes(array $nodes) : array
-    {
-        return $this->betterNodeFinder->find($nodes, function (\PhpParser\Node $subNode) : bool {
-            if (!$subNode instanceof \PhpParser\Node\Expr\Variable) {
-                return \false;
-            }
-            $parentArrowFunction = $this->betterNodeFinder->findParentType($subNode, \PhpParser\Node\Expr\ArrowFunction::class);
-            if ($parentArrowFunction instanceof \PhpParser\Node\Expr\ArrowFunction) {
-                return !(bool) $this->betterNodeFinder->findParentType($parentArrowFunction, \PhpParser\Node\Expr\ArrowFunction::class);
-            }
-            return \true;
-        });
     }
     /**
      * @param ParameterReflection[] $parameterReflections
