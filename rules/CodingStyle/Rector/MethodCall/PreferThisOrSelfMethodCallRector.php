@@ -31,6 +31,11 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
     final public const TYPE_TO_PREFERENCE = 'type_to_preference';
 
     /**
+     * @var string
+     */
+    private const THIS = 'this';
+
+    /**
      * @var array<PreferenceSelfThis>
      */
     private array $typeToPreference = [];
@@ -45,7 +50,9 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
         return new RuleDefinition('Changes $this->... and static:: to self:: or vise versa for given types', [
             new ConfiguredCodeSample(
                 <<<'CODE_SAMPLE'
-class SomeClass extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeClass extends TestCase
 {
     public function run()
     {
@@ -55,7 +62,9 @@ class SomeClass extends \PHPUnit\Framework\TestCase
 CODE_SAMPLE
                 ,
                 <<<'CODE_SAMPLE'
-class SomeClass extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeClass extends TestCase
 {
     public function run()
     {
@@ -122,7 +131,7 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($node instanceof MethodCall && ! $this->isName($node->var, 'this')) {
+        if ($node instanceof MethodCall && ! $this->isName($node->var, self::THIS)) {
             return null;
         }
 
@@ -157,6 +166,16 @@ CODE_SAMPLE
             return null;
         }
 
-        return $this->nodeFactory->createMethodCall('this', $name, $node->args);
+        // avoid adding dynamic method call to static method
+        $classMethod = $this->betterNodeFinder->findParentByTypes($node, [ClassMethod::class]);
+        if (! $classMethod instanceof ClassMethod) {
+            return $this->nodeFactory->createMethodCall(self::THIS, $name, $node->args);
+        }
+
+        if (! $classMethod->isStatic()) {
+            return $this->nodeFactory->createMethodCall(self::THIS, $name, $node->args);
+        }
+
+        return null;
     }
 }
