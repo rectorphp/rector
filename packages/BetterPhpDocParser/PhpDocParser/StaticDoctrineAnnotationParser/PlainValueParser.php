@@ -117,7 +117,10 @@ final class PlainValueParser
 
         // keep the last ")"
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
+
+        if ($tokenIterator->currentTokenValue() === ')') {
+            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
+        }
 
         // keep original name to differentiate between short and FQN class
         $identifierTypeNode = new IdentifierTypeNode($annotationShortName);
