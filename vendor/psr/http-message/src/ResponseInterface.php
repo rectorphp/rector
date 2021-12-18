@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211217\Psr\Http\Message;
+namespace RectorPrefix20211218\Psr\Http\Message;
 
 /**
  * Representation of an outgoing, server-side response.
@@ -17,7 +17,7 @@ namespace RectorPrefix20211217\Psr\Http\Message;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-interface ResponseInterface extends \RectorPrefix20211217\Psr\Http\Message\MessageInterface
+interface ResponseInterface extends \RectorPrefix20211218\Psr\Http\Message\MessageInterface
 {
     /**
      * Gets the response status code.

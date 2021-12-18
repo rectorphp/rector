@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\Rector\FileWithoutNamespace;
 
-use RectorPrefix20211217\Nette\Utils\Strings;
+use RectorPrefix20211218\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -21,7 +21,7 @@ use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211217\Webmozart\Assert\Assert;
+use RectorPrefix20211218\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
  */
@@ -104,7 +104,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $namespacePrefixesWithExcludedClasses = $configuration[self::NAMESPACE_PREFIXES_WITH_EXCLUDED_CLASSES] ?? $configuration;
-        \RectorPrefix20211217\Webmozart\Assert\Assert::allIsAOf($namespacePrefixesWithExcludedClasses, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace::class);
+        \RectorPrefix20211218\Webmozart\Assert\Assert::allIsAOf($namespacePrefixesWithExcludedClasses, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace::class);
         $this->pseudoNamespacesToNamespaces = $namespacePrefixesWithExcludedClasses;
     }
     /**
@@ -172,10 +172,10 @@ CODE_SAMPLE
             return null;
         }
         /** @var string $namespaceName */
-        $namespaceName = \RectorPrefix20211217\Nette\Utils\Strings::before($name, '_', -1);
+        $namespaceName = \RectorPrefix20211218\Nette\Utils\Strings::before($name, '_', -1);
         /** @var string $lastNewNamePart */
-        $lastNewNamePart = \RectorPrefix20211217\Nette\Utils\Strings::after($name, '_', -1);
-        $newNamespace = \RectorPrefix20211217\Nette\Utils\Strings::replace($namespaceName, self::SPLIT_BY_UNDERSCORE_REGEX, '$1$2\\\\$4');
+        $lastNewNamePart = \RectorPrefix20211218\Nette\Utils\Strings::after($name, '_', -1);
+        $newNamespace = \RectorPrefix20211218\Nette\Utils\Strings::replace($namespaceName, self::SPLIT_BY_UNDERSCORE_REGEX, '$1$2\\\\$4');
         if ($this->newNamespace !== null && $this->newNamespace !== $newNamespace) {
             throw new \Rector\Core\Exception\ShouldNotHappenException('There cannot be 2 different namespaces in one file');
         }

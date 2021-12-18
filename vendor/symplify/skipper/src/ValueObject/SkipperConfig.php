@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211217\Symplify\Skipper\ValueObject;
+namespace RectorPrefix20211218\Symplify\Skipper\ValueObject;
 
 /**
  * @api
