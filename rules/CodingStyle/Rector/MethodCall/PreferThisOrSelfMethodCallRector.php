@@ -28,6 +28,10 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
      */
     public const TYPE_TO_PREFERENCE = 'type_to_preference';
     /**
+     * @var string
+     */
+    private const THIS = 'this';
+    /**
      * @var array<PreferenceSelfThis>
      */
     private $typeToPreference = [];
@@ -43,7 +47,9 @@ final class PreferThisOrSelfMethodCallRector extends \Rector\Core\Rector\Abstrac
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes $this->... and static:: to self:: or vise versa for given types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
-class SomeClass extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeClass extends TestCase
 {
     public function run()
     {
@@ -52,7 +58,9 @@ class SomeClass extends \PHPUnit\Framework\TestCase
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class SomeClass extends TestCase
 {
     public function run()
     {
@@ -105,7 +113,7 @@ CODE_SAMPLE
         if ($node instanceof \PhpParser\Node\Expr\StaticCall && !$this->isNames($node->class, [\Rector\Core\Enum\ObjectReference::SELF()->getValue(), \Rector\Core\Enum\ObjectReference::STATIC()->getValue()])) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall && !$this->isName($node->var, 'this')) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall && !$this->isName($node->var, self::THIS)) {
             return null;
         }
         $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
@@ -133,6 +141,14 @@ CODE_SAMPLE
         if ($name === null) {
             return null;
         }
-        return $this->nodeFactory->createMethodCall('this', $name, $node->args);
+        // avoid adding dynamic method call to static method
+        $classMethod = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\ClassMethod::class]);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return $this->nodeFactory->createMethodCall(self::THIS, $name, $node->args);
+        }
+        if (!$classMethod->isStatic()) {
+            return $this->nodeFactory->createMethodCall(self::THIS, $name, $node->args);
+        }
+        return null;
     }
 }
