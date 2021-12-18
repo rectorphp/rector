@@ -32,6 +32,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3258
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector\ParamTypeDeclarationRectorTest
+ *
+ * @deprecated Use specific rules to infer params instead. This rule will be split info many small ones.
  */
 final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpVersionInterface
 {
