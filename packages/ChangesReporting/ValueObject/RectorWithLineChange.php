@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\ChangesReporting\ValueObject;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20211218\Symplify\EasyParallel\Contract\SerializableInterface;
-final class RectorWithLineChange implements \RectorPrefix20211218\Symplify\EasyParallel\Contract\SerializableInterface
+use RectorPrefix20211219\Symplify\EasyParallel\Contract\SerializableInterface;
+final class RectorWithLineChange implements \RectorPrefix20211219\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ final class RectorWithLineChange implements \RectorPrefix20211218\Symplify\EasyP
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode(array $json) : \RectorPrefix20211218\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20211219\Symplify\EasyParallel\Contract\SerializableInterface
     {
         return new self($json[self::KEY_RECTOR_CLASS], $json[self::KEY_LINE]);
     }

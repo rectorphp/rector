@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211218\Symplify\Skipper\SkipVoter;
+namespace RectorPrefix20211219\Symplify\Skipper\SkipVoter;
 
-use RectorPrefix20211218\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20211218\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix20211218\Symplify\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix20211218\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver;
-use RectorPrefix20211218\Symplify\Skipper\Skipper\OnlySkipper;
-use RectorPrefix20211218\Symplify\Skipper\Skipper\SkipSkipper;
-use RectorPrefix20211218\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20211219\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211219\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20211219\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix20211219\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use RectorPrefix20211219\Symplify\Skipper\Skipper\OnlySkipper;
+use RectorPrefix20211219\Symplify\Skipper\Skipper\SkipSkipper;
+use RectorPrefix20211219\Symplify\Skipper\ValueObject\Option;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class ClassSkipVoter implements \RectorPrefix20211218\Symplify\Skipper\Contract\SkipVoterInterface
+final class ClassSkipVoter implements \RectorPrefix20211219\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
@@ -33,7 +33,7 @@ final class ClassSkipVoter implements \RectorPrefix20211218\Symplify\Skipper\Con
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
-    public function __construct(\RectorPrefix20211218\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker, \RectorPrefix20211218\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20211218\Symplify\Skipper\Skipper\SkipSkipper $skipSkipper, \RectorPrefix20211218\Symplify\Skipper\Skipper\OnlySkipper $onlySkipper, \RectorPrefix20211218\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver $skippedClassResolver)
+    public function __construct(\RectorPrefix20211219\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker, \RectorPrefix20211219\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20211219\Symplify\Skipper\Skipper\SkipSkipper $skipSkipper, \RectorPrefix20211219\Symplify\Skipper\Skipper\OnlySkipper $onlySkipper, \RectorPrefix20211219\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver $skippedClassResolver)
     {
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
         $this->parameterProvider = $parameterProvider;
@@ -56,7 +56,7 @@ final class ClassSkipVoter implements \RectorPrefix20211218\Symplify\Skipper\Con
      */
     public function shouldSkip($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
-        $only = $this->parameterProvider->provideArrayParameter(\RectorPrefix20211218\Symplify\Skipper\ValueObject\Option::ONLY);
+        $only = $this->parameterProvider->provideArrayParameter(\RectorPrefix20211219\Symplify\Skipper\ValueObject\Option::ONLY);
         $doesMatchOnly = $this->onlySkipper->doesMatchOnly($element, $smartFileInfo, $only);
         if (\is_bool($doesMatchOnly)) {
             return $doesMatchOnly;

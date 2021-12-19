@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211218\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20211219\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20211218\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211218\Symfony\Component\DependencyInjection\Exception\EnvParameterException;
+use RectorPrefix20211219\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211219\Symfony\Component\DependencyInjection\Exception\EnvParameterException;
 /**
  * This class is used to remove circular dependencies between individual passes.
  *
@@ -24,8 +24,8 @@ class Compiler
     private $serviceReferenceGraph;
     public function __construct()
     {
-        $this->passConfig = new \RectorPrefix20211218\Symfony\Component\DependencyInjection\Compiler\PassConfig();
-        $this->serviceReferenceGraph = new \RectorPrefix20211218\Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph();
+        $this->passConfig = new \RectorPrefix20211219\Symfony\Component\DependencyInjection\Compiler\PassConfig();
+        $this->serviceReferenceGraph = new \RectorPrefix20211219\Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph();
     }
     /**
      * @return PassConfig
@@ -41,14 +41,14 @@ class Compiler
     {
         return $this->serviceReferenceGraph;
     }
-    public function addPass(\RectorPrefix20211218\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass, string $type = \RectorPrefix20211218\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
+    public function addPass(\RectorPrefix20211219\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass, string $type = \RectorPrefix20211219\Symfony\Component\DependencyInjection\Compiler\PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {
         $this->passConfig->addPass($pass, $type, $priority);
     }
     /**
      * @final
      */
-    public function log(\RectorPrefix20211218\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass, string $message)
+    public function log(\RectorPrefix20211219\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface $pass, string $message)
     {
         if (\strpos($message, "\n") !== \false) {
             $message = \str_replace("\n", "\n" . \get_class($pass) . ': ', \trim($message));
@@ -65,7 +65,7 @@ class Compiler
     /**
      * Run the Compiler and process all Passes.
      */
-    public function compile(\RectorPrefix20211218\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function compile(\RectorPrefix20211219\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         try {
             foreach ($this->passConfig->getPasses() as $pass) {
@@ -83,7 +83,7 @@ class Compiler
                 }
             } while ($prev = $prev->getPrevious());
             if ($usedEnvs) {
-                $e = new \RectorPrefix20211218\Symfony\Component\DependencyInjection\Exception\EnvParameterException($usedEnvs, $e);
+                $e = new \RectorPrefix20211219\Symfony\Component\DependencyInjection\Exception\EnvParameterException($usedEnvs, $e);
             }
             throw $e;
         } finally {

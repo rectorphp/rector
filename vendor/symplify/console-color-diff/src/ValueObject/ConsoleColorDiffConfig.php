@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211218\Symplify\ConsoleColorDiff\ValueObject;
+namespace RectorPrefix20211219\Symplify\ConsoleColorDiff\ValueObject;
 
 /**
  * @api

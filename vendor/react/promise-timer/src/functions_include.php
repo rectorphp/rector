@@ -1,7 +1,7 @@
 <?php
 
-namespace RectorPrefix20211218\React\Promise\Timer;
+namespace RectorPrefix20211219\React\Promise\Timer;
 
-if (!\function_exists('RectorPrefix20211218\\React\\Promise\\Timer\\timeout')) {
+if (!\function_exists('RectorPrefix20211219\\React\\Promise\\Timer\\timeout')) {
     require __DIR__ . '/functions.php';
 }

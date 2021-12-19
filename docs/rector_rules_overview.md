@@ -2219,7 +2219,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
- class SomeClass extends \PHPUnit\Framework\TestCase
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeClass extends TestCase
  {
      public function run()
      {
