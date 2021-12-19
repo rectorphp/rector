@@ -5,15 +5,12 @@ namespace Rector\PhpAttribute;
 
 use PhpParser\Node\Expr;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use Rector\PhpAttribute\Enum\DocTagNodeState;
 /**
  * @see \Rector\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */
 final class AnnotationToAttributeMapper
 {
-    /**
-     * @var string
-     */
-    public const REMOVE_ARRAY = 'remove_array';
     /**
      * @var \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface[]
      * @readonly
@@ -40,6 +37,6 @@ final class AnnotationToAttributeMapper
         if ($value instanceof \PhpParser\Node\Expr) {
             return $value;
         }
-        return self::REMOVE_ARRAY;
+        return \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY;
     }
 }

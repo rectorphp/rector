@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8
+class ComposerStaticInitc845df416bc17caf7c4e7ca40a14b0b2
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3064,6 +3064,7 @@ class ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\DoctrineAnnotationAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/DoctrineAnnotationAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/StringAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => __DIR__ . '/../..' . '/packages/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
+        'Rector\\PhpAttribute\\Enum\\DocTagNodeState' => __DIR__ . '/../..' . '/packages/PhpAttribute/Enum/DocTagNodeState.php',
         'Rector\\PhpAttribute\\Exception\\InvalidNestedAttributeException' => __DIR__ . '/../..' . '/packages/PhpAttribute/Exception/InvalidNestedAttributeException.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\ExprParameterReflectionTypeCorrector' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/ExprParameterReflectionTypeCorrector.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\NamedArgumentsResolver' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/NamedArgumentsResolver.php',
@@ -3071,6 +3072,7 @@ class ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8
         'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
         'Rector\\PhpAttribute\\Printer\\DoctrineAnnotationFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/Printer/DoctrineAnnotationFactory.php',
         'Rector\\PhpAttribute\\Printer\\PhpAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php',
+        'Rector\\PhpAttribute\\RemovableAnnotationAnalyzer' => __DIR__ . '/../..' . '/packages/PhpAttribute/RemovableAnnotationAnalyzer.php',
         'Rector\\PhpAttribute\\UnwrapableAnnotationAnalyzer' => __DIR__ . '/../..' . '/packages/PhpAttribute/UnwrapableAnnotationAnalyzer.php',
         'Rector\\PhpSpecToPHPUnit\\LetManipulator' => __DIR__ . '/../..' . '/rules/PhpSpecToPHPUnit/LetManipulator.php',
         'Rector\\PhpSpecToPHPUnit\\MatchersManipulator' => __DIR__ . '/../..' . '/rules/PhpSpecToPHPUnit/MatchersManipulator.php',
@@ -3825,9 +3827,9 @@ class ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc85c318719c02d6b4e84fd0f316d6cd8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc845df416bc17caf7c4e7ca40a14b0b2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc845df416bc17caf7c4e7ca40a14b0b2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc845df416bc17caf7c4e7ca40a14b0b2::$classMap;
 
         }, null, ClassLoader::class);
     }

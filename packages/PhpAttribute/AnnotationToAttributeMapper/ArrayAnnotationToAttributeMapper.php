@@ -6,6 +6,7 @@ namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 use PhpParser\Node\Expr;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use Rector\PhpAttribute\Enum\DocTagNodeState;
 use RectorPrefix20211219\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
@@ -57,6 +58,6 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
         if (!\is_array($value)) {
             return \false;
         }
-        return \in_array(\Rector\PhpAttribute\AnnotationToAttributeMapper::REMOVE_ARRAY, $value, \true);
+        return \in_array(\Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY, $value, \true);
     }
 }
