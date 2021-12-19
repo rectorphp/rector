@@ -21,12 +21,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
     $services->set(AnnotationToAttributeRector::class)
         ->configure([
-            AnnotationToAttributeRector::ANNOTATION_TO_ATTRIBUTE => [
-                new AnnotationToAttribute(All::class),
-                new AnnotationToAttribute(Length::class),
-                new AnnotationToAttribute(NotNull::class),
-                new AnnotationToAttribute(NotNumber::class),
-                new AnnotationToAttribute(GenericAnnotation::class),
-            ],
+            new AnnotationToAttribute(All::class),
+            new AnnotationToAttribute(Length::class),
+            new AnnotationToAttribute(NotNull::class),
+            new AnnotationToAttribute(NotNumber::class),
+            new AnnotationToAttribute(GenericAnnotation::class),
         ]);
 };

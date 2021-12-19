@@ -28,6 +28,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             new AnnotationToAttribute('Doctrine\ORM\Mapping\ManyToMany'),
             new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
             new AnnotationToAttribute('Doctrine\ORM\Mapping\UniqueConstraint'),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\JoinColumns'),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\JoinColumn'),
 
             // validation
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),

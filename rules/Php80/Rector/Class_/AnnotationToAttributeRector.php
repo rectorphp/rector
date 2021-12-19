@@ -27,6 +27,7 @@ use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\RemovableAnnotationAnalyzer;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -57,7 +58,8 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
         private readonly AttrGroupsFactory $attrGroupsFactory,
         private readonly PhpDocTagRemover $phpDocTagRemover,
         private readonly PhpDocNodeFinder $phpDocNodeFinder,
-        private readonly UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer
+        private readonly UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer,
+        private readonly RemovableAnnotationAnalyzer $removableAnnotationAnalyzer,
     ) {
     }
 
@@ -148,6 +150,7 @@ CODE_SAMPLE
         $this->annotationsToAttributes = $annotationsToAttributes;
 
         $this->unwrapableAnnotationAnalyzer->configure($annotationsToAttributes);
+        $this->removableAnnotationAnalyzer->configure($annotationsToAttributes);
     }
 
     public function provideMinPhpVersion(): int
@@ -222,7 +225,6 @@ CODE_SAMPLE
 
             $doctrineTagValueNode = $phpDocChildNode->value;
             $annotationToAttribute = $this->matchAnnotationToAttribute($doctrineTagValueNode);
-
             if (! $annotationToAttribute instanceof AnnotationToAttribute) {
                 continue;
             }
@@ -245,10 +247,14 @@ CODE_SAMPLE
                 $shouldInlinedNested = true;
             }
 
-            $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
-                $doctrineTagValueNode,
-                $annotationToAttribute,
-            );
+            if (! $this->removableAnnotationAnalyzer->isRemovable($doctrineTagValueNode)) {
+                $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute(
+                    $doctrineTagValueNode,
+                    $annotationToAttribute,
+                );
+            } else {
+                $shouldInlinedNested = true;
+            }
 
             if ($shouldInlinedNested) {
                 // inline nested
