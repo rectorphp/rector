@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class, MethodCall::class, StaticCall::class];
+        return [FuncCall::class, MethodCall::class, StaticCall::class, Node\Expr\New_::class];
     }
 
     /**
