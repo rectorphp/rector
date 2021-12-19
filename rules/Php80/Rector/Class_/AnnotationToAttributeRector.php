@@ -26,6 +26,7 @@ use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
+use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -67,12 +68,18 @@ final class AnnotationToAttributeRector extends \Rector\Core\Rector\AbstractRect
      * @var \Rector\Php80\PhpDoc\PhpDocNodeFinder
      */
     private $phpDocNodeFinder;
-    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer
+     */
+    private $unwrapableAnnotationAnalyzer;
+    public function __construct(\Rector\PhpAttribute\Printer\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeFactory\AttrGroupsFactory $attrGroupsFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Php80\PhpDoc\PhpDocNodeFinder $phpDocNodeFinder, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->phpDocNodeFinder = $phpDocNodeFinder;
+        $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -137,6 +144,7 @@ CODE_SAMPLE
         $annotationsToAttributes = $configuration[self::ANNOTATION_TO_ATTRIBUTE] ?? $configuration;
         \RectorPrefix20211219\Webmozart\Assert\Assert::allIsAOf($annotationsToAttributes, \Rector\Php80\ValueObject\AnnotationToAttribute::class);
         $this->annotationsToAttributes = $annotationsToAttributes;
+        $this->unwrapableAnnotationAnalyzer->configure($annotationsToAttributes);
     }
     public function provideMinPhpVersion() : int
     {
@@ -196,11 +204,21 @@ CODE_SAMPLE
                 continue;
             }
             $nestedDoctrineAnnotationTagValueNodes = $this->phpDocNodeFinder->findByType($doctrineTagValueNode, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode::class);
+            $shouldInlinedNested = \false;
             // depends on PHP 8.1+ - nested values, skip for now
             if ($nestedDoctrineAnnotationTagValueNodes !== [] && !$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
-                continue;
+                if (!$this->unwrapableAnnotationAnalyzer->areUnwrappable($nestedDoctrineAnnotationTagValueNodes)) {
+                    continue;
+                }
+                $shouldInlinedNested = \true;
             }
             $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($doctrineTagValueNode, $annotationToAttribute);
+            if ($shouldInlinedNested) {
+                // inline nested
+                foreach ($nestedDoctrineAnnotationTagValueNodes as $nestedDoctrineAnnotationTagValueNode) {
+                    $doctrineTagAndAnnotationToAttributes[] = new \Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute($nestedDoctrineAnnotationTagValueNode, $annotationToAttribute);
+                }
+            }
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineTagValueNode);
         }
         return $this->attrGroupsFactory->create($doctrineTagAndAnnotationToAttributes);

@@ -37,8 +37,16 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
      */
     public function map($value)
     {
-        return \array_map(function ($item) {
+        $values = \array_map(function ($item) {
             return $this->annotationToAttributeMapper->map($item);
         }, $value);
+        foreach ($values as $key => $value) {
+            // remove the key and value? useful in case of unwrapping nested attributes
+            if ($value !== \Rector\PhpAttribute\AnnotationToAttributeMapper::REMOVE_ARRAY && $value !== [\Rector\PhpAttribute\AnnotationToAttributeMapper::REMOVE_ARRAY]) {
+                continue;
+            }
+            unset($values[$key]);
+        }
+        return $values;
     }
 }

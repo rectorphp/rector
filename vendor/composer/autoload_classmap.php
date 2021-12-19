@@ -2676,6 +2676,7 @@ return array(
     'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => $baseDir . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
     'Rector\\PhpAttribute\\Printer\\DoctrineAnnotationFactory' => $baseDir . '/packages/PhpAttribute/Printer/DoctrineAnnotationFactory.php',
     'Rector\\PhpAttribute\\Printer\\PhpAttributeGroupFactory' => $baseDir . '/packages/PhpAttribute/Printer/PhpAttributeGroupFactory.php',
+    'Rector\\PhpAttribute\\UnwrapableAnnotationAnalyzer' => $baseDir . '/packages/PhpAttribute/UnwrapableAnnotationAnalyzer.php',
     'Rector\\PhpSpecToPHPUnit\\LetManipulator' => $baseDir . '/rules/PhpSpecToPHPUnit/LetManipulator.php',
     'Rector\\PhpSpecToPHPUnit\\MatchersManipulator' => $baseDir . '/rules/PhpSpecToPHPUnit/MatchersManipulator.php',
     'Rector\\PhpSpecToPHPUnit\\Naming\\PhpSpecRenaming' => $baseDir . '/rules/PhpSpecToPHPUnit/Naming/PhpSpecRenaming.php',

@@ -13,6 +13,7 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
 use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
+use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use RectorPrefix20211219\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
@@ -33,10 +34,16 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
     private $namedArgsFactory;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory)
+    /**
+     * @readonly
+     * @var \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer
+     */
+    private $unwrapableAnnotationAnalyzer;
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->namedArgsFactory = $namedArgsFactory;
+        $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
     }
     /**
      * Avoid circular reference
@@ -51,7 +58,10 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements \Rector\Php
      */
     public function isCandidate($value) : bool
     {
-        return $value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+        if (!$value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+            return \false;
+        }
+        return !$this->unwrapableAnnotationAnalyzer->areUnwrappable([$value]);
     }
     /**
      * @param DoctrineAnnotationTagValueNode $value
