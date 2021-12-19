@@ -42,11 +42,21 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
         }, $value);
         foreach ($values as $key => $value) {
             // remove the key and value? useful in case of unwrapping nested attributes
-            if ($value !== \Rector\PhpAttribute\AnnotationToAttributeMapper::REMOVE_ARRAY && $value !== [\Rector\PhpAttribute\AnnotationToAttributeMapper::REMOVE_ARRAY]) {
+            if (!$this->isRemoveArrayPlaceholder($value)) {
                 continue;
             }
             unset($values[$key]);
         }
         return $values;
+    }
+    /**
+     * @param mixed[]|\PhpParser\Node\Expr $value
+     */
+    private function isRemoveArrayPlaceholder($value) : bool
+    {
+        if (!\is_array($value)) {
+            return \false;
+        }
+        return \in_array(\Rector\PhpAttribute\AnnotationToAttributeMapper::REMOVE_ARRAY, $value, \true);
     }
 }
