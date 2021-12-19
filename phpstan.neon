@@ -613,3 +613,10 @@ parameters:
         -
             path: rules/Php74/Rector/Property/TypedPropertyRector.php
             message: '#Class cognitive complexity is \d+, keep it under 30#'
+
+        -
+            message: '#Cognitive complexity for "Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector\:\:processDoctrineAnnotationClasses\(\)" is \d+, keep it under 10#'
+            path: rules/Php80/Rector/Class_/AnnotationToAttributeRector.php
+
+        - '#Strict comparison using \!\=\= between array\|PhpParser\\Node\\Expr and (.*?) will always evaluate to true#'
+        - '#Anonymous function should return array\|PhpParser\\Node\\Expr but returns array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string#'

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node\Expr;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 
 /**
@@ -13,6 +12,11 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
  */
 final class AnnotationToAttributeMapper
 {
+    /**
+     * @var string
+     */
+    final public const REMOVE_ARRAY = 'remove_array';
+
     /**
      * @param AnnotationToAttributeMapperInterface[] $annotationToAttributeMappers
      */
@@ -22,9 +26,9 @@ final class AnnotationToAttributeMapper
     }
 
     /**
-     * @return Expr|Expr[]
+     * @return Expr|Expr[]|string
      */
-    public function map(mixed $value): array|Expr
+    public function map(mixed $value): array|Expr|string
     {
         foreach ($this->annotationToAttributeMappers as $annotationToAttributeMapper) {
             if ($annotationToAttributeMapper->isCandidate($value)) {
@@ -36,6 +40,6 @@ final class AnnotationToAttributeMapper
             return $value;
         }
 
-        throw new NotImplementedYetException();
+        return self::REMOVE_ARRAY;
     }
 }

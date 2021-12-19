@@ -35,6 +35,19 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
      */
     public function map($value): array|Expr
     {
-        return array_map(fn ($item): Expr|array => $this->annotationToAttributeMapper->map($item), $value);
+        $values = array_map(fn ($item): Expr|array => $this->annotationToAttributeMapper->map($item), $value);
+
+        foreach ($values as $key => $value) {
+            // remove the key and value? useful in case of unwrapping nested attributes
+            if ($value !== AnnotationToAttributeMapper::REMOVE_ARRAY && $value !== [
+                AnnotationToAttributeMapper::REMOVE_ARRAY,
+            ]) {
+                continue;
+            }
+
+            unset($values[$key]);
+        }
+
+        return $values;
     }
 }

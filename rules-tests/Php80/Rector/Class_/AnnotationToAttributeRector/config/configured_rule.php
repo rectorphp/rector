@@ -26,6 +26,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             // doctrine
             new AnnotationToAttribute('Doctrine\ORM\Mapping\Entity'),
             new AnnotationToAttribute('Doctrine\ORM\Mapping\ManyToMany'),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\Table'),
+            new AnnotationToAttribute('Doctrine\ORM\Mapping\UniqueConstraint'),
 
             // validation
             new AnnotationToAttribute('Symfony\Component\Validator\Constraints\All'),

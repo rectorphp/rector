@@ -14,6 +14,7 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
 use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
+use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Symfony\Contracts\Service\Attribute\Required;
 
 /**
@@ -25,7 +26,8 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
 
     public function __construct(
         private readonly PhpVersionProvider $phpVersionProvider,
-        private readonly NamedArgsFactory $namedArgsFactory
+        private readonly NamedArgsFactory $namedArgsFactory,
+        private readonly UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer,
     ) {
     }
 
@@ -40,7 +42,11 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
 
     public function isCandidate(mixed $value): bool
     {
-        return $value instanceof DoctrineAnnotationTagValueNode;
+        if (! $value instanceof DoctrineAnnotationTagValueNode) {
+            return false;
+        }
+
+        return ! $this->unwrapableAnnotationAnalyzer->areUnwrappable([$value]);
     }
 
     /**
