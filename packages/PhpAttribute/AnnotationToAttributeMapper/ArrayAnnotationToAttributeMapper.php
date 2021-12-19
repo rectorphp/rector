@@ -39,9 +39,7 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
 
         foreach ($values as $key => $value) {
             // remove the key and value? useful in case of unwrapping nested attributes
-            if ($value !== AnnotationToAttributeMapper::REMOVE_ARRAY && $value !== [
-                AnnotationToAttributeMapper::REMOVE_ARRAY,
-            ]) {
+            if (! $this->isRemoveArrayPlaceholder($value)) {
                 continue;
             }
 
@@ -49,5 +47,14 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
         }
 
         return $values;
+    }
+
+    private function isRemoveArrayPlaceholder(Expr|array $value): bool
+    {
+        if (! is_array($value)) {
+            return false;
+        }
+
+        return in_array(AnnotationToAttributeMapper::REMOVE_ARRAY, $value, true);
     }
 }

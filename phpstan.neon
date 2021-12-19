@@ -620,3 +620,5 @@ parameters:
 
         - '#Strict comparison using \!\=\= between array\|PhpParser\\Node\\Expr and (.*?) will always evaluate to true#'
         - '#Anonymous function should return array\|PhpParser\\Node\\Expr but returns array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string#'
+
+        - '#Method Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper\:\:isRemoveArrayPlaceholder\(\) has parameter \$value with no value type specified in iterable type array#'
