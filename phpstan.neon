@@ -141,10 +141,6 @@ parameters:
 
         - '#Method (.*?) should return array<PhpParser\\Node\\(.*?)\> but returns array<PhpParser\\Node\>#'
 
-        # intersection
-        - '#Property Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\:\:\$returnTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
-        - '#Property Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\:\:\$propertyTypeInferers \(array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PropertyTypeInfererInterface\>\) does not accept array<Rector\\TypeDeclaration\\Contract\\TypeInferer\\PriorityAwareTypeInfererInterface\>#'
-
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
 
         -
@@ -291,7 +287,6 @@ parameters:
             message: '#Class cognitive complexity is \d+, keep it under \d+#'
             paths:
                 - packages/PHPStanStaticTypeMapper/TypeMapper/UnionTypeMapper.php
-                - src/Rector/AbstractRector.php
 
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
@@ -462,10 +457,6 @@ parameters:
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 10#'
 
         -
-            path: rules/Php74/Rector/Property/TypedPropertyRector.php
-            message: '#Class cognitive complexity is 36, keep it under 30#'
-
-        -
             path: rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php
             message: '#Class cognitive complexity is 31, keep it under 30#'
 
@@ -613,7 +604,6 @@ parameters:
             message: '#Cognitive complexity for "Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector\:\:processDoctrineAnnotationClasses\(\)" is \d+, keep it under 10#'
             path: rules/Php80/Rector/Class_/AnnotationToAttributeRector.php
 
-        - '#Strict comparison using \!\=\= between array\|PhpParser\\Node\\Expr and (.*?) will always evaluate to true#'
         - '#Anonymous function should return array\|PhpParser\\Node\\Expr but returns array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string#'
 
         - '#Method Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper\:\:isRemoveArrayPlaceholder\(\) has parameter \$value with no value type specified in iterable type array#'
