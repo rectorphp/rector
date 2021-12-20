@@ -31,11 +31,8 @@ final class ClassManipulator
         }
 
         $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            if ($classReflection === $ancestorClassReflection) {
-                continue;
-            }
-
+        $ancestorClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
             if (! $ancestorClassReflection->hasMethod($oldMethod)) {
                 continue;
             }
