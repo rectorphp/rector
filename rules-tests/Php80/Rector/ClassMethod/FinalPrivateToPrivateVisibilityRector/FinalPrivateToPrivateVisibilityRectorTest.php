@@ -12,7 +12,6 @@ final class FinalPrivateToPrivateVisibilityRectorTest extends AbstractRectorTest
 {
     /**
      * @dataProvider provideData()
-     * @requires PHP < 8.0
      */
     public function test(SmartFileInfo $fileInfo): void
     {
