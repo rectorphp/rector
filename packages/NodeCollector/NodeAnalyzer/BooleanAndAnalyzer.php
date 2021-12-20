@@ -16,6 +16,7 @@ final class BooleanAndAnalyzer
     public function findBooleanAndConditions(BooleanAnd $booleanAnd): array
     {
         $conditions = [];
+        /** @var BinaryOp|Expr $booleanAnd */
         while ($booleanAnd instanceof BinaryOp) {
             $conditions[] = $booleanAnd->right;
             $booleanAnd = $booleanAnd->left;
