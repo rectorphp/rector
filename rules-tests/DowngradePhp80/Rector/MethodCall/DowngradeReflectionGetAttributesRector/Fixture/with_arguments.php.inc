@@ -24,7 +24,7 @@ final class WithArguments
 {
     public function run(\ReflectionClass $reflectionClass)
     {
-        if ([]) {
+        if (method_exists($reflectionClass, 'getAttributes') ? $reflectionClass->getAttributes('someName', 1) : []) {
             return true;
         }
 

@@ -24,7 +24,7 @@ class SomeClass
 {
     public function run(\ReflectionClass $reflectionClass)
     {
-        if ([]) {
+        if (method_exists($reflectionClass, 'getAttributes') ? $reflectionClass->getAttributes() : []) {
             return true;
         }
 

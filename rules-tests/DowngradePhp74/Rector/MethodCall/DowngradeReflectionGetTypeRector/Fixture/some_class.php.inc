@@ -24,7 +24,7 @@ class SomeClass
 {
     public function run(\ReflectionProperty $reflectionProperty)
     {
-        if (null) {
+        if (method_exists($reflectionProperty, 'getType') ? $reflectionProperty->getType() : null) {
             return true;
         }
 
