@@ -72,7 +72,7 @@ final class Reflection
      */
     public static function getPropertyType(\ReflectionProperty $prop) : ?string
     {
-        return self::getType($prop, \PHP_VERSION_ID >= 70400 ? \method_exists($prop, 'getType') ? $prop->getType() : null : null);
+        return self::getType($prop, \PHP_VERSION_ID >= 70400 ? null : null);
     }
     /**
      * @deprecated

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff
+class ComposerStaticInit92bcbf4746a781392c39f1d4f13799d9
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2424,7 +2424,6 @@ class ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff
         'Rector\\DowngradePhp80\\Rector\\FunctionLike\\DowngradeUnionTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php',
         'Rector\\DowngradePhp80\\Rector\\Instanceof_\\DowngradePhp80ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php',
         'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeNamedArgumentRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php',
-        'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeReflectionClassGetConstantsFilterRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionClassGetConstantsFilterRector.php',
         'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeReflectionGetAttributesRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionGetAttributesRector.php',
         'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeReflectionPropertyGetDefaultValueRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionPropertyGetDefaultValueRector.php',
         'Rector\\DowngradePhp80\\Rector\\New_\\DowngradeArbitraryExpressionsSupportRector' => __DIR__ . '/../..' . '/rules/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php',
@@ -2690,7 +2689,6 @@ class ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff
         'Rector\\Nette\\ValueObject\\ParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ParameterAssign.php',
         'Rector\\Nette\\ValueObject\\TemplateParametersAssigns' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/TemplateParametersAssigns.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
-        'Rector\\NodeCollector\\NodeAnalyzer\\BitwiseOrAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BitwiseOrAnalyzer.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\BooleanAndAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php',
         'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => __DIR__ . '/../..' . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
@@ -3832,9 +3830,9 @@ class ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd107d1ba77db5896bc9586f3697f65ff::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit92bcbf4746a781392c39f1d4f13799d9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit92bcbf4746a781392c39f1d4f13799d9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit92bcbf4746a781392c39f1d4f13799d9::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -75,7 +75,7 @@ final class Preloader
             $r->getDefaultProperties();
             if (\PHP_VERSION_ID >= 70400) {
                 foreach ($r->getProperties(\ReflectionProperty::IS_PUBLIC) as $p) {
-                    self::preloadType(\method_exists($p, 'getType') ? \method_exists($p, 'getType') ? $p->getType() : null : null, $preloaded);
+                    self::preloadType(null, $preloaded);
                 }
             }
             foreach ($r->getMethods(\ReflectionMethod::IS_PUBLIC) as $m) {

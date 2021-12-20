@@ -29,7 +29,7 @@ final class Target
     }
     public static function parseName(\ReflectionParameter $parameter) : string
     {
-        if (80000 > \PHP_VERSION_ID || !($target = (\method_exists($parameter, 'getAttributes') ? \method_exists($parameter, 'getAttributes') ? $parameter->getAttributes(self::class) : [] : [])[0] ?? null)) {
+        if (80000 > \PHP_VERSION_ID || !($target = [][0] ?? null)) {
             return $parameter->name;
         }
         $name = $target->newInstance()->name;
