@@ -52,7 +52,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211220\Symfony
             } catch (\ReflectionException $e) {
                 continue;
             }
-            $targets = (\method_exists($attributeReflector, 'getAttributes') ? \method_exists($attributeReflector, 'getAttributes') ? $attributeReflector->getAttributes(\Attribute::class) : [] : [])[0] ?? 0;
+            $targets = (\method_exists($attributeReflector, 'getAttributes') ? $attributeReflector->getAttributes(\Attribute::class) : [])[0] ?? 0;
             $targets = $targets ? $targets->getArguments()[0] ?? -1 : 0;
             foreach (['class', 'method', 'property', 'parameter'] as $symbol) {
                 if (['Reflector'] !== $types) {
@@ -76,7 +76,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211220\Symfony
         $instanceof = $value->getInstanceofConditionals();
         $conditionals = $instanceof[$classReflector->getName()] ?? new \RectorPrefix20211220\Symfony\Component\DependencyInjection\ChildDefinition('');
         if ($this->classAttributeConfigurators) {
-            foreach (\method_exists($classReflector, 'getAttributes') ? \method_exists($classReflector, 'getAttributes') ? $classReflector->getAttributes() : [] : [] as $attribute) {
+            foreach (\method_exists($classReflector, 'getAttributes') ? $classReflector->getAttributes() : [] as $attribute) {
                 if ($configurator = $this->classAttributeConfigurators[$attribute->getName()] ?? null) {
                     $configurator($conditionals, $attribute->newInstance(), $classReflector);
                 }
@@ -90,7 +90,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211220\Symfony
             }
             if ($constructorReflector) {
                 foreach ($constructorReflector->getParameters() as $parameterReflector) {
-                    foreach (\method_exists($parameterReflector, 'getAttributes') ? \method_exists($parameterReflector, 'getAttributes') ? $parameterReflector->getAttributes() : [] : [] as $attribute) {
+                    foreach (\method_exists($parameterReflector, 'getAttributes') ? $parameterReflector->getAttributes() : [] as $attribute) {
                         if ($configurator = $this->parameterAttributeConfigurators[$attribute->getName()] ?? null) {
                             $configurator($conditionals, $attribute->newInstance(), $parameterReflector);
                         }
@@ -104,7 +104,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211220\Symfony
                     continue;
                 }
                 if ($this->methodAttributeConfigurators) {
-                    foreach (\method_exists($methodReflector, 'getAttributes') ? \method_exists($methodReflector, 'getAttributes') ? $methodReflector->getAttributes() : [] : [] as $attribute) {
+                    foreach (\method_exists($methodReflector, 'getAttributes') ? $methodReflector->getAttributes() : [] as $attribute) {
                         if ($configurator = $this->methodAttributeConfigurators[$attribute->getName()] ?? null) {
                             $configurator($conditionals, $attribute->newInstance(), $methodReflector);
                         }
@@ -112,7 +112,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211220\Symfony
                 }
                 if ($this->parameterAttributeConfigurators) {
                     foreach ($methodReflector->getParameters() as $parameterReflector) {
-                        foreach (\method_exists($parameterReflector, 'getAttributes') ? \method_exists($parameterReflector, 'getAttributes') ? $parameterReflector->getAttributes() : [] : [] as $attribute) {
+                        foreach (\method_exists($parameterReflector, 'getAttributes') ? $parameterReflector->getAttributes() : [] as $attribute) {
                             if ($configurator = $this->parameterAttributeConfigurators[$attribute->getName()] ?? null) {
                                 $configurator($conditionals, $attribute->newInstance(), $parameterReflector);
                             }
@@ -126,7 +126,7 @@ final class AttributeAutoconfigurationPass extends \RectorPrefix20211220\Symfony
                 if ($propertyReflector->isStatic()) {
                     continue;
                 }
-                foreach (\method_exists($propertyReflector, 'getAttributes') ? \method_exists($propertyReflector, 'getAttributes') ? $propertyReflector->getAttributes() : [] : [] as $attribute) {
+                foreach (\method_exists($propertyReflector, 'getAttributes') ? $propertyReflector->getAttributes() : [] as $attribute) {
                     if ($configurator = $this->propertyAttributeConfigurators[$attribute->getName()] ?? null) {
                         $configurator($conditionals, $attribute->newInstance(), $propertyReflector);
                     }

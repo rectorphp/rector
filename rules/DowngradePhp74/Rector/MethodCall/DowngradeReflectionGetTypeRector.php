@@ -71,13 +71,15 @@ CODE_SAMPLE
         if ($parent instanceof \PhpParser\Node\Expr\Instanceof_) {
             return null;
         }
-        // avoid infinite loop
-        $createdByRule = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE);
-        if ($createdByRule === self::class) {
-            return null;
-        }
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE, self::class);
         $args = [new \PhpParser\Node\Arg($node->var), new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('getType'))];
-        return new \PhpParser\Node\Expr\Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
+        $ternary = new \PhpParser\Node\Expr\Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\Ternary) {
+            return $ternary;
+        }
+        if (!$this->nodeComparator->areNodesEqual($parent, $ternary)) {
+            return $ternary;
+        }
+        return null;
     }
 }

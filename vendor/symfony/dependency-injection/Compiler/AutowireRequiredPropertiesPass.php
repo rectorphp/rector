@@ -39,10 +39,10 @@ class AutowireRequiredPropertiesPass extends \RectorPrefix20211220\Symfony\Compo
         }
         $properties = $value->getProperties();
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
-            if (!($type = \method_exists($reflectionProperty, 'getType') ? \method_exists($reflectionProperty, 'getType') ? $reflectionProperty->getType() : null : null) instanceof \ReflectionNamedType) {
+            if (!($type = \method_exists($reflectionProperty, 'getType') ? $reflectionProperty->getType() : null) instanceof \ReflectionNamedType) {
                 continue;
             }
-            if ((\PHP_VERSION_ID < 80000 || !(\method_exists($reflectionProperty, 'getAttributes') ? \method_exists($reflectionProperty, 'getAttributes') ? $reflectionProperty->getAttributes(\RectorPrefix20211220\Symfony\Contracts\Service\Attribute\Required::class) : [] : [])) && (\false === ($doc = $reflectionProperty->getDocComment()) || \false === \stripos($doc, '@required') || !\preg_match('#(?:^/\\*\\*|\\n\\s*+\\*)\\s*+@required(?:\\s|\\*/$)#i', $doc))) {
+            if ((\PHP_VERSION_ID < 80000 || !(\method_exists($reflectionProperty, 'getAttributes') ? $reflectionProperty->getAttributes(\RectorPrefix20211220\Symfony\Contracts\Service\Attribute\Required::class) : [])) && (\false === ($doc = $reflectionProperty->getDocComment()) || \false === \stripos($doc, '@required') || !\preg_match('#(?:^/\\*\\*|\\n\\s*+\\*)\\s*+@required(?:\\s|\\*/$)#i', $doc))) {
                 continue;
             }
             if (\array_key_exists($name = $reflectionProperty->getName(), $properties)) {

@@ -67,13 +67,15 @@ CODE_SAMPLE
         if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Reflector'))) {
             return null;
         }
-        // avoid infinite loop
-        $createdByRule = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE);
-        if ($createdByRule === self::class) {
-            return null;
-        }
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE, self::class);
         $args = [new \PhpParser\Node\Arg($node->var), new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('getAttributes'))];
-        return new \PhpParser\Node\Expr\Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, new \PhpParser\Node\Expr\Array_([]));
+        $ternary = new \PhpParser\Node\Expr\Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, new \PhpParser\Node\Expr\Array_([]));
+        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\Ternary) {
+            return $ternary;
+        }
+        if (!$this->nodeComparator->areNodesEqual($parent, $ternary)) {
+            return $ternary;
+        }
+        return null;
     }
 }
