@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rector\Core\ProcessAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -19,13 +19,18 @@ use Rector\Core\ValueObject\RectifiedNode;
  *
  * Some limitations:
  *
- *   - only check against Stmt which not ClassLike.
+ *   - only check against Node which not Assign or Class_
  *   - The checked node doesn't has PhpDocInfo changed.
  *
  * which possibly changed by other process.
  */
 final class RectifiedAnalyzer
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const EXCLUDE_NODES = [Assign::class, Class_::class];
+
     /**
      * @var array<string, RectifiedNode|null>
      */
@@ -38,11 +43,7 @@ final class RectifiedAnalyzer
 
     public function verify(RectorInterface $rector, Node $node, File $currentFile): ?RectifiedNode
     {
-        if (! $node instanceof Stmt) {
-            return null;
-        }
-
-        if ($node instanceof ClassLike) {
+        if (in_array($node::class, self::EXCLUDE_NODES, true)) {
             return null;
         }
 
