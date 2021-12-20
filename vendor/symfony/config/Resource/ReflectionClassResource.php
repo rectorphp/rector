@@ -108,7 +108,7 @@ class ReflectionClassResource implements \RectorPrefix20211220\Symfony\Component
     {
         if (\PHP_VERSION_ID >= 80000) {
             $attributes = [];
-            foreach ([] as $a) {
+            foreach (\method_exists($class, 'getAttributes') ? $class->getAttributes() : [] as $a) {
                 $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
             }
             (yield \print_r($attributes, \true));
@@ -128,7 +128,7 @@ class ReflectionClassResource implements \RectorPrefix20211220\Symfony\Component
             $defaults = $class->getDefaultProperties();
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
                 if (\PHP_VERSION_ID >= 80000) {
-                    foreach ([] as $a) {
+                    foreach (\method_exists($p, 'getAttributes') ? $p->getAttributes() : [] as $a) {
                         $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                     }
                     (yield \print_r($attributes, \true));
@@ -147,7 +147,7 @@ class ReflectionClassResource implements \RectorPrefix20211220\Symfony\Component
         }, null, $class->name);
         foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $m) {
             if (\PHP_VERSION_ID >= 80000) {
-                foreach ([] as $a) {
+                foreach (\method_exists($m, 'getAttributes') ? $m->getAttributes() : [] as $a) {
                     $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                 }
                 (yield \print_r($attributes, \true));
@@ -157,7 +157,7 @@ class ReflectionClassResource implements \RectorPrefix20211220\Symfony\Component
             $parametersWithUndefinedConstants = [];
             foreach ($m->getParameters() as $p) {
                 if (\PHP_VERSION_ID >= 80000) {
-                    foreach ([] as $a) {
+                    foreach (\method_exists($p, 'getAttributes') ? $p->getAttributes() : [] as $a) {
                         $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                     }
                     (yield \print_r($attributes, \true));

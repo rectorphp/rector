@@ -89,7 +89,7 @@ class Command
     public static function getDefaultName() : ?string
     {
         $class = static::class;
-        if ($attribute = []) {
+        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(\RectorPrefix20211220\Symfony\Component\Console\Attribute\AsCommand::class) : [] : []) {
             return $attribute[0]->newInstance()->name;
         }
         $r = new \ReflectionProperty($class, 'defaultName');
@@ -98,7 +98,7 @@ class Command
     public static function getDefaultDescription() : ?string
     {
         $class = static::class;
-        if ($attribute = []) {
+        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(\RectorPrefix20211220\Symfony\Component\Console\Attribute\AsCommand::class) : [] : []) {
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');

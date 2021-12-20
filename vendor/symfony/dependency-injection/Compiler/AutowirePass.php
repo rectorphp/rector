@@ -209,7 +209,7 @@ class AutowirePass extends \RectorPrefix20211220\Symfony\Component\DependencyInj
             }
             $type = \RectorPrefix20211220\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper::getTypeHint($reflectionMethod, $parameter, \true);
             if ($checkAttributes) {
-                foreach ([] as $attribute) {
+                foreach (\method_exists($parameter, 'getAttributes') ? \method_exists($parameter, 'getAttributes') ? $parameter->getAttributes() : [] : [] as $attribute) {
                     if (\RectorPrefix20211220\Symfony\Component\DependencyInjection\Attribute\TaggedIterator::class === $attribute->getName()) {
                         $attribute = $attribute->newInstance();
                         $arguments[$index] = new \RectorPrefix20211220\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument($attribute->tag, $attribute->indexAttribute, $attribute->defaultIndexMethod, \false, $attribute->defaultPriorityMethod);

@@ -42,7 +42,7 @@ class AutowireRequiredMethodsPass extends \RectorPrefix20211220\Symfony\Componen
                 continue;
             }
             while (\true) {
-                if (\PHP_VERSION_ID >= 80000 && []) {
+                if (\PHP_VERSION_ID >= 80000 && (\method_exists($r, 'getAttributes') ? \method_exists($r, 'getAttributes') ? $r->getAttributes(\RectorPrefix20211220\Symfony\Contracts\Service\Attribute\Required::class) : [] : [])) {
                     if ($this->isWither($r, $r->getDocComment() ?: '')) {
                         $withers[] = [$r->name, [], \true];
                     } else {

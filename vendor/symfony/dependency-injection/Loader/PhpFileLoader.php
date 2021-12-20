@@ -91,7 +91,7 @@ class PhpFileLoader extends \RectorPrefix20211220\Symfony\Component\DependencyIn
         $r = new \ReflectionFunction($callback);
         if (\PHP_VERSION_ID >= 80000) {
             $attribute = null;
-            foreach ([] as $attribute) {
+            foreach (\method_exists($r, 'getAttributes') ? \method_exists($r, 'getAttributes') ? $r->getAttributes(\RectorPrefix20211220\Symfony\Component\DependencyInjection\Attribute\When::class) : [] : [] as $attribute) {
                 if ($this->env === $attribute->newInstance()->env) {
                     $attribute = null;
                     break;
