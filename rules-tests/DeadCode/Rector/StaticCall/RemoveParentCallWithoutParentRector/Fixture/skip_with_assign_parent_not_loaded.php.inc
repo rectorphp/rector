@@ -2,7 +2,7 @@
 
 namespace Rector\Tests\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector\Fixture;
 
-class SkipWithAssign
+class SkipWithAssignParentNotLoaded extends ParentNotLoaded
 {
     public function run()
     {
@@ -11,5 +11,3 @@ class SkipWithAssign
         return $result;
     }
 }
-
-?>
