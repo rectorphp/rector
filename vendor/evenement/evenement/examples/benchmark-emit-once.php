@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211219;
+namespace RectorPrefix20211220;
 
 /*
  * This file is part of Evenement.
@@ -13,9 +13,9 @@ namespace RectorPrefix20211219;
  */
 \ini_set('memory_limit', '512M');
 const ITERATIONS = 100000;
-use RectorPrefix20211219\Evenement\EventEmitter;
+use RectorPrefix20211220\Evenement\EventEmitter;
 require __DIR__ . '/../vendor/autoload.php';
-$emitter = new \RectorPrefix20211219\Evenement\EventEmitter();
+$emitter = new \RectorPrefix20211220\Evenement\EventEmitter();
 for ($i = 0; $i < \ITERATIONS; $i++) {
     $emitter->once('event', function ($a, $b, $c) {
     });

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211219;
+namespace RectorPrefix20211220;
 
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
@@ -26,4 +26,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Ssch\TYPO3Rector\Rector\v11\v0\SubstituteConstantsModeAndRequestTypeRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\v11\v0\RemoveLanguageModeMethodsFromTypo3QuerySettingsRector::class);
     $services->set(\Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector::class)->configure([new \Rector\Transform\ValueObject\StaticCallToFuncCall('TYPO3\\CMS\\Core\\Utility\\StringUtility', 'beginsWith', 'str_starts_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('TYPO3\\CMS\\Core\\Utility\\StringUtility', 'endsWith', 'str_ends_with'), new \Rector\Transform\ValueObject\StaticCallToFuncCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'isFirstPartOfStr', 'str_starts_with')]);
+    $services->set(\Ssch\TYPO3Rector\Rector\v11\v0\ReplaceInjectAnnotationWithMethodRector::class);
 };

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211219\React\Dns\Config;
+namespace RectorPrefix20211220\React\Dns\Config;
 
 use RuntimeException;
 /**
@@ -34,7 +34,7 @@ class HostsFile
         }
         // Windows actually stores the path in the registry under
         // \HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\DataBasePath
-        $path = 'RectorPrefix20211219\\%SystemRoot%\\system32\\drivers\\etc\\hosts';
+        $path = 'RectorPrefix20211220\\%SystemRoot%\\system32\\drivers\\etc\\hosts';
         $base = \getenv('SystemRoot');
         if ($base === \false) {
             $base = 'C:\\Windows';
@@ -117,8 +117,8 @@ class HostsFile
         }
         $names = array();
         foreach (\preg_split('/\\r?\\n/', $this->contents) as $line) {
-            $parts = \preg_split('/\\s+/', $line, null, \PREG_SPLIT_NO_EMPTY);
-            $addr = \array_shift($parts);
+            $parts = \preg_split('/\\s+/', $line, -1, \PREG_SPLIT_NO_EMPTY);
+            $addr = (string) \array_shift($parts);
             // remove IPv6 zone ID (`fe80::1%lo0` => `fe80:1`)
             if (\strpos($addr, ':') !== \false && ($pos = \strpos($addr, '%')) !== \false) {
                 $addr = \substr($addr, 0, $pos);

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211219\Helmich\TypoScriptParser\Tokenizer\Printer;
+namespace RectorPrefix20211220\Helmich\TypoScriptParser\Tokenizer\Printer;
 
-use RectorPrefix20211219\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
-class CodeTokenPrinter implements \RectorPrefix20211219\Helmich\TypoScriptParser\Tokenizer\Printer\TokenPrinterInterface
+use RectorPrefix20211220\Helmich\TypoScriptParser\Tokenizer\TokenInterface;
+class CodeTokenPrinter implements \RectorPrefix20211220\Helmich\TypoScriptParser\Tokenizer\Printer\TokenPrinterInterface
 {
     /**
      * @param TokenInterface[] $tokens

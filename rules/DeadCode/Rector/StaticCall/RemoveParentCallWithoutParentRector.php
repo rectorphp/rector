@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\StaticCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -101,8 +102,7 @@ CODE_SAMPLE
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            $this->removeNode($node);
-            return null;
+            return $this->processNoParentReflection($node);
         }
         $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
         if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -121,6 +121,15 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($node);
+        return null;
+    }
+    private function processNoParentReflection(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\ConstFetch
+    {
+        $parent = $staticCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
+            return $this->nodeFactory->createNull();
+        }
+        $this->removeNode($staticCall);
         return null;
     }
 }

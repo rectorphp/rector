@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211219\Symplify\Astral\PhpParser;
+namespace RectorPrefix20211220\Symplify\Astral\PhpParser;
 
 use PhpParser\Node\Stmt;
 use PHPStan\Parser\Parser;

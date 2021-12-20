@@ -6,6 +6,7 @@ namespace Rector\DowngradePhp73\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer;
@@ -62,7 +63,7 @@ CODE_SAMPLE
         return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\New_::class];
     }
     /**
-     * @param FuncCall|MethodCall|StaticCall $node
+     * @param FuncCall|MethodCall|StaticCall|New_ $node
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {

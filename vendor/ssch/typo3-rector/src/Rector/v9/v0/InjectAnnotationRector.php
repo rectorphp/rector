@@ -4,22 +4,11 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Nop;
-use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20211219\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20211219\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -37,16 +26,16 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
      */
     private const NEW_ANNOTATION = 'TYPO3\\CMS\\Extbase\\Annotation\\Inject';
     /**
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
+     * @var \Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory
      */
-    private $phpDocTagRemover;
+    private $injectMethodFactory;
     /**
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
     private $docBlockTagReplacer;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer $docBlockTagReplacer)
+    public function __construct(\Ssch\TYPO3Rector\NodeFactory\InjectMethodFactory $injectMethodFactory, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer $docBlockTagReplacer)
     {
-        $this->phpDocTagRemover = $phpDocTagRemover;
+        $this->injectMethodFactory = $injectMethodFactory;
         $this->docBlockTagReplacer = $docBlockTagReplacer;
     }
     /**
@@ -73,29 +62,7 @@ final class InjectAnnotationRector extends \Rector\Core\Rector\AbstractRector
                 $this->docBlockTagReplacer->replaceTagByAnother($propertyPhpDocInfo, self::OLD_ANNOTATION, self::NEW_ANNOTATION);
                 continue;
             }
-            /** @var string $variableName */
-            $variableName = $this->getName($property);
-            $paramBuilder = new \RectorPrefix20211219\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($variableName);
-            $varType = $propertyPhpDocInfo->getVarType();
-            if (!$varType instanceof \PHPStan\Type\ObjectType) {
-                continue;
-            }
-            // Remove the old annotation and use setterInjection instead
-            $this->phpDocTagRemover->removeByName($propertyPhpDocInfo, self::OLD_ANNOTATION);
-            if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
-                $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified($varType->getClassName()));
-            } elseif ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
-                $paramBuilder->setType($varType->getShortName());
-            }
-            $param = $paramBuilder->getNode();
-            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $variableName);
-            $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, new \PhpParser\Node\Expr\Variable($variableName));
-            // Add new line and then the method
-            $injectMethods[] = new \PhpParser\Node\Stmt\Nop();
-            $methodAlreadyExists = $node->getMethod($this->createInjectMethodName($variableName));
-            if (!$methodAlreadyExists instanceof \PhpParser\Node\Stmt\ClassMethod) {
-                $injectMethods[] = $this->createInjectClassMethod($variableName, $param, $assign);
-            }
+            $injectMethods = \array_merge($injectMethods, $this->injectMethodFactory->createInjectMethodStatements($node, $property, self::OLD_ANNOTATION));
         }
         $node->stmts = \array_merge($node->stmts, $injectMethods);
         return $node;
@@ -125,19 +92,5 @@ public function injectSomeService(SomeService $someService)
 
 CODE_SAMPLE
 )]);
-    }
-    private function createInjectClassMethod(string $variableName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Assign $assign) : \PhpParser\Node\Stmt\ClassMethod
-    {
-        $injectMethodName = $this->createInjectMethodName($variableName);
-        $injectMethodBuilder = new \RectorPrefix20211219\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($injectMethodName);
-        $injectMethodBuilder->makePublic();
-        $injectMethodBuilder->addParam($param);
-        $injectMethodBuilder->setReturnType('void');
-        $injectMethodBuilder->addStmt($assign);
-        return $injectMethodBuilder->getNode();
-    }
-    private function createInjectMethodName(string $variableName) : string
-    {
-        return 'inject' . \ucfirst($variableName);
     }
 }

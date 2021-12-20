@@ -1,4 +1,4 @@
-# 222 Rules Overview
+# 224 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -2382,6 +2382,28 @@ Remove TypoScript option addQueryString.method
 
 <br>
 
+## RemoveBackendUtilityViewOnClickUsageRector
+
+Resolve usages of BackendUtility::viewOnClick to new method
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v3\RemoveBackendUtilityViewOnClickUsageRector`](../src/Rector/v11/v3/RemoveBackendUtilityViewOnClickUsageRector.php)
+
+```diff
+-$onclick = BackendUtility::viewOnClick(
+-    $pageId, $backPath, $rootLine, $section,
+-    $viewUri, $getVars, $switchFocus
+-);
++$onclick = PreviewUriBuilder::create($pageId, $viewUri)
++    ->withRootLine($rootLine)
++    ->withSection($section)
++    ->withAdditionalQueryParameters($getVars)
++    ->buildDispatcherDataAttributes([
++        PreviewUriBuilder::OPTION_SWITCH_FOCUS => $switchFocus,
++    ]);
+```
+
+<br>
+
 ## RemoveCharsetConverterParametersRector
 
 Remove CharsetConvertParameters
@@ -3321,6 +3343,28 @@ Replace $_EXTKEY with extension key
          'FooBar' => 'baz',
      ]
  );
+```
+
+<br>
+
+## ReplaceInjectAnnotationWithMethodRector
+
+Turns properties with `@TYPO3\CMS\Extbase\Annotation\Inject` to setter injection
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v0\ReplaceInjectAnnotationWithMethodRector`](../src/Rector/v11/v0/ReplaceInjectAnnotationWithMethodRector.php)
+
+```diff
+ /**
+  * @var SomeService
+- * @TYPO3\CMS\Extbase\Annotation\Inject
+  */
+-private $someService;
++private $someService;
++
++public function injectSomeService(SomeService $someService)
++{
++    $this->someService = $someService;
++}
 ```
 
 <br>

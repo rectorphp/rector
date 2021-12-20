@@ -8,8 +8,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
 use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\VariadicAwareParamTagValueNode;
-use RectorPrefix20211219\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ParamPhpDocNodeVisitor extends \RectorPrefix20211219\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
+use RectorPrefix20211220\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class ParamPhpDocNodeVisitor extends \RectorPrefix20211220\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @readonly

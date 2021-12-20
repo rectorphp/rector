@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211219\Symplify\Astral\NodeAnalyzer;
+namespace RectorPrefix20211220\Symplify\Astral\NodeAnalyzer;
 
-use RectorPrefix20211219\Nette\Application\UI\Template;
+use RectorPrefix20211220\Nette\Application\UI\Template;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Analyser\Scope;
-use RectorPrefix20211219\Symplify\Astral\Naming\SimpleNameResolver;
-use RectorPrefix20211219\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser;
+use RectorPrefix20211220\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20211220\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser;
 /**
  * @api
  */
@@ -17,7 +17,7 @@ final class NetteTypeAnalyzer
     /**
      * @var array<class-string<Template>>
      */
-    private const TEMPLATE_TYPES = ['RectorPrefix20211219\\Nette\\Application\\UI\\Template', 'RectorPrefix20211219\\Nette\\Application\\UI\\ITemplate', 'RectorPrefix20211219\\Nette\\Bridges\\ApplicationLatte\\Template', 'RectorPrefix20211219\\Nette\\Bridges\\ApplicationLatte\\DefaultTemplate'];
+    private const TEMPLATE_TYPES = ['RectorPrefix20211220\\Nette\\Application\\UI\\Template', 'RectorPrefix20211220\\Nette\\Application\\UI\\ITemplate', 'RectorPrefix20211220\\Nette\\Bridges\\ApplicationLatte\\Template', 'RectorPrefix20211220\\Nette\\Bridges\\ApplicationLatte\\DefaultTemplate'];
     /**
      * @var \Symplify\Astral\Naming\SimpleNameResolver
      */
@@ -26,7 +26,7 @@ final class NetteTypeAnalyzer
      * @var \Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser
      */
     private $containsTypeAnalyser;
-    public function __construct(\RectorPrefix20211219\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20211219\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser $containsTypeAnalyser)
+    public function __construct(\RectorPrefix20211220\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20211220\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser $containsTypeAnalyser)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->containsTypeAnalyser = $containsTypeAnalyser;
@@ -61,7 +61,7 @@ final class NetteTypeAnalyzer
             return \false;
         }
         // this type has getComponent() method
-        return \is_a($className, 'RectorPrefix20211219\\Nette\\ComponentModel\\Container', \true);
+        return \is_a($className, 'RectorPrefix20211220\\Nette\\ComponentModel\\Container', \true);
     }
     public function isInsideControl(\PHPStan\Analyser\Scope $scope) : bool
     {
@@ -69,6 +69,6 @@ final class NetteTypeAnalyzer
         if ($className === null) {
             return \false;
         }
-        return \is_a($className, 'RectorPrefix20211219\\Nette\\Application\\UI\\Control', \true);
+        return \is_a($className, 'RectorPrefix20211220\\Nette\\Application\\UI\\Control', \true);
     }
 }

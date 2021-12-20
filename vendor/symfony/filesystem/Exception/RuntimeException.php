@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211219\Symfony\Component\Filesystem\Exception;
+namespace RectorPrefix20211220\Symfony\Component\Filesystem\Exception;
 
 /**
  * @author Théo Fidry <theo.fidry@gmail.com>
  */
-class RuntimeException extends \RuntimeException implements \RectorPrefix20211219\Symfony\Component\Filesystem\Exception\ExceptionInterface
+class RuntimeException extends \RuntimeException implements \RectorPrefix20211220\Symfony\Component\Filesystem\Exception\ExceptionInterface
 {
 }

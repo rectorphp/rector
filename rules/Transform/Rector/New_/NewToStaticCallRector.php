@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\NewToStaticCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211219\Webmozart\Assert\Assert;
+use RectorPrefix20211220\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest
  */
@@ -73,8 +73,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $typeToStaticCalls = $configuration[self::TYPE_TO_STATIC_CALLS] ?? $configuration;
-        \RectorPrefix20211219\Webmozart\Assert\Assert::isArray($typeToStaticCalls);
-        \RectorPrefix20211219\Webmozart\Assert\Assert::allIsAOf($typeToStaticCalls, \Rector\Transform\ValueObject\NewToStaticCall::class);
+        \RectorPrefix20211220\Webmozart\Assert\Assert::isArray($typeToStaticCalls);
+        \RectorPrefix20211220\Webmozart\Assert\Assert::allIsAOf($typeToStaticCalls, \Rector\Transform\ValueObject\NewToStaticCall::class);
         $this->typeToStaticCalls = $typeToStaticCalls;
     }
 }

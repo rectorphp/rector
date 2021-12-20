@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.9.0 (2021-12-20)
+
+*   Feature: Full support for PHP 8.1 release and prepare PHP 8.2 compatibility
+    by refactoring `Parser` to avoid assigning dynamic properties.
+    (#188 and #186 by @clue and #184 by @SimonFrings)
+
+*   Feature: Avoid dependency on `ext-filter`.
+    (#185 by @clue)
+
+*   Feature / Fix: Skip invalid nameserver entries from `resolv.conf` and ignore IPv6 zone IDs.
+    (#187 by @clue)
+
+*   Feature / Fix: Reduce socket read chunk size for queries over TCP/IP.
+    (#189 by @clue)
+
 ## 1.8.0 (2021-07-11)
 
 A major new feature release, see [**release announcement**](https://clue.engineering/2021/announcing-reactphp-default-loop).

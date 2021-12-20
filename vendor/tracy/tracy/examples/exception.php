@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211219;
+namespace RectorPrefix20211220;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20211219\Tracy\Debugger;
+use RectorPrefix20211220\Tracy\Debugger;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20211219\Tracy\Debugger::enable(\RectorPrefix20211219\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20211220\Tracy\Debugger::enable(\RectorPrefix20211220\Tracy\Debugger::DETECT, __DIR__ . '/log');
 ?>
 <!DOCTYPE html><link rel="stylesheet" href="assets/style.css">
 
@@ -29,13 +29,13 @@ class DemoClass
         throw new \Exception('The my exception', 123);
     }
 }
-\class_alias('RectorPrefix20211219\\DemoClass', 'DemoClass', \false);
+\class_alias('RectorPrefix20211220\\DemoClass', 'DemoClass', \false);
 function demo($a, $b)
 {
-    $demo = new \RectorPrefix20211219\DemoClass();
+    $demo = new \RectorPrefix20211220\DemoClass();
     $demo->first($a, $b);
 }
-if (\RectorPrefix20211219\Tracy\Debugger::$productionMode) {
+if (\RectorPrefix20211220\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }
-\RectorPrefix20211219\demo(10, 'any string');
+\RectorPrefix20211220\demo(10, 'any string');

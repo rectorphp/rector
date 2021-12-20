@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211219\Symfony\Component\Config\Resource;
+namespace RectorPrefix20211220\Symfony\Component\Config\Resource;
 
-use RectorPrefix20211219\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix20211219\Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
-use RectorPrefix20211219\Symfony\Contracts\Service\ServiceSubscriberInterface;
+use RectorPrefix20211220\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20211220\Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
+use RectorPrefix20211220\Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *
  * @final
  */
-class ReflectionClassResource implements \RectorPrefix20211219\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class ReflectionClassResource implements \RectorPrefix20211220\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $files = [];
     private $className;
@@ -108,7 +108,7 @@ class ReflectionClassResource implements \RectorPrefix20211219\Symfony\Component
     {
         if (\PHP_VERSION_ID >= 80000) {
             $attributes = [];
-            foreach ([] as $a) {
+            foreach (\method_exists($class, 'getAttributes') ? $class->getAttributes() : [] as $a) {
                 $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
             }
             (yield \print_r($attributes, \true));
@@ -128,7 +128,7 @@ class ReflectionClassResource implements \RectorPrefix20211219\Symfony\Component
             $defaults = $class->getDefaultProperties();
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
                 if (\PHP_VERSION_ID >= 80000) {
-                    foreach ([] as $a) {
+                    foreach (\method_exists($p, 'getAttributes') ? $p->getAttributes() : [] as $a) {
                         $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                     }
                     (yield \print_r($attributes, \true));
@@ -147,7 +147,7 @@ class ReflectionClassResource implements \RectorPrefix20211219\Symfony\Component
         }, null, $class->name);
         foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $m) {
             if (\PHP_VERSION_ID >= 80000) {
-                foreach ([] as $a) {
+                foreach (\method_exists($m, 'getAttributes') ? $m->getAttributes() : [] as $a) {
                     $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                 }
                 (yield \print_r($attributes, \true));
@@ -157,7 +157,7 @@ class ReflectionClassResource implements \RectorPrefix20211219\Symfony\Component
             $parametersWithUndefinedConstants = [];
             foreach ($m->getParameters() as $p) {
                 if (\PHP_VERSION_ID >= 80000) {
-                    foreach ([] as $a) {
+                    foreach (\method_exists($p, 'getAttributes') ? $p->getAttributes() : [] as $a) {
                         $attributes[] = [$a->getName(), \PHP_VERSION_ID >= 80100 ? (string) $a : $a->getArguments()];
                     }
                     (yield \print_r($attributes, \true));
@@ -202,18 +202,18 @@ class ReflectionClassResource implements \RectorPrefix20211219\Symfony\Component
         if ($class->isAbstract() || $class->isInterface() || $class->isTrait()) {
             return;
         }
-        if (\interface_exists(\RectorPrefix20211219\Symfony\Component\EventDispatcher\EventSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20211219\Symfony\Component\EventDispatcher\EventSubscriberInterface::class)) {
-            (yield \RectorPrefix20211219\Symfony\Component\EventDispatcher\EventSubscriberInterface::class);
+        if (\interface_exists(\RectorPrefix20211220\Symfony\Component\EventDispatcher\EventSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20211220\Symfony\Component\EventDispatcher\EventSubscriberInterface::class)) {
+            (yield \RectorPrefix20211220\Symfony\Component\EventDispatcher\EventSubscriberInterface::class);
             (yield \print_r($class->name::getSubscribedEvents(), \true));
         }
-        if (\interface_exists(\RectorPrefix20211219\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20211219\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class)) {
-            (yield \RectorPrefix20211219\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class);
+        if (\interface_exists(\RectorPrefix20211220\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20211220\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class)) {
+            (yield \RectorPrefix20211220\Symfony\Component\Messenger\Handler\MessageSubscriberInterface::class);
             foreach ($class->name::getHandledMessages() as $key => $value) {
                 (yield $key . \print_r($value, \true));
             }
         }
-        if (\interface_exists(\RectorPrefix20211219\Symfony\Contracts\Service\ServiceSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20211219\Symfony\Contracts\Service\ServiceSubscriberInterface::class)) {
-            (yield \RectorPrefix20211219\Symfony\Contracts\Service\ServiceSubscriberInterface::class);
+        if (\interface_exists(\RectorPrefix20211220\Symfony\Contracts\Service\ServiceSubscriberInterface::class, \false) && $class->isSubclassOf(\RectorPrefix20211220\Symfony\Contracts\Service\ServiceSubscriberInterface::class)) {
+            (yield \RectorPrefix20211220\Symfony\Contracts\Service\ServiceSubscriberInterface::class);
             (yield \print_r($class->name::getSubscribedServices(), \true));
         }
     }
