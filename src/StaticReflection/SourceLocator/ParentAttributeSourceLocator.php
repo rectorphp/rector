@@ -42,17 +42,18 @@ final class ParentAttributeSourceLocator implements SourceLocator
 
     public function locateIdentifier(Reflector $reflector, Identifier $identifier): ?Reflection
     {
-        if ($identifier->getName() === 'Symfony\Component\DependencyInjection\Attribute\Autoconfigure' && $this->reflectionProvider->hasClass(
-            $identifier->getName()
+        $identifierName = $identifier->getName();
+        if ($identifierName === 'Symfony\Component\DependencyInjection\Attribute\Autoconfigure' && $this->reflectionProvider->hasClass(
+            $identifierName
         )) {
-            $classReflection = $this->reflectionProvider->getClass($identifier->getName());
+            $classReflection = $this->reflectionProvider->getClass($identifierName);
 
-            $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $identifier->getName());
+            $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $identifierName);
             if ($class === null) {
                 return null;
             }
 
-            $class->namespacedName = new FullyQualified($identifier->getName());
+            $class->namespacedName = new FullyQualified($identifierName);
             $fakeLocatedSource = new LocatedSource('virtual', null);
             $classReflector = new ClassReflector($this);
 
