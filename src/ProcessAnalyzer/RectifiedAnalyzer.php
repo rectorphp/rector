@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\ProcessAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -17,13 +17,17 @@ use Rector\Core\ValueObject\RectifiedNode;
  *
  * Some limitations:
  *
- *   - only check against Stmt which not ClassLike.
+ *   - only check against Node which not Assign or Class_
  *   - The checked node doesn't has PhpDocInfo changed.
  *
  * which possibly changed by other process.
  */
 final class RectifiedAnalyzer
 {
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const EXCLUDE_NODES = [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Class_::class];
     /**
      * @var array<string, RectifiedNode|null>
      */
@@ -39,10 +43,7 @@ final class RectifiedAnalyzer
     }
     public function verify(\Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node, \Rector\Core\ValueObject\Application\File $currentFile) : ?\Rector\Core\ValueObject\RectifiedNode
     {
-        if (!$node instanceof \PhpParser\Node\Stmt) {
-            return null;
-        }
-        if ($node instanceof \PhpParser\Node\Stmt\ClassLike) {
+        if (\in_array(\get_class($node), self::EXCLUDE_NODES, \true)) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
