@@ -111,11 +111,8 @@ final class ClassMethodParamVendorLockResolver
     }
     private function hasClassMethodLockMatchingFileName(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName, string $filePathPartName) : bool
     {
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            // skip self
-            if ($ancestorClassReflection === $classReflection) {
-                continue;
-            }
+        $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
+        foreach ($ancestorClassReflections as $ancestorClassReflection) {
             // parent type
             if (!$ancestorClassReflection->hasNativeMethod($methodName)) {
                 continue;

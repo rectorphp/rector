@@ -100,15 +100,11 @@ final class FamilyRelationsAnalyzer
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $ancestorClassReflections = $classReflection->getAncestors();
+        $ancestorClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
         $propertyName = $this->nodeNameResolver->getName($property);
         $kindPropertyFetch = $this->getKindPropertyFetch($property);
-        $className = $classReflection->getName();
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             $ancestorClassName = $ancestorClassReflection->getName();
-            if ($ancestorClassName === $className) {
-                continue;
-            }
             if ($ancestorClassReflection->isSubclassOf('PHPUnit\\Framework\\TestCase')) {
                 continue;
             }
