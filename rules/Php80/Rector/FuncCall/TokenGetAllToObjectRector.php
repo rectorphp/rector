@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
@@ -171,5 +172,25 @@ CODE_SAMPLE
                 $this->removeNode($node);
             }
         });
+    }
+
+    /**
+     * @param Stmt[] $stmts
+     */
+    private function unwrapStmts(array $stmts, If_ $if): void
+    {
+        // move /* */ doc block from if to first element to keep it
+        $currentPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($if);
+
+        foreach ($stmts as $key => $stmt) {
+            if ($key === 0) {
+                $stmt->setAttribute(AttributeKey::PHP_DOC_INFO, $currentPhpDocInfo);
+
+                // move // comments
+                $stmt->setAttribute(AttributeKey::COMMENTS, $if->getComments());
+            }
+
+            $this->nodesToAddCollector->addNodeAfterNode($stmt, $if);
+        }
     }
 }
