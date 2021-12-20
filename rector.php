@@ -69,8 +69,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             __DIR__ . '/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
         ],
 
-        __DIR__ . '/src/UnusedPrivateConstant.php',
-
         MyCLabsClassToEnumRector::class,
         SpatieEnumClassToEnumRector::class,
 

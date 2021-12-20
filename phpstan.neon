@@ -41,7 +41,6 @@ parameters:
     checkGenericClassInNonGenericObjectType: false
 
     excludePaths:
-        - src/UnusedPrivateConstant.php
         # too modern code for PHPStan 0.12.2
         - bin/validate-phpstan-version.php
 
