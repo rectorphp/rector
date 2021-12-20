@@ -29,8 +29,9 @@ final class RenamedClassesSourceLocator implements \PHPStan\BetterReflection\Sou
     }
     public function locateIdentifier(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\Identifier $identifier) : ?\PHPStan\BetterReflection\Reflection\Reflection
     {
+        $identifierName = $identifier->getName();
         foreach ($this->renamedClassesDataCollector->getOldClasses() as $oldClass) {
-            if ($identifier->getName() !== $oldClass) {
+            if ($identifierName !== $oldClass) {
                 continue;
             }
             // inspired at https://github.com/phpstan/phpstan-src/blob/a9dd9af959fb0c1e0a09d4850f78e05e8dff3d91/src/Reflection/BetterReflection/BetterReflectionProvider.php#L220-L225
