@@ -1761,7 +1761,6 @@ return array(
     'Rector\\Core\\Stubs\\DummyTraitClass' => $baseDir . '/src/Stubs/DummyTraitClass.php',
     'Rector\\Core\\Stubs\\PHPStanStubLoader' => $baseDir . '/src/Stubs/PHPStanStubLoader.php',
     'Rector\\Core\\Template\\DefaultResolver' => $baseDir . '/src/Template/DefaultResolver.php',
-    'Rector\\Core\\UnusedPrivateConstant' => $baseDir . '/src/UnusedPrivateConstant.php',
     'Rector\\Core\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',
     'Rector\\Core\\Util\\StaticRectorStrings' => $baseDir . '/src/Util/StaticRectorStrings.php',
     'Rector\\Core\\Util\\StringUtils' => $baseDir . '/src/Util/StringUtils.php',
