@@ -25,6 +25,8 @@ final class SwitchExprsResolver
         $condAndExpr = [];
         $collectionEmptyCasesCond = [];
 
+        $this->moveDefaultCaseToLast($switch);
+
         foreach ($switch->cases as $key => $case) {
             if (! $this->isValidCase($case)) {
                 return [];
@@ -83,6 +85,34 @@ final class SwitchExprsResolver
         }
 
         return $condAndExpr;
+    }
+
+    private function moveDefaultCaseToLast(Switch_ $switch): void
+    {
+        foreach ($switch->cases as $key => $case) {
+            if ($case->cond instanceof Expr) {
+                continue;
+            }
+
+            // not has next? default is at the end, no need move
+            if (! isset($switch->cases[$key + 1])) {
+                return;
+            }
+
+            for ($loop = $key - 1; $loop >= 0; --$loop) {
+                if ($switch->cases[$loop]->stmts !== []) {
+                    break;
+                }
+
+                unset($switch->cases[$loop]);
+            }
+
+            $caseToMove = $switch->cases[$key];
+            unset($switch->cases[$key]);
+            $switch->cases[] = $caseToMove;
+
+            break;
+        }
     }
 
     private function isValidCase(Case_ $case): bool
