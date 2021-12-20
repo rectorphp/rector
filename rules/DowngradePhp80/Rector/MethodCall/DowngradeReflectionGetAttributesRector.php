@@ -78,15 +78,19 @@ CODE_SAMPLE
             return null;
         }
 
-        // avoid infinite loop
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE);
-        if ($createdByRule === self::class) {
-            return null;
-        }
-
-        $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
         $args = [new Arg($node->var), new Arg(new String_('getAttributes'))];
 
-        return new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, new Array_([]));
+        $ternary = new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, new Array_([]));
+
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parent instanceof Ternary) {
+            return $ternary;
+        }
+
+        if (! $this->nodeComparator->areNodesEqual($parent, $ternary)) {
+            return $ternary;
+        }
+
+        return null;
     }
 }
