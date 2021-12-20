@@ -5,6 +5,7 @@ namespace Rector\Core\DependencyInjection\Collector;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use ReflectionClass;
+use ReflectionClassConstant;
 use RectorPrefix20211220\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20211220\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix20211220\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
@@ -66,14 +67,20 @@ final class ConfigureCallValuesCollector
                     // fixes bug when 1 item is unwrapped and treated as constant key, without rule having public constant
                     $classReflection = new \ReflectionClass($rectorClass);
                     $reflectionClassConstants = $classReflection->getReflectionConstants();
-                    foreach ($reflectionClassConstants as $reflectionClassConstant) {
-                        if (!$reflectionClassConstant->isPublic()) {
-                            continue;
+                    $result = [];
+                    \array_walk($reflectionClassConstants, function ($value) use(&$result) {
+                        if ($value->isPublic()) {
+                            $result[$value->getName()] = $value->getValue();
                         }
-                        $constantValue = $reflectionClassConstant->getValue();
-                        $constantName = $reflectionClassConstant->getName();
+                    });
+                    $constantNamesToValues = $result;
+                    foreach ($constantNamesToValues as $constantName => $constantValue) {
                         if ($constantValue === $firstKey) {
-                            if (\strpos((string) $reflectionClassConstant->getDocComment(), '@deprecated') === \false) {
+                            $reflectionConstant = $classReflection->getReflectionConstant($constantName);
+                            if ($reflectionConstant === \false) {
+                                continue;
+                            }
+                            if (\strpos((string) $reflectionConstant->getDocComment(), '@deprecated') === \false) {
                                 continue;
                             }
                             $warningMessage = \sprintf('The constant for "%s::%s" is deprecated.%sUse "->configure()" directly instead.', $rectorClass, $constantName, \PHP_EOL);

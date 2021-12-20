@@ -14,6 +14,7 @@ final class BooleanAndAnalyzer
     public function findBooleanAndConditions(\PhpParser\Node\Expr\BinaryOp\BooleanAnd $booleanAnd) : array
     {
         $conditions = [];
+        /** @var BinaryOp|Expr $booleanAnd */
         while ($booleanAnd instanceof \PhpParser\Node\Expr\BinaryOp) {
             $conditions[] = $booleanAnd->right;
             $booleanAnd = $booleanAnd->left;
