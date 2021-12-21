@@ -49,6 +49,7 @@ Alternatively, you can download the whole package or [tracy.phar](https://github
 
 | Tracy     | compatible with PHP | compatible with browsers
 |-----------|---------------|----------
+| Tracy 2.9 | PHP 7.2 – 8.1 | Chrome 55+, Firefox 53+, Safari 11+ and iOS Safari 11+
 | Tracy 2.8 | PHP 7.2 – 8.1 | Chrome 55+, Firefox 53+, Safari 11+ and iOS Safari 11+
 | Tracy 2.7 | PHP 7.1 – 8.0 | Chrome 55+, Firefox 53+, MS Edge 16+, Safari 11+ and iOS Safari 11+
 | Tracy 2.6 | PHP 7.1 – 8.0 | Chrome 49+, Firefox 45+, MS Edge 14+, Safari 10+ and iOS Safari 10.2+
@@ -176,10 +177,10 @@ any scripts:
 AJAX and redirected requests
 ----------------------------
 
-Tracy is able to show Debug bar and Bluescreens for AJAX and redirected requests. You just have to start session before Tracy:
+Tracy is able to show Debug bar and Bluescreens for AJAX and redirected requests. Tracy keeps the data in a temporary files and uses the `tracy-session` cookie. Tracy can be configured to use a standard PHP session:
 
 ```php
-session_start();
+Debugger::setSessionStorage(new Tracy\NativeSession);
 Debugger::enable();
 ```
 
@@ -187,6 +188,7 @@ In case you use non-standard session handler, you can start Tracy immediately (i
 and then inform Tracy that session is ready to use via `dispatch()`:
 
 ```php
+Debugger::setSessionStorage(new Tracy\NativeSession);
 Debugger::enable();
 
 // initialize session handler

@@ -1,14 +1,5 @@
 <?php
 
-/**
- * Debug Bar loader template.
- *
- * It uses Font Awesome by Dave Gandy - http://fontawesome.io
- *
- * This file is part of the Tracy (https://tracy.nette.org)
- * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
- */
-
 declare(strict_types=1);
 
 namespace Tracy;
@@ -16,7 +7,7 @@ namespace Tracy;
 /**
  * @var ?string $nonce
  * @var bool $async
- * @var string $contentId
+ * @var string $requestId
  */
 
 $baseUrl = $_SERVER['REQUEST_URI'] ?? '';
@@ -25,14 +16,14 @@ $nonceAttr = $nonce ? ' nonce="' . Helpers::escapeHtml($nonce) . '"' : '';
 $asyncAttr = $async ? ' async' : '';
 ?>
 <?php if (empty($content)): ?>
-<script src="<?= Helpers::escapeHtml($baseUrl) ?>_tracy_bar=<?= urlencode("content.$contentId") ?>&amp;XDEBUG_SESSION_STOP=1" data-id="<?= Helpers::escapeHtml($contentId) ?>"<?= $asyncAttr, $nonceAttr ?>></script>
+<script src="<?= Helpers::escapeHtml($baseUrl) ?>_tracy_bar=<?= urlencode("content.$requestId") ?>&amp;XDEBUG_SESSION_STOP=1" data-id="<?= Helpers::escapeHtml($requestId) ?>"<?= $asyncAttr, $nonceAttr ?>></script>
 <?php else: ?>
 
 
 
 
 <!-- Tracy Debug Bar -->
-<script src="<?= Helpers::escapeHtml($baseUrl) ?>_tracy_bar=js&amp;v=<?= urlencode(Debugger::VERSION) ?>&amp;XDEBUG_SESSION_STOP=1" data-id="<?= Helpers::escapeHtml($contentId) ?>"<?= $nonceAttr ?>></script>
+<script src="<?= Helpers::escapeHtml($baseUrl) ?>_tracy_bar=js&amp;v=<?= urlencode(Debugger::VERSION) ?>&amp;XDEBUG_SESSION_STOP=1" data-id="<?= Helpers::escapeHtml($requestId) ?>"<?= $nonceAttr ?>></script>
 <script<?= $nonceAttr ?>>
 Tracy.Debug.init(<?= str_replace(['<!--', '</s'], ['<\!--', '<\/s'], json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE)) ?>);
 </script>

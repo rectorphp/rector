@@ -23,7 +23,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 final class PromotedPropertyCandidateResolver
 {
     /**
@@ -43,9 +43,9 @@ final class PromotedPropertyCandidateResolver
     private $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer
      */
-    private $propertyTypeInferer;
+    private $varDocPropertyTypeInferer;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -61,12 +61,12 @@ final class PromotedPropertyCandidateResolver
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
-        $this->propertyTypeInferer = $propertyTypeInferer;
+        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeComparator = $typeComparator;
         $this->typeFactory = $typeFactory;
@@ -223,7 +223,7 @@ final class PromotedPropertyCandidateResolver
             return \true;
         }
         // @todo unknown type, not suitable?
-        $propertyType = $this->propertyTypeInferer->inferProperty($property);
+        $propertyType = $this->varDocPropertyTypeInferer->inferProperty($property);
         return $this->hasConflictingParamType($matchedParam, $propertyType);
     }
 }

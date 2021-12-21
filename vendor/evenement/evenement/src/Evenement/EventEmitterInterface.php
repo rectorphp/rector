@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211220\Evenement;
+namespace RectorPrefix20211221\Evenement;
 
 interface EventEmitterInterface
 {

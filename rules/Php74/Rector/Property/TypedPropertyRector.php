@@ -28,7 +28,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -45,9 +45,9 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer
      */
-    private $propertyTypeInferer;
+    private $varDocPropertyTypeInferer;
     /**
      * @readonly
      * @var \Rector\VendorLocker\VendorLockResolver
@@ -88,9 +88,9 @@ final class TypedPropertyRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer
      */
     private $objectTypeAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer $propertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\VendorLocker\VendorLockResolver $vendorLockResolver, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Core\NodeAnalyzer\PropertyAnalyzer $propertyAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer $objectTypeAnalyzer)
     {
-        $this->propertyTypeInferer = $propertyTypeInferer;
+        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->varTagRemover = $varTagRemover;
@@ -135,7 +135,7 @@ CODE_SAMPLE
         if ($this->shouldSkipProperty($node, $scope)) {
             return null;
         }
-        $varType = $this->propertyTypeInferer->inferProperty($node);
+        $varType = $this->varDocPropertyTypeInferer->inferProperty($node);
         if ($varType instanceof \PHPStan\Type\MixedType) {
             return null;
         }

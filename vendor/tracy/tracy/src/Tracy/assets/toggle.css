@@ -13,6 +13,7 @@
 .tracy-toggle {
 	cursor: pointer;
 	user-select: none;
+	white-space: nowrap;
 }
 
 .tracy-toggle:after {

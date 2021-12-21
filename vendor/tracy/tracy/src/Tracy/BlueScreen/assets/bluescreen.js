@@ -30,7 +30,7 @@ class BlueScreen
 
 		if (!ajax) {
 			document.body.appendChild(blueScreen);
-			let id = location.href + document.getElementById('tracy-bs-error').textContent;
+			let id = location.href + document.querySelector('.section--error').textContent;
 			Tracy.Toggle.persist(blueScreen, sessionStorage.getItem('tracy-toggles-bskey') === id);
 			sessionStorage.setItem('tracy-toggles-bskey', id);
 		}
@@ -47,7 +47,14 @@ class BlueScreen
 			}
 		});
 
+		blueScreen.addEventListener('tracy-toggle', (e) => {
+			if (!e.target.matches('.tracy-dump *') && e.detail.originalEvent) {
+				e.detail.relatedTarget.classList.toggle('panel-fadein', !e.detail.collapsed);
+			}
+		});
+
 		Tracy.TableSort.init();
+		Tracy.Tabs.init();
 	}
 
 

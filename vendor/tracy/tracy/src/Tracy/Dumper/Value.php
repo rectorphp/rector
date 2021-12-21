@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211220\Tracy\Dumper;
+namespace RectorPrefix20211221\Tracy\Dumper;
 
 /**
  * @internal
@@ -32,7 +32,7 @@ final class Value implements \JsonSerializable
     public $editor;
     /** @var ?bool */
     public $collapsed;
-    public function __construct(string $type, $value = null, int $length = null)
+    public function __construct(string $type, $value = null, ?int $length = null)
     {
         $this->type = $type;
         $this->value = $value;

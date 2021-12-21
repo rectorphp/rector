@@ -21,6 +21,7 @@ class Toggle
 				&& Math.pow(start[0] - e.clientX, 2) + Math.pow(start[1] - e.clientY, 2) < MOVE_THRESHOLD
 			) {
 				Toggle.toggle(el, undefined, e);
+				e.preventDefault();
 				e.stopImmediatePropagation();
 			}
 		});

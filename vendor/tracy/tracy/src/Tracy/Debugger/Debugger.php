@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211220\Tracy;
+namespace RectorPrefix20211221\Tracy;
 
 use ErrorException;
 /**
@@ -13,7 +13,7 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.8.9';
+    public const VERSION = '2.9.0';
     /** server modes for Debugger::enable() */
     public const DEVELOPMENT = \false, PRODUCTION = \true, DETECT = null;
     public const COOKIE_SECRET = 'tracy-debug';
@@ -36,7 +36,7 @@ class Debugger
     /********************* errors and exceptions reporting ****************d*g**/
     /** @var bool|int determines whether any error will cause immediate death in development mode; if integer that it's matched against error severity */
     public static $strictMode = \false;
-    /** @var bool disables the @ (shut-up) operator so that notices and warnings are no longer hidden */
+    /** @var bool|int disables the @ (shut-up) operator so that notices and warnings are no longer hidden; if integer than it's matched against error severity */
     public static $scream = \false;
     /** @var callable[] functions that are automatically called after fatal error */
     public static $onFatalError = [];
@@ -61,7 +61,7 @@ class Debugger
     /** @var string|array email(s) to which send error notifications */
     public static $email;
     /** for Debugger::log() and Debugger::fireLog() */
-    public const DEBUG = \RectorPrefix20211220\Tracy\ILogger::DEBUG, INFO = \RectorPrefix20211220\Tracy\ILogger::INFO, WARNING = \RectorPrefix20211220\Tracy\ILogger::WARNING, ERROR = \RectorPrefix20211220\Tracy\ILogger::ERROR, EXCEPTION = \RectorPrefix20211220\Tracy\ILogger::EXCEPTION, CRITICAL = \RectorPrefix20211220\Tracy\ILogger::CRITICAL;
+    public const DEBUG = \RectorPrefix20211221\Tracy\ILogger::DEBUG, INFO = \RectorPrefix20211221\Tracy\ILogger::INFO, WARNING = \RectorPrefix20211221\Tracy\ILogger::WARNING, ERROR = \RectorPrefix20211221\Tracy\ILogger::ERROR, EXCEPTION = \RectorPrefix20211221\Tracy\ILogger::EXCEPTION, CRITICAL = \RectorPrefix20211221\Tracy\ILogger::CRITICAL;
     /********************* misc ****************d*g**/
     /** @var float timestamp with microseconds of the start of the request */
     public static $time;
@@ -77,6 +77,8 @@ class Debugger
     public static $customCssFiles = [];
     /** @var string[] */
     public static $customJsFiles = [];
+    /** @var callable[] */
+    private static $sourceMappers = [];
     /** @var array|null */
     private static $cpuUsage;
     /********************* services ****************d*g**/
@@ -88,6 +90,10 @@ class Debugger
     private static $logger;
     /** @var ILogger */
     private static $fireLogger;
+    /** @var array{DevelopmentStrategy, ProductionStrategy} */
+    private static $strategy;
+    /** @var SessionStorage */
+    private static $sessionStorage;
     /**
      * Static class - cannot be instantiated.
      */
@@ -101,7 +107,7 @@ class Debugger
      * @param  string  $logDirectory  error log directory
      * @param  string|array  $email  administrator email; enables email sending in production mode
      */
-    public static function enable($mode = null, string $logDirectory = null, $email = null) : void
+    public static function enable($mode = null, ?string $logDirectory = null, $email = null) : void
     {
         if ($mode !== null || self::$productionMode === null) {
             self::$productionMode = \is_bool($mode) ? $mode : !self::detectDebugMode($mode);
@@ -128,15 +134,15 @@ class Debugger
         }
         // php configuration
         if (\function_exists('ini_set')) {
-            \ini_set('display_errors', self::$productionMode ? '0' : '1');
+            \ini_set('display_errors', '0');
             // or 'stderr'
             \ini_set('html_errors', '0');
             \ini_set('log_errors', '0');
             \ini_set('zend.exception_ignore_args', '0');
-        } elseif (\ini_get('display_errors') != !self::$productionMode && \ini_get('display_errors') !== (self::$productionMode ? 'stderr' : 'stdout')) {
-            self::exceptionHandler(new \RuntimeException("Unable to set 'display_errors' because function ini_set() is disabled."));
         }
         \error_reporting(\E_ALL);
+        $strategy = self::getStrategy();
+        $strategy->initialize();
         if (self::$enabled) {
             return;
         }
@@ -146,7 +152,7 @@ class Debugger
             exit(255);
         });
         \set_error_handler([self::class, 'errorHandler']);
-        foreach (['Bar/Bar', 'Bar/DefaultBarPanel', 'BlueScreen/BlueScreen', 'Dumper/Describer', 'Dumper/Dumper', 'Dumper/Exposer', 'Dumper/Renderer', 'Dumper/Value', 'Logger/FireLogger', 'Logger/Logger', 'Helpers'] as $path) {
+        foreach (['Bar/Bar', 'Bar/DefaultBarPanel', 'BlueScreen/BlueScreen', 'Dumper/Describer', 'Dumper/Dumper', 'Dumper/Exposer', 'Dumper/Renderer', 'Dumper/Value', 'Logger/FireLogger', 'Logger/Logger', 'Session/SessionStorage', 'Session/FileSession', 'Session/NativeSession', 'Helpers'] as $path) {
             require_once \dirname(__DIR__) . "/{$path}.php";
         }
         self::dispatch();
@@ -154,19 +160,8 @@ class Debugger
     }
     public static function dispatch() : void
     {
-        if (self::$productionMode || \RectorPrefix20211220\Tracy\Helpers::isCli()) {
-            return;
-        } elseif (\headers_sent($file, $line) || \ob_get_length()) {
-            throw new \LogicException(__METHOD__ . '() called after some output has been sent. ' . ($file ? "Output started at {$file}:{$line}." : 'Try Tracy\\OutputDebugger to find where output started.'));
-        } elseif (self::$enabled && \session_status() !== \PHP_SESSION_ACTIVE) {
-            \ini_set('session.use_cookies', '1');
-            \ini_set('session.use_only_cookies', '1');
-            \ini_set('session.use_trans_sid', '0');
-            \ini_set('session.cookie_path', '/');
-            \ini_set('session.cookie_httponly', '1');
-            \session_start();
-        }
-        if (self::getBar()->dispatchAssets()) {
+        if (!\RectorPrefix20211221\Tracy\Helpers::isCli() && self::getStrategy()->sendAssets()) {
+            self::$showBar = \false;
             exit;
         }
     }
@@ -175,9 +170,7 @@ class Debugger
      */
     public static function renderLoader() : void
     {
-        if (!self::$productionMode) {
-            self::getBar()->renderLoader();
-        }
+        self::getStrategy()->renderLoader();
     }
     public static function isEnabled() : bool
     {
@@ -191,16 +184,15 @@ class Debugger
     {
         $error = \error_get_last();
         if (\in_array($error['type'] ?? null, [\E_ERROR, \E_CORE_ERROR, \E_COMPILE_ERROR, \E_PARSE, \E_RECOVERABLE_ERROR, \E_USER_ERROR], \true)) {
-            self::exceptionHandler(\RectorPrefix20211220\Tracy\Helpers::fixStack(new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line'])));
+            self::exceptionHandler(\RectorPrefix20211221\Tracy\Helpers::fixStack(new \ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line'])));
         } elseif (($error['type'] ?? null) === \E_COMPILE_WARNING) {
             \error_clear_last();
             self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
         }
         self::$reserved = null;
-        if (self::$showBar && !self::$productionMode) {
-            self::removeOutputBuffers(\false);
+        if (self::$showBar && !\RectorPrefix20211221\Tracy\Helpers::isCli()) {
             try {
-                self::getBar()->render();
+                self::getStrategy()->renderBar();
             } catch (\Throwable $e) {
                 self::exceptionHandler($e);
             }
@@ -218,46 +210,9 @@ class Debugger
         if (!\headers_sent()) {
             \http_response_code(isset($_SERVER['HTTP_USER_AGENT']) && \strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE ') !== \false ? 503 : 500);
         }
-        \RectorPrefix20211220\Tracy\Helpers::improveException($exception);
+        \RectorPrefix20211221\Tracy\Helpers::improveException($exception);
         self::removeOutputBuffers(\true);
-        if (self::$productionMode || \connection_aborted()) {
-            try {
-                self::log($exception, self::EXCEPTION);
-            } catch (\Throwable $e) {
-            }
-            if (!$firstTime) {
-                // nothing
-            } elseif (\RectorPrefix20211220\Tracy\Helpers::isHtmlMode()) {
-                if (!\headers_sent()) {
-                    \header('Content-Type: text/html; charset=UTF-8');
-                }
-                (function ($logged) use($exception) {
-                    require self::$errorTemplate ?: __DIR__ . '/assets/error.500.phtml';
-                })(empty($e));
-            } elseif (\RectorPrefix20211220\Tracy\Helpers::isCli()) {
-                // @ triggers E_NOTICE when strerr is closed since PHP 7.4
-                @\fwrite(\STDERR, "ERROR: {$exception->getMessage()}\n" . (isset($e) ? 'Unable to log error. You may try enable debug mode to inspect the problem.' : 'Check log to see more info.') . "\n");
-            }
-        } elseif ($firstTime && \RectorPrefix20211220\Tracy\Helpers::isHtmlMode() || \RectorPrefix20211220\Tracy\Helpers::isAjax()) {
-            self::getBlueScreen()->render($exception);
-        } else {
-            self::fireLog($exception);
-            try {
-                $file = self::log($exception, self::EXCEPTION);
-                if ($file && !\headers_sent()) {
-                    \header("X-Tracy-Error-Log: {$file}", \false);
-                }
-                if (\RectorPrefix20211220\Tracy\Helpers::detectColors()) {
-                    echo "\n\n" . \RectorPrefix20211220\Tracy\BlueScreen::highlightPhpCli($exception->getFile(), $exception->getLine()) . "\n";
-                }
-                echo "{$exception}\n" . ($file ? "\n(stored in {$file})\n" : '');
-                if ($file && self::$browser) {
-                    \exec(self::$browser . ' ' . \escapeshellarg(\strtr($file, self::$editorMapping)));
-                }
-            } catch (\Throwable $e) {
-                echo "{$exception}\nTracy is unable to log error: {$e->getMessage()}\n";
-            }
-        }
+        self::getStrategy()->handleException($exception, $firstTime);
         try {
             foreach ($firstTime ? self::$onFatalError : [] as $handler) {
                 $handler($exception);
@@ -275,22 +230,19 @@ class Debugger
      * @throws ErrorException
      * @internal
      */
-    public static function errorHandler(int $severity, string $message, string $file, int $line, array $context = null) : ?bool
+    public static function errorHandler(int $severity, string $message, string $file, int $line, ?array $context = null) : bool
     {
         $error = \error_get_last();
         if (($error['type'] ?? null) === \E_COMPILE_WARNING) {
             \error_clear_last();
             self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
         }
-        if (self::$scream) {
-            \error_reporting(\E_ALL);
-        }
         if ($context) {
             $context = (array) (object) $context;
             // workaround for PHP bug #80234
         }
         if ($severity === \E_RECOVERABLE_ERROR || $severity === \E_USER_ERROR) {
-            if (\RectorPrefix20211220\Tracy\Helpers::findTrace(\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS), '*::__toString')) {
+            if (\RectorPrefix20211221\Tracy\Helpers::findTrace(\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS), '*::__toString')) {
                 // workaround for PHP < 7.4
                 $previous = isset($context['e']) && $context['e'] instanceof \Throwable ? $context['e'] : null;
                 $e = new \ErrorException($message, 0, $severity, $file, $line, $previous);
@@ -301,42 +253,14 @@ class Debugger
             $e = new \ErrorException($message, 0, $severity, $file, $line);
             $e->context = $context;
             throw $e;
-        } elseif (($severity & \error_reporting()) !== $severity) {
-            // muted errors
-        } elseif (self::$productionMode) {
-            if (($severity & self::$logSeverity) === $severity) {
-                $e = new \ErrorException($message, 0, $severity, $file, $line);
-                $e->context = $context;
-                \RectorPrefix20211220\Tracy\Helpers::improveException($e);
-            } else {
-                $e = 'PHP ' . \RectorPrefix20211220\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20211220\Tracy\Helpers::improveError($message, (array) $context) . " in {$file}:{$line}";
-            }
-            try {
-                self::log($e, self::ERROR);
-            } catch (\Throwable $foo) {
-            }
-        } elseif ((\is_bool(self::$strictMode) ? self::$strictMode : (self::$strictMode & $severity) === $severity) && !isset($_GET['_tracy_skip_error'])) {
-            $e = new \ErrorException($message, 0, $severity, $file, $line);
-            $e->context = $context;
-            $e->skippable = \true;
-            self::exceptionHandler($e);
-            exit(255);
-        } else {
-            $message = 'PHP ' . \RectorPrefix20211220\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20211220\Tracy\Helpers::improveError($message, (array) $context);
-            $count =& self::getBar()->getPanel('Tracy:errors')->data["{$file}|{$line}|{$message}"];
-            if ($count++) {
-                // repeated error
-                return null;
-            } else {
-                self::fireLog(new \ErrorException($message, 0, $severity, $file, $line));
-                return \RectorPrefix20211220\Tracy\Helpers::isHtmlMode() || \RectorPrefix20211220\Tracy\Helpers::isAjax() ? null : \false;
-                // false calls normal error handler
-            }
+        } elseif ($severity & \error_reporting() || (\is_int(self::$scream) ? $severity & self::$scream : self::$scream)) {
+            self::getStrategy()->handleError($severity, $message, $file, $line, $context);
         }
         return \false;
         // calls normal error handler to fill-in error_get_last()
     }
-    private static function removeOutputBuffers(bool $errorOccurred) : void
+    /** @internal */
+    public static function removeOutputBuffers(bool $errorOccurred) : void
     {
         while (\ob_get_level() > self::$obLevel) {
             $status = \ob_get_status();
@@ -351,45 +275,68 @@ class Debugger
         }
     }
     /********************* services ****************d*g**/
-    public static function getBlueScreen() : \RectorPrefix20211220\Tracy\BlueScreen
+    public static function getBlueScreen() : \RectorPrefix20211221\Tracy\BlueScreen
     {
         if (!self::$blueScreen) {
-            self::$blueScreen = new \RectorPrefix20211220\Tracy\BlueScreen();
+            self::$blueScreen = new \RectorPrefix20211221\Tracy\BlueScreen();
             self::$blueScreen->info = ['PHP ' . \PHP_VERSION, $_SERVER['SERVER_SOFTWARE'] ?? null, 'Tracy ' . self::VERSION];
         }
         return self::$blueScreen;
     }
-    public static function getBar() : \RectorPrefix20211220\Tracy\Bar
+    public static function getBar() : \RectorPrefix20211221\Tracy\Bar
     {
         if (!self::$bar) {
-            self::$bar = new \RectorPrefix20211220\Tracy\Bar();
-            self::$bar->addPanel($info = new \RectorPrefix20211220\Tracy\DefaultBarPanel('info'), 'Tracy:info');
+            self::$bar = new \RectorPrefix20211221\Tracy\Bar();
+            self::$bar->addPanel($info = new \RectorPrefix20211221\Tracy\DefaultBarPanel('info'), 'Tracy:info');
             $info->cpuUsage = self::$cpuUsage;
-            self::$bar->addPanel(new \RectorPrefix20211220\Tracy\DefaultBarPanel('errors'), 'Tracy:errors');
+            self::$bar->addPanel(new \RectorPrefix20211221\Tracy\DefaultBarPanel('errors'), 'Tracy:errors');
             // filled by errorHandler()
         }
         return self::$bar;
     }
-    public static function setLogger(\RectorPrefix20211220\Tracy\ILogger $logger) : void
+    public static function setLogger(\RectorPrefix20211221\Tracy\ILogger $logger) : void
     {
         self::$logger = $logger;
     }
-    public static function getLogger() : \RectorPrefix20211220\Tracy\ILogger
+    public static function getLogger() : \RectorPrefix20211221\Tracy\ILogger
     {
         if (!self::$logger) {
-            self::$logger = new \RectorPrefix20211220\Tracy\Logger(self::$logDirectory, self::$email, self::getBlueScreen());
+            self::$logger = new \RectorPrefix20211221\Tracy\Logger(self::$logDirectory, self::$email, self::getBlueScreen());
             self::$logger->directory =& self::$logDirectory;
             // back compatiblity
             self::$logger->email =& self::$email;
         }
         return self::$logger;
     }
-    public static function getFireLogger() : \RectorPrefix20211220\Tracy\ILogger
+    public static function getFireLogger() : \RectorPrefix20211221\Tracy\ILogger
     {
         if (!self::$fireLogger) {
-            self::$fireLogger = new \RectorPrefix20211220\Tracy\FireLogger();
+            self::$fireLogger = new \RectorPrefix20211221\Tracy\FireLogger();
         }
         return self::$fireLogger;
+    }
+    /** @return ProductionStrategy|DevelopmentStrategy @internal */
+    public static function getStrategy()
+    {
+        if (empty(self::$strategy[self::$productionMode])) {
+            self::$strategy[self::$productionMode] = self::$productionMode ? new \RectorPrefix20211221\Tracy\ProductionStrategy() : new \RectorPrefix20211221\Tracy\DevelopmentStrategy(self::getBar(), self::getBlueScreen(), new \RectorPrefix20211221\Tracy\DeferredContent(self::getSessionStorage()));
+        }
+        return self::$strategy[self::$productionMode];
+    }
+    public static function setSessionStorage(\RectorPrefix20211221\Tracy\SessionStorage $storage) : void
+    {
+        if (self::$sessionStorage) {
+            throw new \Exception('Storage is already set.');
+        }
+        self::$sessionStorage = $storage;
+    }
+    /** @internal */
+    public static function getSessionStorage() : \RectorPrefix20211221\Tracy\SessionStorage
+    {
+        if (!self::$sessionStorage) {
+            self::$sessionStorage = \is_dir($dir = \session_save_path()) || \is_dir($dir = \ini_get('upload_tmp_dir')) || \is_dir($dir = \sys_get_temp_dir()) || ($dir = self::$logDirectory) ? new \RectorPrefix20211221\Tracy\FileSession($dir) : new \RectorPrefix20211221\Tracy\NativeSession();
+        }
+        return self::$sessionStorage;
     }
     /********************* useful tools ****************d*g**/
     /**
@@ -402,12 +349,12 @@ class Debugger
     public static function dump($var, bool $return = \false)
     {
         if ($return) {
-            $options = [\RectorPrefix20211220\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20211220\Tracy\Dumper::TRUNCATE => self::$maxLength];
-            return \RectorPrefix20211220\Tracy\Helpers::isCli() ? \RectorPrefix20211220\Tracy\Dumper::toText($var) : \RectorPrefix20211220\Tracy\Helpers::capture(function () use($var, $options) {
-                \RectorPrefix20211220\Tracy\Dumper::dump($var, $options);
+            $options = [\RectorPrefix20211221\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20211221\Tracy\Dumper::TRUNCATE => self::$maxLength];
+            return \RectorPrefix20211221\Tracy\Helpers::isCli() ? \RectorPrefix20211221\Tracy\Dumper::toText($var) : \RectorPrefix20211221\Tracy\Helpers::capture(function () use($var, $options) {
+                \RectorPrefix20211221\Tracy\Dumper::dump($var, $options);
             });
         } elseif (!self::$productionMode) {
-            \RectorPrefix20211220\Tracy\Dumper::dump($var, [\RectorPrefix20211220\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20211220\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20211220\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20211220\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20211220\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
+            \RectorPrefix20211221\Tracy\Dumper::dump($var, [\RectorPrefix20211221\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20211221\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20211221\Tracy\Dumper::LOCATION => self::$showLocation, \RectorPrefix20211221\Tracy\Dumper::THEME => self::$dumpTheme, \RectorPrefix20211221\Tracy\Dumper::KEYS_TO_HIDE => self::$keysToHide]);
         }
         return $var;
     }
@@ -415,7 +362,7 @@ class Debugger
      * Starts/stops stopwatch.
      * @return float   elapsed seconds
      */
-    public static function timer(string $name = null) : float
+    public static function timer(?string $name = null) : float
     {
         static $time = [];
         $now = \microtime(\true);
@@ -429,14 +376,14 @@ class Debugger
      * @param  mixed  $var
      * @return mixed  variable itself
      */
-    public static function barDump($var, string $title = null, array $options = [])
+    public static function barDump($var, ?string $title = null, array $options = [])
     {
         if (!self::$productionMode) {
             static $panel;
             if (!$panel) {
-                self::getBar()->addPanel($panel = new \RectorPrefix20211220\Tracy\DefaultBarPanel('dumps'), 'Tracy:dumps');
+                self::getBar()->addPanel($panel = new \RectorPrefix20211221\Tracy\DefaultBarPanel('dumps'), 'Tracy:dumps');
             }
-            $panel->data[] = ['title' => $title, 'dump' => \RectorPrefix20211220\Tracy\Dumper::toHtml($var, $options + [\RectorPrefix20211220\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20211220\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20211220\Tracy\Dumper::LOCATION => self::$showLocation ?: \RectorPrefix20211220\Tracy\Dumper::LOCATION_CLASS | \RectorPrefix20211220\Tracy\Dumper::LOCATION_SOURCE, \RectorPrefix20211220\Tracy\Dumper::LAZY => \true])];
+            $panel->data[] = ['title' => $title, 'dump' => \RectorPrefix20211221\Tracy\Dumper::toHtml($var, $options + [\RectorPrefix20211221\Tracy\Dumper::DEPTH => self::$maxDepth, \RectorPrefix20211221\Tracy\Dumper::TRUNCATE => self::$maxLength, \RectorPrefix20211221\Tracy\Dumper::LOCATION => self::$showLocation ?: \RectorPrefix20211221\Tracy\Dumper::LOCATION_CLASS | \RectorPrefix20211221\Tracy\Dumper::LOCATION_SOURCE, \RectorPrefix20211221\Tracy\Dumper::LAZY => \true])];
         }
         return $var;
     }
@@ -445,7 +392,7 @@ class Debugger
      * @param  mixed  $message
      * @return mixed
      */
-    public static function log($message, string $level = \RectorPrefix20211220\Tracy\ILogger::INFO)
+    public static function log($message, string $level = \RectorPrefix20211221\Tracy\ILogger::INFO)
     {
         return self::getLogger()->log($message, $level);
     }
@@ -456,6 +403,21 @@ class Debugger
     public static function fireLog($message) : bool
     {
         return !self::$productionMode && self::$showFireLogger ? self::getFireLogger()->log($message) : \false;
+    }
+    /** @internal */
+    public static function addSourceMapper(callable $mapper) : void
+    {
+        self::$sourceMappers[] = $mapper;
+    }
+    /** @return array{file: string, line: int, label: string, active: bool} */
+    public static function mapSource(string $file, int $line) : ?array
+    {
+        foreach (self::$sourceMappers as $mapper) {
+            if ($res = $mapper($file, $line)) {
+                return $res;
+            }
+        }
+        return null;
     }
     /**
      * Detects debug mode by IP address.

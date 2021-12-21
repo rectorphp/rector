@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211220;
+namespace RectorPrefix20211221;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -53,7 +53,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Ssch\TYPO3Rector\Rector\v10\v0\ChangeDefaultCachingFrameworkNamesRector::class);
     $services->set(\Ssch\TYPO3Rector\Rector\General\ExtEmConfRector::class)->configure([\Ssch\TYPO3Rector\Rector\General\ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => ['createDirs', 'uploadfolder']]);
     $services->set(\Ssch\TYPO3Rector\Rector\v10\v0\SwiftMailerBasedMailMessageToMailerBasedMessageRector::class);
-    $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector::class);
+    $services->set(\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\ExtbasePersistenceTypoScriptRector::class)->configure([]);
     $services->set(\Rector\Transform\Rector\MethodCall\MethodCallToStaticCallRector::class)->configure([new \Rector\Transform\ValueObject\MethodCallToStaticCall('TYPO3\\CMS\\Recordlist\\RecordList\\DatabaseRecordList', 'thumbCode', 'TYPO3\\CMS\\Backend\\Utility\\BackendUtility', 'thumbCode')]);
     $services->set(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class)->configure([new \Rector\Renaming\ValueObject\MethodCallRename('TYPO3\\CMS\\Recordlist\\RecordList\\DatabaseRecordList', 'requestUri', 'listURL')]);
     $services->set(\Ssch\TYPO3Rector\FileProcessor\Yaml\Form\Rector\EmailFinisherRector::class);

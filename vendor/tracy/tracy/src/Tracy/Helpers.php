@@ -5,8 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211220\Tracy;
+namespace RectorPrefix20211221\Tracy;
 
+use RectorPrefix20211221\Nette;
 /**
  * Rendering helpers for Debugger.
  */
@@ -15,13 +16,13 @@ class Helpers
     /**
      * Returns HTML link to editor.
      */
-    public static function editorLink(string $file, int $line = null) : string
+    public static function editorLink(string $file, ?int $line = null) : string
     {
-        $file = \strtr($origFile = $file, \RectorPrefix20211220\Tracy\Debugger::$editorMapping);
+        $file = \strtr($origFile = $file, \RectorPrefix20211221\Tracy\Debugger::$editorMapping);
         if ($editor = self::editorUri($origFile, $line)) {
             $parts = \explode('/', \strtr($file, '\\', '/'));
             $file = \array_pop($parts);
-            while ($parts && \strlen($file) < 42) {
+            while ($parts && \strlen($file) < 50) {
                 $file = \array_pop($parts) . '/' . $file;
             }
             $file = ($parts ? '.../' : '') . $file;
@@ -34,12 +35,14 @@ class Helpers
     /**
      * Returns link to editor.
      */
-    public static function editorUri(string $file, int $line = null, string $action = 'open', string $search = '', string $replace = '') : ?string
+    public static function editorUri(string $file, ?int $line = null, string $action = 'open', string $search = '', string $replace = '') : ?string
     {
-        if (\RectorPrefix20211220\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
+        if (\RectorPrefix20211221\Tracy\Debugger::$editor && $file && ($action === 'create' || \is_file($file))) {
             $file = \strtr($file, '/', \DIRECTORY_SEPARATOR);
-            $file = \strtr($file, \RectorPrefix20211220\Tracy\Debugger::$editorMapping);
-            return \strtr(\RectorPrefix20211220\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
+            $file = \strtr($file, \RectorPrefix20211221\Tracy\Debugger::$editorMapping);
+            $search = \str_replace("\n", \PHP_EOL, $search);
+            $replace = \str_replace("\n", \PHP_EOL, $replace);
+            return \strtr(\RectorPrefix20211221\Tracy\Debugger::$editor, ['%action' => $action, '%file' => \rawurlencode($file), '%line' => $line ?: 1, '%search' => \rawurlencode($search), '%replace' => \rawurlencode($replace)]);
         }
         return null;
     }
@@ -54,7 +57,7 @@ class Helpers
     {
         return \htmlspecialchars((string) $s, \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5, 'UTF-8');
     }
-    public static function findTrace(array $trace, $method, int &$index = null) : ?array
+    public static function findTrace(array $trace, $method, ?int &$index = null) : ?array
     {
         $m = \is_array($method) ? $method : \explode('::', $method);
         foreach ($trace as $i => $item) {
@@ -112,7 +115,7 @@ class Helpers
     public static function improveException(\Throwable $e) : void
     {
         $message = $e->getMessage();
-        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211220\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
+        if (!$e instanceof \Error && !$e instanceof \ErrorException || $e instanceof \RectorPrefix20211221\Nette\MemberAccessException || \strpos($e->getMessage(), 'did you mean')) {
             // do nothing
         } elseif (\preg_match('#^Call to undefined function (\\S+\\\\)?(\\w+)\\(#', $message, $m)) {
             $funcs = \array_merge(\get_defined_functions()['internal'], \get_defined_functions()['user']);
@@ -145,10 +148,11 @@ class Helpers
             $replace = ["::\${$m[2]}", "::\${$hint}"];
         }
         if (isset($hint)) {
+            $loc = \RectorPrefix20211221\Tracy\Debugger::mapSource($e->getFile(), $e->getLine()) ?? ['file' => $e->getFile(), 'line' => $e->getLine()];
             $ref = new \ReflectionProperty($e, 'message');
             $ref->setAccessible(\true);
             $ref->setValue($e, $message);
-            $e->tracyAction = ['link' => self::editorUri($e->getFile(), $e->getLine(), 'fix', $replace[0], $replace[1]), 'label' => 'fix it'];
+            $e->tracyAction = ['link' => self::editorUri($loc['file'], $loc['line'], 'fix', $replace[0], $replace[1]), 'label' => 'fix it'];
         }
     }
     /** @internal */
@@ -218,6 +222,16 @@ class Helpers
         return isset($_SERVER['HTTP_X_TRACY_AJAX']) && \preg_match('#^\\w{10,15}$#D', $_SERVER['HTTP_X_TRACY_AJAX']);
     }
     /** @internal */
+    public static function isRedirect() : bool
+    {
+        return (bool) \preg_match('#^Location:#im', \implode("\n", \headers_list()));
+    }
+    /** @internal */
+    public static function createId() : string
+    {
+        return \bin2hex(\random_bytes(5));
+    }
+    /** @internal */
     public static function isCli() : bool
     {
         return \PHP_SAPI === 'cli' || \PHP_SAPI === 'phpdbg';
@@ -253,7 +267,7 @@ class Helpers
         }
     }
     /** @internal */
-    public static function encodeString(string $s, int $maxLength = null, bool $showWhitespaces = \true) : string
+    public static function encodeString(string $s, ?int $maxLength = null, bool $showWhitespaces = \true) : string
     {
         $utf8 = self::isUtf8($s);
         $len = $utf8 ? self::utf8Length($s) : \strlen($s);

@@ -46,9 +46,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->set(ExtensionComposerRector::class)->call('configure', [[
-            ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT => '^10.4'
-    ]]);
+    $services->set(ExtensionComposerRector::class)->configure([
+        ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT => '^10.4'
+    ]);
 };
 ```
 
@@ -78,12 +78,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
 
-    $services->set(TypoScriptFileProcessor::class)
-        ->call('configure', [[
+    $services->set(TypoScriptFileProcessor::class)->configure([
             TypoScriptFileProcessor::ALLOWED_FILE_EXTENSIONS => [
                 'special',
             ],
-        ]]);
+    ]);
 };
 ```
 # Special Cases

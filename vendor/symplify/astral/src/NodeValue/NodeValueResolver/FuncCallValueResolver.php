@@ -1,22 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211220\Symplify\Astral\NodeValue\NodeValueResolver;
+namespace RectorPrefix20211221\Symplify\Astral\NodeValue\NodeValueResolver;
 
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use RectorPrefix20211220\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
-use RectorPrefix20211220\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix20211220\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20211221\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
+use RectorPrefix20211221\Symplify\Astral\Exception\ShouldNotHappenException;
+use RectorPrefix20211221\Symplify\Astral\Naming\SimpleNameResolver;
 /**
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
  *
  * @implements NodeValueResolverInterface<FuncCall>
  */
-final class FuncCallValueResolver implements \RectorPrefix20211220\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
+final class FuncCallValueResolver implements \RectorPrefix20211221\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
 {
+    /**
+     * @var string[]
+     */
+    private const EXCLUDED_FUNC_NAMES = ['pg_*'];
     /**
      * @var \Symplify\Astral\Naming\SimpleNameResolver
      */
@@ -25,7 +29,7 @@ final class FuncCallValueResolver implements \RectorPrefix20211220\Symplify\Astr
      * @var \PhpParser\ConstExprEvaluator
      */
     private $constExprEvaluator;
-    public function __construct(\RectorPrefix20211220\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \PhpParser\ConstExprEvaluator $constExprEvaluator)
+    public function __construct(\RectorPrefix20211221\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \PhpParser\ConstExprEvaluator $constExprEvaluator)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->constExprEvaluator = $constExprEvaluator;
@@ -50,11 +54,23 @@ final class FuncCallValueResolver implements \RectorPrefix20211220\Symplify\Astr
         }
         if ($expr->name instanceof \PhpParser\Node\Name) {
             $functionName = (string) $expr->name;
+            if (!$this->isAllowedFunctionName($functionName)) {
+                return null;
+            }
             if (\function_exists($functionName) && \is_callable($functionName)) {
                 return \call_user_func_array($functionName, $arguments);
             }
-            throw new \RectorPrefix20211220\Symplify\Astral\Exception\ShouldNotHappenException();
+            throw new \RectorPrefix20211221\Symplify\Astral\Exception\ShouldNotHappenException();
         }
         return null;
+    }
+    private function isAllowedFunctionName(string $functionName) : bool
+    {
+        foreach (self::EXCLUDED_FUNC_NAMES as $excludedFuncName) {
+            if (\fnmatch($excludedFuncName, $functionName, \FNM_NOESCAPE)) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }

@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Debug Bar: panel "info" template.
- *
- * This file is part of the Tracy (https://tracy.nette.org)
- * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
- */
-
 declare(strict_types=1);
 
 namespace Tracy;
@@ -39,14 +32,14 @@ $cachedFiles = isset($opcache['scripts']) ? array_intersect(array_keys($opcache[
 $jit = $opcache['jit'] ?? null;
 
 $info = [
-	'Execution time' => number_format($this->time * 1000, 1, '.', ' ') . ' ms',
-	'CPU usage user + system' => isset($userUsage) ? (int) $userUsage . ' % + ' . (int) $systemUsage . ' %' : null,
-	'Peak of allocated memory' => number_format(memory_get_peak_usage() / 1000000, 2, '.', ' ') . ' MB',
+	'Execution time' => number_format($this->time * 1000, 1, '.', "\u{202f}") . "\u{202f}ms",
+	'CPU usage user + system' => isset($userUsage) ? (int) $userUsage . "\u{202f}% + " . (int) $systemUsage . "\u{202f}%" : null,
+	'Peak of allocated memory' => number_format(memory_get_peak_usage() / 1000000, 2, '.', "\u{202f}") . "\u{202f}MB",
 	'Included files' => count(get_included_files()),
 	'Classes + interfaces + traits' => $countClasses(get_declared_classes()) . ' + '
 		. $countClasses(get_declared_interfaces()) . ' + ' . $countClasses(get_declared_traits()),
-	'OPcache' => $opcache ? round(count($cachedFiles) * 100 / count(get_included_files())) . ' % cached' : '–',
-	'JIT' => empty($jit['buffer_size']) ? '–' : round(($jit['buffer_size'] - $jit['buffer_free']) / $jit['buffer_size'] * 100) . ' % used',
+	'OPcache' => $opcache ? round(count($cachedFiles) * 100 / count(get_included_files())) . "\u{202f}% cached" : '–',
+	'JIT' => empty($jit['buffer_size']) ? '–' : round(($jit['buffer_size'] - $jit['buffer_free']) / $jit['buffer_size'] * 100) . "\u{202f}% used",
 	'Your IP' => $ipFormatter($_SERVER['REMOTE_ADDR'] ?? null),
 	'Server IP' => $ipFormatter($_SERVER['SERVER_ADDR'] ?? null),
 	'HTTP method / response code' => isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] . ' / ' . http_response_code() : null,
@@ -65,9 +58,9 @@ if (class_exists('Composer\Autoload\ClassLoader', false)) {
 		return $baseDir;
 	})();
 	$composer = @json_decode((string) file_get_contents($baseDir . '/composer.lock')); // @ may not exist or be valid
-	list($packages, $devPackages) = [(array) @$composer->packages, (array) @$composer->{'packages-dev'}]; // @ keys may not exist
+	[$packages, $devPackages] = [(array) @$composer->packages, (array) @$composer->{'packages-dev'}]; // @ keys may not exist
 	foreach ([&$packages, &$devPackages] as &$items) {
-		array_walk($items, function($package) {
+		array_walk($items, function ($package) {
 			$package->hash = $package->source->reference ?? $package->dist->reference ?? null;
 		}, $items);
 		usort($items, function ($a, $b): int { return $a->name <=> $b->name; });

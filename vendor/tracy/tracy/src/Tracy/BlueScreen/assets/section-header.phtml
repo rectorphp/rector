@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var \Throwable $ex
+ * @var \Throwable[] $exceptions
+ * @var array[] $actions
+ * @var BlueScreen $this
+ */
+
+$title = $ex instanceof \ErrorException
+	? Helpers::errorTypeToString($ex->getSeverity())
+	: Helpers::getClass($ex);
+$code = $ex->getCode() ? ' #' . $ex->getCode() : '';
+
+?>
+<section class="section section--error">
+	<?php if ($ex->getMessage()): ?><p><?= Helpers::escapeHtml($title . $code) ?></p><?php endif ?>
+
+
+	<h1><span><?= $this->formatMessage($ex) ?: Helpers::escapeHtml($title . $code) ?></span>
+<?php foreach ($actions as $item): ?>
+	<a href="<?= Helpers::escapeHtml($item['link']) ?>" class="action"<?= empty($item['external']) ? '' : ' target="_blank" rel="noreferrer noopener"'?>><?= Helpers::escapeHtml($item['label']) ?>&#x25ba;</a>
+<?php endforeach ?>
+	</h1>
+</section>
+
+<?php if ($ex->getPrevious()): ?>
+<div class="caused">
+	<a href="#tracyCaused<?= count($exceptions) + 1 ?>">Caused by <?= Helpers::escapeHtml(Helpers::getClass($ex->getPrevious())) ?></a>
+</div>
+<?php endif ?>

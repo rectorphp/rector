@@ -1,0 +1,66 @@
+<?php
+
+/**
+ * This file is part of the Tracy (https://tracy.nette.org)
+ * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
+ */
+declare (strict_types=1);
+namespace RectorPrefix20211221\Tracy;
+
+use ErrorException;
+/**
+ * @internal
+ */
+final class ProductionStrategy
+{
+    public function initialize() : void
+    {
+        if (!\function_exists('ini_set') && (\ini_get('display_errors') && \ini_get('display_errors') !== 'stderr')) {
+            \RectorPrefix20211221\Tracy\Debugger::exceptionHandler(new \RuntimeException("Unable to set 'display_errors' because function ini_set() is disabled."));
+        }
+    }
+    public function handleException(\Throwable $exception, bool $firstTime) : void
+    {
+        try {
+            \RectorPrefix20211221\Tracy\Debugger::log($exception, \RectorPrefix20211221\Tracy\Debugger::EXCEPTION);
+        } catch (\Throwable $e) {
+        }
+        if (!$firstTime) {
+            // nothing
+        } elseif (\RectorPrefix20211221\Tracy\Helpers::isHtmlMode()) {
+            if (!\headers_sent()) {
+                \header('Content-Type: text/html; charset=UTF-8');
+            }
+            (function ($logged) use($exception) {
+                require \RectorPrefix20211221\Tracy\Debugger::$errorTemplate ?: __DIR__ . '/assets/error.500.phtml';
+            })(empty($e));
+        } elseif (\RectorPrefix20211221\Tracy\Helpers::isCli()) {
+            // @ triggers E_NOTICE when strerr is closed since PHP 7.4
+            @\fwrite(\STDERR, "ERROR: {$exception->getMessage()}\n" . (isset($e) ? 'Unable to log error. You may try enable debug mode to inspect the problem.' : 'Check log to see more info.') . "\n");
+        }
+    }
+    public function handleError(int $severity, string $message, string $file, int $line, array $context = null) : void
+    {
+        if ($severity & \RectorPrefix20211221\Tracy\Debugger::$logSeverity) {
+            $err = new \ErrorException($message, 0, $severity, $file, $line);
+            $err->context = $context;
+            \RectorPrefix20211221\Tracy\Helpers::improveException($err);
+        } else {
+            $err = 'PHP ' . \RectorPrefix20211221\Tracy\Helpers::errorTypeToString($severity) . ': ' . \RectorPrefix20211221\Tracy\Helpers::improveError($message, (array) $context) . " in {$file}:{$line}";
+        }
+        try {
+            \RectorPrefix20211221\Tracy\Debugger::log($err, \RectorPrefix20211221\Tracy\Debugger::ERROR);
+        } catch (\Throwable $e) {
+        }
+    }
+    public function sendAssets() : bool
+    {
+        return \false;
+    }
+    public function renderLoader() : void
+    {
+    }
+    public function renderBar() : void
+    {
+    }
+}

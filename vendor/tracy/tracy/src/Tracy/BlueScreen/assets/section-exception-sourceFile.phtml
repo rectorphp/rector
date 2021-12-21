@@ -1,0 +1,44 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var \Throwable $ex
+ * @var int $expanded
+ */
+
+$sourceOriginal = $ex->getFile() && is_file($ex->getFile()) ? [$ex->getFile(), $ex->getLine()] : null;
+$sourceMapped = $sourceOriginal ? Debugger::mapSource(...$sourceOriginal) : null;
+?>
+<section class="section">
+	<h2 class="section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle<?= ($collapsed = $expanded !== null) ? ' tracy-collapsed' : '' ?>">Source file</a></h2>
+
+	<div class="section-panel<?= $collapsed ? ' tracy-collapsed' : '' ?>">
+<?php if ($sourceOriginal && $sourceMapped): ?>
+		<div class="tracy-tabs">
+			<ul class="tabs-bar">
+				<li class="tracy-tab-label<?= $sourceMapped['active'] ? '' : ' tracy-active' ?>"><a href="#">PHP</a></li>
+				<li class="tracy-tab-label<?= $sourceMapped['active'] ? ' tracy-active' : '' ?>"><a href="#"><?= Helpers::escapeHtml($sourceMapped['label']) ?></a></li>
+			</ul>
+
+			<div>
+				<div class="tracy-tab-panel tabs-panel<?= $sourceMapped['active'] ? '' : ' tracy-active' ?>">
+					<p><b>File:</b> <?= Helpers::editorLink(...$sourceOriginal) ?></p>
+					<?= BlueScreen::highlightFile(...$sourceOriginal) ?>
+				</div>
+
+				<div class="tracy-tab-panel tabs-panel<?= $sourceMapped['active'] ? ' tracy-active' : '' ?>">
+					<p><b>File:</b> <?= Helpers::editorLink($sourceMapped['file'], $sourceMapped['line']) ?></p>
+					<?= BlueScreen::highlightFile($sourceMapped['file'], $sourceMapped['line'], 15, false) ?>
+				</div>
+			</div>
+		</div>
+<?php else: ?>
+		<p><b>File:</b> <?= Helpers::editorLink($ex->getFile(), $ex->getLine()) ?></p>
+		<?php if ($sourceOriginal) echo BlueScreen::highlightFile(...$sourceOriginal) ?>
+<?php endif ?>
+
+	</div>
+</section>
