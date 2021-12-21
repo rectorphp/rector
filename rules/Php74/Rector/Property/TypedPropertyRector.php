@@ -29,7 +29,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 use Rector\VendorLocker\VendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -46,7 +46,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function __construct(
-        private readonly PropertyTypeInferer $propertyTypeInferer,
+        private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         private readonly VendorLockResolver $vendorLockResolver,
         private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
         private readonly VarTagRemover $varTagRemover,
@@ -103,7 +103,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $varType = $this->propertyTypeInferer->inferProperty($node);
+        $varType = $this->varDocPropertyTypeInferer->inferProperty($node);
         if ($varType instanceof MixedType) {
             return null;
         }

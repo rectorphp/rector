@@ -11,26 +11,28 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\VarDocPropertyTypeInferer;
 
-final class PropertyTypeInferer
+final class VarDocPropertyTypeInferer
 {
     public function __construct(
         private readonly GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer,
         private readonly DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer,
-        private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         private readonly TypeFactory $typeFactory,
         private readonly DoctrineTypeAnalyzer $doctrineTypeAnalyzer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
     ) {
     }
 
     public function inferProperty(Property $property): Type
     {
-        $resolvedType = $this->varDocPropertyTypeInferer->inferProperty($property);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+
+        $resolvedType = $phpDocInfo->getVarType();
         if ($resolvedType instanceof VoidType) {
             return new MixedType();
         }

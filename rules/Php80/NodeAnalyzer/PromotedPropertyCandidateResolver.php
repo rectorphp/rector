@@ -24,7 +24,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 
 final class PromotedPropertyCandidateResolver
 {
@@ -32,7 +32,7 @@ final class PromotedPropertyCandidateResolver
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
         private readonly NodeComparator $nodeComparator,
-        private readonly PropertyTypeInferer $propertyTypeInferer,
+        private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly TypeComparator $typeComparator,
         private readonly TypeFactory $typeFactory
@@ -242,7 +242,7 @@ final class PromotedPropertyCandidateResolver
         }
 
         // @todo unknown type, not suitable?
-        $propertyType = $this->propertyTypeInferer->inferProperty($property);
+        $propertyType = $this->varDocPropertyTypeInferer->inferProperty($property);
         return $this->hasConflictingParamType($matchedParam, $propertyType);
     }
 }

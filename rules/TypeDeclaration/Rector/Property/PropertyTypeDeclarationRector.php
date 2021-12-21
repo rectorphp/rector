@@ -15,18 +15,17 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
- * @deprecated Split to smaller specific rules.
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
  */
 final class PropertyTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
-        private readonly PropertyTypeInferer $propertyTypeInferer,
+        private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
         private readonly PhpDocTypeChanger $phpDocTypeChanger
     ) {
     }
@@ -92,7 +91,7 @@ CODE_SAMPLE
             return null;
         }
 
-        $type = $this->propertyTypeInferer->inferProperty($node);
+        $type = $this->varDocPropertyTypeInferer->inferProperty($node);
         if ($type instanceof MixedType) {
             return null;
         }
