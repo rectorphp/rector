@@ -5230,7 +5230,6 @@
                 "symplify\/composer-json-manipulator": "^10.0.4",
                 "symplify\/package-builder": "^10.0.4",
                 "symplify\/smart-file-system": "^10.0.4",
-                "symplify\/symplify-kernel": "^10.0.4",
                 "webmozart\/assert": "^1.10"
             },
             "conflict": {
