@@ -4,31 +4,55 @@ declare(strict_types=1);
 
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use ReturnTypeWillChange;
 
 final class PhpDocFromTypeDeclarationDecorator
 {
+    /**
+     * @var class-string<ReturnTypeWillChange>
+     */
+    private const RETURN_TYPE_WILL_CHANGE_ATTRIBUTE = 'ReturnTypeWillChange';
+
+    /**
+     * @var array<string, array<string, string[]>>
+     */
+    private const ADD_RETURN_TYPE_WILL_CHANGE = [
+        'PHPStan\Type\MixedType' => [
+            'ArrayAccess' => ['offsetGet'],
+        ],
+    ];
+
     public function __construct(
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly TypeUnwrapper $typeUnwrapper
+        private readonly TypeUnwrapper $typeUnwrapper,
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly PhpAttributeGroupFactory $phpAttributeGroupFactory,
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
     ) {
     }
 
@@ -43,6 +67,24 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
 
         $functionLike->returnType = null;
+
+        if (! $functionLike instanceof ClassMethod) {
+            return;
+        }
+
+        $classLike = $this->betterNodeFinder->findParentByTypes($functionLike, [Class_::class, Interface_::class]);
+        if (! $classLike instanceof ClassLike) {
+            return;
+        }
+
+        if (! $this->isRequireReturnTypeWillChange($type::class, $classLike, $functionLike)) {
+            return;
+        }
+
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(
+            self::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE
+        );
+        $functionLike->attrGroups[] = $attributeGroup;
     }
 
     /**
@@ -100,6 +142,36 @@ final class PhpDocFromTypeDeclarationDecorator
 
         $this->decorate($functionLike);
         return true;
+    }
+
+    private function isRequireReturnTypeWillChange(string $type, ClassLike $classLike, ClassMethod $classMethod): bool
+    {
+        if (! array_key_exists($type, self::ADD_RETURN_TYPE_WILL_CHANGE)) {
+            return false;
+        }
+
+        $className = (string) $this->nodeNameResolver->getName($classLike);
+        $objectClass = new ObjectType($className);
+        $methodName = $this->nodeNameResolver->getName($classMethod);
+
+        foreach (self::ADD_RETURN_TYPE_WILL_CHANGE[$type] as $class => $methods) {
+            $objectClassConfig = new ObjectType($class);
+            if (! $objectClassConfig->isSuperTypeOf($objectClass)->yes()) {
+                continue;
+            }
+
+            if (! in_array($methodName, $methods, true)) {
+                continue;
+            }
+
+            if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, self::RETURN_TYPE_WILL_CHANGE_ATTRIBUTE)) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private function isTypeMatch(ComplexType|Identifier|Name $typeNode, Type $requireType): bool
