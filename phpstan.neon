@@ -52,7 +52,6 @@ parameters:
         - bin/generate-changelog.php
 
         - */config.php
-        - tests/debug_functions.php
 
         # broken in PHPStan https://github.com/rectorphp/rector/runs/1305002460#step:5:56
         - packages/BetterPhpDocParser/ValueObject/PhpDocNode/AbstractTagValueNode.php
