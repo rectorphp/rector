@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211221\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20211222\Symfony\Component\DependencyInjection\Exception;
 
-use RectorPrefix20211221\Psr\Container\ContainerExceptionInterface;
+use RectorPrefix20211222\Psr\Container\ContainerExceptionInterface;
 /**
  * Base ExceptionInterface for Dependency Injection component.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Bulat Shakirzyanov <bulat@theopenskyproject.com>
  */
-interface ExceptionInterface extends \RectorPrefix20211221\Psr\Container\ContainerExceptionInterface
+interface ExceptionInterface extends \RectorPrefix20211222\Psr\Container\ContainerExceptionInterface
 {
 }

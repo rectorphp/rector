@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211221\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20211222\Symfony\Component\Config\Definition\Builder;
 
 /**
  * This class provides a fluent interface for building a node.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class NodeBuilder implements \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\NodeParentInterface
+class NodeBuilder implements \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\NodeParentInterface
 {
     protected $parent;
     protected $nodeMapping;
     public function __construct()
     {
-        $this->nodeMapping = ['variable' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition::class, 'scalar' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition::class, 'boolean' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\BooleanNodeDefinition::class, 'integer' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\IntegerNodeDefinition::class, 'float' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\FloatNodeDefinition::class, 'array' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition::class, 'enum' => \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\EnumNodeDefinition::class];
+        $this->nodeMapping = ['variable' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition::class, 'scalar' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition::class, 'boolean' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\BooleanNodeDefinition::class, 'integer' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\IntegerNodeDefinition::class, 'float' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\FloatNodeDefinition::class, 'array' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition::class, 'enum' => \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\EnumNodeDefinition::class];
     }
     /**
      * Set the parent node.
      *
      * @return $this
      */
-    public function setParent(\RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface $parent = null)
+    public function setParent(\RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\ParentNodeDefinitionInterface $parent = null)
     {
         $this->parent = $parent;
         return $this;
@@ -135,9 +135,9 @@ class NodeBuilder implements \RectorPrefix20211221\Symfony\Component\Config\Defi
      *
      * @return $this
      */
-    public function append(\RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
+    public function append(\RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\NodeDefinition $node)
     {
-        if ($node instanceof \RectorPrefix20211221\Symfony\Component\Config\Definition\Builder\BuilderAwareInterface) {
+        if ($node instanceof \RectorPrefix20211222\Symfony\Component\Config\Definition\Builder\BuilderAwareInterface) {
             $builder = clone $this;
             $builder->setParent(null);
             $node->setBuilder($builder);

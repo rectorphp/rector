@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211221\Symplify\PackageBuilder\DependencyInjection\FileLoader;
+namespace RectorPrefix20211222\Symplify\PackageBuilder\DependencyInjection\FileLoader;
 
-use RectorPrefix20211221\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix20211221\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20211221\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix20211221\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20211222\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix20211222\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20211222\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix20211222\Symplify\PackageBuilder\Yaml\ParametersMerger;
 /**
  * @api
  *
@@ -14,15 +14,15 @@ use RectorPrefix20211221\Symplify\PackageBuilder\Yaml\ParametersMerger;
  * - https://github.com/symfony/symfony/issues/26713
  * - https://github.com/symfony/symfony/pull/21313#issuecomment-372037445
  */
-final class ParameterMergingPhpFileLoader extends \RectorPrefix20211221\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+final class ParameterMergingPhpFileLoader extends \RectorPrefix20211222\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
      * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
      */
     private $parametersMerger;
-    public function __construct(\RectorPrefix20211221\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20211221\Symfony\Component\Config\FileLocatorInterface $fileLocator)
+    public function __construct(\RectorPrefix20211222\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20211222\Symfony\Component\Config\FileLocatorInterface $fileLocator)
     {
-        $this->parametersMerger = new \RectorPrefix20211221\Symplify\PackageBuilder\Yaml\ParametersMerger();
+        $this->parametersMerger = new \RectorPrefix20211222\Symplify\PackageBuilder\Yaml\ParametersMerger();
         parent::__construct($containerBuilder, $fileLocator);
     }
     /**

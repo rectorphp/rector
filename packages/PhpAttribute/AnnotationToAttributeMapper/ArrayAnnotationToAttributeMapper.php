@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix20211221\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211222\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */

@@ -15,7 +15,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20211221\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211222\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<IntersectionType>
  */

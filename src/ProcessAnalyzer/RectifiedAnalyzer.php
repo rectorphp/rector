@@ -6,7 +6,6 @@ namespace Rector\Core\ProcessAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\RectifiedNode;
@@ -15,10 +14,9 @@ use Rector\Core\ValueObject\RectifiedNode;
  *
  *        Same Rector Rule <-> Same Node <-> Same File
  *
- * Some limitations:
+ * Limitation:
  *
- *   - only check against Node which not Assign or Class_
- *   - The checked node doesn't has PhpDocInfo changed.
+ *   It only check against Node which not Assign or Class_
  *
  * which possibly changed by other process.
  */
@@ -32,22 +30,9 @@ final class RectifiedAnalyzer
      * @var array<string, RectifiedNode|null>
      */
     private $previousFileWithNodes = [];
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
-    {
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
-    }
     public function verify(\Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node, \Rector\Core\ValueObject\Application\File $currentFile) : ?\Rector\Core\ValueObject\RectifiedNode
     {
         if (\in_array(\get_class($node), self::EXCLUDE_NODES, \true)) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo->hasChanged()) {
             return null;
         }
         $smartFileInfo = $currentFile->getSmartFileInfo();

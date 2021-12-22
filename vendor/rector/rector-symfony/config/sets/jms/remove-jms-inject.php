@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211221;
+namespace RectorPrefix20211222;
 
 use Rector\Symfony\Rector\Property\JMSInjectPropertyToConstructorInjectionRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
