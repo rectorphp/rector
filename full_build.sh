@@ -37,8 +37,16 @@ rm rector.php
 cp ../build/target-repository/bootstrap.php .
 cp ../preload.php .
 
-# Update to your local php 7.1 path
-/opt/homebrew/Cellar/php@7.1/7.1.33_4/bin/php bin/rector list --ansi
+# allow to specify PHP71_BIN_PATH env
+# usage:
+#
+#   export PHP71_BIN_PATH=/opt/homebrew/Cellar/php@7.1/7.1.33_4/bin/php && sh ./full_build.sh
+#
+if [ -z "$PHP71_BIN_PATH" ]; then
+    eval "bin/rector list --ansi";
+else
+    eval "$PHP71_BIN_PATH bin/rector list --ansi";
+fi
 
 cd ..
 rm -rf rector-build
