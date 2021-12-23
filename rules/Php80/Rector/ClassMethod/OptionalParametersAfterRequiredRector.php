@@ -113,7 +113,7 @@ CODE_SAMPLE
         if (!$classMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($classMethodReflection, $classMethod->params);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($classMethodReflection);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
@@ -131,7 +131,7 @@ CODE_SAMPLE
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $new->args);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
@@ -145,7 +145,7 @@ CODE_SAMPLE
         if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return null;
         }
-        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection, $methodCall->args);
+        $expectedArgOrParamOrder = $this->resolveExpectedArgParamOrderIfDifferent($methodReflection);
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
@@ -158,19 +158,15 @@ CODE_SAMPLE
         return $methodCall;
     }
     /**
-     * @param array<Node\Arg|Node\Param> $argsOrParams
      * @return int[]|null
      */
-    private function resolveExpectedArgParamOrderIfDifferent(\PHPStan\Reflection\MethodReflection $methodReflection, array $argsOrParams) : ?array
+    private function resolveExpectedArgParamOrderIfDifferent(\PHPStan\Reflection\MethodReflection $methodReflection) : ?array
     {
         if ($this->vendorLocationDetector->detectMethodReflection($methodReflection)) {
             return null;
         }
         $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         $expectedParameterReflections = $this->requireOptionalParamResolver->resolveFromReflection($methodReflection);
-        if (\count($argsOrParams) !== \count($parametersAcceptor->getParameters())) {
-            return null;
-        }
         if ($expectedParameterReflections === $parametersAcceptor->getParameters()) {
             return null;
         }
