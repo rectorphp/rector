@@ -232,7 +232,7 @@ final class BetterNodeFinder
      */
     public function findClassMethodAssignsToLocalProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : array
     {
-        return $this->find((array) $classMethod->stmts, function (\PhpParser\Node $node) use($propertyName) : bool {
+        return $this->find((array) $classMethod->stmts, function (\PhpParser\Node $node) use($classMethod, $propertyName) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
@@ -241,6 +241,10 @@ final class BetterNodeFinder
             }
             $propertyFetch = $node->var;
             if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
+                return \false;
+            }
+            $parentFunctionLike = $this->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+            if ($parentFunctionLike !== $classMethod) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
