@@ -9,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\VoidType;
+use PHPStan\Type\NeverType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -99,8 +100,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->usePhpdoc) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\VoidType());
+            $this->changePhpDocToVoidIfNotNever($node);
             return $node;
         }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
@@ -121,5 +121,16 @@ CODE_SAMPLE
         $usePhpdoc = $configuration[self::USE_PHPDOC] ?? \false;
         \RectorPrefix20211223\Webmozart\Assert\Assert::boolean($usePhpdoc);
         $this->usePhpdoc = $usePhpdoc;
+    }
+    /**
+     * @param \PhpParser\Node|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     */
+    private function changePhpDocToVoidIfNotNever($node) : void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        if ($phpDocInfo->getReturnType() instanceof \PHPStan\Type\NeverType) {
+            return;
+        }
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new \PHPStan\Type\VoidType());
     }
 }
