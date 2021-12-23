@@ -36,7 +36,7 @@ final class ScalarStringToTypeMapper
         ResourceType::class => ['resource'],
         CallableType::class => ['callback', 'callable'],
         ObjectWithoutClassType::class => ['object'],
-        NeverType::class => ['never'],
+        NeverType::class => ['never', 'never-return', 'never-returns', 'no-return'],
     ];
 
     public function mapScalarStringToType(string $scalarName): Type

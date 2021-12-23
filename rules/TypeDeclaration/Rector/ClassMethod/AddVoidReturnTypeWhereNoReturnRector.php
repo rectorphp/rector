@@ -10,6 +10,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\VoidType;
+use PHPStan\Type\NeverType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -100,8 +101,7 @@ CODE_SAMPLE
         }
 
         if ($this->usePhpdoc) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
+            $this->changePhpDocToVoidIfNotNever($node);
 
             return $node;
         }
@@ -128,5 +128,16 @@ CODE_SAMPLE
         Assert::boolean($usePhpdoc);
 
         $this->usePhpdoc = $usePhpdoc;
+    }
+
+    private function changePhpDocToVoidIfNotNever(ClassMethod|Function_|Closure|Node $node): void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+        if ($phpDocInfo->getReturnType() instanceof NeverType) {
+            return;
+        }
+
+        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
     }
 }
