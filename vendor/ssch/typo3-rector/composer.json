@@ -61,7 +61,12 @@
         "optimize-autoloader": true,
         "update-with-dependencies": true,
         "sort-packages": true,
-        "platform-check": false
+        "platform-check": false,
+        "allow-plugins": {
+            "phpstan\/extension-installer": true,
+            "rector\/extension-installer": true,
+            "cweagans\/composer-patches": true
+        }
     },
     "scripts": {
         "update-composer": [
