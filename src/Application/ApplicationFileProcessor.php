@@ -12,9 +12,9 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20211222\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20211222\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix20211222\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20211223\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20211223\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20211223\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
@@ -55,7 +55,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20211222\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20211222\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20211222\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20211223\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20211223\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20211223\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
