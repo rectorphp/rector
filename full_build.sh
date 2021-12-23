@@ -28,13 +28,33 @@ git checkout composer.json
 rm -rf rector-build/packages-tests rector-build/rules-tests rector-build/tests rector-build/bin/generate-changelog.php rector-build/bin/validate-phpstan-version.php
 
 sh build/downgrade-rector.sh rector-build
-sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
 
-cd rector-prefixed-downgraded
+cd rector-build
+
+# avoid syntax error in php 7.1 and 7.2
+rm rector.php
+
 cp ../build/target-repository/bootstrap.php .
 cp ../preload.php .
-bin/rector list --ansi
-bin/rector process vendor/symfony/string/Slugger/ --dry-run
+
+# Update to your local php 7.1 path
+/opt/homebrew/Cellar/php@7.1/7.1.33_4/bin/php bin/rector list --ansi
 
 cd ..
-rm -rf rector-prefixed-downgraded
+rm -rf rector-build
+
+# Prefixed build only works on PHP < 8.1 now, so only able to run on CI.
+# We may need a way to specify PHP path on run build/build-rector-scoped.sh, eg:
+#
+#     /path/to/php/bin/php build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
+#
+#
+# sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
+# cd rector-prefixed-downgraded
+# cp ../build/target-repository/bootstrap.php .
+# cp ../preload.php .
+# bin/rector list --ansi
+# bin/rector process vendor/symfony/string/Slugger/ --dry-run
+
+# cd ..
+# rm -rf rector-prefixed-downgraded
