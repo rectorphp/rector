@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit65e788c479d0ce7e4d47503bc187b6ca
+class ComposerStaticInit15331ff51bc7980f936ec88ca2c71d9f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2368,6 +2368,7 @@ class ComposerStaticInit65e788c479d0ce7e4d47503bc187b6ca
         'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeScalarTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php',
         'Rector\\DowngradePhp70\\Rector\\GroupUse\\SplitGroupedUseImportsRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php',
         'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeClosureCallRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php',
+        'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeMethodCallOnCloneRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php',
         'Rector\\DowngradePhp70\\Rector\\New_\\DowngradeAnonymousClassRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php',
         'Rector\\DowngradePhp70\\Rector\\Spaceship\\DowngradeSpaceshipRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php',
         'Rector\\DowngradePhp70\\Rector\\String_\\DowngradeGeneratedScalarTypesRector' => __DIR__ . '/../..' . '/rules/DowngradePhp70/Rector/String_/DowngradeGeneratedScalarTypesRector.php',
@@ -3837,9 +3838,9 @@ class ComposerStaticInit65e788c479d0ce7e4d47503bc187b6ca
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit65e788c479d0ce7e4d47503bc187b6ca::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit65e788c479d0ce7e4d47503bc187b6ca::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit65e788c479d0ce7e4d47503bc187b6ca::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit15331ff51bc7980f936ec88ca2c71d9f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit15331ff51bc7980f936ec88ca2c71d9f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit15331ff51bc7980f936ec88ca2c71d9f::$classMap;
 
         }, null, ClassLoader::class);
     }

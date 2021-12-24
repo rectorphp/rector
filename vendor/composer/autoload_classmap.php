@@ -1973,6 +1973,7 @@ return array(
     'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeScalarTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php',
     'Rector\\DowngradePhp70\\Rector\\GroupUse\\SplitGroupedUseImportsRector' => $baseDir . '/rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php',
     'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeClosureCallRector' => $baseDir . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php',
+    'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeMethodCallOnCloneRector' => $baseDir . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php',
     'Rector\\DowngradePhp70\\Rector\\New_\\DowngradeAnonymousClassRector' => $baseDir . '/rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php',
     'Rector\\DowngradePhp70\\Rector\\Spaceship\\DowngradeSpaceshipRector' => $baseDir . '/rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php',
     'Rector\\DowngradePhp70\\Rector\\String_\\DowngradeGeneratedScalarTypesRector' => $baseDir . '/rules/DowngradePhp70/Rector/String_/DowngradeGeneratedScalarTypesRector.php',
