@@ -22,7 +22,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeCollector\NodeAnalyzer\BitwiseOrAnalyzer;
+use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -47,14 +47,14 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends \Rector\Cor
     private $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\NodeCollector\NodeAnalyzer\BitwiseOrAnalyzer
+     * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
-    private $bitwiseOrAnalyzer;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\NodeCollector\NodeAnalyzer\BitwiseOrAnalyzer $bitwiseOrAnalyzer)
+    private $binaryOpConditionsCollector;
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\NodeCollector\BinaryOpConditionsCollector $binaryOpConditionsCollector)
     {
         $this->variableNaming = $variableNaming;
         $this->ifManipulator = $ifManipulator;
-        $this->bitwiseOrAnalyzer = $bitwiseOrAnalyzer;
+        $this->binaryOpConditionsCollector = $binaryOpConditionsCollector;
     }
     /**
      * @return array<class-string<Node>>
@@ -160,7 +160,7 @@ CODE_SAMPLE
      */
     private function resolveClassConstFetchNames(\PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr) : array
     {
-        $values = $this->bitwiseOrAnalyzer->findBitwiseOrConditions($bitwiseOr);
+        $values = $this->binaryOpConditionsCollector->findConditions($bitwiseOr, \PhpParser\Node\Expr\BinaryOp\BitwiseOr::class);
         if ($this->shouldSkipBitwiseOrValues($values)) {
             return [];
         }

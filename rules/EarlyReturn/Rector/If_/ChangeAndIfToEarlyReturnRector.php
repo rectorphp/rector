@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
-use Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer;
+use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,15 +43,15 @@ final class ChangeAndIfToEarlyReturnRector extends \Rector\Core\Rector\AbstractR
     private $contextAnalyzer;
     /**
      * @readonly
-     * @var \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer
+     * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
-    private $booleanAndAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\EarlyReturn\NodeFactory\InvertedIfFactory $invertedIfFactory, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer $booleanAndAnalyzer)
+    private $binaryOpConditionsCollector;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\EarlyReturn\NodeFactory\InvertedIfFactory $invertedIfFactory, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer, \Rector\NodeCollector\BinaryOpConditionsCollector $binaryOpConditionsCollector)
     {
         $this->ifManipulator = $ifManipulator;
         $this->invertedIfFactory = $invertedIfFactory;
         $this->contextAnalyzer = $contextAnalyzer;
-        $this->booleanAndAnalyzer = $booleanAndAnalyzer;
+        $this->binaryOpConditionsCollector = $binaryOpConditionsCollector;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
+        $booleanAndConditions = $this->binaryOpConditionsCollector->findConditions($expr, \PhpParser\Node\Expr\BinaryOp\BooleanAnd::class);
         $afters = [];
         if (!$ifNextReturn instanceof \PhpParser\Node\Stmt\Return_) {
             $afters[] = $node->stmts[0];

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit49e7aa8579a11fbb0e73512dbde5438d
+class ComposerStaticInit5dece9224a80671b63f680874f2cd11b
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2696,9 +2696,8 @@ class ComposerStaticInit49e7aa8579a11fbb0e73512dbde5438d
         'Rector\\Nette\\ValueObject\\LatteVariableType' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/LatteVariableType.php',
         'Rector\\Nette\\ValueObject\\ParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ParameterAssign.php',
         'Rector\\Nette\\ValueObject\\TemplateParametersAssigns' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/TemplateParametersAssigns.php',
+        'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
-        'Rector\\NodeCollector\\NodeAnalyzer\\BitwiseOrAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BitwiseOrAnalyzer.php',
-        'Rector\\NodeCollector\\NodeAnalyzer\\BooleanAndAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/BooleanAndAnalyzer.php',
         'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => __DIR__ . '/../..' . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallable.php',
@@ -3838,9 +3837,9 @@ class ComposerStaticInit49e7aa8579a11fbb0e73512dbde5438d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit49e7aa8579a11fbb0e73512dbde5438d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit49e7aa8579a11fbb0e73512dbde5438d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit49e7aa8579a11fbb0e73512dbde5438d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5dece9224a80671b63f680874f2cd11b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5dece9224a80671b63f680874f2cd11b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5dece9224a80671b63f680874f2cd11b::$classMap;
 
         }, null, ClassLoader::class);
     }
