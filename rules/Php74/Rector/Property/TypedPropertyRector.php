@@ -6,8 +6,8 @@ namespace Rector\Php74\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
@@ -225,27 +225,28 @@ CODE_SAMPLE
         if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \true;
         }
-        /**
-         * - skip trait properties, as they are unpredictable based on class context they appear in
-         * - skip interface properties as well, as interface not allowed to have property
-         */
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        // skip trait properties, as they ar unpredictable based on class context they appear in
+        $trait = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Trait_::class);
+        if ($trait instanceof \PhpParser\Node\Stmt\Trait_) {
             return \true;
         }
         $propertyName = $this->getName($property);
-        if ($this->isModifiedByTrait($class, $propertyName)) {
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
+        if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike && $this->isModifiedByTrait($classLike, $propertyName)) {
             return \true;
         }
         if ($property->isPrivate()) {
             return $this->propertyAnalyzer->hasForbiddenType($property);
         }
         // is we're in final class, the type can be changed
-        return !$this->isSafeProtectedProperty($property, $class);
+        return !$this->isSafeProtectedProperty($property, $classReflection);
     }
-    private function isModifiedByTrait(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
+    private function isModifiedByTrait(\PhpParser\Node\Stmt\ClassLike $classLike, string $propertyName) : bool
     {
-        foreach ($class->getTraitUses() as $traitUse) {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return \false;
+        }
+        foreach ($classLike->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $traitName) {
                 $trait = $this->astResolver->resolveClassFromName($traitName->toString());
                 if (!$trait instanceof \PhpParser\Node\Stmt\Trait_) {
@@ -258,14 +259,14 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\Class_ $class) : bool
+    private function isSafeProtectedProperty(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection) : bool
     {
         if (!$property->isProtected()) {
             return \false;
         }
-        if (!$class->isFinal()) {
+        if (!$classReflection->isFinal()) {
             return \false;
         }
-        return !$class->extends instanceof \PhpParser\Node\Name\FullyQualified;
+        return $classReflection->getParents() === [];
     }
 }
