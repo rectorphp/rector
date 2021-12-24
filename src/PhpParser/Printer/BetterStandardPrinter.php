@@ -36,18 +36,6 @@ final class BetterStandardPrinter extends Standard
 {
     /**
      * @var string
-     * @see https://regex101.com/r/QA7mai/1
-     */
-    private const EMPTY_STARTING_TAG_REGEX = '/^<\\?php\\s+\\?>\\n?/';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/IVNkrt/1
-     */
-    private const EMPTY_ENDING_TAG_REGEX = '/<\\?php$/';
-
-    /**
-     * @var string
      * @see https://regex101.com/r/jUFizd/1
      */
     private const NEWLINE_END_REGEX = "#\n$#";
@@ -113,12 +101,6 @@ final class BetterStandardPrinter extends Standard
         $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($origTokens);
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
-
-        // strip empty starting/ending php tags
-        if (array_key_exists(0, $stmts) && $stmts[0] instanceof FileWithoutNamespace) {
-            $content = Strings::replace($content, self::EMPTY_STARTING_TAG_REGEX, '');
-            $content = Strings::replace(\rtrim($content), self::EMPTY_ENDING_TAG_REGEX, '') . "\n";
-        }
 
         // add new line in case of added stmts
         if (count($stmts) !== count($origStmts) && ! StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
