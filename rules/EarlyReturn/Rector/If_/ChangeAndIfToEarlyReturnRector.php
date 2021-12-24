@@ -17,7 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
-use Rector\NodeCollector\NodeAnalyzer\BooleanAndAnalyzer;
+use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,7 +32,7 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
         private readonly IfManipulator $ifManipulator,
         private readonly InvertedIfFactory $invertedIfFactory,
         private readonly ContextAnalyzer $contextAnalyzer,
-        private readonly BooleanAndAnalyzer $booleanAndAnalyzer,
+        private readonly BinaryOpConditionsCollector $binaryOpConditionsCollector
     ) {
     }
 
@@ -105,7 +105,7 @@ CODE_SAMPLE
 
         /** @var BooleanAnd $expr */
         $expr = $node->cond;
-        $booleanAndConditions = $this->booleanAndAnalyzer->findBooleanAndConditions($expr);
+        $booleanAndConditions = $this->binaryOpConditionsCollector->findConditions($expr, BooleanAnd::class);
         $afters = [];
 
         if (! $ifNextReturn instanceof Return_) {

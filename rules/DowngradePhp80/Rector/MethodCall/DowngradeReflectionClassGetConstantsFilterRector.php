@@ -23,7 +23,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeCollector\NodeAnalyzer\BitwiseOrAnalyzer;
+use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -45,7 +45,7 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRec
     public function __construct(
         private readonly VariableNaming $variableNaming,
         private readonly IfManipulator $ifManipulator,
-        private readonly BitwiseOrAnalyzer $bitwiseOrAnalyzer
+        private readonly BinaryOpConditionsCollector $binaryOpConditionsCollector
     ) {
     }
 
@@ -195,7 +195,7 @@ CODE_SAMPLE
      */
     private function resolveClassConstFetchNames(BitwiseOr $bitwiseOr): array
     {
-        $values = $this->bitwiseOrAnalyzer->findBitwiseOrConditions($bitwiseOr);
+        $values = $this->binaryOpConditionsCollector->findConditions($bitwiseOr, BitwiseOr::class);
 
         if ($this->shouldSkipBitwiseOrValues($values)) {
             return [];
