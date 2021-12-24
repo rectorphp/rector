@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20211223\React\Socket;
+namespace RectorPrefix20211224\React\Socket;
 
-use RectorPrefix20211223\Evenement\EventEmitter;
-use RectorPrefix20211223\React\EventLoop\LoopInterface;
-final class SocketServer extends \RectorPrefix20211223\Evenement\EventEmitter implements \RectorPrefix20211223\React\Socket\ServerInterface
+use RectorPrefix20211224\Evenement\EventEmitter;
+use RectorPrefix20211224\React\EventLoop\LoopInterface;
+final class SocketServer extends \RectorPrefix20211224\Evenement\EventEmitter implements \RectorPrefix20211224\React\Socket\ServerInterface
 {
     private $server;
     /**
@@ -29,7 +29,7 @@ final class SocketServer extends \RectorPrefix20211223\Evenement\EventEmitter im
      * @throws \InvalidArgumentException if the listening address is invalid
      * @throws \RuntimeException if listening on this address fails (already in use etc.)
      */
-    public function __construct($uri, array $context = array(), \RectorPrefix20211223\React\EventLoop\LoopInterface $loop = null)
+    public function __construct($uri, array $context = array(), \RectorPrefix20211224\React\EventLoop\LoopInterface $loop = null)
     {
         // apply default options if not explicitly given
         $context += array('tcp' => array(), 'tls' => array(), 'unix' => array());
@@ -39,21 +39,21 @@ final class SocketServer extends \RectorPrefix20211223\Evenement\EventEmitter im
             $scheme = \substr($uri, 0, $pos);
         }
         if ($scheme === 'unix') {
-            $server = new \RectorPrefix20211223\React\Socket\UnixServer($uri, $loop, $context['unix']);
+            $server = new \RectorPrefix20211224\React\Socket\UnixServer($uri, $loop, $context['unix']);
         } elseif ($scheme === 'php') {
-            $server = new \RectorPrefix20211223\React\Socket\FdServer($uri, $loop);
+            $server = new \RectorPrefix20211224\React\Socket\FdServer($uri, $loop);
         } else {
             if (\preg_match('#^(?:\\w+://)?\\d+$#', $uri)) {
                 throw new \InvalidArgumentException('Invalid URI given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
             }
-            $server = new \RectorPrefix20211223\React\Socket\TcpServer(\str_replace('tls://', '', $uri), $loop, $context['tcp']);
+            $server = new \RectorPrefix20211224\React\Socket\TcpServer(\str_replace('tls://', '', $uri), $loop, $context['tcp']);
             if ($scheme === 'tls') {
-                $server = new \RectorPrefix20211223\React\Socket\SecureServer($server, $loop, $context['tls']);
+                $server = new \RectorPrefix20211224\React\Socket\SecureServer($server, $loop, $context['tls']);
             }
         }
         $this->server = $server;
         $that = $this;
-        $server->on('connection', function (\RectorPrefix20211223\React\Socket\ConnectionInterface $conn) use($that) {
+        $server->on('connection', function (\RectorPrefix20211224\React\Socket\ConnectionInterface $conn) use($that) {
             $that->emit('connection', array($conn));
         });
         $server->on('error', function (\Exception $error) use($that) {

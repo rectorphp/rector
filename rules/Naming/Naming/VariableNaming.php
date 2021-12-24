@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use RectorPrefix20211223\Nette\Utils\Strings;
+use RectorPrefix20211224\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -22,7 +22,7 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20211223\Symfony\Component\String\UnicodeString;
+use RectorPrefix20211224\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
     /**
@@ -56,7 +56,7 @@ final class VariableNaming
             $name = $fallbackName;
         }
         if (\strpos($name, '\\') !== \false) {
-            $name = (string) \RectorPrefix20211223\Nette\Utils\Strings::after($name, '\\', -1);
+            $name = (string) \RectorPrefix20211224\Nette\Utils\Strings::after($name, '\\', -1);
         }
         $countedValueName = $this->createCountedValueName($name, $scope);
         return \lcfirst($countedValueName);
@@ -97,7 +97,7 @@ final class VariableNaming
         } else {
             $variableName = $this->nodeNameResolver->getShortName($variableName);
         }
-        $variableNameUnicodeString = new \RectorPrefix20211223\Symfony\Component\String\UnicodeString($variableName);
+        $variableNameUnicodeString = new \RectorPrefix20211224\Symfony\Component\String\UnicodeString($variableName);
         return $variableNameUnicodeString->camel()->toString();
     }
     private function resolveFromNode(\PhpParser\Node $node) : ?string

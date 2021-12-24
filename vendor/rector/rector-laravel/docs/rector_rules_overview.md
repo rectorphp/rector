@@ -1,4 +1,4 @@
-# 20 Rules Overview
+# 21 Rules Overview
 
 ## AddArgumentDefaultValueRector
 
@@ -12,14 +12,16 @@ Adds default value for arguments in defined methods.
 use Rector\Laravel\Rector\ClassMethod\AddArgumentDefaultValueRector;
 use Rector\Laravel\ValueObject\AddArgumentDefaultValue;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\SymfonyPhpConfig\ValueObjectInliner;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(AddArgumentDefaultValueRector::class)
-->configure([                new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
-]);
+        ->configure([
+            AddArgumentDefaultValueRector::ADDED_ARGUMENTS => [
+                new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, false),
+            ],
+        ]);
 };
 ```
 
@@ -31,6 +33,29 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 -    public function someMethod($value)
 +    public function someMethod($value = false)
      {
+     }
+ }
+```
+
+<br>
+
+## AddGenericReturnTypeToRelationsRector
+
+Add generic return type to relations in child of `Illuminate\Database\Eloquent\Model`
+
+- class: [`Rector\Laravel\Rector\ClassMethod\AddGenericReturnTypeToRelationsRector`](../src/Rector/ClassMethod/AddGenericReturnTypeToRelationsRector.php)
+
+```diff
+ use App\Account;
+ use Illuminate\Database\Eloquent\Model;
+ use Illuminate\Database\Eloquent\Relations\HasMany;
+
+ class User extends Model
+ {
++    /** @return HasMany<Account> */
+     public function accounts(): HasMany
+     {
+         return $this->hasMany(Account::class);
      }
  }
 ```
@@ -307,9 +332,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(OptionalToNullsafeOperatorRector::class)
-        ->call('configure', [[
+        ->configure([
             OptionalToNullsafeOperatorRector::EXCLUDE_METHODS => ['present'],
-        ]]);
+        ]);
 };
 ```
 
@@ -425,9 +450,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
     $services->set(RouteActionCallableRector::class)
-        ->call('configure', [[
+        ->configure([
             RouteActionCallableRector::NAMESPACE => 'App\Http\Controllers',
-        ]]);
+        ]);
 };
 ```
 

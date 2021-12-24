@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\LNumber;
 
-use RectorPrefix20211223\Nette\Utils\Strings;
+use RectorPrefix20211224\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211223\Webmozart\Assert\Assert;
+use RectorPrefix20211224\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/numeric_literal_separator
  * @changelog https://github.com/nikic/PHP-Parser/pull/615
@@ -50,7 +50,7 @@ final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\Abstra
     public function configure(array $configuration) : void
     {
         $limitValue = $configuration[self::LIMIT_VALUE] ?? self::DEFAULT_LIMIT_VALUE;
-        \RectorPrefix20211223\Webmozart\Assert\Assert::integer($limitValue);
+        \RectorPrefix20211224\Webmozart\Assert\Assert::integer($limitValue);
         $this->limitValue = $limitValue;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
@@ -144,7 +144,7 @@ CODE_SAMPLE
             return \true;
         }
         // too short
-        return \RectorPrefix20211223\Nette\Utils\Strings::length($numericValueAsString) <= self::GROUP_SIZE;
+        return \RectorPrefix20211224\Nette\Utils\Strings::length($numericValueAsString) <= self::GROUP_SIZE;
     }
     /**
      * @return string[]

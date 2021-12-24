@@ -7,6 +7,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Accessory\HasMethodType;
 use PHPStan\Type\Type;
@@ -40,6 +41,9 @@ final class PHPStanStaticTypeMapper
         }
         if ($type instanceof \PHPStan\Type\Accessory\HasMethodType) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
+        }
+        if ($type instanceof \PHPStan\Type\Accessory\AccessoryLiteralStringType) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string');
         }
         throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }

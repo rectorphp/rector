@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211223\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20211224\Symfony\Component\DependencyInjection\Argument;
 
 /**
  * @internal
