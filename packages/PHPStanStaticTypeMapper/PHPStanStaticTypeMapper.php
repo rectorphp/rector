@@ -8,6 +8,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Accessory\HasMethodType;
 use PHPStan\Type\Type;
@@ -41,6 +42,10 @@ final class PHPStanStaticTypeMapper
 
         if ($type instanceof HasMethodType) {
             return new IdentifierTypeNode('object');
+        }
+
+        if ($type instanceof AccessoryLiteralStringType) {
+            return new IdentifierTypeNode('string');
         }
 
         throw new NotImplementedYetException(__METHOD__ . ' for ' . $type::class);
