@@ -3051,6 +3051,7 @@ return array(
     'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => $baseDir . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
     'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => $baseDir . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
     'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => $baseDir . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
+    'Rector\\TypeDeclaration\\Guard\\PropertyTypeOverrideGuard' => $baseDir . '/rules/TypeDeclaration/Guard/PropertyTypeOverrideGuard.php',
     'Rector\\TypeDeclaration\\Matcher\\PropertyAssignMatcher' => $baseDir . '/rules/TypeDeclaration/Matcher/PropertyAssignMatcher.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\AutowiredClassMethodOrPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/AutowiredClassMethodOrPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\CallTypesResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/CallTypesResolver.php',
