@@ -84,15 +84,13 @@ final class VariableToConstantGuard
         $this->referencePositionsByFunctionName[$functionReflection->getName()] = $referencePositions;
         return $referencePositions;
     }
-    /**
-     * @return int|string
-     */
-    private function getArgumentPosition(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $desiredArg)
+    private function getArgumentPosition(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Arg $desiredArg) : int
     {
         foreach ($funcCall->args as $position => $arg) {
             if ($arg !== $desiredArg) {
                 continue;
             }
+            /** @var int $position */
             return $position;
         }
         throw new \Rector\Core\Exception\ShouldNotHappenException();
