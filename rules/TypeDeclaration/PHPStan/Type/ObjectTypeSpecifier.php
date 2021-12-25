@@ -13,10 +13,16 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,7 +45,7 @@ final class ObjectTypeSpecifier
         Node $node,
         ObjectType $objectType,
         Scope|null $scope
-    ): ObjectType | AliasedObjectType | ShortenedObjectType | FullyQualifiedObjectType | StaticType | MixedType {
+    ): TypeWithClassName | UnionType | MixedType {
         /** @var Use_[]|null $uses */
         $uses = $node->getAttribute(AttributeKey::USE_NODES);
         if ($uses === null) {
@@ -73,6 +79,12 @@ final class ObjectTypeSpecifier
 
         if ($this->reflectionProvider->hasClass($className)) {
             return new FullyQualifiedObjectType($className);
+        }
+
+        if ($className === 'scalar') {
+            // pseudo type, see https://www.php.net/manual/en/language.types.intro.php
+            $scalarTypes = [new BooleanType(), new StringType(), new IntegerType(), new FloatType()];
+            return new UnionType($scalarTypes);
         }
 
         // invalid type
