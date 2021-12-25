@@ -118,11 +118,14 @@ CODE_SAMPLE
             return $this->processType($node, $inferedReturnType);
         }
 
-        if (! $inferedReturnType->isSuperTypeOf(new MixedType())->yes()) {
-            return $this->processType($node, $inferedReturnType);
+        foreach ($inferedReturnType->getTypes() as $unionedType) {
+            // mixed type cannot be joined with another types
+            if ($unionedType instanceof MixedType) {
+                return null;
+            }
         }
 
-        return null;
+        return $this->processType($node, $inferedReturnType);
     }
 
     public function provideMinPhpVersion(): int
