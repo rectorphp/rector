@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,7 +27,8 @@ final class PropertyTypeDeclarationRector extends AbstractRector
 {
     public function __construct(
         private readonly VarDocPropertyTypeInferer $varDocPropertyTypeInferer,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly PropertyTypeOverrideGuard $propertyTypeOverrideGuard,
     ) {
     }
 
@@ -100,7 +102,9 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(
+            PhpVersionFeature::TYPED_PROPERTIES
+        ) && $this->propertyTypeOverrideGuard->isLegal($node)) {
             $this->completeTypedProperty($type, $node);
             return $node;
         }
