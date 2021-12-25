@@ -5,20 +5,12 @@ declare(strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
+use Rector\Core\Util\StringUtils;
+use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class PhpFilesFinder
 {
-    /**
-     * @var string[]
-     */
-    private const NON_PHP_FILE_EXTENSIONS = [
-        // Laravel
-        '.blade.php',
-        // Smarty
-        '.tpl',
-    ];
-
     public function __construct(
         private readonly FilesFinder $filesFinder,
         private readonly UnchangedFilesFilter $unchangedFilesFilter
@@ -32,15 +24,32 @@ final class PhpFilesFinder
     public function findInPaths(array $paths): array
     {
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths);
+        $suffixRegexPattern = StaticNonPhpFileSuffixes::getSuffixRegexPattern();
 
         // filter out non-PHP files
         foreach ($phpFileInfos as $key => $phpFileInfo) {
             $pathName = $phpFileInfo->getPathname();
-            foreach (self::NON_PHP_FILE_EXTENSIONS as $nonPHPFileExtension) {
-                if (str_ends_with($pathName, $nonPHPFileExtension)) {
-                    unset($phpFileInfos[$key]);
-                    continue 2;
-                }
+
+            /**
+             *  check .blade.php early so next .php check in next if can be skipped
+             */
+            if (str_ends_with($pathName, '.blade.php')) {
+                unset($phpFileInfos[$key]);
+                continue;
+            }
+
+            /**
+             * obvious
+             */
+            if (str_ends_with($pathName, '.php')) {
+                continue;
+            }
+
+            /**
+             * only check with regex when needed
+             */
+            if (StringUtils::isMatch($pathName, $suffixRegexPattern)) {
+                unset($phpFileInfos[$key]);
             }
         }
 
