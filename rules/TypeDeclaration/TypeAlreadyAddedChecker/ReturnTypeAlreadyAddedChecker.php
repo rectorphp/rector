@@ -117,13 +117,13 @@ final class ReturnTypeAlreadyAddedChecker
         }
 
         // skip nullable type
-        $nullType = new NullType();
-        if ($type->isSuperTypeOf($nullType)->yes()) {
+        if ($type->isSuperTypeOf(new NullType())->yes()) {
             return false;
         }
 
         $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
-        return $type->isSuperTypeOf($classMethodReturnType)
+
+        return $classMethodReturnType->isSuperTypeOf($type)
             ->yes();
     }
 
