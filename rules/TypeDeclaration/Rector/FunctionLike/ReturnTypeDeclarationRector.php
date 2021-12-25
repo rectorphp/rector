@@ -132,10 +132,13 @@ CODE_SAMPLE
         if (!$inferedReturnType instanceof \PHPStan\Type\UnionType) {
             return $this->processType($node, $inferedReturnType);
         }
-        if (!$inferedReturnType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
-            return $this->processType($node, $inferedReturnType);
+        foreach ($inferedReturnType->getTypes() as $unionedType) {
+            // mixed type cannot be joined with another types
+            if ($unionedType instanceof \PHPStan\Type\MixedType) {
+                return null;
+            }
         }
-        return null;
+        return $this->processType($node, $inferedReturnType);
     }
     public function provideMinPhpVersion() : int
     {
