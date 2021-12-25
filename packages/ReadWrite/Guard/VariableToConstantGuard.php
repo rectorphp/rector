@@ -103,13 +103,14 @@ final class VariableToConstantGuard
         return $referencePositions;
     }
 
-    private function getArgumentPosition(FuncCall $funcCall, Arg $desiredArg): int|string
+    private function getArgumentPosition(FuncCall $funcCall, Arg $desiredArg): int
     {
         foreach ($funcCall->args as $position => $arg) {
             if ($arg !== $desiredArg) {
                 continue;
             }
 
+            /** @var int $position */
             return $position;
         }
 
