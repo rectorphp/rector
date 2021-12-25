@@ -124,12 +124,11 @@ final class ReturnTypeAlreadyAddedChecker
             return \false;
         }
         // skip nullable type
-        $nullType = new \PHPStan\Type\NullType();
-        if ($type->isSuperTypeOf($nullType)->yes()) {
+        if ($type->isSuperTypeOf(new \PHPStan\Type\NullType())->yes()) {
             return \false;
         }
         $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
-        return $type->isSuperTypeOf($classMethodReturnType)->yes();
+        return $classMethodReturnType->isSuperTypeOf($type)->yes();
     }
     private function isStaticTypeIterable(\PHPStan\Type\Type $type) : bool
     {
