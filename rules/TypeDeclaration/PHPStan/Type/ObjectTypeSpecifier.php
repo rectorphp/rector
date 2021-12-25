@@ -12,10 +12,16 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
 use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -39,7 +45,7 @@ final class ObjectTypeSpecifier
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\TypeWithClassName|\PHPStan\Type\UnionType
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(\PhpParser\Node $node, \PHPStan\Type\ObjectType $objectType, $scope)
     {
@@ -69,6 +75,11 @@ final class ObjectTypeSpecifier
         }
         if ($this->reflectionProvider->hasClass($className)) {
             return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($className);
+        }
+        if ($className === 'scalar') {
+            // pseudo type, see https://www.php.net/manual/en/language.types.intro.php
+            $scalarTypes = [new \PHPStan\Type\BooleanType(), new \PHPStan\Type\StringType(), new \PHPStan\Type\IntegerType(), new \PHPStan\Type\FloatType()];
+            return new \PHPStan\Type\UnionType($scalarTypes);
         }
         // invalid type
         return new \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType($className);
