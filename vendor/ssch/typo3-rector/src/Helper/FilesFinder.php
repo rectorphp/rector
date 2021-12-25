@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Helper;
 
-use RectorPrefix20211224\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
+use RectorPrefix20211225\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class FilesFinder
 {
@@ -34,7 +34,7 @@ final class FilesFinder
     private function findFileRelativeFromGivenFileInfo(\Symplify\SmartFileSystem\SmartFileInfo $fileInfo, string $filename) : ?\Symplify\SmartFileSystem\SmartFileInfo
     {
         // special case for tests
-        if (\RectorPrefix20211224\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if (\RectorPrefix20211225\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return $fileInfo;
         }
         $currentDirectory = \dirname($fileInfo->getRealPath());

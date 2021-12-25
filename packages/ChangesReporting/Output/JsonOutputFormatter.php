@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix20211224\Nette\Utils\Json;
+use RectorPrefix20211225\Nette\Utils\Json;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\ValueObject\Configuration;
@@ -46,7 +46,7 @@ final class JsonOutputFormatter implements \Rector\ChangesReporting\Contract\Out
         if ($errorsData !== []) {
             $errorsJson['errors'] = $errorsData;
         }
-        $json = \RectorPrefix20211224\Nette\Utils\Json::encode($errorsJson, \RectorPrefix20211224\Nette\Utils\Json::PRETTY);
+        $json = \RectorPrefix20211225\Nette\Utils\Json::encode($errorsJson, \RectorPrefix20211225\Nette\Utils\Json::PRETTY);
         echo $json . \PHP_EOL;
     }
     /**

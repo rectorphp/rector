@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211224\Symfony\Component\Console\Command;
+namespace RectorPrefix20211225\Symfony\Component\Console\Command;
 
-use RectorPrefix20211224\Symfony\Component\Console\Application;
-use RectorPrefix20211224\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix20211224\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20211224\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix20211224\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20211224\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211224\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20211225\Symfony\Component\Console\Application;
+use RectorPrefix20211225\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix20211225\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20211225\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix20211225\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20211225\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211225\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-final class LazyCommand extends \RectorPrefix20211224\Symfony\Component\Console\Command\Command
+final class LazyCommand extends \RectorPrefix20211225\Symfony\Component\Console\Command\Command
 {
     private $command;
     /**
@@ -37,14 +37,14 @@ final class LazyCommand extends \RectorPrefix20211224\Symfony\Component\Console\
     {
         $this->getCommand()->ignoreValidationErrors();
     }
-    public function setApplication(\RectorPrefix20211224\Symfony\Component\Console\Application $application = null) : void
+    public function setApplication(\RectorPrefix20211225\Symfony\Component\Console\Application $application = null) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setApplication($application);
         }
         parent::setApplication($application);
     }
-    public function setHelperSet(\RectorPrefix20211224\Symfony\Component\Console\Helper\HelperSet $helperSet) : void
+    public function setHelperSet(\RectorPrefix20211225\Symfony\Component\Console\Helper\HelperSet $helperSet) : void
     {
         if ($this->command instanceof parent) {
             $this->command->setHelperSet($helperSet);
@@ -55,11 +55,11 @@ final class LazyCommand extends \RectorPrefix20211224\Symfony\Component\Console\
     {
         return $this->isEnabled ?? $this->getCommand()->isEnabled();
     }
-    public function run(\RectorPrefix20211224\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211224\Symfony\Component\Console\Output\OutputInterface $output) : int
+    public function run(\RectorPrefix20211225\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211225\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         return $this->getCommand()->run($input, $output);
     }
-    public function complete(\RectorPrefix20211224\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20211224\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
+    public function complete(\RectorPrefix20211225\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20211225\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
         $this->getCommand()->complete($input, $suggestions);
     }
@@ -87,11 +87,11 @@ final class LazyCommand extends \RectorPrefix20211224\Symfony\Component\Console\
         $this->getCommand()->setDefinition($definition);
         return $this;
     }
-    public function getDefinition() : \RectorPrefix20211224\Symfony\Component\Console\Input\InputDefinition
+    public function getDefinition() : \RectorPrefix20211225\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getDefinition();
     }
-    public function getNativeDefinition() : \RectorPrefix20211224\Symfony\Component\Console\Input\InputDefinition
+    public function getNativeDefinition() : \RectorPrefix20211225\Symfony\Component\Console\Input\InputDefinition
     {
         return $this->getCommand()->getNativeDefinition();
     }

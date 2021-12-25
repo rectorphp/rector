@@ -20,7 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211224\Webmozart\Assert\Assert;
+use RectorPrefix20211225\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
@@ -101,8 +101,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $oldToNewClasses = $configuration[self::OLD_TO_NEW_CLASSES] ?? $configuration;
-        \RectorPrefix20211224\Webmozart\Assert\Assert::isArray($oldToNewClasses);
-        \RectorPrefix20211224\Webmozart\Assert\Assert::allString($oldToNewClasses);
+        \RectorPrefix20211225\Webmozart\Assert\Assert::isArray($oldToNewClasses);
+        \RectorPrefix20211225\Webmozart\Assert\Assert::allString($oldToNewClasses);
         $this->addOldToNewClasses($oldToNewClasses);
     }
     /**
@@ -123,8 +123,8 @@ CODE_SAMPLE
      */
     private function addOldToNewClasses(array $oldToNewClasses) : void
     {
-        \RectorPrefix20211224\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
-        \RectorPrefix20211224\Webmozart\Assert\Assert::allString($oldToNewClasses);
+        \RectorPrefix20211225\Webmozart\Assert\Assert::allString(\array_keys($oldToNewClasses));
+        \RectorPrefix20211225\Webmozart\Assert\Assert::allString($oldToNewClasses);
         $this->renamedClassesDataCollector->addOldToNewClasses($oldToNewClasses);
     }
 }
