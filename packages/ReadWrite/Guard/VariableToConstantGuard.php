@@ -110,7 +110,6 @@ final class VariableToConstantGuard
                 continue;
             }
 
-            /** @var int $position */
             return $position;
         }
 

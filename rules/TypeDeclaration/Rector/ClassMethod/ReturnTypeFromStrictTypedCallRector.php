@@ -159,7 +159,7 @@ CODE_SAMPLE
         return $arrowFunction;
     }
 
-    private function isUnionPossibleReturnsVoid(ClassMethod | Function_ | Closure | ArrowFunction $node): bool
+    private function isUnionPossibleReturnsVoid(ClassMethod | Function_ | Closure $node): bool
     {
         $inferReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         if ($inferReturnType instanceof UnionType) {
@@ -191,6 +191,10 @@ CODE_SAMPLE
     {
         if (! $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return true;
+        }
+
+        if ($node instanceof ArrowFunction) {
+            return $node->returnType !== null;
         }
 
         if ($node->returnType !== null) {
