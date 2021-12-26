@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20211225\Nette\Utils\Strings;
+use RectorPrefix20211226\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
@@ -102,7 +102,7 @@ CODE_SAMPLE
             return null;
         }
         $parameterName = $stringArgument->value;
-        $parameterName = \RectorPrefix20211225\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
+        $parameterName = \RectorPrefix20211226\Nette\Utils\Strings::replace($parameterName, '#\\.#', '_');
         $propertyName = $this->propertyNaming->underscoreToName($parameterName);
         $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {

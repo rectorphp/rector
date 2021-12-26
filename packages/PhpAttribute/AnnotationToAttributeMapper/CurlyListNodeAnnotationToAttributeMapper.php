@@ -7,7 +7,7 @@ use PhpParser\Node\Expr;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use RectorPrefix20211225\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211226\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */

@@ -11,7 +11,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-use RectorPrefix20211225\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211226\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpDocTypeMapperInterface<UnionTypeNode>
  */

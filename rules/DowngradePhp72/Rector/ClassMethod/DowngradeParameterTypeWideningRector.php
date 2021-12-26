@@ -18,7 +18,7 @@ use Rector\DowngradePhp72\PhpDoc\NativeParamToPhpDocDecorator;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211225\Webmozart\Assert\Assert;
+use RectorPrefix20211226\Webmozart\Assert\Assert;
 /**
  * @changelog https://www.php.net/manual/en/migration72.new-features.php#migration72.new-features.param-type-widening
  * @see https://3v4l.org/fOgSE
@@ -133,8 +133,8 @@ CODE_SAMPLE
     {
         $unsafeTypesToMethods = $configuration;
         foreach ($unsafeTypesToMethods as $key => $value) {
-            \RectorPrefix20211225\Webmozart\Assert\Assert::string($key);
-            \RectorPrefix20211225\Webmozart\Assert\Assert::allString($value);
+            \RectorPrefix20211226\Webmozart\Assert\Assert::string($key);
+            \RectorPrefix20211226\Webmozart\Assert\Assert::allString($value);
         }
         $this->unsafeTypesToMethods = $unsafeTypesToMethods;
     }

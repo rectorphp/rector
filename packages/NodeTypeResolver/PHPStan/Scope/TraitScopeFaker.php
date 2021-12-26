@@ -7,7 +7,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Stubs\DummyTraitClass;
-use RectorPrefix20211225\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211226\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class TraitScopeFaker
 {
     /**
@@ -20,7 +20,7 @@ final class TraitScopeFaker
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\RectorPrefix20211225\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(\RectorPrefix20211226\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->privatesAccessor = $privatesAccessor;
         $this->reflectionProvider = $reflectionProvider;

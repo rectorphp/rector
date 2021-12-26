@@ -17,7 +17,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer;
-use RectorPrefix20211225\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20211226\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -44,7 +44,7 @@ final class DesiredClassTypeToDynamicRector extends \Rector\Core\Rector\Abstract
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \RectorPrefix20211225\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
+    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\RemovingStatic\NodeAnalyzer\StaticCallPresenceAnalyzer $staticCallPresenceAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \RectorPrefix20211226\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->propertyNaming = $propertyNaming;
         $this->staticCallPresenceAnalyzer = $staticCallPresenceAnalyzer;

@@ -22,7 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp56\NodeManipulator\ArgManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211225\Webmozart\Assert\Assert;
+use RectorPrefix20211226\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/argument_unpacking
  *
@@ -146,7 +146,7 @@ CODE_SAMPLE
     {
         if ($this->argManipulator->canBeInlined($args)) {
             $unpackedArgs = $this->argManipulator->unpack($args);
-            \RectorPrefix20211225\Webmozart\Assert\Assert::minCount($unpackedArgs, 1);
+            \RectorPrefix20211226\Webmozart\Assert\Assert::minCount($unpackedArgs, 1);
             /** @var Array_ $array */
             $array = $unpackedArgs[0]->value;
             $arrayItems = \array_filter($array->items);

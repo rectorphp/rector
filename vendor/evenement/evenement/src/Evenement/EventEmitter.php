@@ -9,9 +9,9 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211225\Evenement;
+namespace RectorPrefix20211226\Evenement;
 
-class EventEmitter implements \RectorPrefix20211225\Evenement\EventEmitterInterface
+class EventEmitter implements \RectorPrefix20211226\Evenement\EventEmitterInterface
 {
     use EventEmitterTrait;
 }

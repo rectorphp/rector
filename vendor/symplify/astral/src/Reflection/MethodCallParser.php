@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211225\Symplify\Astral\Reflection;
+namespace RectorPrefix20211226\Symplify\Astral\Reflection;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -9,7 +9,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
-use RectorPrefix20211225\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20211226\Symplify\Astral\Naming\SimpleNameResolver;
 /**
  * @api
  */
@@ -23,7 +23,7 @@ final class MethodCallParser
      * @var \Symplify\Astral\Reflection\ReflectionParser
      */
     private $reflectionParser;
-    public function __construct(\RectorPrefix20211225\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20211225\Symplify\Astral\Reflection\ReflectionParser $reflectionParser)
+    public function __construct(\RectorPrefix20211226\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20211226\Symplify\Astral\Reflection\ReflectionParser $reflectionParser)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->reflectionParser = $reflectionParser;

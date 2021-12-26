@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211225\Symplify\EasyParallel\Enum;
+namespace RectorPrefix20211226\Symplify\EasyParallel\Enum;
 
 final class Content
 {

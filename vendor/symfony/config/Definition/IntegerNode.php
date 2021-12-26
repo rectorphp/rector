@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211225\Symfony\Component\Config\Definition;
+namespace RectorPrefix20211226\Symfony\Component\Config\Definition;
 
-use RectorPrefix20211225\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix20211226\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
 /**
  * This node represents an integer value in the config tree.
  *
  * @author Jeanmonod David <david.jeanmonod@gmail.com>
  */
-class IntegerNode extends \RectorPrefix20211225\Symfony\Component\Config\Definition\NumericNode
+class IntegerNode extends \RectorPrefix20211226\Symfony\Component\Config\Definition\NumericNode
 {
     /**
      * {@inheritdoc}
@@ -24,7 +24,7 @@ class IntegerNode extends \RectorPrefix20211225\Symfony\Component\Config\Definit
     protected function validateType($value)
     {
         if (!\is_int($value)) {
-            $ex = new \RectorPrefix20211225\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "int", but got "%s".', $this->getPath(), \get_debug_type($value)));
+            $ex = new \RectorPrefix20211226\Symfony\Component\Config\Definition\Exception\InvalidTypeException(\sprintf('Invalid type for path "%s". Expected "int", but got "%s".', $this->getPath(), \get_debug_type($value)));
             if ($hint = $this->getInfo()) {
                 $ex->addHint($hint);
             }

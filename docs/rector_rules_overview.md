@@ -1,4 +1,4 @@
-# 506 Rules Overview
+# 508 Rules Overview
 
 <br>
 
@@ -28,7 +28,7 @@
 
 - [DowngradePhp56](#downgradephp56) (4)
 
-- [DowngradePhp70](#downgradephp70) (13)
+- [DowngradePhp70](#downgradephp70) (14)
 
 - [DowngradePhp71](#downgradephp71) (10)
 
@@ -38,7 +38,7 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (24)
+- [DowngradePhp80](#downgradephp80) (25)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -4214,6 +4214,20 @@ Refactor scalar types in PHP code in string snippets, e.g. generated container c
 
 <br>
 
+### DowngradeMethodCallOnCloneRector
+
+Replace (clone `$obj)->call()` to object assign and call
+
+- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector`](../rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php)
+
+```diff
+-(clone $this)->execute();
++$object = (clone $this);
++$object->execute();
+```
+
+<br>
+
 ### DowngradeNullCoalesceRector
 
 Change null coalesce to isset ternary check
@@ -5386,6 +5400,27 @@ Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLi
          return true;
      }
  }
+```
+
+<br>
+
+### DowngradeReflectionClassGetConstantsFilterRector
+
+Downgrade ReflectionClass->getConstants(ReflectionClassConstant::IS_*)
+
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionClassGetConstantsFilterRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionClassGetConstantsFilterRector.php)
+
+```diff
+ $reflectionClass = new ReflectionClass('SomeClass');
+-$constants = $reflectionClass->getConstants(ReflectionClassConstant::IS_PUBLIC));
++$reflectionClassConstants = $reflectionClass->getReflectionConstants();
++$result = [];
++array_walk($reflectionClassConstants, function ($value) use (&$result) {
++    if ($value->isPublic()) {
++       $result[$value->getName()] = $value->getValue();
++    }
++});
++$constants = $result;
 ```
 
 <br>

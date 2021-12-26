@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211225\Tracy;
+namespace RectorPrefix20211226\Tracy;
 
-class NativeSession implements \RectorPrefix20211225\Tracy\SessionStorage
+class NativeSession implements \RectorPrefix20211226\Tracy\SessionStorage
 {
     public function isAvailable() : bool
     {

@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211225\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20211226\Symfony\Component\DependencyInjection\Argument;
 
-use RectorPrefix20211225\Symfony\Component\DependencyInjection\ServiceLocator as BaseServiceLocator;
+use RectorPrefix20211226\Symfony\Component\DependencyInjection\ServiceLocator as BaseServiceLocator;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *
  * @internal
  */
-class ServiceLocator extends \RectorPrefix20211225\Symfony\Component\DependencyInjection\ServiceLocator
+class ServiceLocator extends \RectorPrefix20211226\Symfony\Component\DependencyInjection\ServiceLocator
 {
     private $factory;
     private $serviceMap;
