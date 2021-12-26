@@ -90,7 +90,6 @@ final class VariableToConstantGuard
             if ($arg !== $desiredArg) {
                 continue;
             }
-            /** @var int $position */
             return $position;
         }
         throw new \Rector\Core\Exception\ShouldNotHappenException();

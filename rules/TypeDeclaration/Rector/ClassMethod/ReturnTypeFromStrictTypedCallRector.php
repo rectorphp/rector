@@ -150,7 +150,7 @@ CODE_SAMPLE
         return $arrowFunction;
     }
     /**
-     * @param \PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function isUnionPossibleReturnsVoid($node) : bool
     {
@@ -182,6 +182,9 @@ CODE_SAMPLE
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES)) {
             return \true;
+        }
+        if ($node instanceof \PhpParser\Node\Expr\ArrowFunction) {
+            return $node->returnType !== null;
         }
         if ($node->returnType !== null) {
             return \true;

@@ -5,7 +5,6 @@ namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Name\FullyQualified;
@@ -15,7 +14,10 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\BenevolentUnionType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
@@ -27,6 +29,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
@@ -70,9 +73,14 @@ final class ReturnTypeInferer
      */
     private $reflectionProvider;
     /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    /**
      * @param ReturnTypeInfererInterface[] $returnTypeInferers
      */
-    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\PriorityAwareSorter $priorityAwareSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211226\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(array $returnTypeInferers, \Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\TypeDeclaration\Sorter\PriorityAwareSorter $priorityAwareSorter, \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20211226\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
@@ -80,16 +88,21 @@ final class ReturnTypeInferer
         $this->parameterProvider = $parameterProvider;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionProvider = $reflectionProvider;
+        $this->nodeTypeResolver = $nodeTypeResolver;
         $this->returnTypeInferers = $priorityAwareSorter->sort($returnTypeInferers);
     }
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    public function inferFunctionLike($functionLike) : \PHPStan\Type\Type
     {
         return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
     }
     /**
      * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function inferFunctionLikeWithExcludedInferers(\PhpParser\Node\FunctionLike $functionLike, array $excludedInferers) : \PHPStan\Type\Type
+    public function inferFunctionLikeWithExcludedInferers($functionLike, array $excludedInferers) : \PHPStan\Type\Type
     {
         $isSupportedStaticReturnType = $this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::STATIC_RETURN_TYPE);
         $isAutoImport = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
@@ -130,10 +143,12 @@ final class ReturnTypeInferer
         }
         return $type;
     }
-    private function resolveTypeWithVoidHandling(\PhpParser\Node\FunctionLike $functionLike, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    private function resolveTypeWithVoidHandling($functionLike, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
-        if ($resolvedType instanceof \PHPStan\Type\VoidType && !$functionLike instanceof \PhpParser\Node\Expr\ArrowFunction) {
-            /** @var ClassMethod|Function_|Closure $functionLike */
+        if ($resolvedType instanceof \PHPStan\Type\VoidType) {
             $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, function (\PhpParser\Node $subNode) : bool {
                 if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
                     return \false;
@@ -144,7 +159,47 @@ final class ReturnTypeInferer
                 return new \PHPStan\Type\MixedType();
             }
         }
+        if ($resolvedType instanceof \PHPStan\Type\UnionType) {
+            $benevolentUnionTypeIntegerType = $this->resolveBenevolentUnionTypeInteger($functionLike, $resolvedType);
+            if ($benevolentUnionTypeIntegerType instanceof \PHPStan\Type\IntegerType) {
+                return $benevolentUnionTypeIntegerType;
+            }
+        }
         return $resolvedType;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return \PHPStan\Type\IntegerType|\PHPStan\Type\UnionType
+     */
+    private function resolveBenevolentUnionTypeInteger($functionLike, \PHPStan\Type\UnionType $unionType)
+    {
+        $types = $unionType->getTypes();
+        $countTypes = \count($types);
+        if ($countTypes !== 2) {
+            return $unionType;
+        }
+        if (!($types[0] instanceof \PHPStan\Type\IntegerType && $types[1] instanceof \PHPStan\Type\StringType)) {
+            return $unionType;
+        }
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, \PhpParser\Node\Stmt\Return_::class);
+        $returnsWithExpr = \array_filter($returns, function ($v) : bool {
+            return $v->expr instanceof \PhpParser\Node\Expr;
+        });
+        if ($returns !== $returnsWithExpr) {
+            return $unionType;
+        }
+        if ($returnsWithExpr === []) {
+            return $unionType;
+        }
+        foreach ($returnsWithExpr as $returnWithExpr) {
+            /** @var Expr $expr */
+            $expr = $returnWithExpr->expr;
+            $type = $this->nodeTypeResolver->getType($expr);
+            if (!$type instanceof \PHPStan\Type\BenevolentUnionType) {
+                return $unionType;
+            }
+        }
+        return $types[0];
     }
     private function isAutoImportWithFullyQualifiedReturn(bool $isAutoImport, \PhpParser\Node\FunctionLike $functionLike) : bool
     {
