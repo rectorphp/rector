@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Transform\Rector\Function_\ReservedFnFunctionRector;
+namespace Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
@@ -15,6 +15,7 @@ final class ReservedFnFunctionRectorTest extends AbstractRectorTestCase
      */
     public function test(SmartFileInfo $fileInfo): void
     {
+        $this->markTestSkipped('Requires tweaked PHP Parser to verify `fn` as valid function to simulate php <7.4');
         $this->doTestFileInfo($fileInfo);
     }
 

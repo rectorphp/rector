@@ -1,17 +1,17 @@
 <?php
 
-namespace Rector\Tests\Transform\Rector\Function_\ReservedFnFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\Fixture;
 
 class Fixture
 {
     public function run()
     {
-        function reservedFn($value)
+        function fn($value)
         {
             return $value;
         }
 
-        reservedFn(5);
+        fn(5);
     }
 }
 
@@ -19,7 +19,7 @@ class Fixture
 -----
 <?php
 
-namespace Rector\Tests\Transform\Rector\Function_\ReservedFnFunctionRector\Fixture;
+namespace Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\Fixture;
 
 class Fixture
 {
