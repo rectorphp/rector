@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -60,16 +62,14 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if (!$this->isLegalClass($node)) {
             return null;
         }
-        if ($node->params === []) {
+        $params = $this->matchConstructorParams($node);
+        if ($params === null) {
             return null;
         }
-        if ($node->stmts === []) {
-            return null;
-        }
-        foreach ($node->params as $param) {
+        foreach ($params as $param) {
             if (!$param->type instanceof \PhpParser\Node\NullableType) {
                 continue;
             }
@@ -107,5 +107,32 @@ CODE_SAMPLE
         }
         $param->flags = $property->flags;
         $this->removeNode($property);
+    }
+    private function isLegalClass(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
+    {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
+            return \false;
+        }
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
+            return !$classLike->isAbstract();
+        }
+        return \true;
+    }
+    /**
+     * @return mixed[]|null
+     */
+    private function matchConstructorParams(\PhpParser\Node\Stmt\ClassMethod $classMethod)
+    {
+        if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+            return null;
+        }
+        if ($classMethod->params === []) {
+            return null;
+        }
+        if ($classMethod->stmts === []) {
+            return null;
+        }
+        return $classMethod->params;
     }
 }
