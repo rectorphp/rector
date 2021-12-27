@@ -556,6 +556,12 @@ final class PhpVersionFeature
     final public const ARRAY_SPREAD_STRING_KEYS = PhpVersion::PHP_81;
 
     /**
+     * @see https://wiki.php.net/rfc/internal_method_return_types
+     * @var int
+     */
+    final public const RETURN_TYPE_WILL_CHANGE_ATTRIBUTE = PhpVersion::PHP_81;
+
+    /**
      * @see https://wiki.php.net/rfc/deprecate_dynamic_properties
      * @var int
      */

@@ -120,7 +120,9 @@ parameters:
 
         -
             message: '#Nested foreach with empty statement is not allowed#'
-            path: packages-tests/BetterPhpDocParser/PhpDocParser/TagValueNodeReprint/TagValueNodeReprintTest.php
+            paths:
+                - packages-tests/BetterPhpDocParser/PhpDocParser/TagValueNodeReprint/TagValueNodeReprintTest.php
+                - rules/Transform/Rector/ClassMethod/ReturnTypeWillChangeRector.php
 
         -
             message: '#Function "dump\(\)" cannot be used/left in the code#'
