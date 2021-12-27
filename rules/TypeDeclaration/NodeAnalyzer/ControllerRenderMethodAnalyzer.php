@@ -7,6 +7,8 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\Astral\Naming\SimpleNameResolver;
 
@@ -14,7 +16,8 @@ final class ControllerRenderMethodAnalyzer
 {
     public function __construct(
         private readonly SimpleNameResolver $simpleNameResolver,
-        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer
+        private readonly PhpAttributeAnalyzer $phpAttributeAnalyzer,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
     ) {
     }
 
@@ -58,10 +61,19 @@ final class ControllerRenderMethodAnalyzer
             return false;
         }
 
-        if ($this->simpleNameResolver->isNames($classMethod->name, ['__invoke', '*render'])) {
+        if ($this->simpleNameResolver->isNames($classMethod->name, ['__invoke', '*action'])) {
             return true;
         }
 
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Symfony\Component\Routing\Annotation\Route');
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Symfony\Component\Routing\Annotation\Route')) {
+            return true;
+        }
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (! $phpDocInfo instanceof PhpDocInfo) {
+            return false;
+        }
+
+        return $phpDocInfo->hasByAnnotationClass('Symfony\Component\Routing\Annotation\Route');
     }
 }
