@@ -6,6 +6,7 @@ namespace RectorPrefix20211227;
 use Rector\Core\Configuration\Option;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector;
+use Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector;
 use Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector;
 use Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector;
 use Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector;
@@ -18,4 +19,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector::class);
     $services->set(\Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector::class);
     $services->set(\Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector::class);
+    $services->set(\Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector::class);
 };

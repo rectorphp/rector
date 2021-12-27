@@ -1959,6 +1959,7 @@ return array(
     'Rector\\DowngradePhp56\\NodeManipulator\\ArgManipulator' => $baseDir . '/rules/DowngradePhp56/NodeManipulator/ArgManipulator.php',
     'Rector\\DowngradePhp56\\NodeManipulator\\UnpackedArgList' => $baseDir . '/rules/DowngradePhp56/NodeManipulator/UnpackedArgList.php',
     'Rector\\DowngradePhp56\\Rector\\CallLike\\DowngradeArgumentUnpackingRector' => $baseDir . '/rules/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php',
+    'Rector\\DowngradePhp56\\Rector\\FuncCall\\DowngradeArrayFilterUseConstantRector' => $baseDir . '/rules/DowngradePhp56/Rector/FuncCall/DowngradeArrayFilterUseConstantRector.php',
     'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialAssignmentOperatorRector' => $baseDir . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php',
     'Rector\\DowngradePhp56\\Rector\\Pow\\DowngradeExponentialOperatorRector' => $baseDir . '/rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php',
     'Rector\\DowngradePhp56\\Rector\\Use_\\DowngradeUseFunctionRector' => $baseDir . '/rules/DowngradePhp56/Rector/Use_/DowngradeUseFunctionRector.php',
