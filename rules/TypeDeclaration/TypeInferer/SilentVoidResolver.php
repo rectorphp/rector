@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
-use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 
@@ -32,10 +31,6 @@ final class SilentVoidResolver
     {
         $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
         if ($classLike instanceof Interface_) {
-            return false;
-        }
-
-        if ($classLike instanceof Trait_) {
             return false;
         }
 
