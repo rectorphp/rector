@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a
+class ComposerStaticInit89bbf9ea64d91c15e6668b678e3d4823
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3298,6 +3298,7 @@ class ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a
         'Rector\\Symfony\\Rector\\ClassMethod\\MergeMethodAnnotationToRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveDefaultGetBlockPrefixRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php',
+        'Rector\\Symfony\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ReplaceSensioRouteAnnotationWithSymfonyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RouteCollectionBuilderToRoutingConfiguratorRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\TemplateAnnotationToThisRenderRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php',
@@ -3380,6 +3381,7 @@ class ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a
         'Rector\\Transform\\Rector\\Assign\\PropertyAssignToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/PropertyAssignToMethodCallRector.php',
         'Rector\\Transform\\Rector\\Assign\\PropertyFetchToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php',
         'Rector\\Transform\\Rector\\Attribute\\AttributeKeyToClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Attribute/AttributeKeyToClassConstFetchRector.php',
+        'Rector\\Transform\\Rector\\ClassMethod\\ReturnTypeWillChangeRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/ClassMethod/ReturnTypeWillChangeRector.php',
         'Rector\\Transform\\Rector\\ClassMethod\\SingleToManyMethodRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/ClassMethod/SingleToManyMethodRector.php',
         'Rector\\Transform\\Rector\\ClassMethod\\WrapReturnRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/ClassMethod/WrapReturnRector.php',
         'Rector\\Transform\\Rector\\Class_\\AddAllowDynamicPropertiesAttributeRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/AddAllowDynamicPropertiesAttributeRector.php',
@@ -3840,9 +3842,9 @@ class ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit89bbf9ea64d91c15e6668b678e3d4823::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit89bbf9ea64d91c15e6668b678e3d4823::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit89bbf9ea64d91c15e6668b678e3d4823::$classMap;
 
         }, null, ClassLoader::class);
     }

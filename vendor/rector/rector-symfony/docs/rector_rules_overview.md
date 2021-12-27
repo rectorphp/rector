@@ -1,4 +1,4 @@
-# 52 Rules Overview
+# 54 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -918,6 +918,29 @@ Remove service from Sensio `@Route`
 
 <br>
 
+## RenderMethodParamToTypeDeclarationRector
+
+Move `@param` docs on `render()` method in Symfony controller to strict type declaration
+
+- class: [`Rector\Symfony\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector`](../src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
+ final class SomeController extends AbstractController
+ {
+-    /**
+-     * @param string $name
+-     */
+-    public function render($name)
++    public function render(string $name)
+     {
+     }
+ }
+```
+
+<br>
+
 ## ReplaceSensioRouteAnnotationWithSymfonyRector
 
 Replace Sensio `@Route` annotation with Symfony one
@@ -937,6 +960,39 @@ Replace Sensio `@Route` annotation with Symfony one
      {
      }
  }
+```
+
+<br>
+
+## ReplaceServiceArgumentRector
+
+Replace defined `service()` argument in Symfony PHP config
+
+:wrench: **configure it!**
+
+- class: [`Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector`](../src/Rector/FuncCall/ReplaceServiceArgumentRector.php)
+
+```php
+use PhpParser\Node\Scalar\String_;
+use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
+use Rector\Symfony\ValueObject\ReplaceServiceArgument;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(ReplaceServiceArgumentRector::class)
+        ->configure([new ReplaceServiceArgument('ContainerInterface', new String_('service_container', []))]);
+};
+```
+
+↓
+
+```diff
+ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+-return service(ContainerInterface::class);
++return service('service_container');
 ```
 
 <br>

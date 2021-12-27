@@ -16,28 +16,26 @@
         }
     ],
     "require": {
-        "php": "^7.2 || ^8.0",
+        "php": "^7.4 || ^8.0",
         "ext-json": "*",
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "ergebnis\/license": "^1.0.0",
-        "ergebnis\/php-cs-fixer-config": "^2.2.1",
-        "ergebnis\/phpstan-rules": "~0.15.2",
-        "ergebnis\/test-util": "^1.1.0",
-        "infection\/infection": "~0.15.3",
-        "phpstan\/extension-installer": "^1.0.4",
-        "phpstan\/phpstan": "~0.12.40",
-        "phpstan\/phpstan-deprecation-rules": "~0.12.5",
-        "phpstan\/phpstan-phpunit": "~0.12.16",
-        "phpstan\/phpstan-strict-rules": "~0.12.4",
-        "phpunit\/phpunit": "^8.5.8",
-        "psalm\/plugin-phpunit": "~0.11.0",
-        "vimeo\/psalm": "^3.14.2"
+        "ergebnis\/license": "^1.1.0",
+        "ergebnis\/php-cs-fixer-config": "^3.4.0",
+        "fakerphp\/faker": "^1.17.0",
+        "infection\/infection": "~0.25.5",
+        "phpunit\/phpunit": "^9.5.11",
+        "psalm\/plugin-phpunit": "~0.16.1",
+        "vimeo\/psalm": "^4.16.1"
     },
     "config": {
+        "allow-plugins": {
+            "composer\/package-versions-deprecated": true,
+            "infection\/extension-installer": true
+        },
         "platform": {
-            "php": "7.2.33"
+            "php": "7.4.26"
         },
         "preferred-install": "dist",
         "sort-packages": true

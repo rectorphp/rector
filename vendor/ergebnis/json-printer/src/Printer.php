@@ -2,7 +2,7 @@
 
 declare (strict_types=1);
 /**
- * Copyright (c) 2018-2020 Andreas Möller
+ * Copyright (c) 2018-2021 Andreas Möller
  *
  * For the full copyright and license information, please view
  * the LICENSE.md file that was distributed with this source code.
@@ -32,13 +32,7 @@ final class Printer implements \RectorPrefix20211227\Ergebnis\Json\Printer\Print
      * @see http://php.net/manual/en/function.json-encode.php
      * @see http://php.net/manual/en/json.constants.php
      *
-     * @param string $json
-     * @param string $indent
-     * @param string $newLine
-     *
      * @throws \InvalidArgumentException
-     *
-     * @return string
      */
     public function print(string $json, string $indent = '    ', string $newLine = \PHP_EOL) : string
     {
