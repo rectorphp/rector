@@ -140,7 +140,7 @@ final class ApplicationFileProcessor
             }
 
             // not relevant for us
-            if ($code === E_DEPRECATED) {
+            if (in_array($code, [E_DEPRECATED, E_WARNING], true)) {
                 return true;
             }
 
