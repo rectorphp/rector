@@ -10,6 +10,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
@@ -19,6 +20,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\TypeDeclaration\NodeAnalyzer\ControllerRenderMethodAnalyzer;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\TraitTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
@@ -46,7 +48,8 @@ final class ParamTypeDeclarationRector extends AbstractRector implements MinPhpV
         private readonly ParamTypeInferer $paramTypeInferer,
         private readonly TraitTypeAnalyzer $traitTypeAnalyzer,
         private readonly ParamTagRemover $paramTagRemover,
-        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard
+        private readonly ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard,
+        private readonly ControllerRenderMethodAnalyzer $controllerRenderMethodAnalyzer,
     ) {
     }
 
@@ -132,6 +135,14 @@ CODE_SAMPLE
         $this->hasChanged = false;
 
         if ($node->params === []) {
+            return null;
+        }
+
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($node instanceof ClassMethod && $scope instanceof Scope && $this->controllerRenderMethodAnalyzer->isRenderMethod(
+            $node,
+            $scope
+        )) {
             return null;
         }
 

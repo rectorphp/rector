@@ -8,6 +8,6 @@ if (class_exists('Nette\Application\UI\Presenter')) {
     return;
 }
 
-class Presenter
+class Presenter extends Control
 {
 }
