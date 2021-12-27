@@ -20,6 +20,11 @@ use Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
+     * @var SystemError[]
+     */
+    private array $systemErrors = [];
+
+    /**
      * @param FileProcessorInterface[] $fileProcessors
      */
     public function __construct(
@@ -39,11 +44,20 @@ final class ApplicationFileProcessor
      */
     public function run(array $files, Configuration $configuration): array
     {
+        $this->configureCustomErrorHandler();
+
         $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
         $this->fileFormatter->format($files);
 
         $this->fileDiffFileDecorator->decorate($files);
         $this->printFiles($files, $configuration);
+
+        $this->restoreErrorHandler();
+
+        $systemErrorsAndFileDiffs['system_errors'] = array_merge(
+            $systemErrorsAndFileDiffs['system_errors'],
+            $this->systemErrors
+        );
 
         return $systemErrorsAndFileDiffs;
     }
@@ -112,5 +126,34 @@ final class ApplicationFileProcessor
 
         $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $file->getFileContent());
         $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
+    }
+
+    /**
+     * Inspired by @see https://github.com/phpstan/phpstan-src/blob/89af4e7db257750cdee5d4259ad312941b6b25e8/src/Analyser/Analyser.php#L134
+     */
+    private function configureCustomErrorHandler(): void
+    {
+        $errorHandlerCallback = function (int $code, string $message, string $file, int $line): bool {
+            if ((error_reporting() & $code) === 0) {
+                // silence @ operator
+                return true;
+            }
+
+            // not relevant for us
+            if ($code === E_DEPRECATED) {
+                return true;
+            }
+
+            $this->systemErrors[] = new SystemError($message, $file, $line);
+
+            return true;
+        };
+
+        set_error_handler($errorHandlerCallback);
+    }
+
+    private function restoreErrorHandler(): void
+    {
+        restore_error_handler();
     }
 }
