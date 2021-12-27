@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb0109ba856782f6a3c9f43532d8f9080
+class ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2658,6 +2658,7 @@ class ComposerStaticInitb0109ba856782f6a3c9f43532d8f9080
         'Rector\\Nette\\Rector\\Assign\\MakeGetComponentAssignAnnotatedRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\MergeTemplateSetFileToTemplateRenderRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/MergeTemplateSetFileToTemplateRenderRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\RemoveParentAndNameFromComponentConstructorRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/RemoveParentAndNameFromComponentConstructorRector.php',
+        'Rector\\Nette\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\TemplateMagicAssignToExplicitVariableArrayRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/TemplateMagicAssignToExplicitVariableArrayRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\TranslateClassMethodToVariadicsRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/TranslateClassMethodToVariadicsRector.php',
         'Rector\\Nette\\Rector\\Class_\\FormDataRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Class_/FormDataRector.php',
@@ -3839,9 +3840,9 @@ class ComposerStaticInitb0109ba856782f6a3c9f43532d8f9080
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb0109ba856782f6a3c9f43532d8f9080::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb0109ba856782f6a3c9f43532d8f9080::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb0109ba856782f6a3c9f43532d8f9080::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf0a0f398784a1e6034013cd1c0ab2e8a::$classMap;
 
         }, null, ClassLoader::class);
     }

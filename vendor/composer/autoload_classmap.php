@@ -2263,6 +2263,7 @@ return array(
     'Rector\\Nette\\Rector\\Assign\\MakeGetComponentAssignAnnotatedRector' => $vendorDir . '/rector/rector-nette/src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php',
     'Rector\\Nette\\Rector\\ClassMethod\\MergeTemplateSetFileToTemplateRenderRector' => $vendorDir . '/rector/rector-nette/src/Rector/ClassMethod/MergeTemplateSetFileToTemplateRenderRector.php',
     'Rector\\Nette\\Rector\\ClassMethod\\RemoveParentAndNameFromComponentConstructorRector' => $vendorDir . '/rector/rector-nette/src/Rector/ClassMethod/RemoveParentAndNameFromComponentConstructorRector.php',
+    'Rector\\Nette\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => $vendorDir . '/rector/rector-nette/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
     'Rector\\Nette\\Rector\\ClassMethod\\TemplateMagicAssignToExplicitVariableArrayRector' => $vendorDir . '/rector/rector-nette/src/Rector/ClassMethod/TemplateMagicAssignToExplicitVariableArrayRector.php',
     'Rector\\Nette\\Rector\\ClassMethod\\TranslateClassMethodToVariadicsRector' => $vendorDir . '/rector/rector-nette/src/Rector/ClassMethod/TranslateClassMethodToVariadicsRector.php',
     'Rector\\Nette\\Rector\\Class_\\FormDataRector' => $vendorDir . '/rector/rector-nette/src/Rector/Class_/FormDataRector.php',
