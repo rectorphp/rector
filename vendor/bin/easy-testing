@@ -8,11 +8,11 @@
  *
  * @generated
  */
-namespace RectorPrefix20211226\Composer;
+namespace RectorPrefix20211227\Composer;
 
 $GLOBALS['_composer_autoload_path'] = __DIR__ . '/..' . '/autoload.php';
 if (\PHP_VERSION_ID < 80000) {
-    if (!\class_exists('RectorPrefix20211226\\Composer\\BinProxyWrapper')) {
+    if (!\class_exists('RectorPrefix20211227\\Composer\\BinProxyWrapper')) {
         /**
          * @internal
          */
@@ -70,7 +70,7 @@ if (\PHP_VERSION_ID < 80000) {
             }
         }
     }
-    if (\function_exists('stream_wrapper_register') && \stream_wrapper_register('composer-bin-proxy', 'RectorPrefix20211226\\Composer\\BinProxyWrapper')) {
+    if (\function_exists('stream_wrapper_register') && \stream_wrapper_register('composer-bin-proxy', 'RectorPrefix20211227\\Composer\\BinProxyWrapper')) {
         include "composer-bin-proxy://" . __DIR__ . '/..' . '/symplify/easy-testing/bin/easy-testing';
         exit(0);
     }

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use RectorPrefix20211226\Nette\Utils\Reflection;
+use RectorPrefix20211227\Nette\Utils\Reflection;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -22,9 +22,9 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use ReflectionClass;
-use RectorPrefix20211226\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20211226\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20211226\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20211227\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211227\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20211227\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\CodingStyle\ClassNameImport\ShortNameResolver\ShortNameResolverTest
  */
@@ -68,7 +68,7 @@ final class ShortNameResolver
      * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
      */
     private $useImportNameMatcher;
-    public function __construct(\RectorPrefix20211226\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher)
+    public function __construct(\RectorPrefix20211227\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -166,7 +166,7 @@ final class ShortNameResolver
             if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
                 return;
             }
-            $phpDocNodeTraverser = new \RectorPrefix20211226\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
+            $phpDocNodeTraverser = new \RectorPrefix20211227\Symplify\SimplePhpDocParser\PhpDocNodeTraverser();
             $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$shortNames) {
                 if ($node instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                     $shortName = \trim($node->name, '@');
@@ -210,7 +210,7 @@ final class ShortNameResolver
         foreach ($shortNames as $shortName) {
             $stmtsMatchedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts);
             if ($reflectionClass instanceof \ReflectionClass) {
-                $fullyQualifiedName = \RectorPrefix20211226\Nette\Utils\Reflection::expandClassName($shortName, $reflectionClass);
+                $fullyQualifiedName = \RectorPrefix20211227\Nette\Utils\Reflection::expandClassName($shortName, $reflectionClass);
             } elseif (\is_string($stmtsMatchedName)) {
                 $fullyQualifiedName = $stmtsMatchedName;
             } else {
