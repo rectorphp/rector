@@ -69,11 +69,21 @@ CODE_SAMPLE
         if ($patterns === []) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($patterns as $pattern) {
             foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
-                $pattern->value = \RectorPrefix20211228\Nette\Utils\Strings::replace($pattern->value, '#' . \preg_quote($complexPattern, '#') . '#', $simple);
+                $originalValue = $pattern->value;
+                $simplifiedValue = \RectorPrefix20211228\Nette\Utils\Strings::replace($pattern->value, '#' . \preg_quote($complexPattern, '#') . '#', $simple);
+                if ($originalValue === $simplifiedValue) {
+                    continue;
+                }
+                $pattern->value = $simplifiedValue;
+                $hasChanged = \true;
             }
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
 }

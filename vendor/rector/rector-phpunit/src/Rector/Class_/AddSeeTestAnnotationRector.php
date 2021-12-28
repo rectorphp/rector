@@ -93,13 +93,14 @@ CODE_SAMPLE
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->removeNonExistingClassSeeAnnotation($phpDocInfo);
-        if ($matchingTestClassName !== null) {
-            if ($this->hasAlreadySeeAnnotation($phpDocInfo, $matchingTestClassName)) {
-                return null;
-            }
-            $newSeeTagNode = $this->createSeePhpDocTagNode($matchingTestClassName);
-            $phpDocInfo->addPhpDocTagNode($newSeeTagNode);
+        if ($matchingTestClassName === null) {
+            return null;
         }
+        if ($this->hasAlreadySeeAnnotation($phpDocInfo, $matchingTestClassName)) {
+            return null;
+        }
+        $newSeeTagNode = $this->createSeePhpDocTagNode($matchingTestClassName);
+        $phpDocInfo->addPhpDocTagNode($newSeeTagNode);
         return $node;
     }
     private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class) : bool

@@ -66,16 +66,14 @@ final class RegexPatternArgumentManipulator
     }
     /**
      * @return String_[]
+     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function matchCallArgumentWithRegexPattern(\PhpParser\Node\Expr $expr) : array
+    public function matchCallArgumentWithRegexPattern($call) : array
     {
-        if ($expr instanceof \PhpParser\Node\Expr\FuncCall) {
-            return $this->processFuncCall($expr);
+        if ($call instanceof \PhpParser\Node\Expr\FuncCall) {
+            return $this->processFuncCall($call);
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticCall) {
-            return $this->processStaticCall($expr);
-        }
-        return [];
+        return $this->processStaticCall($call);
     }
     /**
      * @return String_[]

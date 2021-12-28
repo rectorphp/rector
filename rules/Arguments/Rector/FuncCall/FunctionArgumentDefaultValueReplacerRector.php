@@ -57,16 +57,24 @@ CODE_SAMPLE
     }
     /**
      * @param FuncCall $node
+     * @return \PhpParser\Node\Expr\FuncCall|null
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node)
     {
+        $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {
             if (!$this->isName($node->name, $replacedArgument->getFunction())) {
                 continue;
             }
-            $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            $changedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            if ($changedNode instanceof \PhpParser\Node) {
+                $hasChanged = \true;
+            }
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     /**
      * @param mixed[] $configuration

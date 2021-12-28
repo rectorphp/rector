@@ -55,17 +55,20 @@ CODE_SAMPLE
         if ($this->isName($node, 'mysql_list_dbs')) {
             $node->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
             $node->args[0] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('SHOW DATABASES'));
+            return $node;
         }
         if ($this->isName($node, 'mysql_list_fields') && $node->args[0] instanceof \PhpParser\Node\Arg && $node->args[1] instanceof \PhpParser\Node\Arg) {
             $node->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
             $node->args[0]->value = $this->joinStringWithNode('SHOW COLUMNS FROM', $node->args[1]->value);
             unset($node->args[1]);
+            return $node;
         }
         if ($this->isName($node, 'mysql_list_tables') && $node->args[0] instanceof \PhpParser\Node\Arg) {
             $node->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
             $node->args[0]->value = $this->joinStringWithNode('SHOW TABLES FROM', $node->args[0]->value);
+            return $node;
         }
-        return $node;
+        return null;
     }
     private function processMysqlCreateDb(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {

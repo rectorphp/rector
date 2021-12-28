@@ -78,13 +78,18 @@ CODE_SAMPLE
         if ($regexArguments === []) {
             return null;
         }
+        $hasChanged = \false;
         foreach ($regexArguments as $regexArgument) {
             if (\Rector\Core\Util\StringUtils::isMatch($regexArgument->value, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
                 continue;
             }
             $this->escapeStringNode($regexArgument);
+            $hasChanged = \true;
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     private function escapeStringNode(\PhpParser\Node\Scalar\String_ $string) : void
     {

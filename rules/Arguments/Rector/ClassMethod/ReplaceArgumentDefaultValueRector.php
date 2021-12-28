@@ -58,10 +58,11 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
     public function refactor(\PhpParser\Node $node)
     {
+        $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $replacedArgument->getObjectType())) {
                 continue;
@@ -69,9 +70,15 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $replacedArgument->getMethod())) {
                 continue;
             }
-            $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            if ($replacedNode instanceof \PhpParser\Node) {
+                $hasChanged = \true;
+            }
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     /**
      * @param mixed[] $configuration

@@ -342,7 +342,7 @@ final class AstResolver
         if (!$this->reflectionProvider->hasFunction($funcCall->name, $scope)) {
             return null;
         }
-        $reflectionFunction = $this->reflectionProvider->getFunction($funcCall->name, $scope);
-        return $this->resolveFunctionFromFunctionReflection($reflectionFunction);
+        $functionReflection = $this->reflectionProvider->getFunction($funcCall->name, $scope);
+        return $this->resolveFunctionFromFunctionReflection($functionReflection);
     }
 }

@@ -51,17 +51,24 @@ CODE_SAMPLE
     }
     /**
      * @param FuncCall $node
+     * @return \PhpParser\Node\Expr\FuncCall|null
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(\PhpParser\Node $node)
     {
+        $hasChanged = \false;
         foreach ($node->args as $nodeArg) {
             if (!$nodeArg instanceof \PhpParser\Node\Arg) {
                 continue;
             }
-            if ($nodeArg->byRef) {
-                $nodeArg->byRef = \false;
+            if (!$nodeArg->byRef) {
+                continue;
             }
+            $nodeArg->byRef = \false;
+            $hasChanged = \true;
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
 }

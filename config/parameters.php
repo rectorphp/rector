@@ -16,8 +16,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, []);
     // parallel
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \false);
-    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, 20);
-    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_JOB_SIZE, 60);
+    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, 16);
+    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_JOB_SIZE, 20);
     // FQN class importing
     $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \false);
     $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);
