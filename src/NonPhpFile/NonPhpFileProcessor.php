@@ -3,11 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Core\NonPhpFile;
 
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
+use Rector\Parallel\ValueObject\Bridge;
 final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
@@ -16,18 +20,41 @@ final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileP
      */
     private $nonPhpRectors;
     /**
+     * @readonly
+     * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
+     */
+    private $fileDiffFactory;
+    /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */
-    public function __construct(array $nonPhpRectors)
+    public function __construct(array $nonPhpRectors, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory)
     {
         $this->nonPhpRectors = $nonPhpRectors;
+        $this->fileDiffFactory = $fileDiffFactory;
     }
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
+    /**
+     * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
+     */
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
+        if ($this->nonPhpRectors === []) {
+            return $systemErrorsAndFileDiffs;
+        }
+        $oldFileContent = $file->getFileContent();
+        $newFileContent = $file->getFileContent();
         foreach ($this->nonPhpRectors as $nonPhpRector) {
             $newFileContent = $nonPhpRector->refactorFileContent($file->getFileContent());
+            if ($oldFileContent === $newFileContent) {
+                continue;
+            }
             $file->changeFileContent($newFileContent);
         }
+        if ($oldFileContent !== $newFileContent) {
+            $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContent, $newFileContent);
+            $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = $fileDiff;
+        }
+        return $systemErrorsAndFileDiffs;
     }
     public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {

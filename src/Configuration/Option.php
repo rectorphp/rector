@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20211227\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20211228\JetBrains\PhpStorm\Immutable;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use RectorPrefix20211227\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20211228\Symplify\Skipper\ValueObject\Option as SkipperOption;
 #[Immutable]
 final class Option
 {
@@ -82,7 +82,7 @@ final class Option
     /**
      * @var string
      */
-    public const SKIP = \RectorPrefix20211227\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = \RectorPrefix20211228\Symplify\Skipper\ValueObject\Option::SKIP;
     /**
      * @var string
      */
@@ -154,4 +154,12 @@ final class Option
      * @var string
      */
     public const PARALLEL_PORT = 'port';
+    /**
+     * @var string
+     */
+    public const PARALLEL_JOB_SIZE = 'parallel-job-size';
+    /**
+     * @var string
+     */
+    public const PARALLEL_MAX_NUMBER_OF_PROCESSES = 'parallel-max-number-of-processes';
 }

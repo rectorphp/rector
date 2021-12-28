@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211227\Symplify\SimplePhpDocParser;
+namespace RectorPrefix20211228\Symplify\SimplePhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20211227\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
-use RectorPrefix20211227\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException;
-use RectorPrefix20211227\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
+use RectorPrefix20211228\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface;
+use RectorPrefix20211228\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException;
+use RectorPrefix20211228\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
 /**
  * @api
  *
@@ -62,7 +62,7 @@ final class PhpDocNodeTraverser
      * @var PhpDocNodeVisitorInterface[]
      */
     private $phpDocNodeVisitors = [];
-    public function addPhpDocNodeVisitor(\RectorPrefix20211227\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
+    public function addPhpDocNodeVisitor(\RectorPrefix20211228\Symplify\SimplePhpDocParser\Contract\PhpDocNodeVisitorInterface $phpDocNodeVisitor) : void
     {
         $this->phpDocNodeVisitors[] = $phpDocNodeVisitor;
     }
@@ -78,7 +78,7 @@ final class PhpDocNodeTraverser
     }
     public function traverseWithCallable(\PHPStan\PhpDocParser\Ast\Node $node, string $docContent, callable $callable) : \PHPStan\PhpDocParser\Ast\Node
     {
-        $callablePhpDocNodeVisitor = new \RectorPrefix20211227\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor($callable, $docContent);
+        $callablePhpDocNodeVisitor = new \RectorPrefix20211228\Symplify\SimplePhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor($callable, $docContent);
         $this->addPhpDocNodeVisitor($callablePhpDocNodeVisitor);
         $this->traverse($node);
         return $node;
@@ -115,7 +115,7 @@ final class PhpDocNodeTraverser
                             $subNode = null;
                             continue 2;
                         } else {
-                            throw new \RectorPrefix20211227\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));
+                            throw new \RectorPrefix20211228\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));
                         }
                     }
                 }
@@ -166,7 +166,7 @@ final class PhpDocNodeTraverser
                         unset($nodes[$key]);
                         continue 2;
                     } else {
-                        throw new \RectorPrefix20211227\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));
+                        throw new \RectorPrefix20211228\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException('enterNode() returned invalid value of type ' . \gettype($return));
                     }
                 }
             }
@@ -192,7 +192,7 @@ final class PhpDocNodeTraverser
                         $this->stopTraversal = \true;
                         break 2;
                     } else {
-                        throw new \RectorPrefix20211227\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException('leaveNode() returned invalid value of type ' . \gettype($return));
+                        throw new \RectorPrefix20211228\Symplify\SimplePhpDocParser\Exception\InvalidTraverseException('leaveNode() returned invalid value of type ' . \gettype($return));
                     }
                 }
                 if ($breakVisitorIndex === $visitorIndex) {

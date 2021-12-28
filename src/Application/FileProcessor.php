@@ -49,10 +49,7 @@ final class FileProcessor
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts);
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
-    /**
-     * @return mixed[]
-     */
-    public function refactor(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
+    public function refactor(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
         $file->changeNewStmts($newStmts);
@@ -60,7 +57,5 @@ final class FileProcessor
         while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
             $this->refactor($otherTouchedFile, $configuration);
         }
-        // @todo parallel - to be implemented
-        return [];
     }
 }

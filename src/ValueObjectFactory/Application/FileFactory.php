@@ -8,6 +8,7 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\ValueObject\Application\File
  */
@@ -39,15 +40,23 @@ final class FileFactory
     }
     /**
      * @param string[] $paths
-     * @return File[]
+     * @return SmartFileInfo[]
      */
-    public function createFromPaths(array $paths, \Rector\Core\ValueObject\Configuration $configuration) : array
+    public function createFileInfosFromPaths(array $paths, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
         if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();
         }
         $supportedFileExtensions = $this->resolveSupportedFileExtensions($configuration);
-        $fileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
+        return $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
+    }
+    /**
+     * @param string[] $paths
+     * @return File[]
+     */
+    public function createFromPaths(array $paths, \Rector\Core\ValueObject\Configuration $configuration) : array
+    {
+        $fileInfos = $this->createFileInfosFromPaths($paths, $configuration);
         $files = [];
         foreach ($fileInfos as $fileInfo) {
             $files[] = new \Rector\Core\ValueObject\Application\File($fileInfo, $fileInfo->getContents());

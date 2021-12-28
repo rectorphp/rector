@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix20211227\Clue\React\NDJson;
+namespace RectorPrefix20211228\Clue\React\NDJson;
 
-use RectorPrefix20211227\Evenement\EventEmitter;
-use RectorPrefix20211227\React\Stream\WritableStreamInterface;
+use RectorPrefix20211228\Evenement\EventEmitter;
+use RectorPrefix20211228\React\Stream\WritableStreamInterface;
 /**
  * The Encoder / Serializer can be used to write any value, encode it as a JSON text and forward it to an output stream
  */
-class Encoder extends \RectorPrefix20211227\Evenement\EventEmitter implements \RectorPrefix20211227\React\Stream\WritableStreamInterface
+class Encoder extends \RectorPrefix20211228\Evenement\EventEmitter implements \RectorPrefix20211228\React\Stream\WritableStreamInterface
 {
     private $output;
     private $options;
@@ -20,7 +20,7 @@ class Encoder extends \RectorPrefix20211227\Evenement\EventEmitter implements \R
      * @throws \InvalidArgumentException
      * @throws \BadMethodCallException
      */
-    public function __construct(\RectorPrefix20211227\React\Stream\WritableStreamInterface $output, $options = 0, $depth = 512)
+    public function __construct(\RectorPrefix20211228\React\Stream\WritableStreamInterface $output, $options = 0, $depth = 512)
     {
         // @codeCoverageIgnoreStart
         if (\defined('JSON_PRETTY_PRINT') && $options & \JSON_PRETTY_PRINT) {

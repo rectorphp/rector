@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211227\React\Dns\Query;
+namespace RectorPrefix20211228\React\Dns\Query;
 
-use RectorPrefix20211227\React\Promise\Promise;
+use RectorPrefix20211228\React\Promise\Promise;
 /**
  * Send DNS queries over a UDP or TCP/IP stream transport.
  *
@@ -49,20 +49,20 @@ use RectorPrefix20211227\React\Promise\Promise;
  * );
  * ```
  */
-class SelectiveTransportExecutor implements \RectorPrefix20211227\React\Dns\Query\ExecutorInterface
+class SelectiveTransportExecutor implements \RectorPrefix20211228\React\Dns\Query\ExecutorInterface
 {
     private $datagramExecutor;
     private $streamExecutor;
-    public function __construct(\RectorPrefix20211227\React\Dns\Query\ExecutorInterface $datagramExecutor, \RectorPrefix20211227\React\Dns\Query\ExecutorInterface $streamExecutor)
+    public function __construct(\RectorPrefix20211228\React\Dns\Query\ExecutorInterface $datagramExecutor, \RectorPrefix20211228\React\Dns\Query\ExecutorInterface $streamExecutor)
     {
         $this->datagramExecutor = $datagramExecutor;
         $this->streamExecutor = $streamExecutor;
     }
-    public function query(\RectorPrefix20211227\React\Dns\Query\Query $query)
+    public function query(\RectorPrefix20211228\React\Dns\Query\Query $query)
     {
         $stream = $this->streamExecutor;
         $pending = $this->datagramExecutor->query($query);
-        return new \RectorPrefix20211227\React\Promise\Promise(function ($resolve, $reject) use(&$pending, $stream, $query) {
+        return new \RectorPrefix20211228\React\Promise\Promise(function ($resolve, $reject) use(&$pending, $stream, $query) {
             $pending->then($resolve, function ($e) use(&$pending, $stream, $query, $resolve, $reject) {
                 if ($e->getCode() === (\defined('SOCKET_EMSGSIZE') ? \SOCKET_EMSGSIZE : 90)) {
                     $pending = $stream->query($query)->then($resolve, $reject);

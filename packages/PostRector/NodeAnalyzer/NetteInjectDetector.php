@@ -73,8 +73,8 @@ final class NetteInjectDetector
         // prefer local constructor
         $classReflection = $this->reflectionProvider->getClass($className);
         if ($classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
-            $constructorReflectionMethod = $classReflection->getConstructor();
-            $declaringClass = $constructorReflectionMethod->getDeclaringClass();
+            $methodReflection = $classReflection->getConstructor();
+            $declaringClass = $methodReflection->getDeclaringClass();
             // be sure its local constructor
             if ($declaringClass->getName() === $className) {
                 return \false;

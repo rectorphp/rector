@@ -32,4 +32,8 @@ final class Name
      * @var string
      */
     public const APPLIED_RECTORS = 'applied_rectors';
+    /**
+     * @var string
+     */
+    public const RECTOR_CLASS = 'rector_class';
 }

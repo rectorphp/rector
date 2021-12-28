@@ -15,7 +15,7 @@ use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20211227\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211228\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ClassStringType>
  */

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
-use RectorPrefix20211227\JetBrains\PhpStorm\Immutable;
+use RectorPrefix20211228\JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -61,12 +61,17 @@ final class Configuration
      */
     private $parallelIdentifier = null;
     /**
+     * @readonly
+     * @var bool
+     */
+    private $isParallel = \false;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param string|null $parallelPort
      * @param string|null $parallelIdentifier
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs = null, $parallelPort = null, $parallelIdentifier = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?\Rector\Core\ValueObject\Bootstrap\BootstrapConfigs $bootstrapConfigs = null, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -78,6 +83,7 @@ final class Configuration
         $this->bootstrapConfigs = $bootstrapConfigs;
         $this->parallelPort = $parallelPort;
         $this->parallelIdentifier = $parallelIdentifier;
+        $this->isParallel = $isParallel;
     }
     public function isDryRun() : bool
     {
@@ -132,5 +138,16 @@ final class Configuration
     public function getParallelIdentifier() : ?string
     {
         return $this->parallelIdentifier;
+    }
+    public function isParallel() : bool
+    {
+        return $this->isParallel;
+    }
+    /**
+     * @return string|null
+     */
+    public function getConfig()
+    {
+        return $this->getMainConfigFilePath();
     }
 }

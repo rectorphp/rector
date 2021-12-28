@@ -7,13 +7,13 @@ use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20211227\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
-use RectorPrefix20211227\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
+use RectorPrefix20211228\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
+use RectorPrefix20211228\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
@@ -40,7 +40,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
     /**
      * @param ComposerRectorInterface[] $composerRectors
      */
-    public function __construct(\RectorPrefix20211227\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20211227\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter $composerJsonPrinter, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, array $composerRectors)
+    public function __construct(\RectorPrefix20211228\Symplify\ComposerJsonManipulator\ComposerJsonFactory $composerJsonFactory, \RectorPrefix20211228\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter $composerJsonPrinter, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, array $composerRectors)
     {
         $this->composerJsonFactory = $composerJsonFactory;
         $this->composerJsonPrinter = $composerJsonPrinter;

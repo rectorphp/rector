@@ -3,11 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObject\Reporting;
 
-use RectorPrefix20211227\Nette\Utils\Strings;
+use RectorPrefix20211228\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20211227\Symplify\EasyParallel\Contract\SerializableInterface;
-final class FileDiff implements \RectorPrefix20211227\Symplify\EasyParallel\Contract\SerializableInterface
+use RectorPrefix20211228\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix20211228\Webmozart\Assert\Assert;
+final class FileDiff implements \RectorPrefix20211228\Symplify\EasyParallel\Contract\SerializableInterface
 {
     /**
      * @var string
@@ -63,6 +64,7 @@ final class FileDiff implements \RectorPrefix20211227\Symplify\EasyParallel\Cont
         $this->diff = $diff;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
         $this->rectorsWithLineChanges = $rectorsWithLineChanges;
+        \RectorPrefix20211228\Webmozart\Assert\Assert::allIsAOf($rectorsWithLineChanges, \Rector\ChangesReporting\ValueObject\RectorWithLineChange::class);
     }
     public function getDiff() : string
     {
@@ -96,7 +98,7 @@ final class FileDiff implements \RectorPrefix20211227\Symplify\EasyParallel\Cont
     }
     public function getFirstLineNumber() : ?int
     {
-        $match = \RectorPrefix20211227\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
+        $match = \RectorPrefix20211228\Nette\Utils\Strings::match($this->diff, self::FIRST_LINE_REGEX);
         // probably some error in diff
         if (!isset($match[self::FIRST_LINE_KEY])) {
             return null;
@@ -113,9 +115,13 @@ final class FileDiff implements \RectorPrefix20211227\Symplify\EasyParallel\Cont
     /**
      * @param array<string, mixed> $json
      */
-    public static function decode(array $json) : \RectorPrefix20211227\Symplify\EasyParallel\Contract\SerializableInterface
+    public static function decode(array $json) : \RectorPrefix20211228\Symplify\EasyParallel\Contract\SerializableInterface
     {
-        return new self($json[self::KEY_RELATIVE_FILE_PATH], $json[self::KEY_DIFF], $json[self::KEY_DIFF_CONSOLE_FORMATTED], $json[self::KEY_RECTORS_WITH_LINE_CHANGES]);
+        $rectorWithLineChanges = [];
+        foreach ($json[self::KEY_RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {
+            $rectorWithLineChanges[] = \Rector\ChangesReporting\ValueObject\RectorWithLineChange::decode($rectorWithLineChangesJson);
+        }
+        return new self($json[self::KEY_RELATIVE_FILE_PATH], $json[self::KEY_DIFF], $json[self::KEY_DIFF_CONSOLE_FORMATTED], $rectorWithLineChanges);
     }
     /**
      * @template TType as object

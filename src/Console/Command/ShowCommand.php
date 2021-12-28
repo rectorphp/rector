@@ -7,10 +7,10 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20211227\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211227\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211227\Symfony\Component\Console\Output\OutputInterface;
-final class ShowCommand extends \RectorPrefix20211227\Symfony\Component\Console\Command\Command
+use RectorPrefix20211228\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211228\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211228\Symfony\Component\Console\Output\OutputInterface;
+final class ShowCommand extends \RectorPrefix20211228\Symfony\Component\Console\Command\Command
 {
     /**
      * @readonly
@@ -35,7 +35,7 @@ final class ShowCommand extends \RectorPrefix20211227\Symfony\Component\Console\
     {
         $this->setDescription('Show loaded Rectors with their configuration');
     }
-    protected function execute(\RectorPrefix20211227\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211227\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(\RectorPrefix20211228\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20211228\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $this->outputStyle->title('Loaded Rector rules');
         $rectors = \array_filter($this->rectors, function (\Rector\Core\Contract\Rector\RectorInterface $rector) : bool {
@@ -56,6 +56,6 @@ final class ShowCommand extends \RectorPrefix20211227\Symfony\Component\Console\
         }
         $message = \sprintf('%d loaded Rectors', $rectorCount);
         $this->outputStyle->success($message);
-        return \RectorPrefix20211227\Symfony\Component\Console\Command\Command::SUCCESS;
+        return \RectorPrefix20211228\Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }

@@ -5,10 +5,13 @@ namespace Rector\Parallel\Command;
 
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Command\ProcessCommand;
-use RectorPrefix20211227\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211228\Symfony\Component\Console\Command\Command;
+use RectorPrefix20211228\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20211228\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix20211228\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
+ * @todo possibly extract to symplify/easy-parallel
  */
 final class WorkerCommandLineFactory
 {
@@ -18,56 +21,75 @@ final class WorkerCommandLineFactory
     private const OPTION_DASHES = '--';
     /**
      * @readonly
-     * @var \Rector\Core\Console\Command\ProcessCommand
+     * @var \Symplify\EasyParallel\Reflection\CommandFromReflectionFactory
      */
-    private $processCommand;
-    public function __construct(\Rector\Core\Console\Command\ProcessCommand $processCommand)
+    private $commandFromReflectionFactory;
+    public function __construct()
     {
-        $this->processCommand = $processCommand;
+        $this->commandFromReflectionFactory = new \RectorPrefix20211228\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
     }
-    public function create(string $mainScript, string $originalCommandName, string $workerCommandName, ?string $projectConfigFile, \RectorPrefix20211227\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
+    /**
+     * @param class-string<Command> $mainCommandClass
+     */
+    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, ?string $projectConfigFile, \RectorPrefix20211228\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $mainScript], $commandArguments);
-        $processCommandArray = [];
+        $workerCommandArray = [];
+        $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
+        if ($mainCommand->getName() === null) {
+            $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
+            throw new \RectorPrefix20211228\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
+        }
+        $mainCommandName = $mainCommand->getName();
+        $mainCommandNames = [$mainCommandName, $mainCommandName[0]];
         foreach ($args as $arg) {
             // skip command name
-            if ($arg === $originalCommandName) {
+            if (\in_array($arg, $mainCommandNames, \true)) {
                 break;
             }
-            $processCommandArray[] = \escapeshellarg($arg);
+            $workerCommandArray[] = \escapeshellarg($arg);
         }
-        $processCommandArray[] = $workerCommandName;
+        $workerCommandArray[] = $workerCommandName;
         if ($projectConfigFile !== null) {
-            $processCommandArray[] = self::OPTION_DASHES . \Rector\Core\Configuration\Option::CONFIG;
-            $processCommandArray[] = \escapeshellarg($projectConfigFile);
+            $workerCommandArray[] = self::OPTION_DASHES . \Rector\Core\Configuration\Option::CONFIG;
+            $workerCommandArray[] = \escapeshellarg($projectConfigFile);
         }
-        $processCommandOptions = $this->createProcessCommandOptions($input, $this->getCheckCommandOptionNames());
-        $processCommandArray = \array_merge($processCommandArray, $processCommandOptions);
+        $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
+        $workerCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
+        $workerCommandArray = \array_merge($workerCommandArray, $workerCommandOptions);
         // for TCP local server
-        $processCommandArray[] = '--port';
-        $processCommandArray[] = $port;
-        $processCommandArray[] = '--identifier';
-        $processCommandArray[] = \escapeshellarg($identifier);
+        $workerCommandArray[] = '--port';
+        $workerCommandArray[] = $port;
+        $workerCommandArray[] = '--identifier';
+        $workerCommandArray[] = \escapeshellarg($identifier);
         /** @var string[] $paths */
         $paths = $input->getArgument(\Rector\Core\Configuration\Option::SOURCE);
         foreach ($paths as $path) {
-            $processCommandArray[] = \escapeshellarg($path);
+            $workerCommandArray[] = \escapeshellarg($path);
         }
         // set json output
-        $processCommandArray[] = self::OPTION_DASHES . \Rector\Core\Configuration\Option::OUTPUT_FORMAT;
-        $processCommandArray[] = \escapeshellarg(\Rector\ChangesReporting\Output\JsonOutputFormatter::NAME);
+        $workerCommandArray[] = self::OPTION_DASHES . \Rector\Core\Configuration\Option::OUTPUT_FORMAT;
+        $workerCommandArray[] = \escapeshellarg(\Rector\ChangesReporting\Output\JsonOutputFormatter::NAME);
         // disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
-        $processCommandArray[] = '--no-ansi';
-        return \implode(' ', $processCommandArray);
+        $workerCommandArray[] = '--no-ansi';
+        return \implode(' ', $workerCommandArray);
+    }
+    private function shouldSkipOption(\RectorPrefix20211228\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
+    {
+        if (!$input->hasOption($optionName)) {
+            return \true;
+        }
+        // skip output format, not relevant in parallel worker command
+        return $optionName === \Rector\Core\Configuration\Option::OUTPUT_FORMAT;
     }
     /**
      * @return string[]
      */
-    private function getCheckCommandOptionNames() : array
+    private function getCommandOptionNames(\RectorPrefix20211228\Symfony\Component\Console\Command\Command $command) : array
     {
-        $inputDefinition = $this->processCommand->getDefinition();
+        $inputDefinition = $command->getDefinition();
         $optionNames = [];
         foreach ($inputDefinition->getOptions() as $inputOption) {
             $optionNames[] = $inputOption->getName();
@@ -77,39 +99,31 @@ final class WorkerCommandLineFactory
     /**
      * Keeps all options that are allowed in check command options
      *
-     * @param string[] $checkCommandOptionNames
+     * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function createProcessCommandOptions(\RectorPrefix20211227\Symfony\Component\Console\Input\InputInterface $input, array $checkCommandOptionNames) : array
+    private function mirrorCommandOptions(\RectorPrefix20211228\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
     {
-        $processCommandOptions = [];
-        foreach ($checkCommandOptionNames as $checkCommandOptionName) {
-            if ($this->shouldSkipOption($input, $checkCommandOptionName)) {
+        $workerCommandOptions = [];
+        foreach ($mainCommandOptionNames as $mainCommandOptionName) {
+            if ($this->shouldSkipOption($input, $mainCommandOptionName)) {
                 continue;
             }
             /** @var bool|string|null $optionValue */
-            $optionValue = $input->getOption($checkCommandOptionName);
+            $optionValue = $input->getOption($mainCommandOptionName);
             // skip clutter
             if ($optionValue === null) {
                 continue;
             }
             if (\is_bool($optionValue)) {
                 if ($optionValue) {
-                    $processCommandOptions[] = \sprintf('--%s', $checkCommandOptionName);
+                    $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
                 }
                 continue;
             }
-            $processCommandOptions[] = self::OPTION_DASHES . $checkCommandOptionName;
-            $processCommandOptions[] = \escapeshellarg($optionValue);
+            $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+            $workerCommandOptions[] = \escapeshellarg($optionValue);
         }
-        return $processCommandOptions;
-    }
-    private function shouldSkipOption(\RectorPrefix20211227\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
-    {
-        if (!$input->hasOption($optionName)) {
-            return \true;
-        }
-        // skip output format, not relevant in parallel worker command
-        return $optionName === \Rector\Core\Configuration\Option::OUTPUT_FORMAT;
+        return $workerCommandOptions;
     }
 }

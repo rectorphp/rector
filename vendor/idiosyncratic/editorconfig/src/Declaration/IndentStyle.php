@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211227\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20211227\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20211228\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function in_array;
 use function is_string;
 use function strtolower;
-final class IndentStyle extends \RectorPrefix20211227\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class IndentStyle extends \RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function getName() : string
     {
@@ -19,7 +19,7 @@ final class IndentStyle extends \RectorPrefix20211227\Idiosyncratic\EditorConfig
     public function validateValue($value) : void
     {
         if (\is_string($value) === \false || \in_array(\strtolower($value), ['tab', 'space']) === \false) {
-            throw new \RectorPrefix20211227\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
+            throw new \RectorPrefix20211228\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
         }
     }
 }

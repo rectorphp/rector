@@ -24,7 +24,7 @@
         "phpunit\/phpunit": "^9.5",
         "rector\/phpstan-rules": "^0.4.17",
         "rector\/rector-generator": "dev-main",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#5399a80",
         "symfony\/console": "^6.0",
         "symplify\/coding-standard": "^10.0",
         "symplify\/easy-coding-standard": "^10.0",

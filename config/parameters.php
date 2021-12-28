@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211227;
+namespace RectorPrefix20211228;
 
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
@@ -16,6 +16,8 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES, []);
     // parallel
     $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \false);
+    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, 20);
+    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL_JOB_SIZE, 60);
     // FQN class importing
     $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \false);
     $parameters->set(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES, \true);

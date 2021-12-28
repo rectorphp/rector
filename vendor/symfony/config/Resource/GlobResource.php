@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211227\Symfony\Component\Config\Resource;
+namespace RectorPrefix20211228\Symfony\Component\Config\Resource;
 
-use RectorPrefix20211227\Symfony\Component\Finder\Finder;
-use RectorPrefix20211227\Symfony\Component\Finder\Glob;
+use RectorPrefix20211228\Symfony\Component\Finder\Finder;
+use RectorPrefix20211228\Symfony\Component\Finder\Glob;
 /**
  * GlobResource represents a set of resources stored on the filesystem.
  *
@@ -23,7 +23,7 @@ use RectorPrefix20211227\Symfony\Component\Finder\Glob;
  *
  * @implements \IteratorAggregate<string, \SplFileInfo>
  */
-class GlobResource implements \IteratorAggregate, \RectorPrefix20211227\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class GlobResource implements \IteratorAggregate, \RectorPrefix20211228\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     private $prefix;
     private $pattern;
@@ -141,11 +141,11 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20211227\Symfony\
             }
             return;
         }
-        if (!\class_exists(\RectorPrefix20211227\Symfony\Component\Finder\Finder::class)) {
+        if (!\class_exists(\RectorPrefix20211228\Symfony\Component\Finder\Finder::class)) {
             throw new \LogicException(\sprintf('Extended glob pattern "%s" cannot be used as the Finder component is not installed.', $this->pattern));
         }
-        $finder = new \RectorPrefix20211227\Symfony\Component\Finder\Finder();
-        $regex = \RectorPrefix20211227\Symfony\Component\Finder\Glob::toRegex($this->pattern);
+        $finder = new \RectorPrefix20211228\Symfony\Component\Finder\Finder();
+        $regex = \RectorPrefix20211228\Symfony\Component\Finder\Glob::toRegex($this->pattern);
         if ($this->recursive) {
             $regex = \substr_replace($regex, '(/|$)', -2, 1);
         }
