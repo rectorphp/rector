@@ -54,6 +54,11 @@ final class GenerateChangelogCommand extends Command
      */
     private const HASH = 'hash';
 
+    /**
+     * @var string
+     */
+    private const MESSAGE = 'message';
+
     protected function configure(): void
     {
         $this->setName(CommandNaming::classToName(self::class));
@@ -131,9 +136,9 @@ final class GenerateChangelogCommand extends Command
             }
 
             // clean commit from duplicating issue number
-            $commitMatch = Strings::match($commit['message'], '#(.*?)( \(\#\d+\))?$#ms');
+            $commitMatch = Strings::match($commit[self::MESSAGE], '#(.*?)( \(\#\d+\))?$#ms');
 
-            $commit = $commitMatch[1] ?? $commit['message'];
+            $commit = $commitMatch[1] ?? $commit[self::MESSAGE];
 
             $changelogLine = sprintf(
                 '* %s (%s)%s%s',
@@ -156,7 +161,7 @@ final class GenerateChangelogCommand extends Command
         return self::SUCCESS;
     }
 
-    protected function createThanks(string|null $thanks): string
+    private function createThanks(string|null $thanks): string
     {
         if ($thanks === null) {
             return '';

@@ -78,8 +78,10 @@ CODE_SAMPLE
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
      */
-    public function refactor(Node $node): MethodCall | StaticCall | ClassMethod
+    public function refactor(Node $node): MethodCall | StaticCall | ClassMethod | null
     {
+        $hasChanged = false;
+
         foreach ($this->replacedArguments as $replacedArgument) {
             if (! $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType(
                 $node,
@@ -92,10 +94,17 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            if ($replacedNode instanceof Node) {
+                $hasChanged = true;
+            }
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     /**

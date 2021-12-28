@@ -61,18 +61,27 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): FuncCall
+    public function refactor(Node $node): FuncCall|null
     {
+        $hasChanged = false;
+
         foreach ($node->args as $nodeArg) {
             if (! $nodeArg instanceof Arg) {
                 continue;
             }
 
-            if ($nodeArg->byRef) {
-                $nodeArg->byRef = false;
+            if (! $nodeArg->byRef) {
+                continue;
             }
+
+            $nodeArg->byRef = false;
+            $hasChanged = true;
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 }

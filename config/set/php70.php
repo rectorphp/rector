@@ -24,8 +24,6 @@ use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    $containerConfigurator->import(__DIR__ . '/mysql-to-mysqli.php');
-
     $services = $containerConfigurator->services();
     $services->set(Php4ConstructorRector::class);
 

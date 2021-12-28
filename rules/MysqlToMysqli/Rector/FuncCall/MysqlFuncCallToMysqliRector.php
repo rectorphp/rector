@@ -69,6 +69,8 @@ CODE_SAMPLE
         if ($this->isName($node, 'mysql_list_dbs')) {
             $node->name = new Name(self::MYSQLI_QUERY);
             $node->args[0] = new Arg(new String_('SHOW DATABASES'));
+
+            return $node;
         }
 
         if ($this->isName(
@@ -79,14 +81,18 @@ CODE_SAMPLE
             $node->args[0]->value = $this->joinStringWithNode('SHOW COLUMNS FROM', $node->args[1]->value);
 
             unset($node->args[1]);
+
+            return $node;
         }
 
         if ($this->isName($node, 'mysql_list_tables') && $node->args[0] instanceof Arg) {
             $node->name = new Name(self::MYSQLI_QUERY);
             $node->args[0]->value = $this->joinStringWithNode('SHOW TABLES FROM', $node->args[0]->value);
+
+            return $node;
         }
 
-        return $node;
+        return null;
     }
 
     private function processMysqlCreateDb(FuncCall $funcCall): ?FuncCall

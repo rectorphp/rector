@@ -82,16 +82,30 @@ CODE_SAMPLE
             return null;
         }
 
+        $hasChanged = false;
+
         foreach ($patterns as $pattern) {
             foreach (self::COMPLEX_PATTERN_TO_SIMPLE as $complexPattern => $simple) {
-                $pattern->value = Strings::replace(
+                $originalValue = $pattern->value;
+                $simplifiedValue = Strings::replace(
                     $pattern->value,
                     '#' . preg_quote($complexPattern, '#') . '#',
                     $simple
                 );
+
+                if ($originalValue === $simplifiedValue) {
+                    continue;
+                }
+
+                $pattern->value = $simplifiedValue;
+                $hasChanged = true;
             }
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 }

@@ -33,7 +33,7 @@ jobs:
                     - config utils scoper.php
 
         runs-on: ubuntu-latest
-        timeout-minutes: 30
+        timeout-minutes: 10
 
         steps:
             # workaround for missing secret in fork PRs - see https://github.com/actions/checkout/issues/298

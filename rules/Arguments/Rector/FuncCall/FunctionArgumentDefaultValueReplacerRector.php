@@ -67,17 +67,25 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node): FuncCall
+    public function refactor(Node $node): FuncCall|null
     {
+        $hasChanged = false;
         foreach ($this->replacedArguments as $replacedArgument) {
             if (! $this->isName($node->name, $replacedArgument->getFunction())) {
                 continue;
             }
 
-            $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            $changedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            if ($changedNode instanceof Node) {
+                $hasChanged = true;
+            }
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     /**

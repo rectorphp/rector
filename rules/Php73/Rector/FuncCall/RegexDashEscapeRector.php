@@ -87,15 +87,22 @@ CODE_SAMPLE
             return null;
         }
 
+        $hasChanged = false;
+
         foreach ($regexArguments as $regexArgument) {
             if (StringUtils::isMatch($regexArgument->value, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
                 continue;
             }
 
             $this->escapeStringNode($regexArgument);
+            $hasChanged = true;
         }
 
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+
+        return null;
     }
 
     private function escapeStringNode(String_ $string): void

@@ -99,6 +99,10 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
+
         if ($this->shouldSkipProperty($node, $scope)) {
             return null;
         }

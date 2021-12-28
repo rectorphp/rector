@@ -62,17 +62,13 @@ final class RegexPatternArgumentManipulator
     /**
      * @return String_[]
      */
-    public function matchCallArgumentWithRegexPattern(Expr $expr): array
+    public function matchCallArgumentWithRegexPattern(FuncCall|StaticCall $call): array
     {
-        if ($expr instanceof FuncCall) {
-            return $this->processFuncCall($expr);
+        if ($call instanceof FuncCall) {
+            return $this->processFuncCall($call);
         }
 
-        if ($expr instanceof StaticCall) {
-            return $this->processStaticCall($expr);
-        }
-
-        return [];
+        return $this->processStaticCall($call);
     }
 
     /**
