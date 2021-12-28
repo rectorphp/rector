@@ -30,11 +30,14 @@ final class ApplicationFileProcessorTest extends AbstractTestCase
 
     public function test(): void
     {
-        $files = $this->fileFactory->createFromPaths([__DIR__ . '/Fixture'], new Configuration());
+        $paths = [__DIR__ . '/Fixture'];
+
+        $configuration = new Configuration(isDryRun: true, paths: $paths);
+
+        $files = $this->fileFactory->createFromPaths($paths, $configuration);
         $this->assertCount(2, $files);
 
-        $configuration = new Configuration(true);
-        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration, new ArrayInput([]));
+        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($configuration, new ArrayInput([]));
 
         $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
-use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
@@ -17,10 +16,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\Validation\EmptyConfigurableRectorChecker;
-use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
-use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Rector\VersionBonding\Application\MissedRectorDueVersionChecker;
 use Symfony\Component\Console\Application;
@@ -40,10 +37,8 @@ final class ProcessCommand extends AbstractProcessCommand
         private readonly ChangedFilesDetector $changedFilesDetector,
         private readonly MissingRectorRulesReporter $missingRectorRulesReporter,
         private readonly ApplicationFileProcessor $applicationFileProcessor,
-        private readonly FileFactory $fileFactory,
         private readonly BootstrapFilesIncluder $bootstrapFilesIncluder,
         private readonly ProcessResultFactory $processResultFactory,
-        private readonly NodeScopeResolver $nodeScopeResolver,
         private readonly DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
         private readonly MissedRectorDueVersionChecker $missedRectorDueVersionChecker,
         private readonly EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
@@ -93,18 +88,12 @@ final class ProcessCommand extends AbstractProcessCommand
         // 2. inform user about registering configurable rule without configuration
         $this->emptyConfigurableRectorChecker->check();
 
-        // 3. collect all files from files+dirs provided paths
-        $files = $this->fileFactory->createFromPaths($paths, $configuration);
-
-        // 4. PHPStan has to know about all files too
-        $this->configurePHPStanNodeScopeResolver($files);
-
         // MAIN PHASE
-        // 5. run Rector
-        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration, $input);
+        // 3. run Rector
+        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($configuration, $input);
 
         // REPORTING PHASE
-        // 6. reporting phase
+        // 4. reporting phase
         // report diffs and errors
         $outputFormat = $configuration->getOutputFormat();
         $outputFormatter = $this->outputFormatterCollector->getByName($outputFormat);
@@ -157,34 +146,5 @@ final class ProcessCommand extends AbstractProcessCommand
         }
 
         return $processResult->getFileDiffs() === [] ? Command::SUCCESS : Command::FAILURE;
-    }
-
-    /**
-     * @param File[] $files
-     */
-    private function configurePHPStanNodeScopeResolver(array $files): void
-    {
-        $filePaths = $this->resolvePhpFilePaths($files);
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-
-    /**
-     * @param File[] $files
-     * @return string[]
-     */
-    private function resolvePhpFilePaths(array $files): array
-    {
-        $filePaths = [];
-
-        foreach ($files as $file) {
-            $smartFileInfo = $file->getSmartFileInfo();
-            $pathName = $smartFileInfo->getPathname();
-
-            if (\str_ends_with($pathName, '.php')) {
-                $filePaths[] = $pathName;
-            }
-        }
-
-        return $filePaths;
     }
 }

@@ -18,11 +18,14 @@ final class ConfigurationFactory
     ) {
     }
 
-    public function createForTests(): Configuration
+    /**
+     * @param string[] $paths
+     */
+    public function createForTests(array $paths): Configuration
     {
         $fileExtensions = $this->parameterProvider->provideArrayParameter(Option::FILE_EXTENSIONS);
 
-        return new Configuration(true, true, false, ConsoleOutputFormatter::NAME, $fileExtensions);
+        return new Configuration(true, true, false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths);
     }
 
     /**

@@ -8,6 +8,7 @@ use Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\EasyParallel\Contract\SerializableInterface;
+use Webmozart\Assert\Assert;
 
 final class FileDiff implements SerializableInterface
 {
@@ -51,6 +52,7 @@ final class FileDiff implements SerializableInterface
         private readonly string $diffConsoleFormatted,
         private readonly array $rectorsWithLineChanges = []
     ) {
+        Assert::allIsAOf($rectorsWithLineChanges, RectorWithLineChange::class);
     }
 
     public function getDiff(): string
@@ -82,6 +84,7 @@ final class FileDiff implements SerializableInterface
     public function getRectorClasses(): array
     {
         $rectorClasses = [];
+
         foreach ($this->rectorsWithLineChanges as $rectorWithLineChange) {
             $rectorClasses[] = $rectorWithLineChange->getRectorClass();
         }
@@ -119,11 +122,17 @@ final class FileDiff implements SerializableInterface
      */
     public static function decode(array $json): SerializableInterface
     {
+        $rectorWithLineChanges = [];
+
+        foreach ($json[self::KEY_RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {
+            $rectorWithLineChanges[] = RectorWithLineChange::decode($rectorWithLineChangesJson);
+        }
+
         return new self(
             $json[self::KEY_RELATIVE_FILE_PATH],
             $json[self::KEY_DIFF],
             $json[self::KEY_DIFF_CONSOLE_FORMATTED],
-            $json[self::KEY_RECTORS_WITH_LINE_CHANGES],
+            $rectorWithLineChanges,
         );
     }
 

@@ -49,6 +49,7 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
 
         $filePaths = $this->fileSystemFilter->filterFiles($filesAndDirectories);
+
         $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
 
         $smartFileInfos = [];
