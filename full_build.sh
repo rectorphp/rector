@@ -42,7 +42,7 @@ cp ../preload.php .
 #
 #   export PHP71_BIN_PATH=/opt/homebrew/Cellar/php@7.1/7.1.33_4/bin/php && sh ./full_build.sh
 #
-if [ -z "$PHP71_BIN_PATH" ]; then
+if test -z ${PHP71_BIN_PATH+y}; then
     eval "bin/rector list --ansi";
 else
     eval "$PHP71_BIN_PATH bin/rector list --ansi";
