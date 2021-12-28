@@ -490,7 +490,7 @@ parameters:
         - '#PHPDoc tag @param for parameter \$postFileCallback with type \(Closure\)\|null is not subtype of native type Closure#'
 
         # parallel complexity
-        - '#Cognitive complexity for "Rector\\Parallel\\Application\\ParallelFileProcessor\:\:check\(\)" is \d+, keep it under 10#'
+        - '#Cognitive complexity for "Rector\\Parallel\\Application\\ParallelFileProcessor\:\:process\(\)" is \d+, keep it under 10#'
 
         - '#Argument and options "debug", "clear\-cache" got confused#'
 

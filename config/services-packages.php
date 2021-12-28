@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symplify\EasyParallel\CpuCoreCountProvider;
-use Symplify\EasyParallel\FileSystem\FilePathNormalizer;
-use Symplify\EasyParallel\ScheduleFactory;
+use Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+    // make use of https://github.com/symplify/easy-parallel
+    $containerConfigurator->import(EasyParallelConfig::FILE_PATH);
+
     $services = $containerConfigurator->services();
 
     $services->defaults()
@@ -32,7 +33,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // parallel
     $services->set(ParametersMerger::class);
-    $services->set(ScheduleFactory::class);
-    $services->set(FilePathNormalizer::class);
-    $services->set(CpuCoreCountProvider::class);
 };

@@ -146,7 +146,7 @@ final class ProcessCommand extends AbstractProcessCommand
 
     private function resolveReturnCode(ProcessResult $processResult, Configuration $configuration): int
     {
-        // some errors were found → fail
+        // some system errors were found → fail
         if ($processResult->getErrors() !== []) {
             return Command::FAILURE;
         }

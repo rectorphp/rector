@@ -59,7 +59,7 @@ final class ParallelFileProcessor
      * @param Closure(int): void|null $postFileCallback Used for progress bar jump
      * @return mixed[]
      */
-    public function check(
+    public function process(
         Schedule $schedule,
         string $mainScript,
         Closure $postFileCallback,

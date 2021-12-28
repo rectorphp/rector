@@ -45,6 +45,11 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             return;
         }
 
+        // to keep space between progress bar and success message
+        if ($configuration->shouldShowProgressBar() && $processResult->getFileDiffs() === []) {
+            $this->outputStyle->newline();
+        }
+
         $message = $this->createSuccessMessage($processResult, $configuration);
         $this->outputStyle->success($message);
     }
@@ -106,7 +111,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
             $message = sprintf(
                 'Could not process "%s" file%s, due to: %s"%s".',
-                $error->getFileWithLine(),
+                $error->getFile(),
                 $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
                 $errorMessage

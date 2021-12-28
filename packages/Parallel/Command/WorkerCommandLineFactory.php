@@ -13,6 +13,7 @@ use Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
+ * @todo possibly extract to symplify/easy-parallel
  */
 final class WorkerCommandLineFactory
 {
@@ -43,7 +44,7 @@ final class WorkerCommandLineFactory
         $commandArguments = array_slice($_SERVER['argv'], 1);
         $args = array_merge([PHP_BINARY, $mainScript], $commandArguments);
 
-        $processCommandArray = [];
+        $workerCommandArray = [];
 
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
 
@@ -61,41 +62,41 @@ final class WorkerCommandLineFactory
                 break;
             }
 
-            $processCommandArray[] = escapeshellarg($arg);
+            $workerCommandArray[] = escapeshellarg($arg);
         }
 
-        $processCommandArray[] = $workerCommandName;
+        $workerCommandArray[] = $workerCommandName;
         if ($projectConfigFile !== null) {
-            $processCommandArray[] = self::OPTION_DASHES . Option::CONFIG;
-            $processCommandArray[] = escapeshellarg($projectConfigFile);
+            $workerCommandArray[] = self::OPTION_DASHES . Option::CONFIG;
+            $workerCommandArray[] = escapeshellarg($projectConfigFile);
         }
 
         $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
-        $processCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
-        $processCommandArray = array_merge($processCommandArray, $processCommandOptions);
+        $workerCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
+        $workerCommandArray = array_merge($workerCommandArray, $workerCommandOptions);
 
         // for TCP local server
-        $processCommandArray[] = '--port';
-        $processCommandArray[] = $port;
+        $workerCommandArray[] = '--port';
+        $workerCommandArray[] = $port;
 
-        $processCommandArray[] = '--identifier';
-        $processCommandArray[] = escapeshellarg($identifier);
+        $workerCommandArray[] = '--identifier';
+        $workerCommandArray[] = escapeshellarg($identifier);
 
         /** @var string[] $paths */
         $paths = $input->getArgument(Option::SOURCE);
         foreach ($paths as $path) {
-            $processCommandArray[] = escapeshellarg($path);
+            $workerCommandArray[] = escapeshellarg($path);
         }
 
         // set json output
-        $processCommandArray[] = self::OPTION_DASHES . Option::OUTPUT_FORMAT;
-        $processCommandArray[] = escapeshellarg(JsonOutputFormatter::NAME);
+        $workerCommandArray[] = self::OPTION_DASHES . Option::OUTPUT_FORMAT;
+        $workerCommandArray[] = escapeshellarg(JsonOutputFormatter::NAME);
 
         // disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
-        $processCommandArray[] = '--no-ansi';
+        $workerCommandArray[] = '--no-ansi';
 
-        return implode(' ', $processCommandArray);
+        return implode(' ', $workerCommandArray);
     }
 
     private function shouldSkipOption(InputInterface $input, string $optionName): bool
@@ -131,7 +132,7 @@ final class WorkerCommandLineFactory
      */
     private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames): array
     {
-        $processCommandOptions = [];
+        $workerCommandOptions = [];
 
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {
             if ($this->shouldSkipOption($input, $mainCommandOptionName)) {
@@ -148,16 +149,16 @@ final class WorkerCommandLineFactory
 
             if (is_bool($optionValue)) {
                 if ($optionValue) {
-                    $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+                    $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
                 }
 
                 continue;
             }
 
-            $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
-            $processCommandOptions[] = escapeshellarg($optionValue);
+            $workerCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+            $workerCommandOptions[] = escapeshellarg($optionValue);
         }
 
-        return $processCommandOptions;
+        return $workerCommandOptions;
     }
 }
