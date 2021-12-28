@@ -8,8 +8,8 @@ use Nette\Utils\Strings;
 use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 
@@ -106,7 +106,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
 
             $message = sprintf(
                 'Could not process "%s" file%s, due to: %s"%s".',
-                $error->getRelativeFilePath(),
+                $error->getFileWithLine(),
                 $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
                 $errorMessage

@@ -192,7 +192,9 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         // workaround for file around refactor()
         $file = $this->currentFileProvider->getFile();
         if (! $file instanceof File) {
-            throw new ShouldNotHappenException('File is missing');
+            throw new ShouldNotHappenException(
+                'File object is missing. Make sure you call $this->currentFileProvider->setFile(...) before traversing.'
+            );
         }
 
         $this->file = $file;

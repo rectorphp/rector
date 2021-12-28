@@ -559,8 +559,9 @@ parameters:
              message: '#Instead of array shape, use value object with specific types in constructor and getters#'
              paths:
                  - src/ValueObjectFactory/ProcessResultFactory.php
-                 - src/Application/*Processor.php
+                 - src/*/*Processor.php
                  - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
+                 - src/Contract/Processor/FileProcessorInterface.php
 
         - '#Call to function property_exists\(\) with PhpParser\\Node\\Stmt\\ClassLike and (.*?) will always evaluate to true#'
 
@@ -607,3 +608,13 @@ parameters:
         - '#Anonymous function should return array\|PhpParser\\Node\\Expr but returns array<PhpParser\\Node\\Expr\>\|PhpParser\\Node\\Expr\|string#'
 
         - '#Method Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper\:\:isRemoveArrayPlaceholder\(\) has parameter \$value with no value type specified in iterable type array#'
+
+        # future scope of parallel
+        - '#Call to function is_array\(\) with array\{system_errors\: array<Rector\\Core\\ValueObject\\Application\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} will always evaluate to true#'
+
+        -
+            message: '#Use value object over return of values#'
+            path: src/Application/ApplicationFileProcessor.php
+
+        - '#Method Rector\\Core\\Application\\ApplicationFileProcessor\:\:runParallel\(\) should return array\{system_errors\: array<Rector\\Core\\ValueObject\\Error\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} but returns array#'
+        - '#Call to function is_array\(\) with array\{system_errors\: array<Rector\\Core\\ValueObject\\Error\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} will always evaluate to true#'

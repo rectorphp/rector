@@ -9,6 +9,7 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
 use Rector\Testing\PHPUnit\AbstractTestCase;
+use Symfony\Component\Console\Input\ArrayInput;
 
 final class ApplicationFileProcessorTest extends AbstractTestCase
 {
@@ -33,7 +34,7 @@ final class ApplicationFileProcessorTest extends AbstractTestCase
         $this->assertCount(2, $files);
 
         $configuration = new Configuration(true);
-        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration);
+        $systemErrorsAndFileDiffs = $this->applicationFileProcessor->run($files, $configuration, new ArrayInput([]));
 
         $processResult = $this->processResultFactory->create($systemErrorsAndFileDiffs);
 

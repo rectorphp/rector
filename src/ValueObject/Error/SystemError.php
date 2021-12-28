@@ -10,9 +10,10 @@ use Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     public function __construct(
-        private readonly int $line,
         private readonly string $message,
-        private readonly string $relativeFilePath
+        private readonly string $relativeFilePath,
+        private readonly int|null $line = null,
+        private readonly string|null $rectorClass = null
     ) {
     }
 
@@ -21,20 +22,31 @@ final class SystemError implements SerializableInterface
         return $this->message;
     }
 
+    public function getFile(): string
+    {
+        return $this->relativeFilePath;
+    }
+
+    public function getLine(): int|null
+    {
+        return $this->line;
+    }
+
     public function getFileWithLine(): string
     {
         return $this->relativeFilePath . ':' . $this->line;
     }
 
     /**
-     * @return array{line: int, message: string, relative_file_path: string}
+     * @return array{message: string, relative_file_path: string, line: int|null, rector_class: string|null}
      */
     public function jsonSerialize(): array
     {
         return [
-            Name::LINE => $this->line,
             Name::MESSAGE => $this->message,
             Name::RELATIVE_FILE_PATH => $this->relativeFilePath,
+            Name::LINE => $this->line,
+            Name::RECTOR_CLASS => $this->rectorClass,
         ];
     }
 
@@ -43,6 +55,16 @@ final class SystemError implements SerializableInterface
      */
     public static function decode(array $json): SerializableInterface
     {
-        return new self($json[Name::LINE], $json[Name::MESSAGE], $json[Name::RELATIVE_FILE_PATH]);
+        return new self(
+            $json[Name::MESSAGE],
+            $json[Name::RELATIVE_FILE_PATH],
+            $json[Name::LINE],
+            $json[Name::RECTOR_CLASS]
+        );
+    }
+
+    public function getRectorClass(): ?string
+    {
+        return $this->rectorClass;
     }
 }

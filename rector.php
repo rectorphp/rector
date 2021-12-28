@@ -61,6 +61,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+    // $parameters->set(Option::PARALLEL, true);
 
     $parameters->set(Option::SKIP, [
         StringClassNameToClassConstantRector::class,

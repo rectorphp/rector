@@ -35,10 +35,7 @@ final class FileProcessor
         $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
     }
 
-    /**
-     * @return mixed[]
-     */
-    public function refactor(File $file, Configuration $configuration): array
+    public function refactor(File $file, Configuration $configuration): void
     {
         $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
         $file->changeNewStmts($newStmts);
@@ -47,8 +44,5 @@ final class FileProcessor
         while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
             $this->refactor($otherTouchedFile, $configuration);
         }
-
-        // @todo parallel - to be implemented
-        return [];
     }
 }

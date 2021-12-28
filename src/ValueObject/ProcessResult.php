@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\ValueObject;
 
-use Rector\Core\ValueObject\Application\SystemError;
+use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Webmozart\Assert\Assert;

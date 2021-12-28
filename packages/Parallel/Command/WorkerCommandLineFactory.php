@@ -6,8 +6,10 @@ namespace Rector\Parallel\Command;
 
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Command\ProcessCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
@@ -19,14 +21,19 @@ final class WorkerCommandLineFactory
      */
     private const OPTION_DASHES = '--';
 
-    public function __construct(
-        private readonly ProcessCommand $processCommand
-    ) {
+    private readonly CommandFromReflectionFactory $commandFromReflectionFactory;
+
+    public function __construct()
+    {
+        $this->commandFromReflectionFactory = new CommandFromReflectionFactory();
     }
 
+    /**
+     * @param class-string<Command> $mainCommandClass
+     */
     public function create(
         string $mainScript,
-        string $originalCommandName,
+        string $mainCommandClass,
         string $workerCommandName,
         ?string $projectConfigFile,
         InputInterface $input,
@@ -38,9 +45,19 @@ final class WorkerCommandLineFactory
 
         $processCommandArray = [];
 
+        $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
+
+        if ($mainCommand->getName() === null) {
+            $errorMessage = sprintf('The command name for "%s" is missing', $mainCommand::class);
+            throw new ParallelShouldNotHappenException($errorMessage);
+        }
+
+        $mainCommandName = $mainCommand->getName();
+        $mainCommandNames = [$mainCommandName, $mainCommandName[0]];
+
         foreach ($args as $arg) {
             // skip command name
-            if ($arg === $originalCommandName) {
+            if (in_array($arg, $mainCommandNames, true)) {
                 break;
             }
 
@@ -53,7 +70,8 @@ final class WorkerCommandLineFactory
             $processCommandArray[] = escapeshellarg($projectConfigFile);
         }
 
-        $processCommandOptions = $this->createProcessCommandOptions($input, $this->getCheckCommandOptionNames());
+        $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
+        $processCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
         $processCommandArray = array_merge($processCommandArray, $processCommandOptions);
 
         // for TCP local server
@@ -80,12 +98,22 @@ final class WorkerCommandLineFactory
         return implode(' ', $processCommandArray);
     }
 
+    private function shouldSkipOption(InputInterface $input, string $optionName): bool
+    {
+        if (! $input->hasOption($optionName)) {
+            return true;
+        }
+
+        // skip output format, not relevant in parallel worker command
+        return $optionName === Option::OUTPUT_FORMAT;
+    }
+
     /**
      * @return string[]
      */
-    private function getCheckCommandOptionNames(): array
+    private function getCommandOptionNames(Command $command): array
     {
-        $inputDefinition = $this->processCommand->getDefinition();
+        $inputDefinition = $command->getDefinition();
 
         $optionNames = [];
         foreach ($inputDefinition->getOptions() as $inputOption) {
@@ -98,20 +126,20 @@ final class WorkerCommandLineFactory
     /**
      * Keeps all options that are allowed in check command options
      *
-     * @param string[] $checkCommandOptionNames
+     * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function createProcessCommandOptions(InputInterface $input, array $checkCommandOptionNames): array
+    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames): array
     {
         $processCommandOptions = [];
 
-        foreach ($checkCommandOptionNames as $checkCommandOptionName) {
-            if ($this->shouldSkipOption($input, $checkCommandOptionName)) {
+        foreach ($mainCommandOptionNames as $mainCommandOptionName) {
+            if ($this->shouldSkipOption($input, $mainCommandOptionName)) {
                 continue;
             }
 
             /** @var bool|string|null $optionValue */
-            $optionValue = $input->getOption($checkCommandOptionName);
+            $optionValue = $input->getOption($mainCommandOptionName);
 
             // skip clutter
             if ($optionValue === null) {
@@ -120,26 +148,16 @@ final class WorkerCommandLineFactory
 
             if (is_bool($optionValue)) {
                 if ($optionValue) {
-                    $processCommandOptions[] = sprintf('--%s', $checkCommandOptionName);
+                    $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
                 }
 
                 continue;
             }
 
-            $processCommandOptions[] = self::OPTION_DASHES . $checkCommandOptionName;
+            $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
             $processCommandOptions[] = escapeshellarg($optionValue);
         }
 
         return $processCommandOptions;
-    }
-
-    private function shouldSkipOption(InputInterface $input, string $optionName): bool
-    {
-        if (! $input->hasOption($optionName)) {
-            return true;
-        }
-
-        // skip output format, not relevant in parallel worker command
-        return $optionName === Option::OUTPUT_FORMAT;
     }
 }

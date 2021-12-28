@@ -15,8 +15,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\Application\SystemError;
 use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
@@ -147,7 +147,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             $systemError = new SystemError(
                 $throwable->getMessage(),
                 $file->getRelativeFilePath(),
-                $throwable->getLine()
+                $throwable->getLine(),
             );
 
             return [$systemError];

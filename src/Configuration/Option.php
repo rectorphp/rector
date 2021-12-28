@@ -190,4 +190,14 @@ final class Option
      * @var string
      */
     final public const PARALLEL_PORT = 'port';
+
+    /**
+     * @var string
+     */
+    final public const PARALLEL_JOB_SIZE = 'parallel-job-size';
+
+    /**
+     * @var string
+     */
+    final public const PARALLEL_MAX_NUMBER_OF_PROCESSES = 'parallel-max-number-of-processes';
 }

@@ -35,8 +35,6 @@ use Throwable;
  * https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92#diff-39c7a3b0cbb217bbfff96fbb454e6e5e60c74cf92fbb0f9d246b8bebbaad2bb0
  *
  * https://github.com/phpstan/phpstan-src/commit/b84acd2e3eadf66189a64fdbc6dd18ff76323f67#diff-7f625777f1ce5384046df08abffd6c911cfbb1cfc8fcb2bdeaf78f337689e3e2R150
- *
- * @api @todo complete parallel run
  */
 final class ParallelFileProcessor
 {
@@ -124,9 +122,9 @@ final class ParallelFileProcessor
             &$reachedSystemErrorsCountLimit
         ): void {
             $systemErrors[] = new SystemError(
-                $throwable->getLine(),
                 $throwable->getMessage(),
-                $throwable->getFile()
+                $throwable->getFile(),
+                $throwable->getLine(),
             );
 
             ++$systemErrorsCount;
@@ -143,7 +141,7 @@ final class ParallelFileProcessor
             $processIdentifier = Random::generate();
             $workerCommandLine = $this->workerCommandLineFactory->create(
                 $mainScript,
-                CommandNaming::classToName(ProcessCommand::class),
+                ProcessCommand::class,
                 CommandNaming::classToName(WorkerCommand::class),
                 $projectConfigFile,
                 $input,
@@ -152,6 +150,7 @@ final class ParallelFileProcessor
             );
 
             $parallelProcess = new ParallelProcess($workerCommandLine, $streamSelectLoop, self::TIMEOUT_IN_SECONDS);
+
             $parallelProcess->start(
                 // 1. callable on data
                 function (array $json) use (
@@ -164,7 +163,6 @@ final class ParallelFileProcessor
                     &$reachedInternalErrorsCountLimit,
                     $processIdentifier
                 ): void {
-
                     // decode arrays to objects
                     foreach ($json[Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (is_string($jsonError)) {

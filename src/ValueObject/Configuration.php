@@ -27,6 +27,7 @@ final class Configuration
         private readonly ?BootstrapConfigs $bootstrapConfigs = null,
         private readonly string | null $parallelPort = null,
         private readonly string | null $parallelIdentifier = null,
+        private readonly bool $isParallel = false,
     ) {
     }
 
@@ -94,5 +95,15 @@ final class Configuration
     public function getParallelIdentifier(): ?string
     {
         return $this->parallelIdentifier;
+    }
+
+    public function isParallel(): bool
+    {
+        return $this->isParallel;
+    }
+
+    public function getConfig(): string|null
+    {
+        return $this->getMainConfigFilePath();
     }
 }

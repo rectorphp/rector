@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\Core\Console\Command;
 
+use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Symfony\Component\Console\Command\Command;
@@ -55,6 +56,14 @@ abstract class AbstractProcessCommand extends Command
             null,
             InputOption::VALUE_NONE,
             'Hide diffs of changed files. Useful e.g. for nicer CI output.'
+        );
+
+        $this->addOption(
+            Option::OUTPUT_FORMAT,
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Select output format',
+            ConsoleOutputFormatter::NAME
         );
 
         $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');

@@ -26,9 +26,9 @@ jobs:
             # and reverting other commit change
             # this should not happen on create a tag, so wait first
             -
-                name: "Wait 3 minutes before checkout rectorphp/rector-src on create a tag"
+                name: "Wait before checkout rectorphp/rector-src on create a tag"
                 if: "startsWith(github.ref, 'refs/tags/')"
-                run: sleep 180
+                run: sleep 120
 
             -
                 uses: actions/checkout@v2

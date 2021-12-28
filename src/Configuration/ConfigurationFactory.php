@@ -42,6 +42,7 @@ final class ConfigurationFactory
 
         $fileExtensions = $this->parameterProvider->provideArrayParameter(Option::FILE_EXTENSIONS);
 
+        $isParallel = $this->parameterProvider->provideBoolParameter(Option::PARALLEL);
         $parallelPort = (string) $input->getOption(Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(Option::PARALLEL_IDENTIFIER);
 
@@ -55,7 +56,8 @@ final class ConfigurationFactory
             $showDiffs,
             null,
             $parallelPort,
-            $parallelIdentifier
+            $parallelIdentifier,
+            $isParallel
         );
     }
 

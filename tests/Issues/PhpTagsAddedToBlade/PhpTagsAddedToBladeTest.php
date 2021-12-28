@@ -8,6 +8,7 @@ use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
 
@@ -23,7 +24,7 @@ final class PhpTagsAddedToBladeTest extends AbstractRectorTestCase
         $file = new File($inputFileInfo, $inputFileInfo->getContents());
 
         $applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
-        $applicationFileProcessor->run([$file], $configuration);
+        $applicationFileProcessor->run([$file], $configuration, new ArrayInput([]));
 
         $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $file->getFileContent());
 
