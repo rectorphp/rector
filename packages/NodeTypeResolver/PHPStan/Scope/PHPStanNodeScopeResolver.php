@@ -56,7 +56,6 @@ final class PHPStanNodeScopeResolver
         private readonly PrivatesAccessor $privatesAccessor,
         private readonly RenamedClassesSourceLocator $renamedClassesSourceLocator,
         private readonly ParentAttributeSourceLocator $parentAttributeSourceLocator,
-        private readonly TraitScopeFaker $traitScopeFaker,
     ) {
     }
 
@@ -77,11 +76,12 @@ final class PHPStanNodeScopeResolver
 
                 $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
 
-                $scopeContext = $this->traitScopeFaker->createDummyClassScopeContext($scope);
                 $traitScope = clone $scope;
-                $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $scopeContext);
 
-                $traitScope = $traitScope->enterTrait($traitReflectionClass);
+                $scopeContext = $this->privatesAccessor->getPrivateProperty($traitScope, self::CONTEXT);
+                $traitContext = clone $scopeContext;
+                $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitReflectionClass);
+                $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
 
                 $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 return;
