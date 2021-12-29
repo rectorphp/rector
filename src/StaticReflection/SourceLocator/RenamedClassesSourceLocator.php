@@ -41,7 +41,7 @@ final class RenamedClassesSourceLocator implements SourceLocator
     }
 
     /**
-     * @return Reflection[]
+     * @return array<int, Reflection>
      */
     public function locateIdentifiersByType(Reflector $reflector, IdentifierType $identifierType): array
     {

@@ -37,7 +37,7 @@ final class IntermediateSourceLocator implements SourceLocator
 
     /**
      * Find all identifiers of a type
-     * @return Reflection[]
+     * @return array<int, Reflection>
      */
     public function locateIdentifiersByType(Reflector $reflector, IdentifierType $identifierType): array
     {
