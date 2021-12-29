@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211228\Symfony\Component\Console\Completion;
+namespace RectorPrefix20211229\Symfony\Component\Console\Completion;
 
-use RectorPrefix20211228\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20211228\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20211228\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20211228\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20211229\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20211229\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20211229\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20211229\Symfony\Component\Console\Input\InputOption;
 /**
  * An input specialized for shell completion.
  *
@@ -22,7 +22,7 @@ use RectorPrefix20211228\Symfony\Component\Console\Input\InputOption;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-final class CompletionInput extends \RectorPrefix20211228\Symfony\Component\Console\Input\ArgvInput
+final class CompletionInput extends \RectorPrefix20211229\Symfony\Component\Console\Input\ArgvInput
 {
     public const TYPE_ARGUMENT_VALUE = 'argument_value';
     public const TYPE_OPTION_VALUE = 'option_value';
@@ -59,7 +59,7 @@ final class CompletionInput extends \RectorPrefix20211228\Symfony\Component\Cons
     /**
      * {@inheritdoc}
      */
-    public function bind(\RectorPrefix20211228\Symfony\Component\Console\Input\InputDefinition $definition) : void
+    public function bind(\RectorPrefix20211229\Symfony\Component\Console\Input\InputDefinition $definition) : void
     {
         parent::bind($definition);
         $relevantToken = $this->getRelevantToken();
@@ -92,11 +92,11 @@ final class CompletionInput extends \RectorPrefix20211228\Symfony\Component\Cons
         }
         // complete argument value
         $this->completionType = self::TYPE_ARGUMENT_VALUE;
-        $arguments = $this->getArguments();
-        foreach ($arguments as $argumentName => $argumentValue) {
-            if (null === $argumentValue) {
+        foreach ($this->definition->getArguments() as $argumentName => $argument) {
+            if (!isset($this->arguments[$argumentName])) {
                 break;
             }
+            $argumentValue = $this->arguments[$argumentName];
             $this->completionName = $argumentName;
             if (\is_array($argumentValue)) {
                 \end($argumentValue);
@@ -106,7 +106,7 @@ final class CompletionInput extends \RectorPrefix20211228\Symfony\Component\Cons
             }
         }
         if ($this->currentIndex >= \count($this->tokens)) {
-            if (null === $arguments[$argumentName] || $this->definition->getArgument($argumentName)->isArray()) {
+            if (!isset($this->arguments[$argumentName]) || $this->definition->getArgument($argumentName)->isArray()) {
                 $this->completionName = $argumentName;
                 $this->completionValue = '';
             } else {
@@ -159,12 +159,12 @@ final class CompletionInput extends \RectorPrefix20211228\Symfony\Component\Cons
     {
         try {
             return parent::parseToken($token, $parseOptions);
-        } catch (\RectorPrefix20211228\Symfony\Component\Console\Exception\RuntimeException $e) {
+        } catch (\RectorPrefix20211229\Symfony\Component\Console\Exception\RuntimeException $e) {
             // suppress errors, completed input is almost never valid
         }
         return $parseOptions;
     }
-    private function getOptionFromToken(string $optionToken) : ?\RectorPrefix20211228\Symfony\Component\Console\Input\InputOption
+    private function getOptionFromToken(string $optionToken) : ?\RectorPrefix20211229\Symfony\Component\Console\Input\InputOption
     {
         $optionName = \ltrim($optionToken, '-');
         if (!$optionName) {

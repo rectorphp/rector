@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20211229\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20211228\Idiosyncratic\EditorConfig\Exception\InvalidValue;
-use RectorPrefix20211228\PHPUnit\Framework\TestCase;
+use RectorPrefix20211229\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20211229\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class InsertFinalNewlineTest extends \RectorPrefix20211228\PHPUnit\Framework\TestCase
+class InsertFinalNewlineTest extends \RectorPrefix20211229\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        $declaration = new \RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('false');
+        $declaration = new \RectorPrefix20211229\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('false');
         $this->assertEquals('insert_final_newline=false', (string) $declaration);
-        $declaration = new \RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('true');
+        $declaration = new \RectorPrefix20211229\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('true');
         $this->assertEquals('insert_final_newline=true', (string) $declaration);
     }
     public function testInvalidValues()
     {
-        $this->expectException(\RectorPrefix20211228\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('4');
-        $this->expectException(\RectorPrefix20211228\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
-        $declaration = new \RectorPrefix20211228\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('four');
+        $this->expectException(\RectorPrefix20211229\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211229\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('4');
+        $this->expectException(\RectorPrefix20211229\Idiosyncratic\EditorConfig\Exception\InvalidValue::class);
+        $declaration = new \RectorPrefix20211229\Idiosyncratic\EditorConfig\Declaration\InsertFinalNewline('four');
     }
 }

@@ -57,6 +57,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/**/Resources/**/BowerComponents/*',
         __DIR__ . '/**/Resources/**/bower_components/*',
         __DIR__ . '/**/Resources/**/build/*',
+        __DIR__ . '/vendor/*',
+        __DIR__ . '/Build/*',
+        __DIR__ . '/public/*',
+        __DIR__ . '/.github/*',
+        __DIR__ . '/.Build/*',
     ]);
 
     // This is used by the class \Ssch\TYPO3Rector\Rector\PostRector\FullQualifiedNamePostRector to force FQN in this paths and files

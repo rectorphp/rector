@@ -38,17 +38,13 @@ use Rector\PostRector\Rector\NameImportingPostRector;
 use Ssch\TYPO3Rector\FileProcessor\Composer\Rector\ExtensionComposerRector;
 use Ssch\TYPO3Rector\Rector\General\ConvertImplicitVariablesToExplicitGlobalsRector;
 use Ssch\TYPO3Rector\Rector\General\ExtEmConfRector;
-use Ssch\TYPO3Rector\Set\Typo3SetList;
+use Ssch\TYPO3Rector\Set\Typo3LevelSetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $containerConfigurator->import(Typo3SetList::TYPO3_76);
-    $containerConfigurator->import(Typo3SetList::TYPO3_87);
-    $containerConfigurator->import(Typo3SetList::TYPO3_95);
-    $containerConfigurator->import(Typo3SetList::TYPO3_104);
-    $containerConfigurator->import(Typo3SetList::TYPO3_11);
+    $containerConfigurator->import(Typo3LevelSetList::UP_TO_TYPO3_11);
 
     // FQN classes are not imported by default. If you don't do it manually after every Rector run, enable it by:
     $parameters->set(Option::AUTO_IMPORT_NAMES, true);
@@ -92,6 +88,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/**/Resources/**/BowerComponents/*',
         __DIR__ . '/**/Resources/**/bower_components/*',
         __DIR__ . '/**/Resources/**/build/*',
+        __DIR__ . '/vendor/*',
+        __DIR__ . '/Build/*',
+        __DIR__ . '/public/*',
+        __DIR__ . '/.github/*',
+        __DIR__ . '/.Build/*',
     ]);
 
     // If you have trouble that rector cannot run because some TYPO3 constants are not defined add an additional constants file

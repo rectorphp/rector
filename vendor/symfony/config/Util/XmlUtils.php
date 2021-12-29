@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211228\Symfony\Component\Config\Util;
+namespace RectorPrefix20211229\Symfony\Component\Config\Util;
 
-use RectorPrefix20211228\Symfony\Component\Config\Util\Exception\InvalidXmlException;
-use RectorPrefix20211228\Symfony\Component\Config\Util\Exception\XmlParsingException;
+use RectorPrefix20211229\Symfony\Component\Config\Util\Exception\InvalidXmlException;
+use RectorPrefix20211229\Symfony\Component\Config\Util\Exception\XmlParsingException;
 /**
  * XMLUtils is a bunch of utility methods to XML operations.
  *
@@ -57,7 +57,7 @@ class XmlUtils
             if (\LIBXML_VERSION < 20900) {
                 \libxml_disable_entity_loader($disableEntities);
             }
-            throw new \RectorPrefix20211228\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", static::getXmlErrors($internalErrors)));
+            throw new \RectorPrefix20211229\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", static::getXmlErrors($internalErrors)));
         }
         $dom->normalizeDocument();
         \libxml_use_internal_errors($internalErrors);
@@ -66,7 +66,7 @@ class XmlUtils
         }
         foreach ($dom->childNodes as $child) {
             if (\XML_DOCUMENT_TYPE_NODE === $child->nodeType) {
-                throw new \RectorPrefix20211228\Symfony\Component\Config\Util\Exception\XmlParsingException('Document types are not allowed.');
+                throw new \RectorPrefix20211229\Symfony\Component\Config\Util\Exception\XmlParsingException('Document types are not allowed.');
             }
         }
         if (null !== $schemaOrCallable) {
@@ -84,14 +84,14 @@ class XmlUtils
                 $valid = @$dom->schemaValidateSource($schemaSource);
             } else {
                 \libxml_use_internal_errors($internalErrors);
-                throw new \RectorPrefix20211228\Symfony\Component\Config\Util\Exception\XmlParsingException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
+                throw new \RectorPrefix20211229\Symfony\Component\Config\Util\Exception\XmlParsingException('The schemaOrCallable argument has to be a valid path to XSD file or callable.');
             }
             if (!$valid) {
                 $messages = static::getXmlErrors($internalErrors);
                 if (empty($messages)) {
-                    throw new \RectorPrefix20211228\Symfony\Component\Config\Util\Exception\InvalidXmlException('The XML is not valid.', 0, $e);
+                    throw new \RectorPrefix20211229\Symfony\Component\Config\Util\Exception\InvalidXmlException('The XML is not valid.', 0, $e);
                 }
-                throw new \RectorPrefix20211228\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", $messages), 0, $e);
+                throw new \RectorPrefix20211229\Symfony\Component\Config\Util\Exception\XmlParsingException(\implode("\n", $messages), 0, $e);
             }
         }
         \libxml_clear_errors();
@@ -124,8 +124,8 @@ class XmlUtils
         }
         try {
             return static::parse($content, $schemaOrCallable);
-        } catch (\RectorPrefix20211228\Symfony\Component\Config\Util\Exception\InvalidXmlException $e) {
-            throw new \RectorPrefix20211228\Symfony\Component\Config\Util\Exception\XmlParsingException(\sprintf('The XML file "%s" is not valid.', $file), 0, $e->getPrevious());
+        } catch (\RectorPrefix20211229\Symfony\Component\Config\Util\Exception\InvalidXmlException $e) {
+            throw new \RectorPrefix20211229\Symfony\Component\Config\Util\Exception\XmlParsingException(\sprintf('The XML file "%s" is not valid.', $file), 0, $e->getPrevious());
         }
     }
     /**
@@ -208,13 +208,10 @@ class XmlUtils
             case 'null' === $lowercaseValue:
                 return null;
             case \ctype_digit($value):
-                $raw = $value;
-                $cast = (int) $value;
-                return '0' == $value[0] ? \octdec($value) : ($raw === (string) $cast ? $cast : $raw);
             case isset($value[1]) && '-' === $value[0] && \ctype_digit(\substr($value, 1)):
                 $raw = $value;
                 $cast = (int) $value;
-                return '0' == $value[1] ? \octdec($value) : ($raw === (string) $cast ? $cast : $raw);
+                return self::isOctal($value) ? \intval($value, 8) : ($raw === (string) $cast ? $cast : $raw);
             case 'true' === $lowercaseValue:
                 return \true;
             case 'false' === $lowercaseValue:
@@ -240,5 +237,12 @@ class XmlUtils
         \libxml_clear_errors();
         \libxml_use_internal_errors($internalErrors);
         return $errors;
+    }
+    private static function isOctal(string $str) : bool
+    {
+        if ('-' === $str[0]) {
+            $str = \substr($str, 1);
+        }
+        return $str === '0' . \decoct(\intval($str, 8));
     }
 }

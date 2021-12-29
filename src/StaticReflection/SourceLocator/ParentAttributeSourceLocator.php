@@ -16,7 +16,7 @@ use PHPStan\BetterReflection\SourceLocator\Located\LocatedSource;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\AstResolver;
-use RectorPrefix20211228\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211229\Symfony\Contracts\Service\Attribute\Required;
 /**
  * This mimics classes that PHPStan fails to find in scope, but actually has an access in static reflection.
  * Some weird bug, that crashes on parent classes.
@@ -62,7 +62,7 @@ final class ParentAttributeSourceLocator implements \PHPStan\BetterReflection\So
         return null;
     }
     /**
-     * @return Reflection[]
+     * @return array<int, Reflection>
      */
     public function locateIdentifiersByType(\PHPStan\BetterReflection\Reflector\Reflector $reflector, \PHPStan\BetterReflection\Identifier\IdentifierType $identifierType) : array
     {

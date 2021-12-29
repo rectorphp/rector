@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211228\Nette\Utils;
+namespace RectorPrefix20211229\Nette\Utils;
 
-use RectorPrefix20211228\Nette;
+use RectorPrefix20211229\Nette;
 use function is_array, is_object, strlen;
 /**
  * String tools library.
@@ -38,9 +38,9 @@ class Strings
     public static function chr(int $code) : string
     {
         if ($code < 0 || $code >= 0xd800 && $code <= 0xdfff || $code > 0x10ffff) {
-            throw new \RectorPrefix20211228\Nette\InvalidArgumentException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
+            throw new \RectorPrefix20211229\Nette\InvalidArgumentException('Code point must be in range 0x0 to 0xD7FF or 0xE000 to 0x10FFFF.');
         } elseif (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20211228\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
+            throw new \RectorPrefix20211229\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
         }
         return \iconv('UTF-32BE', 'UTF-8//IGNORE', \pack('N', $code));
     }
@@ -75,7 +75,7 @@ class Strings
             return \mb_substr($s, $start, $length, 'UTF-8');
             // MB is much faster
         } elseif (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20211228\Nette\NotSupportedException(__METHOD__ . '() requires extension ICONV or MBSTRING, neither is loaded.');
+            throw new \RectorPrefix20211229\Nette\NotSupportedException(__METHOD__ . '() requires extension ICONV or MBSTRING, neither is loaded.');
         } elseif ($length === null) {
             $length = self::length($s);
         } elseif ($start < 0 && $length < 0) {
@@ -330,7 +330,7 @@ class Strings
     public static function reverse(string $s) : string
     {
         if (!\extension_loaded('iconv')) {
-            throw new \RectorPrefix20211228\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
+            throw new \RectorPrefix20211229\Nette\NotSupportedException(__METHOD__ . '() requires ICONV extension that is not loaded.');
         }
         return \iconv('UTF-32LE', 'UTF-8', \strrev(\iconv('UTF-8', 'UTF-32BE', $s)));
     }
@@ -388,7 +388,7 @@ class Strings
                 $pos--;
             }
         }
-        return \RectorPrefix20211228\Nette\Utils\Helpers::falseToNull($pos);
+        return \RectorPrefix20211229\Nette\Utils\Helpers::falseToNull($pos);
     }
     /**
      * Splits a string into array by the regular expression. Parenthesized expression in the delimiter are captured.
@@ -430,7 +430,7 @@ class Strings
     {
         if (\is_object($replacement) || \is_array($replacement)) {
             if (!\is_callable($replacement, \false, $textual)) {
-                throw new \RectorPrefix20211228\Nette\InvalidStateException("Callback '{$textual}' is not callable.");
+                throw new \RectorPrefix20211229\Nette\InvalidStateException("Callback '{$textual}' is not callable.");
             }
             return self::pcre('preg_replace_callback', [$pattern, $replacement, $subject, $limit]);
         } elseif (\is_array($pattern) && \is_string(\key($pattern))) {
@@ -442,12 +442,12 @@ class Strings
     /** @internal */
     public static function pcre(string $func, array $args)
     {
-        $res = \RectorPrefix20211228\Nette\Utils\Callback::invokeSafe($func, $args, function (string $message) use($args) : void {
+        $res = \RectorPrefix20211229\Nette\Utils\Callback::invokeSafe($func, $args, function (string $message) use($args) : void {
             // compile-time error, not detectable by preg_last_error
-            throw new \RectorPrefix20211228\Nette\Utils\RegexpException($message . ' in pattern: ' . \implode(' or ', (array) $args[0]));
+            throw new \RectorPrefix20211229\Nette\Utils\RegexpException($message . ' in pattern: ' . \implode(' or ', (array) $args[0]));
         });
         if (($code = \preg_last_error()) && ($res === null || !\in_array($func, ['preg_filter', 'preg_replace_callback', 'preg_replace'], \true))) {
-            throw new \RectorPrefix20211228\Nette\Utils\RegexpException((\RectorPrefix20211228\Nette\Utils\RegexpException::MESSAGES[$code] ?? 'Unknown error') . ' (pattern: ' . \implode(' or ', (array) $args[0]) . ')', $code);
+            throw new \RectorPrefix20211229\Nette\Utils\RegexpException((\RectorPrefix20211229\Nette\Utils\RegexpException::MESSAGES[$code] ?? 'Unknown error') . ' (pattern: ' . \implode(' or ', (array) $args[0]) . ')', $code);
         }
         return $res;
     }
