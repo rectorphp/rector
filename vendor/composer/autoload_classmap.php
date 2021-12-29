@@ -2414,6 +2414,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeCommonTypeNarrower.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
+    'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNumericStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNumericStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\BooleanTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/BooleanTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/CallableTypeMapper.php',

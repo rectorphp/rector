@@ -2523,12 +2523,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "ffcd97189c63cc203a4f25eadde1e23cd90c3a79"
+                "reference": "1e9f0c38fa225cdc534146d145a7fad61848666f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/ffcd97189c63cc203a4f25eadde1e23cd90c3a79",
-                "reference": "ffcd97189c63cc203a4f25eadde1e23cd90c3a79",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/1e9f0c38fa225cdc534146d145a7fad61848666f",
+                "reference": "1e9f0c38fa225cdc534146d145a7fad61848666f",
                 "shasum": ""
             },
             "require": {
@@ -2539,7 +2539,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.0",
+                "phpstan\/phpstan": "^1.3",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
@@ -2552,7 +2552,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-28T13:15:49+00:00",
+            "time": "2021-12-29T23:41:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

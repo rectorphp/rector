@@ -77,6 +77,10 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
             if (!$resolvedType instanceof \PhpParser\Node\Name) {
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
+            $resolvedTypeName = (string) $resolvedType;
+            if ($resolvedTypeName === 'string') {
+                return $resolvedType;
+            }
             $intersectionedTypeNodes[] = $resolvedType;
         }
         return new \PhpParser\Node\IntersectionType($intersectionedTypeNodes);
