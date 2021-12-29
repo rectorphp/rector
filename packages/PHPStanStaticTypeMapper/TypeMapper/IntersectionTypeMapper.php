@@ -84,6 +84,11 @@ final class IntersectionTypeMapper implements TypeMapperInterface
                 throw new ShouldNotHappenException();
             }
 
+            $resolvedTypeName = (string) $resolvedType;
+            if ($resolvedTypeName === 'string') {
+                return $resolvedType;
+            }
+
             $intersectionedTypeNodes[] = $resolvedType;
         }
 
