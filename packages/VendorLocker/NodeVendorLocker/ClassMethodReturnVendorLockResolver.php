@@ -32,10 +32,7 @@ final class ClassMethodReturnVendorLockResolver
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        if ($this->isVendorLockedByAncestors($classReflection, $methodName)) {
-            return \true;
-        }
-        return $classReflection->isTrait();
+        return $this->isVendorLockedByAncestors($classReflection, $methodName);
     }
     private function isVendorLockedByAncestors(\PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
     {

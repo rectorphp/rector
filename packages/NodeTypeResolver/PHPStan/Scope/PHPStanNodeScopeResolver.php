@@ -87,12 +87,7 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator
      */
     private $parentAttributeSourceLocator;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\TraitScopeFaker
-     */
-    private $traitScopeFaker;
-    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211229\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator, \Rector\NodeTypeResolver\PHPStan\Scope\TraitScopeFaker $traitScopeFaker)
+    public function __construct(\Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Caching\FileSystem\DependencyResolver $dependencyResolver, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, \RectorPrefix20211229\Symplify\PackageBuilder\Reflection\PrivatesAccessor $privatesAccessor, \Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator $renamedClassesSourceLocator, \Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator $parentAttributeSourceLocator)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -103,7 +98,6 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->parentAttributeSourceLocator = $parentAttributeSourceLocator;
-        $this->traitScopeFaker = $traitScopeFaker;
     }
     /**
      * @param Stmt[] $stmts
@@ -118,10 +112,11 @@ final class PHPStanNodeScopeResolver
             if ($node instanceof \PhpParser\Node\Stmt\Trait_) {
                 $traitName = $this->resolveClassName($node);
                 $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
-                $scopeContext = $this->traitScopeFaker->createDummyClassScopeContext($scope);
                 $traitScope = clone $scope;
-                $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $scopeContext);
-                $traitScope = $traitScope->enterTrait($traitReflectionClass);
+                $scopeContext = $this->privatesAccessor->getPrivateProperty($traitScope, self::CONTEXT);
+                $traitContext = clone $scopeContext;
+                $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitReflectionClass);
+                $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
                 $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 return;
             }

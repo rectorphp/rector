@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4c42b62ee124901a628846b6be329809
+class ComposerStaticInit684314e606e93eba3503d2cfb295b982
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2159,7 +2159,6 @@ class ComposerStaticInit4c42b62ee124901a628846b6be329809
         'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\ParentAttributeSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/ParentAttributeSourceLocator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
-        'Rector\\Core\\Stubs\\DummyTraitClass' => __DIR__ . '/../..' . '/src/Stubs/DummyTraitClass.php',
         'Rector\\Core\\Stubs\\PHPStanStubLoader' => __DIR__ . '/../..' . '/src/Stubs/PHPStanStubLoader.php',
         'Rector\\Core\\Template\\DefaultResolver' => __DIR__ . '/../..' . '/src/Template/DefaultResolver.php',
         'Rector\\Core\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
@@ -2758,7 +2757,6 @@ class ComposerStaticInit4c42b62ee124901a628846b6be329809
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
-        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\TraitScopeFaker' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/TraitScopeFaker.php',
         'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/TypeHasher.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\StaticTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/StaticTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php',
@@ -3843,9 +3841,9 @@ class ComposerStaticInit4c42b62ee124901a628846b6be329809
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4c42b62ee124901a628846b6be329809::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4c42b62ee124901a628846b6be329809::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4c42b62ee124901a628846b6be329809::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit684314e606e93eba3503d2cfb295b982::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit684314e606e93eba3503d2cfb295b982::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit684314e606e93eba3503d2cfb295b982::$classMap;
 
         }, null, ClassLoader::class);
     }
