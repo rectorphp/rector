@@ -19,6 +19,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PHPStan\Type\MixedType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -88,10 +89,17 @@ CODE_SAMPLE
             return null;
         }
 
+        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE);
+        if ($createdByRule === self::class) {
+            return null;
+        }
+
         // direct null check ConstFetch
         if ($args[1]->value instanceof ConstFetch && $this->valueResolver->isNull($args[1]->value)) {
             $args = [$args[0]];
             $node->args = $args;
+
+            $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
             return $node;
         }
 
@@ -103,6 +111,7 @@ CODE_SAMPLE
         $node->args[1] = new Arg($this->createNewArgFirstTernary($args));
         $node->args[2] = new Arg($this->createNewArgSecondTernary($args));
 
+        $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
         return $node;
     }
 
