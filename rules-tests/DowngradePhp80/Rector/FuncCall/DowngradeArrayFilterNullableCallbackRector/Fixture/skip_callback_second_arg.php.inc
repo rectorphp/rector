@@ -9,5 +9,3 @@ class SkipCallbackSecondArg
         array_filter($data, fn ($v, $k) => ! empty ($v), ARRAY_FILTER_USE_BOTH);
     }
 }
-
-?>

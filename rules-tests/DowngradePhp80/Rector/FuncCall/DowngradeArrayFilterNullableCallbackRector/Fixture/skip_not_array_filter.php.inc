@@ -9,5 +9,3 @@ class SkipNotArrayFilter
         strlen('test');
     }
 }
-
-?>

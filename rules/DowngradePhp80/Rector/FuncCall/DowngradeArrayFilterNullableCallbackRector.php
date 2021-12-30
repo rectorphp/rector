@@ -7,6 +7,7 @@ namespace Rector\DowngradePhp80\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -20,6 +21,10 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\ClosureType;
+use PHPStan\Type\Constant\ConstantStringType;
+use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -118,7 +123,16 @@ CODE_SAMPLE
 
     private function shouldSkipSecondArg(Expr $expr): bool
     {
-        return in_array($expr::class, [String_::class, Closure::class, ArrowFunction::class], true);
+        if (in_array($expr::class, [String_::class, Closure::class, ArrowFunction::class, Array_::class], true)) {
+            return true;
+        }
+
+        $type = $this->nodeTypeResolver->getType($expr);
+        return in_array(
+            $type::class,
+            [StringType::class, ConstantStringType::class, ArrayType::class, ClosureType::class],
+            true
+        );
     }
 
     /**

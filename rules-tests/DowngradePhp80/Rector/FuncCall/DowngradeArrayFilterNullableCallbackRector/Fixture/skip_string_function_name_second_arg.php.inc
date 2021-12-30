@@ -9,5 +9,3 @@ class SkipStringFunctionNameSecondArg
         $result = array_filter($data, 'strlen' );
     }
 }
-
-?>

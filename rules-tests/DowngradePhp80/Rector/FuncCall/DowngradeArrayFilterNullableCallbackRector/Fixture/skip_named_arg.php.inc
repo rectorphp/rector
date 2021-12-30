@@ -9,5 +9,3 @@ class SkipNamedArg
         array_filter(array: $data, callback: null);
     }
 }
-
-?>

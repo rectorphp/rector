@@ -9,5 +9,3 @@ class SkipNoSecondArg
         array_filter($data);
     }
 }
-
-?>
