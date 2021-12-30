@@ -6,9 +6,11 @@ namespace Rector\DowngradePhp80\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\FuncCall;
@@ -17,7 +19,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
-use PHPStan\Type\MixedType;
+use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -103,8 +105,7 @@ CODE_SAMPLE
             return $node;
         }
 
-        $type = $this->nodeTypeResolver->getType($args[1]->value);
-        if (! $type instanceof MixedType) {
+        if ($this->shouldSkipSecondArg($args[1]->value)) {
             return null;
         }
 
@@ -113,6 +114,11 @@ CODE_SAMPLE
 
         $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
         return $node;
+    }
+
+    private function shouldSkipSecondArg(Expr $expr): bool
+    {
+        return in_array($expr::class, [String_::class, Closure::class, ArrowFunction::class], true);
     }
 
     /**
