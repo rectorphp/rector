@@ -25,7 +25,7 @@ use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\
 final class FullyQualifiedName
 {
     /**
-     * @return \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult[]|bool[]
+     * @return bool[]|\Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\Source\ValidationResult[]
      */
     public function isValidDataProvider(): array
     {

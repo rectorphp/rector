@@ -18,6 +18,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -28,7 +29,8 @@ final class VarConstantCommentRector extends AbstractRector
 {
     public function __construct(
         private readonly TypeComparator $typeComparator,
-        private readonly PhpDocTypeChanger $phpDocTypeChanger
+        private readonly PhpDocTypeChanger $phpDocTypeChanger,
+        private readonly TypeNormalizer $typeNormalizer,
     ) {
     }
 
@@ -80,6 +82,9 @@ CODE_SAMPLE
         if ($constType instanceof MixedType) {
             return null;
         }
+
+        // generalize false/true type to bool, as mostly default value but accepts both
+        $constType = $this->typeNormalizer->generalizeConstantBoolTypes($constType);
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
 

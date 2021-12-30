@@ -31,6 +31,9 @@ final class ScalarTypeComparatorTest extends AbstractTestCase
         $this->assertSame($areExpectedEqual, $areEqual);
     }
 
+    /**
+     * @return Iterator<bool[]|BooleanType[]|StringType[]>
+     */
     public function provideData(): Iterator
     {
         yield [new StringType(), new BooleanType(), false];

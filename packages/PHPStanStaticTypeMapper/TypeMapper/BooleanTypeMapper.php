@@ -43,6 +43,11 @@ final class BooleanTypeMapper implements TypeMapperInterface
             return new IdentifierTypeNode('false');
         }
 
+        if ($type instanceof ConstantBooleanType) {
+            // cannot be parent of union
+            return new IdentifierTypeNode('true');
+        }
+
         return new IdentifierTypeNode('bool');
     }
 

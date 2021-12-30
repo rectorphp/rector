@@ -20,6 +20,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -54,6 +55,11 @@ final class ObjectTypeMapper implements TypeMapperInterface
 
         if ($type instanceof GenericObjectType) {
             return $this->mapGenericObjectType($type, $typeKind);
+        }
+
+        if ($type instanceof NonExistingObjectType) {
+            // possibly generic type
+            return new IdentifierTypeNode($type->getClassName());
         }
 
         return new IdentifierTypeNode('\\' . $type->getClassName());

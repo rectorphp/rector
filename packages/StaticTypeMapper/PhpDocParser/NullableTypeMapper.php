@@ -31,6 +31,9 @@ final class NullableTypeMapper implements PhpDocTypeMapperInterface
         return NullableTypeNode::class;
     }
 
+    /**
+     * @param NullableTypeNode $typeNode
+     */
     public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
     {
         $type = $typeNode->type;

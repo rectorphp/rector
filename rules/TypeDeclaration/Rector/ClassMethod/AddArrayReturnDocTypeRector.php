@@ -22,6 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
+use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -43,6 +44,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         private readonly NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType,
         private readonly ReturnTagRemover $returnTagRemover,
         private readonly DetailedTypeAnalyzer $detailedTypeAnalyzer,
+        private readonly TypeNormalizer $typeNormalizer,
     ) {
     }
 
@@ -117,6 +119,9 @@ CODE_SAMPLE
             $inferredReturnType,
             $node->returnType
         );
+
+        // generalize false/true type to bool, as mostly default value but accepts both
+        $inferredReturnType = $this->typeNormalizer->generalizeConstantBoolTypes($inferredReturnType);
 
         $currentReturnType = $phpDocInfo->getReturnType();
 

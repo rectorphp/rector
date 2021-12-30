@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\MixedType;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -207,6 +207,7 @@ CODE_SAMPLE
             $property = $this->nodeFactory->createProperty($name);
             $property->flags = $param->flags;
             $property->type = $param->type;
+
             $this->decoratePropertyWithParamDocInfo($param, $property);
 
             $hasNew = $param->default === null
@@ -240,14 +241,12 @@ CODE_SAMPLE
             return;
         }
 
-        $type = $phpDocInfo->getParamType($name);
-
-        // MixedType likely means there was no param type defined
-        if ($type instanceof MixedType) {
+        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($name);
+        if (! $paramTagValueNode instanceof ParamTagValueNode) {
             return;
         }
 
         $propertyDocInfo = $this->phpDocInfoFactory->createEmpty($property);
-        $this->phpDocTypeChanger->changeVarType($propertyDocInfo, $type);
+        $this->phpDocTypeChanger->changeVarTypeNode($propertyDocInfo, $paramTagValueNode->type);
     }
 }

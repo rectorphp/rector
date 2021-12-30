@@ -15,6 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 
 final class PropertyTypeDecorator
@@ -23,12 +24,16 @@ final class PropertyTypeDecorator
         private readonly PhpVersionProvider $phpVersionProvider,
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly PhpDocInfoFactory $phpDocInfoFactory
+        private readonly PhpDocInfoFactory $phpDocInfoFactory,
+        private readonly TypeNormalizer $typeNormalizer,
     ) {
     }
 
     public function decorateProperty(Property $property, Type $propertyType): void
     {
+        // generalize false/true type to bool, as mostly default value but accepts both
+        $propertyType = $this->typeNormalizer->generalizeConstantBoolTypes($propertyType);
+
         $this->decoratePropertyWithVarDoc($property, $propertyType);
         $this->decoratePropertyWithType($property, $propertyType);
     }

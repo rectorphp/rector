@@ -129,7 +129,6 @@ final class PhpDocInfo
     public function getParamType(string $name): Type
     {
         $paramTagValueNodes = $this->getParamTagValueByName($name);
-
         return $this->getTypeOrMixed($paramTagValueNodes);
     }
 

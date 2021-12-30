@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
@@ -62,6 +63,7 @@ final class PhpDocTypeChanger
         } else {
             // add completely new one
             $varTagValueNode = new VarTagValueNode($newPHPStanPhpDocType, '', '');
+
             $phpDocInfo->addTagValueNode($varTagValueNode);
         }
     }
@@ -170,5 +172,12 @@ final class PhpDocTypeChanger
         $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTag, $property);
 
         $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
+    }
+
+    public function changeVarTypeNode(PhpDocInfo $phpDocInfo, TypeNode $typeNode): void
+    {
+        // add completely new one
+        $varTagValueNode = new VarTagValueNode($typeNode, '', '');
+        $phpDocInfo->addTagValueNode($varTagValueNode);
     }
 }
