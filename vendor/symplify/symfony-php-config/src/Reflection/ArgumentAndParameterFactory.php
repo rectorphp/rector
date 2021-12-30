@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211229\Symplify\SymfonyPhpConfig\Reflection;
+namespace RectorPrefix20211230\Symplify\SymfonyPhpConfig\Reflection;
 
-use RectorPrefix20211229\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20211230\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class ArgumentAndParameterFactory
 {
     /**
@@ -12,7 +12,7 @@ final class ArgumentAndParameterFactory
     private $privatesAccessor;
     public function __construct()
     {
-        $this->privatesAccessor = new \RectorPrefix20211229\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+        $this->privatesAccessor = new \RectorPrefix20211230\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
     }
     /**
      * @param array<string, mixed> $arguments

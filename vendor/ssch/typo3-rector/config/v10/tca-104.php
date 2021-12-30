@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211229;
+namespace RectorPrefix20211230;
 
 use Ssch\TYPO3Rector\Rector\v10\v0\RemoveSeliconFieldPathRector;
 use Ssch\TYPO3Rector\Rector\v10\v0\RemoveTcaOptionSetToDefaultOnCopyRector;

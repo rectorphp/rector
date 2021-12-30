@@ -13,7 +13,7 @@ use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20211229\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20211230\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeTypeResolverInterface<ClassMethod|ClassConst>
  */

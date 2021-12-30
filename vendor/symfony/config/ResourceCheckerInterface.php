@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20211229\Symfony\Component\Config;
+namespace RectorPrefix20211230\Symfony\Component\Config;
 
-use RectorPrefix20211229\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix20211230\Symfony\Component\Config\Resource\ResourceInterface;
 /**
  * Interface for ResourceCheckers.
  *
@@ -30,7 +30,7 @@ interface ResourceCheckerInterface
      *
      * @return bool
      */
-    public function supports(\RectorPrefix20211229\Symfony\Component\Config\Resource\ResourceInterface $metadata);
+    public function supports(\RectorPrefix20211230\Symfony\Component\Config\Resource\ResourceInterface $metadata);
     /**
      * Validates the resource.
      *
@@ -38,5 +38,5 @@ interface ResourceCheckerInterface
      *
      * @return bool
      */
-    public function isFresh(\RectorPrefix20211229\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp);
+    public function isFresh(\RectorPrefix20211230\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp);
 }

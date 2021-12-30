@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211229\Helmich\TypoScriptParser\Parser\AST;
+namespace RectorPrefix20211230\Helmich\TypoScriptParser\Parser\AST;
 
 /**
  * A conditional statement with a condition, an if-branch and an optional else-branch.

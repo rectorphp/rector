@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211229;
+namespace RectorPrefix20211230;
 
 ///////////////////////////////
 /// Utility regex constants ///
@@ -19,17 +19,17 @@ const ARGS = '\\((?<args>[^()]*+(?:\\((?&args)\\)[^()]*+)*+)\\)';
 ///////////////////////////////
 function preprocessGrammar($code)
 {
-    $code = \RectorPrefix20211229\resolveNodes($code);
-    $code = \RectorPrefix20211229\resolveMacros($code);
-    $code = \RectorPrefix20211229\resolveStackAccess($code);
+    $code = \RectorPrefix20211230\resolveNodes($code);
+    $code = \RectorPrefix20211230\resolveMacros($code);
+    $code = \RectorPrefix20211230\resolveStackAccess($code);
     return $code;
 }
 function resolveNodes($code)
 {
     return \preg_replace_callback('~\\b(?<name>[A-Z][a-zA-Z_\\\\]++)\\s*' . \PARAMS . '~', function ($matches) {
         // recurse
-        $matches['params'] = \RectorPrefix20211229\resolveNodes($matches['params']);
-        $params = \RectorPrefix20211229\magicSplit('(?:' . \PARAMS . '|' . \ARGS . ')(*SKIP)(*FAIL)|,', $matches['params']);
+        $matches['params'] = \RectorPrefix20211230\resolveNodes($matches['params']);
+        $params = \RectorPrefix20211230\magicSplit('(?:' . \PARAMS . '|' . \ARGS . ')(*SKIP)(*FAIL)|,', $matches['params']);
         $paramCode = '';
         foreach ($params as $param) {
             $paramCode .= $param . ', ';
@@ -41,54 +41,54 @@ function resolveMacros($code)
 {
     return \preg_replace_callback('~\\b(?<!::|->)(?!array\\()(?<name>[a-z][A-Za-z]++)' . \ARGS . '~', function ($matches) {
         // recurse
-        $matches['args'] = \RectorPrefix20211229\resolveMacros($matches['args']);
+        $matches['args'] = \RectorPrefix20211230\resolveMacros($matches['args']);
         $name = $matches['name'];
-        $args = \RectorPrefix20211229\magicSplit('(?:' . \PARAMS . '|' . \ARGS . ')(*SKIP)(*FAIL)|,', $matches['args']);
+        $args = \RectorPrefix20211230\magicSplit('(?:' . \PARAMS . '|' . \ARGS . ')(*SKIP)(*FAIL)|,', $matches['args']);
         if ('attributes' === $name) {
-            \RectorPrefix20211229\assertArgs(0, $args, $name);
+            \RectorPrefix20211230\assertArgs(0, $args, $name);
             return '$this->startAttributeStack[#1] + $this->endAttributes';
         }
         if ('stackAttributes' === $name) {
-            \RectorPrefix20211229\assertArgs(1, $args, $name);
+            \RectorPrefix20211230\assertArgs(1, $args, $name);
             return '$this->startAttributeStack[' . $args[0] . ']' . ' + $this->endAttributeStack[' . $args[0] . ']';
         }
         if ('init' === $name) {
             return '$$ = array(' . \implode(', ', $args) . ')';
         }
         if ('push' === $name) {
-            \RectorPrefix20211229\assertArgs(2, $args, $name);
+            \RectorPrefix20211230\assertArgs(2, $args, $name);
             return $args[0] . '[] = ' . $args[1] . '; $$ = ' . $args[0];
         }
         if ('pushNormalizing' === $name) {
-            \RectorPrefix20211229\assertArgs(2, $args, $name);
+            \RectorPrefix20211230\assertArgs(2, $args, $name);
             return 'if (is_array(' . $args[1] . ')) { $$ = array_merge(' . $args[0] . ', ' . $args[1] . '); }' . ' else { ' . $args[0] . '[] = ' . $args[1] . '; $$ = ' . $args[0] . '; }';
         }
         if ('toArray' == $name) {
-            \RectorPrefix20211229\assertArgs(1, $args, $name);
+            \RectorPrefix20211230\assertArgs(1, $args, $name);
             return 'is_array(' . $args[0] . ') ? ' . $args[0] . ' : array(' . $args[0] . ')';
         }
         if ('parseVar' === $name) {
-            \RectorPrefix20211229\assertArgs(1, $args, $name);
+            \RectorPrefix20211230\assertArgs(1, $args, $name);
             return 'substr(' . $args[0] . ', 1)';
         }
         if ('parseEncapsed' === $name) {
-            \RectorPrefix20211229\assertArgs(3, $args, $name);
+            \RectorPrefix20211230\assertArgs(3, $args, $name);
             return 'foreach (' . $args[0] . ' as $s) { if ($s instanceof Node\\Scalar\\EncapsedStringPart) {' . ' $s->value = Node\\Scalar\\String_::parseEscapeSequences($s->value, ' . $args[1] . ', ' . $args[2] . '); } }';
         }
         if ('makeNop' === $name) {
-            \RectorPrefix20211229\assertArgs(3, $args, $name);
+            \RectorPrefix20211230\assertArgs(3, $args, $name);
             return '$startAttributes = ' . $args[1] . ';' . ' if (isset($startAttributes[\'comments\']))' . ' { ' . $args[0] . ' = new Stmt\\Nop($startAttributes + ' . $args[2] . '); }' . ' else { ' . $args[0] . ' = null; }';
         }
         if ('makeZeroLengthNop' == $name) {
-            \RectorPrefix20211229\assertArgs(2, $args, $name);
+            \RectorPrefix20211230\assertArgs(2, $args, $name);
             return '$startAttributes = ' . $args[1] . ';' . ' if (isset($startAttributes[\'comments\']))' . ' { ' . $args[0] . ' = new Stmt\\Nop($this->createCommentNopAttributes($startAttributes[\'comments\'])); }' . ' else { ' . $args[0] . ' = null; }';
         }
         if ('strKind' === $name) {
-            \RectorPrefix20211229\assertArgs(1, $args, $name);
+            \RectorPrefix20211230\assertArgs(1, $args, $name);
             return '(' . $args[0] . '[0] === "\'" || (' . $args[0] . '[1] === "\'" && ' . '(' . $args[0] . '[0] === \'b\' || ' . $args[0] . '[0] === \'B\')) ' . '? Scalar\\String_::KIND_SINGLE_QUOTED : Scalar\\String_::KIND_DOUBLE_QUOTED)';
         }
         if ('prependLeadingComments' === $name) {
-            \RectorPrefix20211229\assertArgs(1, $args, $name);
+            \RectorPrefix20211230\assertArgs(1, $args, $name);
             return '$attrs = $this->startAttributeStack[#1]; $stmts = ' . $args[0] . '; ' . 'if (!empty($attrs[\'comments\'])) {' . '$stmts[0]->setAttribute(\'comments\', ' . 'array_merge($attrs[\'comments\'], $stmts[0]->getAttribute(\'comments\', []))); }';
         }
         return $matches[0];
@@ -121,7 +121,7 @@ function regex($regex)
 }
 function magicSplit($regex, $string)
 {
-    $pieces = \preg_split(\RectorPrefix20211229\regex('(?:(?&string)|(?&comment)|(?&code))(*SKIP)(*FAIL)|' . $regex), $string);
+    $pieces = \preg_split(\RectorPrefix20211230\regex('(?:(?&string)|(?&comment)|(?&code))(*SKIP)(*FAIL)|' . $regex), $string);
     foreach ($pieces as &$piece) {
         $piece = \trim($piece);
     }

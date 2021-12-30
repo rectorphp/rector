@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211229\Nette\Utils;
+namespace RectorPrefix20211230\Nette\Utils;
 
-use RectorPrefix20211229\Nette;
+use RectorPrefix20211230\Nette;
 /**
  * File system tool.
  */
@@ -22,7 +22,7 @@ final class FileSystem
     {
         if (!\is_dir($dir) && !@\mkdir($dir, $mode, \true) && !\is_dir($dir)) {
             // @ - dir may already exist
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to create directory '%s' with mode %s. %s", self::normalizePath($dir), \decoct($mode), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to create directory '%s' with mode %s. %s", self::normalizePath($dir), \decoct($mode), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
         }
     }
     /**
@@ -33,9 +33,9 @@ final class FileSystem
     public static function copy(string $origin, string $target, bool $overwrite = \true) : void
     {
         if (\stream_is_local($origin) && !\file_exists($origin)) {
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
         } elseif (!$overwrite && \file_exists($target)) {
-            throw new \RectorPrefix20211229\Nette\InvalidStateException(\sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
+            throw new \RectorPrefix20211230\Nette\InvalidStateException(\sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
         } elseif (\is_dir($origin)) {
             static::createDir($target);
             foreach (new \FilesystemIterator($target) as $item) {
@@ -52,7 +52,7 @@ final class FileSystem
             static::createDir(\dirname($target));
             if (($s = @\fopen($origin, 'rb')) && ($d = @\fopen($target, 'wb')) && @\stream_copy_to_stream($s, $d) === \false) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to copy file '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+                throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to copy file '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
             }
         }
     }
@@ -66,7 +66,7 @@ final class FileSystem
             $func = \DIRECTORY_SEPARATOR === '\\' && \is_dir($path) ? 'rmdir' : 'unlink';
             if (!@$func($path)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to delete '%s'. %s", self::normalizePath($path), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+                throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to delete '%s'. %s", self::normalizePath($path), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
             }
         } elseif (\is_dir($path)) {
             foreach (new \FilesystemIterator($path) as $item) {
@@ -74,7 +74,7 @@ final class FileSystem
             }
             if (!@\rmdir($path)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to delete directory '%s'. %s", self::normalizePath($path), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+                throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to delete directory '%s'. %s", self::normalizePath($path), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
             }
         }
     }
@@ -86,9 +86,9 @@ final class FileSystem
     public static function rename(string $origin, string $target, bool $overwrite = \true) : void
     {
         if (!$overwrite && \file_exists($target)) {
-            throw new \RectorPrefix20211229\Nette\InvalidStateException(\sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
+            throw new \RectorPrefix20211230\Nette\InvalidStateException(\sprintf("File or directory '%s' already exists.", self::normalizePath($target)));
         } elseif (!\file_exists($origin)) {
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($origin)));
         } else {
             static::createDir(\dirname($target));
             if (\realpath($origin) !== \realpath($target)) {
@@ -96,7 +96,7 @@ final class FileSystem
             }
             if (!@\rename($origin, $target)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to rename file or directory '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+                throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to rename file or directory '%s' to '%s'. %s", self::normalizePath($origin), self::normalizePath($target), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
             }
         }
     }
@@ -109,7 +109,7 @@ final class FileSystem
         $content = @\file_get_contents($file);
         // @ is escalated to exception
         if ($content === \false) {
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to read file '%s'. %s", self::normalizePath($file), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to read file '%s'. %s", self::normalizePath($file), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
         }
         return $content;
     }
@@ -122,11 +122,11 @@ final class FileSystem
         static::createDir(\dirname($file));
         if (@\file_put_contents($file, $content) === \false) {
             // @ is escalated to exception
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to write file '%s'. %s", self::normalizePath($file), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to write file '%s'. %s", self::normalizePath($file), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
         }
         if ($mode !== null && !@\chmod($file, $mode)) {
             // @ is escalated to exception
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($file), \decoct($mode), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($file), \decoct($mode), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
         }
     }
     /**
@@ -138,7 +138,7 @@ final class FileSystem
         if (\is_file($path)) {
             if (!@\chmod($path, $fileMode)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($path), \decoct($fileMode), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+                throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to chmod file '%s' to mode %s. %s", self::normalizePath($path), \decoct($fileMode), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
             }
         } elseif (\is_dir($path)) {
             foreach (new \FilesystemIterator($path) as $item) {
@@ -146,10 +146,10 @@ final class FileSystem
             }
             if (!@\chmod($path, $dirMode)) {
                 // @ is escalated to exception
-                throw new \RectorPrefix20211229\Nette\IOException(\sprintf("Unable to chmod directory '%s' to mode %s. %s", self::normalizePath($path), \decoct($dirMode), \RectorPrefix20211229\Nette\Utils\Helpers::getLastError()));
+                throw new \RectorPrefix20211230\Nette\IOException(\sprintf("Unable to chmod directory '%s' to mode %s. %s", self::normalizePath($path), \decoct($dirMode), \RectorPrefix20211230\Nette\Utils\Helpers::getLastError()));
             }
         } else {
-            throw new \RectorPrefix20211229\Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($path)));
+            throw new \RectorPrefix20211230\Nette\IOException(\sprintf("File or directory '%s' not found.", self::normalizePath($path)));
         }
     }
     /**

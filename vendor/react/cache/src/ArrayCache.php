@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix20211229\React\Cache;
+namespace RectorPrefix20211230\React\Cache;
 
-use RectorPrefix20211229\React\Promise;
-use RectorPrefix20211229\React\Promise\PromiseInterface;
-class ArrayCache implements \RectorPrefix20211229\React\Cache\CacheInterface
+use RectorPrefix20211230\React\Promise;
+use RectorPrefix20211230\React\Promise\PromiseInterface;
+class ArrayCache implements \RectorPrefix20211230\React\Cache\CacheInterface
 {
     private $limit;
     private $data = array();
@@ -60,13 +60,13 @@ class ArrayCache implements \RectorPrefix20211229\React\Cache\CacheInterface
             unset($this->data[$key], $this->expires[$key]);
         }
         if (!\array_key_exists($key, $this->data)) {
-            return \RectorPrefix20211229\React\Promise\resolve($default);
+            return \RectorPrefix20211230\React\Promise\resolve($default);
         }
         // remove and append to end of array to keep track of LRU info
         $value = $this->data[$key];
         unset($this->data[$key]);
         $this->data[$key] = $value;
-        return \RectorPrefix20211229\React\Promise\resolve($value);
+        return \RectorPrefix20211230\React\Promise\resolve($value);
     }
     public function set($key, $value, $ttl = null)
     {
@@ -93,12 +93,12 @@ class ArrayCache implements \RectorPrefix20211229\React\Cache\CacheInterface
             }
             unset($this->data[$key], $this->expires[$key]);
         }
-        return \RectorPrefix20211229\React\Promise\resolve(\true);
+        return \RectorPrefix20211230\React\Promise\resolve(\true);
     }
     public function delete($key)
     {
         unset($this->data[$key], $this->expires[$key]);
-        return \RectorPrefix20211229\React\Promise\resolve(\true);
+        return \RectorPrefix20211230\React\Promise\resolve(\true);
     }
     public function getMultiple(array $keys, $default = null)
     {
@@ -106,27 +106,27 @@ class ArrayCache implements \RectorPrefix20211229\React\Cache\CacheInterface
         foreach ($keys as $key) {
             $values[$key] = $this->get($key, $default);
         }
-        return \RectorPrefix20211229\React\Promise\all($values);
+        return \RectorPrefix20211230\React\Promise\all($values);
     }
     public function setMultiple(array $values, $ttl = null)
     {
         foreach ($values as $key => $value) {
             $this->set($key, $value, $ttl);
         }
-        return \RectorPrefix20211229\React\Promise\resolve(\true);
+        return \RectorPrefix20211230\React\Promise\resolve(\true);
     }
     public function deleteMultiple(array $keys)
     {
         foreach ($keys as $key) {
             unset($this->data[$key], $this->expires[$key]);
         }
-        return \RectorPrefix20211229\React\Promise\resolve(\true);
+        return \RectorPrefix20211230\React\Promise\resolve(\true);
     }
     public function clear()
     {
         $this->data = array();
         $this->expires = array();
-        return \RectorPrefix20211229\React\Promise\resolve(\true);
+        return \RectorPrefix20211230\React\Promise\resolve(\true);
     }
     public function has($key)
     {
@@ -135,13 +135,13 @@ class ArrayCache implements \RectorPrefix20211229\React\Cache\CacheInterface
             unset($this->data[$key], $this->expires[$key]);
         }
         if (!\array_key_exists($key, $this->data)) {
-            return \RectorPrefix20211229\React\Promise\resolve(\false);
+            return \RectorPrefix20211230\React\Promise\resolve(\false);
         }
         // remove and append to end of array to keep track of LRU info
         $value = $this->data[$key];
         unset($this->data[$key]);
         $this->data[$key] = $value;
-        return \RectorPrefix20211229\React\Promise\resolve(\true);
+        return \RectorPrefix20211230\React\Promise\resolve(\true);
     }
     /**
      * @return float

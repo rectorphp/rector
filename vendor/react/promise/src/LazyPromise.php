@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix20211229\React\Promise;
+namespace RectorPrefix20211230\React\Promise;
 
 /**
  * @deprecated 2.8.0 LazyPromise is deprecated and should not be used anymore.
  */
-class LazyPromise implements \RectorPrefix20211229\React\Promise\ExtendedPromiseInterface, \RectorPrefix20211229\React\Promise\CancellablePromiseInterface
+class LazyPromise implements \RectorPrefix20211230\React\Promise\ExtendedPromiseInterface, \RectorPrefix20211230\React\Promise\CancellablePromiseInterface
 {
     private $factory;
     private $promise;
@@ -47,9 +47,9 @@ class LazyPromise implements \RectorPrefix20211229\React\Promise\ExtendedPromise
             try {
                 $this->promise = resolve(\call_user_func($this->factory));
             } catch (\Throwable $exception) {
-                $this->promise = new \RectorPrefix20211229\React\Promise\RejectedPromise($exception);
+                $this->promise = new \RectorPrefix20211230\React\Promise\RejectedPromise($exception);
             } catch (\Exception $exception) {
-                $this->promise = new \RectorPrefix20211229\React\Promise\RejectedPromise($exception);
+                $this->promise = new \RectorPrefix20211230\React\Promise\RejectedPromise($exception);
             }
         }
         return $this->promise;
