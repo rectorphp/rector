@@ -25,7 +25,7 @@ class PhpExecutableFinder
     }
     /**
      * Finds The PHP executable.
-     * @return bool|string
+     * @return string|true
      */
     public function find(bool $includeArgs = \true)
     {

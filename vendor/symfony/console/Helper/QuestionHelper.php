@@ -416,7 +416,7 @@ class QuestionHelper extends \RectorPrefix20211230\Symfony\Component\Console\Hel
      *
      * @param resource $inputStream The handler resource
      * @param Question $question    The question being asked
-     * @return bool|string
+     * @return string|true
      */
     private function readInput($inputStream, \RectorPrefix20211230\Symfony\Component\Console\Question\Question $question)
     {
@@ -450,8 +450,8 @@ class QuestionHelper extends \RectorPrefix20211230\Symfony\Component\Console\Hel
     }
     /**
      * Sets console I/O to the specified code page and converts the user input.
-     * @param bool|string $input
-     * @return bool|string
+     * @param string|true $input
+     * @return string|true
      */
     private function resetIOCodepage(int $cp, $input)
     {

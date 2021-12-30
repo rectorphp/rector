@@ -15,7 +15,7 @@ if (!\function_exists('mb_convert_encoding')) {
     /**
      * @param mixed[]|string|null $string
      * @param mixed[]|string|null $from_encoding
-     * @return mixed[]|bool|string
+     * @return mixed[]|string|true
      */
     function mb_convert_encoding($string, ?string $to_encoding, $from_encoding = null)
     {
@@ -94,7 +94,7 @@ if (!\function_exists('mb_check_encoding')) {
 if (!\function_exists('mb_detect_encoding')) {
     /**
      * @param mixed[]|string|null $encodings
-     * @return bool|string
+     * @return string|true
      */
     function mb_detect_encoding(?string $string, $encodings = null, ?bool $strict = \false)
     {
@@ -126,7 +126,7 @@ if (!\function_exists('mb_strlen')) {
 }
 if (!\function_exists('mb_strpos')) {
     /**
-     * @return bool|int
+     * @return int|true
      */
     function mb_strpos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -163,7 +163,7 @@ if (!\function_exists('mb_substr')) {
 }
 if (!\function_exists('mb_stripos')) {
     /**
-     * @return bool|int
+     * @return int|true
      */
     function mb_stripos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -172,7 +172,7 @@ if (!\function_exists('mb_stripos')) {
 }
 if (!\function_exists('mb_stristr')) {
     /**
-     * @return bool|string
+     * @return string|true
      */
     function mb_stristr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -181,7 +181,7 @@ if (!\function_exists('mb_stristr')) {
 }
 if (!\function_exists('mb_strrchr')) {
     /**
-     * @return bool|string
+     * @return string|true
      */
     function mb_strrchr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -190,7 +190,7 @@ if (!\function_exists('mb_strrchr')) {
 }
 if (!\function_exists('mb_strrichr')) {
     /**
-     * @return bool|string
+     * @return string|true
      */
     function mb_strrichr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -199,7 +199,7 @@ if (!\function_exists('mb_strrichr')) {
 }
 if (!\function_exists('mb_strripos')) {
     /**
-     * @return bool|int
+     * @return int|true
      */
     function mb_strripos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -208,7 +208,7 @@ if (!\function_exists('mb_strripos')) {
 }
 if (!\function_exists('mb_strrpos')) {
     /**
-     * @return bool|int
+     * @return int|true
      */
     function mb_strrpos(?string $haystack, ?string $needle, ?int $offset = 0, ?string $encoding = null)
     {
@@ -217,7 +217,7 @@ if (!\function_exists('mb_strrpos')) {
 }
 if (!\function_exists('mb_strstr')) {
     /**
-     * @return bool|string
+     * @return string|true
      */
     function mb_strstr(?string $haystack, ?string $needle, ?bool $before_needle = \false, ?string $encoding = null)
     {
@@ -226,7 +226,7 @@ if (!\function_exists('mb_strstr')) {
 }
 if (!\function_exists('mb_get_info')) {
     /**
-     * @return mixed[]|bool|int|string
+     * @return mixed[]|int|string|true
      */
     function mb_get_info(?string $type = 'all')
     {
@@ -262,7 +262,7 @@ if (!\function_exists('mb_output_handler')) {
 }
 if (!\function_exists('mb_http_input')) {
     /**
-     * @return mixed[]|bool|string
+     * @return mixed[]|string|true
      */
     function mb_http_input(?string $type = null)
     {
@@ -272,7 +272,7 @@ if (!\function_exists('mb_http_input')) {
 if (!\function_exists('mb_convert_variables')) {
     /**
      * @param mixed[]|string|null $from_encoding
-     * @return bool|string
+     * @return string|true
      * @param mixed $var
      * @param mixed ...$vars
      */
@@ -283,7 +283,7 @@ if (!\function_exists('mb_convert_variables')) {
 }
 if (!\function_exists('mb_ord')) {
     /**
-     * @return bool|int
+     * @return int|true
      */
     function mb_ord(?string $string, ?string $encoding = null)
     {
@@ -292,7 +292,7 @@ if (!\function_exists('mb_ord')) {
 }
 if (!\function_exists('mb_chr')) {
     /**
-     * @return bool|string
+     * @return string|true
      */
     function mb_chr(?int $codepoint, ?string $encoding = null)
     {

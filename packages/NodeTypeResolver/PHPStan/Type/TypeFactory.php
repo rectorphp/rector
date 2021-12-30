@@ -42,10 +42,10 @@ final class TypeFactory
     /**
      * @param Type[] $types
      */
-    public function createMixedPassedOrUnionType(array $types) : \PHPStan\Type\Type
+    public function createMixedPassedOrUnionType(array $types, bool $keepConstantTypes = \false) : \PHPStan\Type\Type
     {
         $types = $this->unwrapUnionedTypes($types);
-        $types = $this->uniquateTypes($types);
+        $types = $this->uniquateTypes($types, $keepConstantTypes);
         return $this->createUnionOrSingleType($types);
     }
     /**

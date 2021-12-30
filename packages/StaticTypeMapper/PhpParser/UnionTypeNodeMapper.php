@@ -48,6 +48,6 @@ final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\Php
         foreach ($node->types as $unionedType) {
             $types[] = $this->phpParserNodeMapper->mapToPHPStanType($unionedType);
         }
-        return $this->typeFactory->createMixedPassedOrUnionType($types);
+        return $this->typeFactory->createMixedPassedOrUnionType($types, \true);
     }
 }
