@@ -17,7 +17,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 final class PHPStanStaticTypeMapper
 {
     /**
-     * @var \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface[]
+     * @var TypeMapperInterface[]
      * @readonly
      */
     private $typeMappers;

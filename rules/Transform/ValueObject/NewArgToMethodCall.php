@@ -12,6 +12,9 @@ final class NewArgToMethodCall
      * @var string
      */
     private $type;
+    /**
+     * @var mixed
+     */
     private $value;
     /**
      * @readonly

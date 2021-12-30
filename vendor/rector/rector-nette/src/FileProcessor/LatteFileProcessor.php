@@ -14,7 +14,7 @@ use Rector\Parallel\ValueObject\Bridge;
 final class LatteFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \Rector\Nette\Contract\Rector\LatteRectorInterface[]
+     * @var LatteRectorInterface[]
      */
     private $latteRectors;
     /**

@@ -29,7 +29,7 @@ final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FilePro
      */
     private $formatPreservingNeonPrinter;
     /**
-     * @var \Rector\Nette\Contract\Rector\NeonRectorInterface[]
+     * @var NeonRectorInterface[]
      */
     private $neonRectors;
     /**

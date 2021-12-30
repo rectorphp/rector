@@ -10,6 +10,9 @@ final class InputFileInfoAndExpected
      * @var \Symplify\SmartFileSystem\SmartFileInfo
      */
     private $inputFileInfo;
+    /**
+     * @var mixed
+     */
     private $expected;
     /**
      * @param mixed $expected

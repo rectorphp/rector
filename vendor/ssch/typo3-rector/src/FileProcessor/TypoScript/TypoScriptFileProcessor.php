@@ -70,7 +70,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $rectorOutputStyle;
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\TypoScriptRectorInterface[]
+     * @var TypoScriptRectorInterface[]
      */
     private $typoScriptRectors = [];
     /**

@@ -33,7 +33,7 @@ final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FilePr
      */
     private $smartFileSystem;
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface[]
+     * @var IconRectorInterface[]
      */
     private $iconsRector;
     /**

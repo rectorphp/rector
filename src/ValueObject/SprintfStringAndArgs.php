@@ -13,7 +13,7 @@ final class SprintfStringAndArgs
      */
     private $string;
     /**
-     * @var \PhpParser\Node\Expr[]
+     * @var Expr[]
      * @readonly
      */
     private $arrayItems;

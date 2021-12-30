@@ -35,7 +35,7 @@ final class InitCommand extends \RectorPrefix20211230\Symfony\Component\Console\
      */
     private $symfonyStyle;
     /**
-     * @var \Rector\Core\Contract\Template\TemplateResolverInterface[]
+     * @var TemplateResolverInterface[]
      * @readonly
      */
     private $templateResolvers;

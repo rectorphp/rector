@@ -8,22 +8,22 @@ use Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface;
 final class ArrayFuncCallToMethodCall implements \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface
 {
     /**
-     * @var \non-empty-string
+     * @var non-empty-string
      * @readonly
      */
     private $function;
     /**
-     * @var \non-empty-string
+     * @var non-empty-string
      * @readonly
      */
     private $class;
     /**
-     * @var \non-empty-string
+     * @var non-empty-string
      * @readonly
      */
     private $arrayMethod;
     /**
-     * @var \non-empty-string
+     * @var non-empty-string
      * @readonly
      */
     private $nonArrayMethod;

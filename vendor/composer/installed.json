@@ -2310,12 +2310,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "7bcfd90d9dbcfcf1cb33ebbe06adee91a94b08bb"
+                "reference": "96d50d4383d37615cf69d2415cc469f36c8b552f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/7bcfd90d9dbcfcf1cb33ebbe06adee91a94b08bb",
-                "reference": "7bcfd90d9dbcfcf1cb33ebbe06adee91a94b08bb",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/96d50d4383d37615cf69d2415cc469f36c8b552f",
+                "reference": "96d50d4383d37615cf69d2415cc469f36c8b552f",
                 "shasum": ""
             },
             "require": {
@@ -2339,7 +2339,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-24T20:37:06+00:00",
+            "time": "2021-12-30T11:30:47+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

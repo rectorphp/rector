@@ -15,7 +15,7 @@ use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 final class PhpDocTypeMapper
 {
     /**
-     * @var \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface[]
+     * @var PhpDocTypeMapperInterface[]
      * @readonly
      */
     private $phpDocTypeMappers;

@@ -36,7 +36,7 @@ final class VariableNaming
      */
     private $nodeTypeResolver;
     /**
-     * @var \Rector\Naming\Contract\AssignVariableNameResolverInterface[]
+     * @var AssignVariableNameResolverInterface[]
      * @readonly
      */
     private $assignVariableNameResolvers;

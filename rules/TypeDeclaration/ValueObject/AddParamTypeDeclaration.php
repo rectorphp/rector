@@ -19,7 +19,7 @@ final class AddParamTypeDeclaration
      */
     private $methodName;
     /**
-     * @var int
+     * @var int<0, max>
      * @readonly
      */
     private $position;

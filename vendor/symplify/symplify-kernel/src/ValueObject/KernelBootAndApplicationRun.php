@@ -17,7 +17,7 @@ use Throwable;
 final class KernelBootAndApplicationRun
 {
     /**
-     * @var class-string<\Symfony\Component\HttpKernel\KernelInterface|\Symplify\SymplifyKernel\Contract\LightKernelInterface>
+     * @var class-string<(KernelInterface | LightKernelInterface)>
      */
     private $kernelClass;
     /**

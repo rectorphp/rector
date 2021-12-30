@@ -102,7 +102,7 @@ final class ApplicationFileProcessor
      */
     private $cpuCoreCountProvider;
     /**
-     * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
+     * @var FileProcessorInterface[]
      * @readonly
      */
     private $fileProcessors = [];

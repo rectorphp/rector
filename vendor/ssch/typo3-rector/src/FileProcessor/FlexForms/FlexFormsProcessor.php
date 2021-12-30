@@ -20,7 +20,7 @@ use UnexpectedValueException;
 final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\FlexForms\Rector\FlexFormRectorInterface[]
+     * @var FlexFormRectorInterface[]
      */
     private $flexFormRectors;
     /**

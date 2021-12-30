@@ -16,6 +16,9 @@ final class BinaryToVersionCompareCondition implements \Rector\DeadCode\Contract
      * @var string
      */
     private $binaryClass;
+    /**
+     * @var mixed
+     */
     private $expectedValue;
     /**
      * @param mixed $expectedValue

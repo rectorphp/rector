@@ -16,7 +16,13 @@ final class ReplaceFuncCallArgumentDefaultValue implements \Rector\Arguments\Con
      * @var int
      */
     private $position;
+    /**
+     * @var mixed
+     */
     private $valueBefore;
+    /**
+     * @var mixed
+     */
     private $valueAfter;
     /**
      * @param mixed $valueBefore

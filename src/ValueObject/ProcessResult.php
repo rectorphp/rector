@@ -13,12 +13,12 @@ use RectorPrefix20211230\Webmozart\Assert\Assert;
 final class ProcessResult
 {
     /**
-     * @var \Rector\Core\ValueObject\Error\SystemError[]
+     * @var SystemError[]
      * @readonly
      */
     private $systemErrors;
     /**
-     * @var \Rector\Core\ValueObject\Reporting\FileDiff[]
+     * @var FileDiff[]
      * @readonly
      */
     private $fileDiffs;

@@ -36,7 +36,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
      */
     private $yamlIndentResolver;
     /**
-     * @var \Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface[]
+     * @var FormYamlRectorInterface[]
      */
     private $transformer;
     /**

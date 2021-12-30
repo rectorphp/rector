@@ -27,7 +27,7 @@ final class ServiceDefinition
      */
     private $alias;
     /**
-     * @var \Rector\Symfony\Contract\Tag\TagInterface[]
+     * @var TagInterface[]
      */
     private $tags;
     /**

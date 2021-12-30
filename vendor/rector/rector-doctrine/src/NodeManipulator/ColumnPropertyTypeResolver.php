@@ -32,7 +32,7 @@ final class ColumnPropertyTypeResolver
      */
     private $typeFactory;
     /**
-     * @var array<string, \PHPStan\Type\Type>
+     * @var array<string, Type>
      */
     private $doctrineTypeToScalarType;
     /**

@@ -12,7 +12,7 @@ use Rector\PhpAttribute\Enum\DocTagNodeState;
 final class AnnotationToAttributeMapper
 {
     /**
-     * @var \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface[]
+     * @var AnnotationToAttributeMapperInterface[]
      * @readonly
      */
     private $annotationToAttributeMappers;

@@ -18,7 +18,7 @@ final class ShowCommand extends \RectorPrefix20211230\Symfony\Component\Console\
      */
     private $outputStyle;
     /**
-     * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @var RectorInterface[]
      * @readonly
      */
     private $rectors;

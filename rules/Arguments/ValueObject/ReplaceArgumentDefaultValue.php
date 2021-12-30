@@ -23,11 +23,17 @@ final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\Re
      */
     private $method;
     /**
-     * @var int
+     * @var int<0, max>
      * @readonly
      */
     private $position;
+    /**
+     * @var mixed
+     */
     private $valueBefore;
+    /**
+     * @var mixed
+     */
     private $valueAfter;
     /**
      * @param int<0, max> $position

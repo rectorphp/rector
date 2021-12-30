@@ -31,7 +31,7 @@ final class PhpDocNodeMapper
      */
     private $cloningPhpDocNodeVisitor;
     /**
-     * @var \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface[]
+     * @var BasePhpDocNodeVisitorInterface[]
      * @readonly
      */
     private $phpDocNodeVisitors;

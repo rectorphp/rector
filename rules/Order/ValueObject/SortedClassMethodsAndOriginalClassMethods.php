@@ -6,12 +6,12 @@ namespace Rector\Order\ValueObject;
 final class SortedClassMethodsAndOriginalClassMethods
 {
     /**
-     * @var string[]
+     * @var array<int, string>
      * @readonly
      */
     private $sortedClassMethods;
     /**
-     * @var string[]
+     * @var array<int, string>
      * @readonly
      */
     private $originalClassMethods;

@@ -23,7 +23,7 @@ final class SimpleNameResolver
      */
     private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\\w+]#';
     /**
-     * @var \Symplify\Astral\Contract\NodeNameResolverInterface[]
+     * @var NodeNameResolverInterface[]
      */
     private $nodeNameResolvers;
     /**

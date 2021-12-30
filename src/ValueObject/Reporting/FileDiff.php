@@ -51,7 +51,7 @@ final class FileDiff implements \RectorPrefix20211230\Symplify\EasyParallel\Cont
      */
     private $diffConsoleFormatted;
     /**
-     * @var \Rector\ChangesReporting\ValueObject\RectorWithLineChange[]
+     * @var RectorWithLineChange[]
      * @readonly
      */
     private $rectorsWithLineChanges = [];

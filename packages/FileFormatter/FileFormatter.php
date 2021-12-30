@@ -27,7 +27,7 @@ final class FileFormatter
      */
     private $parameterProvider;
     /**
-     * @var \Rector\FileFormatter\Contract\Formatter\FileFormatterInterface[]
+     * @var FileFormatterInterface[]
      * @readonly
      */
     private $fileFormatters = [];

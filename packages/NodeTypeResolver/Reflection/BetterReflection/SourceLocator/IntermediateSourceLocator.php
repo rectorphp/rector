@@ -12,7 +12,7 @@ use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 final class IntermediateSourceLocator implements \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator
 {
     /**
-     * @var \Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface[]
+     * @var SourceLocatorProviderInterface[]
      * @readonly
      */
     private $sourceLocatorProviders;

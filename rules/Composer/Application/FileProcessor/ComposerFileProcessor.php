@@ -33,7 +33,7 @@ final class ComposerFileProcessor implements \Rector\Core\Contract\Processor\Fil
      */
     private $fileDiffFactory;
     /**
-     * @var \Rector\Composer\Contract\Rector\ComposerRectorInterface[]
+     * @var ComposerRectorInterface[]
      * @readonly
      */
     private $composerRectors;

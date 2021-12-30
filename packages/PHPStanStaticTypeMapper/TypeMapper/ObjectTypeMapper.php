@@ -19,6 +19,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use RectorPrefix20211230\Symfony\Contracts\Service\Attribute\Required;
@@ -51,6 +52,10 @@ final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract
         }
         if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return $this->mapGenericObjectType($type, $typeKind);
+        }
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {
+            // possibly generic type
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $type->getClassName());
     }

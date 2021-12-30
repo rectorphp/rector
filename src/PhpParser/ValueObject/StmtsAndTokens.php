@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 final class StmtsAndTokens
 {
     /**
-     * @var \PhpParser\Node\Stmt[]
+     * @var Stmt[]
      * @readonly
      */
     private $stmts;

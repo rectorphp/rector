@@ -7,15 +7,15 @@ use PhpParser\Node\Expr;
 final class TemplateParametersAssigns
 {
     /**
-     * @var \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign[]
+     * @var AlwaysTemplateParameterAssign[]
      */
     private $templateParameterAssigns;
     /**
-     * @var \Rector\Nette\ValueObject\ParameterAssign[]
+     * @var ParameterAssign[]
      */
     private $conditionalTemplateParameterAssign;
     /**
-     * @var \Rector\Nette\ValueObject\AlwaysTemplateParameterAssign[]
+     * @var AlwaysTemplateParameterAssign[]
      */
     private $defaultChangeableTemplateParameterAssigns;
     /**

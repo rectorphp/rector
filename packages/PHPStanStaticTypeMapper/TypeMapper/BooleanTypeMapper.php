@@ -43,6 +43,10 @@ final class BooleanTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contrac
         if ($this->isFalseBooleanTypeWithUnion($type)) {
             return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('false');
         }
+        if ($type instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+            // cannot be parent of union
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('true');
+        }
         return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('bool');
     }
     /**

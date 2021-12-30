@@ -15,7 +15,7 @@ use Rector\Parallel\ValueObject\Bridge;
 final class NonPhpFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
-     * @var \Rector\Core\Contract\Rector\NonPhpRectorInterface[]
+     * @var NonPhpRectorInterface[]
      * @readonly
      */
     private $nonPhpRectors;

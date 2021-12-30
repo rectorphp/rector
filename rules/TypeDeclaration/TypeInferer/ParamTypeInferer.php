@@ -18,7 +18,7 @@ final class ParamTypeInferer
      */
     private $genericClassStringTypeNormalizer;
     /**
-     * @var \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface[]
+     * @var ParamTypeInfererInterface[]
      * @readonly
      */
     private $paramTypeInferers;

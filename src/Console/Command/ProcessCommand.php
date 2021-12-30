@@ -83,7 +83,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      */
     private $symfonyStyle;
     /**
-     * @var \Rector\Core\Contract\Rector\RectorInterface[]
+     * @var RectorInterface[]
      * @readonly
      */
     private $rectors;

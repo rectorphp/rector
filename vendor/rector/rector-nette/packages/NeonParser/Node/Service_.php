@@ -28,7 +28,7 @@ final class Service_ extends \Rector\Nette\NeonParser\Node\AbstractVirtualNode
      */
     private $factoryLiteralNode;
     /**
-     * @var \Rector\Nette\NeonParser\Node\Service_\SetupMethodCall[]
+     * @var SetupMethodCall[]
      */
     private $setupMethodCalls;
     /**

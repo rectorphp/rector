@@ -14,7 +14,7 @@ final class Schedule
      */
     private $numberOfProcesses;
     /**
-     * @var string[][]
+     * @var array<array<string>>
      */
     private $jobs;
     /**

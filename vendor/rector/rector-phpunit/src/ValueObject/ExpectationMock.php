@@ -11,11 +11,11 @@ use PhpParser\Node\Stmt\Expression;
 final class ExpectationMock
 {
     /**
-     * @var PropertyFetch|Variable
+     * @var Variable|PropertyFetch
      */
     private $expectationVariable;
     /**
-     * @var \PhpParser\Node\Arg[]
+     * @var Arg[]
      */
     private $methodArguments;
     /**
@@ -27,7 +27,7 @@ final class ExpectationMock
      */
     private $expr;
     /**
-     * @var \PhpParser\Node\Expr[]|null[]
+     * @var array<int, (null | Expr)>
      */
     private $withArguments;
     /**

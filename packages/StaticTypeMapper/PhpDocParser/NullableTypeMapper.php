@@ -37,6 +37,9 @@ final class NullableTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpD
     {
         return \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode::class;
     }
+    /**
+     * @param NullableTypeNode $typeNode
+     */
     public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
     {
         $type = $typeNode->type;

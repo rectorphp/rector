@@ -25,7 +25,7 @@ final class FileFactory
      */
     private $changedFilesDetector;
     /**
-     * @var \Rector\Core\Contract\Processor\FileProcessorInterface[]
+     * @var FileProcessorInterface[]
      * @readonly
      */
     private $fileProcessors;

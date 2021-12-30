@@ -9,6 +9,9 @@ final class InputAndExpected
      * @var string
      */
     private $input;
+    /**
+     * @var mixed
+     */
     private $expected;
     /**
      * @param mixed $expected

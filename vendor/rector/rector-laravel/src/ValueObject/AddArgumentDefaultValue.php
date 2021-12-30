@@ -18,6 +18,9 @@ final class AddArgumentDefaultValue
      * @var int
      */
     private $position;
+    /**
+     * @var mixed
+     */
     private $defaultValue;
     /**
      * @param mixed $defaultValue
