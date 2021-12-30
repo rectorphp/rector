@@ -141,12 +141,17 @@ CODE_SAMPLE
 
         $stringsToReplace = [];
 
+        /**
+         * NOTE: Although value may be a string when entered as an index, it can be
+         * an integer when retrieved (e.g. '100')
+         * @var array-key $value
+         */
         foreach ($stringsByValue as $value => $strings) {
             if (count($strings) < self::MINIMAL_VALUE_OCCURRENCE) {
                 continue;
             }
 
-            $stringsToReplace[] = $value;
+            $stringsToReplace[] = (string) $value;
         }
 
         return $stringsToReplace;
@@ -285,6 +290,7 @@ CODE_SAMPLE
         // apply "CONST" prefix if constant beginning with number
         if ($beginningNumbers !== '') {
             $parts = array_merge(['CONST', $beginningNumbers], $parts);
+            $parts = array_filter($parts);
         }
 
         $value = implode(self::UNDERSCORE, $parts);
