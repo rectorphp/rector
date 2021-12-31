@@ -11,11 +11,13 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class PropertyFetchFinder
 {
@@ -29,6 +31,7 @@ final class PropertyFetchFinder
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly AstResolver $astResolver,
+        private readonly NodeTypeResolver $nodeTypeResolver
     ) {
     }
 
@@ -118,7 +121,7 @@ final class PropertyFetchFinder
                 return false;
             }
 
-            return $this->isNamePropertyNameEquals($propertyFetch, $propertyName);
+            return $this->isNamePropertyNameEquals($propertyFetch, $propertyName, $class);
         });
 
         /** @var StaticPropertyFetch[] $staticPropertyFetches */
@@ -146,13 +149,27 @@ final class PropertyFetchFinder
         return $parent !== $class && ! $hasTrait;
     }
 
-    private function isNamePropertyNameEquals(PropertyFetch $propertyFetch, string $propertyName): bool
+    private function isNamePropertyNameEquals(PropertyFetch $propertyFetch, string $propertyName, Class_ $class): bool
     {
-        if (! $this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
+        // early check if property fetch name is not equals with property name
+        // so next check is check var name and var type only
+        if (! $this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
             return false;
         }
 
-        return $this->nodeNameResolver->isName($propertyFetch->name, $propertyName);
+        if ($this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
+            return true;
+        }
+
+        $propertyFetchVarType = $this->nodeTypeResolver->getType($propertyFetch->var);
+        if (! $propertyFetchVarType instanceof TypeWithClassName) {
+            return false;
+        }
+
+        $propertyFetchVarTypeClassName = $propertyFetchVarType->getClassName();
+        $classLikeName = $this->nodeNameResolver->getName($class);
+
+        return $propertyFetchVarTypeClassName === $classLikeName;
     }
 
     private function resolvePropertyName(Property | Param $propertyOrPromotedParam): ?string
