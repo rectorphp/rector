@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\NodeTraverser\InfiniteLoopTraversingException;
+use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\NodeVisitor\CreatedByRuleNodeVisitor;
 use Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector;
@@ -24,9 +25,15 @@ final class InfiniteLoopValidator
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeDecorator\CreatedByRuleDecorator
+     */
+    private $createdByRuleDecorator;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->createdByRuleDecorator = $createdByRuleDecorator;
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
@@ -36,9 +43,9 @@ final class InfiniteLoopValidator
         if (\in_array($rectorClass, self::ALLOWED_INFINITE_RECTOR_CLASSES, \true)) {
             return;
         }
-        $createdByRule = $originalNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE);
+        $createdByRule = $originalNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE) ?? [];
         // special case
-        if ($createdByRule === $rectorClass) {
+        if (\in_array($rectorClass, $createdByRule, \true)) {
             // does it contain the same node type as input?
             $originalNodeClass = \get_class($originalNode);
             $hasNestedOriginalNodeType = $this->betterNodeFinder->findInstanceOf($node, $originalNodeClass);
@@ -54,7 +61,7 @@ final class InfiniteLoopValidator
     private function decorateNode(\PhpParser\Node $node, string $rectorClass) : void
     {
         $nodeTraverser = new \PhpParser\NodeTraverser();
-        $createdByRuleNodeVisitor = new \Rector\Core\PhpParser\NodeVisitor\CreatedByRuleNodeVisitor($rectorClass);
+        $createdByRuleNodeVisitor = new \Rector\Core\PhpParser\NodeVisitor\CreatedByRuleNodeVisitor($this->createdByRuleDecorator, $rectorClass);
         $nodeTraverser->addVisitor($createdByRuleNodeVisitor);
         $nodeTraverser->traverse([$node]);
     }

@@ -5,21 +5,27 @@ namespace Rector\Core\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 final class CreatedByRuleNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeDecorator\CreatedByRuleDecorator
+     */
+    private $createdByRuleDecorator;
     /**
      * @readonly
      * @var string
      */
     private $rectorClass;
-    public function __construct(string $rectorClass)
+    public function __construct(\Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator, string $rectorClass)
     {
+        $this->createdByRuleDecorator = $createdByRuleDecorator;
         $this->rectorClass = $rectorClass;
     }
     public function enterNode(\PhpParser\Node $node)
     {
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE, $this->rectorClass);
+        $this->createdByRuleDecorator->decorate($node, $this->rectorClass);
         return $node;
     }
 }

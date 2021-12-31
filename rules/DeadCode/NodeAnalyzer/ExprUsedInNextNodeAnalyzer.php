@@ -41,7 +41,7 @@ final class ExprUsedInNextNodeAnalyzer
     }
     private function hasIfChangedByRemoveAlwaysElseRector(\PhpParser\Node\Stmt\If_ $if) : bool
     {
-        $createdByRule = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE);
-        return $createdByRule === \Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector::class;
+        $createdByRule = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE) ?? [];
+        return \in_array(\Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector::class, $createdByRule, \true);
     }
 }

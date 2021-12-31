@@ -1696,6 +1696,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\PropertyPresenceChecker' => $baseDir . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
     'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariableAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariadicAnalyzer.php',
+    'Rector\\Core\\NodeDecorator\\CreatedByRuleDecorator' => $baseDir . '/src/NodeDecorator/CreatedByRuleDecorator.php',
     'Rector\\Core\\NodeDecorator\\NamespacedNameDecorator' => $baseDir . '/src/NodeDecorator/NamespacedNameDecorator.php',
     'Rector\\Core\\NodeDecorator\\PropertyTypeDecorator' => $baseDir . '/src/NodeDecorator/PropertyTypeDecorator.php',
     'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => $baseDir . '/src/NodeManipulator/ArrayDestructVariableFilter.php',

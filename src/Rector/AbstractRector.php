@@ -26,6 +26,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer;
+use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -171,9 +172,13 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
      */
     private $rectifiedAnalyzer;
     /**
+     * @var \Rector\Core\NodeDecorator\CreatedByRuleDecorator
+     */
+    private $createdByRuleDecorator;
+    /**
      * @required
      */
-    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20211231\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20211231\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211231\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20211231\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer $changedNodeAnalyzer, \Rector\Core\Validation\InfiniteLoopValidator $infiniteLoopValidator, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer) : void
+    public function autowire(\Rector\PostRector\Collector\NodesToRemoveCollector $nodesToRemoveCollector, \Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\NodeRemoval\NodeRemover $nodeRemover, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \RectorPrefix20211231\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \RectorPrefix20211231\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\Exclusion\ExclusionManager $exclusionManager, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \RectorPrefix20211231\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \RectorPrefix20211231\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer $changedNodeAnalyzer, \Rector\Core\Validation\InfiniteLoopValidator $infiniteLoopValidator, \Rector\Core\ProcessAnalyzer\RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Core\NodeDecorator\CreatedByRuleDecorator $createdByRuleDecorator) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -200,6 +205,7 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $this->changedNodeAnalyzer = $changedNodeAnalyzer;
         $this->infiniteLoopValidator = $infiniteLoopValidator;
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
+        $this->createdByRuleDecorator = $createdByRuleDecorator;
     }
     /**
      * @return Node[]|null
@@ -235,7 +241,12 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
         $originalAttributes = $node->getAttributes();
         $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE) ?? clone $node;
         $node = $this->refactor($node);
+        // nothing to change → continue
+        if ($node === null) {
+            return null;
+        }
         if (\is_array($node)) {
+            $this->createdByRuleDecorator->decorate($originalNode, static::class);
             $originalNodeHash = \spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
             if ($node !== []) {
@@ -246,29 +257,28 @@ abstract class AbstractRector extends \PhpParser\NodeVisitorAbstract implements 
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
-        // nothing to change → continue
-        if (!$node instanceof \PhpParser\Node) {
-            return null;
+        // not changed, return node early
+        if (!$this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
+            return $node;
         }
-        // changed!
-        if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
-            $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
-            $this->file->addRectorClassWithLine($rectorWithLineChange);
-            // update parents relations - must run before connectParentNodes()
-            $this->mirrorAttributes($originalAttributes, $node);
-            $this->connectParentNodes($node);
-            // is different node type? do not traverse children to avoid looping
-            if (\get_class($originalNode) !== \get_class($node)) {
-                $this->infiniteLoopValidator->process($node, $originalNode, static::class);
-                // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-                $originalNodeHash = \spl_object_hash($originalNode);
-                if ($originalNode instanceof \PhpParser\Node\Stmt && $node instanceof \PhpParser\Node\Expr) {
-                    $node = new \PhpParser\Node\Stmt\Expression($node);
-                }
-                $this->nodesToReturn[$originalNodeHash] = $node;
-                return $node;
-            }
+        $this->createdByRuleDecorator->decorate($node, static::class);
+        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($this), $originalNode->getLine());
+        $this->file->addRectorClassWithLine($rectorWithLineChange);
+        // update parents relations - must run before connectParentNodes()
+        $this->mirrorAttributes($originalAttributes, $node);
+        $this->connectParentNodes($node);
+        // is equals node type? return node early
+        if (\get_class($originalNode) === \get_class($node)) {
+            return $node;
         }
+        // is different node type? do not traverse children to avoid looping
+        $this->infiniteLoopValidator->process($node, $originalNode, static::class);
+        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+        $originalNodeHash = \spl_object_hash($originalNode);
+        if ($originalNode instanceof \PhpParser\Node\Stmt && $node instanceof \PhpParser\Node\Expr) {
+            $node = new \PhpParser\Node\Stmt\Expression($node);
+        }
+        $this->nodesToReturn[$originalNodeHash] = $node;
         return $node;
     }
     /**

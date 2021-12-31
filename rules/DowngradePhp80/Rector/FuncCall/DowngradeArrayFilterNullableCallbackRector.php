@@ -82,15 +82,14 @@ CODE_SAMPLE
         if (!isset($args[1])) {
             return null;
         }
-        $createdByRule = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE);
-        if ($createdByRule === self::class) {
+        $createdByRule = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE) ?? [];
+        if (\in_array(self::class, $createdByRule, \true)) {
             return null;
         }
         // direct null check ConstFetch
         if ($args[1]->value instanceof \PhpParser\Node\Expr\ConstFetch && $this->valueResolver->isNull($args[1]->value)) {
             $args = [$args[0]];
             $node->args = $args;
-            $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE, self::class);
             return $node;
         }
         if ($this->shouldSkipSecondArg($args[1]->value)) {
@@ -98,7 +97,6 @@ CODE_SAMPLE
         }
         $node->args[1] = new \PhpParser\Node\Arg($this->createNewArgFirstTernary($args));
         $node->args[2] = new \PhpParser\Node\Arg($this->createNewArgSecondTernary($args));
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CREATED_BY_RULE, self::class);
         return $node;
     }
     private function shouldSkipSecondArg(\PhpParser\Node\Expr $expr) : bool

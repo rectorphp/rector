@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7f0a65a2c8923817a71d3b6fea426d18
+class ComposerStaticInite97b4cfe3136a985b3f861761a5bbc76
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2091,6 +2091,7 @@ class ComposerStaticInit7f0a65a2c8923817a71d3b6fea426d18
         'Rector\\Core\\NodeAnalyzer\\PropertyPresenceChecker' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
         'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/VariableAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/VariadicAnalyzer.php',
+        'Rector\\Core\\NodeDecorator\\CreatedByRuleDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/CreatedByRuleDecorator.php',
         'Rector\\Core\\NodeDecorator\\NamespacedNameDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/NamespacedNameDecorator.php',
         'Rector\\Core\\NodeDecorator\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/PropertyTypeDecorator.php',
         'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayDestructVariableFilter.php',
@@ -3844,9 +3845,9 @@ class ComposerStaticInit7f0a65a2c8923817a71d3b6fea426d18
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7f0a65a2c8923817a71d3b6fea426d18::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7f0a65a2c8923817a71d3b6fea426d18::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7f0a65a2c8923817a71d3b6fea426d18::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite97b4cfe3136a985b3f861761a5bbc76::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite97b4cfe3136a985b3f861761a5bbc76::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite97b4cfe3136a985b3f861761a5bbc76::$classMap;
 
         }, null, ClassLoader::class);
     }
