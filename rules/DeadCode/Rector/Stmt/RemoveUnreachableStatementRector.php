@@ -149,7 +149,7 @@ CODE_SAMPLE
     private function isAfterMarkTestSkippedMethodCall(Stmt $stmt): bool
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($stmt, function (Node $node): bool {
-            if (! $node instanceof MethodCall) {
+            if (! $node instanceof MethodCall && ! $node instanceof StaticCall) {
                 return false;
             }
 
