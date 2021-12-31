@@ -119,7 +119,7 @@ CODE_SAMPLE
     private function isAfterMarkTestSkippedMethodCall(\PhpParser\Node\Stmt $stmt) : bool
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($stmt, function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall && !$node instanceof \PhpParser\Node\Expr\StaticCall) {
                 return \false;
             }
             if ($node->name instanceof \PhpParser\Node\Expr\MethodCall) {
