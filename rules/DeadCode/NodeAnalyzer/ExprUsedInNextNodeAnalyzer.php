@@ -40,7 +40,7 @@ final class ExprUsedInNextNodeAnalyzer
 
     private function hasIfChangedByRemoveAlwaysElseRector(If_ $if): bool
     {
-        $createdByRule = $if->getAttribute(AttributeKey::CREATED_BY_RULE);
-        return $createdByRule === RemoveAlwaysElseRector::class;
+        $createdByRule = $if->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        return in_array(RemoveAlwaysElseRector::class, $createdByRule, true);
     }
 }

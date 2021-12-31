@@ -27,6 +27,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeAnalyzer\ChangedNodeAnalyzer;
+use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -127,6 +128,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
     private RectifiedAnalyzer $rectifiedAnalyzer;
 
+    private CreatedByRuleDecorator $createdByRuleDecorator;
+
     #[Required]
     public function autowire(
         NodesToRemoveCollector $nodesToRemoveCollector,
@@ -153,7 +156,8 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         CurrentFileProvider $currentFileProvider,
         ChangedNodeAnalyzer $changedNodeAnalyzer,
         InfiniteLoopValidator $infiniteLoopValidator,
-        RectifiedAnalyzer $rectifiedAnalyzer
+        RectifiedAnalyzer $rectifiedAnalyzer,
+        CreatedByRuleDecorator $createdByRuleDecorator
     ): void {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodesToAddCollector = $nodesToAddCollector;
@@ -180,6 +184,7 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
         $this->changedNodeAnalyzer = $changedNodeAnalyzer;
         $this->infiniteLoopValidator = $infiniteLoopValidator;
         $this->rectifiedAnalyzer = $rectifiedAnalyzer;
+        $this->createdByRuleDecorator = $createdByRuleDecorator;
     }
 
     /**
@@ -228,7 +233,14 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
 
         $node = $this->refactor($node);
 
+        // nothing to change → continue
+        if ($node === null) {
+            return null;
+        }
+
         if (is_array($node)) {
+            $this->createdByRuleDecorator->decorate($originalNode, static::class);
+
             $originalNodeHash = spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $node;
 
@@ -241,36 +253,36 @@ abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorIn
             return $originalNode;
         }
 
-        // nothing to change → continue
-        if (! $node instanceof Node) {
-            return null;
+        // not changed, return node early
+        if (! $this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
+            return $node;
         }
 
-        // changed!
-        if ($this->changedNodeAnalyzer->hasNodeChanged($originalNode, $node)) {
-            $rectorWithLineChange = new RectorWithLineChange($this::class, $originalNode->getLine());
-            $this->file->addRectorClassWithLine($rectorWithLineChange);
+        $this->createdByRuleDecorator->decorate($node, static::class);
 
-            // update parents relations - must run before connectParentNodes()
-            $this->mirrorAttributes($originalAttributes, $node);
-            $this->connectParentNodes($node);
+        $rectorWithLineChange = new RectorWithLineChange($this::class, $originalNode->getLine());
+        $this->file->addRectorClassWithLine($rectorWithLineChange);
 
-            // is different node type? do not traverse children to avoid looping
-            if ($originalNode::class !== $node::class) {
-                $this->infiniteLoopValidator->process($node, $originalNode, static::class);
+        // update parents relations - must run before connectParentNodes()
+        $this->mirrorAttributes($originalAttributes, $node);
+        $this->connectParentNodes($node);
 
-                // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-                $originalNodeHash = spl_object_hash($originalNode);
-
-                if ($originalNode instanceof Stmt && $node instanceof Expr) {
-                    $node = new Expression($node);
-                }
-
-                $this->nodesToReturn[$originalNodeHash] = $node;
-
-                return $node;
-            }
+        // is equals node type? return node early
+        if ($originalNode::class === $node::class) {
+            return $node;
         }
+
+        // is different node type? do not traverse children to avoid looping
+        $this->infiniteLoopValidator->process($node, $originalNode, static::class);
+
+        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+        $originalNodeHash = spl_object_hash($originalNode);
+
+        if ($originalNode instanceof Stmt && $node instanceof Expr) {
+            $node = new Expression($node);
+        }
+
+        $this->nodesToReturn[$originalNodeHash] = $node;
 
         return $node;
     }

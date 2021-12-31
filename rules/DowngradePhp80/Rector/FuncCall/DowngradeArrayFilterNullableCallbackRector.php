@@ -96,8 +96,8 @@ CODE_SAMPLE
             return null;
         }
 
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE);
-        if ($createdByRule === self::class) {
+        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        if (in_array(self::class, $createdByRule, true)) {
             return null;
         }
 
@@ -106,7 +106,6 @@ CODE_SAMPLE
             $args = [$args[0]];
             $node->args = $args;
 
-            $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
             return $node;
         }
 
@@ -117,7 +116,6 @@ CODE_SAMPLE
         $node->args[1] = new Arg($this->createNewArgFirstTernary($args));
         $node->args[2] = new Arg($this->createNewArgSecondTernary($args));
 
-        $node->setAttribute(AttributeKey::CREATED_BY_RULE, self::class);
         return $node;
     }
 
