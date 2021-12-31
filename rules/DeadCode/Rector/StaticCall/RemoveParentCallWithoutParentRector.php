@@ -11,6 +11,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Enum\ObjectReference;
@@ -90,16 +91,13 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
-        if (!$node->class instanceof \PhpParser\Node\Name) {
-            return null;
-        }
-        if (!$this->isName($node->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
-            return null;
-        }
-        if ($classLike->extends instanceof \PhpParser\Node\Name\FullyQualified && !$this->reflectionProvider->hasClass($classLike->extends->toString())) {
+        if ($this->shouldSkip($node, $classLike)) {
             return null;
         }
         $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            return null;
+        }
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return $this->processNoParentReflection($node);
@@ -122,6 +120,16 @@ CODE_SAMPLE
         }
         $this->removeNode($node);
         return null;
+    }
+    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall, \PhpParser\Node\Stmt\Class_ $class) : bool
+    {
+        if (!$staticCall->class instanceof \PhpParser\Node\Name) {
+            return \true;
+        }
+        if (!$this->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT()->getValue())) {
+            return \true;
+        }
+        return $class->extends instanceof \PhpParser\Node\Name\FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());
     }
     private function processNoParentReflection(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\ConstFetch
     {
