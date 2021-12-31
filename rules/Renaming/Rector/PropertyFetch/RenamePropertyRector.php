@@ -17,7 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameProperty;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20211230\Webmozart\Assert\Assert;
+use RectorPrefix20211231\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\PropertyFetch\RenamePropertyRector\RenamePropertyRectorTest
  */
@@ -59,7 +59,7 @@ final class RenamePropertyRector extends \Rector\Core\Rector\AbstractRector impl
     public function configure(array $configuration) : void
     {
         $renamedProperties = $configuration[self::RENAMED_PROPERTIES] ?? $configuration;
-        \RectorPrefix20211230\Webmozart\Assert\Assert::allIsAOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
+        \RectorPrefix20211231\Webmozart\Assert\Assert::allIsAOf($renamedProperties, \Rector\Renaming\ValueObject\RenameProperty::class);
         $this->renamedProperties = $renamedProperties;
     }
     private function processFromClassLike(\PhpParser\Node\Stmt\ClassLike $classLike) : \PhpParser\Node\Stmt\ClassLike

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211230;
+namespace RectorPrefix20211231;
 
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Transform\Rector\String_\StringToClassConstantRector;

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20211230\React\Promise;
+namespace RectorPrefix20211231\React\Promise;
 
 class CancellationQueue
 {

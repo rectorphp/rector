@@ -4,6 +4,7 @@
 1. [Installation](./installation.md)
 1. [Configuration and Processing](./configuration_and_processing.md)
 1. [Best practice guide](./best_practice_guide.md)
+1. [Special rules](./special_rules.md)
 1. [Beyond PHP - Entering the realm of FileProcessors](./beyond_php_file_processors.md)
 1. [Limitations](./limitations.md)
 1. [Contribution](./contribution.md)

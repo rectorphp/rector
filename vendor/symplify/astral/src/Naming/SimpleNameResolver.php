@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211230\Symplify\Astral\Naming;
+namespace RectorPrefix20211231\Symplify\Astral\Naming;
 
-use RectorPrefix20211230\Nette\Utils\Strings;
+use RectorPrefix20211231\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix20211230\Symplify\Astral\Contract\NodeNameResolverInterface;
+use RectorPrefix20211231\Symplify\Astral\Contract\NodeNameResolverInterface;
 /**
  * @see \Symplify\Astral\Tests\Naming\SimpleNameResolverTest
  */
@@ -100,7 +100,7 @@ final class SimpleNameResolver
             return null;
         }
         // anonymous class return null name
-        if (\RectorPrefix20211230\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_REGEX)) {
+        if (\RectorPrefix20211231\Nette\Utils\Strings::match($className, self::ANONYMOUS_CLASS_REGEX)) {
             return null;
         }
         return $this->resolveShortName($className);
@@ -134,13 +134,13 @@ final class SimpleNameResolver
         if ($name === null) {
             return \false;
         }
-        return (bool) \RectorPrefix20211230\Nette\Utils\Strings::match($name, $desiredNameRegex);
+        return (bool) \RectorPrefix20211231\Nette\Utils\Strings::match($name, $desiredNameRegex);
     }
     public function resolveShortName(string $className) : string
     {
         if (\strpos($className, '\\') === \false) {
             return $className;
         }
-        return (string) \RectorPrefix20211230\Nette\Utils\Strings::after($className, '\\', -1);
+        return (string) \RectorPrefix20211231\Nette\Utils\Strings::after($className, '\\', -1);
     }
 }

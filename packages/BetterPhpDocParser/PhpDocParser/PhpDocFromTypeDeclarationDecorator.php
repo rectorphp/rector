@@ -25,7 +25,7 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\Printer\PhpAttributeGroupFactory;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20211230\ReturnTypeWillChange;
+use RectorPrefix20211231\ReturnTypeWillChange;
 final class PhpDocFromTypeDeclarationDecorator
 {
     /**
