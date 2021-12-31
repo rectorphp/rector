@@ -12,6 +12,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Enum\ObjectReference;
@@ -83,21 +84,14 @@ CODE_SAMPLE
             return null;
         }
 
-        if (! $node->class instanceof Name) {
-            return null;
-        }
-
-        if (! $this->isName($node->class, ObjectReference::PARENT()->getValue())) {
-            return null;
-        }
-
-        if ($classLike->extends instanceof FullyQualified && ! $this->reflectionProvider->hasClass(
-            $classLike->extends->toString()
-        )) {
+        if ($this->shouldSkip($node, $classLike)) {
             return null;
         }
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return null;
+        }
 
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         if (! $parentClassReflection instanceof ClassReflection) {
@@ -127,6 +121,21 @@ CODE_SAMPLE
         $this->removeNode($node);
 
         return null;
+    }
+
+    private function shouldSkip(StaticCall $staticCall, Class_ $class): bool
+    {
+        if (! $staticCall->class instanceof Name) {
+            return true;
+        }
+
+        if (! $this->isName($staticCall->class, ObjectReference::PARENT()->getValue())) {
+            return true;
+        }
+
+        return $class->extends instanceof FullyQualified && ! $this->reflectionProvider->hasClass(
+            $class->extends->toString()
+        );
     }
 
     private function processNoParentReflection(StaticCall $staticCall): ?ConstFetch
