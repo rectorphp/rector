@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
@@ -34,11 +35,16 @@ final class ConstructClassMethodToSetUpTestCaseRector extends \Rector\Core\Recto
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    public function __construct(\Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator, \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer $staticCallAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->setUpClassMethodNodeManipulator = $setUpClassMethodNodeManipulator;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->classAnalyzer = $classAnalyzer;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -90,6 +96,9 @@ CODE_SAMPLE
         }
         $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return null;
+        }
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
         $this->removeNode($constructClassMethod);
