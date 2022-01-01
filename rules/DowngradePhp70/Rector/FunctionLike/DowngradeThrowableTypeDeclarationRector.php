@@ -64,11 +64,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $throwableType = new \PHPStan\Type\ObjectType('Throwable');
+        $objectType = new \PHPStan\Type\ObjectType('Throwable');
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $throwableType);
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $objectType);
         }
-        if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $throwableType)) {
+        if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $objectType)) {
             return null;
         }
         return $node;
