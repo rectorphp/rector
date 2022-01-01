@@ -71,13 +71,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $throwableType = new ObjectType('Throwable');
+        $objectType = new ObjectType('Throwable');
 
         foreach ($node->getParams() as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $throwableType);
+            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $objectType);
         }
 
-        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $throwableType)) {
+        if (! $this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $objectType)) {
             return null;
         }
 
