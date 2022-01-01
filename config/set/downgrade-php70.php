@@ -13,6 +13,7 @@ use Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector;
 use Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector;
 use Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector;
+use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector;
@@ -25,6 +26,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_56);
     $services = $containerConfigurator->services();
     $services->set(\Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector::class);
+    $services->set(\Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector::class);

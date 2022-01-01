@@ -189,6 +189,9 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($returnType instanceof \PHPStan\Type\UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
+        if ($returnType instanceof \PHPStan\Type\ObjectType) {
+            return $returnType->equals($requireType);
+        }
         return \get_class($returnType) === \get_class($requireType);
     }
     /**

@@ -1971,6 +1971,7 @@ return array(
     'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeDirnameLevelsRector' => $baseDir . '/rules/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php',
     'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeSessionStartArrayOptionsRector' => $baseDir . '/rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php',
     'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeScalarTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php',
+    'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeThrowableTypeDeclarationRector' => $baseDir . '/rules/DowngradePhp70/Rector/FunctionLike/DowngradeThrowableTypeDeclarationRector.php',
     'Rector\\DowngradePhp70\\Rector\\GroupUse\\SplitGroupedUseImportsRector' => $baseDir . '/rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php',
     'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeClosureCallRector' => $baseDir . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php',
     'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeMethodCallOnCloneRector' => $baseDir . '/rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php',
