@@ -36,7 +36,7 @@ final class DowngradeSelfTypeDeclarationRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Remove "self" return type, add a "@return self" tag instead',
+            'Remove "self" return type, add a "@return $this" tag instead',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
@@ -52,6 +52,9 @@ CODE_SAMPLE
                     <<<'CODE_SAMPLE'
 class SomeClass
 {
+    /**
+     * @return $this
+     */
     public function foo()
     {
         return $this;
