@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20211231\Nette\Utils;
+namespace RectorPrefix20220101\Nette\Utils;
 
-use RectorPrefix20211231\Nette;
+use RectorPrefix20220101\Nette;
 /**
  * Floating-point numbers comparison.
  */

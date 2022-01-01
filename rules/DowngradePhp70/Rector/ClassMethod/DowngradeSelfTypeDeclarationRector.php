@@ -36,7 +36,7 @@ final class DowngradeSelfTypeDeclarationRector extends \Rector\Core\Rector\Abstr
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "self" return type, add a "@return self" tag instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "self" return type, add a "@return $this" tag instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function foo(): self
@@ -48,6 +48,9 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
+    /**
+     * @return $this
+     */
     public function foo()
     {
         return $this;

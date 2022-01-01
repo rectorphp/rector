@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211231;
+namespace RectorPrefix20220101;
 
 use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;

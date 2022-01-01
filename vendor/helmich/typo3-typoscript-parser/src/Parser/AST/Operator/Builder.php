@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211231\Helmich\TypoScriptParser\Parser\AST\Operator;
+namespace RectorPrefix20220101\Helmich\TypoScriptParser\Parser\AST\Operator;
 
 /**
  * Helper class for quickly building operator AST nodes

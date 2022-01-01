@@ -15,7 +15,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix20211231\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20220101\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -38,7 +38,7 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20211231\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220101\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;

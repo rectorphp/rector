@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211231\Symplify\EasyParallel\CommandLine;
+namespace RectorPrefix20220101\Symplify\EasyParallel\CommandLine;
 
-use RectorPrefix20211231\Symfony\Component\Console\Command\Command;
-use RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211231\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix20211231\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
+use RectorPrefix20220101\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220101\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix20220101\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 /**
  * @see \Symplify\EasyParallel\Tests\CommandLine\WorkerCommandLineFactoryTest
  */
@@ -28,19 +28,19 @@ final class WorkerCommandLineFactory
     private $commandFromReflectionFactory;
     public function __construct()
     {
-        $this->commandFromReflectionFactory = new \RectorPrefix20211231\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
+        $this->commandFromReflectionFactory = new \RectorPrefix20220101\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
     }
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, \RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
+    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, \RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $baseScript], $commandArguments);
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {
             $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
-            throw new \RectorPrefix20211231\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
+            throw new \RectorPrefix20220101\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
         }
         $mainCommandName = $mainCommand->getName();
         $processCommandArray = [];
@@ -80,7 +80,7 @@ final class WorkerCommandLineFactory
     /**
      * @return string[]
      */
-    private function getCommandOptionNames(\RectorPrefix20211231\Symfony\Component\Console\Command\Command $command) : array
+    private function getCommandOptionNames(\RectorPrefix20220101\Symfony\Component\Console\Command\Command $command) : array
     {
         $inputDefinition = $command->getDefinition();
         $optionNames = [];
@@ -95,7 +95,7 @@ final class WorkerCommandLineFactory
      * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function mirrorCommandOptions(\RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
+    private function mirrorCommandOptions(\RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
     {
         $processCommandOptions = [];
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {
@@ -119,7 +119,7 @@ final class WorkerCommandLineFactory
         }
         return $processCommandOptions;
     }
-    private function shouldSkipOption(\RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(\RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;

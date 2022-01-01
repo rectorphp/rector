@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20211231\React\Promise;
+namespace RectorPrefix20220101\React\Promise;
 
-interface CancellablePromiseInterface extends \RectorPrefix20211231\React\Promise\PromiseInterface
+interface CancellablePromiseInterface extends \RectorPrefix20220101\React\Promise\PromiseInterface
 {
     /**
      * The `cancel()` method notifies the creator of the promise that there is no

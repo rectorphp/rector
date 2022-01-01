@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20211231;
+namespace RectorPrefix20220101;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20211231\Tracy\Debugger;
+use RectorPrefix20220101\Tracy\Debugger;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20211231\Tracy\Debugger::enable(\RectorPrefix20211231\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20220101\Tracy\Debugger::enable(\RectorPrefix20220101\Tracy\Debugger::DETECT, __DIR__ . '/log');
 if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
     // AJAX request
-    \RectorPrefix20211231\bdump('AJAX request ' . \date('H:i:s'));
+    \RectorPrefix20220101\bdump('AJAX request ' . \date('H:i:s'));
     if (!empty($_GET['error'])) {
-        \RectorPrefix20211231\this_is_fatal_error();
+        \RectorPrefix20220101\this_is_fatal_error();
     }
     $data = [\rand(), \rand(), \rand()];
     \header('Content-Type: application/json');
@@ -20,7 +20,7 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) {
     echo \json_encode($data);
     exit;
 }
-\RectorPrefix20211231\bdump('classic request ' . \date('H:i:s'));
+\RectorPrefix20220101\bdump('classic request ' . \date('H:i:s'));
 ?>
 <!DOCTYPE html><html class=arrow><link rel="stylesheet" href="assets/style.css">
 
@@ -68,6 +68,6 @@ $('button').click(function() {
 
 
 <?php 
-if (\RectorPrefix20211231\Tracy\Debugger::$productionMode) {
+if (\RectorPrefix20220101\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }

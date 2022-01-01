@@ -16,16 +16,16 @@ use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\FileFormatter\FileFormatter;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20211231\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20211231\Symplify\EasyParallel\CpuCoreCountProvider;
-use RectorPrefix20211231\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix20211231\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
-use RectorPrefix20211231\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix20211231\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20211231\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220101\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220101\Symplify\EasyParallel\CpuCoreCountProvider;
+use RectorPrefix20220101\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix20220101\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
+use RectorPrefix20220101\Symplify\EasyParallel\ScheduleFactory;
+use RectorPrefix20220101\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220101\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20211231\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220101\Symplify\SmartFileSystem\SmartFileSystem;
 final class ApplicationFileProcessor
 {
     /**
@@ -109,7 +109,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(\RectorPrefix20211231\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20211231\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \RectorPrefix20211231\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Parallel\Application\ParallelFileProcessor $parallelFileProcessor, \RectorPrefix20211231\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20211231\Symplify\EasyParallel\ScheduleFactory $scheduleFactory, \RectorPrefix20211231\Symplify\EasyParallel\FileSystem\FilePathNormalizer $filePathNormalizer, \RectorPrefix20211231\Symplify\EasyParallel\CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
+    public function __construct(\RectorPrefix20220101\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Application\FileDecorator\FileDiffFileDecorator $fileDiffFileDecorator, \Rector\FileFormatter\FileFormatter $fileFormatter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, \RectorPrefix20220101\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\ValueObjectFactory\Application\FileFactory $fileFactory, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \RectorPrefix20220101\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Parallel\Application\ParallelFileProcessor $parallelFileProcessor, \RectorPrefix20220101\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220101\Symplify\EasyParallel\ScheduleFactory $scheduleFactory, \RectorPrefix20220101\Symplify\EasyParallel\FileSystem\FilePathNormalizer $filePathNormalizer, \RectorPrefix20220101\Symplify\EasyParallel\CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
@@ -129,7 +129,7 @@ final class ApplicationFileProcessor
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function run(\Rector\Core\ValueObject\Configuration $configuration, \RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface $input) : array
+    public function run(\Rector\Core\ValueObject\Configuration $configuration, \RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface $input) : array
     {
         $fileInfos = $this->fileFactory->createFileInfosFromPaths($configuration->getPaths(), $configuration);
         // no files found
@@ -232,7 +232,7 @@ final class ApplicationFileProcessor
      * @param SmartFileInfo[] $fileInfos
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    private function runParallel(array $fileInfos, \Rector\Core\ValueObject\Configuration $configuration, \RectorPrefix20211231\Symfony\Component\Console\Input\InputInterface $input) : array
+    private function runParallel(array $fileInfos, \Rector\Core\ValueObject\Configuration $configuration, \RectorPrefix20220101\Symfony\Component\Console\Input\InputInterface $input) : array
     {
         // must be a string, otherwise the serialization returns empty arrays
         $filePaths = $this->filePathNormalizer->resolveFilePathsFromFileInfos($fileInfos);
@@ -253,7 +253,7 @@ final class ApplicationFileProcessor
         };
         $mainScript = $this->resolveCalledRectorBinary();
         if ($mainScript === null) {
-            throw new \RectorPrefix20211231\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException('[parallel] Main script was not found');
+            throw new \RectorPrefix20220101\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException('[parallel] Main script was not found');
         }
         // mimics see https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92#diff-387b8f04e0db7a06678eb52ce0c0d0aff73e0d7d8fc5df834d0a5fbec198e5daR139
         return $this->parallelFileProcessor->process($schedule, $mainScript, $postFileCallback, $configuration->getConfig(), $input);
