@@ -7,7 +7,7 @@ use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix20220101\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220102\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\RectorGeneratorTest
  */
@@ -38,7 +38,7 @@ final class RectorGenerator
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\RectorGenerator\Finder\TemplateFinder $templateFinder, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Generator\FileGenerator $fileGenerator, \Rector\RectorGenerator\Guard\OverrideGuard $overrideGuard, \RectorPrefix20220101\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\Rector\RectorGenerator\Finder\TemplateFinder $templateFinder, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Generator\FileGenerator $fileGenerator, \Rector\RectorGenerator\Guard\OverrideGuard $overrideGuard, \RectorPrefix20220102\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->templateFinder = $templateFinder;
         $this->templateVariablesFactory = $templateVariablesFactory;

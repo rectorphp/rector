@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220101;
+namespace RectorPrefix20220102;
 
 require __DIR__ . '/../src/tracy.php';
-use RectorPrefix20220101\Tracy\Debugger;
+use RectorPrefix20220102\Tracy\Debugger;
 // For security reasons, Tracy is visible only on localhost.
 // You may force Tracy to run in development mode by passing the Debugger::DEVELOPMENT instead of Debugger::DETECT.
-\RectorPrefix20220101\Tracy\Debugger::enable(\RectorPrefix20220101\Tracy\Debugger::DETECT, __DIR__ . '/log');
+\RectorPrefix20220102\Tracy\Debugger::enable(\RectorPrefix20220102\Tracy\Debugger::DETECT, __DIR__ . '/log');
 if (isset($_GET['sleep'])) {
     \header('Content-Type: application/javascript');
     \sleep(10);
@@ -19,13 +19,13 @@ if (isset($_GET['sleep'])) {
 <h1>Tracy: Preloading</h1>
 
 <?php 
-\RectorPrefix20220101\Tracy\Debugger::renderLoader();
+\RectorPrefix20220102\Tracy\Debugger::renderLoader();
 ?>
 
 <script src="?sleep=1"></script>
 
 
 <?php 
-if (\RectorPrefix20220101\Tracy\Debugger::$productionMode) {
+if (\RectorPrefix20220102\Tracy\Debugger::$productionMode) {
     echo '<p><b>For security reasons, Tracy is visible only on localhost. Look into the source code to see how to enable Tracy.</b></p>';
 }

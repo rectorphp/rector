@@ -1,4 +1,4 @@
-# 508 Rules Overview
+# 512 Rules Overview
 
 <br>
 
@@ -26,9 +26,9 @@
 
 - [DowngradePhp55](#downgradephp55) (4)
 
-- [DowngradePhp56](#downgradephp56) (4)
+- [DowngradePhp56](#downgradephp56) (5)
 
-- [DowngradePhp70](#downgradephp70) (14)
+- [DowngradePhp70](#downgradephp70) (15)
 
 - [DowngradePhp71](#downgradephp71) (10)
 
@@ -38,7 +38,7 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (25)
+- [DowngradePhp80](#downgradephp80) (26)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -74,7 +74,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (14)
+- [Php74](#php74) (15)
 
 - [Php80](#php80) (18)
 
@@ -4077,6 +4077,30 @@ Replace argument unpacking by `call_user_func_array()`
 
 <br>
 
+### DowngradeArrayFilterUseConstantRector
+
+Replace use ARRAY_FILTER_USE_BOTH and ARRAY_FILTER_USE_KEY to loop to filter it
+
+- class: [`Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector`](../rules/DowngradePhp56/Rector/FuncCall/DowngradeArrayFilterUseConstantRector.php)
+
+```diff
+ $arr = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
+
+-var_dump(array_filter($arr, function($v, $k) {
+-    return $k == 'b' || $v == 4;
+-}, ARRAY_FILTER_USE_BOTH));
++$result = [];
++foreach ($arr as $k => $v) {
++    if ($v === 4 || $k === 'b') {
++        $result[$k] = $v;
++    }
++}
++
++var_dump($result);
+```
+
+<br>
+
 ### DowngradeExponentialAssignmentOperatorRector
 
 Remove exponential assignment operator **=
@@ -4291,7 +4315,7 @@ Remove the type params and return type, add `@param` and `@return` tags instead
 
 ### DowngradeSelfTypeDeclarationRector
 
-Remove "self" return type, add a `"@return` self" tag instead
+Remove "self" return type, add a `"@return` `$this"` tag instead
 
 - class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
 
@@ -4299,6 +4323,9 @@ Remove "self" return type, add a `"@return` self" tag instead
  class SomeClass
  {
 -    public function foo(): self
++    /**
++     * @return $this
++     */
 +    public function foo()
      {
          return $this;
@@ -4352,6 +4379,29 @@ Remove the declare(strict_types=1)
 ```diff
 -declare(strict_types=1);
  echo 'something';
+```
+
+<br>
+
+### DowngradeThrowableTypeDeclarationRector
+
+Replace `Throwable` type hints by PHPDoc tags
+
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeThrowableTypeDeclarationRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function foo(\Throwable $e): ?\Throwable
++    /**
++     * @param \Throwable $e
++     * @return \Throwable|null
++     */
++    public function foo($e)
+     {
+         return new \Exception("Troubles");
+     }
+ }
 ```
 
 <br>
@@ -5128,6 +5178,26 @@ Replace arbitrary expressions used with new or instanceof.
 -$object = new (getObjectClassName());
 +$className = getObjectClassName();
 +$object = new $className();
+```
+
+<br>
+
+### DowngradeArrayFilterNullableCallbackRector
+
+Unset nullable callback on array_filter
+
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeArrayFilterNullableCallbackRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($callback = null)
+     {
+         $data = [[]];
+-        var_dump(array_filter($data, null));
++        var_dump(array_filter($data));
+     }
+ }
 ```
 
 <br>
@@ -7777,6 +7847,31 @@ Change deprecated (real) to (float)
 +        $number = (float) 5;
          $number = (float) 5;
          $number = (double) 5;
+     }
+ }
+```
+
+<br>
+
+### ReservedFnFunctionRector
+
+Change `fn()` function name to `f()`, since it will be reserved keyword
+
+- class: [`Rector\Php74\Rector\Function_\ReservedFnFunctionRector`](../rules/Php74/Rector/Function_/ReservedFnFunctionRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        function fn($value)
++        function f($value)
+         {
+             return $value;
+         }
+
+-        fn(5);
++        f(5);
      }
  }
 ```
@@ -11070,24 +11165,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 <br>
 
-### ReservedFnFunctionRector
+### ReturnTypeWillChangeRector
 
-Change `fn()` function name, since it will be reserved keyword
+Add #[\ReturnTypeWillChange] attribute to configured instanceof class with methods
 
 :wrench: **configure it!**
 
-- class: [`Rector\Transform\Rector\Function_\ReservedFnFunctionRector`](../rules/Transform/Rector/Function_/ReservedFnFunctionRector.php)
+- class: [`Rector\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector`](../rules/Transform/Rector/ClassMethod/ReturnTypeWillChangeRector.php)
 
 ```php
-use Rector\Transform\Rector\Function_\ReservedFnFunctionRector;
+use Rector\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(ReservedFnFunctionRector::class)
+    $services->set(ReturnTypeWillChangeRector::class)
         ->configure([
-            'fn' => 'someFunctionName',
+            ArrayAccess::class => ['offsetGet'],
         ]);
 };
 ```
@@ -11095,18 +11190,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 ↓
 
 ```diff
- class SomeClass
+ class SomeClass implements ArrayAccess
  {
-     public function run()
++    #[\ReturnTypeWillChange]
+     public function offsetGet($offset)
      {
--        function fn($value)
-+        function f($value)
-         {
-             return $value;
-         }
-
--        fn(5);
-+        f(5);
      }
  }
 ```

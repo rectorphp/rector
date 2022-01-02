@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
-use RectorPrefix20220101\Nette\Utils\Strings;
+use RectorPrefix20220102\Nette\Utils\Strings;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
@@ -48,15 +48,15 @@ final class TemplateFileSystem
         // normalize core package
         if (!$rectorRecipe->isRectorRepository()) {
             // special keyword for 3rd party Rectors, not for core Github contribution
-            $destination = \RectorPrefix20220101\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_PATH_REGEX, 'utils/rector/src');
-            $destination = \RectorPrefix20220101\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_TESTS_PATH_REGEX, 'utils/rector/tests');
+            $destination = \RectorPrefix20220102\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_PATH_REGEX, 'utils/rector/src');
+            $destination = \RectorPrefix20220102\Nette\Utils\Strings::replace($destination, self::PACKAGE_RULES_TESTS_PATH_REGEX, 'utils/rector/tests');
         }
         // remove _Configured|_Extra prefix
         $destination = $this->templateFactory->create($destination, $templateVariables);
-        $destination = \RectorPrefix20220101\Nette\Utils\Strings::replace($destination, self::CONFIGURED_OR_EXTRA_REGEX, '');
+        $destination = \RectorPrefix20220102\Nette\Utils\Strings::replace($destination, self::CONFIGURED_OR_EXTRA_REGEX, '');
         // remove ".inc" protection from PHPUnit if not a test case
         if ($this->isNonFixtureFileWithIncSuffix($destination)) {
-            $destination = \RectorPrefix20220101\Nette\Utils\Strings::before($destination, '.inc');
+            $destination = \RectorPrefix20220102\Nette\Utils\Strings::before($destination, '.inc');
         }
         // special hack for tests, to PHPUnit doesn't load the generated file as test case
         /** @var string $destination */
@@ -67,7 +67,7 @@ final class TemplateFileSystem
     }
     private function isNonFixtureFileWithIncSuffix(string $filePath) : bool
     {
-        if (\RectorPrefix20220101\Nette\Utils\Strings::match($filePath, self::FIXTURE_SHORT_REGEX) !== null) {
+        if (\RectorPrefix20220102\Nette\Utils\Strings::match($filePath, self::FIXTURE_SHORT_REGEX) !== null) {
             return \false;
         }
         return \substr_compare($filePath, '.inc', -\strlen('.inc')) === 0;

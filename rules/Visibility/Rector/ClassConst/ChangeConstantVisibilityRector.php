@@ -12,7 +12,7 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Visibility\ValueObject\ChangeConstantVisibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220101\Webmozart\Assert\Assert;
+use RectorPrefix20220102\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Visibility\Rector\ClassConst\ChangeConstantVisibilityRector\ChangeConstantVisibilityRectorTest
  */
@@ -92,8 +92,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $classConstantVisibilityChanges = $configuration[self::CLASS_CONSTANT_VISIBILITY_CHANGES] ?? $configuration;
-        \RectorPrefix20220101\Webmozart\Assert\Assert::isArray($classConstantVisibilityChanges);
-        \RectorPrefix20220101\Webmozart\Assert\Assert::allIsAOf($classConstantVisibilityChanges, \Rector\Visibility\ValueObject\ChangeConstantVisibility::class);
+        \RectorPrefix20220102\Webmozart\Assert\Assert::isArray($classConstantVisibilityChanges);
+        \RectorPrefix20220102\Webmozart\Assert\Assert::allIsAOf($classConstantVisibilityChanges, \Rector\Visibility\ValueObject\ChangeConstantVisibility::class);
         $this->classConstantVisibilityChanges = $classConstantVisibilityChanges;
     }
 }

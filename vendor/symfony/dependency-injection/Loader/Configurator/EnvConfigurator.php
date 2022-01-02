@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220101\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220102\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220101\Symfony\Component\Config\Loader\ParamConfigurator;
-class EnvConfigurator extends \RectorPrefix20220101\Symfony\Component\Config\Loader\ParamConfigurator
+use RectorPrefix20220102\Symfony\Component\Config\Loader\ParamConfigurator;
+class EnvConfigurator extends \RectorPrefix20220102\Symfony\Component\Config\Loader\ParamConfigurator
 {
     /**
      * @var string[]
@@ -30,7 +30,7 @@ class EnvConfigurator extends \RectorPrefix20220101\Symfony\Component\Config\Loa
      */
     public function __call(string $name, array $arguments) : self
     {
-        $processor = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20220101\\1_\\2', $name));
+        $processor = \strtolower(\preg_replace(['/([A-Z]+)([A-Z][a-z])/', '/([a-z\\d])([A-Z])/'], 'RectorPrefix20220102\\1_\\2', $name));
         $this->custom($processor, ...$arguments);
         return $this;
     }
