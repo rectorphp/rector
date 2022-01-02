@@ -21,6 +21,9 @@ final class BinaryOpConditionsCollector
      */
     public function findConditions(\PhpParser\Node\Expr\BinaryOp $binaryOp, string $binaryOpClass) : array
     {
+        if (\get_class($binaryOp) !== $binaryOpClass) {
+            return [$binaryOp];
+        }
         $conditions = [];
         /** @var BinaryOp|Expr $binaryOp */
         while ($binaryOp instanceof \PhpParser\Node\Expr\BinaryOp) {
