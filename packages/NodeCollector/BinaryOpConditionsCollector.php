@@ -23,6 +23,10 @@ final class BinaryOpConditionsCollector
      */
     public function findConditions(BinaryOp $binaryOp, string $binaryOpClass): array
     {
+        if ($binaryOp::class !== $binaryOpClass) {
+            return [$binaryOp];
+        }
+
         $conditions = [];
         /** @var BinaryOp|Expr $binaryOp */
         while ($binaryOp instanceof BinaryOp) {
