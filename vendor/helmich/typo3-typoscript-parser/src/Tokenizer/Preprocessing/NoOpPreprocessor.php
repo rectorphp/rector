@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220102\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
+namespace RectorPrefix20220103\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
 
 /**
  * Preprocessor that does not actually do anything
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class NoOpPreprocessor implements \RectorPrefix20220102\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
+class NoOpPreprocessor implements \RectorPrefix20220103\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
 {
     /**
      * @param string $contents Un-processed Typoscript contents

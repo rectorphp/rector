@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix20220102\Nette\Utils\Strings;
+use RectorPrefix20220103\Nette\Utils\Strings;
 use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;
@@ -95,13 +95,16 @@ final class ChangedFilesDetector
     }
     private function storeConfigurationDataHash(string $filePath, string $configurationHash) : void
     {
-        $key = \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20220102\Nette\Utils\Strings::webalize($filePath);
+        $key = \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY . '_' . \RectorPrefix20220103\Nette\Utils\Strings::webalize($filePath);
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
         $this->cache->save($key, \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY, $configurationHash);
     }
     private function invalidateCacheIfConfigurationChanged(string $key, string $configurationHash) : void
     {
         $oldCachedValue = $this->cache->load($key, \Rector\Caching\Enum\CacheKey::CONFIGURATION_HASH_KEY);
+        if ($oldCachedValue === null) {
+            return;
+        }
         if ($oldCachedValue === $configurationHash) {
             return;
         }

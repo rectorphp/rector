@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220102\Webmozart\Assert\Assert;
+use RectorPrefix20220103\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector\AddMethodParentCallRectorTest
  */
@@ -93,8 +93,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $methodsByParentTypes = $configuration[self::METHODS_BY_PARENT_TYPES] ?? $configuration;
-        \RectorPrefix20220102\Webmozart\Assert\Assert::allString(\array_keys($methodsByParentTypes));
-        \RectorPrefix20220102\Webmozart\Assert\Assert::allString($methodsByParentTypes);
+        \RectorPrefix20220103\Webmozart\Assert\Assert::allString(\array_keys($methodsByParentTypes));
+        \RectorPrefix20220103\Webmozart\Assert\Assert::allString($methodsByParentTypes);
         /** @var array<string, string> $methodsByParentTypes */
         $this->methodByParentTypes = $methodsByParentTypes;
     }
