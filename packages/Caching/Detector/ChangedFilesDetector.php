@@ -113,7 +113,7 @@ final class ChangedFilesDetector
     private function invalidateCacheIfConfigurationChanged(string $key, string $configurationHash): void
     {
         $oldCachedValue = $this->cache->load($key, CacheKey::CONFIGURATION_HASH_KEY);
-        if ($oldCachedValue === null){
+        if ($oldCachedValue === null) {
             return;
         }
 

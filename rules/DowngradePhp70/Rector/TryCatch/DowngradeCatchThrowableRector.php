@@ -19,6 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCatchThrowableRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const EXCEPTION = 'Exception';
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -64,10 +69,10 @@ CODE_SAMPLE
         foreach ($node->catches as $key => $catch) {
             $shouldAddExceptionFallback =
                 $this->isCatchingType($catch->types, 'Throwable')
-                && ! $this->isCatchingType($catch->types, 'Exception')
+                && ! $this->isCatchingType($catch->types, self::EXCEPTION)
                 && ! $this->isCaughtByAnotherClause($catch->stmts, $node->catches);
             if ($shouldAddExceptionFallback) {
-                $catchType = new FullyQualified('Exception');
+                $catchType = new FullyQualified(self::EXCEPTION);
                 $this->nodesToAddCollector->addNodeAfterNode(
                     new Catch_([$catchType], $catch->var, $catch->stmts),
                     $node->catches[$key]
@@ -92,6 +97,7 @@ CODE_SAMPLE
                 return true;
             }
         }
+
         return false;
     }
 
@@ -103,12 +109,13 @@ CODE_SAMPLE
     {
         foreach ($catches as $catch) {
             $caughtAndBodyMatches =
-                $this->isCatchingType($catch->types, 'Exception')
+                $this->isCatchingType($catch->types, self::EXCEPTION)
                 && $this->nodeComparator->areNodesEqual($catch->stmts, $body);
             if ($caughtAndBodyMatches) {
                 return true;
             }
         }
+
         return false;
     }
 }
