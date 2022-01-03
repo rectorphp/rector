@@ -110,6 +110,14 @@ final class ApplicationFileProcessor
                     unset($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS][$key]);
                     $newSystemErrorsAndFileDiffs = $this->run($fallbackConfiguration, $input);
 
+                    /**
+                     * Using Recursive merge on purpose to merge with existing Parallel associative data of $systemErrorsAndFileDiffs
+                     *
+                     * @see e2e/parallel-reflection-resolver/src for demo, tested with run in CI:
+                     *
+                     * ~ cd e2e/parallel-reflection-resolver
+                     * ~ php ../e2eTestRunner.php
+                     */
                     /** @var array{system_errors: SystemError[], file_diffs: FileDiff[]} $systemErrorsAndFileDiffs */
                     $systemErrorsAndFileDiffs = array_merge_recursive(
                         $systemErrorsAndFileDiffs,
