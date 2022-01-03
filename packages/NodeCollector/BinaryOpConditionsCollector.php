@@ -5,6 +5,9 @@ namespace Rector\NodeCollector;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+/**
+ * @see \Rector\Tests\NodeCollector\BinaryOpConditionsCollectorTest
+ */
 final class BinaryOpConditionsCollector
 {
     /**

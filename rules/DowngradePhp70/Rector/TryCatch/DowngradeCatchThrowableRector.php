@@ -17,6 +17,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeCatchThrowableRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const EXCEPTION = 'Exception';
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -51,9 +55,9 @@ CODE_SAMPLE
     {
         $originalCatches = $node->catches;
         foreach ($node->catches as $key => $catch) {
-            $shouldAddExceptionFallback = $this->isCatchingType($catch->types, 'Throwable') && !$this->isCatchingType($catch->types, 'Exception') && !$this->isCaughtByAnotherClause($catch->stmts, $node->catches);
+            $shouldAddExceptionFallback = $this->isCatchingType($catch->types, 'Throwable') && !$this->isCatchingType($catch->types, self::EXCEPTION) && !$this->isCaughtByAnotherClause($catch->stmts, $node->catches);
             if ($shouldAddExceptionFallback) {
-                $catchType = new \PhpParser\Node\Name\FullyQualified('Exception');
+                $catchType = new \PhpParser\Node\Name\FullyQualified(self::EXCEPTION);
                 $this->nodesToAddCollector->addNodeAfterNode(new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts), $node->catches[$key]);
             }
         }
@@ -81,7 +85,7 @@ CODE_SAMPLE
     private function isCaughtByAnotherClause(array $body, array $catches) : bool
     {
         foreach ($catches as $catch) {
-            $caughtAndBodyMatches = $this->isCatchingType($catch->types, 'Exception') && $this->nodeComparator->areNodesEqual($catch->stmts, $body);
+            $caughtAndBodyMatches = $this->isCatchingType($catch->types, self::EXCEPTION) && $this->nodeComparator->areNodesEqual($catch->stmts, $body);
             if ($caughtAndBodyMatches) {
                 return \true;
             }

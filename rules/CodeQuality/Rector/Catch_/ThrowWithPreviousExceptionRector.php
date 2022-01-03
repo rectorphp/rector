@@ -148,8 +148,8 @@ CODE_SAMPLE
         if (!$construct) {
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
-        $constructorReflectionMethod = $classReflection->getConstructor();
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($constructorReflectionMethod->getVariants());
+        $methodReflection = $classReflection->getConstructor();
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
             $parameterType = $parameterReflection->getType();
             if (!$parameterType instanceof \PHPStan\Type\TypeWithClassName) {
