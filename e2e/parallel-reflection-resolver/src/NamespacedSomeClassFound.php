@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SomeNamespace;
+namespace E2e\Parallel\Reflection\Resolver;
 
 final class NamespacedSomeClassFound
 {
