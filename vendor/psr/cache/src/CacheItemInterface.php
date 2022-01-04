@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220103\Psr\Cache;
+namespace RectorPrefix20220104\Psr\Cache;
 
 /**
  * CacheItemInterface defines an interface for interacting with objects inside a cache.

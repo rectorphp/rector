@@ -8,27 +8,27 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220103\Symfony\Component\DependencyInjection\Dumper;
+namespace RectorPrefix20220104\Symfony\Component\DependencyInjection\Dumper;
 
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Parameter;
-use RectorPrefix20220103\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220103\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Parameter;
+use RectorPrefix20220104\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220104\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * XmlDumper dumps a service container as an XML string.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Martin Hasoň <martin.hason@gmail.com>
  */
-class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInjection\Dumper\Dumper
+class XmlDumper extends \RectorPrefix20220104\Symfony\Component\DependencyInjection\Dumper\Dumper
 {
     /**
      * @var \DOMDocument
@@ -80,7 +80,7 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
             $parent->appendChild($call);
         }
     }
-    private function addService(\RectorPrefix20220103\Symfony\Component\DependencyInjection\Definition $definition, ?string $id, \DOMElement $parent)
+    private function addService(\RectorPrefix20220104\Symfony\Component\DependencyInjection\Definition $definition, ?string $id, \DOMElement $parent)
     {
         $service = $this->document->createElement('service');
         if (null !== $id) {
@@ -107,9 +107,9 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
         if (null !== ($decoratedService = $definition->getDecoratedService())) {
             [$decorated, $renamedId, $priority] = $decoratedService;
             $service->setAttribute('decorates', $decorated);
-            $decorationOnInvalid = $decoratedService[3] ?? \RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
-            if (\in_array($decorationOnInvalid, [\RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE, \RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE], \true)) {
-                $invalidBehavior = \RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE === $decorationOnInvalid ? 'null' : 'ignore';
+            $decorationOnInvalid = $decoratedService[3] ?? \RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+            if (\in_array($decorationOnInvalid, [\RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE, \RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE], \true)) {
+                $invalidBehavior = \RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE === $decorationOnInvalid ? 'null' : 'ignore';
                 $service->setAttribute('decoration-on-invalid', $invalidBehavior);
             }
             if (null !== $renamedId) {
@@ -147,12 +147,12 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
         $this->addMethodCalls($definition->getMethodCalls(), $service);
         if ($callable = $definition->getFactory()) {
             $factory = $this->document->createElement('factory');
-            if (\is_array($callable) && $callable[0] instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Definition) {
+            if (\is_array($callable) && $callable[0] instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Definition) {
                 $this->addService($callable[0], null, $factory);
                 $factory->setAttribute('method', $callable[1]);
             } elseif (\is_array($callable)) {
                 if (null !== $callable[0]) {
-                    $factory->setAttribute($callable[0] instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Reference ? 'service' : 'class', $callable[0]);
+                    $factory->setAttribute($callable[0] instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Reference ? 'service' : 'class', $callable[0]);
                 }
                 $factory->setAttribute('method', $callable[1]);
             } else {
@@ -179,11 +179,11 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
         }
         if ($callable = $definition->getConfigurator()) {
             $configurator = $this->document->createElement('configurator');
-            if (\is_array($callable) && $callable[0] instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Definition) {
+            if (\is_array($callable) && $callable[0] instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Definition) {
                 $this->addService($callable[0], null, $configurator);
                 $configurator->setAttribute('method', $callable[1]);
             } elseif (\is_array($callable)) {
-                $configurator->setAttribute($callable[0] instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Reference ? 'service' : 'class', $callable[0]);
+                $configurator->setAttribute($callable[0] instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Reference ? 'service' : 'class', $callable[0]);
                 $configurator->setAttribute('method', $callable[1]);
             } else {
                 $configurator->setAttribute('function', $callable);
@@ -192,7 +192,7 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
         }
         $parent->appendChild($service);
     }
-    private function addServiceAlias(string $alias, \RectorPrefix20220103\Symfony\Component\DependencyInjection\Alias $id, \DOMElement $parent)
+    private function addServiceAlias(string $alias, \RectorPrefix20220104\Symfony\Component\DependencyInjection\Alias $id, \DOMElement $parent)
     {
         $service = $this->document->createElement('service');
         $service->setAttribute('id', $alias);
@@ -240,8 +240,8 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
             if (\is_array($tag = $value)) {
                 $element->setAttribute('type', 'collection');
                 $this->convertParameters($value, $type, $element, 'key');
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument || $value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument && ($tag = $value->getTaggedIteratorArgument())) {
-                $element->setAttribute('type', $value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument ? 'tagged_iterator' : 'tagged_locator');
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument || $value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument && ($tag = $value->getTaggedIteratorArgument())) {
+                $element->setAttribute('type', $value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument ? 'tagged_iterator' : 'tagged_locator');
                 $element->setAttribute('tag', $tag->getTag());
                 if (null !== $tag->getIndexAttribute()) {
                     $element->setAttribute('index-by', $tag->getIndexAttribute());
@@ -252,31 +252,31 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
                         $element->setAttribute('default-priority-method', $tag->getDefaultPriorityMethod());
                     }
                 }
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\IteratorArgument) {
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\IteratorArgument) {
                 $element->setAttribute('type', 'iterator');
                 $this->convertParameters($value->getValues(), $type, $element, 'key');
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument) {
                 $element->setAttribute('type', 'service_locator');
                 $this->convertParameters($value->getValues(), $type, $element, 'key');
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Reference || $value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Reference || $value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
                 $element->setAttribute('type', 'service');
-                if ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
+                if ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument) {
                     $element->setAttribute('type', 'service_closure');
                     $value = $value->getValues()[0];
                 }
                 $element->setAttribute('id', (string) $value);
                 $behavior = $value->getInvalidBehavior();
-                if (\RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE == $behavior) {
+                if (\RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE == $behavior) {
                     $element->setAttribute('on-invalid', 'null');
-                } elseif (\RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE == $behavior) {
+                } elseif (\RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE == $behavior) {
                     $element->setAttribute('on-invalid', 'ignore');
-                } elseif (\RectorPrefix20220103\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE == $behavior) {
+                } elseif (\RectorPrefix20220104\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE == $behavior) {
                     $element->setAttribute('on-invalid', 'ignore_uninitialized');
                 }
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Definition) {
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Definition) {
                 $element->setAttribute('type', 'service');
                 $this->addService($value, null, $element);
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\ExpressionLanguage\Expression) {
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\ExpressionLanguage\Expression) {
                 $element->setAttribute('type', 'expression');
                 $text = $this->document->createTextNode(self::phpToXml((string) $value));
                 $element->appendChild($text);
@@ -284,10 +284,10 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
                 $element->setAttribute('type', 'binary');
                 $text = $this->document->createTextNode(self::phpToXml(\base64_encode($value)));
                 $element->appendChild($text);
-            } elseif ($value instanceof \RectorPrefix20220103\UnitEnum) {
+            } elseif ($value instanceof \RectorPrefix20220104\UnitEnum) {
                 $element->setAttribute('type', 'constant');
                 $element->appendChild($this->document->createTextNode(self::phpToXml($value)));
-            } elseif ($value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Argument\AbstractArgument) {
+            } elseif ($value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Argument\AbstractArgument) {
                 $element->setAttribute('type', 'abstract');
                 $text = $this->document->createTextNode(self::phpToXml($value->getText()));
                 $element->appendChild($text);
@@ -337,12 +337,12 @@ class XmlDumper extends \RectorPrefix20220103\Symfony\Component\DependencyInject
                 return 'true';
             case \false === $value:
                 return 'false';
-            case $value instanceof \RectorPrefix20220103\Symfony\Component\DependencyInjection\Parameter:
+            case $value instanceof \RectorPrefix20220104\Symfony\Component\DependencyInjection\Parameter:
                 return '%' . $value . '%';
-            case $value instanceof \RectorPrefix20220103\UnitEnum:
+            case $value instanceof \RectorPrefix20220104\UnitEnum:
                 return \sprintf('%s::%s', \get_class($value), $value->name);
             case \is_object($value) || \is_resource($value):
-                throw new \RectorPrefix20220103\Symfony\Component\DependencyInjection\Exception\RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
+                throw new \RectorPrefix20220104\Symfony\Component\DependencyInjection\Exception\RuntimeException('Unable to dump a service container if a parameter is an object or a resource.');
             default:
                 return (string) $value;
         }

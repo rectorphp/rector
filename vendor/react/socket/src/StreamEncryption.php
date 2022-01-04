@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20220103\React\Socket;
+namespace RectorPrefix20220104\React\Socket;
 
-use RectorPrefix20220103\React\EventLoop\LoopInterface;
-use RectorPrefix20220103\React\Promise\Deferred;
+use RectorPrefix20220104\React\EventLoop\LoopInterface;
+use RectorPrefix20220104\React\Promise\Deferred;
 use RuntimeException;
 use UnexpectedValueException;
 /**
@@ -17,7 +17,7 @@ class StreamEncryption
     private $loop;
     private $method;
     private $server;
-    public function __construct(\RectorPrefix20220103\React\EventLoop\LoopInterface $loop, $server = \true)
+    public function __construct(\RectorPrefix20220104\React\EventLoop\LoopInterface $loop, $server = \true)
     {
         $this->loop = $loop;
         $this->server = $server;
@@ -40,17 +40,17 @@ class StreamEncryption
             }
         }
     }
-    public function enable(\RectorPrefix20220103\React\Socket\Connection $stream)
+    public function enable(\RectorPrefix20220104\React\Socket\Connection $stream)
     {
         return $this->toggle($stream, \true);
     }
-    public function toggle(\RectorPrefix20220103\React\Socket\Connection $stream, $toggle)
+    public function toggle(\RectorPrefix20220104\React\Socket\Connection $stream, $toggle)
     {
         // pause actual stream instance to continue operation on raw stream socket
         $stream->pause();
         // TODO: add write() event to make sure we're not sending any excessive data
         // cancelling this leaves this stream in an inconsistent state…
-        $deferred = new \RectorPrefix20220103\React\Promise\Deferred(function () {
+        $deferred = new \RectorPrefix20220104\React\Promise\Deferred(function () {
             throw new \RuntimeException();
         });
         // get actual stream socket from stream instance
@@ -81,7 +81,7 @@ class StreamEncryption
             throw $error;
         });
     }
-    public function toggleCrypto($socket, \RectorPrefix20220103\React\Promise\Deferred $deferred, $toggle, $method)
+    public function toggleCrypto($socket, \RectorPrefix20220104\React\Promise\Deferred $deferred, $toggle, $method)
     {
         $error = null;
         \set_error_handler(function ($_, $errstr) use(&$error) {

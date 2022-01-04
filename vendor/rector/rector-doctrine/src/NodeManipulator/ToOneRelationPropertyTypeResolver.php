@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
-use RectorPrefix20220103\Nette\Utils\Strings;
+use RectorPrefix20220104\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\MixedType;
@@ -55,7 +55,7 @@ final class ToOneRelationPropertyTypeResolver
             return new \PHPStan\Type\MixedType();
         }
         if (\substr_compare($targetEntity, '::class', -\strlen('::class')) === 0) {
-            $targetEntity = \RectorPrefix20220103\Nette\Utils\Strings::before($targetEntity, '::class');
+            $targetEntity = \RectorPrefix20220104\Nette\Utils\Strings::before($targetEntity, '::class');
         }
         // resolve to FQN
         $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
