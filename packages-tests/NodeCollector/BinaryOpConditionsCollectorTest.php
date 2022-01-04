@@ -20,9 +20,9 @@ final class BinaryOpConditionsCollectorTest extends TestCase
         $a = new Variable('a');
         $b = new Variable('b');
         $c = new Variable('c');
-        $plus = new Plus(new Plus($a, $b), $c);
+        $abcPlus = new Plus(new Plus($a, $b), $c);
 
-        $result = $binaryOpConditionsCollector->findConditions($plus, Plus::class);
+        $result = $binaryOpConditionsCollector->findConditions($abcPlus, Plus::class);
 
         $this->assertEquals([
             2 => $a,
@@ -39,14 +39,14 @@ final class BinaryOpConditionsCollectorTest extends TestCase
         $a = new Variable('a');
         $b = new Variable('b');
         $c = new Variable('c');
-        $bc = new Plus($b, $c);
-        $tree = new Plus($a, $bc);
+        $bcPlus = new Plus($b, $c);
+        $abcPlus = new Plus($a, $bcPlus);
 
-        $result = $binaryOpConditionsCollector->findConditions($tree, Plus::class);
+        $result = $binaryOpConditionsCollector->findConditions($abcPlus, Plus::class);
 
         $this->assertEquals([
             1 => $a,
-            0 => $bc,
+            0 => $bcPlus,
         ], $result);
     }
 
@@ -58,12 +58,12 @@ final class BinaryOpConditionsCollectorTest extends TestCase
         $a = new Variable('a');
         $b = new Variable('b');
         $c = new Variable('c');
-        $minus = new Minus(new Plus($a, $b), $c);
+        $abcMinus = new Minus(new Plus($a, $b), $c);
 
-        $result = $binaryOpConditionsCollector->findConditions($minus, Plus::class);
+        $result = $binaryOpConditionsCollector->findConditions($abcMinus, Plus::class);
 
         $this->assertEquals([
-            0 => $minus,
+            0 => $abcMinus,
         ], $result);
     }
 
@@ -88,13 +88,13 @@ final class BinaryOpConditionsCollectorTest extends TestCase
         $a = new Variable('a');
         $b = new Variable('b');
         $c = new Variable('c');
-        $minus = new Minus($a, $b);
-        $plus = new Plus($minus, $c);
+        $abMinus = new Minus($a, $b);
+        $abcPlus = new Plus($abMinus, $c);
 
-        $result = $binaryOpConditionsCollector->findConditions($plus, Plus::class);
+        $result = $binaryOpConditionsCollector->findConditions($abcPlus, Plus::class);
 
         $this->assertEquals([
-            1 => $minus,
+            1 => $abMinus,
             0 => $c,
         ], $result);
     }
