@@ -96,11 +96,6 @@ final class WorkerCommandLineFactory
         // @see https://github.com/symfony/symfony/issues/1238
         $workerCommandArray[] = '--no-ansi';
 
-        if ($input->hasOption(Option::CONFIG)) {
-            $workerCommandArray[] = '--config';
-            $workerCommandArray[] = $input->getOption(Option::CONFIG);
-        }
-
         return implode(' ', $workerCommandArray);
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\ValueObject\Configuration;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -48,6 +49,7 @@ final class ConfigurationFactory
         $isParallel = $this->parameterProvider->provideBoolParameter(Option::PARALLEL);
         $parallelPort = (string) $input->getOption(Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(Option::PARALLEL_IDENTIFIER);
+        $rectorConfigsResolver = new RectorConfigsResolver();
 
         return new Configuration(
             $isDryRun,
@@ -57,7 +59,7 @@ final class ConfigurationFactory
             $fileExtensions,
             $paths,
             $showDiffs,
-            null,
+            $rectorConfigsResolver->provide(),
             $parallelPort,
             $parallelIdentifier,
             $isParallel
