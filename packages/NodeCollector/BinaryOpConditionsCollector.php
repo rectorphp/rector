@@ -20,11 +20,13 @@ final class BinaryOpConditionsCollector
      * the implicit parenthesization (`[a, b ?? c]`) might not match the expectations.
      *
      * @param class-string<BinaryOp> $binaryOpClass
-     * @return Expr[]
+     * @return array<int, Expr>
      */
-    public function findConditions(\PhpParser\Node\Expr\BinaryOp $binaryOp, string $binaryOpClass) : array
+    public function findConditions(\PhpParser\Node\Expr $binaryOp, string $binaryOpClass) : array
     {
         if (\get_class($binaryOp) !== $binaryOpClass) {
+            // Different binary operators, as well as non-BinaryOp expressions
+            // are considered trivial case of a single operand (no operators).
             return [$binaryOp];
         }
         $conditions = [];

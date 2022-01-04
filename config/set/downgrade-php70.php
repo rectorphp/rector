@@ -16,6 +16,7 @@ use Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUser
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
+use Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
@@ -28,6 +29,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters->set(\Rector\Core\Configuration\Option::PHP_VERSION_FEATURES, \Rector\Core\ValueObject\PhpVersion::PHP_56);
     $services = $containerConfigurator->services();
     $services->set(\Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector::class);
+    $services->set(\Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector::class);
     $services->set(\Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector::class);
