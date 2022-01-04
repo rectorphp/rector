@@ -26,6 +26,7 @@ use RectorPrefix20220104\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220104\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20220104\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220104\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**
@@ -172,9 +173,7 @@ final class ApplicationFileProcessor
                     continue;
                 }
                 $result = $fileProcessor->process($file, $configuration);
-                if (\is_array($result)) {
-                    $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
-                }
+                $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
             }
             // progress bar +1
             if ($configuration->shouldShowProgressBar()) {
@@ -287,6 +286,7 @@ final class ApplicationFileProcessor
      */
     private function resolvePhpFilePaths(array $files) : array
     {
+        \RectorPrefix20220104\Webmozart\Assert\Assert::allIsAOf($files, \Rector\Core\ValueObject\Application\File::class);
         $filePaths = [];
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();

@@ -13,7 +13,7 @@ interface FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration);
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array;
     /**
      * @return string[]
      */
