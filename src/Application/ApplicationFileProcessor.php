@@ -77,30 +77,16 @@ final class ApplicationFileProcessor
             ];
         }
 
-//        $filePaths = [];
-//        foreach ($fileInfos as $fileInfo) {
-//            $filePaths[] = $fileInfo->getRealPath();
-//        }
-
         $this->configureCustomErrorHandler();
-
-//         PHPStan has to know about all files too
-//        $this->configurePHPStanNodeScopeResolver($filePaths);
-
-        // 1. collect all files from files+dirs provided paths
-        $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
-
-        // 2. PHPStan has to know about all files too
-        $this->configurePHPStanNodeScopeResolver($files);
 
         if ($configuration->isParallel()) {
             $systemErrorsAndFileDiffs = $this->runParallel($fileInfos, $configuration, $input);
         } else {
-//            // 1. collect all files from files+dirs provided paths
-//            $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
+            // 1. collect all files from files+dirs provided paths
+            $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
 
-//            // 2. PHPStan has to know about all files too
-//            $this->configurePHPStanNodeScopeResolver($files);
+            // 2. PHPStan has to know about all files too
+            $this->configurePHPStanNodeScopeResolver($files);
 
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
             $this->fileFormatter->format($files);

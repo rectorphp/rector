@@ -6,8 +6,10 @@ namespace Rector\Parallel;
 
 use Clue\React\NDJson\Decoder;
 use Clue\React\NDJson\Encoder;
+use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
@@ -30,11 +32,15 @@ final class WorkerRunner
         private readonly ParametersMerger $parametersMerger,
         private readonly CurrentFileProvider $currentFileProvider,
         private readonly PhpFileProcessor $phpFileProcessor,
+        private readonly NodeScopeResolver $nodeScopeResolver,
+        private readonly DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator,
     ) {
     }
 
     public function run(Encoder $encoder, Decoder $decoder, Configuration $configuration): void
     {
+        $this->dynamicSourceLocatorDecorator->addPaths($configuration->getPaths());
+
         // 1. handle system error
         $handleErrorCallback = static function (Throwable $throwable) use ($encoder): void {
             $systemErrors = new SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
@@ -66,6 +72,9 @@ final class WorkerRunner
 
             $errorAndFileDiffs = [];
             $systemErrors = [];
+
+            // 1. allow PHPStan to work with static reflection on provided files
+            $this->nodeScopeResolver->setAnalysedFiles($filePaths);
 
             foreach ($filePaths as $filePath) {
                 try {
