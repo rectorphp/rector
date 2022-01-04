@@ -49,6 +49,7 @@ final class DowngradePathsCommand extends Command
             'vendor/ssch',
             'rules/Naming',
             'rules',
+            'utils',
             'bin rector.php',
         ], $downgradePaths);
 
