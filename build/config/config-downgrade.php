@@ -21,6 +21,7 @@ require_once  __DIR__ . '/../../stubs/Nette/DI/CompilerExtension.php';
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
+    $parameters->set(Option::PARALLEL, false);
     $parameters->set(Option::SKIP, DowngradeRectorConfig::DEPENDENCY_EXCLUDE_PATHS);
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, __DIR__ . '/phpstan-for-downgrade.neon');
 
