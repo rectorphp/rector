@@ -44,7 +44,7 @@ final class DowngradePathsCommand extends Command
             'vendor/symfony/dependency-injection',
             'vendor/symfony/console',
             'vendor/symfony vendor/psr',
-            'vendor/symplify vendor/nikic src/Config src/DependencyInjection',
+            'vendor/symplify vendor/nikic src/DependencyInjection',
             'src',
             'packages',
             'vendor/ssch',
