@@ -15,6 +15,7 @@ use Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUser
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector;
+use Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector;
 use Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector;
 use Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector;
@@ -29,6 +30,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services = $containerConfigurator->services();
     $services->set(DowngradeCatchThrowableRector::class);
+    $services->set(DowngradeInstanceofThrowableRector::class);
     $services->set(DowngradeScalarTypeDeclarationRector::class);
     $services->set(DowngradeThrowableTypeDeclarationRector::class);
     $services->set(DowngradeStrictTypeDeclarationRector::class);

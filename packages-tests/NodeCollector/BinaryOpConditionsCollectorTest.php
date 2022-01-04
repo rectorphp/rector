@@ -67,6 +67,17 @@ final class BinaryOpConditionsCollectorTest extends TestCase
         ], $result);
     }
 
+    public function testTrivialCase(): void
+    {
+        $collector = new BinaryOpConditionsCollector();
+
+        $a = new Variable('a');
+
+        $result = $collector->findConditions($a, Plus::class);
+
+        $this->assertEquals([0 => $a], $result);
+    }
+
     public function testInnerNodeDifferentOp(): void
     {
         $binaryOpConditionsCollector = new BinaryOpConditionsCollector();
