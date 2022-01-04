@@ -129,10 +129,7 @@ final class ApplicationFileProcessor
                 }
 
                 $result = $fileProcessor->process($file, $configuration);
-
-                if (is_array($result)) {
-                    $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
-                }
+                $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
             }
 
             // progress bar +1
