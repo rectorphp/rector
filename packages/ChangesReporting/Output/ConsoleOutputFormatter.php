@@ -98,7 +98,7 @@ final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\
         foreach ($errors as $error) {
             $errorMessage = $error->getMessage();
             $errorMessage = $this->normalizePathsToRelativeWithLine($errorMessage);
-            $message = \sprintf('Could not process "%s" file%s, due to: %s"%s".', $error->getFile(), $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '', \PHP_EOL, $errorMessage);
+            $message = \sprintf('Could not process %s%s, due to: %s"%s".', $error->getFile() !== null ? '"' . $error->getFile() . '" file' : 'some files', $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '', \PHP_EOL, $errorMessage);
             if ($error->getLine() !== null) {
                 $message .= ' On line: ' . $error->getLine();
             }
