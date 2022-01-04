@@ -9,7 +9,7 @@ use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set(Option::PARALLEL, true);
+    $parameters->set(Option::PARALLEL, false);
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src/',
     ]);

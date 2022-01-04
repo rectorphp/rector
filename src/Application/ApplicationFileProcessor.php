@@ -9,7 +9,6 @@ use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
-use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
@@ -25,7 +24,6 @@ use Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use Symplify\EasyParallel\FileSystem\FilePathNormalizer;
 use Symplify\EasyParallel\ScheduleFactory;
 use Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -37,12 +35,6 @@ final class ApplicationFileProcessor
      * @var string
      */
     private const ARGV = 'argv';
-
-    /**
-     * @var string
-     * @see https://regex101.com/r/fD77Jt/1
-     */
-    private const CLASS_NOT_FOUND_REGEX = '#^System error: "Class .* was not found while trying to analyse it - discovering symbols is probably not configured properly."#';
 
     /**
      * @var SystemError[]
@@ -66,7 +58,6 @@ final class ApplicationFileProcessor
         private readonly ScheduleFactory $scheduleFactory,
         private readonly FilePathNormalizer $filePathNormalizer,
         private readonly CpuCoreCountProvider $cpuCoreCountProvider,
-        private readonly PrivatesAccessor $privatesAccessor,
         private readonly array $fileProcessors = []
     ) {
     }
@@ -86,51 +77,30 @@ final class ApplicationFileProcessor
             ];
         }
 
+//        $filePaths = [];
+//        foreach ($fileInfos as $fileInfo) {
+//            $filePaths[] = $fileInfo->getRealPath();
+//        }
+
         $this->configureCustomErrorHandler();
+
+//         PHPStan has to know about all files too
+//        $this->configurePHPStanNodeScopeResolver($filePaths);
+
+        // 1. collect all files from files+dirs provided paths
+        $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
+
+        // 2. PHPStan has to know about all files too
+        $this->configurePHPStanNodeScopeResolver($files);
 
         if ($configuration->isParallel()) {
             $systemErrorsAndFileDiffs = $this->runParallel($fileInfos, $configuration, $input);
-            /** @var SystemError $error */
-            foreach ($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] as $key => $error) {
-                if (StringUtils::isMatch($error->getMessage(), self::CLASS_NOT_FOUND_REGEX)) {
-                    $fallbackConfiguration = new Configuration(
-                        $configuration->isDryRun(),
-                        $configuration->shouldShowProgressBar(),
-                        $configuration->shouldClearCache(),
-                        $configuration->getOutputFormat(),
-                        $configuration->getFileExtensions(),
-                        [$error->getFile()],
-                        $configuration->shouldShowDiffs(),
-                        $this->privatesAccessor->getPrivateProperty($configuration, 'bootstrapConfigs'),
-                        $configuration->getParallelPort(),
-                        $configuration->getParallelIdentifier(),
-                        false
-                    );
-
-                    unset($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS][$key]);
-                    $newSystemErrorsAndFileDiffs = $this->run($fallbackConfiguration, $input);
-
-                    /**
-                     * Using Recursive merge on purpose to merge with existing Parallel associative data of $systemErrorsAndFileDiffs
-                     *
-                     * @see e2e/parallel-reflection-resolver/src for demo, tested with run in CI:
-                     *
-                     * ~ cd e2e/parallel-reflection-resolver
-                     * ~ php ../e2eTestRunner.php
-                     */
-                    /** @var array{system_errors: SystemError[], file_diffs: FileDiff[]} $systemErrorsAndFileDiffs */
-                    $systemErrorsAndFileDiffs = array_merge_recursive(
-                        $systemErrorsAndFileDiffs,
-                        $newSystemErrorsAndFileDiffs
-                    );
-                }
-            }
         } else {
-            // 1. collect all files from files+dirs provided paths
-            $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
+//            // 1. collect all files from files+dirs provided paths
+//            $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
 
-            // 2. PHPStan has to know about all files too
-            $this->configurePHPStanNodeScopeResolver($files);
+//            // 2. PHPStan has to know about all files too
+//            $this->configurePHPStanNodeScopeResolver($files);
 
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
             $this->fileFormatter->format($files);

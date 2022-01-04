@@ -108,7 +108,7 @@
             ],
             "Rector\\Core\\Tests\\": "tests",
             "Rector\\RuleDocGenerator\\": "utils/rule-doc-generator/src",
-            "E2e\\Parallel\\Reflection\\Resolver\\": "e2e/parallel-reflection-resolver/src/"
+            "E2e\\Parallel\\Reflection\\Resolver\\": ["e2e/parallel-reflection-resolver/src/", "e2e/no-parallel-reflection-resolver/src"]
         },
         "classmap": [
             "stubs",
