@@ -4,9 +4,18 @@
 // runs a rector e2e test.
 // checks whether we expect a certain output, or alternatively that rector just processed everything without errors
 
-$projectRoot = __DIR__ .'/../';
-$rectorBin = $projectRoot .'bin/rector';
-$autoloadFile = $projectRoot .'vendor/autoload.php';
+use SebastianBergmann\Diff\Differ;
+use Symfony\Component\Console\Command\Command;
+use Symplify\ConsoleColorDiff\Console\Formatter\ColorConsoleDiffFormatter;
+use Symplify\ConsoleColorDiff\Console\Output\ConsoleDiffer;
+use Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+
+$projectRoot = __DIR__ .'/..';
+$rectorBin = $projectRoot . '/bin/rector';
+$autoloadFile = $projectRoot . '/vendor/autoload.php';
+
+// so we can use helper classes here
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $e2eCommand = 'php '. $rectorBin .' process --dry-run --no-ansi --no-progress-bar -a '. $autoloadFile . ' --clear-cache';
 
@@ -27,19 +36,19 @@ if (!file_exists($expectedDiff)) {
     exit($exitCode);
 }
 
+$symfonyStyleFactory = new SymfonyStyleFactory();
+$symfonyStyle =  $symfonyStyleFactory->create();
+
 $matchedExpectedOutput = false;
 $expectedOutput = trim(file_get_contents($expectedDiff));
 if ($output === $expectedOutput) {
-    $matchedExpectedOutput = true;
+    $symfonyStyle->success('End-to-end test successfully completed');
+    exit(Command::SUCCESS);
 }
 
-if ($matchedExpectedOutput === false) {
-    echo "\nEXPECTED:\n";
-    var_dump($expectedOutput);
-    echo "\nACTUAL:\n";
-    var_dump($output);
-    exit(1);
-}
+// print color diff, to make easy find the differences
+$consoleDiffer = new ConsoleDiffer(new Differ(), new ColorConsoleDiffFormatter());
+$diff = $consoleDiffer->diff($output, $expectedOutput);
+$symfonyStyle->writeln($diff);
 
-echo "[OK] end-to-end test successfully completed.";
-exit(0);
+exit(Command::FAILURE);
