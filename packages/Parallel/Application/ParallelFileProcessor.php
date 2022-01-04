@@ -69,6 +69,7 @@ final class ParallelFileProcessor
         $numberOfProcesses = $schedule->getNumberOfProcesses();
         // initial counters
         $fileDiffs = [];
+        /** @var SystemError[] $systemErrors */
         $systemErrors = [];
         $tcpServer = new \RectorPrefix20220104\React\Socket\TcpServer('127.0.0.1:0', $streamSelectLoop);
         $this->processPool = new \RectorPrefix20220104\Symplify\EasyParallel\ValueObject\ProcessPool($tcpServer);
@@ -117,7 +118,7 @@ final class ParallelFileProcessor
                     // decode arrays to objects
                     foreach ($json[\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (\is_string($jsonError)) {
-                            $systemErrors[] = 'System error: ' . $jsonError;
+                            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError('System error: ' . $jsonError);
                             continue;
                         }
                         $systemErrors[] = \Rector\Core\ValueObject\Error\SystemError::decode($jsonError);
@@ -149,14 +150,14 @@ final class ParallelFileProcessor
                     if ($exitCode === null) {
                         return;
                     }
-                    $systemErrors[] = 'Child process error: ' . $stdErr;
+                    $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError('Child process error: ' . $stdErr);
                 }
             );
             $this->processPool->attachProcess($processIdentifier, $parallelProcess);
         }
         $streamSelectLoop->run();
         if ($reachedSystemErrorsCountLimit) {
-            $systemErrors[] = \sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_COUNT_LIMIT);
+            $systemErrors[] = new \Rector\Core\ValueObject\Error\SystemError(\sprintf('Reached system errors count limit of %d, exiting...', self::SYSTEM_ERROR_COUNT_LIMIT));
         }
         return [\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $fileDiffs, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $systemErrors, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => \count($systemErrors)];
     }

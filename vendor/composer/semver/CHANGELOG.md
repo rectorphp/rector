@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+### [3.2.7] 2022-01-04
+
+* Fixed: typo in type definition of Intervals class causing issues with Psalm scanning vendors
+
 ### [3.2.6] 2021-10-25
 
   * Fixed: type improvements to parseStability
@@ -149,6 +153,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     - Namespace: `Composer\Test\Package\LinkConstraint` -> `Composer\Test\Semver\Constraint`
   * Changed: code style using php-cs-fixer.
 
+[3.2.7]: https://github.com/composer/semver/compare/3.2.6...3.2.7
+[3.2.6]: https://github.com/composer/semver/compare/3.2.5...3.2.6
 [3.2.5]: https://github.com/composer/semver/compare/3.2.4...3.2.5
 [3.2.4]: https://github.com/composer/semver/compare/3.2.3...3.2.4
 [3.2.3]: https://github.com/composer/semver/compare/3.2.2...3.2.3

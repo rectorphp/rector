@@ -14,9 +14,9 @@ final class SystemError implements \RectorPrefix20220104\Symplify\EasyParallel\C
     private $message;
     /**
      * @readonly
-     * @var string
+     * @var string|null
      */
-    private $relativeFilePath;
+    private $relativeFilePath = null;
     /**
      * @readonly
      * @var int|null
@@ -28,10 +28,11 @@ final class SystemError implements \RectorPrefix20220104\Symplify\EasyParallel\C
      */
     private $rectorClass = null;
     /**
+     * @param string|null $relativeFilePath
      * @param int|null $line
      * @param string|null $rectorClass
      */
-    public function __construct(string $message, string $relativeFilePath, $line = null, $rectorClass = null)
+    public function __construct(string $message, $relativeFilePath = null, $line = null, $rectorClass = null)
     {
         $this->message = $message;
         $this->relativeFilePath = $relativeFilePath;
@@ -42,7 +43,10 @@ final class SystemError implements \RectorPrefix20220104\Symplify\EasyParallel\C
     {
         return $this->message;
     }
-    public function getFile() : string
+    /**
+     * @return string|null
+     */
+    public function getFile()
     {
         return $this->relativeFilePath;
     }
@@ -58,7 +62,7 @@ final class SystemError implements \RectorPrefix20220104\Symplify\EasyParallel\C
         return $this->relativeFilePath . ':' . $this->line;
     }
     /**
-     * @return array{message: string, relative_file_path: string, line: int|null, rector_class: string|null}
+     * @return array{message: string, relative_file_path: string|null, line: int|null, rector_class: string|null}
      */
     public function jsonSerialize() : array
     {

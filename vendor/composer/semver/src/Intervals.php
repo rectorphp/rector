@@ -363,7 +363,7 @@ class Intervals
         return array('numeric' => $intervals, 'branches' => $branches);
     }
     /**
-     * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}}
+     * @phpstan-return array{'numeric': Interval[], 'branches': array{'names': string[], 'exclude': bool}}
      */
     private static function generateSingleConstraintIntervals(\RectorPrefix20220104\Composer\Semver\Constraint\Constraint $constraint)
     {
