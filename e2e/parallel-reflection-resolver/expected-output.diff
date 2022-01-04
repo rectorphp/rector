@@ -1,12 +1,12 @@
 2 files with changes
 ====================
 
-1) src/NamespacedSomeClassFound.php:5
+1) src/SomeClassNotFound.php:3
 
     ---------- begin diff ----------
 @@ @@
 
- final class NamespacedSomeClassFound
+ final class SomeClassNotFound
  {
 -    private $foo;
  }
@@ -16,12 +16,12 @@ Applied rules:
  * RemoveUnusedPrivatePropertyRector
 
 
-2) src/SomeClassNotFound.php:3
+2) src/NamespacedSomeClassFound.php:5
 
     ---------- begin diff ----------
 @@ @@
 
- final class SomeClassNotFound
+ final class NamespacedSomeClassFound
  {
 -    private $foo;
  }
