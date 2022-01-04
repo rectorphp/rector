@@ -8,6 +8,7 @@ use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
+use Rector\Symfony\Set\SymfonySetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
@@ -24,4 +25,6 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
+    // for testing
+    $containerConfigurator->import(\Rector\Symfony\Set\SymfonySetList::SYMFONY_60);
 };

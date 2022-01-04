@@ -18,6 +18,7 @@ use PHPStan\Type\UnionType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20220104\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
@@ -34,6 +35,13 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $nullableValueGuessType = new \PHPStan\Type\UnionType([new \PHPStan\Type\NullType(), new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\Guess\\ValueGuess')]);
     $configurationType = new \PHPStan\Type\ObjectType('Symfony\\Component\\Config\\Definition\\ConfigurationInterface');
     $scalarTypes = [$arrayType, new \PHPStan\Type\BooleanType(), new \PHPStan\Type\StringType(), new \PHPStan\Type\IntegerType(), new \PHPStan\Type\FloatType(), new \PHPStan\Type\NullType()];
+    $scalarArrayObjectUnionedTypes = \array_merge($scalarTypes, [new \PHPStan\Type\ObjectType('ArrayObject')]);
+    // cannot be crated with \PHPStan\Type\UnionTypeHelper::sortTypes() as ObjectType requires a class reflection we do not have here
+    $unionTypeReflectionClass = new \ReflectionClass(\PHPStan\Type\UnionType::class);
+    /** @var UnionType $scalarArrayObjectUnionType */
+    $scalarArrayObjectUnionType = $unionTypeReflectionClass->newInstanceWithoutConstructor();
+    $privatesAccessor = new \RectorPrefix20220104\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
+    $privatesAccessor->setPrivateProperty($scalarArrayObjectUnionType, 'types', $scalarArrayObjectUnionedTypes);
     // @see https://github.com/symfony/symfony/pull/42064
     $services = $containerConfigurator->services();
     $services->set(\Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector::class)->configure([
@@ -152,10 +160,10 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Validator\\Constraint', 'getRequiredOptions', $arrayType),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Validator\\Constraint', 'validatedBy', new \PHPStan\Type\StringType()),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Validator\\Constraint', 'getTargets', new \PHPStan\Type\UnionType([new \PHPStan\Type\StringType(), $arrayType])),
-        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Serializer\\Normalizer\\AbstractObjectNormalizer', 'normalize', new \PHPStan\Type\UnionType(\array_merge($scalarTypes, [new \PHPStan\Type\ObjectType('ArrayObject')]))),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Serializer\\Normalizer\\AbstractObjectNormalizer', 'normalize', $scalarArrayObjectUnionType),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\DependencyInjection\\Container', 'getParameter', new \PHPStan\Type\UnionType($scalarTypes)),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\DependencyInjection\\ContainerInterface', 'getParameter', new \PHPStan\Type\UnionType($scalarTypes)),
-        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface', 'normalize', new \PHPStan\Type\UnionType(\array_merge($scalarTypes, [new \PHPStan\Type\ObjectType('ArrayObject')]))),
+        new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface', 'normalize', $scalarArrayObjectUnionType),
         new \Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration('Symfony\\Component\\Security\\Http\\Authenticator\\AuthenticatorInterface', 'authenticate', new \PHPStan\Type\ObjectType('Symfony\\Component\\Security\\Http\\Authenticator\\Passport\\Passport')),
     ]);
 };
