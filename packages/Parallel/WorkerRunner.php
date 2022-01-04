@@ -5,8 +5,10 @@ namespace Rector\Parallel;
 
 use RectorPrefix20220104\Clue\React\NDJson\Decoder;
 use RectorPrefix20220104\Clue\React\NDJson\Encoder;
+use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
@@ -38,14 +40,27 @@ final class WorkerRunner
      * @var \Rector\Core\Application\FileProcessor\PhpFileProcessor
      */
     private $phpFileProcessor;
-    public function __construct(\RectorPrefix20220104\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileProcessor\PhpFileProcessor $phpFileProcessor)
+    /**
+     * @readonly
+     * @var \PHPStan\Analyser\NodeScopeResolver
+     */
+    private $nodeScopeResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
+     */
+    private $dynamicSourceLocatorDecorator;
+    public function __construct(\RectorPrefix20220104\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileProcessor\PhpFileProcessor $phpFileProcessor, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->parametersMerger = $parametersMerger;
         $this->currentFileProvider = $currentFileProvider;
         $this->phpFileProcessor = $phpFileProcessor;
+        $this->nodeScopeResolver = $nodeScopeResolver;
+        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
     public function run(\RectorPrefix20220104\Clue\React\NDJson\Encoder $encoder, \RectorPrefix20220104\Clue\React\NDJson\Decoder $decoder, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
+        $this->dynamicSourceLocatorDecorator->addPaths($configuration->getPaths());
         // 1. handle system error
         $handleErrorCallback = static function (\Throwable $throwable) use($encoder) : void {
             $systemErrors = new \Rector\Core\ValueObject\Error\SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
@@ -64,6 +79,8 @@ final class WorkerRunner
             $filePaths = $json[\Rector\Parallel\ValueObject\Bridge::FILES] ?? [];
             $errorAndFileDiffs = [];
             $systemErrors = [];
+            // 1. allow PHPStan to work with static reflection on provided files
+            $this->nodeScopeResolver->setAnalysedFiles($filePaths);
             foreach ($filePaths as $filePath) {
                 try {
                     $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($filePath);
