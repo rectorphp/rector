@@ -6,14 +6,12 @@ namespace Rector\DowngradePhp70\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,7 +21,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeUncallableValueCallToCallUserFuncRector extends \Rector\Core\Rector\AbstractRector
 {
-    /** @var array<class-string<Expr>> */
+    /**
+     * @var array<class-string<Expr>>
+     */
     private const INDIRECT_CALLABLE_EXPR = [
         // Interpreted as MethodCall without parentheses.
         \PhpParser\Node\Expr\PropertyFetch::class,

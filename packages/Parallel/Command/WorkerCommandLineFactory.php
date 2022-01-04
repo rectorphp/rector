@@ -74,6 +74,10 @@ final class WorkerCommandLineFactory
         // disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
         $workerCommandArray[] = '--no-ansi';
+        if ($input->hasOption(\Rector\Core\Configuration\Option::CONFIG)) {
+            $workerCommandArray[] = '--config';
+            $workerCommandArray[] = $input->getOption(\Rector\Core\Configuration\Option::CONFIG);
+        }
         return \implode(' ', $workerCommandArray);
     }
     private function shouldSkipOption(\RectorPrefix20220104\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
