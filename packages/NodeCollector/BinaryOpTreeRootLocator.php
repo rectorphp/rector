@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Rector\NodeCollector;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
+/**
+ * @see \Rector\Tests\NodeCollector\BinaryOpTreeRootLocatorTest
+ */
 final class BinaryOpTreeRootLocator
 {
     /**
@@ -20,20 +24,32 @@ final class BinaryOpTreeRootLocator
      */
     public function findOperationRoot(Expr $expr, string $binaryOpClass): Expr
     {
-        /** @var ?Expr $parentNode */
         $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode === null || $parentNode::class !== $binaryOpClass) {
+        if (! $parentNode instanceof Node) {
             return $expr;
         }
 
-        assert($parentNode instanceof BinaryOp);
-        $isLeftChild = $parentNode->left === $expr;
-        $isRightChild = $parentNode->right === $expr;
-        $isRightChildAndNotBinaryOp = $isRightChild && $expr::class !== $binaryOpClass;
-        if ($isLeftChild || $isRightChildAndNotBinaryOp) {
+        if ($parentNode::class !== $binaryOpClass) {
+            return $expr;
+        }
+
+        if (! $parentNode instanceof BinaryOp) {
+            return $expr;
+        }
+
+        if ($parentNode->left === $expr) {
             return $this->findOperationRoot($parentNode, $binaryOpClass);
         }
 
-        return $expr;
+        $isRightChild = $parentNode->right === $expr;
+        if (! $isRightChild) {
+            return $expr;
+        }
+
+        if ($expr::class === $binaryOpClass) {
+            return $expr;
+        }
+
+        return $this->findOperationRoot($parentNode, $binaryOpClass);
     }
 }
