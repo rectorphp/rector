@@ -27,6 +27,7 @@ use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SmartFileSystem\SmartFileSystem;
+use Webmozart\Assert\Assert;
 
 final class ApplicationFileProcessor
 {
@@ -284,6 +285,8 @@ final class ApplicationFileProcessor
      */
     private function resolvePhpFilePaths(array $files): array
     {
+        Assert::allIsAOf($files, File::class);
+
         $filePaths = [];
 
         foreach ($files as $file) {
