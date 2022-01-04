@@ -75,7 +75,9 @@ final class BinaryOpConditionsCollectorTest extends TestCase
 
         $result = $collector->findConditions($a, Plus::class);
 
-        $this->assertEquals([0 => $a], $result);
+        $this->assertEquals([
+            0 => $a,
+        ], $result);
     }
 
     public function testInnerNodeDifferentOp(): void
