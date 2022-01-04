@@ -81,37 +81,36 @@ CODE_SAMPLE
         // Store the value into a temporary variable to prevent running possible side-effects twice
         // when the expression is e.g. function.
         $variable = $this->createVariable($node);
-        $throwableCheck = new \PhpParser\Node\Expr\Instanceof_(new \PhpParser\Node\Expr\Assign($variable, $node->expr), $node->class);
+        $instanceof = new \PhpParser\Node\Expr\Instanceof_(new \PhpParser\Node\Expr\Assign($variable, $node->expr), $node->class);
         $exceptionFallbackCheck = $this->createFallbackCheck($variable);
-        $expression = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($throwableCheck, $exceptionFallbackCheck);
-        return $expression;
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($instanceof, $exceptionFallbackCheck);
     }
-    private function createVariable(\PhpParser\Node\Expr\Instanceof_ $expr) : \PhpParser\Node\Expr\Variable
+    private function createVariable(\PhpParser\Node\Expr\Instanceof_ $instanceof) : \PhpParser\Node\Expr\Variable
     {
-        $currentStmt = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $currentStmt = $instanceof->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
         $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         return new \PhpParser\Node\Expr\Variable($this->variableNaming->createCountedValueName('throwable', $scope));
     }
     /**
      * Also checks similar manual transformations.
      */
-    private function isAlreadyTransformed(\PhpParser\Node\Expr\Instanceof_ $instanceof_) : bool
+    private function isAlreadyTransformed(\PhpParser\Node\Expr\Instanceof_ $instanceof) : bool
     {
         /** @var Node $parentNode */
-        $parentNode = $instanceof_->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $instanceof->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return \false;
         }
-        $hasVariableToFindInDisjunction = ($var = $instanceof_->expr) instanceof \PhpParser\Node\Expr\Variable || $instanceof_->expr instanceof \PhpParser\Node\Expr\Assign && ($var = $instanceof_->expr->var) instanceof \PhpParser\Node\Expr\Variable;
+        $hasVariableToFindInDisjunction = ($var = $instanceof->expr) instanceof \PhpParser\Node\Expr\Variable || $instanceof->expr instanceof \PhpParser\Node\Expr\Assign && ($var = $instanceof->expr->var) instanceof \PhpParser\Node\Expr\Variable;
         if (!$hasVariableToFindInDisjunction) {
             return \false;
         }
-        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof_, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class);
+        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class);
         $disjuncts = $this->binaryOpConditionsCollector->findConditions($disjunctionTree, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class);
         // If we transformed it ourselves, the second check can only be to the right
         // since it uses the assigned variable.
-        if ($instanceof_->expr instanceof \PhpParser\Node\Expr\Assign) {
-            $index = \array_search($instanceof_, $disjuncts, \true);
+        if ($instanceof->expr instanceof \PhpParser\Node\Expr\Assign) {
+            $index = \array_search($instanceof, $disjuncts, \true);
             if ($index !== \false) {
                 $disjuncts = \array_slice($disjuncts, $index);
             }
