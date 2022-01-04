@@ -74,6 +74,7 @@ final class ParallelFileProcessor
 
         // initial counters
         $fileDiffs = [];
+        /** @var SystemError[] $systemErrors */
         $systemErrors = [];
 
         $tcpServer = new TcpServer('127.0.0.1:0', $streamSelectLoop);
@@ -166,7 +167,7 @@ final class ParallelFileProcessor
                     // decode arrays to objects
                     foreach ($json[Bridge::SYSTEM_ERRORS] as $jsonError) {
                         if (is_string($jsonError)) {
-                            $systemErrors[] = 'System error: ' . $jsonError;
+                            $systemErrors[] = new SystemError('System error: ' . $jsonError);
                             continue;
                         }
 
@@ -211,7 +212,7 @@ final class ParallelFileProcessor
                         return;
                     }
 
-                    $systemErrors[] = 'Child process error: ' . $stdErr;
+                    $systemErrors[] = new SystemError('Child process error: ' . $stdErr);
                 }
             );
 
@@ -221,10 +222,10 @@ final class ParallelFileProcessor
         $streamSelectLoop->run();
 
         if ($reachedSystemErrorsCountLimit) {
-            $systemErrors[] = sprintf(
+            $systemErrors[] = new SystemError(sprintf(
                 'Reached system errors count limit of %d, exiting...',
                 self::SYSTEM_ERROR_COUNT_LIMIT
-            );
+            ));
         }
 
         return [

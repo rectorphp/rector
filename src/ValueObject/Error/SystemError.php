@@ -11,7 +11,7 @@ final class SystemError implements SerializableInterface
 {
     public function __construct(
         private readonly string $message,
-        private readonly string $relativeFilePath,
+        private readonly string|null $relativeFilePath = null,
         private readonly int|null $line = null,
         private readonly string|null $rectorClass = null
     ) {
@@ -22,7 +22,7 @@ final class SystemError implements SerializableInterface
         return $this->message;
     }
 
-    public function getFile(): string
+    public function getFile(): string|null
     {
         return $this->relativeFilePath;
     }
@@ -38,7 +38,7 @@ final class SystemError implements SerializableInterface
     }
 
     /**
-     * @return array{message: string, relative_file_path: string, line: int|null, rector_class: string|null}
+     * @return array{message: string, relative_file_path: string|null, line: int|null, rector_class: string|null}
      */
     public function jsonSerialize(): array
     {
