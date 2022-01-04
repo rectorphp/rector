@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [2.0.4] - 2022-01-04
+  * Fixed: allow calling `isXdebugActive` before class instantiation.
+
 ## [2.0.3] - 2021-12-08
   * Added: support, type annotations and refactoring for stricter PHPStan analysis.
 
@@ -94,7 +97,8 @@
   * Break: the following class was renamed:
     - `Composer\XdebugHandler` -> `Composer\XdebugHandler\XdebugHandler`
 
-[Unreleased]: https://github.com/composer/xdebug-handler/compare/2.0.3...HEAD
+[Unreleased]: https://github.com/composer/xdebug-handler/compare/2.0.4...HEAD
+[2.0.4]: https://github.com/composer/xdebug-handler/compare/2.0.3...2.0.4
 [2.0.3]: https://github.com/composer/xdebug-handler/compare/2.0.2...2.0.3
 [2.0.2]: https://github.com/composer/xdebug-handler/compare/2.0.1...2.0.2
 [2.0.1]: https://github.com/composer/xdebug-handler/compare/2.0.0...2.0.1

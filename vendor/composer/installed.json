@@ -227,17 +227,17 @@
         },
         {
             "name": "composer\/xdebug-handler",
-            "version": "2.0.3",
-            "version_normalized": "2.0.3.0",
+            "version": "2.0.4",
+            "version_normalized": "2.0.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/xdebug-handler.git",
-                "reference": "6555461e76962fd0379c444c46fd558a0fcfb65e"
+                "reference": "0c1a3925ec58a4ec98e992b9c7d171e9e184be0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/xdebug-handler\/zipball\/6555461e76962fd0379c444c46fd558a0fcfb65e",
-                "reference": "6555461e76962fd0379c444c46fd558a0fcfb65e",
+                "url": "https:\/\/api.github.com\/repos\/composer\/xdebug-handler\/zipball\/0c1a3925ec58a4ec98e992b9c7d171e9e184be0a",
+                "reference": "0c1a3925ec58a4ec98e992b9c7d171e9e184be0a",
                 "shasum": ""
             },
             "require": {
@@ -250,7 +250,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "symfony\/phpunit-bridge": "^4.2 || ^5.0 || ^6.0"
             },
-            "time": "2021-12-08T13:07:32+00:00",
+            "time": "2022-01-04T17:06:45+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -276,7 +276,7 @@
             "support": {
                 "irc": "irc:\/\/irc.freenode.org\/composer",
                 "issues": "https:\/\/github.com\/composer\/xdebug-handler\/issues",
-                "source": "https:\/\/github.com\/composer\/xdebug-handler\/tree\/2.0.3"
+                "source": "https:\/\/github.com\/composer\/xdebug-handler\/tree\/2.0.4"
             },
             "funding": [
                 {
