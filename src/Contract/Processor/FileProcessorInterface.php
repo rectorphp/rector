@@ -16,7 +16,7 @@ interface FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration);
+    public function process(File $file, Configuration $configuration): array;
 
     /**
      * @return string[]
