@@ -33,7 +33,7 @@ export IFS=";"
 for directory in $directories; do
     echo "[NOTE] Downgrading '$directory' directory\n"
 
-    if printf '%s' "$directory" | grep -Eq '^(vendor/(symfony|symplify)|utils).*'; then
+    if printf '%s' "$directory" | grep -Eq '^(vendor/(symfony|symplify)|rules/Naming|utils).*'; then
         echo "downgrading with no parallel...\n"
         CONFIG_PATH_DOWNGRADE="build/config/config-downgrade.php"
     else
