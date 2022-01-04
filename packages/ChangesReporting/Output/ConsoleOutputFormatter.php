@@ -110,8 +110,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $errorMessage = $this->normalizePathsToRelativeWithLine($errorMessage);
 
             $message = sprintf(
-                'Could not process "%s" file%s, due to: %s"%s".',
-                $error->getFile(),
+                'Could not process %s%s, due to: %s"%s".',
+                $error->getFile() !== null ? '"' . $error->getFile() . '" file' : 'some files',
                 $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '',
                 PHP_EOL,
                 $errorMessage
