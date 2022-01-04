@@ -14,7 +14,8 @@ $projectRoot = __DIR__ .'/..';
 $rectorBin = $projectRoot . '/bin/rector';
 $autoloadFile = $projectRoot . '/vendor/autoload.php';
 
-require_once $autoloadFile;
+// so we can use helper classes here
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $e2eCommand = 'php '. $rectorBin .' process --dry-run --no-ansi --no-progress-bar -a '. $autoloadFile . ' --clear-cache';
 
