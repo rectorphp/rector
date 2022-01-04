@@ -18,6 +18,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
+use PHPStan\Broker\ClassAutoloadingException;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
@@ -136,7 +137,12 @@ final class NodeTypeResolver
             $resolvedType = $resolvedType->getStaticObjectType();
         }
         if ($resolvedType instanceof \PHPStan\Type\ObjectType) {
-            return $this->resolveObjectType($resolvedType, $requiredObjectType);
+            try {
+                return $this->resolveObjectType($resolvedType, $requiredObjectType);
+            } catch (\PHPStan\Broker\ClassAutoloadingException $exception) {
+                // in some type checks, the provided type in rector.php configuration does not have to exists
+                return \false;
+            }
         }
         return $this->isMatchingUnionType($resolvedType, $requiredObjectType);
     }
