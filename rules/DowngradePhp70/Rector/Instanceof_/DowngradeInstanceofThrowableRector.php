@@ -67,6 +67,7 @@ CODE_SAMPLE
         if (! ($node->class instanceof Name && $this->nodeNameResolver->isName($node->class, 'Throwable'))) {
             return null;
         }
+
         $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
         if (in_array(self::class, $createdByRule, true)) {
             return null;
@@ -80,16 +81,15 @@ CODE_SAMPLE
         // Store the value into a temporary variable to prevent running possible side-effects twice
         // when the expression is e.g. function.
         $variable = $this->createVariable($node);
-        $throwableCheck = new Instanceof_(new Assign($variable, $node->expr), $node->class);
+        $instanceof = new Instanceof_(new Assign($variable, $node->expr), $node->class);
         $exceptionFallbackCheck = $this->createFallbackCheck($variable);
-        $expression = new BooleanOr($throwableCheck, $exceptionFallbackCheck);
 
-        return $expression;
+        return new BooleanOr($instanceof, $exceptionFallbackCheck);
     }
 
-    private function createVariable(Instanceof_ $expr): Variable
+    private function createVariable(Instanceof_ $instanceof): Variable
     {
-        $currentStmt = $expr->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $currentStmt = $instanceof->getAttribute(AttributeKey::CURRENT_STATEMENT);
         $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
 
         return new Variable($this->variableNaming->createCountedValueName('throwable', $scope));
@@ -98,26 +98,26 @@ CODE_SAMPLE
     /**
      * Also checks similar manual transformations.
      */
-    private function isAlreadyTransformed(Instanceof_ $instanceof_): bool
+    private function isAlreadyTransformed(Instanceof_ $instanceof): bool
     {
         /** @var Node $parentNode */
-        $parentNode = $instanceof_->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $instanceof->getAttribute(AttributeKey::PARENT_NODE);
         if (! $parentNode instanceof BooleanOr) {
             return false;
         }
 
-        $hasVariableToFindInDisjunction = ($var = $instanceof_->expr) instanceof Variable || ($instanceof_->expr instanceof Assign && ($var = $instanceof_->expr->var) instanceof Variable);
+        $hasVariableToFindInDisjunction = ($var = $instanceof->expr) instanceof Variable || ($instanceof->expr instanceof Assign && ($var = $instanceof->expr->var) instanceof Variable);
         if (! $hasVariableToFindInDisjunction) {
             return false;
         }
 
-        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof_, BooleanOr::class);
+        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof, BooleanOr::class);
         $disjuncts = $this->binaryOpConditionsCollector->findConditions($disjunctionTree, BooleanOr::class);
 
         // If we transformed it ourselves, the second check can only be to the right
         // since it uses the assigned variable.
-        if ($instanceof_->expr instanceof Assign) {
-            $index = array_search($instanceof_, $disjuncts, true);
+        if ($instanceof->expr instanceof Assign) {
+            $index = array_search($instanceof, $disjuncts, true);
             if ($index !== false) {
                 $disjuncts = array_slice($disjuncts, $index);
             }
