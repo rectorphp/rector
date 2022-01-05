@@ -8,6 +8,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
+use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 
@@ -20,13 +21,7 @@ final class IterableTypeAnalyzer
 
     public function isIterableType(Type $type): bool
     {
-        if ($type instanceof UnionType) {
-            foreach ($type->getTypes() as $unionedType) {
-                if (! $this->isIterableType($unionedType)) {
-                    return false;
-                }
-            }
-
+        if ($this->isUnionOfIterableTypes($type)) {
             return true;
         }
 
@@ -50,5 +45,24 @@ final class IterableTypeAnalyzer
         }
 
         return false;
+    }
+
+    private function isUnionOfIterableTypes(Type $type): bool
+    {
+        if (! $type instanceof UnionType) {
+            return false;
+        }
+        foreach ($type->getTypes() as $unionedType) {
+            // nullable union is allowed
+            if ($unionedType instanceof NullType) {
+                continue;
+            }
+
+            if (! $this->isIterableType($unionedType)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
