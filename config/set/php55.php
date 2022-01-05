@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220104;
+namespace RectorPrefix20220105;
 
 use Rector\Php55\Rector\Class_\ClassConstantToSelfClassRector;
 use Rector\Php55\Rector\FuncCall\PregReplaceEModifierRector;

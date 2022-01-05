@@ -5,12 +5,12 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220104\Tracy;
+namespace RectorPrefix20220105\Tracy;
 
 /**
  * Logger.
  */
-class Logger implements \RectorPrefix20220104\Tracy\ILogger
+class Logger implements \RectorPrefix20220105\Tracy\ILogger
 {
     /** @var string|null name of the directory where errors should be logged */
     public $directory;
@@ -27,7 +27,7 @@ class Logger implements \RectorPrefix20220104\Tracy\ILogger
     /**
      * @param  string|array|null  $email
      */
-    public function __construct(?string $directory, $email = null, ?\RectorPrefix20220104\Tracy\BlueScreen $blueScreen = null)
+    public function __construct(?string $directory, $email = null, ?\RectorPrefix20220105\Tracy\BlueScreen $blueScreen = null)
     {
         $this->directory = $directory;
         $this->email = $email;
@@ -68,12 +68,12 @@ class Logger implements \RectorPrefix20220104\Tracy\ILogger
     public static function formatMessage($message) : string
     {
         if ($message instanceof \Throwable) {
-            foreach (\RectorPrefix20220104\Tracy\Helpers::getExceptionChain($message) as $exception) {
-                $tmp[] = ($exception instanceof \ErrorException ? \RectorPrefix20220104\Tracy\Helpers::errorTypeToString($exception->getSeverity()) . ': ' . $exception->getMessage() : \RectorPrefix20220104\Tracy\Helpers::getClass($exception) . ': ' . $exception->getMessage() . ($exception->getCode() ? ' #' . $exception->getCode() : '')) . ' in ' . $exception->getFile() . ':' . $exception->getLine();
+            foreach (\RectorPrefix20220105\Tracy\Helpers::getExceptionChain($message) as $exception) {
+                $tmp[] = ($exception instanceof \ErrorException ? \RectorPrefix20220105\Tracy\Helpers::errorTypeToString($exception->getSeverity()) . ': ' . $exception->getMessage() : \RectorPrefix20220105\Tracy\Helpers::getClass($exception) . ': ' . $exception->getMessage() . ($exception->getCode() ? ' #' . $exception->getCode() : '')) . ' in ' . $exception->getFile() . ':' . $exception->getLine();
             }
             $message = \implode("\ncaused by ", $tmp);
         } elseif (!\is_string($message)) {
-            $message = \RectorPrefix20220104\Tracy\Dumper::toText($message);
+            $message = \RectorPrefix20220105\Tracy\Dumper::toText($message);
         }
         return \trim($message);
     }
@@ -82,11 +82,11 @@ class Logger implements \RectorPrefix20220104\Tracy\ILogger
      */
     public static function formatLogLine($message, ?string $exceptionFile = null) : string
     {
-        return \implode(' ', [\date('[Y-m-d H-i-s]'), \preg_replace('#\\s*\\r?\\n\\s*#', ' ', static::formatMessage($message)), ' @  ' . \RectorPrefix20220104\Tracy\Helpers::getSource(), $exceptionFile ? ' @@  ' . \basename($exceptionFile) : null]);
+        return \implode(' ', [\date('[Y-m-d H-i-s]'), \preg_replace('#\\s*\\r?\\n\\s*#', ' ', static::formatMessage($message)), ' @  ' . \RectorPrefix20220105\Tracy\Helpers::getSource(), $exceptionFile ? ' @@  ' . \basename($exceptionFile) : null]);
     }
     public function getExceptionFile(\Throwable $exception, string $level = self::EXCEPTION) : string
     {
-        foreach (\RectorPrefix20220104\Tracy\Helpers::getExceptionChain($exception) as $exception) {
+        foreach (\RectorPrefix20220105\Tracy\Helpers::getExceptionChain($exception) as $exception) {
             $data[] = [\get_class($exception), $exception->getMessage(), $exception->getCode(), $exception->getFile(), $exception->getLine(), \array_map(function (array $item) : array {
                 unset($item['args']);
                 return $item;
@@ -108,7 +108,7 @@ class Logger implements \RectorPrefix20220104\Tracy\ILogger
     protected function logException(\Throwable $exception, ?string $file = null) : string
     {
         $file = $file ?: $this->getExceptionFile($exception);
-        $bs = $this->blueScreen ?: new \RectorPrefix20220104\Tracy\BlueScreen();
+        $bs = $this->blueScreen ?: new \RectorPrefix20220105\Tracy\BlueScreen();
         $bs->renderToFile($exception, $file);
         return $file;
     }
@@ -130,7 +130,7 @@ class Logger implements \RectorPrefix20220104\Tracy\ILogger
     public function defaultMailer($message, string $email) : void
     {
         $host = \preg_replace('#[^\\w.-]+#', '', $_SERVER['SERVER_NAME'] ?? \php_uname('n'));
-        $parts = \str_replace(["\r\n", "\n"], ["\n", \PHP_EOL], ['headers' => \implode("\n", ['From: ' . ($this->fromEmail ?: "noreply@{$host}"), 'X-Mailer: Tracy', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: 8bit']) . "\n", 'subject' => "PHP: An error occurred on the server {$host}", 'body' => static::formatMessage($message) . "\n\nsource: " . \RectorPrefix20220104\Tracy\Helpers::getSource()]);
+        $parts = \str_replace(["\r\n", "\n"], ["\n", \PHP_EOL], ['headers' => \implode("\n", ['From: ' . ($this->fromEmail ?: "noreply@{$host}"), 'X-Mailer: Tracy', 'Content-Type: text/plain; charset=UTF-8', 'Content-Transfer-Encoding: 8bit']) . "\n", 'subject' => "PHP: An error occurred on the server {$host}", 'body' => static::formatMessage($message) . "\n\nsource: " . \RectorPrefix20220105\Tracy\Helpers::getSource()]);
         \mail($email, $parts['subject'], $parts['body'], $parts['headers']);
     }
 }

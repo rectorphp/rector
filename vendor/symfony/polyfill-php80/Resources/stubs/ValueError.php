@@ -2,7 +2,8 @@
 
 
 
-class ValueError extends \Error
-{
+if (\PHP_VERSION_ID < 80000) {
+    class ValueError extends \Error
+    {
+    }
 }
-\class_alias('RectorPrefix20220104\\ValueError', 'ValueError', \false);

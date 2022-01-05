@@ -23,9 +23,12 @@
     "require": {
         "php": ">=7.1"
     },
+    "provide": {
+        "ext-ctype": "*"
+    },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220104\\Symfony\\Polyfill\\Ctype\\": ""
+            "RectorPrefix20220105\\Symfony\\Polyfill\\Ctype\\": ""
         },
         "files": [
             "bootstrap.php"
