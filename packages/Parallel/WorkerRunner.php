@@ -83,6 +83,10 @@ final class WorkerRunner
                     $file = new File($smartFileInfo, $smartFileInfo->getContents());
                     $this->currentFileProvider->setFile($file);
 
+                    if (! $this->phpFileProcessor->supports($file, $configuration)) {
+                        continue;
+                    }
+
                     $currentErrorsAndFileDiffs = $this->phpFileProcessor->process($file, $configuration);
 
                     $errorAndFileDiffs = $this->parametersMerger->merge(
