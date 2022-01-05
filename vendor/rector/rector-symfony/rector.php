@@ -19,6 +19,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         \Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector::class,
         '*/Fixture/*',
         '*/Source/*',
+        '*/Source*/*',
     ]);
     $services = $containerConfigurator->services();
     $services->set(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class)->configure(['Symfony\\*', 'Twig_*', 'Swift_*']);

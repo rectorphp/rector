@@ -5,9 +5,12 @@ namespace Rector\Symfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -40,7 +43,7 @@ final class MakeCommandLazyRector extends \Rector\Core\Rector\AbstractRector
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make Symfony commands lazy', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
-class SunshineCommand extends Command
+final class SunshineCommand extends Command
 {
     public function configure()
     {
@@ -51,7 +54,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 use Symfony\Component\Console\Command\Command
 
-class SunshineCommand extends Command
+final class SunshineCommand extends Command
 {
     protected static $defaultName = 'sunshine';
     public function configure()
@@ -76,21 +79,28 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new \PHPStan\Type\ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
-        $commandName = $this->resolveCommandNameAndRemove($node);
+        $defaultNameProperty = $node->getProperty('defaultName');
+        if ($defaultNameProperty instanceof \PhpParser\Node\Stmt\Property) {
+            return null;
+        }
+        $commandName = $this->resolveCommandName($node);
         if (!$commandName instanceof \PhpParser\Node) {
             return null;
         }
+        if (!$commandName instanceof \PhpParser\Node\Scalar\String_ && !$commandName instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            return null;
+        }
+        $this->removeConstructorIfHasOnlySetNameMethodCall($node);
         $defaultNameProperty = $this->createStaticProtectedPropertyWithDefault('defaultName', $commandName);
         $node->stmts = \array_merge([$defaultNameProperty], $node->stmts);
         return $node;
     }
-    private function resolveCommandNameAndRemove(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
+    private function resolveCommandName(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
     {
         $commandName = $this->resolveCommandNameFromConstructor($class);
         if (!$commandName instanceof \PhpParser\Node) {
-            $commandName = $this->resolveCommandNameFromSetName($class);
+            return $this->resolveCommandNameFromSetName($class);
         }
-        $this->removeConstructorIfHasOnlySetNameMethodCall($class);
         return $commandName;
     }
     private function resolveCommandNameFromConstructor(\PhpParser\Node\Stmt\Class_ $class) : ?\PhpParser\Node
@@ -107,6 +117,11 @@ CODE_SAMPLE
             if (!$commandName instanceof \PhpParser\Node\Expr) {
                 return null;
             }
+            // only valid static property values for name
+            if (!$commandName instanceof \PhpParser\Node\Scalar\String_ && !$commandName instanceof \PhpParser\Node\Expr\ConstFetch) {
+                return null;
+            }
+            // remove if parent name is not string
             \array_shift($node->args);
         });
         return $commandName;
