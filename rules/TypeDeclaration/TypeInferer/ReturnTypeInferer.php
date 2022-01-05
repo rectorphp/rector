@@ -93,6 +93,7 @@ final class ReturnTypeInferer
                 continue;
             }
 
+
             $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
 
             // in case of void, check return type of children methods

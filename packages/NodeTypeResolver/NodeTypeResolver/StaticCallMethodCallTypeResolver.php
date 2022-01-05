@@ -59,11 +59,15 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         }
 
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+
         if (! $scope instanceof Scope) {
             return new MixedType();
         }
 
         $nodeReturnType = $scope->getType($node);
+        dump_with_depth($nodeReturnType, 3);
+        die;
+
         if (! $nodeReturnType instanceof MixedType) {
             return $nodeReturnType;
         }

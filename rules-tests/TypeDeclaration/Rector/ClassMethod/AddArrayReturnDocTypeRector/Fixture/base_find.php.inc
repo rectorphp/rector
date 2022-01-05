@@ -23,7 +23,7 @@ use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector\
 final class Finder extends BaseFinder
 {
     /**
-     * @return static|false
+     * @return bool|static
      */
     public function something()
     {
