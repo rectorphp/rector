@@ -15,7 +15,7 @@ use PHPStan\Type\UnionType;
 final class IterableTypeAnalyzer
 {
     public function __construct(
-        private ReflectionProvider $reflectionProvider,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -38,8 +38,8 @@ final class IterableTypeAnalyzer
                 return false;
             }
 
-            $genericObjectType = $this->reflectionProvider->getClass($type->getClassName());
-            if ($genericObjectType->implementsInterface('Traversable')) {
+            $genericObjectTypeClassReflection = $this->reflectionProvider->getClass($type->getClassName());
+            if ($genericObjectTypeClassReflection->implementsInterface('Traversable')) {
                 return true;
             }
         }
@@ -52,6 +52,7 @@ final class IterableTypeAnalyzer
         if (! $type instanceof UnionType) {
             return false;
         }
+
         foreach ($type->getTypes() as $unionedType) {
             // nullable union is allowed
             if ($unionedType instanceof NullType) {
