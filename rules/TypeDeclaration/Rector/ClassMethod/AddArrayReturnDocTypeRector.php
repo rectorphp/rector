@@ -25,6 +25,7 @@ use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
+use Rector\TypeDeclaration\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInfererTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
@@ -45,6 +46,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         private readonly ReturnTagRemover $returnTagRemover,
         private readonly DetailedTypeAnalyzer $detailedTypeAnalyzer,
         private readonly TypeNormalizer $typeNormalizer,
+        private readonly IterableTypeAnalyzer $iterableTypeAnalyzer,
     ) {
     }
 
@@ -178,6 +180,10 @@ CODE_SAMPLE
         ClassMethod $classMethod,
         PhpDocInfo $phpDocInfo
     ): bool {
+        if (! $this->iterableTypeAnalyzer->isIterableType($newType)) {
+            return true;
+        }
+
         if ($newType instanceof ArrayType && $this->shouldSkipArrayType($newType, $classMethod, $phpDocInfo)) {
             return true;
         }

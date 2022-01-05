@@ -6,6 +6,18 @@ use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use Tracy\Dumper;
 
+if (! function_exists('dump_with_depth')) {
+    /**
+     * @param mixed $value
+     */
+    function dump_with_depth($value, int $depth = 2): void
+    {
+        Dumper::dump($value, [
+            Dumper::DEPTH => $depth,
+        ]);
+    }
+}
+
 if (! function_exists('dn')) {
     function dn(Node $node, int $depth = 2): void
     {
