@@ -6,6 +6,15 @@ namespace RectorPrefix20220105;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use RectorPrefix20220105\Tracy\Dumper;
+if (!\function_exists('dump_with_depth')) {
+    /**
+     * @param mixed $value
+     */
+    function dump_with_depth($value, int $depth = 2) : void
+    {
+        \RectorPrefix20220105\Tracy\Dumper::dump($value, [\RectorPrefix20220105\Tracy\Dumper::DEPTH => $depth]);
+    }
+}
 if (!\function_exists('dn')) {
     function dn(\PhpParser\Node $node, int $depth = 2) : void
     {

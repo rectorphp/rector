@@ -9,8 +9,8 @@ $loader = require_once __DIR__.'/autoload.php';
 if (!class_exists('AutoloadIncluder', false) && !interface_exists('AutoloadIncluder', false) && !trait_exists('AutoloadIncluder', false)) {
     spl_autoload_call('RectorPrefix20220105\AutoloadIncluder');
 }
-if (!class_exists('ComposerAutoloaderInit4786b9bf3ccba2bd289627c76c84f87f', false) && !interface_exists('ComposerAutoloaderInit4786b9bf3ccba2bd289627c76c84f87f', false) && !trait_exists('ComposerAutoloaderInit4786b9bf3ccba2bd289627c76c84f87f', false)) {
-    spl_autoload_call('RectorPrefix20220105\ComposerAutoloaderInit4786b9bf3ccba2bd289627c76c84f87f');
+if (!class_exists('ComposerAutoloaderInitd2c47e9b1c523de03caede4ae2ea2722', false) && !interface_exists('ComposerAutoloaderInitd2c47e9b1c523de03caede4ae2ea2722', false) && !trait_exists('ComposerAutoloaderInitd2c47e9b1c523de03caede4ae2ea2722', false)) {
+    spl_autoload_call('RectorPrefix20220105\ComposerAutoloaderInitd2c47e9b1c523de03caede4ae2ea2722');
 }
 if (!class_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !interface_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false) && !trait_exists('Helmich\TypoScriptParser\Parser\AST\Statement', false)) {
     spl_autoload_call('RectorPrefix20220105\Helmich\TypoScriptParser\Parser\AST\Statement');
@@ -51,6 +51,11 @@ if (!class_exists('Symplify\SmartFileSystem\SmartFileInfo', false) && !interface
 
 // Functions whitelisting. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/README.md#functions-whitelisting
+if (!function_exists('dump_with_depth')) {
+    function dump_with_depth() {
+        return \RectorPrefix20220105\dump_with_depth(...func_get_args());
+    }
+}
 if (!function_exists('dn')) {
     function dn() {
         return \RectorPrefix20220105\dn(...func_get_args());
@@ -66,9 +71,9 @@ if (!function_exists('print_node')) {
         return \RectorPrefix20220105\print_node(...func_get_args());
     }
 }
-if (!function_exists('composerRequire4786b9bf3ccba2bd289627c76c84f87f')) {
-    function composerRequire4786b9bf3ccba2bd289627c76c84f87f() {
-        return \RectorPrefix20220105\composerRequire4786b9bf3ccba2bd289627c76c84f87f(...func_get_args());
+if (!function_exists('composerRequired2c47e9b1c523de03caede4ae2ea2722')) {
+    function composerRequired2c47e9b1c523de03caede4ae2ea2722() {
+        return \RectorPrefix20220105\composerRequired2c47e9b1c523de03caede4ae2ea2722(...func_get_args());
     }
 }
 if (!function_exists('scanPath')) {

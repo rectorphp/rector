@@ -3105,6 +3105,7 @@ return array(
     'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => $baseDir . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
+    'Rector\\TypeDeclaration\\TypeAnalyzer\\IterableTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/IterableTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\ObjectTypeComparator' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/ObjectTypeComparator.php',
     'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer.php',
