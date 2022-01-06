@@ -2,8 +2,15 @@
 # this file overrides definitions from the config above
 services:
     defaultAnalysisParser:
-        factory: @pathRoutingParser
+        factory: @cachedPathRoutingParser
         arguments!: []
+
+    cachedPathRoutingParser:
+        class: PHPStan\Parser\CachedParser
+        arguments:
+            originalParser: @pathRoutingParser
+            cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
+        autowired: false
 
     pathRoutingParser:
         class: PHPStan\Parser\PathRoutingParser
