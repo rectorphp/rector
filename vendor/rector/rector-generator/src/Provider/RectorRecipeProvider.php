@@ -32,7 +32,7 @@ final class RectorRecipeProvider
             $rectorRecipe->setResources($rectorRecipeConfiguration[\Rector\RectorGenerator\ValueObject\Option::RESOURCES]);
         }
         if (isset($rectorRecipeConfiguration[\Rector\RectorGenerator\ValueObject\Option::SET_FILE_PATH])) {
-            $rectorRecipe->setResources($rectorRecipeConfiguration[\Rector\RectorGenerator\ValueObject\Option::SET_FILE_PATH]);
+            $rectorRecipe->setSetFilePath($rectorRecipeConfiguration[\Rector\RectorGenerator\ValueObject\Option::SET_FILE_PATH]);
         }
         $this->rectorRecipe = $rectorRecipe;
     }

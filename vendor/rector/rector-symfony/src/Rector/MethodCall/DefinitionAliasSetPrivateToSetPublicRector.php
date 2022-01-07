@@ -79,7 +79,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'setPrivate')) {
             return null;
         }
-        $argValue = $node->args[0]->value;
+        $argValue = $node->getArgs()[0]->value;
         $argValue = $argValue instanceof \PhpParser\Node\Expr\ConstFetch ? $this->createNegationConsFetch($argValue) : new \PhpParser\Node\Expr\BooleanNot($argValue);
         return $this->nodeFactory->createMethodCall($node->var, 'setPublic', [$argValue]);
     }

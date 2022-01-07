@@ -10,10 +10,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class FormCollectionAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
@@ -24,7 +26,7 @@ final class FormCollectionAnalyzer
     }
     public function isCollectionType(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        $typeValue = $methodCall->args[1]->value;
+        $typeValue = $methodCall->getArgs()[1]->value;
         if (!$typeValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }

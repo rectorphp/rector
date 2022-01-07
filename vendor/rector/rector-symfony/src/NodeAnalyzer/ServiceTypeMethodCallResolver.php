@@ -15,10 +15,12 @@ use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class ServiceTypeMethodCallResolver
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
@@ -32,7 +34,7 @@ final class ServiceTypeMethodCallResolver
         if (!isset($methodCall->args[0])) {
             return new \PHPStan\Type\MixedType();
         }
-        $argument = $methodCall->args[0]->value;
+        $argument = $methodCall->getArgs()[0]->value;
         $serviceMap = $this->serviceMapProvider->provide();
         if ($argument instanceof \PhpParser\Node\Scalar\String_) {
             return $serviceMap->getServiceType($argument->value);

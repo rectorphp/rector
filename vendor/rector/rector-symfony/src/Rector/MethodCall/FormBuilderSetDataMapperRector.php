@@ -19,6 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormBuilderSetDataMapperRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \PHPStan\Type\ObjectType
      */
     private $dataMapperObjectType;
@@ -74,13 +75,13 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'setDataMapper')) {
             return null;
         }
-        $argumentValue = $node->args[0]->value;
+        $argumentValue = $node->getArgs()[0]->value;
         if ($this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
             return null;
         }
         $propertyPathAccessor = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'));
         $newArgumentValue = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified($this->dataMapperObjectType->getClassName()), [new \PhpParser\Node\Arg($propertyPathAccessor)]);
-        $node->args[0]->value = $newArgumentValue;
+        $node->getArgs()[0]->value = $newArgumentValue;
         return $node;
     }
 }

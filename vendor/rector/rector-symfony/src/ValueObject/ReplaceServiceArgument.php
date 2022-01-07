@@ -12,6 +12,7 @@ final class ReplaceServiceArgument
      */
     private $oldValue;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $newValueExpr;

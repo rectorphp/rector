@@ -16,10 +16,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer
      */
     private $dependencyInjectionMethodCallAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ContainerAwareAnalyzer
      */
     private $containerAwareAnalyzer;

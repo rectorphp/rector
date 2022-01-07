@@ -23,6 +23,7 @@ final class ListenerServiceDefinitionProvider
      */
     private $listenerClassesToEvents = [];
     /**
+     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;

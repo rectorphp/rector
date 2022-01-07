@@ -94,9 +94,9 @@ CODE_SAMPLE
                 return null;
             }
             $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE, \true);
-            $pathValue = $node->args[0]->value;
-            $controllerValue = $node->args[1]->value;
-            $nameValue = $node->args[2]->value ?? null;
+            $pathValue = $node->getArgs()[0]->value;
+            $controllerValue = $node->getArgs()[1]->value;
+            $nameValue = $node->getArgs()[2]->value ?? null;
             if (!$nameValue instanceof \PhpParser\Node\Expr) {
                 throw new \Rector\Core\Exception\NotImplementedYetException();
             }

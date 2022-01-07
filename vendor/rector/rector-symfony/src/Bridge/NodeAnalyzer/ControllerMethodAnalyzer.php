@@ -11,6 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerMethodAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;

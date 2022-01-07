@@ -13,6 +13,7 @@ final class ContainerAwareAnalyzer
      */
     private $getMethodAwareObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

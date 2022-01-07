@@ -20,7 +20,7 @@ use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220105\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220107\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,6 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeCommandLazyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
@@ -139,7 +140,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, 'setName')) {
                 return null;
             }
-            $commandName = $node->args[0]->value;
+            $commandName = $node->getArgs()[0]->value;
             $commandNameStaticType = $this->getType($commandName);
             if (!$commandNameStaticType instanceof \PHPStan\Type\StringType) {
                 return null;
@@ -193,15 +194,16 @@ CODE_SAMPLE
         if (\count($staticCall->args) < 1) {
             return null;
         }
-        $staticType = $this->getType($staticCall->args[0]->value);
+        $firstArg = $staticCall->getArgs()[0];
+        $staticType = $this->getType($firstArg->value);
         if (!$staticType instanceof \PHPStan\Type\StringType) {
             return null;
         }
-        return $staticCall->args[0]->value;
+        return $firstArg->value;
     }
     private function createStaticProtectedPropertyWithDefault(string $name, \PhpParser\Node $node) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new \RectorPrefix20220105\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220107\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makeProtected();
         $propertyBuilder->makeStatic();
         $propertyBuilder->setDefault($node);

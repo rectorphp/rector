@@ -17,8 +17,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220105\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix20220105\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20220107\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix20220107\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,6 +32,7 @@ final class StringToArrayArgumentProcessRector extends \Rector\Core\Rector\Abstr
      */
     private const EXCLUDED_PROCESS_METHOD_CALLS = ['setWorkingDirectory', 'addOutput', 'addErrorOutput'];
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;
@@ -114,14 +115,15 @@ CODE_SAMPLE
             $expr->args[$argumentPosition] = new \PhpParser\Node\Arg($arrayNode);
             return;
         }
+        $args = $expr->getArgs();
         if ($firstArgumentExpr instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($firstArgumentExpr, 'sprintf')) {
             $arrayNode = $this->nodeTransformer->transformSprintfToArray($firstArgumentExpr);
             if ($arrayNode !== null) {
-                $expr->args[$argumentPosition]->value = $arrayNode;
+                $args[$argumentPosition]->value = $arrayNode;
             }
         } elseif ($firstArgumentExpr instanceof \PhpParser\Node\Scalar\String_) {
             $parts = $this->splitProcessCommandToItems($firstArgumentExpr->value);
-            $expr->args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
+            $args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
         }
         $this->processPreviousAssign($expr, $firstArgumentExpr);
     }
@@ -130,8 +132,8 @@ CODE_SAMPLE
      */
     private function splitProcessCommandToItems(string $process) : array
     {
-        $privatesCaller = new \RectorPrefix20220105\Symplify\PackageBuilder\Reflection\PrivatesCaller();
-        return $privatesCaller->callPrivateMethod(new \RectorPrefix20220105\Symfony\Component\Console\Input\StringInput(''), 'tokenize', [$process]);
+        $privatesCaller = new \RectorPrefix20220107\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        return $privatesCaller->callPrivateMethod(new \RectorPrefix20220107\Symfony\Component\Console\Input\StringInput(''), 'tokenize', [$process]);
     }
     private function processPreviousAssign(\PhpParser\Node $node, \PhpParser\Node\Expr $firstArgumentExpr) : void
     {

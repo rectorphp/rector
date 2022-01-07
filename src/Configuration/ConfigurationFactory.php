@@ -6,9 +6,9 @@ namespace Rector\Core\Configuration;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220105\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220105\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220105\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220107\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220107\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ConfigurationFactory
 {
     /**
@@ -21,7 +21,7 @@ final class ConfigurationFactory
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix20220105\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220105\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix20220107\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220107\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->parameterProvider = $parameterProvider;
         $this->symfonyStyle = $symfonyStyle;
@@ -37,7 +37,7 @@ final class ConfigurationFactory
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
-    public function createFromInput(\RectorPrefix20220105\Symfony\Component\Console\Input\InputInterface $input) : \Rector\Core\ValueObject\Configuration
+    public function createFromInput(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input) : \Rector\Core\ValueObject\Configuration
     {
         $isDryRun = (bool) $input->getOption(\Rector\Core\Configuration\Option::DRY_RUN);
         $shouldClearCache = (bool) $input->getOption(\Rector\Core\Configuration\Option::CLEAR_CACHE);
@@ -52,7 +52,7 @@ final class ConfigurationFactory
         $rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
         return new \Rector\Core\ValueObject\Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $rectorConfigsResolver->provide(), $parallelPort, $parallelIdentifier, $isParallel);
     }
-    private function shouldShowProgressBar(\RectorPrefix20220105\Symfony\Component\Console\Input\InputInterface $input, string $outputFormat) : bool
+    private function shouldShowProgressBar(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $outputFormat) : bool
     {
         $noProgressBar = (bool) $input->getOption(\Rector\Core\Configuration\Option::NO_PROGRESS_BAR);
         if ($noProgressBar) {
@@ -80,7 +80,7 @@ final class ConfigurationFactory
     /**
      * @return string[]|mixed[]
      */
-    private function resolvePaths(\RectorPrefix20220105\Symfony\Component\Console\Input\InputInterface $input) : array
+    private function resolvePaths(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input) : array
     {
         $commandLinePaths = (array) $input->getArgument(\Rector\Core\Configuration\Option::SOURCE);
         // command line has priority

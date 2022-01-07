@@ -7,14 +7,17 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 final class EventListenerTag implements \Rector\Symfony\Contract\Tag\TagInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $event;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var int
      */
     private $priority;

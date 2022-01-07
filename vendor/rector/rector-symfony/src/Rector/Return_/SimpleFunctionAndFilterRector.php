@@ -130,7 +130,7 @@ CODE_SAMPLE
             $filterName = $this->valueResolver->getValue($arrayItem->key);
             $arrayItem->key = null;
             $arrayItem->value->class = new \PhpParser\Node\Name\FullyQualified($newClass);
-            $oldArguments = $arrayItem->value->args;
+            $oldArguments = $arrayItem->value->getArgs();
             $this->decorateArrayItem($arrayItem, $oldArguments, $filterName);
             break;
         }

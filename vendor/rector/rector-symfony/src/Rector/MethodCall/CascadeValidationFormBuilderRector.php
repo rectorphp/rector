@@ -23,6 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CascadeValidationFormBuilderRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
@@ -84,7 +85,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var Array_ $formBuilderOptionsArrayNode */
-        $formBuilderOptionsArrayNode = $node->args[1]->value;
+        $formBuilderOptionsArrayNode = $node->getArgs()[1]->value;
         if (!$this->isSuccessfulRemovalCascadeValidationOption($node, $formBuilderOptionsArrayNode)) {
             return null;
         }
@@ -96,10 +97,11 @@ CODE_SAMPLE
         if (!$this->isName($methodCall->name, 'createFormBuilder')) {
             return \true;
         }
-        if (!isset($methodCall->args[1])) {
+        if (!isset($methodCall->getArgs()[1])) {
             return \true;
         }
-        return !$methodCall->args[1]->value instanceof \PhpParser\Node\Expr\Array_;
+        $secondArg = $methodCall->getArgs()[1];
+        return !$secondArg->value instanceof \PhpParser\Node\Expr\Array_;
     }
     private function isSuccessfulRemovalCascadeValidationOption(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Array_ $optionsArrayNode) : bool
     {
@@ -130,7 +132,7 @@ CODE_SAMPLE
         while ($parentNode instanceof \PhpParser\Node\Expr\MethodCall) {
             if ($this->isName($parentNode->name, 'add')) {
                 /** @var Array_ $addOptionsArrayNode */
-                $addOptionsArrayNode = isset($parentNode->args[2]) ? $parentNode->args[2]->value : new \PhpParser\Node\Expr\Array_();
+                $addOptionsArrayNode = isset($parentNode->getArgs()[2]) ? $parentNode->getArgs()[2]->value : new \PhpParser\Node\Expr\Array_();
                 $addOptionsArrayNode->items[] = $constraintsArrayItem;
                 $parentNode->args[2] = new \PhpParser\Node\Arg($addOptionsArrayNode);
             }

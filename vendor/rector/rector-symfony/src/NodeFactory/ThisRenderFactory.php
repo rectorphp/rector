@@ -23,22 +23,27 @@ use Rector\Symfony\Helper\TemplateGuesser;
 final class ThisRenderFactory
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\ArrayFromCompactFactory
      */
     private $arrayFromCompactFactory;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Symfony\Helper\TemplateGuesser
      */
     private $templateGuesser;

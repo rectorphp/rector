@@ -30,10 +30,12 @@ final class GetRequestRector extends \Rector\Core\Rector\AbstractRector
      */
     private $requestVariableAndParamName;
     /**
+     * @readonly
      * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
     private $controllerMethodAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
@@ -78,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->controllerAnalyzer->detect($node)) {
+        if (!$this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
         if ($node instanceof \PhpParser\Node\Stmt\ClassMethod) {
@@ -169,12 +171,12 @@ CODE_SAMPLE
         if (\count($methodCall->args) !== 1) {
             return \false;
         }
-        if (!$methodCall->args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
+        $firstArg = $methodCall->getArgs()[0];
+        if (!$firstArg->value instanceof \PhpParser\Node\Scalar\String_) {
             return \false;
         }
-        /** @var String_ $stringValue */
-        $stringValue = $methodCall->args[0]->value;
-        return $stringValue->value === 'request';
+        $string = $firstArg->value;
+        return $string->value === 'request';
     }
     private function getRequestVariableAndParamName() : string
     {

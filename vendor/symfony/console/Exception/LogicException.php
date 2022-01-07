@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220105\Symfony\Component\Console\Exception;
+namespace RectorPrefix20220107\Symfony\Component\Console\Exception;
 
 /**
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */
-class LogicException extends \LogicException implements \RectorPrefix20220105\Symfony\Component\Console\Exception\ExceptionInterface
+class LogicException extends \LogicException implements \RectorPrefix20220107\Symfony\Component\Console\Exception\ExceptionInterface
 {
 }

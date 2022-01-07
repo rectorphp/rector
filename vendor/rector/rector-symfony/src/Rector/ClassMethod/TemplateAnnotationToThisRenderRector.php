@@ -44,18 +44,22 @@ final class TemplateAnnotationToThisRenderRector extends \Rector\Core\Rector\Abs
      */
     private const RESPONSE_CLASS = 'Symfony\\Component\\HttpFoundation\\Response';
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer
      */
     private $arrayUnionResponseTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater
      */
     private $returnTypeDeclarationUpdater;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\ThisRenderFactory
      */
     private $thisRenderFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;

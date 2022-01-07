@@ -29,10 +29,12 @@ final class JMSInjectPropertyToConstructorInjectionRector extends \Rector\Core\R
      */
     private const INJECT_ANNOTATION_CLASS = 'JMS\\DiExtraBundle\\Annotation\\Inject';
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\JMSDITypeResolver
      */
     private $jmsDITypeResolver;
     /**
+     * @readonly
      * @var \Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator
      */
     private $propertyConstructorInjectionManipulator;

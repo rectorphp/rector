@@ -5,11 +5,18 @@ services:
         factory: @pathRoutingParser
         arguments!: []
 
+    cachedRectorParser:
+        class: PHPStan\Parser\CachedParser
+        arguments:
+            originalParser: @rectorParser
+            cachedNodesByStringCountMax: %cache.nodesByStringCountMax%
+        autowired: false
+
     pathRoutingParser:
         class: PHPStan\Parser\PathRoutingParser
         arguments:
-            currentPhpVersionRichParser: @rectorParser
-            currentPhpVersionSimpleParser: @rectorParser
+            currentPhpVersionRichParser: @cachedRectorParser
+            currentPhpVersionSimpleParser: @cachedRectorParser
             php8Parser: @php8Parser
         autowired: false
 

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220105;
+namespace RectorPrefix20220107;
 
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\MixedType;
@@ -10,6 +10,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
+use Rector\Symfony\Rector\MethodCall\GetHelperControllerToServiceRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
@@ -31,4 +32,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // @see https://github.com/symfony/symfony/pull/40403
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
     ]);
+    $services->set(\Rector\Symfony\Rector\MethodCall\GetHelperControllerToServiceRector::class);
 };

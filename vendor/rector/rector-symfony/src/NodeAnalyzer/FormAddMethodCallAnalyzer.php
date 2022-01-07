@@ -14,10 +14,12 @@ final class FormAddMethodCallAnalyzer
      */
     private $formObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
@@ -36,9 +38,9 @@ final class FormAddMethodCallAnalyzer
             return \false;
         }
         // just one argument
-        if (!isset($methodCall->args[1])) {
+        if (!isset($methodCall->getArgs()[1])) {
             return \false;
         }
-        return $methodCall->args[1]->value !== null;
+        return $methodCall->getArgs()[1]->value !== null;
     }
 }
