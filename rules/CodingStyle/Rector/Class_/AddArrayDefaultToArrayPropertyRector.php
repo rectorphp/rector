@@ -171,24 +171,24 @@ CODE_SAMPLE
 
             $isNextNodeCountingProperty = (bool) $this->betterNodeFinder->findFirst($node->right, function (Node $node) use (
                 $propertyNames
-            ): ?bool {
+            ): bool {
                 if (! $node instanceof FuncCall) {
-                    return null;
+                    return false;
                 }
 
                 if (! $this->isName($node, 'count')) {
-                    return null;
+                    return false;
                 }
 
                 if (! $this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
-                    return null;
+                    return false;
                 }
 
                 /** @var Arg $firstArg */
                 $firstArg = $node->args[0];
                 $countedArgument = $firstArg->value;
                 if (! $countedArgument instanceof PropertyFetch) {
-                    return null;
+                    return false;
                 }
 
                 return $this->isNames($countedArgument, $propertyNames);
