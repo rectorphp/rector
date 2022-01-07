@@ -57,7 +57,6 @@ final class ConfigurationFactory
             $fileExtensions,
             $paths,
             $showDiffs,
-            null,
             $parallelPort,
             $parallelIdentifier,
             $isParallel

@@ -36,7 +36,6 @@ final class WorkerCommandLineFactory
         string $mainScript,
         string $mainCommandClass,
         string $workerCommandName,
-        ?string $projectConfigFile,
         InputInterface $input,
         string $identifier,
         int $port
@@ -66,10 +65,6 @@ final class WorkerCommandLineFactory
         }
 
         $workerCommandArray[] = $workerCommandName;
-        if ($projectConfigFile !== null) {
-            $workerCommandArray[] = self::OPTION_DASHES . Option::CONFIG;
-            $workerCommandArray[] = escapeshellarg($projectConfigFile);
-        }
 
         $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
         $workerCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);

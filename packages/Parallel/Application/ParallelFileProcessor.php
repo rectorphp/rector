@@ -63,7 +63,6 @@ final class ParallelFileProcessor
         Schedule $schedule,
         string $mainScript,
         Closure $postFileCallback,
-        ?string $projectConfigFile,
         InputInterface $input
     ): array {
         $jobs = array_reverse($schedule->getJobs());
@@ -144,7 +143,6 @@ final class ParallelFileProcessor
                 $mainScript,
                 ProcessCommand::class,
                 CommandNaming::classToName(WorkerCommand::class),
-                $projectConfigFile,
                 $input,
                 $processIdentifier,
                 $serverPort,
