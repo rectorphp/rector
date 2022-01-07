@@ -6,8 +6,6 @@ namespace Rector\Core\ValueObject;
 
 use JetBrains\PhpStorm\Immutable;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 #[Immutable]
 final class Configuration
@@ -24,7 +22,6 @@ final class Configuration
         private readonly array $fileExtensions = ['php'],
         private readonly array $paths = [],
         private readonly bool $showDiffs = true,
-        private readonly ?BootstrapConfigs $bootstrapConfigs = null,
         private readonly string | null $parallelPort = null,
         private readonly string | null $parallelIdentifier = null,
         private readonly bool $isParallel = false,
@@ -72,21 +69,6 @@ final class Configuration
         return $this->showDiffs;
     }
 
-    public function getMainConfigFilePath(): ?string
-    {
-        if ($this->bootstrapConfigs === null) {
-            return null;
-        }
-
-        $mainConfigFile = $this->bootstrapConfigs->getMainConfigFile();
-        if (! is_string($mainConfigFile)) {
-            return null;
-        }
-
-        $mainConfigFileInfo = new SmartFileInfo($mainConfigFile);
-        return $mainConfigFileInfo->getRelativeFilePathFromCwd();
-    }
-
     public function getParallelPort(): ?string
     {
         return $this->parallelPort;
@@ -100,10 +82,5 @@ final class Configuration
     public function isParallel(): bool
     {
         return $this->isParallel;
-    }
-
-    public function getConfig(): string|null
-    {
-        return $this->getMainConfigFilePath();
     }
 }

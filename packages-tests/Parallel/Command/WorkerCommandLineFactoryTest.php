@@ -54,7 +54,6 @@ final class WorkerCommandLineFactoryTest extends AbstractKernelTestCase
             self::DUMMY_MAIN_SCRIPT,
             ProcessCommand::class,
             CommandNaming::classToName(WorkerCommand::class),
-            null,
             $arrayInput,
             'identifier',
             2000

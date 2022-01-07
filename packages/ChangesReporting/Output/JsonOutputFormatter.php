@@ -31,9 +31,6 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     public function report(ProcessResult $processResult, Configuration $configuration): void
     {
         $errorsJson = [
-            'meta' => [
-                'config' => $configuration->getMainConfigFilePath(),
-            ],
             'totals' => [
                 'changed_files' => count($processResult->getFileDiffs()),
                 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(),
