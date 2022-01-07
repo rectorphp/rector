@@ -180,9 +180,9 @@ CODE_SAMPLE
 
     private function findConnectionVariable(FuncCall $funcCall): ?Expr
     {
-        $connectionAssign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node): ?bool {
+        $connectionAssign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node): bool {
             if (! $node instanceof Assign) {
-                return null;
+                return false;
             }
 
             return $this->isObjectType($node->expr, new ObjectType('mysqli'));
