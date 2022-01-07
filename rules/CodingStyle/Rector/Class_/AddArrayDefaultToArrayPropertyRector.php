@@ -155,21 +155,21 @@ CODE_SAMPLE
             if (!$this->isLocalPropertyOfNamesNotIdenticalToNull($node->left, $propertyNames)) {
                 return null;
             }
-            $isNextNodeCountingProperty = (bool) $this->betterNodeFinder->findFirst($node->right, function (\PhpParser\Node $node) use($propertyNames) : ?bool {
+            $isNextNodeCountingProperty = (bool) $this->betterNodeFinder->findFirst($node->right, function (\PhpParser\Node $node) use($propertyNames) : bool {
                 if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
-                    return null;
+                    return \false;
                 }
                 if (!$this->isName($node, 'count')) {
-                    return null;
+                    return \false;
                 }
                 if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
-                    return null;
+                    return \false;
                 }
                 /** @var Arg $firstArg */
                 $firstArg = $node->args[0];
                 $countedArgument = $firstArg->value;
                 if (!$countedArgument instanceof \PhpParser\Node\Expr\PropertyFetch) {
-                    return null;
+                    return \false;
                 }
                 return $this->isNames($countedArgument, $propertyNames);
             });

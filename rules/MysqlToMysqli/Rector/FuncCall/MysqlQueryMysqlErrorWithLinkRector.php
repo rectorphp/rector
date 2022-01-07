@@ -114,9 +114,9 @@ CODE_SAMPLE
     }
     private function findConnectionVariable(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr
     {
-        $connectionAssign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $node) : ?bool {
+        $connectionAssign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (\PhpParser\Node $node) : bool {
             if (!$node instanceof \PhpParser\Node\Expr\Assign) {
-                return null;
+                return \false;
             }
             return $this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('mysqli'));
         });

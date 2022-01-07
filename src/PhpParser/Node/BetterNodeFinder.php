@@ -222,6 +222,7 @@ final class BetterNodeFinder
     }
     /**
      * @param mixed[]|\PhpParser\Node $nodes
+     * @param callable(Node $node): bool $filter
      */
     public function findFirst($nodes, callable $filter) : ?\PhpParser\Node
     {
@@ -262,6 +263,9 @@ final class BetterNodeFinder
             return $this->nodeComparator->areNodesEqual($node->var, $expr);
         });
     }
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstPreviousOfNode(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
     {
         // move to previous expression
@@ -283,6 +287,9 @@ final class BetterNodeFinder
         }
         return null;
     }
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstPrevious(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
     {
         $node = $node instanceof \PhpParser\Node\Stmt\Expression ? $node : $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
@@ -315,6 +322,9 @@ final class BetterNodeFinder
             return $this->typeChecker->isInstanceOf($node, $types);
         });
     }
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstNext(\PhpParser\Node $node, callable $filter) : ?\PhpParser\Node
     {
         $next = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
