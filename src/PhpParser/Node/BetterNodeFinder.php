@@ -225,6 +225,7 @@ final class BetterNodeFinder
 
     /**
      * @param Node|Node[] $nodes
+     * @param callable(Node $node): bool $filter
      */
     public function findFirst(Node | array $nodes, callable $filter): ?Node
     {
@@ -274,6 +275,9 @@ final class BetterNodeFinder
         });
     }
 
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstPreviousOfNode(Node $node, callable $filter): ?Node
     {
         // move to previous expression
@@ -300,6 +304,9 @@ final class BetterNodeFinder
         return null;
     }
 
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstPrevious(Node $node, callable $filter): ?Node
     {
         $node = $node instanceof Expression ? $node : $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
@@ -339,6 +346,9 @@ final class BetterNodeFinder
         );
     }
 
+    /**
+     * @param callable(Node $node): bool $filter
+     */
     public function findFirstNext(Node $node, callable $filter): ?Node
     {
         $next = $node->getAttribute(AttributeKey::NEXT_NODE);
@@ -530,6 +540,9 @@ final class BetterNodeFinder
         return null;
     }
 
+    /**
+     * @return Closure|Function_|ClassMethod|Class_|Namespace_|null
+     */
     private function findParentScope(Node $node): Node|null
     {
         return $this->findParentByTypes($node, [
