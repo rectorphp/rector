@@ -189,7 +189,7 @@ CODE_SAMPLE
         });
 
         if (! $connectionAssign instanceof Assign) {
-            return false;
+            return null;
         }
 
         return $connectionAssign->var;
