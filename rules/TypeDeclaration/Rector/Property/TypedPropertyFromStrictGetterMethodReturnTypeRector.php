@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -89,6 +90,10 @@ CODE_SAMPLE
 
         $getterReturnType = $this->getterTypeDeclarationPropertyTypeInferer->inferProperty($node);
         if (! $getterReturnType instanceof Type) {
+            return null;
+        }
+
+        if ($getterReturnType instanceof MixedType) {
             return null;
         }
 
