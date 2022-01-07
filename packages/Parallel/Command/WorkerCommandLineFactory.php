@@ -31,7 +31,7 @@ final class WorkerCommandLineFactory
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, ?string $projectConfigFile, \RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
+    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, \RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $mainScript], $commandArguments);
@@ -51,10 +51,6 @@ final class WorkerCommandLineFactory
             $workerCommandArray[] = \escapeshellarg($arg);
         }
         $workerCommandArray[] = $workerCommandName;
-        if ($projectConfigFile !== null) {
-            $workerCommandArray[] = self::OPTION_DASHES . \Rector\Core\Configuration\Option::CONFIG;
-            $workerCommandArray[] = \escapeshellarg($projectConfigFile);
-        }
         $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
         $workerCommandOptions = $this->mirrorCommandOptions($input, $mainCommandOptionNames);
         $workerCommandArray = \array_merge($workerCommandArray, $workerCommandOptions);
@@ -74,6 +70,10 @@ final class WorkerCommandLineFactory
         // disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
         $workerCommandArray[] = '--no-ansi';
+        if ($input->hasOption(\Rector\Core\Configuration\Option::CONFIG)) {
+            $workerCommandArray[] = '--config';
+            $workerCommandArray[] = $input->getOption(\Rector\Core\Configuration\Option::CONFIG);
+        }
         return \implode(' ', $workerCommandArray);
     }
     private function shouldSkipOption(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool

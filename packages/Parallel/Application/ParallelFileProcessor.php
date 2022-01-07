@@ -61,7 +61,7 @@ final class ParallelFileProcessor
      * @param Closure(int): void|null $postFileCallback Used for progress bar jump
      * @return mixed[]
      */
-    public function process(\RectorPrefix20220107\Symplify\EasyParallel\ValueObject\Schedule $schedule, string $mainScript, \Closure $postFileCallback, ?string $projectConfigFile, \RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input) : array
+    public function process(\RectorPrefix20220107\Symplify\EasyParallel\ValueObject\Schedule $schedule, string $mainScript, \Closure $postFileCallback, \RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input) : array
     {
         $jobs = \array_reverse($schedule->getJobs());
         $streamSelectLoop = new \RectorPrefix20220107\React\EventLoop\StreamSelectLoop();
@@ -110,7 +110,7 @@ final class ParallelFileProcessor
                 break;
             }
             $processIdentifier = \RectorPrefix20220107\Nette\Utils\Random::generate();
-            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \Rector\Core\Console\Command\ProcessCommand::class, \RectorPrefix20220107\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\WorkerCommand::class), $projectConfigFile, $input, $processIdentifier, $serverPort);
+            $workerCommandLine = $this->workerCommandLineFactory->create($mainScript, \Rector\Core\Console\Command\ProcessCommand::class, \RectorPrefix20220107\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(\Rector\Core\Console\Command\WorkerCommand::class), $input, $processIdentifier, $serverPort);
             $parallelProcess = new \RectorPrefix20220107\Symplify\EasyParallel\ValueObject\ParallelProcess($workerCommandLine, $streamSelectLoop, self::TIMEOUT_IN_SECONDS);
             $parallelProcess->start(
                 // 1. callable on data

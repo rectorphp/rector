@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Bootstrap\RectorConfigsResolver;
 use Rector\Core\ValueObject\Configuration;
 use RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220107\Symfony\Component\Console\Style\SymfonyStyle;
@@ -49,8 +48,7 @@ final class ConfigurationFactory
         $isParallel = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::PARALLEL);
         $parallelPort = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER);
-        $rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
-        return new \Rector\Core\ValueObject\Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $rectorConfigsResolver->provide(), $parallelPort, $parallelIdentifier, $isParallel);
+        return new \Rector\Core\ValueObject\Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel);
     }
     private function shouldShowProgressBar(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $outputFormat) : bool
     {
