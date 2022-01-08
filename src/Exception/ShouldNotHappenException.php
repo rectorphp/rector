@@ -26,11 +26,11 @@ final class ShouldNotHappenException extends Exception
     {
         $debugBacktrace = debug_backtrace();
 
-        $class = $debugBacktrace[2]['class'] ?? null;
-        $function = (string) $debugBacktrace[2]['function'];
-        $line = (int) $debugBacktrace[1]['line'];
+        $class = isset($debugBacktrace[2]['class']) ? (string) $debugBacktrace[2]['class'] : null;
+        $function = isset($debugBacktrace[2]['function']) ? (string) $debugBacktrace[2]['function'] : '';
+        $line = isset($debugBacktrace[1]['line']) ? (int) $debugBacktrace[1]['line'] : 0;
 
-        $method = $class ? ($class . '::' . $function) : $function;
+        $method = $class !== null ? ($class . '::' . $function) : $function;
 
         return sprintf('Look at "%s()" on line %d', $method, $line);
     }
