@@ -2033,6 +2033,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeMatchToSwitchRector' => $baseDir . '/rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php',
     'Rector\\DowngradePhp80\\Rector\\Expression\\DowngradeThrowExprRector' => $baseDir . '/rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeArrayFilterNullableCallbackRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php',
+    'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeNumberFormatNoFourthArgRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeNumberFormatNoFourthArgRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrContainsRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrEndsWithRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php',
     'Rector\\DowngradePhp80\\Rector\\FuncCall\\DowngradeStrStartsWithRector' => $baseDir . '/rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php',

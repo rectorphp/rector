@@ -222,7 +222,7 @@ final class BetterNodeFinder
     }
     /**
      * @param mixed[]|\PhpParser\Node $nodes
-     * @param callable(Node $node): bool $filter
+     * @param callable(Node $filter): bool $filter
      */
     public function findFirst($nodes, callable $filter) : ?\PhpParser\Node
     {
