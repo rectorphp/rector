@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
 use ReflectionFunction;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,8 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNumberFormatNoFourthArgRector extends AbstractRector
 {
     public function __construct(
-        private readonly ArgsAnalyzer $argsAnalyzer,
-        private readonly ReflectionResolver $reflectionResolver
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
