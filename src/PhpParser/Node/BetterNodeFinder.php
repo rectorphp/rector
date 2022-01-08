@@ -224,8 +224,8 @@ final class BetterNodeFinder
     }
 
     /**
-     * @param Node|Node[] $nodes
-     * @param callable(Node $node): bool $filter
+     * @param Node|Node[] $filters
+     * @param callable(Node $filter): bool $filter
      */
     public function findFirst(Node | array $nodes, callable $filter): ?Node
     {
