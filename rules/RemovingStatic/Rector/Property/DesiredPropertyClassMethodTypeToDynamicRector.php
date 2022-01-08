@@ -13,7 +13,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use RectorPrefix20220107\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220108\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,7 +30,7 @@ final class DesiredPropertyClassMethodTypeToDynamicRector extends \Rector\Core\R
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\RectorPrefix20220107\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(\RectorPrefix20220108\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
         $typesToRemoveStaticFrom = $parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::TYPES_TO_REMOVE_STATIC_FROM);

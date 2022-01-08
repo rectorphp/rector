@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220107\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix20220108\Symfony\Component\DependencyInjection\Loader;
 
 /**
  * GlobFileLoader loads files from a glob pattern.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class GlobFileLoader extends \RectorPrefix20220107\Symfony\Component\DependencyInjection\Loader\FileLoader
+class GlobFileLoader extends \RectorPrefix20220108\Symfony\Component\DependencyInjection\Loader\FileLoader
 {
     /**
      * {@inheritdoc}

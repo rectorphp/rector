@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220107\Symfony\Component\Config;
+namespace RectorPrefix20220108\Symfony\Component\Config;
 
-use RectorPrefix20220107\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use RectorPrefix20220108\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 /**
  * FileLocator uses an array of pre-defined paths to find files.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class FileLocator implements \RectorPrefix20220107\Symfony\Component\Config\FileLocatorInterface
+class FileLocator implements \RectorPrefix20220108\Symfony\Component\Config\FileLocatorInterface
 {
     protected $paths;
     /**
@@ -36,7 +36,7 @@ class FileLocator implements \RectorPrefix20220107\Symfony\Component\Config\File
         }
         if ($this->isAbsolutePath($name)) {
             if (!\file_exists($name)) {
-                throw new \RectorPrefix20220107\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException(\sprintf('The file "%s" does not exist.', $name), 0, null, [$name]);
+                throw new \RectorPrefix20220108\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException(\sprintf('The file "%s" does not exist.', $name), 0, null, [$name]);
             }
             return $name;
         }
@@ -57,7 +57,7 @@ class FileLocator implements \RectorPrefix20220107\Symfony\Component\Config\File
             }
         }
         if (!$filepaths) {
-            throw new \RectorPrefix20220107\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException(\sprintf('The file "%s" does not exist (in: "%s").', $name, \implode('", "', $paths)), 0, null, $notfound);
+            throw new \RectorPrefix20220108\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException(\sprintf('The file "%s" does not exist (in: "%s").', $name, \implode('", "', $paths)), 0, null, $notfound);
         }
         return $filepaths;
     }

@@ -5,10 +5,10 @@ namespace Rector\Parallel\Command;
 
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
-use RectorPrefix20220107\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220107\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix20220107\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
+use RectorPrefix20220108\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220108\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220108\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix20220108\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
  * @todo possibly extract to symplify/easy-parallel
@@ -26,12 +26,12 @@ final class WorkerCommandLineFactory
     private $commandFromReflectionFactory;
     public function __construct()
     {
-        $this->commandFromReflectionFactory = new \RectorPrefix20220107\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
+        $this->commandFromReflectionFactory = new \RectorPrefix20220108\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
     }
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, \RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
+    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, \RectorPrefix20220108\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $mainScript], $commandArguments);
@@ -39,7 +39,7 @@ final class WorkerCommandLineFactory
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {
             $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
-            throw new \RectorPrefix20220107\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
+            throw new \RectorPrefix20220108\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
         }
         $mainCommandName = $mainCommand->getName();
         $mainCommandNames = [$mainCommandName, $mainCommandName[0]];
@@ -76,7 +76,7 @@ final class WorkerCommandLineFactory
         }
         return \implode(' ', $workerCommandArray);
     }
-    private function shouldSkipOption(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(\RectorPrefix20220108\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;
@@ -87,7 +87,7 @@ final class WorkerCommandLineFactory
     /**
      * @return string[]
      */
-    private function getCommandOptionNames(\RectorPrefix20220107\Symfony\Component\Console\Command\Command $command) : array
+    private function getCommandOptionNames(\RectorPrefix20220108\Symfony\Component\Console\Command\Command $command) : array
     {
         $inputDefinition = $command->getDefinition();
         $optionNames = [];
@@ -102,7 +102,7 @@ final class WorkerCommandLineFactory
      * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function mirrorCommandOptions(\RectorPrefix20220107\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
+    private function mirrorCommandOptions(\RectorPrefix20220108\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
     {
         $workerCommandOptions = [];
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {
