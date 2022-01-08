@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\VariadicPlaceholder;
 
 final class ArgsAnalyzer
@@ -40,5 +41,19 @@ final class ArgsAnalyzer
         }
 
         return true;
+    }
+
+    /**
+     * @param Arg[] $args
+     */
+    public function hasNamedArg(array $args): bool
+    {
+        foreach ($args as $arg) {
+            if ($arg->name instanceof Identifier) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

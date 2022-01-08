@@ -17,6 +17,7 @@ use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRe
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeArrayFilterNullableCallbackRector;
+use Rector\DowngradePhp80\Rector\FuncCall\DowngradeNumberFormatNoFourthArgRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector;
@@ -80,4 +81,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeReflectionPropertyGetDefaultValueRector::class);
     $services->set(DowngradeReflectionClassGetConstantsFilterRector::class);
     $services->set(DowngradeArrayFilterNullableCallbackRector::class);
+    $services->set(DowngradeNumberFormatNoFourthArgRector::class);
 };
