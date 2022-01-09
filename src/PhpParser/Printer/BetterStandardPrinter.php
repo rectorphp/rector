@@ -260,6 +260,10 @@ final class BetterStandardPrinter extends Standard
     {
         $closureContent = parent::pExpr_Closure($closure);
 
+        if ($closure->uses === []) {
+            return $closureContent;
+        }
+
         return Strings::replace($closureContent, self::USE_REGEX, '$1 (');
     }
 
@@ -339,6 +343,10 @@ final class BetterStandardPrinter extends Standard
     protected function pStmt_ClassMethod(ClassMethod $classMethod): string
     {
         $content = parent::pStmt_ClassMethod($classMethod);
+
+        if (! $classMethod->returnType instanceof Node) {
+            return $content;
+        }
 
         // this approach is chosen, to keep changes in parent pStmt_ClassMethod() updated
         return Strings::replace($content, self::REPLACE_COLON_WITH_SPACE_REGEX, '$1: ');
