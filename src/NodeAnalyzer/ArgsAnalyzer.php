@@ -36,11 +36,14 @@ final class ArgsAnalyzer
         return \true;
     }
     /**
-     * @param Arg[] $args
+     * @param mixed[]|Arg[] $args
      */
     public function hasNamedArg(array $args) : bool
     {
         foreach ($args as $arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
+                continue;
+            }
             if ($arg->name instanceof \PhpParser\Node\Identifier) {
                 return \true;
             }

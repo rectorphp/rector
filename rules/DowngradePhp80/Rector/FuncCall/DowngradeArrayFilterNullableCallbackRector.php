@@ -24,6 +24,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -35,6 +36,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeArrayFilterNullableCallbackRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    {
+        $this->argsAnalyzer = $argsAnalyzer;
+    }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Unset nullable callback on array_filter', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
@@ -72,11 +82,11 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node)
     {
-        $args = $node->getArgs();
         if (!$this->isName($node, 'array_filter')) {
             return null;
         }
-        if ($this->hasNamedArg($args)) {
+        $args = $node->getArgs();
+        if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
         }
         if (!isset($args[1])) {
@@ -127,17 +137,5 @@ CODE_SAMPLE
         $identical = new \PhpParser\Node\Expr\BinaryOp\Identical($args[1]->value, $this->nodeFactory->createNull());
         $constFetch = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('ARRAY_FILTER_USE_BOTH'));
         return new \PhpParser\Node\Expr\Ternary($identical, $constFetch, isset($args[2]) ? $args[2]->value : new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('0')));
-    }
-    /**
-     * @param Arg[] $args
-     */
-    private function hasNamedArg(array $args) : bool
-    {
-        foreach ($args as $arg) {
-            if ($arg->name instanceof \PhpParser\Node\Identifier) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }

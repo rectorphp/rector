@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver;
@@ -32,10 +32,16 @@ final class DowngradeNamedArgumentRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver
      */
     private $unnamedArgumentResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver $unnamedArgumentResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
+     */
+    private $argsAnalyzer;
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver $unnamedArgumentResolver, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->unnamedArgumentResolver = $unnamedArgumentResolver;
+        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
@@ -109,15 +115,6 @@ CODE_SAMPLE
      */
     private function shouldSkip(array $args) : bool
     {
-        foreach ($args as $arg) {
-            if (!$arg instanceof \PhpParser\Node\Arg) {
-                continue;
-            }
-            if (!$arg->name instanceof \PhpParser\Node\Identifier) {
-                continue;
-            }
-            return \false;
-        }
-        return \true;
+        return !$this->argsAnalyzer->hasNamedArg($args);
     }
 }
