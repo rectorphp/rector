@@ -1,4 +1,4 @@
-# 512 Rules Overview
+# 516 Rules Overview
 
 <br>
 
@@ -28,7 +28,7 @@
 
 - [DowngradePhp56](#downgradephp56) (5)
 
-- [DowngradePhp70](#downgradephp70) (15)
+- [DowngradePhp70](#downgradephp70) (18)
 
 - [DowngradePhp71](#downgradephp71) (10)
 
@@ -38,7 +38,7 @@
 
 - [DowngradePhp74](#downgradephp74) (12)
 
-- [DowngradePhp80](#downgradephp80) (26)
+- [DowngradePhp80](#downgradephp80) (27)
 
 - [DowngradePhp81](#downgradephp81) (8)
 
@@ -4173,6 +4173,24 @@ Remove anonymous class
 
 <br>
 
+### DowngradeCatchThrowableRector
+
+Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.
+
+- class: [`Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector`](../rules/DowngradePhp70/Rector/TryCatch/DowngradeCatchThrowableRector.php)
+
+```diff
+ try {
+     // Some code...
+ } catch (\Throwable $exception) {
+     handle();
++} catch (\Exception $exception) {
++    handle();
+ }
+```
+
+<br>
+
 ### DowngradeClosureCallRector
 
 Replace `Closure::call()` by `Closure::bindTo()`
@@ -4234,6 +4252,19 @@ Refactor scalar types in PHP code in string snippets, e.g. generated container c
          return $name;
      }
  EOF;
+```
+
+<br>
+
+### DowngradeInstanceofThrowableRector
+
+Add `instanceof Exception` check as a fallback to `instanceof Throwable` to support exception hierarchies in PHP 5
+
+- class: [`Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector`](../rules/DowngradePhp70/Rector/Instanceof_/DowngradeInstanceofThrowableRector.php)
+
+```diff
+-return $e instanceof \Throwable;
++return ($throwable = $e) instanceof \Throwable || $throwable instanceof \Exception;
 ```
 
 <br>
@@ -4402,6 +4433,33 @@ Replace `Throwable` type hints by PHPDoc tags
          return new \Exception("Troubles");
      }
  }
+```
+
+<br>
+
+### DowngradeUncallableValueCallToCallUserFuncRector
+
+Downgrade calling a value that is not directly callable in PHP 5 (property, static property, closure, …) to call_user_func.
+
+- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUserFuncRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeUncallableValueCallToCallUserFuncRector.php)
+
+```diff
+ final class Foo
+ {
+     /** @var callable */
+     public $handler;
+     /** @var callable */
+     public static $staticHandler;
+ }
+
+ $foo = new Foo;
+-($foo->handler)(/* args */);
+-($foo::$staticHandler)(41);
++call_user_func($foo->handler, /* args */);
++call_user_func($foo::$staticHandler, 41);
+
+-(function() { /* … */ })();
++call_user_func(function() { /* … */ });
 ```
 
 <br>
@@ -5390,6 +5448,25 @@ Change nullsafe operator to ternary operator rector
 -$dateAsString = $booking->startDate?->dateTimeString;
 +$dateAsString = ($bookingGetStartDate = $booking->getStartDate()) ? $bookingGetStartDate->asDateTimeString() : null;
 +$dateAsString = ($bookingGetStartDate = $booking->startDate) ? $bookingGetStartDate->dateTimeString : null;
+```
+
+<br>
+
+### DowngradeNumberFormatNoFourthArgRector
+
+Downgrade number_format arg to fill 4th arg when only 3rd arg filled
+
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeNumberFormatNoFourthArgRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeNumberFormatNoFourthArgRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return number_format(1000, 2, ',');
++        return number_format(1000, 2, ',', ',');
+     }
+ }
 ```
 
 <br>
@@ -11759,9 +11836,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AddReturnTypeDeclarationRector::class)
         ->configure(
-            [new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(false), new MixedType(
-                false
-            )))]
+            [new AddReturnTypeDeclaration('SomeClass', 'getData', new ArrayType(new MixedType(), new MixedType()))]
         );
 };
 ```
