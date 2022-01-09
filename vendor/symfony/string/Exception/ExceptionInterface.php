@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220108\Symfony\Component\String\Exception;
+namespace RectorPrefix20220109\Symfony\Component\String\Exception;
 
 interface ExceptionInterface extends \Throwable
 {

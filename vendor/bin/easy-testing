@@ -8,12 +8,12 @@
  *
  * @generated
  */
-namespace RectorPrefix20220108\Composer;
+namespace RectorPrefix20220109\Composer;
 
 $GLOBALS['_composer_bin_dir'] = __DIR__;
 $GLOBALS['_composer_autoload_path'] = __DIR__ . '/..' . '/autoload.php';
 if (\PHP_VERSION_ID < 80000) {
-    if (!\class_exists('RectorPrefix20220108\\Composer\\BinProxyWrapper')) {
+    if (!\class_exists('RectorPrefix20220109\\Composer\\BinProxyWrapper')) {
         /**
          * @internal
          */
@@ -79,7 +79,7 @@ if (\PHP_VERSION_ID < 80000) {
             }
         }
     }
-    if (\function_exists('stream_wrapper_register') && \stream_wrapper_register('phpvfscomposer', 'RectorPrefix20220108\\Composer\\BinProxyWrapper')) {
+    if (\function_exists('stream_wrapper_register') && \stream_wrapper_register('phpvfscomposer', 'RectorPrefix20220109\\Composer\\BinProxyWrapper')) {
         include "phpvfscomposer://" . __DIR__ . '/..' . '/symplify/easy-testing/bin/easy-testing';
         exit(0);
     }
