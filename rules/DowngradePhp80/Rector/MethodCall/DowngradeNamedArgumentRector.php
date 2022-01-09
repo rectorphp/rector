@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver;
@@ -26,7 +26,8 @@ final class DowngradeNamedArgumentRector extends AbstractRector
 {
     public function __construct(
         private readonly ReflectionResolver $reflectionResolver,
-        private readonly UnnamedArgumentResolver $unnamedArgumentResolver
+        private readonly UnnamedArgumentResolver $unnamedArgumentResolver,
+        private readonly ArgsAnalyzer $argsAnalyzer
     ) {
     }
 
@@ -116,18 +117,6 @@ CODE_SAMPLE
      */
     private function shouldSkip(array $args): bool
     {
-        foreach ($args as $arg) {
-            if (! $arg instanceof Arg) {
-                continue;
-            }
-
-            if (! $arg->name instanceof Identifier) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
+        return ! $this->argsAnalyzer->hasNamedArg($args);
     }
 }

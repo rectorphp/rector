@@ -25,6 +25,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\ClosureType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,6 +38,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeArrayFilterNullableCallbackRector extends AbstractRector
 {
+    public function __construct(
+        private readonly ArgsAnalyzer $argsAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
@@ -82,13 +88,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): FuncCall|Ternary|null
     {
-        $args = $node->getArgs();
-
         if (! $this->isName($node, 'array_filter')) {
             return null;
         }
 
-        if ($this->hasNamedArg($args)) {
+        $args = $node->getArgs();
+        if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
         }
 
@@ -162,19 +167,5 @@ CODE_SAMPLE
             $constFetch,
             isset($args[2]) ? $args[2]->value : new ConstFetch(new Name('0'))
         );
-    }
-
-    /**
-     * @param Arg[] $args
-     */
-    private function hasNamedArg(array $args): bool
-    {
-        foreach ($args as $arg) {
-            if ($arg->name instanceof Identifier) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
