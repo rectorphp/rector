@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix20220109\React\Dns\Query;
+namespace RectorPrefix20220110\React\Dns\Query;
 
-use RectorPrefix20220109\React\Dns\Model\Message;
-use RectorPrefix20220109\React\Dns\Protocol\BinaryDumper;
-use RectorPrefix20220109\React\Dns\Protocol\Parser;
-use RectorPrefix20220109\React\EventLoop\Loop;
-use RectorPrefix20220109\React\EventLoop\LoopInterface;
-use RectorPrefix20220109\React\Promise\Deferred;
+use RectorPrefix20220110\React\Dns\Model\Message;
+use RectorPrefix20220110\React\Dns\Protocol\BinaryDumper;
+use RectorPrefix20220110\React\Dns\Protocol\Parser;
+use RectorPrefix20220110\React\EventLoop\Loop;
+use RectorPrefix20220110\React\EventLoop\LoopInterface;
+use RectorPrefix20220110\React\Promise\Deferred;
 /**
  * Send DNS queries over a UDP transport.
  *
@@ -79,7 +79,7 @@ use RectorPrefix20220109\React\Promise\Deferred;
  *   packages. Higher-level components should take advantage of the Datagram
  *   component instead of reimplementing this socket logic from scratch.
  */
-final class UdpTransportExecutor implements \RectorPrefix20220109\React\Dns\Query\ExecutorInterface
+final class UdpTransportExecutor implements \RectorPrefix20220110\React\Dns\Query\ExecutorInterface
 {
     private $nameserver;
     private $loop;
@@ -95,7 +95,7 @@ final class UdpTransportExecutor implements \RectorPrefix20220109\React\Dns\Quer
      * @param string         $nameserver
      * @param ?LoopInterface $loop
      */
-    public function __construct($nameserver, \RectorPrefix20220109\React\EventLoop\LoopInterface $loop = null)
+    public function __construct($nameserver, \RectorPrefix20220110\React\EventLoop\LoopInterface $loop = null)
     {
         if (\strpos($nameserver, '[') === \false && \substr_count($nameserver, ':') >= 2 && \strpos($nameserver, '://') === \false) {
             // several colons, but not enclosed in square brackets => enclose IPv6 address in square brackets
@@ -106,21 +106,21 @@ final class UdpTransportExecutor implements \RectorPrefix20220109\React\Dns\Quer
             throw new \InvalidArgumentException('Invalid nameserver address given');
         }
         $this->nameserver = 'udp://' . $parts['host'] . ':' . (isset($parts['port']) ? $parts['port'] : 53);
-        $this->loop = $loop ?: \RectorPrefix20220109\React\EventLoop\Loop::get();
-        $this->parser = new \RectorPrefix20220109\React\Dns\Protocol\Parser();
-        $this->dumper = new \RectorPrefix20220109\React\Dns\Protocol\BinaryDumper();
+        $this->loop = $loop ?: \RectorPrefix20220110\React\EventLoop\Loop::get();
+        $this->parser = new \RectorPrefix20220110\React\Dns\Protocol\Parser();
+        $this->dumper = new \RectorPrefix20220110\React\Dns\Protocol\BinaryDumper();
     }
-    public function query(\RectorPrefix20220109\React\Dns\Query\Query $query)
+    public function query(\RectorPrefix20220110\React\Dns\Query\Query $query)
     {
-        $request = \RectorPrefix20220109\React\Dns\Model\Message::createRequestForQuery($query);
+        $request = \RectorPrefix20220110\React\Dns\Model\Message::createRequestForQuery($query);
         $queryData = $this->dumper->toBinary($request);
         if (isset($queryData[$this->maxPacketSize])) {
-            return \RectorPrefix20220109\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Query too large for UDP transport', \defined('SOCKET_EMSGSIZE') ? \SOCKET_EMSGSIZE : 90));
+            return \RectorPrefix20220110\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Query too large for UDP transport', \defined('SOCKET_EMSGSIZE') ? \SOCKET_EMSGSIZE : 90));
         }
         // UDP connections are instant, so try connection without a loop or timeout
         $socket = @\stream_socket_client($this->nameserver, $errno, $errstr, 0);
         if ($socket === \false) {
-            return \RectorPrefix20220109\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to connect to DNS server ' . $this->nameserver . ' (' . $errstr . ')', $errno));
+            return \RectorPrefix20220110\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to connect to DNS server ' . $this->nameserver . ' (' . $errstr . ')', $errno));
         }
         // set socket to non-blocking and immediately try to send (fill write buffer)
         \stream_set_blocking($socket, \false);
@@ -132,14 +132,14 @@ final class UdpTransportExecutor implements \RectorPrefix20220109\React\Dns\Quer
             // fwrite(): send of 8192 bytes failed with errno=111 Connection refused
             $error = \error_get_last();
             \preg_match('/errno=(\\d+) (.+)/', $error['message'], $m);
-            return \RectorPrefix20220109\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to send query to DNS server ' . $this->nameserver . ' (' . (isset($m[2]) ? $m[2] : $error['message']) . ')', isset($m[1]) ? (int) $m[1] : 0));
+            return \RectorPrefix20220110\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to send query to DNS server ' . $this->nameserver . ' (' . (isset($m[2]) ? $m[2] : $error['message']) . ')', isset($m[1]) ? (int) $m[1] : 0));
         }
         $loop = $this->loop;
-        $deferred = new \RectorPrefix20220109\React\Promise\Deferred(function () use($loop, $socket, $query) {
+        $deferred = new \RectorPrefix20220110\React\Promise\Deferred(function () use($loop, $socket, $query) {
             // cancellation should remove socket from loop and close socket
             $loop->removeReadStream($socket);
             \fclose($socket);
-            throw new \RectorPrefix20220109\React\Dns\Query\CancellationException('DNS query for ' . $query->describe() . ' has been cancelled');
+            throw new \RectorPrefix20220110\React\Dns\Query\CancellationException('DNS query for ' . $query->describe() . ' has been cancelled');
         });
         $max = $this->maxPacketSize;
         $parser = $this->parser;

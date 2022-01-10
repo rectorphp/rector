@@ -19,7 +19,7 @@ use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\PhpAttribute\Printer\DoctrineAnnotationFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220109\Webmozart\Assert\Assert;
+use RectorPrefix20220110\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *
@@ -111,7 +111,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $attributesToAnnotations = $configuration[self::ATTRIBUTE_TO_ANNOTATION] ?? $configuration;
-        \RectorPrefix20220109\Webmozart\Assert\Assert::allIsAOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
+        \RectorPrefix20220110\Webmozart\Assert\Assert::allIsAOf($attributesToAnnotations, \Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation::class);
         $this->attributesToAnnotations = $attributesToAnnotations;
     }
     /**
