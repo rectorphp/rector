@@ -18,12 +18,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220110\\Symplify\\ComposerJsonManipulator\\": "src"
+            "RectorPrefix20220111\\Symplify\\ComposerJsonManipulator\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220110\\Symplify\\ComposerJsonManipulator\\Tests\\": "tests"
+            "RectorPrefix20220111\\Symplify\\ComposerJsonManipulator\\Tests\\": "tests"
         }
     },
     "extra": {

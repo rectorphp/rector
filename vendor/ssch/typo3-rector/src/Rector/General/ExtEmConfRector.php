@@ -60,9 +60,6 @@ final class ExtEmConfRector extends \Rector\Core\Rector\AbstractRector implement
         if (null === $node->var->dim) {
             return null;
         }
-        if (!$this->isName($node->var->dim, '_EXTKEY')) {
-            return null;
-        }
         if (!$node->expr instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }

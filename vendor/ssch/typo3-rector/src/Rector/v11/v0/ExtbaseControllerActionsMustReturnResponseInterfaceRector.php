@@ -9,7 +9,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Throw_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -118,13 +120,19 @@ CODE_SAMPLE
         if (\strncmp($methodName, 'initialize', \strlen('initialize')) === 0) {
             return \true;
         }
-        if ($this->hasExitCall($node)) {
+        if ($this->lastStatementIsExitCall($node)) {
             return \true;
         }
         if ($this->hasRedirectCall($node)) {
             return \true;
         }
-        return $this->alreadyResponseReturnType($node);
+        if ($this->lastStatementIsForwardCall($node)) {
+            return \true;
+        }
+        if ($this->hasExceptionCall($node)) {
+            return \true;
+        }
+        return $this->isAlreadyResponseReturnType($node);
     }
     /**
      * @return Return_[]
@@ -145,13 +153,16 @@ CODE_SAMPLE
             return $this->isNames($node->name, ['redirect', 'redirectToUri']);
         });
     }
-    private function hasExitCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function lastStatementIsExitCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
     {
-        return (bool) $this->betterNodeFinder->find((array) $node->stmts, function (\PhpParser\Node $node) : bool {
-            return $node instanceof \PhpParser\Node\Expr\Exit_;
-        });
+        if (null === $node->stmts) {
+            return \false;
+        }
+        $statements = $node->stmts;
+        $lastStatement = \array_pop($statements);
+        return $lastStatement instanceof \PhpParser\Node\Stmt\Expression && $lastStatement->expr instanceof \PhpParser\Node\Expr\Exit_;
     }
-    private function alreadyResponseReturnType(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    private function isAlreadyResponseReturnType(\PhpParser\Node\Stmt\ClassMethod $node) : bool
     {
         $returns = $this->findReturns($node);
         $responseObjectType = new \PHPStan\Type\ObjectType('Psr\\Http\\Message\\ResponseInterface');
@@ -163,7 +174,38 @@ CODE_SAMPLE
             if ($returnType->isSuperTypeOf($responseObjectType)->yes()) {
                 return \true;
             }
+            if ($returnType instanceof \PHPStan\Type\ObjectType && $returnType->isInstanceOf('Psr\\Http\\Message\\ResponseInterface')->yes()) {
+                return \true;
+            }
         }
         return \false;
+    }
+    private function hasExceptionCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    {
+        if (null === $node->stmts) {
+            return \false;
+        }
+        $statements = $node->stmts;
+        $lastStatement = \array_pop($statements);
+        if (!$lastStatement instanceof \PhpParser\Node\Stmt\Throw_) {
+            return \false;
+        }
+        $propagateResponseException = new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Http\\PropagateResponseException');
+        return $this->getType($lastStatement->expr)->isSuperTypeOf($propagateResponseException)->yes();
+    }
+    private function lastStatementIsForwardCall(\PhpParser\Node\Stmt\ClassMethod $node) : bool
+    {
+        if (null === $node->stmts) {
+            return \false;
+        }
+        $statements = $node->stmts;
+        $lastStatement = \array_pop($statements);
+        if (!$lastStatement instanceof \PhpParser\Node\Stmt\Expression) {
+            return \false;
+        }
+        if (!$lastStatement->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+            return \false;
+        }
+        return $this->isName($lastStatement->expr->name, 'forward');
     }
 }

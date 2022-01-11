@@ -69,20 +69,33 @@ final class ArrayParser
     {
         // skip newlines
         $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL);
-        if ($tokenIterator->isNextTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON])) {
+        $key = null;
+        // join "ClassName::CONSTANT_REFERENCE" to identifier
+        if ($tokenIterator->isNextTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_DOUBLE_COLON])) {
+            $key = $tokenIterator->currentTokenValue();
+            // "::"
+            $tokenIterator->next();
+            $key .= $tokenIterator->currentTokenValue();
+            $tokenIterator->consumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_DOUBLE_COLON);
+            $key .= $tokenIterator->currentTokenValue();
+            $tokenIterator->next();
+        }
+        if ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON]) || $tokenIterator->isNextTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON])) {
             $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL);
             $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON);
-            if ($tokenIterator->isNextTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER)) {
-                $key = $this->plainValueParser->parseValue($tokenIterator);
-            } else {
-                $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COMMA);
-                $key = $this->plainValueParser->parseValue($tokenIterator);
+            if ($key === null) {
+                if ($tokenIterator->isNextTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_IDENTIFIER)) {
+                    $key = $this->plainValueParser->parseValue($tokenIterator);
+                } else {
+                    $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COMMA);
+                    $key = $this->plainValueParser->parseValue($tokenIterator);
+                }
             }
             $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL);
             $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON);
             return [$key, $this->plainValueParser->parseValue($tokenIterator)];
         }
-        return [null, $this->plainValueParser->parseValue($tokenIterator)];
+        return [$key, $this->plainValueParser->parseValue($tokenIterator)];
     }
     /**
      * @param mixed[] $values

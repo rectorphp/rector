@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\Composer\Rector;
 
 use Rector\Composer\Contract\Rector\ComposerRectorInterface;
-use RectorPrefix20220110\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
+use RectorPrefix20220111\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -17,7 +17,7 @@ final class RemoveCmsPackageDirFromExtraComposerRector implements \Rector\Compos
      * @var string
      */
     private const TYPO3_CMS = 'typo3/cms';
-    public function refactor(\RectorPrefix20220110\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220111\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $extra = $composerJson->getExtra();
         if (!isset($extra[self::TYPO3_CMS])) {
@@ -31,6 +31,7 @@ final class RemoveCmsPackageDirFromExtraComposerRector implements \Rector\Compos
     }
     public function configure(array $configuration) : void
     {
+        // The class is not configurable, but as rector expects every class implementing ComposerRectorInterface to be configurable we have to add this method
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {

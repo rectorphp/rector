@@ -42,21 +42,16 @@ final class RemoveMethodsFromEidUtilityAndTsfeRector extends \Rector\Core\Rector
             return null;
         }
         if ($this->isEidUtilityMethodCall($node)) {
-            try {
-                $this->removeNode($node);
-            } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-                return null;
-            }
+            $this->removeMethodCall($node);
             return null;
         }
         if (!$this->isNames($node->name, ['initFEuser', 'storeSessionData', 'previewInfo', 'hook_eofe', 'addTempContentHttpHeaders', 'sendCacheHeaders'])) {
             return null;
         }
-        try {
-            $this->removeNode($node);
-        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
-            return null;
+        if ($this->isName($node->name, 'storeSessionData') && $node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return $this->delegateToFrontendUserProperty($node);
         }
+        $this->removeMethodCall($node);
         return null;
     }
     /**
@@ -99,5 +94,19 @@ CODE_SAMPLE
             return \true;
         }
         return $this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'));
+    }
+    /**
+     * @param \PhpParser\Node|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     */
+    private function removeMethodCall($node) : void
+    {
+        try {
+            parent::removeNode($node);
+        } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+        }
+    }
+    private function delegateToFrontendUserProperty(\PhpParser\Node\Expr\MethodCall $node) : \PhpParser\Node\Expr\MethodCall
+    {
+        return $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch($node->var, 'fe_user'), (string) $this->getName($node->name));
     }
 }

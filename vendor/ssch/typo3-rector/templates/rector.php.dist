@@ -108,8 +108,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // $services->set(ExtbasePersistenceTypoScriptRector::class);
     // Add some general TYPO3 rules
     $services->set(ConvertImplicitVariablesToExplicitGlobalsRector::class);
-    $services->set(ExtEmConfRector::class);
-    $services->set(ExtensionComposerRector::class);
+    $services->set(ExtEmConfRector::class)->configure([
+        ExtEmConfRector::ADDITIONAL_VALUES_TO_BE_REMOVED => []
+    ]);
+    $services->set(ExtensionComposerRector::class)->configure([
+        ExtensionComposerRector::TYPO3_VERSION_CONSTRAINT => ''
+    ]);
 
     // Do you want to modernize your TypoScript include statements for files and move from <INCLUDE /> to @import use the FileIncludeToImportStatementVisitor
     // $services->set(FileIncludeToImportStatementTypoScriptRector::class);

@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20220110\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220111\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<CallableType>
  */

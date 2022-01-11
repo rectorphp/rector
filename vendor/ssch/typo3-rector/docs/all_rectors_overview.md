@@ -1,4 +1,4 @@
-# 224 Rules Overview
+# 228 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -1257,6 +1257,42 @@ Instantiate PageRenderer explicitly
 ```diff
 -$pageRenderer = $GLOBALS['TSFE']->getPageRenderer();
 +$pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
+```
+
+<br>
+
+## LibFluidContentToContentElementTypoScriptPostRector
+
+Convert lib.fluidContent to lib.contentElement
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\PostRector\LibFluidContentToContentElementTypoScriptPostRector`](../src/FileProcessor/TypoScript/PostRector/LibFluidContentToContentElementTypoScriptPostRector.php)
+
+```diff
+-lib.fluidContent.templateRootPaths.200 = EXT:your_extension_key/Resources/Private/Templates/
++lib.contentElement.templateRootPaths.200 = EXT:your_extension_key/Resources/Private/Templates/
+```
+
+<br>
+
+## LibFluidContentToLibContentElementRector
+
+Convert lib.fluidContent to lib.contentElement
+
+- class: [`Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\LibFluidContentToLibContentElementRector`](../src/FileProcessor/TypoScript/Rector/LibFluidContentToLibContentElementRector.php)
+
+```diff
+-lib.fluidContent {
++lib.contentElement {
+    templateRootPaths {
+       200 = EXT:your_extension_key/Resources/Private/Templates/
+    }
+    partialRootPaths {
+       200 = EXT:your_extension_key/Resources/Private/Partials/
+    }
+    layoutRootPaths {
+       200 = EXT:your_extension_key/Resources/Private/Layouts/
+    }
+ }
 ```
 
 <br>
@@ -3631,6 +3667,22 @@ Substitute TYPO3_MODE and TYPO3_REQUESTTYPE constants
 
 <br>
 
+## SubstituteExtbaseRequestGetBaseUriRector
+
+Use PSR-7 compatible request for uri instead of the method getBaseUri
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v3\SubstituteExtbaseRequestGetBaseUriRector`](../src/Rector/v11/v3/SubstituteExtbaseRequestGetBaseUriRector.php)
+
+```diff
+-$baseUri = $this->request->getBaseUri();
++$request = $GLOBALS['TYPO3_REQUEST'];
++/** @var NormalizedParams $normalizedParams */
++$normalizedParams = $request->getAttribute('normalizedParams');
++$baseUri = $normalizedParams->getSiteUrl();
+```
+
+<br>
+
 ## SubstituteGeneralUtilityDevLogRector
 
 Substitute `GeneralUtility::devLog()` to Logging API
@@ -4322,6 +4374,41 @@ Use LanguageAspect instead of language properties of TSFE
 +use TYPO3\CMS\Core\Context\Context;
 +use TYPO3\CMS\Core\Utility\GeneralUtility;
 +$languageUid = GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('language', 'id');
+```
+
+<br>
+
+## UseLanguageTypeForLanguageFieldColumnRector
+
+use the new TCA type language instead of foreign_table => sys_language for selecting a records
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v3\UseLanguageTypeForLanguageFieldColumnRector`](../src/Rector/v11/v3/UseLanguageTypeForLanguageFieldColumnRector.php)
+
+```diff
+ return [
+     'ctrl' => [
+         'languageField' => 'sys_language_uid',
+     ],
+     'columns' => [
+         'sys_language_uid' => [
+             'exclude' => 1,
+             'label' => 'Language',
+             'config' => [
+-                'type' => 'select',
+-                'renderType' => 'selectSingle',
+-                'foreign_table' => 'sys_language',
+-                'foreign_table_where' => 'ORDER BY sys_language.title',
+-                'eval' => 'int',
+-                'items' => [
+-                    [$_LLL_general . ':LGL.allLanguages', -1],
+-                    [$_LLL_general . ':LGL.default_value', 0]
+-
+-                ],
++                'type' => 'language'
+             ],
+         ],
+     ],
+ ];
 ```
 
 <br>
