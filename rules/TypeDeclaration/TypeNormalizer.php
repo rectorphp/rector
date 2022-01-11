@@ -93,9 +93,10 @@ final class TypeNormalizer
     {
         return \PHPStan\Type\TypeTraverser::map($type, function (\PHPStan\Type\Type $traversedType, callable $traverserCallable) : Type {
             if ($this->isConstantArrayNever($traversedType)) {
+                \assert($traversedType instanceof \PHPStan\Type\Constant\ConstantArrayType);
                 // not sure why, but with direct new node everything gets nulled to MixedType
-                $this->privatesAccessor->setPrivateProperty($traversedType, 'keyType', new \PHPStan\Type\MixedType());
-                $this->privatesAccessor->setPrivateProperty($traversedType, 'itemType', new \PHPStan\Type\MixedType());
+                $this->privatesAccessor->setPrivatePropertyOfClass($traversedType, 'keyType', new \PHPStan\Type\MixedType(), \PHPStan\Type\Type::class);
+                $this->privatesAccessor->setPrivatePropertyOfClass($traversedType, 'itemType', new \PHPStan\Type\MixedType(), \PHPStan\Type\Type::class);
                 return $traversedType;
             }
             if ($traversedType instanceof \PHPStan\Type\UnionType) {
