@@ -80,15 +80,35 @@ final class ArrayParser
         // skip newlines
         $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
 
-        if ($tokenIterator->isNextTokenTypes([Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON])) {
+        $key = null;
+
+        // join "ClassName::CONSTANT_REFERENCE" to identifier
+        if ($tokenIterator->isNextTokenTypes([Lexer::TOKEN_DOUBLE_COLON])) {
+            $key = $tokenIterator->currentTokenValue();
+
+            // "::"
+            $tokenIterator->next();
+            $key .= $tokenIterator->currentTokenValue();
+
+            $tokenIterator->consumeTokenType(Lexer::TOKEN_DOUBLE_COLON);
+            $key .= $tokenIterator->currentTokenValue();
+
+            $tokenIterator->next();
+        }
+
+        if ($tokenIterator->isCurrentTokenTypes(
+            [Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON]
+        ) || $tokenIterator->isNextTokenTypes([Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON])) {
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COLON);
 
-            if ($tokenIterator->isNextTokenType(Lexer::TOKEN_IDENTIFIER)) {
-                $key = $this->plainValueParser->parseValue($tokenIterator);
-            } else {
-                $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COMMA);
-                $key = $this->plainValueParser->parseValue($tokenIterator);
+            if ($key === null) {
+                if ($tokenIterator->isNextTokenType(Lexer::TOKEN_IDENTIFIER)) {
+                    $key = $this->plainValueParser->parseValue($tokenIterator);
+                } else {
+                    $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COMMA);
+                    $key = $this->plainValueParser->parseValue($tokenIterator);
+                }
             }
 
             $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
@@ -97,7 +117,7 @@ final class ArrayParser
             return [$key, $this->plainValueParser->parseValue($tokenIterator)];
         }
 
-        return [null, $this->plainValueParser->parseValue($tokenIterator)];
+        return [$key, $this->plainValueParser->parseValue($tokenIterator)];
     }
 
     /**
