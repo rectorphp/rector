@@ -12,6 +12,21 @@ use RectorPrefix20220111\Symplify\PHPStanRules\Exception\ShouldNotHappenExceptio
 final class PrivatesAccessor
 {
     /**
+     * @template T as object
+     *
+     * @param class-string<T> $valueClassName
+     * @return object
+     * @param object $object
+     */
+    public function getPrivatePropertyOfClass($object, string $propertyName, string $valueClassName)
+    {
+        $value = $this->getPrivateProperty($object, $propertyName);
+        if ($value instanceof $valueClassName) {
+            return $value;
+        }
+        throw new \RectorPrefix20220111\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
+    }
+    /**
      * @return mixed
      * @param object $object
      */
@@ -20,6 +35,20 @@ final class PrivatesAccessor
         $propertyReflection = $this->resolvePropertyReflection($object, $propertyName);
         $propertyReflection->setAccessible(\true);
         return $propertyReflection->getValue($object);
+    }
+    /**
+     * @template T
+     *
+     * @param class-string<T> $valueClassName
+     * @param mixed $value
+     * @param object $object
+     */
+    public function setPrivatePropertyOfClass($object, string $propertyName, $value, string $valueClassName) : void
+    {
+        if (!$value instanceof $valueClassName) {
+            throw new \RectorPrefix20220111\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
+        }
+        $this->setPrivateProperty($object, $propertyName, $value);
     }
     /**
      * @param mixed $value
@@ -41,7 +70,8 @@ final class PrivatesAccessor
         }
         $parentClass = \get_parent_class($object);
         if ($parentClass === \false) {
-            throw new \RectorPrefix20220111\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
+            $errorMessage = \sprintf('Property "$%s" was not found in "%s" class', $propertyName, \get_class($object));
+            throw new \RectorPrefix20220111\Symplify\PHPStanRules\Exception\ShouldNotHappenException($errorMessage);
         }
         return new \ReflectionProperty($parentClass, $propertyName);
     }

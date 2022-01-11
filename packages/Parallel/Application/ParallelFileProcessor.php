@@ -39,7 +39,7 @@ final class ParallelFileProcessor
     /**
      * @var int
      */
-    public const TIMEOUT_IN_SECONDS = 60;
+    public const TIMEOUT_IN_SECONDS = 120;
     /**
      * @var int
      */
