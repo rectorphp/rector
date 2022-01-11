@@ -3,8 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -14,7 +15,10 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Doctrine\NodeAnalyzer\AttributeArgValueResolver;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class ColumnPropertyTypeResolver
 {
@@ -22,6 +26,10 @@ final class ColumnPropertyTypeResolver
      * @var string
      */
     private const DATE_TIME_INTERFACE = 'DateTimeInterface';
+    /**
+     * @var string
+     */
+    private const COLUMN_CLASS = 'Doctrine\\ORM\\Mapping\\Column';
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
@@ -32,6 +40,14 @@ final class ColumnPropertyTypeResolver
      */
     private $typeFactory;
     /**
+     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
+     */
+    private $attributeFinder;
+    /**
+     * @var \Rector\Doctrine\NodeAnalyzer\AttributeArgValueResolver
+     */
+    private $attributeArgValueResolver;
+    /**
      * @var array<string, Type>
      */
     private $doctrineTypeToScalarType;
@@ -39,7 +55,7 @@ final class ColumnPropertyTypeResolver
      * @param array<string, Type> $doctrineTypeToScalarType
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, array $doctrineTypeToScalarType = null)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, \Rector\Doctrine\NodeAnalyzer\AttributeArgValueResolver $attributeArgValueResolver, array $doctrineTypeToScalarType = null)
     {
         $doctrineTypeToScalarType = $doctrineTypeToScalarType ?? [
             'tinyint' => new \PHPStan\Type\BooleanType(),
@@ -79,27 +95,48 @@ final class ColumnPropertyTypeResolver
         ];
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
+        $this->attributeFinder = $attributeFinder;
+        $this->attributeArgValueResolver = $attributeArgValueResolver;
         $this->doctrineTypeToScalarType = $doctrineTypeToScalarType;
     }
-    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    public function resolve(\PhpParser\Node\Stmt\Property $property, bool $isNullable) : ?\PHPStan\Type\Type
     {
+        $columnAttribute = $this->attributeFinder->findAttributeByClass($property, self::COLUMN_CLASS);
+        if ($columnAttribute instanceof \PhpParser\Node\Attribute) {
+            $argValue = $this->attributeArgValueResolver->resolve($columnAttribute, 'type');
+            if ($argValue instanceof \PhpParser\Node\Scalar\String_) {
+                return $this->createPHPStanTypeFromDoctrineStringType($argValue->value, $isNullable);
+            }
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');
+        return $this->resolveFromPhpDocInfo($phpDocInfo, $isNullable);
+    }
+    /**
+     * @return \PHPStan\Type\Type|null
+     */
+    private function resolveFromPhpDocInfo(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, bool $isNullable)
+    {
+        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(self::COLUMN_CLASS);
         if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
-        if ($type === null) {
+        if (!\is_string($type)) {
             return new \PHPStan\Type\MixedType();
         }
+        return $this->createPHPStanTypeFromDoctrineStringType($type, $isNullable);
+    }
+    /**
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\Type
+     */
+    private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable)
+    {
         $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
         if (!$scalarType instanceof \PHPStan\Type\Type) {
             return new \PHPStan\Type\MixedType();
         }
         $types = [$scalarType];
-        $isNullable = $doctrineAnnotationTagValueNode->getValue('nullable');
-        // is nullable?
-        if ($isNullable instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode) {
+        if ($isNullable) {
             $types[] = new \PHPStan\Type\NullType();
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);

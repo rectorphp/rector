@@ -13,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver;
+use Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,11 +35,16 @@ final class TypedPropertyFromColumnTypeRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver $columnPropertyTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @var \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver
+     */
+    private $nullabilityColumnPropertyTypeResolver;
+    public function __construct(\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver $columnPropertyTypeResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver $nullabilityColumnPropertyTypeResolver)
     {
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->columnPropertyTypeResolver = $columnPropertyTypeResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->nullabilityColumnPropertyTypeResolver = $nullabilityColumnPropertyTypeResolver;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -82,12 +88,13 @@ CODE_SAMPLE
         if ($node->type !== null) {
             return null;
         }
-        $propertyType = $this->columnPropertyTypeResolver->resolve($node);
+        $isNullable = $this->nullabilityColumnPropertyTypeResolver->isNullable($node);
+        $propertyType = $this->columnPropertyTypeResolver->resolve($node, $isNullable);
         if (!$propertyType instanceof \PHPStan\Type\Type || $propertyType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         // add default null if missing
-        if (!\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
+        if ($isNullable && !\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
             $propertyType = \PHPStan\Type\TypeCombinator::addNull($propertyType);
         }
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY());
