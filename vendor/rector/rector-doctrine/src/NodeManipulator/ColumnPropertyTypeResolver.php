@@ -64,14 +64,14 @@ final class ColumnPropertyTypeResolver
             'mediumint' => new \PHPStan\Type\IntegerType(),
             'int' => new \PHPStan\Type\IntegerType(),
             'integer' => new \PHPStan\Type\IntegerType(),
-            'bigint' => new \PHPStan\Type\IntegerType(),
             'numeric' => new \PHPStan\Type\IntegerType(),
             // floats
-            'decimal' => new \PHPStan\Type\FloatType(),
             'float' => new \PHPStan\Type\FloatType(),
             'double' => new \PHPStan\Type\FloatType(),
             'real' => new \PHPStan\Type\FloatType(),
             // strings
+            'decimal' => new \PHPStan\Type\StringType(),
+            'bigint' => new \PHPStan\Type\StringType(),
             'tinytext' => new \PHPStan\Type\StringType(),
             'mediumtext' => new \PHPStan\Type\StringType(),
             'longtext' => new \PHPStan\Type\StringType(),
