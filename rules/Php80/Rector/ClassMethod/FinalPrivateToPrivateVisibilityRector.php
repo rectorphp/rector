@@ -6,6 +6,7 @@ namespace Rector\Php80\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -70,6 +71,9 @@ CODE_SAMPLE
     private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if (!$classMethod->isFinal()) {
+            return \true;
+        }
+        if ($classMethod->name->toString() === \Rector\Core\ValueObject\MethodName::CONSTRUCT) {
             return \true;
         }
         return !$classMethod->isPrivate();

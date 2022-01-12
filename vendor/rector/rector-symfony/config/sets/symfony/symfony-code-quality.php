@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220111;
+namespace RectorPrefix20220112;
 
 use Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector;

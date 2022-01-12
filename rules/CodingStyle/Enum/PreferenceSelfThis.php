@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Enum;
 
-use RectorPrefix20220111\MyCLabs\Enum\Enum;
+use RectorPrefix20220112\MyCLabs\Enum\Enum;
 /**
  * @method static PreferenceSelfThis PREFER_THIS()
  * @method static PreferenceSelfThis PREFER_SELF()
  */
-final class PreferenceSelfThis extends \RectorPrefix20220111\MyCLabs\Enum\Enum
+final class PreferenceSelfThis extends \RectorPrefix20220112\MyCLabs\Enum\Enum
 {
     /**
      * @api

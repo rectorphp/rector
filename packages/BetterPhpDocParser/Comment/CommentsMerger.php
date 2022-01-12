@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\Comment;
 use PhpParser\Comment;
 use PhpParser\Node;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220111\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220112\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class CommentsMerger
 {
     /**
@@ -14,7 +14,7 @@ final class CommentsMerger
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\RectorPrefix20220111\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\RectorPrefix20220112\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }

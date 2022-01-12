@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\VersionBonding\Application;
 
-use RectorPrefix20220111\Nette\Utils\Strings;
+use RectorPrefix20220112\Nette\Utils\Strings;
 use PHPStan\Php\PhpVersion;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220111\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220112\Symfony\Component\Console\Style\SymfonyStyle;
 final class MissedRectorDueVersionChecker
 {
     /**
@@ -21,7 +21,7 @@ final class MissedRectorDueVersionChecker
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220111\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220112\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->phpVersionProvider = $phpVersionProvider;
         $this->symfonyStyle = $symfonyStyle;
@@ -70,7 +70,7 @@ final class MissedRectorDueVersionChecker
         }
         foreach ($minPhpVersions as $minPhpVersion) {
             $phpVersion = new \PHPStan\Php\PhpVersion($minPhpVersion->provideMinPhpVersion());
-            $shortRectorClass = \RectorPrefix20220111\Nette\Utils\Strings::after(\get_class($minPhpVersion), '\\', -1);
+            $shortRectorClass = \RectorPrefix20220112\Nette\Utils\Strings::after(\get_class($minPhpVersion), '\\', -1);
             $rectorMessage = \sprintf(' * [%s] %s', $phpVersion->getVersionString(), $shortRectorClass);
             $this->symfonyStyle->writeln($rectorMessage);
         }
