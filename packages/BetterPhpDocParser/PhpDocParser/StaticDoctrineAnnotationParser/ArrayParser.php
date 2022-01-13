@@ -96,6 +96,13 @@ final class ArrayParser
             $tokenIterator->next();
         }
 
+        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+
+        if ($tokenIterator->isCurrentTokenTypes([Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_COMMA])) {
+            // it's a value, not a key
+            return [null, $key];
+        }
+
         if ($tokenIterator->isCurrentTokenTypes(
             [Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON]
         ) || $tokenIterator->isNextTokenTypes([Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON])) {
