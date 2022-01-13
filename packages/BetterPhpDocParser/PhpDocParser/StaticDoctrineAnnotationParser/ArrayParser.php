@@ -80,6 +80,11 @@ final class ArrayParser
             $key .= $tokenIterator->currentTokenValue();
             $tokenIterator->next();
         }
+        $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_PHPDOC_EOL);
+        if ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_CLOSE_CURLY_BRACKET, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COMMA])) {
+            // it's a value, not a key
+            return [null, $key];
+        }
         if ($tokenIterator->isCurrentTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON]) || $tokenIterator->isNextTokenTypes([\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL, \PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON])) {
             $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_EQUAL);
             $tokenIterator->tryConsumeTokenType(\PHPStan\PhpDocParser\Lexer\Lexer::TOKEN_COLON);
