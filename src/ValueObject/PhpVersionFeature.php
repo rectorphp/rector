@@ -572,4 +572,9 @@ final class PhpVersionFeature
      * @var int
      */
     final public const MIXED_TYPE = PhpVersion::PHP_80;
+
+    /**
+     * @var int
+     */
+    final public const DEPRECATE_NULL_ARG_IN_STRING_FUNCTION = PhpVersion::PHP_81;
 }

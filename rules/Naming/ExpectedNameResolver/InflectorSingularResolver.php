@@ -51,7 +51,7 @@ final class InflectorSingularResolver
     {
         $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy !== null) {
-            return Strings::substring($currentName, 0, -strlen($matchBy['by']));
+            return Strings::substring($currentName, 0, -strlen((string) $matchBy['by']));
         }
 
         $resolvedValue = $this->resolveSingularizeMap($currentName);

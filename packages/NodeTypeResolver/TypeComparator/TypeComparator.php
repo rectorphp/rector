@@ -27,7 +27,6 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 use Rector\TypeDeclaration\TypeNormalizer;
 
 final class TypeComparator
@@ -256,8 +255,11 @@ final class TypeComparator
         });
     }
 
-    private function isTypeSelfAndDocParamTypeStatic(Type $phpStanDocType, Type $phpParserNodeType, TypeNode $phpStanDocTypeNode) : bool
-    {
+    private function isTypeSelfAndDocParamTypeStatic(
+        Type $phpStanDocType,
+        Type $phpParserNodeType,
+        TypeNode $phpStanDocTypeNode
+    ): bool {
         return $phpStanDocType instanceof StaticType
             && $phpParserNodeType instanceof ThisType
             && $phpStanDocTypeNode->getAttribute(PhpDocAttributeKey::PARENT) instanceof ParamTagValueNode;

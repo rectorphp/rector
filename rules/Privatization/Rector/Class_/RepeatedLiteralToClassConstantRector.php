@@ -280,7 +280,7 @@ CODE_SAMPLE
         }
 
         // convert camelcase parts to underscore
-        $parts = explode(self::UNDERSCORE, $value);
+        $parts = explode(self::UNDERSCORE, (string) $value);
 
         $parts = array_map(
             fn (string $value): string => StaticRectorStrings::camelCaseToUnderscore($value),

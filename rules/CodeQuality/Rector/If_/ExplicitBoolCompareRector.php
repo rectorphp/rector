@@ -218,7 +218,7 @@ CODE_SAMPLE
             return $this->resolveZeroIdenticalstring($identical, $isNegated, $expr);
         }
 
-        $length = strlen($value);
+        $length = strlen((string) $value);
 
         if ($length === 1) {
             $string = new String_('0');

@@ -92,7 +92,7 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
         }
 
         $type = $oldTokens[$startTokenPos][1];
-        if (str_contains($type, '\\')) {
+        if (str_contains((string) $type, '\\')) {
             return null;
         }
 
