@@ -197,7 +197,7 @@ CODE_SAMPLE
         if ($value === null) {
             return $this->resolveZeroIdenticalstring($identical, $isNegated, $expr);
         }
-        $length = \strlen($value);
+        $length = \strlen((string) $value);
         if ($length === 1) {
             $string = new \PhpParser\Node\Scalar\String_('0');
             return $this->resolveIdentical($expr, $isNegated, $string);

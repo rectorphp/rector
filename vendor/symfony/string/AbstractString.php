@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220112\Symfony\Component\String;
+namespace RectorPrefix20220113\Symfony\Component\String;
 
-use RectorPrefix20220112\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix20220112\Symfony\Component\String\Exception\InvalidArgumentException;
-use RectorPrefix20220112\Symfony\Component\String\Exception\RuntimeException;
+use RectorPrefix20220113\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix20220113\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix20220113\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a string of abstract characters.
  *
@@ -374,7 +374,7 @@ abstract class AbstractString implements \JsonSerializable
     public function repeat(int $multiplier)
     {
         if (0 > $multiplier) {
-            throw new \RectorPrefix20220112\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('Multiplier must be positive, %d given.', $multiplier));
+            throw new \RectorPrefix20220113\Symfony\Component\String\Exception\InvalidArgumentException(\sprintf('Multiplier must be positive, %d given.', $multiplier));
         }
         $str = clone $this;
         $str->string = \str_repeat($str->string, $multiplier);
@@ -417,17 +417,17 @@ abstract class AbstractString implements \JsonSerializable
             $delimiter .= 'i';
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20220112\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20220113\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             if (\false === ($chunks = \preg_split($delimiter, $this->string, $limit, $flags))) {
                 $lastError = \preg_last_error();
                 foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
                     if ($lastError === $v && '_ERROR' === \substr($k, -6)) {
-                        throw new \RectorPrefix20220112\Symfony\Component\String\Exception\RuntimeException('Splitting failed with ' . $k . '.');
+                        throw new \RectorPrefix20220113\Symfony\Component\String\Exception\RuntimeException('Splitting failed with ' . $k . '.');
                     }
                 }
-                throw new \RectorPrefix20220112\Symfony\Component\String\Exception\RuntimeException('Splitting failed with unknown error code.');
+                throw new \RectorPrefix20220113\Symfony\Component\String\Exception\RuntimeException('Splitting failed with unknown error code.');
             }
         } finally {
             \restore_error_handler();
@@ -465,21 +465,21 @@ abstract class AbstractString implements \JsonSerializable
      * @return $this
      */
     public abstract function title(bool $allWords = \false);
-    public function toByteString(string $toEncoding = null) : \RectorPrefix20220112\Symfony\Component\String\ByteString
+    public function toByteString(string $toEncoding = null) : \RectorPrefix20220113\Symfony\Component\String\ByteString
     {
-        $b = new \RectorPrefix20220112\Symfony\Component\String\ByteString();
+        $b = new \RectorPrefix20220113\Symfony\Component\String\ByteString();
         $toEncoding = \in_array($toEncoding, ['utf8', 'utf-8', 'UTF8'], \true) ? 'UTF-8' : $toEncoding;
-        if (null === $toEncoding || $toEncoding === ($fromEncoding = $this instanceof \RectorPrefix20220112\Symfony\Component\String\AbstractUnicodeString || \preg_match('//u', $b->string) ? 'UTF-8' : 'Windows-1252')) {
+        if (null === $toEncoding || $toEncoding === ($fromEncoding = $this instanceof \RectorPrefix20220113\Symfony\Component\String\AbstractUnicodeString || \preg_match('//u', $b->string) ? 'UTF-8' : 'Windows-1252')) {
             $b->string = $this->string;
             return $b;
         }
         \set_error_handler(static function ($t, $m) {
-            throw new \RectorPrefix20220112\Symfony\Component\String\Exception\InvalidArgumentException($m);
+            throw new \RectorPrefix20220113\Symfony\Component\String\Exception\InvalidArgumentException($m);
         });
         try {
             try {
                 $b->string = \mb_convert_encoding($this->string, $toEncoding, 'UTF-8');
-            } catch (\RectorPrefix20220112\Symfony\Component\String\Exception\InvalidArgumentException $e) {
+            } catch (\RectorPrefix20220113\Symfony\Component\String\Exception\InvalidArgumentException $e) {
                 if (!\function_exists('iconv')) {
                     throw $e;
                 }
@@ -490,17 +490,17 @@ abstract class AbstractString implements \JsonSerializable
         }
         return $b;
     }
-    public function toCodePointString() : \RectorPrefix20220112\Symfony\Component\String\CodePointString
+    public function toCodePointString() : \RectorPrefix20220113\Symfony\Component\String\CodePointString
     {
-        return new \RectorPrefix20220112\Symfony\Component\String\CodePointString($this->string);
+        return new \RectorPrefix20220113\Symfony\Component\String\CodePointString($this->string);
     }
     public function toString() : string
     {
         return $this->string;
     }
-    public function toUnicodeString() : \RectorPrefix20220112\Symfony\Component\String\UnicodeString
+    public function toUnicodeString() : \RectorPrefix20220113\Symfony\Component\String\UnicodeString
     {
-        return new \RectorPrefix20220112\Symfony\Component\String\UnicodeString($this->string);
+        return new \RectorPrefix20220113\Symfony\Component\String\UnicodeString($this->string);
     }
     /**
      * @return $this

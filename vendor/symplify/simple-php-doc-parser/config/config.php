@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220112;
+namespace RectorPrefix20220113;
 
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20220112\Symplify\\SimplePhpDocParser\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php']);
+    $services->load('RectorPrefix20220113\Symplify\\SimplePhpDocParser\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php']);
     $services->set(\PHPStan\PhpDocParser\Parser\PhpDocParser::class);
     $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
     $services->set(\PHPStan\PhpDocParser\Parser\TypeParser::class);

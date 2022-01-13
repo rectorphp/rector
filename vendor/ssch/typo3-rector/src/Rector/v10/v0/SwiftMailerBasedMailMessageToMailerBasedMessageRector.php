@@ -87,6 +87,12 @@ CODE_SAMPLE
     }
     private function refactorMethodSetBody(\PhpParser\Node\Expr\MethodCall $node) : ?\PhpParser\Node\Expr\MethodCall
     {
+        if (!isset($node->args[0])) {
+            return null;
+        }
+        if (!$node->args[0]->value instanceof \PhpParser\Node) {
+            return null;
+        }
         $bodyType = $this->nodeTypeResolver->getType($node->args[0]->value);
         $contentType = isset($node->args[1]) ? $this->valueResolver->getValue($node->args[1]->value) : null;
         if (!$bodyType instanceof \PHPStan\Type\StringType) {

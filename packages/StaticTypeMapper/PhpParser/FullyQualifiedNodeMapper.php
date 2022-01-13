@@ -85,7 +85,7 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
             return null;
         }
         $type = $oldTokens[$startTokenPos][1];
-        if (\strpos($type, '\\') !== \false) {
+        if (\strpos((string) $type, '\\') !== \false) {
             return null;
         }
         $objectTypes = $this->usedImportsResolver->resolveForNode($fullyQualified);

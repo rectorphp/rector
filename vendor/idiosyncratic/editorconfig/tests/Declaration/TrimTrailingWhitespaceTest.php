@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220112\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220113\Idiosyncratic\EditorConfig\Declaration;
 
 use DomainException;
-use RectorPrefix20220112\PHPUnit\Framework\TestCase;
+use RectorPrefix20220113\PHPUnit\Framework\TestCase;
 use RuntimeException;
-class TrimTrailingWhitespaceTest extends \RectorPrefix20220112\PHPUnit\Framework\TestCase
+class TrimTrailingWhitespaceTest extends \RectorPrefix20220113\PHPUnit\Framework\TestCase
 {
     public function testValidValues()
     {
-        $declaration = new \RectorPrefix20220112\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('false');
+        $declaration = new \RectorPrefix20220113\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('false');
         $this->assertEquals('trim_trailing_whitespace=false', (string) $declaration);
-        $declaration = new \RectorPrefix20220112\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('true');
+        $declaration = new \RectorPrefix20220113\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('true');
         $this->assertEquals('trim_trailing_whitespace=true', (string) $declaration);
     }
     public function testInvalidIntValue()
     {
         $this->expectException(\DomainException::class);
-        $declaration = new \RectorPrefix20220112\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('4');
+        $declaration = new \RectorPrefix20220113\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('4');
     }
     public function testInvalidStringValue()
     {
         $this->expectException(\DomainException::class);
-        $declaration = new \RectorPrefix20220112\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('four');
+        $declaration = new \RectorPrefix20220113\Idiosyncratic\EditorConfig\Declaration\TrimTrailingWhitespace('four');
     }
 }

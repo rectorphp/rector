@@ -10,8 +10,8 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20220112\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220112\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20220113\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220113\Symplify\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**
@@ -41,7 +41,7 @@ final class PostFileProcessor
     /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(\RectorPrefix20220112\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \RectorPrefix20220112\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $postRectors)
+    public function __construct(\RectorPrefix20220113\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \RectorPrefix20220113\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $postRectors)
     {
         $this->skipper = $skipper;
         $this->currentFileProvider = $currentFileProvider;

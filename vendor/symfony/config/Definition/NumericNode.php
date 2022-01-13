@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220112\Symfony\Component\Config\Definition;
+namespace RectorPrefix20220113\Symfony\Component\Config\Definition;
 
-use RectorPrefix20220112\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20220113\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 /**
  * This node represents a numeric value in the config tree.
  *
  * @author David Jeanmonod <david.jeanmonod@gmail.com>
  */
-class NumericNode extends \RectorPrefix20220112\Symfony\Component\Config\Definition\ScalarNode
+class NumericNode extends \RectorPrefix20220113\Symfony\Component\Config\Definition\ScalarNode
 {
     protected $min;
     protected $max;
@@ -24,7 +24,7 @@ class NumericNode extends \RectorPrefix20220112\Symfony\Component\Config\Definit
      * @param int|float|null $min
      * @param int|float|null $max
      */
-    public function __construct(?string $name, \RectorPrefix20220112\Symfony\Component\Config\Definition\NodeInterface $parent = null, $min = null, $max = null, string $pathSeparator = \RectorPrefix20220112\Symfony\Component\Config\Definition\BaseNode::DEFAULT_PATH_SEPARATOR)
+    public function __construct(?string $name, \RectorPrefix20220113\Symfony\Component\Config\Definition\NodeInterface $parent = null, $min = null, $max = null, string $pathSeparator = \RectorPrefix20220113\Symfony\Component\Config\Definition\BaseNode::DEFAULT_PATH_SEPARATOR)
     {
         parent::__construct($name, $parent, $pathSeparator);
         $this->min = $min;
@@ -44,7 +44,7 @@ class NumericNode extends \RectorPrefix20220112\Symfony\Component\Config\Definit
             $errorMsg = \sprintf('The value %s is too big for path "%s". Should be less than or equal to %s', $value, $this->getPath(), $this->max);
         }
         if (isset($errorMsg)) {
-            $ex = new \RectorPrefix20220112\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($errorMsg);
+            $ex = new \RectorPrefix20220113\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($errorMsg);
             $ex->setPath($this->getPath());
             throw $ex;
         }

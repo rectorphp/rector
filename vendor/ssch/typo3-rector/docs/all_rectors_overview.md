@@ -1,4 +1,4 @@
-# 228 Rules Overview
+# 231 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -92,6 +92,36 @@ Add renderType for select fields
          ],
      ],
  ];
+```
+
+<br>
+
+## AddSetConfigurationMethodToExceptionHandlerRector
+
+Add method setConfiguration to class which implements ExceptionHandlerInterface
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v4\AddSetConfigurationMethodToExceptionHandlerRector`](../src/Rector/v11/v4/AddSetConfigurationMethodToExceptionHandlerRector.php)
+
+```diff
+ use TYPO3\CMS\Frontend\ContentObject\Exception\ExceptionHandlerInterface;
+ use TYPO3\CMS\Frontend\ContentObject\AbstractContentObject;
+
+ class CustomExceptionHandler implements ExceptionHandlerInterface
+ {
+     private array $configuration;
+
+-    public function __construct(array $configuration) {
+-        $this->configuration = $configuration;
++    public function handle(\Exception $exception, AbstractContentObject $contentObject = null, $contentObjectConfiguration = [])
++    {
+     }
+
+-    public function handle(\Exception $exception, AbstractContentObject $contentObject = null, $contentObjectConfiguration = [])
++    public function setConfiguration(array $configuration): void
+     {
++        $this->configuration = $configuration;
+     }
+ }
 ```
 
 <br>
@@ -3617,6 +3647,39 @@ Use SiteRepository instead of instantiating class Site directly with page id
 
 <br>
 
+## SubstituteBackendTemplateViewWithModuleTemplateRector
+
+Use an instance of ModuleTemplate instead of BackendTemplateView
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\SubstituteBackendTemplateViewWithModuleTemplateRector`](../src/Rector/v11/v5/SubstituteBackendTemplateViewWithModuleTemplateRector.php)
+
+```diff
+ class MyController extends ActionController
+ {
+-    protected $defaultViewObjectName = BackendTemplateView::class;
++    protected ModuleTemplateFactory $moduleTemplateFactory;
+
++    public function __construct(
++        ModuleTemplateFactory $moduleTemplateFactory,
++    ) {
++        $this->moduleTemplateFactory = $moduleTemplateFactory;
++    }
++
+     public function myAction(): ResponseInterface
+     {
+         $this->view->assign('someVar', 'someContent');
+-        $moduleTemplate = $this->view->getModuleTemplate();
++        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+         // Adding title, menus, buttons, etc. using $moduleTemplate ...
+-        return $this->htmlResponse();
++        $moduleTemplate->setContent($this->view->render());
++        return $this->htmlResponse($moduleTemplate->renderContent());
+     }
+ }
+```
+
+<br>
+
 ## SubstituteCacheWrapperMethodsRector
 
 Caching framework wrapper methods in BackendUtility
@@ -3719,6 +3782,45 @@ Substitute deprecated method calls of class GeneralUtility
 -GeneralUtility::milliseconds();
 +inet_ntop(inet_pton($address));
 +round(microtime(true) * 1000);
+```
+
+<br>
+
+## SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector
+
+Use PageRenderer and IconFactory directly instead of getting them from the ModuleTemplate
+
+- class: [`Ssch\TYPO3Rector\Rector\v11\v5\SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector`](../src/Rector/v11/v5/SubstituteGetIconFactoryAndGetPageRendererFromModuleTemplateRector.php)
+
+```diff
+ class MyController extends ActionController
+ {
+     protected ModuleTemplateFactory $moduleTemplateFactory;
++    protected IconFactory $iconFactory;
++    protected PageRenderer $pageRenderer;
+
+-    public function __construct(ModuleTemplateFactory $moduleTemplateFactory)
+-    {
++    public function __construct(
++        ModuleTemplateFactory $moduleTemplateFactory,
++        IconFactory $iconFactory,
++        PageRenderer $pageRenderer
++    ) {
+         $this->moduleTemplateFactory = $moduleTemplateFactory;
++        $this->iconFactory = $iconFactory;
++        $this->pageRenderer = $pageRenderer;
+     }
+
+     public function myAction(): ResponseInterface
+     {
+         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+-        $moduleTemplate->getPageRenderer()->loadRequireJsModule('Vendor/Extension/MyJsModule');
+-        $moduleTemplate->setContent($moduleTemplate->getIconFactory()->getIcon('some-icon', Icon::SIZE_SMALL)->render());
++        $this->pageRenderer->loadRequireJsModule('Vendor/Extension/MyJsModule');
++        $moduleTemplate->setContent($this->iconFactory->getIcon('some-icon', Icon::SIZE_SMALL)->render());
+         return $this->htmlResponse($moduleTemplate->renderContent());
+     }
+ }
 ```
 
 <br>

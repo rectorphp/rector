@@ -463,4 +463,8 @@ final class PhpVersionFeature
      * @var int
      */
     public const MIXED_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
+    public const DEPRECATE_NULL_ARG_IN_STRING_FUNCTION = \Rector\Core\ValueObject\PhpVersion::PHP_81;
 }

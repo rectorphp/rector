@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220112\Symfony\Polyfill\Php81;
+namespace RectorPrefix20220113\Symfony\Polyfill\Php81;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>

@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220112\\Symfony\\Contracts\\EventDispatcher\\": ""
+            "RectorPrefix20220113\\Symfony\\Contracts\\EventDispatcher\\": ""
         }
     },
     "minimum-stability": "dev",
