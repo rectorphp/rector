@@ -191,4 +191,8 @@ final class AttributeKey
      * @var string
      */
     public const WRAPPED_IN_PARENTHESES = 'wrapped_in_parentheses';
+    /**
+     * @var string
+     */
+    public const COMMENT_CLOSURE_RETURN_MIRRORED = 'comment_closure_return_mirrored';
 }
