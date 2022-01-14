@@ -37,11 +37,11 @@
         "react\/dns": "^1.8",
         "react\/event-loop": "^1.2",
         "react\/promise": "^2.6.0 || ^1.2.1",
-        "react\/promise-timer": "^1.4.0",
+        "react\/promise-timer": "^1.8",
         "react\/stream": "^1.2"
     },
     "require-dev": {
-        "clue\/block-react": "^1.2",
+        "clue\/block-react": "^1.5",
         "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35",
         "react\/promise-stream": "^1.2"
     },

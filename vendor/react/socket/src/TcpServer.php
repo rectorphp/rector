@@ -150,7 +150,7 @@ final class TcpServer extends \RectorPrefix20220114\Evenement\EventEmitter imple
         if (!$parts || !isset($parts['scheme'], $parts['host'], $parts['port']) || $parts['scheme'] !== 'tcp') {
             throw new \InvalidArgumentException('Invalid URI "' . $uri . '" given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
-        if (\false === \filter_var(\trim($parts['host'], '[]'), \FILTER_VALIDATE_IP)) {
+        if (@\inet_pton(\trim($parts['host'], '[]')) === \false) {
             throw new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
         $this->master = @\stream_socket_server($uri, $errno, $errstr, \STREAM_SERVER_BIND | \STREAM_SERVER_LISTEN, \stream_context_create(array('socket' => $context + array('backlog' => 511))));

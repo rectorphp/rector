@@ -31,7 +31,9 @@ final class HappyEyeBallsConnector implements \RectorPrefix20220114\React\Socket
         if (\strpos($uri, '://') === \false) {
             $uri = 'tcp://' . $uri;
             $parts = \parse_url($uri);
-            unset($parts['scheme']);
+            if (isset($parts['scheme'])) {
+                unset($parts['scheme']);
+            }
         } else {
             $parts = \parse_url($uri);
         }
@@ -40,7 +42,7 @@ final class HappyEyeBallsConnector implements \RectorPrefix20220114\React\Socket
         }
         $host = \trim($parts['host'], '[]');
         // skip DNS lookup / URI manipulation if this URI already contains an IP
-        if (\false !== \filter_var($host, \FILTER_VALIDATE_IP)) {
+        if (@\inet_pton($host) !== \false) {
             return $this->connector->connect($original);
         }
         $builder = new \RectorPrefix20220114\React\Socket\HappyEyeBallsConnectionBuilder($this->loop, $this->connector, $this->resolver, $uri, $host, $parts);

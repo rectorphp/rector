@@ -11,6 +11,7 @@ use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
@@ -108,17 +109,10 @@ final class TypeComparator
         if ($this->isTypeSelfAndDocParamTypeStatic($phpStanDocType, $phpParserNodeType, $phpStanDocTypeNode)) {
             return \false;
         }
-        // special case for non-final $this/self compare; in case of interface/abstract class, it can be another $this
-        if ($phpStanDocType instanceof \PHPStan\Type\ThisType && $phpParserNodeType instanceof \PHPStan\Type\ThisType) {
-            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            if ($scope instanceof \PHPStan\Analyser\Scope) {
-                $classReflection = $scope->getClassReflection();
-                if ($classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-                    return $classReflection->isFinal();
-                }
-            }
+        if ($this->areTypesSameWithLiteralTypeInPhpDoc($areDifferentScalarTypes, $phpStanDocType, $phpParserNodeType)) {
+            return \false;
         }
-        return \true;
+        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType, $node);
     }
     public function isSubtype(\PHPStan\Type\Type $checkedType, \PHPStan\Type\Type $mainType) : bool
     {
@@ -229,5 +223,23 @@ final class TypeComparator
     private function isTypeSelfAndDocParamTypeStatic(\PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType, \PHPStan\PhpDocParser\Ast\Type\TypeNode $phpStanDocTypeNode) : bool
     {
         return $phpStanDocType instanceof \PHPStan\Type\StaticType && $phpParserNodeType instanceof \PHPStan\Type\ThisType && $phpStanDocTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT) instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+    }
+    private function areTypesSameWithLiteralTypeInPhpDoc(bool $areDifferentScalarTypes, \PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType) : bool
+    {
+        return $areDifferentScalarTypes && $phpStanDocType instanceof \PHPStan\Type\ConstantScalarType && $phpParserNodeType->isSuperTypeOf($phpStanDocType)->yes();
+    }
+    private function isThisTypeInFinalClass(\PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType, \PhpParser\Node $node) : bool
+    {
+        // special case for non-final $this/self compare; in case of interface/abstract class, it can be another $this
+        if ($phpStanDocType instanceof \PHPStan\Type\ThisType && $phpParserNodeType instanceof \PHPStan\Type\ThisType) {
+            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+            if ($scope instanceof \PHPStan\Analyser\Scope) {
+                $classReflection = $scope->getClassReflection();
+                if ($classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+                    return $classReflection->isFinal();
+                }
+            }
+        }
+        return \true;
     }
 }

@@ -26,7 +26,7 @@ final class TcpConnector implements \RectorPrefix20220114\React\Socket\Connector
             return \RectorPrefix20220114\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" is invalid (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         $ip = \trim($parts['host'], '[]');
-        if (\false === \filter_var($ip, \FILTER_VALIDATE_IP)) {
+        if (@\inet_pton($ip) === \false) {
             return \RectorPrefix20220114\React\Promise\reject(new \InvalidArgumentException('Given URI "' . $uri . '" does not contain a valid host IP (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         // use context given in constructor
