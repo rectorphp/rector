@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220113\Symfony\Component\Console\Completion;
+namespace RectorPrefix20220114\Symfony\Component\Console\Completion;
 
-use RectorPrefix20220113\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20220114\Symfony\Component\Console\Input\InputOption;
 /**
  * Stores all completion suggestions for the current input.
  *
@@ -28,7 +28,7 @@ final class CompletionSuggestions
      */
     public function suggestValue($value)
     {
-        $this->valueSuggestions[] = !$value instanceof \RectorPrefix20220113\Symfony\Component\Console\Completion\Suggestion ? new \RectorPrefix20220113\Symfony\Component\Console\Completion\Suggestion($value) : $value;
+        $this->valueSuggestions[] = !$value instanceof \RectorPrefix20220114\Symfony\Component\Console\Completion\Suggestion ? new \RectorPrefix20220114\Symfony\Component\Console\Completion\Suggestion($value) : $value;
         return $this;
     }
     /**
@@ -50,7 +50,7 @@ final class CompletionSuggestions
      *
      * @return $this
      */
-    public function suggestOption(\RectorPrefix20220113\Symfony\Component\Console\Input\InputOption $option)
+    public function suggestOption(\RectorPrefix20220114\Symfony\Component\Console\Input\InputOption $option)
     {
         $this->optionSuggestions[] = $option;
         return $this;

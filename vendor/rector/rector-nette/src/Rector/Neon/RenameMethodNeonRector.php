@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Neon;
 
-use RectorPrefix20220113\Nette\Neon\Node;
+use RectorPrefix20220114\Nette\Neon\Node;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
 use Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
@@ -50,7 +50,7 @@ CODE_SAMPLE
      * @param SetupMethodCall $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode(\RectorPrefix20220113\Nette\Neon\Node $node)
+    public function enterNode(\RectorPrefix20220114\Nette\Neon\Node $node)
     {
         foreach ($this->methodCallRenameCollector->getMethodCallRenames() as $methodCallRename) {
             if (!\is_a($node->className, $methodCallRename->getClass(), \true)) {

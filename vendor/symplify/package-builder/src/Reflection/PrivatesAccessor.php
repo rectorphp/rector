@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220113\Symplify\PackageBuilder\Reflection;
+namespace RectorPrefix20220114\Symplify\PackageBuilder\Reflection;
 
 use ReflectionProperty;
-use RectorPrefix20220113\Symplify\PHPStanRules\Exception\ShouldNotHappenException;
+use RectorPrefix20220114\Symplify\PHPStanRules\Exception\ShouldNotHappenException;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Reflection\PrivatesAccessorTest
@@ -24,7 +24,7 @@ final class PrivatesAccessor
         if ($value instanceof $valueClassName) {
             return $value;
         }
-        throw new \RectorPrefix20220113\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
+        throw new \RectorPrefix20220114\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
     }
     /**
      * @return mixed
@@ -46,7 +46,7 @@ final class PrivatesAccessor
     public function setPrivatePropertyOfClass($object, string $propertyName, $value, string $valueClassName) : void
     {
         if (!$value instanceof $valueClassName) {
-            throw new \RectorPrefix20220113\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
+            throw new \RectorPrefix20220114\Symplify\PHPStanRules\Exception\ShouldNotHappenException();
         }
         $this->setPrivateProperty($object, $propertyName, $value);
     }
@@ -71,7 +71,7 @@ final class PrivatesAccessor
         $parentClass = \get_parent_class($object);
         if ($parentClass === \false) {
             $errorMessage = \sprintf('Property "$%s" was not found in "%s" class', $propertyName, \get_class($object));
-            throw new \RectorPrefix20220113\Symplify\PHPStanRules\Exception\ShouldNotHappenException($errorMessage);
+            throw new \RectorPrefix20220114\Symplify\PHPStanRules\Exception\ShouldNotHappenException($errorMessage);
         }
         return new \ReflectionProperty($parentClass, $propertyName);
     }

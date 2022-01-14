@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220113\Symfony\Component\Console\Output;
+namespace RectorPrefix20220114\Symfony\Component\Console\Output;
 
-use RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20220114\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix20220114\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * Base class for output classes.
  *
@@ -25,7 +25,7 @@ use RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatterInte
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-abstract class Output implements \RectorPrefix20220113\Symfony\Component\Console\Output\OutputInterface
+abstract class Output implements \RectorPrefix20220114\Symfony\Component\Console\Output\OutputInterface
 {
     /**
      * @var int
@@ -37,23 +37,23 @@ abstract class Output implements \RectorPrefix20220113\Symfony\Component\Console
      * @param bool                          $decorated Whether to decorate messages
      * @param OutputFormatterInterface|null $formatter Output formatter instance (null to use default OutputFormatter)
      */
-    public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, \RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter = null)
+    public function __construct(?int $verbosity = self::VERBOSITY_NORMAL, bool $decorated = \false, \RectorPrefix20220114\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter = null)
     {
         $this->verbosity = $verbosity ?? self::VERBOSITY_NORMAL;
-        $this->formatter = $formatter ?? new \RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatter();
+        $this->formatter = $formatter ?? new \RectorPrefix20220114\Symfony\Component\Console\Formatter\OutputFormatter();
         $this->formatter->setDecorated($decorated);
     }
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20220114\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         $this->formatter = $formatter;
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : \RectorPrefix20220113\Symfony\Component\Console\Formatter\OutputFormatterInterface
+    public function getFormatter() : \RectorPrefix20220114\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
         return $this->formatter;
     }
@@ -139,12 +139,12 @@ abstract class Output implements \RectorPrefix20220113\Symfony\Component\Console
         }
         foreach ($messages as $message) {
             switch ($type) {
-                case \RectorPrefix20220113\Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL:
+                case \RectorPrefix20220114\Symfony\Component\Console\Output\OutputInterface::OUTPUT_NORMAL:
                     $message = $this->formatter->format($message);
                     break;
-                case \RectorPrefix20220113\Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW:
+                case \RectorPrefix20220114\Symfony\Component\Console\Output\OutputInterface::OUTPUT_RAW:
                     break;
-                case \RectorPrefix20220113\Symfony\Component\Console\Output\OutputInterface::OUTPUT_PLAIN:
+                case \RectorPrefix20220114\Symfony\Component\Console\Output\OutputInterface::OUTPUT_PLAIN:
                     $message = \strip_tags($this->formatter->format($message));
                     break;
             }
