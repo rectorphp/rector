@@ -21,6 +21,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set(Option::PARALLEL, false);
     $parameters->set(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES, 16);
     $parameters->set(Option::PARALLEL_JOB_SIZE, 20);
+    $parameters->set(Option::PARALLEL_TIMEOUT_IN_SECONDS, 120);
+    $parameters->set(Option::PARALLEL_SYSTEM_ERROR_COUNT_LIMIT, 20);
 
     // FQN class importing
     $parameters->set(Option::AUTO_IMPORT_NAMES, false);
