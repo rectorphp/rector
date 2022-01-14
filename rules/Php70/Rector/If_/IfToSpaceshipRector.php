@@ -109,20 +109,27 @@ CODE_SAMPLE
         if (!$this->areVariablesEqual($condition, $this->firstValue, $this->secondValue)) {
             return null;
         }
+        if ([$this->onGreater, $this->onEqual, $this->onSmaller] === [1, 0, -1]) {
+            return $this->processReturnSpaceship($this->secondValue, $this->firstValue);
+        }
         // is spaceship return values?
         if ([$this->onGreater, $this->onEqual, $this->onSmaller] !== [-1, 0, 1]) {
             return null;
         }
-        if ($this->nextNode !== null) {
-            $this->removeNode($this->nextNode);
-        }
-        // spaceship ready!
-        $spaceship = new \PhpParser\Node\Expr\BinaryOp\Spaceship($this->secondValue, $this->firstValue);
-        return new \PhpParser\Node\Stmt\Return_($spaceship);
+        return $this->processReturnSpaceship($this->firstValue, $this->secondValue);
     }
     public function provideMinPhpVersion() : int
     {
         return \Rector\Core\ValueObject\PhpVersionFeature::SPACESHIP;
+    }
+    private function processReturnSpaceship(\PhpParser\Node\Expr $firstValue, \PhpParser\Node\Expr $secondValue) : \PhpParser\Node\Stmt\Return_
+    {
+        if ($this->nextNode !== null) {
+            $this->removeNode($this->nextNode);
+        }
+        // spaceship ready!
+        $spaceship = new \PhpParser\Node\Expr\BinaryOp\Spaceship($secondValue, $firstValue);
+        return new \PhpParser\Node\Stmt\Return_($spaceship);
     }
     private function reset() : void
     {
