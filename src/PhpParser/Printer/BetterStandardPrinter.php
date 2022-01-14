@@ -6,7 +6,9 @@ namespace Rector\Core\PhpParser\Printer;
 
 use Nette\Utils\Strings;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Ternary;
@@ -147,6 +149,10 @@ final class BetterStandardPrinter extends Standard
     protected function p(Node $node, $parentFormatPreserved = false): string
     {
         $content = parent::p($node, $parentFormatPreserved);
+
+        if ($node instanceof Expr) {
+            $content = $this->resolveContentOnExpr($node, $content);
+        }
 
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === true
             ? ('(' . $content . ')')
@@ -435,6 +441,35 @@ final class BetterStandardPrinter extends Standard
         }
 
         return $result;
+    }
+
+    private function resolveContentOnExpr(Expr $expr, string $content): string
+    {
+        $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if (! $parentNode instanceof ArrowFunction) {
+            return $content;
+        }
+
+        if ($parentNode->expr !== $expr) {
+            return $content;
+        }
+
+        if (! $parentNode->hasAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED)) {
+            return $content;
+        }
+
+        $comments = $expr->getAttribute(AttributeKey::COMMENTS) ?? [];
+
+        if ($comments === []) {
+            return $content;
+        }
+
+        $text = '';
+        foreach ($comments as $comment) {
+            $text .= $comment->getText() . "\n";
+        }
+
+        return $content = $text . $content;
     }
 
     /**

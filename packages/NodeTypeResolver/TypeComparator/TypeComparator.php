@@ -263,14 +263,14 @@ final class TypeComparator
         bool $areDifferentScalarTypes,
         Type $phpStanDocType,
         Type $phpParserNodeType
-    ): bool
-    {
+    ): bool {
         return $areDifferentScalarTypes
             && $phpStanDocType instanceof ConstantScalarType
-            && $phpParserNodeType->isSuperTypeOf($phpStanDocType)->yes();
+            && $phpParserNodeType->isSuperTypeOf($phpStanDocType)
+                ->yes();
     }
 
-    private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType, Node $node) : bool
+    private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType, Node $node): bool
     {
         // special case for non-final $this/self compare; in case of interface/abstract class, it can be another $this
         if ($phpStanDocType instanceof ThisType && $phpParserNodeType instanceof ThisType) {
