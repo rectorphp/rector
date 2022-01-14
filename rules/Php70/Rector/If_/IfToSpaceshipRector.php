@@ -123,24 +123,33 @@ CODE_SAMPLE
             return null;
         }
 
+        if ([$this->onGreater, $this->onEqual, $this->onSmaller] === [1, 0, -1]) {
+            return $this->processReturnSpaceship($this->secondValue, $this->firstValue);
+        }
+
         // is spaceship return values?
         if ([$this->onGreater, $this->onEqual, $this->onSmaller] !== [-1, 0, 1]) {
             return null;
         }
 
-        if ($this->nextNode !== null) {
-            $this->removeNode($this->nextNode);
-        }
-
-        // spaceship ready!
-        $spaceship = new Spaceship($this->secondValue, $this->firstValue);
-
-        return new Return_($spaceship);
+        return $this->processReturnSpaceship($this->firstValue, $this->secondValue);
     }
 
     public function provideMinPhpVersion(): int
     {
         return PhpVersionFeature::SPACESHIP;
+    }
+
+    private function processReturnSpaceship(Expr $firstValue, Expr $secondValue): Return_
+    {
+        if ($this->nextNode !== null) {
+            $this->removeNode($this->nextNode);
+        }
+
+        // spaceship ready!
+        $spaceship = new Spaceship($secondValue, $firstValue);
+
+        return new Return_($spaceship);
     }
 
     private function reset(): void
