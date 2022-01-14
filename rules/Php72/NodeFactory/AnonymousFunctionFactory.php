@@ -201,12 +201,14 @@ final class AnonymousFunctionFactory
     {
         $parent = $this->betterNodeFinder->findParentType($useVariable, Closure::class);
 
-        if ($parent instanceof Closure) {
-            $paramNames = $this->nodeNameResolver->getNames($parent->params);
+        if (! $parent instanceof Closure) {
+            return $anonymousFunctionNode;
+        }
 
-            if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
-                return $anonymousFunctionNode;
-            }
+        $paramNames = $this->nodeNameResolver->getNames($parent->params);
+
+        if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
+            return $anonymousFunctionNode;
         }
 
         $anonymousFunctionNode = clone $anonymousFunctionNode;
@@ -347,7 +349,7 @@ final class AnonymousFunctionFactory
         return $innerMethodCall;
     }
 
-    private function normalizeClassConstFetchForStatic(Expr $expr): null | FullyQualified | Expr
+    private function normalizeClassConstFetchForStatic(Expr $expr): null | Name | FullyQualified | Expr
     {
         if (! $expr instanceof ClassConstFetch) {
             return $expr;
@@ -361,6 +363,11 @@ final class AnonymousFunctionFactory
         $className = $this->nodeNameResolver->getName($expr->class);
         if ($className === null) {
             return null;
+        }
+
+        $name = new Name($className);
+        if ($name->isSpecialClassName()) {
+            return $name;
         }
 
         return new FullyQualified($className);
