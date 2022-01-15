@@ -21,9 +21,9 @@ final class ShouldNotHappenException extends \Exception
     private function createDefaultMessageWithLocation() : string
     {
         $debugBacktrace = \debug_backtrace();
-        $class = isset($debugBacktrace[2]['class']) ? (string) $debugBacktrace[2]['class'] : null;
-        $function = isset($debugBacktrace[2]['function']) ? (string) $debugBacktrace[2]['function'] : '';
-        $line = isset($debugBacktrace[1]['line']) ? (int) $debugBacktrace[1]['line'] : 0;
+        $class = $debugBacktrace[2]['class'] ?? null;
+        $function = $debugBacktrace[2]['function'];
+        $line = $debugBacktrace[1]['line'] ?? 0;
         $method = $class !== null ? $class . '::' . $function : $function;
         return \sprintf('Look at "%s()" on line %d', $method, $line);
     }
