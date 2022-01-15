@@ -113,10 +113,7 @@ CODE_SAMPLE
             return true;
         }
 
-        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped(
-            $node,
-            [Node\Expr\Throw_::class, Throw_::class]
-        );
+        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, [Throw_::class]);
         $hasNeverFuncCall = $this->hasNeverFuncCall($node);
 
         if (! $hasNeverNodes && ! $hasNeverFuncCall) {

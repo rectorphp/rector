@@ -25,7 +25,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     private array $propertiesByClass = [];
 
     /**
-     * @var array<string, array<string, Type>>
+     * @var array<string, array<string, Type|null>>
      */
     private array $propertiesWithoutConstructorByClass = [];
 
@@ -93,7 +93,7 @@ final class PropertyToAddCollector implements NodeCollectorInterface
     }
 
     /**
-     * @return array<string, Type>
+     * @return array<string, Type|null>
      */
     public function getPropertiesWithoutConstructorByClass(Class_ $class): array
     {

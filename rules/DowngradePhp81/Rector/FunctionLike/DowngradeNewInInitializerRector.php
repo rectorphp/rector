@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -22,6 +23,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -89,8 +91,8 @@ CODE_SAMPLE
             return null;
         }
 
+        /** @var ClassMethod|Closure|Function_ $node */
         $node = $this->convertArrowFunctionToClosure($node);
-
         return $this->replaceNewInParams($node);
     }
 
@@ -137,7 +139,7 @@ CODE_SAMPLE
         return $param->type instanceof IntersectionType;
     }
 
-    private function replaceNewInParams(FunctionLike $functionLike): FunctionLike
+    private function replaceNewInParams(ClassMethod|Closure|Function_ $functionLike): ClassMethod|Closure|Function_
     {
         $isConstructor = $functionLike instanceof ClassMethod && $this->isName($functionLike, MethodName::CONSTRUCT);
 

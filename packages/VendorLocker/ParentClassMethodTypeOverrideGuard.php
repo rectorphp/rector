@@ -13,6 +13,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
@@ -30,6 +31,12 @@ final class ParentClassMethodTypeOverrideGuard
 
     public function isReturnTypeChangeAllowed(ClassMethod $classMethod): bool
     {
+        // __construct cannot declare a return type
+        // so the return type change is not allowed
+        if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+            return false;
+        }
+
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
 
