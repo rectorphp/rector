@@ -46,9 +46,12 @@ final class AssignRemover
         $parent = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         if ($parent instanceof \PhpParser\Node\Stmt\Expression) {
             $this->nodeRemover->removeNode($assign);
-        } else {
-            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
-            $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
+            return;
+        }
+        $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
+        $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
+        if ($parent instanceof \PhpParser\Node\Expr\Assign) {
+            $this->removeAssignNode($parent);
         }
     }
 }

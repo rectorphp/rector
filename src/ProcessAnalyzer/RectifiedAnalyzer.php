@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\ProcessAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -16,23 +15,19 @@ use Rector\Core\ValueObject\RectifiedNode;
  *
  * Limitation:
  *
- *   It only check against Node which not Assign or Class_
+ *   It only check against Node which not a Class_
  *
  * which possibly changed by other process.
  */
 final class RectifiedAnalyzer
 {
     /**
-     * @var array<class-string<Node>>
-     */
-    private const EXCLUDE_NODES = [\PhpParser\Node\Expr\Assign::class, \PhpParser\Node\Stmt\Class_::class];
-    /**
      * @var array<string, RectifiedNode|null>
      */
     private $previousFileWithNodes = [];
     public function verify(\Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node, \Rector\Core\ValueObject\Application\File $currentFile) : ?\Rector\Core\ValueObject\RectifiedNode
     {
-        if (\in_array(\get_class($node), self::EXCLUDE_NODES, \true)) {
+        if ($node instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         $smartFileInfo = $currentFile->getSmartFileInfo();
