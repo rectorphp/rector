@@ -30,9 +30,14 @@ final class AssignRemover
         $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if ($parent instanceof Expression) {
             $this->nodeRemover->removeNode($assign);
-        } else {
-            $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
-            $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
+            return;
+        }
+
+        $this->nodesToReplaceCollector->addReplaceNodeWithAnotherNode($assign, $assign->expr);
+        $this->rectorChangeCollector->notifyNodeFileInfo($assign->expr);
+
+        if ($parent instanceof Assign) {
+            $this->removeAssignNode($parent);
         }
     }
 }

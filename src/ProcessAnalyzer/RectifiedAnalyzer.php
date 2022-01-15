@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rector\Core\ProcessAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -18,17 +17,12 @@ use Rector\Core\ValueObject\RectifiedNode;
  *
  * Limitation:
  *
- *   It only check against Node which not Assign or Class_
+ *   It only check against Node which not a Class_
  *
  * which possibly changed by other process.
  */
 final class RectifiedAnalyzer
 {
-    /**
-     * @var array<class-string<Node>>
-     */
-    private const EXCLUDE_NODES = [Assign::class, Class_::class];
-
     /**
      * @var array<string, RectifiedNode|null>
      */
@@ -36,7 +30,7 @@ final class RectifiedAnalyzer
 
     public function verify(RectorInterface $rector, Node $node, File $currentFile): ?RectifiedNode
     {
-        if (in_array($node::class, self::EXCLUDE_NODES, true)) {
+        if ($node instanceof Class_) {
             return null;
         }
 
