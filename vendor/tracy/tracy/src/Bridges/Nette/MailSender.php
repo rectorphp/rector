@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220114\Tracy\Bridges\Nette;
+namespace RectorPrefix20220115\Tracy\Bridges\Nette;
 
-use RectorPrefix20220114\Nette;
-use RectorPrefix20220114\Tracy;
+use RectorPrefix20220115\Nette;
+use RectorPrefix20220115\Tracy;
 /**
  * Tracy logger bridge for Nette Mail.
  */
@@ -19,7 +19,7 @@ class MailSender
     private $mailer;
     /** @var string|null sender of email notifications */
     private $fromEmail;
-    public function __construct(\RectorPrefix20220114\Nette\Mail\IMailer $mailer, ?string $fromEmail = null)
+    public function __construct(\RectorPrefix20220115\Nette\Mail\IMailer $mailer, ?string $fromEmail = null)
     {
         $this->mailer = $mailer;
         $this->fromEmail = $fromEmail;
@@ -30,16 +30,16 @@ class MailSender
     public function send($message, string $email) : void
     {
         $host = \preg_replace('#[^\\w.-]+#', '', $_SERVER['SERVER_NAME'] ?? \php_uname('n'));
-        $mail = new \RectorPrefix20220114\Nette\Mail\Message();
+        $mail = new \RectorPrefix20220115\Nette\Mail\Message();
         $mail->setHeader('X-Mailer', 'Tracy');
-        if ($this->fromEmail || \RectorPrefix20220114\Nette\Utils\Validators::isEmail("noreply@{$host}")) {
+        if ($this->fromEmail || \RectorPrefix20220115\Nette\Utils\Validators::isEmail("noreply@{$host}")) {
             $mail->setFrom($this->fromEmail ?: "noreply@{$host}");
         }
         foreach (\explode(',', $email) as $item) {
             $mail->addTo(\trim($item));
         }
         $mail->setSubject('PHP: An error occurred on the server ' . $host);
-        $mail->setBody(\RectorPrefix20220114\Tracy\Logger::formatMessage($message) . "\n\nsource: " . \RectorPrefix20220114\Tracy\Helpers::getSource());
+        $mail->setBody(\RectorPrefix20220115\Tracy\Logger::formatMessage($message) . "\n\nsource: " . \RectorPrefix20220115\Tracy\Helpers::getSource());
         $this->mailer->send($mail);
     }
 }

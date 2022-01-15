@@ -11,7 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220114\Webmozart\Assert\Assert;
+use RectorPrefix20220115\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToNewRector\FuncCallToNewRectorTest
  */
@@ -74,8 +74,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $functionsToNews = $configuration[self::FUNCTIONS_TO_NEWS] ?? $configuration;
-        \RectorPrefix20220114\Webmozart\Assert\Assert::isArray($functionsToNews);
-        \RectorPrefix20220114\Webmozart\Assert\Assert::allString($functionsToNews);
+        \RectorPrefix20220115\Webmozart\Assert\Assert::isArray($functionsToNews);
+        \RectorPrefix20220115\Webmozart\Assert\Assert::allString($functionsToNews);
         $this->functionToNew = $functionsToNews;
     }
 }

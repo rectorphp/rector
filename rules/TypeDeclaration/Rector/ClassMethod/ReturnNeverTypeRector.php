@@ -107,7 +107,7 @@ CODE_SAMPLE
         if ($hasNotNeverNodes) {
             return \true;
         }
-        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, [\PhpParser\Node\Expr\Throw_::class, \PhpParser\Node\Stmt\Throw_::class]);
+        $hasNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, [\PhpParser\Node\Stmt\Throw_::class]);
         $hasNeverFuncCall = $this->hasNeverFuncCall($node);
         if (!$hasNeverNodes && !$hasNeverFuncCall) {
             return \true;

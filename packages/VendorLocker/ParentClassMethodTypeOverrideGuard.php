@@ -12,10 +12,11 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix20220114\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20220115\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -38,7 +39,7 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220114\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220115\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
@@ -47,6 +48,11 @@ final class ParentClassMethodTypeOverrideGuard
     }
     public function isReturnTypeChangeAllowed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
+        // __construct cannot declare a return type
+        // so the return type change is not allowed
+        if ($this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+            return \false;
+        }
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
         // nothing to check

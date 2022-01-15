@@ -21,7 +21,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
      */
     private $propertiesByClass = [];
     /**
-     * @var array<string, array<string, Type>>
+     * @var array<string, array<string, Type|null>>
      */
     private $propertiesWithoutConstructorByClass = [];
     /**
@@ -83,7 +83,7 @@ final class PropertyToAddCollector implements \Rector\PostRector\Contract\Collec
         return $this->propertiesByClass[$classHash] ?? [];
     }
     /**
-     * @return array<string, Type>
+     * @return array<string, Type|null>
      */
     public function getPropertiesWithoutConstructorByClass(\PhpParser\Node\Stmt\Class_ $class) : array
     {

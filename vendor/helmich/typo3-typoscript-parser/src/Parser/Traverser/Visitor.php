@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220114\Helmich\TypoScriptParser\Parser\Traverser;
+namespace RectorPrefix20220115\Helmich\TypoScriptParser\Parser\Traverser;
 
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 /**

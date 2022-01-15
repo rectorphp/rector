@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -21,6 +22,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -83,6 +85,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
+        /** @var ClassMethod|Closure|Function_ $node */
         $node = $this->convertArrowFunctionToClosure($node);
         return $this->replaceNewInParams($node);
     }
@@ -115,7 +118,11 @@ CODE_SAMPLE
         }
         return $param->type instanceof \PhpParser\Node\IntersectionType;
     }
-    private function replaceNewInParams(\PhpParser\Node\FunctionLike $functionLike) : \PhpParser\Node\FunctionLike
+    /**
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_
+     */
+    private function replaceNewInParams($functionLike)
     {
         $isConstructor = $functionLike instanceof \PhpParser\Node\Stmt\ClassMethod && $this->isName($functionLike, \Rector\Core\ValueObject\MethodName::CONSTRUCT);
         $stmts = [];

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Include_;
 
-use RectorPrefix20220114\Nette\Utils\Strings;
+use RectorPrefix20220115\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Include_;
@@ -72,7 +72,7 @@ CODE_SAMPLE
         }
         // add preslash to string
         if (\strncmp($includeValue, './', \strlen('./')) === 0) {
-            $node->expr->value = \RectorPrefix20220114\Nette\Utils\Strings::substring($includeValue, 1);
+            $node->expr->value = \RectorPrefix20220115\Nette\Utils\Strings::substring($includeValue, 1);
         } else {
             $node->expr->value = '/' . $includeValue;
         }

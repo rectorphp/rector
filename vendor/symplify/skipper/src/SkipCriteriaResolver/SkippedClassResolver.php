@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220114\Symplify\Skipper\SkipCriteriaResolver;
+namespace RectorPrefix20220115\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix20220114\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220114\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix20220114\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20220115\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220115\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix20220115\Symplify\Skipper\ValueObject\Option;
 final class SkippedClassResolver
 {
     /**
@@ -20,7 +20,7 @@ final class SkippedClassResolver
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
      */
     private $classLikeExistenceChecker;
-    public function __construct(\RectorPrefix20220114\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220114\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
+    public function __construct(\RectorPrefix20220115\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220115\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker)
     {
         $this->parameterProvider = $parameterProvider;
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
@@ -33,7 +33,7 @@ final class SkippedClassResolver
         if ($this->skippedClasses !== []) {
             return $this->skippedClasses;
         }
-        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20220114\Symplify\Skipper\ValueObject\Option::SKIP);
+        $skip = $this->parameterProvider->provideArrayParameter(\RectorPrefix20220115\Symplify\Skipper\ValueObject\Option::SKIP);
         foreach ($skip as $key => $value) {
             // e.g. [SomeClass::class] → shift values to [SomeClass::class => null]
             if (\is_int($key)) {

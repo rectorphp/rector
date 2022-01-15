@@ -5,6 +5,7 @@ namespace Rector\PhpSpecToPHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PhpSpecToPHPUnit\Naming\PhpSpecRenaming;
@@ -79,7 +80,7 @@ final class PhpSpecMethodToPHPUnitMethodRector extends \Rector\PhpSpecToPHPUnit\
         $previousStmt = null;
         foreach ((array) $classMethod->stmts as $key => $stmt) {
             $printedStmtContent = $this->print($stmt);
-            if (\strpos($printedStmtContent, 'duringInstantiation') !== \false) {
+            if (\strpos($printedStmtContent, 'duringInstantiation') !== \false && $previousStmt instanceof \PhpParser\Node\Stmt) {
                 $printedPreviousStmt = $this->print($previousStmt);
                 if (\strpos($printedPreviousStmt, 'beConstructedThrough') !== \false) {
                     $classMethod->stmts[$key - 1] = $stmt;
