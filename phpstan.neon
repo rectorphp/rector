@@ -627,3 +627,9 @@ parameters:
 
         # impossible to validate json string is a class-string
         - '#Parameter \#1 \$rectorClass of class Rector\\ChangesReporting\\ValueObject\\RectorWithLineChange constructor expects class\-string<Rector\\Core\\Contract\\Rector\\RectorInterface\>\|Rector\\Core\\Contract\\Rector\\RectorInterface, string given#'
+
+        # will be solved once https://github.com/phpstan/phpstan-src/pull/914 gets released
+        -
+            message: '#sprintf\(\) call mask types does not match provided arguments types#'
+            paths:
+                - src/Exception/ShouldNotHappenException.php
