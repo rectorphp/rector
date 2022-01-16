@@ -74,7 +74,7 @@
         "rector/phpstan-rules": "^0.4.15",
         "spatie/enum": "^3.10",
         "symplify/coding-standard": "^10.0.9",
-        "symplify/easy-ci": "^10.0.9",
+        "symplify/easy-ci": "10.0.9",
         "symplify/easy-coding-standard": "^10.0.9",
         "symplify/easy-testing": "^10.0.9",
         "symplify/monorepo-builder": "^10.0.9",

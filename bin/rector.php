@@ -91,10 +91,13 @@ final class AutoloadIncluder
     /**
      * In case Rector is installed as vendor dependency,
      * this autoloads the project vendor/autoload.php, including Rector
+     *
+     * This also accounts for running a globally installed Rector from the global composer vendor dir
      */
     public function autoloadProjectAutoloaderFile(): void
     {
         $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../../autoload.php');
+        $this->loadIfExistsAndNotLoadedYet(getcwd() . '/vendor/autoload.php');
     }
 
     public function autoloadFromCommandLine(): void
