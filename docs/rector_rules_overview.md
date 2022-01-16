@@ -379,7 +379,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### AbsolutizeRequireAndIncludePathRector
 
-include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.
+include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require being changed depends on the current working directory.
 
 - class: [`Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector`](../rules/CodeQuality/Rector/Include_/AbsolutizeRequireAndIncludePathRector.php)
 
@@ -434,7 +434,7 @@ Split 2 assigns ands to separate line
 
 ### ArrayKeyExistsTernaryThenValueToCoalescingRector
 
-Change `array_key_exists()` ternary to coalesing
+Change `array_key_exists()` ternary to coalescing
 
 - class: [`Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector`](../rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php)
 
@@ -1261,7 +1261,7 @@ Simplify array_search to in_array
 
 ### SimplifyBoolIdenticalTrueRector
 
-Symplify bool value compare to true or false
+Simplify bool value compare to true or false
 
 - class: [`Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector`](../rules/CodeQuality/Rector/Identical/SimplifyBoolIdenticalTrueRector.php)
 
@@ -3349,7 +3349,7 @@ Remove unused parent call with no parent class
 
 ### RemovePhpVersionIdCheckRector
 
-Remove unneded PHP_VERSION_ID check
+Remove unneeded PHP_VERSION_ID check
 
 :wrench: **configure it!**
 
@@ -5513,7 +5513,7 @@ change instanceof Object to is_resource
 
 ### DowngradePropertyPromotionRector
 
-Change constructor property promotion to property asssign
+Change constructor property promotion to property assign
 
 - class: [`Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector`](../rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php)
 
