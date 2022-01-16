@@ -1,4 +1,4 @@
-# 516 Rules Overview
+# 517 Rules Overview
 
 <br>
 
@@ -78,7 +78,7 @@
 
 - [Php80](#php80) (18)
 
-- [Php81](#php81) (8)
+- [Php81](#php81) (9)
 
 - [PhpSpecToPHPUnit](#phpspectophpunit) (7)
 
@@ -379,7 +379,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### AbsolutizeRequireAndIncludePathRector
 
-include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require being changed depends on the current working directory.
+include/require to absolute path. This Rector might introduce backwards incompatible code, when the include/require beeing changed depends on the current working directory.
 
 - class: [`Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector`](../rules/CodeQuality/Rector/Include_/AbsolutizeRequireAndIncludePathRector.php)
 
@@ -434,7 +434,7 @@ Split 2 assigns ands to separate line
 
 ### ArrayKeyExistsTernaryThenValueToCoalescingRector
 
-Change `array_key_exists()` ternary to coalescing
+Change `array_key_exists()` ternary to coalesing
 
 - class: [`Rector\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector`](../rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php)
 
@@ -1261,7 +1261,7 @@ Simplify array_search to in_array
 
 ### SimplifyBoolIdenticalTrueRector
 
-Simplify bool value compare to true or false
+Symplify bool value compare to true or false
 
 - class: [`Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector`](../rules/CodeQuality/Rector/Identical/SimplifyBoolIdenticalTrueRector.php)
 
@@ -3349,7 +3349,7 @@ Remove unused parent call with no parent class
 
 ### RemovePhpVersionIdCheckRector
 
-Remove unneeded PHP_VERSION_ID check
+Remove unneded PHP_VERSION_ID check
 
 :wrench: **configure it!**
 
@@ -5513,7 +5513,7 @@ change instanceof Object to is_resource
 
 ### DowngradePropertyPromotionRector
 
-Change constructor property promotion to property assign
+Change constructor property promotion to property asssign
 
 - class: [`Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector`](../rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php)
 
@@ -8518,6 +8518,25 @@ Replace property declaration of new state with direct new
 +        private Logger $logger = new NullLogger,
      ) {
 -        $this->logger = $logger ?? new NullLogger;
+     }
+ }
+```
+
+<br>
+
+### NullToStrictStringFuncCallArgRector
+
+Change null to strict string defined function call args
+
+- class: [`Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector`](../rules/Php81/Rector/FuncCall/NullToStrictStringFuncCallArgRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        preg_split("#a#", null);
++        preg_split("#a#", '');
      }
  }
 ```
