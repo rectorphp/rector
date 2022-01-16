@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220115\React\Dns\Query;
+namespace RectorPrefix20220116\React\Dns\Query;
 
 final class CancellationException extends \RuntimeException
 {

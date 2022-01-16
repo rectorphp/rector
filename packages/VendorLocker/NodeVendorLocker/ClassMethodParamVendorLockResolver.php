@@ -9,7 +9,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220115\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20220116\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ClassMethodParamVendorLockResolver
 {
     /**
@@ -27,7 +27,7 @@ final class ClassMethodParamVendorLockResolver
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220115\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220116\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;

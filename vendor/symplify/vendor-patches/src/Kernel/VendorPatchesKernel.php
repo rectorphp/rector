@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220115\Symplify\VendorPatches\Kernel;
+namespace RectorPrefix20220116\Symplify\VendorPatches\Kernel;
 
-use RectorPrefix20220115\Psr\Container\ContainerInterface;
-use RectorPrefix20220115\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
-use RectorPrefix20220115\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
-final class VendorPatchesKernel extends \RectorPrefix20220115\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
+use RectorPrefix20220116\Psr\Container\ContainerInterface;
+use RectorPrefix20220116\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
+use RectorPrefix20220116\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel;
+final class VendorPatchesKernel extends \RectorPrefix20220116\Symplify\SymplifyKernel\HttpKernel\AbstractSymplifyKernel
 {
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20220115\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20220116\Psr\Container\ContainerInterface
     {
         $configFiles[] = __DIR__ . '/../../config/config.php';
-        $configFiles[] = \RectorPrefix20220115\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;
+        $configFiles[] = \RectorPrefix20220116\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;
         return $this->create([], [], $configFiles);
     }
 }

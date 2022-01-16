@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix20220115\Clue\React\NDJson\Decoder;
-use RectorPrefix20220115\Clue\React\NDJson\Encoder;
+use RectorPrefix20220116\Clue\React\NDJson\Decoder;
+use RectorPrefix20220116\Clue\React\NDJson\Encoder;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -13,10 +13,10 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20220115\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix20220115\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220116\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix20220116\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 final class WorkerRunner
@@ -50,7 +50,7 @@ final class WorkerRunner
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-    public function __construct(\RectorPrefix20220115\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileProcessor\PhpFileProcessor $phpFileProcessor, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    public function __construct(\RectorPrefix20220116\Symplify\PackageBuilder\Yaml\ParametersMerger $parametersMerger, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Application\FileProcessor\PhpFileProcessor $phpFileProcessor, \PHPStan\Analyser\NodeScopeResolver $nodeScopeResolver, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
     {
         $this->parametersMerger = $parametersMerger;
         $this->currentFileProvider = $currentFileProvider;
@@ -58,20 +58,20 @@ final class WorkerRunner
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
     }
-    public function run(\RectorPrefix20220115\Clue\React\NDJson\Encoder $encoder, \RectorPrefix20220115\Clue\React\NDJson\Decoder $decoder, \Rector\Core\ValueObject\Configuration $configuration) : void
+    public function run(\RectorPrefix20220116\Clue\React\NDJson\Encoder $encoder, \RectorPrefix20220116\Clue\React\NDJson\Decoder $decoder, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         $this->dynamicSourceLocatorDecorator->addPaths($configuration->getPaths());
         // 1. handle system error
         $handleErrorCallback = static function (\Throwable $throwable) use($encoder) : void {
             $systemErrors = new \Rector\Core\ValueObject\Error\SystemError($throwable->getMessage(), $throwable->getFile(), $throwable->getLine());
-            $encoder->write([\RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220115\Symplify\EasyParallel\Enum\Action::RESULT, self::RESULT => [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [$systemErrors], \Rector\Parallel\ValueObject\Bridge::FILES_COUNT => 0, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => 1]]);
+            $encoder->write([\RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220116\Symplify\EasyParallel\Enum\Action::RESULT, self::RESULT => [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [$systemErrors], \Rector\Parallel\ValueObject\Bridge::FILES_COUNT => 0, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => 1]]);
             $encoder->end();
         };
-        $encoder->on(\RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactEvent::ERROR, $handleErrorCallback);
+        $encoder->on(\RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactEvent::ERROR, $handleErrorCallback);
         // 2. collect diffs + errors from file processor
-        $decoder->on(\RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactEvent::DATA, function (array $json) use($encoder, $configuration) : void {
-            $action = $json[\RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactCommand::ACTION];
-            if ($action !== \RectorPrefix20220115\Symplify\EasyParallel\Enum\Action::MAIN) {
+        $decoder->on(\RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactEvent::DATA, function (array $json) use($encoder, $configuration) : void {
+            $action = $json[\RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactCommand::ACTION];
+            if ($action !== \RectorPrefix20220116\Symplify\EasyParallel\Enum\Action::MAIN) {
                 return;
             }
             $systemErrorsCount = 0;
@@ -101,8 +101,8 @@ final class WorkerRunner
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */
-            $encoder->write([\RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220115\Symplify\EasyParallel\Enum\Action::RESULT, self::RESULT => [\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $errorAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] ?? [], \Rector\Parallel\ValueObject\Bridge::FILES_COUNT => \count($filePaths), \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $systemErrors, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => $systemErrorsCount]]);
+            $encoder->write([\RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220116\Symplify\EasyParallel\Enum\Action::RESULT, self::RESULT => [\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $errorAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS] ?? [], \Rector\Parallel\ValueObject\Bridge::FILES_COUNT => \count($filePaths), \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => $systemErrors, \Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS_COUNT => $systemErrorsCount]]);
         });
-        $decoder->on(\RectorPrefix20220115\Symplify\EasyParallel\Enum\ReactEvent::ERROR, $handleErrorCallback);
+        $decoder->on(\RectorPrefix20220116\Symplify\EasyParallel\Enum\ReactEvent::ERROR, $handleErrorCallback);
     }
 }
