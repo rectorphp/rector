@@ -51,7 +51,7 @@ final class RemovePhpVersionIdCheckRector extends \Rector\Core\Rector\AbstractRe
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
         $exampleConfiguration = [self::PHP_VERSION_CONSTRAINT => \Rector\Core\ValueObject\PhpVersion::PHP_80];
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unneded PHP_VERSION_ID check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unneeded PHP_VERSION_ID check', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
