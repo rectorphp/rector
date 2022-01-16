@@ -99,7 +99,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 ### Similar Projects
 
-- [ClangMR](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41342.pdf) for C++ by Google (closed source) - almost idential workflow, developed independently though
+- [ClangMR](https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/41342.pdf) for C++ by Google (closed source) - almost identical workflow, developed independently though
 - [hhast](https://github.com/hhvm/hhast) - HHVM AST + format preserving + migrations
 - [facebook/jscodeshift](https://github.com/facebook/jscodeshift) for Javascript
 - [silverstripe/silverstripe-upgrader](https://github.com/silverstripe/silverstripe-upgrader) for PHP CMS, Silverstripe
