@@ -76,10 +76,14 @@ If the false positive still happen, you can skip the rule applied as last resort
     ]);
 ```
 
-### Dealing with "Class ... was not found while trying to analyse it..."
+## Dealing with "Class ... was not found while trying to analyse it..."
 Sometimes you may encounter this error ([see here for an example](https://github.com/rectorphp/rector/issues/6688)) even if the class is there and it seems to work properly with other tools (e.g. PHPStan).
 
 In this case you may want to try one of the following solutions:
+
+### Register to `Option::AUTOLOAD_PATHS`:
+
+
 ```php
     $parameters->set(Option::AUTOLOAD_PATHS, [
         // the path to the exact class file
@@ -91,7 +95,15 @@ In this case you may want to try one of the following solutions:
     ]);
 ```
 
-Other solution is by register the path of the class to composer.json's `"files"` config, eg:
+### Call command with `-a` option
+
+This may happen when you're using rector globally (not recommended as autoload may overlapped)
+
+```bash
+rector process -a vendor/autoload.php
+```
+
+### Other solution is by register the path of the class to composer.json's `"files"` config, eg:
 
 ```javascript
     "autoload-dev": {
