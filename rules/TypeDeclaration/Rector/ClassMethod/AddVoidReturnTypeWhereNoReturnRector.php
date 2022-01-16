@@ -28,7 +28,7 @@ use Webmozart\Assert\Assert;
 final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface, AllowEmptyConfigurableRectorInterface
 {
     /**
-     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code beeing processed.
+     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code being processed.
      */
     final public const USE_PHPDOC = 'use_phpdoc';
 

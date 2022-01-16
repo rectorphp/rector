@@ -38,7 +38,7 @@ final class DowngradePropertyPromotionRector extends AbstractRector
 
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change constructor property promotion to property asssign', [
+        return new RuleDefinition('Change constructor property promotion to property assign', [
             new CodeSample(
                 <<<'CODE_SAMPLE'
 class SomeClass

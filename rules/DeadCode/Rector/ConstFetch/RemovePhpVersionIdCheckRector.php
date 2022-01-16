@@ -52,7 +52,7 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector implements Conf
             self::PHP_VERSION_CONSTRAINT => PhpVersion::PHP_80,
         ];
         return new RuleDefinition(
-            'Remove unneded PHP_VERSION_ID check',
+            'Remove unneeded PHP_VERSION_ID check',
             [
                 new ConfiguredCodeSample(
                     <<<'CODE_SAMPLE'

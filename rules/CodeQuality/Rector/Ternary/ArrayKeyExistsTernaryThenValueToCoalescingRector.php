@@ -24,7 +24,7 @@ final class ArrayKeyExistsTernaryThenValueToCoalescingRector extends AbstractRec
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Change array_key_exists() ternary to coalesing',
+            'Change array_key_exists() ternary to coalescing',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'

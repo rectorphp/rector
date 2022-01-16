@@ -22,7 +22,7 @@ final class SimplifyBoolIdenticalTrueRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition(
-            'Symplify bool value compare to true or false',
+            'Simplify bool value compare to true or false',
             [
                 new CodeSample(
                     <<<'CODE_SAMPLE'
