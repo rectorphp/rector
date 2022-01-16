@@ -59,7 +59,7 @@ final class ProgressBar
     /**
      * @var int|null
      */
-    private $redrawFreq;
+    private $redrawFreq = 1;
     /**
      * @var int
      */

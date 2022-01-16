@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp74\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
@@ -61,7 +62,8 @@ CODE_SAMPLE
         if ($node->type === null) {
             return null;
         }
-        if ($node->type instanceof \PhpParser\Node\NullableType) {
+        $default = $node->props[0]->default;
+        if ($node->type instanceof \PhpParser\Node\NullableType && $default instanceof \PhpParser\Node\Expr && $this->valueResolver->isNull($default)) {
             $node->props[0]->default = null;
         }
         $this->decoratePropertyWithDocBlock($node, $node->type);
