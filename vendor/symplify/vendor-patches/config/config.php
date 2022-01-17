@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220116;
+namespace RectorPrefix20220117;
 
-use RectorPrefix20220116\SebastianBergmann\Diff\Differ;
-use RectorPrefix20220116\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
-use RectorPrefix20220116\Symfony\Component\Console\Application;
+use RectorPrefix20220117\SebastianBergmann\Diff\Differ;
+use RectorPrefix20220117\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix20220117\Symfony\Component\Console\Application;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220116\Symplify\PackageBuilder\Composer\VendorDirProvider;
-use RectorPrefix20220116\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix20220116\Symplify\SmartFileSystem\Json\JsonFileSystem;
-use RectorPrefix20220116\Symplify\VendorPatches\Command\GenerateCommand;
-use function RectorPrefix20220116\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20220117\Symplify\PackageBuilder\Composer\VendorDirProvider;
+use RectorPrefix20220117\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220117\Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix20220117\Symplify\VendorPatches\Command\GenerateCommand;
+use function RectorPrefix20220117\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();
-    $services->load('RectorPrefix20220116\Symplify\\VendorPatches\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject']);
-    $services->set(\RectorPrefix20220116\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)->args(['$addLineNumbers' => \true]);
-    $services->set(\RectorPrefix20220116\SebastianBergmann\Diff\Differ::class)->args(['$outputBuilder' => \RectorPrefix20220116\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220116\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)]);
-    $services->set(\RectorPrefix20220116\Symplify\PackageBuilder\Composer\VendorDirProvider::class);
-    $services->set(\RectorPrefix20220116\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
-    $services->set(\RectorPrefix20220116\Symfony\Component\Console\Application::class)->call('addCommands', [[\RectorPrefix20220116\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220116\Symplify\VendorPatches\Command\GenerateCommand::class)]]);
-    $services->set(\RectorPrefix20220116\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
+    $services->load('RectorPrefix20220117\Symplify\\VendorPatches\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject']);
+    $services->set(\RectorPrefix20220117\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)->args(['$addLineNumbers' => \true]);
+    $services->set(\RectorPrefix20220117\SebastianBergmann\Diff\Differ::class)->args(['$outputBuilder' => \RectorPrefix20220117\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220117\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)]);
+    $services->set(\RectorPrefix20220117\Symplify\PackageBuilder\Composer\VendorDirProvider::class);
+    $services->set(\RectorPrefix20220117\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
+    $services->set(\RectorPrefix20220117\Symfony\Component\Console\Application::class)->call('addCommands', [[\RectorPrefix20220117\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220117\Symplify\VendorPatches\Command\GenerateCommand::class)]]);
+    $services->set(\RectorPrefix20220117\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };

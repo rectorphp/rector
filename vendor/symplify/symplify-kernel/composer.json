@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220116\\Symplify\\SymplifyKernel\\": "src"
+            "RectorPrefix20220117\\Symplify\\SymplifyKernel\\": "src"
         }
     },
     "extra": {
