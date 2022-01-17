@@ -142,6 +142,10 @@ CODE_SAMPLE
 
     private function isAlwaysIterableType(Type $possibleUnionType): bool
     {
+        if ($possibleUnionType->isIterable()->yes()) {
+            return true;
+        }
+
         if (! $possibleUnionType instanceof UnionType) {
             return false;
         }
