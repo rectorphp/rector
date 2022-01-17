@@ -50,6 +50,7 @@ final class RectorWithLineChange implements \RectorPrefix20220117\Symplify\EasyP
     }
     /**
      * @param array<string, mixed> $json
+     * @return $this
      */
     public static function decode(array $json) : \RectorPrefix20220117\Symplify\EasyParallel\Contract\SerializableInterface
     {
