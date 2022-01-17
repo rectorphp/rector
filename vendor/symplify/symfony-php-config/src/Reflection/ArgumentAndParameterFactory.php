@@ -15,6 +15,8 @@ final class ArgumentAndParameterFactory
         $this->privatesAccessor = new \RectorPrefix20220117\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
     }
     /**
+     * @param class-string $className
+     *
      * @param array<string, mixed> $arguments
      * @param array<string, mixed> $properties
      * @return object

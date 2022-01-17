@@ -1243,6 +1243,8 @@ return array(
     'RectorPrefix20220117\\Symplify\\PackageBuilder\\DependencyInjection\\CompilerPass\\AutowireInterfacesCompilerPass' => $vendorDir . '/symplify/package-builder/src/DependencyInjection/CompilerPass/AutowireInterfacesCompilerPass.php',
     'RectorPrefix20220117\\Symplify\\PackageBuilder\\DependencyInjection\\FileLoader\\ParameterMergingPhpFileLoader' => $vendorDir . '/symplify/package-builder/src/DependencyInjection/FileLoader/ParameterMergingPhpFileLoader.php',
     'RectorPrefix20220117\\Symplify\\PackageBuilder\\Exception\\HttpKernel\\MissingInterfaceException' => $vendorDir . '/symplify/package-builder/src/Exception/HttpKernel/MissingInterfaceException.php',
+    'RectorPrefix20220117\\Symplify\\PackageBuilder\\Exception\\InvalidPrivatePropertyTypeException' => $vendorDir . '/symplify/package-builder/src/Exception/InvalidPrivatePropertyTypeException.php',
+    'RectorPrefix20220117\\Symplify\\PackageBuilder\\Exception\\MissingPrivatePropertyException' => $vendorDir . '/symplify/package-builder/src/Exception/MissingPrivatePropertyException.php',
     'RectorPrefix20220117\\Symplify\\PackageBuilder\\Matcher\\ArrayStringAndFnMatcher' => $vendorDir . '/symplify/package-builder/src/Matcher/ArrayStringAndFnMatcher.php',
     'RectorPrefix20220117\\Symplify\\PackageBuilder\\Neon\\NeonPrinter' => $vendorDir . '/symplify/package-builder/src/Neon/NeonPrinter.php',
     'RectorPrefix20220117\\Symplify\\PackageBuilder\\Parameter\\ParameterProvider' => $vendorDir . '/symplify/package-builder/src/Parameter/ParameterProvider.php',
