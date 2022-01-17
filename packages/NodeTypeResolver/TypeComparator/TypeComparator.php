@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
-use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -23,7 +21,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -272,17 +269,13 @@ final class TypeComparator
 
     private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType, Node $node): bool
     {
-        // special case for non-final $this/self compare; in case of interface/abstract class, it can be another $this
-        if ($phpStanDocType instanceof ThisType && $phpParserNodeType instanceof ThisType) {
-            $scope = $node->getAttribute(AttributeKey::SCOPE);
-            if ($scope instanceof Scope) {
-                $classReflection = $scope->getClassReflection();
-                if ($classReflection instanceof ClassReflection) {
-                    return $classReflection->isFinal();
-                }
-            }
-        }
 
-        return true;
+        /**
+         * Special case for $this/(self|static) compare
+         *
+         * $this refers to the exact object identity, not just the same type. Therefore, it's valid and should not be removed
+         * @see https://wiki.php.net/rfc/this_return_type for more context
+         */
+        return ! ($phpStanDocType instanceof ThisType && $phpParserNodeType instanceof StaticType);
     }
 }
