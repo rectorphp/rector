@@ -4,9 +4,12 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -152,10 +155,7 @@ CODE_SAMPLE
                 continue;
             }
             $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedParamType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM());
-            if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
-                continue;
-            }
-            if ($param->type instanceof \PhpParser\Node\UnionType) {
+            if ($this->shouldSkipParamTypeRefactor($param->type, $phpParserUnionType)) {
                 continue;
             }
             $param->type = $phpParserUnionType;
@@ -221,5 +221,29 @@ CODE_SAMPLE
             return $unionType;
         }
         return $this->typeFactory->createMixedPassedOrUnionType($singleArrayTypes);
+    }
+    /**
+     * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|null $type
+     * @param \PhpParser\Node|\PhpParser\Node\ComplexType|\PhpParser\Node\Name|null $phpParserUnionType
+     */
+    private function shouldSkipParamTypeRefactor($type, $phpParserUnionType) : bool
+    {
+        if (!$phpParserUnionType instanceof \PhpParser\Node\UnionType) {
+            return \true;
+        }
+        if ($type instanceof \PhpParser\Node\UnionType) {
+            return \true;
+        }
+        if (\count($phpParserUnionType->types) > 1) {
+            return \false;
+        }
+        $firstType = $phpParserUnionType->types[0];
+        if (!$firstType instanceof \PhpParser\Node\Name\FullyQualified) {
+            return \false;
+        }
+        if (!$type instanceof \PhpParser\Node\Name\FullyQualified) {
+            return \false;
+        }
+        return $type->toString() === $firstType->toString();
     }
 }
