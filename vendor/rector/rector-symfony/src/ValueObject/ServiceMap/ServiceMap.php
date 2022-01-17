@@ -34,11 +34,6 @@ final class ServiceMap
         if ($class === null) {
             return null;
         }
-        /** @var string[] $interfaces */
-        $interfaces = (array) \class_implements($class);
-        foreach ($interfaces as $interface) {
-            return new \PHPStan\Type\ObjectType($interface);
-        }
         return new \PHPStan\Type\ObjectType($class);
     }
     /**
