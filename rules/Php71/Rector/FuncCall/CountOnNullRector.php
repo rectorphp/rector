@@ -126,6 +126,9 @@ CODE_SAMPLE
     }
     private function isAlwaysIterableType(\PHPStan\Type\Type $possibleUnionType) : bool
     {
+        if ($possibleUnionType->isIterable()->yes()) {
+            return \true;
+        }
         if (!$possibleUnionType instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
