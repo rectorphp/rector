@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Rector\Naming\Naming;
 
 use Nette\Utils\Strings;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -53,7 +53,6 @@ final class PropertyNaming
         private readonly TypeUnwrapper $typeUnwrapper,
         private readonly RectorNamingInflector $rectorNamingInflector,
         private readonly NodeTypeResolver $nodeTypeResolver,
-        private readonly ReflectionProvider $reflectionProvider
     ) {
     }
 
@@ -114,15 +113,28 @@ final class PropertyNaming
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
 
-    public function fqnToVariableName(ObjectType | string $objectType): string
+    public function fqnToVariableName(ThisType | ObjectType | string $objectType): string
     {
-        $className = $this->resolveClassName($objectType);
+        if ($objectType instanceof ThisType) {
+            $objectType = $objectType->getStaticObjectType();
+        }
 
-        $shortName = $this->fqnToShortName($className);
-        $shortName = $this->removeInterfaceSuffixPrefix($className, $shortName);
+        $className = $this->resolveClassName($objectType);
+        if (str_contains($className, '\\')) {
+            $shortClassName = (string) Strings::after($className, '\\', -1);
+        } else {
+            $shortClassName = $className;
+        }
+
+        $variableName = $this->removeInterfaceSuffixPrefix($shortClassName, 'interface');
+        $variableName = $this->removeInterfaceSuffixPrefix($variableName, 'abstract');
+
+        $variableName = $this->fqnToShortName($variableName);
+
+        $variableName = str_replace('_', '', $variableName);
 
         // prolong too short generic names with one namespace up
-        return $this->prolongIfTooShort($shortName, $className);
+        return $this->prolongIfTooShort($variableName, $className);
     }
 
     /**
@@ -218,23 +230,24 @@ final class PropertyNaming
         return $lastNamePart;
     }
 
-    private function removeInterfaceSuffixPrefix(string $className, string $shortName): string
+    private function removeInterfaceSuffixPrefix(string $className, string $category): string
     {
-        // remove interface prefix/suffix
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return $shortName;
+        // suffix
+        if (Strings::match($className, '#' . $category . '$#i')) {
+            return Strings::substring($className, 0, -strlen($category));
+        }
+
+        // prefix
+        if (Strings::match($className, '#^' . $category . '#i')) {
+            return Strings::substring($className, strlen($category));
         }
 
         // starts with "I\W+"?
-        if (StringUtils::isMatch($shortName, self::I_PREFIX_REGEX)) {
-            return Strings::substring($shortName, 1);
+        if (StringUtils::isMatch($className, self::I_PREFIX_REGEX)) {
+            return Strings::substring($className, 1);
         }
 
-        if (\str_ends_with($shortName, self::INTERFACE)) {
-            return Strings::substring($shortName, -strlen(self::INTERFACE));
-        }
-
-        return $shortName;
+        return $className;
     }
 
     private function isPrefixedInterface(string $shortClassName): bool

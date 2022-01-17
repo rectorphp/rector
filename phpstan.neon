@@ -604,3 +604,7 @@ parameters:
             message: '#sprintf\(\) call mask types does not match provided arguments types#'
             paths:
                 - src/Exception/ShouldNotHappenException.php
+
+        -
+            message: '#Only booleans are allowed in an if condition, array\|null given#'
+            path: rules/Naming/Naming/PropertyNaming.php
