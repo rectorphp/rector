@@ -7,10 +7,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 final class EventClassAndClassMethod
 {
     /**
+     * @readonly
      * @var string
      */
     private $eventClass;
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\ClassMethod
      */
     private $classMethod;

@@ -20,18 +20,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveRepositoryFromParentToConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\RepositoryAssignFactory
      */
     private $repositoryAssignFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver
      */
     private $entityObjectTypeResolver;

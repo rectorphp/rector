@@ -8,6 +8,7 @@ final class PropertyNamesAndPhpDocInfos
 {
     /**
      * @var PropertyNameAndPhpDocInfo[]
+     * @readonly
      */
     private $propertyNameAndPhpDocInfos;
     /**

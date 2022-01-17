@@ -20,10 +20,12 @@ final class ExpectationAnalyzer
      */
     private const PROCESSABLE_WILL_STATEMENTS = ['will', 'willReturn', 'willReturnReference', 'willReturnMap', 'willReturnArgument', 'willReturnCallback', 'willReturnSelf', 'willThrowException'];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ConsecutiveAssertionFactory
      */
     private $consecutiveAssertionFactory;

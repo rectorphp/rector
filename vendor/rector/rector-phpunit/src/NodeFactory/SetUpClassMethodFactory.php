@@ -16,14 +16,17 @@ use RectorPrefix20220117\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
     /**
+     * @readonly
      * @var \Rector\PhpSpecToPHPUnit\PHPUnitTypeDeclarationDecorator
      */
     private $phpUnitTypeDeclarationDecorator;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\StmtManipulator
      */
     private $stmtManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

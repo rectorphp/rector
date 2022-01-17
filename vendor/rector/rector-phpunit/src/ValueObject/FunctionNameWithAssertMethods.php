@@ -6,14 +6,17 @@ namespace Rector\PHPUnit\ValueObject;
 final class FunctionNameWithAssertMethods
 {
     /**
+     * @readonly
      * @var string
      */
     private $functionName;
     /**
+     * @readonly
      * @var string
      */
     private $assetMethodName;
     /**
+     * @readonly
      * @var string
      */
     private $notAssertMethodName;

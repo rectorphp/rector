@@ -12,25 +12,31 @@ final class ExpectationMock
 {
     /**
      * @var Variable|PropertyFetch
+     * @readonly
      */
     private $expectationVariable;
     /**
      * @var Arg[]
+     * @readonly
      */
     private $methodArguments;
     /**
+     * @readonly
      * @var int
      */
     private $index;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr|null
      */
     private $expr;
     /**
      * @var array<int, (null | Expr)>
+     * @readonly
      */
     private $withArguments;
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\Expression|null
      */
     private $originalExpression;

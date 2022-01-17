@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeManipulator;
 
-use PhpParser\Node\Attribute;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\BooleanType;
@@ -17,7 +16,6 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Doctrine\NodeAnalyzer\AttributeArgValueResolver;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class ColumnPropertyTypeResolver
@@ -36,26 +34,25 @@ final class ColumnPropertyTypeResolver
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
     /**
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeArgValueResolver
-     */
-    private $attributeArgValueResolver;
-    /**
      * @var array<string, Type>
+     * @readonly
      */
     private $doctrineTypeToScalarType;
     /**
      * @param array<string, Type> $doctrineTypeToScalarType
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, \Rector\Doctrine\NodeAnalyzer\AttributeArgValueResolver $attributeArgValueResolver, array $doctrineTypeToScalarType = null)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, array $doctrineTypeToScalarType = null)
     {
         $doctrineTypeToScalarType = $doctrineTypeToScalarType ?? [
             'tinyint' => new \PHPStan\Type\BooleanType(),
@@ -96,17 +93,13 @@ final class ColumnPropertyTypeResolver
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
         $this->attributeFinder = $attributeFinder;
-        $this->attributeArgValueResolver = $attributeArgValueResolver;
         $this->doctrineTypeToScalarType = $doctrineTypeToScalarType;
     }
     public function resolve(\PhpParser\Node\Stmt\Property $property, bool $isNullable) : ?\PHPStan\Type\Type
     {
-        $columnAttribute = $this->attributeFinder->findAttributeByClass($property, self::COLUMN_CLASS);
-        if ($columnAttribute instanceof \PhpParser\Node\Attribute) {
-            $argValue = $this->attributeArgValueResolver->resolve($columnAttribute, 'type');
-            if ($argValue instanceof \PhpParser\Node\Scalar\String_) {
-                return $this->createPHPStanTypeFromDoctrineStringType($argValue->value, $isNullable);
-            }
+        $argValue = $this->attributeFinder->findAttributeByClassArgByName($property, self::COLUMN_CLASS, 'type');
+        if ($argValue instanceof \PhpParser\Node\Scalar\String_) {
+            return $this->createPHPStanTypeFromDoctrineStringType($argValue->value, $isNullable);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $this->resolveFromPhpDocInfo($phpDocInfo, $isNullable);

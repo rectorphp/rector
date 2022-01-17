@@ -7,10 +7,12 @@ use PhpParser\Node\Expr;
 final class ContentExprAndNeedleExpr
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $contentExpr;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $needleExpr;

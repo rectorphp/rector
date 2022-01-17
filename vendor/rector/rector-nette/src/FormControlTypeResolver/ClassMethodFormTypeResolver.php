@@ -20,10 +20,12 @@ final class ClassMethodFormTypeResolver implements \Rector\Nette\Contract\FormCo
      */
     private $methodNamesByInputNamesResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

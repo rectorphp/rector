@@ -20,10 +20,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class FormFieldsFinder
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

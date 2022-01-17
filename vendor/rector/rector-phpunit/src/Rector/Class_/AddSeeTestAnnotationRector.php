@@ -24,14 +24,17 @@ final class AddSeeTestAnnotationRector extends \Rector\Core\Rector\AbstractRecto
      */
     private const SEE = 'see';
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\Naming\TestClassNameResolver
      */
     private $testClassNameResolver;

@@ -36,6 +36,7 @@ final class TemplateTypeBasedOnPresenterTemplateParametersRector extends \Rector
      */
     private $templateClassTraits = [];
     /**
+     * @readonly
      * @var \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory
      */
     private $classWithPublicPropertiesFactory;

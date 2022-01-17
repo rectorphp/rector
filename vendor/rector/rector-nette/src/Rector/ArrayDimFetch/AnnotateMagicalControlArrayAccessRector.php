@@ -26,26 +26,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AnnotateMagicalControlArrayAccessRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver
      */
     private $methodNamesByInputNamesResolver;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\ArrayDimFetchRenamer
      */
     private $arrayDimFetchRenamer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\ArrayDimFetchAnalyzer
      */
     private $arrayDimFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\ControlDimFetchAnalyzer
      */
     private $controlDimFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Nette\Naming\NetteControlNaming
      */
     private $netteControlNaming;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\AssignAnalyzer
      */
     private $assignAnalyzer;

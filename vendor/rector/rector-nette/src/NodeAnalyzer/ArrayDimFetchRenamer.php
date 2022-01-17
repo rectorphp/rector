@@ -17,10 +17,12 @@ use RectorPrefix20220117\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
 final class ArrayDimFetchRenamer
 {
     /**
+     * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

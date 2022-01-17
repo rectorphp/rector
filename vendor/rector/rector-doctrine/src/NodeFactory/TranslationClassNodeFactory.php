@@ -15,10 +15,12 @@ use Rector\Core\NodeManipulator\ClassInsertManipulator;
 final class TranslationClassNodeFactory
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;

@@ -10,6 +10,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class BinaryOpAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

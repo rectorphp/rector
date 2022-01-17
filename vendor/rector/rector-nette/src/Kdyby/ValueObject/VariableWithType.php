@@ -13,10 +13,12 @@ use PHPStan\Type\Type;
 final class VariableWithType
 {
     /**
+     * @readonly
      * @var string
      */
     private $name;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $type;

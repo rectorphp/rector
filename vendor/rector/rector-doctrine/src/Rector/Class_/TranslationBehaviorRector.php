@@ -30,18 +30,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TranslationBehaviorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory
      */
     private $translationClassNodeFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover
      */
     private $translatablePropertyCollectorAndRemover;

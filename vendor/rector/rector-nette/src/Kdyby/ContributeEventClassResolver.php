@@ -36,14 +36,17 @@ final class ContributeEventClassResolver
         'Contributte\\Events\\Extra\\Event\\Latte\\TemplateCreateEvent' => ['Nette\\Bridges\\ApplicationLatte\\Template' => 'getTemplate'],
     ];
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
@@ -85,11 +88,7 @@ final class ContributeEventClassResolver
     }
     private function resolveParamType(?\PhpParser\Node\Identifier $identifier, \PhpParser\Node\Param $param) : string
     {
-        if ($identifier === null) {
-            $staticType = new \PHPStan\Type\MixedType();
-        } else {
-            $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($identifier);
-        }
+        $staticType = $identifier === null ? new \PHPStan\Type\MixedType() : $this->staticTypeMapper->mapPhpParserNodePHPStanType($identifier);
         return $this->createGetterFromParamAndStaticType($param, $staticType);
     }
 }

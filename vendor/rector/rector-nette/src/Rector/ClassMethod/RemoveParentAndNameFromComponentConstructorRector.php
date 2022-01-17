@@ -40,18 +40,22 @@ final class RemoveParentAndNameFromComponentConstructorRector extends \Rector\Co
      */
     private const NAME = 'name';
     /**
+     * @readonly
      * @var \PHPStan\Type\ObjectType
      */
     private $controlObjectType;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeFinder\ParamFinder
      */
     private $paramFinder;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

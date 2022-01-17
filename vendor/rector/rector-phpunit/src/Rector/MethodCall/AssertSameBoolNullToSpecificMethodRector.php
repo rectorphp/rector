@@ -24,14 +24,17 @@ final class AssertSameBoolNullToSpecificMethodRector extends \Rector\Core\Rector
      */
     private $constantWithAssertMethods = [];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\ArgumentMover
      */
     private $argumentMover;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

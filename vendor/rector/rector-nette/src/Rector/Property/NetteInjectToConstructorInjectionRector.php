@@ -28,22 +28,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NetteInjectToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\NetteInjectPropertyAnalyzer
      */
     private $netteInjectPropertyAnalyzer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

@@ -6,10 +6,12 @@ namespace Rector\Nette\ValueObject;
 final class LatteVariableType
 {
     /**
+     * @readonly
      * @var string
      */
     private $name;
     /**
+     * @readonly
      * @var string
      */
     private $type;

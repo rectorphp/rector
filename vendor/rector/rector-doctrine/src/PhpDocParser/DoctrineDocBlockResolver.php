@@ -13,14 +13,17 @@ use Rector\Doctrine\PhpDoc\ShortClassExpander;
 final class DoctrineDocBlockResolver
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\PhpDoc\ShortClassExpander
      */
     private $shortClassExpander;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

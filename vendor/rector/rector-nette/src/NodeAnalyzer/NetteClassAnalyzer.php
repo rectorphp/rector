@@ -11,10 +11,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class NetteClassAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -25,11 +27,7 @@ final class NetteClassAnalyzer
     }
     public function isInComponent(\PhpParser\Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Stmt\Class_) {
-            $class = $node;
-        } else {
-            $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        }
+        $class = $node instanceof \PhpParser\Node\Stmt\Class_ ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
         if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }

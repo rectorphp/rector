@@ -35,10 +35,12 @@ final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\A
      */
     private $binaryOpWithAssertMethods = [];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

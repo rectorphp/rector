@@ -60,18 +60,22 @@ final class TemplatePropertyAssignCollector
      */
     private $conditionalTemplateParameterAssigns = [];
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ScopeNestingComparator
      */
     private $scopeNestingComparator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\ThisTemplatePropertyFetchAnalyzer
      */
     private $thisTemplatePropertyFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;

@@ -17,22 +17,27 @@ use Rector\Parallel\ValueObject\Bridge;
 final class NeonFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NeonParser\NeonParser
      */
     private $neonParser;
     /**
+     * @readonly
      * @var \Rector\Nette\NeonParser\NeonNodeTraverserFactory
      */
     private $neonNodeTraverserFactory;
     /**
+     * @readonly
      * @var \Rector\Nette\NeonParser\Printer\FormatPreservingNeonPrinter
      */
     private $formatPreservingNeonPrinter;
     /**
      * @var NeonRectorInterface[]
+     * @readonly
      */
     private $neonRectors;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;

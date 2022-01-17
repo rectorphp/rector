@@ -2165,12 +2165,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "e8de3b0cbb4bfb1ddcb65102fbf1d852369d4246"
+                "reference": "2b82f7eba4ec9c9a3059076a2dc176310aa5a274"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/e8de3b0cbb4bfb1ddcb65102fbf1d852369d4246",
-                "reference": "e8de3b0cbb4bfb1ddcb65102fbf1d852369d4246",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/2b82f7eba4ec9c9a3059076a2dc176310aa5a274",
+                "reference": "2b82f7eba4ec9c9a3059076a2dc176310aa5a274",
                 "shasum": ""
             },
             "require": {
@@ -2195,7 +2195,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-01-12T11:18:17+00:00",
+            "time": "2022-01-17T15:16:46+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2377,12 +2377,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "eb859a55eee64bc5dcb60e0b0254f77b8f4790d2"
+                "reference": "fbfa93c0b88d5f2d7b3339e766653cfbd14206bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/eb859a55eee64bc5dcb60e0b0254f77b8f4790d2",
-                "reference": "eb859a55eee64bc5dcb60e0b0254f77b8f4790d2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/fbfa93c0b88d5f2d7b3339e766653cfbd14206bf",
+                "reference": "fbfa93c0b88d5f2d7b3339e766653cfbd14206bf",
                 "shasum": ""
             },
             "require": {
@@ -2414,7 +2414,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-31T08:08:04+00:00",
+            "time": "2022-01-17T15:43:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2523,12 +2523,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "cd2eb3d70f324d0c71bea89d26349f47f5ba6bd2"
+                "reference": "5a8c2a899ba438e49efc15a399ca8bcf3284d33f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/cd2eb3d70f324d0c71bea89d26349f47f5ba6bd2",
-                "reference": "cd2eb3d70f324d0c71bea89d26349f47f5ba6bd2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/5a8c2a899ba438e49efc15a399ca8bcf3284d33f",
+                "reference": "5a8c2a899ba438e49efc15a399ca8bcf3284d33f",
                 "shasum": ""
             },
             "require": {
@@ -2552,7 +2552,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2021-12-31T12:15:32+00:00",
+            "time": "2022-01-17T16:11:25+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2590,12 +2590,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "d12f643aae1eb0e8bb531376ce239c300e647889"
+                "reference": "57743a8956c8cef8fb511b2d35aabbb49cba3161"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d12f643aae1eb0e8bb531376ce239c300e647889",
-                "reference": "d12f643aae1eb0e8bb531376ce239c300e647889",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/57743a8956c8cef8fb511b2d35aabbb49cba3161",
+                "reference": "57743a8956c8cef8fb511b2d35aabbb49cba3161",
                 "shasum": ""
             },
             "require": {
@@ -2623,7 +2623,7 @@
                 "symplify\/rule-doc-generator": "^10.0",
                 "symplify\/vendor-patches": "^10.0"
             },
-            "time": "2022-01-17T10:08:59+00:00",
+            "time": "2022-01-17T15:17:37+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

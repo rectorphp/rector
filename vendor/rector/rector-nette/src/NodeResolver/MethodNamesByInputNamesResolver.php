@@ -9,6 +9,7 @@ final class MethodNamesByInputNamesResolver
 {
     /**
      * @var FormControlTypeResolverInterface[]
+     * @readonly
      */
     private $formControlTypeResolvers;
     /**

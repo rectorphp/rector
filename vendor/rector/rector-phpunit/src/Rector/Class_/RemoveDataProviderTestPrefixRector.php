@@ -25,6 +25,7 @@ final class RemoveDataProviderTestPrefixRector extends \Rector\Core\Rector\Abstr
      */
     private $providerMethodNamesToNewNames = [];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

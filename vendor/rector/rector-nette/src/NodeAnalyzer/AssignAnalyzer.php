@@ -21,18 +21,22 @@ final class AssignAnalyzer
      */
     private $alreadyInitializedAssignsClassMethodObjectHashes = [];
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAdding\FunctionLikeFirstLevelStatementResolver
      */
     private $functionLikeFirstLevelStatementResolver;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator
      */
     private $varAnnotationManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

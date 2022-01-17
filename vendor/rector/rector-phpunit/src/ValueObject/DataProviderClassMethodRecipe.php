@@ -7,11 +7,13 @@ use PhpParser\Node\Arg;
 final class DataProviderClassMethodRecipe
 {
     /**
+     * @readonly
      * @var string
      */
     private $methodName;
     /**
      * @var Arg[]
+     * @readonly
      */
     private $args;
     /**

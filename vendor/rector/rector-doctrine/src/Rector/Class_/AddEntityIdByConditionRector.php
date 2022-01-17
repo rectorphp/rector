@@ -28,18 +28,22 @@ final class AddEntityIdByConditionRector extends \Rector\Core\Rector\AbstractRec
      */
     private $detectedTraits = [];
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\EntityIdNodeFactory
      */
     private $entityIdNodeFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;

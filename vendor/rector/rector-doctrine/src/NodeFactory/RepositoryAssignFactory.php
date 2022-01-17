@@ -13,14 +13,17 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class RepositoryAssignFactory
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver
      */
     private $entityObjectTypeResolver;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

@@ -7,10 +7,12 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class PropertyNameAndPhpDocInfo
 {
     /**
+     * @readonly
      * @var string
      */
     private $propertyName;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
     private $phpDocInfos;

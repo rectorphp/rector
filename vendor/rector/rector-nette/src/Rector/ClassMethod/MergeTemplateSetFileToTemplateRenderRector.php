@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MergeTemplateSetFileToTemplateRenderRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer
      */
     private $netteClassAnalyzer;

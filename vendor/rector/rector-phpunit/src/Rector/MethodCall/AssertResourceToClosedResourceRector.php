@@ -23,10 +23,12 @@ final class AssertResourceToClosedResourceRector extends \Rector\Core\Rector\Abs
      */
     private const RENAME_METHODS_MAP = ['assertIsNotResource' => 'assertIsClosedResource'];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

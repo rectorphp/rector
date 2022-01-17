@@ -15,14 +15,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameMethodLatteRector implements \Rector\Nette\Contract\Rector\LatteRectorInterface
 {
     /**
+     * @readonly
      * @var \Rector\Renaming\Collector\MethodCallRenameCollector
      */
     private $methodCallRenameCollector;
     /**
+     * @readonly
      * @var \Rector\Nette\Latte\Parser\TemplateTypeParser
      */
     private $templateTypeParser;
     /**
+     * @readonly
      * @var \Rector\Nette\Latte\Parser\VarTypeParser
      */
     private $varTypeParser;

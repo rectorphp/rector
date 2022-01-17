@@ -19,6 +19,7 @@ final class CheckRequirementsClassMethodFactory
      */
     private const CHECK_REQUIREMENTS_METHOD_NAME = 'checkRequirements';
     /**
+     * @readonly
      * @var \Rector\Nette\NodeFactory\ParentGetterStmtsToExternalStmtsFactory
      */
     private $parentGetterStmtsToExternalStmtsFactory;

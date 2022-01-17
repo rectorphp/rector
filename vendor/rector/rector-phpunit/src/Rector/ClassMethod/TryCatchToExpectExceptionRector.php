@@ -23,22 +23,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TryCatchToExpectExceptionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory
      */
     private $expectExceptionCodeFactory;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionMessageRegExpFactory
      */
     private $expectExceptionMessageRegExpFactory;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionFactory
      */
     private $expectExceptionFactory;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionMessageFactory
      */
     private $expectExceptionMessageFactory;

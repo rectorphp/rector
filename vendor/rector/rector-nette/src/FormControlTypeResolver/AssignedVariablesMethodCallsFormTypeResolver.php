@@ -17,6 +17,7 @@ final class AssignedVariablesMethodCallsFormTypeResolver implements \Rector\Nett
      */
     private $methodNamesByInputNamesResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

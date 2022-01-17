@@ -17,6 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameMethodNeonRector implements \Rector\Nette\Contract\Rector\NeonRectorInterface
 {
     /**
+     * @readonly
      * @var \Rector\Renaming\Collector\MethodCallRenameCollector
      */
     private $methodCallRenameCollector;

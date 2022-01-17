@@ -24,18 +24,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromColumnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver
      */
     private $columnPropertyTypeResolver;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver
      */
     private $nullabilityColumnPropertyTypeResolver;

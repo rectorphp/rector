@@ -31,26 +31,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassAnnotationToNamedArgumentConstructorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\ParamFactory
      */
     private $paramFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\ConstructClassMethodFactory
      */
     private $constructClassMethodFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AssignPropertyFetchAnalyzer
      */
     private $assignPropertyFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\IssetDimFetchCleaner
      */
     private $issetDimFetchCleaner;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\ConstructorClassMethodAssignFactory
      */
     private $constructorClassMethodAssignFactory;

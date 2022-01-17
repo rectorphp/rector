@@ -21,14 +21,17 @@ final class ListeningClassMethodArgumentManipulator
      */
     private const EVENT_PARAMETER_REPLACED = 'event_parameter_replaced';
     /**
+     * @readonly
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
+     * @readonly
      * @var \Rector\Nette\Kdyby\ContributeEventClassResolver
      */
     private $contributeEventClassResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;

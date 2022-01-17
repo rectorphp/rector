@@ -14,14 +14,17 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class OnVariableMethodCallsFormControlTypeResolver implements \Rector\Nette\Contract\FormControlTypeResolverInterface
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\MethodCallManipulator
      */
     private $methodCallManipulator;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

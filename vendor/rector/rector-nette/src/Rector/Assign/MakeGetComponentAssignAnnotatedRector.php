@@ -28,6 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeGetComponentAssignAnnotatedRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator
      */
     private $varAnnotationManipulator;

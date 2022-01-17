@@ -24,18 +24,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConstructClassMethodToSetUpTestCaseRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator
      */
     private $setUpClassMethodNodeManipulator;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;

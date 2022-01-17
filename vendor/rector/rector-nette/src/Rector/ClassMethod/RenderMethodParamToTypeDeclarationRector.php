@@ -25,14 +25,17 @@ final class RenderMethodParamToTypeDeclarationRector extends \Rector\Core\Rector
      */
     private $hasChanged = \false;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
      */
     private $paramTypeInferer;
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ControllerRenderMethodAnalyzer
      */
     private $controllerRenderMethodAnalyzer;

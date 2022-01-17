@@ -15,10 +15,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FunctionLikeFirstLevelStatementResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ParentScopeFinder
      */
     private $parentScopeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

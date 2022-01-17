@@ -29,18 +29,22 @@ use RectorPrefix20220117\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilde
 final class EventValueObjectClassFactory
 {
     /**
+     * @readonly
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory
      */
     private $variableWithTypesFactory;

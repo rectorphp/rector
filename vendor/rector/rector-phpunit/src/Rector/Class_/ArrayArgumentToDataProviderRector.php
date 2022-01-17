@@ -52,14 +52,17 @@ final class ArrayArgumentToDataProviderRector extends \Rector\Core\Rector\Abstra
      */
     private $dataProviderClassMethodRecipes = [];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory
      */
     private $dataProviderClassMethodFactory;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver
      */
     private $paramAndArgFromArrayResolver;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

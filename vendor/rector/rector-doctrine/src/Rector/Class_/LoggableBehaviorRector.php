@@ -23,6 +23,7 @@ use RectorPrefix20220117\Symplify\SimplePhpDocParser\PhpDocNodeTraverser;
 final class LoggableBehaviorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;

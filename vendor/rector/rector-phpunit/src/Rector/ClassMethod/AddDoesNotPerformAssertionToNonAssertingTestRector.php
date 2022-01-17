@@ -39,10 +39,12 @@ final class AddDoesNotPerformAssertionToNonAssertingTestRector extends \Rector\C
      */
     private $containsAssertCallByClassMethod = [];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

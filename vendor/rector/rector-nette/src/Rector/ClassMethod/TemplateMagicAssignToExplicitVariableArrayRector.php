@@ -28,30 +28,37 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TemplateMagicAssignToExplicitVariableArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector
      */
     private $templatePropertyAssignCollector;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\RenderMethodAnalyzer
      */
     private $renderMethodAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\NetteClassAnalyzer
      */
     private $netteClassAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeFactory\RenderParameterArrayFactory
      */
     private $renderParameterArrayFactory;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\ConditionalTemplateAssignReplacer
      */
     private $conditionalTemplateAssignReplacer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer
      */
     private $templatePropertyParametersReplacer;
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\MethodCallArgMerger
      */
     private $methodCallArgMerger;

@@ -32,6 +32,7 @@ final class AssertCompareToSpecificMethodRector extends \Rector\Core\Rector\Abst
      */
     private $functionNamesWithAssertMethods = [];
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

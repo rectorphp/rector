@@ -37,14 +37,17 @@ final class ManagerRegistryGetManagerToEntityManagerRector extends \Rector\Core\
      */
     private const ENTITY_MANAGER = 'entityManager';
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\MethodCallNameOnTypeResolver
      */
     private $methodCallNameOnTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\DependencyRemover
      */
     private $dependencyRemover;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;

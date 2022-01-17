@@ -18,6 +18,7 @@ final class ReturnFormControlTypeResolver implements \Rector\Nette\Contract\Form
      */
     private $methodNamesByInputNamesResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

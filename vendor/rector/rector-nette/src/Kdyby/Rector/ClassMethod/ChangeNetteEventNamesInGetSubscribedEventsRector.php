@@ -26,22 +26,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeNetteEventNamesInGetSubscribedEventsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Nette\Kdyby\NodeManipulator\GetSubscribedEventsArrayManipulator
      */
     private $getSubscribedEventsArrayManipulator;
     /**
+     * @readonly
      * @var \Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator
      */
     private $listeningClassMethodArgumentManipulator;
     /**
+     * @readonly
      * @var \Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector
      */
     private $listeningMethodsCollector;
     /**
+     * @readonly
      * @var \Rector\Nette\Kdyby\NodeAnalyzer\GetSubscribedEventsClassMethodAnalyzer
      */
     private $getSubscribedEventsClassMethodAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

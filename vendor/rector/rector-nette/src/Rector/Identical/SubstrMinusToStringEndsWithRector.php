@@ -25,6 +25,7 @@ final class SubstrMinusToStringEndsWithRector extends \Rector\Core\Rector\Abstra
      */
     private const SUBSTR = 'substr';
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer
      */
     private $binaryOpAnalyzer;

@@ -31,22 +31,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ServiceEntityRepositoryParentCallToDIRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\RepositoryNodeFactory
      */
     private $repositoryNodeFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\Type\RepositoryTypeFactory
      */
     private $repositoryTypeFactory;
     /**
+     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
