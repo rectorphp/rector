@@ -30,6 +30,7 @@ if (\file_exists(__DIR__ . '/../preload.php') && \is_dir(__DIR__ . '/../vendor')
 require_once __DIR__ . '/../src/constants.php';
 $autoloadIncluder->loadIfExistsAndNotLoadedYet(__DIR__ . '/../vendor/scoper-autoload.php');
 $autoloadIncluder->autoloadProjectAutoloaderFile();
+$autoloadIncluder->autoloadRectorInstalledAsGlobalDependency();
 $autoloadIncluder->autoloadFromCommandLine();
 $rectorConfigsResolver = new \Rector\Core\Bootstrap\RectorConfigsResolver();
 try {
@@ -76,6 +77,19 @@ final class AutoloadIncluder
     public function autoloadProjectAutoloaderFile() : void
     {
         $this->loadIfExistsAndNotLoadedYet(__DIR__ . '/../../../autoload.php');
+    }
+    /**
+     * In case Rector is installed as global dependency
+     */
+    public function autoloadRectorInstalledAsGlobalDependency() : void
+    {
+        if (\dirname(__DIR__) === \dirname(\getcwd(), 2)) {
+            return;
+        }
+        if (\is_dir('vendor/rector/rector')) {
+            return;
+        }
+        $this->loadIfExistsAndNotLoadedYet('vendor/autoload.php');
     }
     public function autoloadFromCommandLine() : void
     {
