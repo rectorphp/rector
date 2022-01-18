@@ -14,6 +14,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $parameters = $containerConfigurator->parameters();
     $parameters->set(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES, \true);
     $parameters->set(\Rector\Core\Configuration\Option::PATHS, [__DIR__ . '/src', __DIR__ . '/tests']);
+    $parameters->set(\Rector\Core\Configuration\Option::PARALLEL, \true);
     $parameters->set(\Rector\Core\Configuration\Option::SKIP, [
         // for tests
         '*/Source/*',

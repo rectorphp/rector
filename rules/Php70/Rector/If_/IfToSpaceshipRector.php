@@ -124,7 +124,7 @@ CODE_SAMPLE
     }
     private function processReturnSpaceship(\PhpParser\Node\Expr $firstValue, \PhpParser\Node\Expr $secondValue) : \PhpParser\Node\Stmt\Return_
     {
-        if ($this->nextNode !== null) {
+        if ($this->nextNode instanceof \PhpParser\Node\Stmt\Return_) {
             $this->removeNode($this->nextNode);
         }
         // spaceship ready!
@@ -145,11 +145,11 @@ CODE_SAMPLE
         if ($if->else !== null) {
             $this->processElse($if->else);
         } else {
-            $this->nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-            if ($this->nextNode instanceof \PhpParser\Node\Stmt\Return_ && $this->nextNode->expr instanceof \PhpParser\Node\Expr\Ternary) {
+            $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+            if ($nextNode instanceof \PhpParser\Node\Stmt\Return_ && $nextNode->expr instanceof \PhpParser\Node\Expr\Ternary) {
                 /** @var Ternary $ternary */
-                $ternary = $this->nextNode->expr;
-                $this->processTernary($ternary);
+                $ternary = $nextNode->expr;
+                $this->processTernary($ternary, $nextNode);
             }
         }
     }
@@ -190,10 +190,10 @@ CODE_SAMPLE
         /** @var Return_ $returnNode */
         $returnNode = $else->stmts[0];
         if ($returnNode->expr instanceof \PhpParser\Node\Expr\Ternary) {
-            $this->processTernary($returnNode->expr);
+            $this->processTernary($returnNode->expr, null);
         }
     }
-    private function processTernary(\PhpParser\Node\Expr\Ternary $ternary) : void
+    private function processTernary(\PhpParser\Node\Expr\Ternary $ternary, ?\PhpParser\Node\Stmt\Return_ $return) : void
     {
         if ($ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Smaller) {
             $this->firstValue = $ternary->cond->left;
@@ -202,6 +202,7 @@ CODE_SAMPLE
                 $this->onSmaller = $this->valueResolver->getValue($ternary->if);
             }
             $this->onGreater = $this->valueResolver->getValue($ternary->else);
+            $this->nextNode = $return;
         } elseif ($ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Greater) {
             $this->firstValue = $ternary->cond->right;
             $this->secondValue = $ternary->cond->left;
@@ -209,6 +210,7 @@ CODE_SAMPLE
                 $this->onGreater = $this->valueResolver->getValue($ternary->if);
             }
             $this->onSmaller = $this->valueResolver->getValue($ternary->else);
+            $this->nextNode = $return;
         }
     }
 }

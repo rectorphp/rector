@@ -82,7 +82,7 @@ final class AttributeFinder
      * @param class-string[] $attributeClasses
      * @param \PhpParser\Node\Param|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
-    private function findAttributeByClasses($node, array $attributeClasses) : ?\PhpParser\Node\Attribute
+    public function findAttributeByClasses($node, array $attributeClasses) : ?\PhpParser\Node\Attribute
     {
         foreach ($attributeClasses as $attributeClass) {
             $attribute = $this->findAttributeByClass($node, $attributeClass);
