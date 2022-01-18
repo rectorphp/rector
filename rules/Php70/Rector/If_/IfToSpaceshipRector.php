@@ -142,7 +142,7 @@ CODE_SAMPLE
 
     private function processReturnSpaceship(Expr $firstValue, Expr $secondValue): Return_
     {
-        if ($this->nextNode !== null) {
+        if ($this->nextNode instanceof Return_) {
             $this->removeNode($this->nextNode);
         }
 
@@ -169,11 +169,11 @@ CODE_SAMPLE
         if ($if->else !== null) {
             $this->processElse($if->else);
         } else {
-            $this->nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-            if ($this->nextNode instanceof Return_ && $this->nextNode->expr instanceof Ternary) {
+            $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+            if ($nextNode instanceof Return_ && $nextNode->expr instanceof Ternary) {
                 /** @var Ternary $ternary */
-                $ternary = $this->nextNode->expr;
-                $this->processTernary($ternary);
+                $ternary = $nextNode->expr;
+                $this->processTernary($ternary, $nextNode);
             }
         }
     }
@@ -224,11 +224,11 @@ CODE_SAMPLE
         /** @var Return_ $returnNode */
         $returnNode = $else->stmts[0];
         if ($returnNode->expr instanceof Ternary) {
-            $this->processTernary($returnNode->expr);
+            $this->processTernary($returnNode->expr, null);
         }
     }
 
-    private function processTernary(Ternary $ternary): void
+    private function processTernary(Ternary $ternary, ?Return_ $return): void
     {
         if ($ternary->cond instanceof Smaller) {
             $this->firstValue = $ternary->cond->left;
@@ -239,6 +239,7 @@ CODE_SAMPLE
             }
 
             $this->onGreater = $this->valueResolver->getValue($ternary->else);
+            $this->nextNode = $return;
         } elseif ($ternary->cond instanceof Greater) {
             $this->firstValue = $ternary->cond->right;
             $this->secondValue = $ternary->cond->left;
@@ -248,6 +249,7 @@ CODE_SAMPLE
             }
 
             $this->onSmaller = $this->valueResolver->getValue($ternary->else);
+            $this->nextNode = $return;
         }
     }
 }
