@@ -105,7 +105,7 @@ final class TypeComparator
             return false;
         }
 
-        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType, $node);
+        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType);
     }
 
     public function isSubtype(Type $checkedType, Type $mainType): bool
@@ -267,7 +267,7 @@ final class TypeComparator
                 ->yes();
     }
 
-    private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType, Node $node): bool
+    private function isThisTypeInFinalClass(Type $phpStanDocType, Type $phpParserNodeType): bool
     {
 
         /**
