@@ -6,14 +6,17 @@ namespace Rector\CakePHP\ValueObject;
 final class RemoveIntermediaryMethod
 {
     /**
+     * @readonly
      * @var string
      */
     private $firstMethod;
     /**
+     * @readonly
      * @var string
      */
     private $secondMethod;
     /**
+     * @readonly
      * @var string
      */
     private $finalMethod;

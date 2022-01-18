@@ -9,10 +9,12 @@ final class ArrayItemsAndFluentClass
 {
     /**
      * @var ArrayItem[]
+     * @readonly
      */
     private $arrayItems;
     /**
      * @var array<string, Expr>
+     * @readonly
      */
     private $fluentCalls;
     /**

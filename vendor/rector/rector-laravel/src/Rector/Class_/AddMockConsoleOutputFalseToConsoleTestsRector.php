@@ -24,10 +24,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddMockConsoleOutputFalseToConsoleTestsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator
      */
     private $setUpClassMethodNodeManipulator;

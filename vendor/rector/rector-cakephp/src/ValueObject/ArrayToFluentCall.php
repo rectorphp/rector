@@ -6,11 +6,13 @@ namespace Rector\CakePHP\ValueObject;
 final class ArrayToFluentCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
      * @var array<string, string>
+     * @readonly
      */
     private $arrayKeysToFluentCalls;
     /**

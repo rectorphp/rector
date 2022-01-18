@@ -8,7 +8,7 @@
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.1",
-        "rector\/phpstan-rules": "^0.4.8",
+        "rector\/phpstan-rules": "^0.4",
         "phpstan\/phpstan": "^1.0",
         "phpunit\/phpunit": "^9.5",
         "symplify\/phpstan-rules": "^10.0",
@@ -16,7 +16,6 @@
         "symplify\/easy-coding-standard": "^10.0",
         "symplify\/rule-doc-generator": "^10.0",
         "rector\/rector-src": "dev-main",
-        "rector\/rector-generator": "dev-main",
         "phpstan\/phpstan-strict-rules": "^1.1",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "symplify\/vendor-patches": "^10.0",

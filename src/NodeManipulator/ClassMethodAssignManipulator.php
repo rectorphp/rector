@@ -23,6 +23,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassMethodAssignManipulator
@@ -66,7 +67,12 @@ final class ClassMethodAssignManipulator
      * @var \Rector\Core\NodeManipulator\ArrayDestructVariableFilter
      */
     private $arrayDestructVariableFilter;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
+     */
+    private $exprUsedInNextNodeAnalyzer;
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter, \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
@@ -75,6 +81,7 @@ final class ClassMethodAssignManipulator
         $this->nodeComparator = $nodeComparator;
         $this->reflectionResolver = $reflectionResolver;
         $this->arrayDestructVariableFilter = $arrayDestructVariableFilter;
+        $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
     }
     /**
      * @return Assign[]
@@ -87,6 +94,11 @@ final class ClassMethodAssignManipulator
         $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);
         $readOnlyVariableAssigns = $this->filterOutMultiAssigns($readOnlyVariableAssigns);
         $readOnlyVariableAssigns = $this->filterOutForeachVariables($readOnlyVariableAssigns);
+        /**
+         * Remove unused variable assign is task of RemoveUnusedVariableAssignRector
+         * so no need to move to constant early
+         */
+        $readOnlyVariableAssigns = $this->filterOutNeverUsedNext($readOnlyVariableAssigns);
         return $this->variableManipulator->filterOutChangedVariables($readOnlyVariableAssigns, $classMethod);
     }
     public function addParameterAndAssignToMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $name, ?\PHPStan\Type\Type $type, \PhpParser\Node\Expr\Assign $assign) : void
@@ -98,6 +110,16 @@ final class ClassMethodAssignManipulator
         $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($assign);
         $classMethodHash = \spl_object_hash($classMethod);
         $this->alreadyAddedClassMethodNames[$classMethodHash][] = $name;
+    }
+    /**
+     * @param Assign[] $readOnlyVariableAssigns
+     * @return Assign[]
+     */
+    private function filterOutNeverUsedNext(array $readOnlyVariableAssigns) : array
+    {
+        return \array_filter($readOnlyVariableAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
+            return $this->exprUsedInNextNodeAnalyzer->isUsed($assign->var);
+        });
     }
     /**
      * @param Assign[] $variableAssigns

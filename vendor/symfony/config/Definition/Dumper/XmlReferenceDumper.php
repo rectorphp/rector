@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220117\Symfony\Component\Config\Definition\Dumper;
+namespace RectorPrefix20220118\Symfony\Component\Config\Definition\Dumper;
 
-use RectorPrefix20220117\Symfony\Component\Config\Definition\ArrayNode;
-use RectorPrefix20220117\Symfony\Component\Config\Definition\BaseNode;
-use RectorPrefix20220117\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix20220117\Symfony\Component\Config\Definition\EnumNode;
-use RectorPrefix20220117\Symfony\Component\Config\Definition\NodeInterface;
-use RectorPrefix20220117\Symfony\Component\Config\Definition\PrototypedArrayNode;
+use RectorPrefix20220118\Symfony\Component\Config\Definition\ArrayNode;
+use RectorPrefix20220118\Symfony\Component\Config\Definition\BaseNode;
+use RectorPrefix20220118\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix20220118\Symfony\Component\Config\Definition\EnumNode;
+use RectorPrefix20220118\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix20220118\Symfony\Component\Config\Definition\PrototypedArrayNode;
 /**
  * Dumps an XML reference configuration for the given configuration/node instance.
  *
@@ -24,11 +24,11 @@ use RectorPrefix20220117\Symfony\Component\Config\Definition\PrototypedArrayNode
 class XmlReferenceDumper
 {
     private $reference;
-    public function dump(\RectorPrefix20220117\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, string $namespace = null)
+    public function dump(\RectorPrefix20220118\Symfony\Component\Config\Definition\ConfigurationInterface $configuration, string $namespace = null)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree(), $namespace);
     }
-    public function dumpNode(\RectorPrefix20220117\Symfony\Component\Config\Definition\NodeInterface $node, string $namespace = null)
+    public function dumpNode(\RectorPrefix20220118\Symfony\Component\Config\Definition\NodeInterface $node, string $namespace = null)
     {
         $this->reference = '';
         $this->writeNode($node, 0, \true, $namespace);
@@ -36,7 +36,7 @@ class XmlReferenceDumper
         $this->reference = null;
         return $ref;
     }
-    private function writeNode(\RectorPrefix20220117\Symfony\Component\Config\Definition\NodeInterface $node, int $depth = 0, bool $root = \false, string $namespace = null)
+    private function writeNode(\RectorPrefix20220118\Symfony\Component\Config\Definition\NodeInterface $node, int $depth = 0, bool $root = \false, string $namespace = null)
     {
         $rootName = $root ? 'config' : $node->getName();
         $rootNamespace = $namespace ?: ($root ? 'http://example.org/schema/dic/' . $node->getName() : null);
@@ -55,7 +55,7 @@ class XmlReferenceDumper
         $rootAttributeComments = [];
         $rootChildren = [];
         $rootComments = [];
-        if ($node instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\ArrayNode) {
+        if ($node instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\ArrayNode) {
             $children = $node->getChildren();
             // comments about the root node
             if ($rootInfo = $node->getInfo()) {
@@ -65,7 +65,7 @@ class XmlReferenceDumper
                 $rootComments[] = 'Namespace: ' . $rootNamespace;
             }
             // render prototyped nodes
-            if ($node instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\PrototypedArrayNode) {
+            if ($node instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\PrototypedArrayNode) {
                 $prototype = $node->getPrototype();
                 $info = 'prototype';
                 if (null !== $prototype->getInfo()) {
@@ -75,10 +75,10 @@ class XmlReferenceDumper
                 if ($key = $node->getKeyAttribute()) {
                     $rootAttributes[$key] = \str_replace('-', ' ', $rootName) . ' ' . $key;
                 }
-                if ($prototype instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\PrototypedArrayNode) {
+                if ($prototype instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\PrototypedArrayNode) {
                     $prototype->setName($key ?? '');
                     $children = [$key => $prototype];
-                } elseif ($prototype instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\ArrayNode) {
+                } elseif ($prototype instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\ArrayNode) {
                     $children = $prototype->getChildren();
                 } else {
                     if ($prototype->hasDefaultValue()) {
@@ -106,7 +106,7 @@ class XmlReferenceDumper
             }
             // get attributes and elements
             foreach ($children as $child) {
-                if ($child instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\ArrayNode) {
+                if ($child instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\ArrayNode) {
                     // get elements
                     $rootChildren[] = $child;
                     continue;
@@ -118,20 +118,20 @@ class XmlReferenceDumper
                 // use a string which isn't used in the normal world
                 // comments
                 $comments = [];
-                if ($child instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\BaseNode && ($info = $child->getInfo())) {
+                if ($child instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\BaseNode && ($info = $child->getInfo())) {
                     $comments[] = $info;
                 }
-                if ($child instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\BaseNode && ($example = $child->getExample())) {
+                if ($child instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\BaseNode && ($example = $child->getExample())) {
                     $comments[] = 'Example: ' . $example;
                 }
                 if ($child->isRequired()) {
                     $comments[] = 'Required';
                 }
-                if ($child instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\BaseNode && $child->isDeprecated()) {
+                if ($child instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\BaseNode && $child->isDeprecated()) {
                     $deprecation = $child->getDeprecation($child->getName(), $node->getPath());
                     $comments[] = \sprintf('Deprecated (%s)', ($deprecation['package'] || $deprecation['version'] ? "Since {$deprecation['package']} {$deprecation['version']}: " : '') . $deprecation['message']);
                 }
-                if ($child instanceof \RectorPrefix20220117\Symfony\Component\Config\Definition\EnumNode) {
+                if ($child instanceof \RectorPrefix20220118\Symfony\Component\Config\Definition\EnumNode) {
                     $comments[] = 'One of ' . \implode('; ', \array_map('json_encode', $child->getValues()));
                 }
                 if (\count($comments)) {

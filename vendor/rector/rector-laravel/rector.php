@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220117;
+namespace RectorPrefix20220118;
 
 use Rector\Core\Configuration\Option;
 use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;
@@ -22,7 +22,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         // @see https://github.com/rectorphp/rector-src/blob/7f73cf017214257c170d34db3af7283eaeeab657/rector.php#L71
         \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class,
     ]);
-    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
+    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
 };

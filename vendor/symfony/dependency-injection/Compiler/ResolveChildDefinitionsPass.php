@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220117\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220118\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220117\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix20220117\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220117\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\ExceptionInterface;
-use RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix20220118\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix20220118\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220118\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\ExceptionInterface;
+use RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 /**
  * This replaces all ChildDefinition instances with their equivalent fully
  * merged Definition instance.
@@ -23,12 +23,12 @@ use RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\Service
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ResolveChildDefinitionsPass extends \RectorPrefix20220117\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveChildDefinitionsPass extends \RectorPrefix20220118\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     private $currentPath;
     protected function processValue($value, bool $isRoot = \false)
     {
-        if (!$value instanceof \RectorPrefix20220117\Symfony\Component\DependencyInjection\Definition) {
+        if (!$value instanceof \RectorPrefix20220118\Symfony\Component\DependencyInjection\Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($isRoot) {
@@ -36,7 +36,7 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20220117\Symfony\Componen
             // container to ensure we are not operating on stale data
             $value = $this->container->getDefinition($this->currentId);
         }
-        if ($value instanceof \RectorPrefix20220117\Symfony\Component\DependencyInjection\ChildDefinition) {
+        if ($value instanceof \RectorPrefix20220118\Symfony\Component\DependencyInjection\ChildDefinition) {
             $this->currentPath = [];
             $value = $this->resolveDefinition($value);
             if ($isRoot) {
@@ -50,31 +50,31 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20220117\Symfony\Componen
      *
      * @throws RuntimeException When the definition is invalid
      */
-    private function resolveDefinition(\RectorPrefix20220117\Symfony\Component\DependencyInjection\ChildDefinition $definition) : \RectorPrefix20220117\Symfony\Component\DependencyInjection\Definition
+    private function resolveDefinition(\RectorPrefix20220118\Symfony\Component\DependencyInjection\ChildDefinition $definition) : \RectorPrefix20220118\Symfony\Component\DependencyInjection\Definition
     {
         try {
             return $this->doResolveDefinition($definition);
-        } catch (\RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException $e) {
+        } catch (\RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException $e) {
             throw $e;
-        } catch (\RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\ExceptionInterface $e) {
+        } catch (\RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\ExceptionInterface $e) {
             $r = new \ReflectionProperty($e, 'message');
             $r->setAccessible(\true);
             $r->setValue($e, \sprintf('Service "%s": %s', $this->currentId, $e->getMessage()));
             throw $e;
         }
     }
-    private function doResolveDefinition(\RectorPrefix20220117\Symfony\Component\DependencyInjection\ChildDefinition $definition) : \RectorPrefix20220117\Symfony\Component\DependencyInjection\Definition
+    private function doResolveDefinition(\RectorPrefix20220118\Symfony\Component\DependencyInjection\ChildDefinition $definition) : \RectorPrefix20220118\Symfony\Component\DependencyInjection\Definition
     {
         if (!$this->container->has($parent = $definition->getParent())) {
-            throw new \RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Parent definition "%s" does not exist.', $parent));
+            throw new \RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('Parent definition "%s" does not exist.', $parent));
         }
         $searchKey = \array_search($parent, $this->currentPath);
         $this->currentPath[] = $parent;
         if (\false !== $searchKey) {
-            throw new \RectorPrefix20220117\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($parent, \array_slice($this->currentPath, $searchKey));
+            throw new \RectorPrefix20220118\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($parent, \array_slice($this->currentPath, $searchKey));
         }
         $parentDef = $this->container->findDefinition($parent);
-        if ($parentDef instanceof \RectorPrefix20220117\Symfony\Component\DependencyInjection\ChildDefinition) {
+        if ($parentDef instanceof \RectorPrefix20220118\Symfony\Component\DependencyInjection\ChildDefinition) {
             $id = $this->currentId;
             $this->currentId = $parent;
             $parentDef = $this->resolveDefinition($parentDef);
@@ -82,7 +82,7 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20220117\Symfony\Componen
             $this->currentId = $id;
         }
         $this->container->log($this, \sprintf('Resolving inheritance for "%s" (parent: %s).', $this->currentId, $parent));
-        $def = new \RectorPrefix20220117\Symfony\Component\DependencyInjection\Definition();
+        $def = new \RectorPrefix20220118\Symfony\Component\DependencyInjection\Definition();
         // merge in parent definition
         // purposely ignored attributes: abstract, shared, tags, autoconfigured
         $def->setClass($parentDef->getClass());
@@ -142,7 +142,7 @@ class ResolveChildDefinitionsPass extends \RectorPrefix20220117\Symfony\Componen
             if (null === $decoratedService) {
                 $def->setDecoratedService($decoratedService);
             } else {
-                $def->setDecoratedService($decoratedService[0], $decoratedService[1], $decoratedService[2], $decoratedService[3] ?? \RectorPrefix20220117\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
+                $def->setDecoratedService($decoratedService[0], $decoratedService[1], $decoratedService[2], $decoratedService[3] ?? \RectorPrefix20220118\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
             }
         }
         // merge arguments

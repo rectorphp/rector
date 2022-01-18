@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220117\Symplify\Astral\NodeValue\NodeValueResolver;
+namespace RectorPrefix20220118\Symplify\Astral\NodeValue\NodeValueResolver;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use ReflectionClassConstant;
-use RectorPrefix20220117\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
-use RectorPrefix20220117\Symplify\Astral\Naming\SimpleNameResolver;
-use RectorPrefix20220117\Symplify\Astral\NodeFinder\SimpleNodeFinder;
+use RectorPrefix20220118\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
+use RectorPrefix20220118\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20220118\Symplify\Astral\NodeFinder\SimpleNodeFinder;
 /**
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
  *
  * @implements NodeValueResolverInterface<ClassConstFetch>
  */
-final class ClassConstFetchValueResolver implements \RectorPrefix20220117\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
+final class ClassConstFetchValueResolver implements \RectorPrefix20220118\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
 {
     /**
      * @var \Symplify\Astral\Naming\SimpleNameResolver
@@ -25,7 +25,7 @@ final class ClassConstFetchValueResolver implements \RectorPrefix20220117\Sympli
      * @var \Symplify\Astral\NodeFinder\SimpleNodeFinder
      */
     private $simpleNodeFinder;
-    public function __construct(\RectorPrefix20220117\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20220117\Symplify\Astral\NodeFinder\SimpleNodeFinder $simpleNodeFinder)
+    public function __construct(\RectorPrefix20220118\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \RectorPrefix20220118\Symplify\Astral\NodeFinder\SimpleNodeFinder $simpleNodeFinder)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->simpleNodeFinder = $simpleNodeFinder;

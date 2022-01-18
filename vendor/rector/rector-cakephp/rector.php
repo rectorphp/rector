@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220117;
+namespace RectorPrefix20220118;
 
 use Rector\Core\Configuration\Option;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
@@ -18,7 +18,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
         '*/Source/*',
         '*/Fixture/*',
     ]);
-    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_80);
+    $containerConfigurator->import(\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::DEAD_CODE);
     $containerConfigurator->import(\Rector\Set\ValueObject\SetList::CODE_QUALITY);
 };

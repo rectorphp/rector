@@ -29,6 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FactoryDefinitionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Laravel\NodeFactory\ModelFactoryNodeFactory
      */
     private $modelFactoryNodeFactory;

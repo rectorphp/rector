@@ -24,6 +24,7 @@ final class AddParentRegisterToEventServiceProviderRector extends \Rector\Core\R
      */
     private const REGISTER = 'register';
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;

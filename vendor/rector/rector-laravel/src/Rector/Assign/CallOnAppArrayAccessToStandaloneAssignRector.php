@@ -25,6 +25,7 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Re
      */
     private $serviceNameTypeAndVariableNames = [];
     /**
+     * @readonly
      * @var \Rector\Laravel\NodeFactory\AppAssignFactory
      */
     private $appAssignFactory;

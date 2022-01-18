@@ -6,22 +6,27 @@ namespace Rector\PHPOffice\ValueObject;
 final class ConditionalSetValue
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
+     * @readonly
      * @var string
      */
     private $newGetMethod;
     /**
+     * @readonly
      * @var string
      */
     private $newSetMethod;
     /**
+     * @readonly
      * @var int
      */
     private $argPosition;
     /**
+     * @readonly
      * @var bool
      */
     private $hasRow;

@@ -20,9 +20,9 @@ use PhpParser\NodeVisitor\NameResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220117\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20220117\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20220117\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220118\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220118\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220118\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 final class ModelFactoryNodeFactory
 {
     /**
@@ -30,22 +30,26 @@ final class ModelFactoryNodeFactory
      */
     private const THIS = 'this';
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
+     * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \RectorPrefix20220117\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \RectorPrefix20220118\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeFactory = $nodeFactory;
@@ -56,7 +60,7 @@ final class ModelFactoryNodeFactory
     {
         $class = new \PhpParser\Node\Stmt\Class_($name . 'Factory');
         $class->extends = new \PhpParser\Node\Name\FullyQualified('Illuminate\\Database\\Eloquent\\Factories\\Factory');
-        $propertyBuilder = new \RectorPrefix20220117\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('model');
+        $propertyBuilder = new \RectorPrefix20220118\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder('model');
         $propertyBuilder->makeProtected();
         $propertyBuilder->setDefault($expr);
         $property = $propertyBuilder->getNode();
@@ -151,7 +155,7 @@ final class ModelFactoryNodeFactory
      */
     private function createPublicMethod(string $name, array $stmts) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20220117\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
+        $methodBuilder = new \RectorPrefix20220118\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
         $methodBuilder->makePublic();
         $methodBuilder->addStmts($stmts);
         return $methodBuilder->getNode();

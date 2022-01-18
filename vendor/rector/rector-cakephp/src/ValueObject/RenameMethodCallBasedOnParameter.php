@@ -7,18 +7,22 @@ use PHPStan\Type\ObjectType;
 final class RenameMethodCallBasedOnParameter
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldClass;
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
+     * @readonly
      * @var string
      */
     private $parameterName;
     /**
+     * @readonly
      * @var string
      */
     private $newMethod;

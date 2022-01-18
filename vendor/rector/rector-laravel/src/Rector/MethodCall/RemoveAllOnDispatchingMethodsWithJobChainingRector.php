@@ -27,6 +27,7 @@ final class RemoveAllOnDispatchingMethodsWithJobChainingRector extends \Rector\C
      */
     private const SWAPPED_METHODS = ['allOnQueue' => 'onQueue', 'allOnConnection' => 'onConnection'];
     /**
+     * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;

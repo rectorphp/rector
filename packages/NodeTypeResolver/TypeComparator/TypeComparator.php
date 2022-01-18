@@ -109,7 +109,7 @@ final class TypeComparator
         if ($this->areTypesSameWithLiteralTypeInPhpDoc($areDifferentScalarTypes, $phpStanDocType, $phpParserNodeType)) {
             return \false;
         }
-        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType, $node);
+        return $this->isThisTypeInFinalClass($phpStanDocType, $phpParserNodeType);
     }
     public function isSubtype(\PHPStan\Type\Type $checkedType, \PHPStan\Type\Type $mainType) : bool
     {
@@ -225,7 +225,7 @@ final class TypeComparator
     {
         return $areDifferentScalarTypes && $phpStanDocType instanceof \PHPStan\Type\ConstantScalarType && $phpParserNodeType->isSuperTypeOf($phpStanDocType)->yes();
     }
-    private function isThisTypeInFinalClass(\PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType, \PhpParser\Node $node) : bool
+    private function isThisTypeInFinalClass(\PHPStan\Type\Type $phpStanDocType, \PHPStan\Type\Type $phpParserNodeType) : bool
     {
         /**
          * Special case for $this/(self|static) compare

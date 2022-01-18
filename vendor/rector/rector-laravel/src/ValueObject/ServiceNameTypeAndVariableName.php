@@ -6,14 +6,17 @@ namespace Rector\Laravel\ValueObject;
 final class ServiceNameTypeAndVariableName
 {
     /**
+     * @readonly
      * @var string
      */
     private $serviceName;
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $variableName;

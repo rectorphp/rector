@@ -26,6 +26,7 @@ final class RequestStaticValidateToInjectRector extends \Rector\Core\Rector\Abst
      */
     private $requestObjectTypes = [];
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassMethodManipulator
      */
     private $classMethodManipulator;

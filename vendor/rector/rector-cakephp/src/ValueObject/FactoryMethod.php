@@ -7,18 +7,22 @@ use PHPStan\Type\ObjectType;
 final class FactoryMethod
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var string
      */
     private $newClass;
     /**
+     * @readonly
      * @var int
      */
     private $position;

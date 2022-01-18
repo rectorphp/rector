@@ -24,6 +24,7 @@ final class AddParentBootToModelClassMethodRector extends \Rector\Core\Rector\Ab
      */
     private const BOOT = 'boot';
     /**
+     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;

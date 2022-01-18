@@ -17,7 +17,7 @@ use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220117\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220118\Symfony\Contracts\Service\Attribute\Required;
 final class PlainValueParser
 {
     /**

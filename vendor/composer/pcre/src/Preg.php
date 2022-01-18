@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix20220117\Composer\Pcre;
+namespace RectorPrefix20220118\Composer\Pcre;
 
 class Preg
 {
@@ -28,7 +28,7 @@ class Preg
         }
         $result = \preg_match($pattern, $subject, $matches, $flags, $offset);
         if ($result === \false) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
         }
         return $result;
     }
@@ -48,7 +48,7 @@ class Preg
     {
         $result = \preg_match($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
         if ($result === \false) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_match', $pattern);
         }
         return $result;
     }
@@ -70,7 +70,7 @@ class Preg
         }
         $result = \preg_match_all($pattern, $subject, $matches, $flags, $offset);
         if ($result === \false || $result === null) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
         }
         return $result;
     }
@@ -90,7 +90,7 @@ class Preg
     {
         $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_OFFSET_CAPTURE, $offset);
         if ($result === \false || $result === null) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_match_all', $pattern);
         }
         return $result;
     }
@@ -110,7 +110,7 @@ class Preg
         }
         $result = \preg_replace($pattern, $replacement, $subject, $limit, $count);
         if ($result === null) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_replace', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_replace', $pattern);
         }
         return $result;
     }
@@ -135,7 +135,7 @@ class Preg
             $result = \preg_replace_callback($pattern, $replacement, $subject, $limit, $count);
         }
         if ($result === null) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_replace_callback', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_replace_callback', $pattern);
         }
         return $result;
     }
@@ -162,7 +162,7 @@ class Preg
         }
         if ($result === null) {
             $pattern = \array_keys($pattern);
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_replace_callback_array', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_replace_callback_array', $pattern);
         }
         return $result;
     }
@@ -180,7 +180,7 @@ class Preg
         }
         $result = \preg_split($pattern, $subject, $limit, $flags);
         if ($result === \false) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_split', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_split', $pattern);
         }
         return $result;
     }
@@ -196,7 +196,7 @@ class Preg
     {
         $result = \preg_split($pattern, $subject, $limit, $flags | \PREG_SPLIT_OFFSET_CAPTURE);
         if ($result === \false) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_split', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_split', $pattern);
         }
         // @phpstan-ignore-next-line See https://github.com/phpstan/phpstan/issues/6155
         return $result;
@@ -212,7 +212,7 @@ class Preg
     {
         $result = \preg_grep($pattern, $array, $flags);
         if ($result === \false) {
-            throw \RectorPrefix20220117\Composer\Pcre\PcreException::fromFunction('preg_grep', $pattern);
+            throw \RectorPrefix20220118\Composer\Pcre\PcreException::fromFunction('preg_grep', $pattern);
         }
         return $result;
     }
