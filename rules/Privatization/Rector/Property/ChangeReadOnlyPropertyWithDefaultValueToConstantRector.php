@@ -12,6 +12,7 @@ use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeFactory\ClassConstantFactory;
 use Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;
+use RectorPrefix20220118\Symplify\PHPStanRules\Reflection\PropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -124,6 +125,12 @@ CODE_SAMPLE
         if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return \true;
         }
-        return $this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'));
+        if ($property->attrGroups !== []) {
+            return \true;
+        }
+        if ($this->isObjectType($classLike, new \PHPStan\Type\ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'))) {
+            return \true;
+        }
+        return \false;
     }
 }

@@ -9,7 +9,6 @@ use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 use Rector\Doctrine\PhpDoc\ShortClassExpander;
@@ -59,18 +58,24 @@ final class ToManyRelationPropertyTypeResolver
             return $this->processToManyRelation($property, $toManyRelationTagValueNode);
         }
         $targetEntity = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_MANY_ANNOTATION_CLASSES, 'targetEntity');
-        return $this->resolveTypeFromTargetEntity($targetEntity, $property);
-    }
-    private function processToManyRelation(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : \PHPStan\Type\Type
-    {
-        $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
-        if (!\is_string($targetEntity) && $targetEntity !== null) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$targetEntity instanceof \PhpParser\Node\Expr) {
+            return null;
         }
         return $this->resolveTypeFromTargetEntity($targetEntity, $property);
     }
     /**
-     * @param \PhpParser\Node\Expr|string|null $targetEntity
+     * @return \PHPStan\Type\Type|null
+     */
+    private function processToManyRelation(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    {
+        $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
+        if (!\is_string($targetEntity)) {
+            return null;
+        }
+        return $this->resolveTypeFromTargetEntity($targetEntity, $property);
+    }
+    /**
+     * @param \PhpParser\Node\Expr|string $targetEntity
      */
     private function resolveTypeFromTargetEntity($targetEntity, \PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
