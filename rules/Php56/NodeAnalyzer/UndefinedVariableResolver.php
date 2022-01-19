@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -48,10 +49,8 @@ final class UndefinedVariableResolver
     {
         $undefinedVariables = [];
 
-        $variableNamesFromParams = $this->collectVariableNamesFromParams($node);
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use (
-            &$undefinedVariables,
-            $variableNamesFromParams
+            &$undefinedVariables
         ): ?int {
             // entering new scope - break!
             if ($node instanceof FunctionLike && ! $node instanceof ArrowFunction) {
@@ -83,10 +82,6 @@ final class UndefinedVariableResolver
                 return null;
             }
 
-            if (in_array($variableName, $variableNamesFromParams, true)) {
-                return null;
-            }
-
             $undefinedVariables[] = $variableName;
 
             return null;
@@ -95,24 +90,9 @@ final class UndefinedVariableResolver
         return array_unique($undefinedVariables);
     }
 
-    /**
-     * @return string[]
-     */
-    private function collectVariableNamesFromParams(ClassMethod | Function_ | Closure $node): array
+    private function issetOrUnsetOrEmptyParent(Node $parentNode): bool
     {
-        $variableNames = [];
-        foreach ($node->getParams() as $param) {
-            if ($param->var instanceof Variable) {
-                $variableNames[] = (string) $this->nodeNameResolver->getName($param->var);
-            }
-        }
-
-        return $variableNames;
-    }
-
-    private function issetOrUnsetParent(Node $parentNode): bool
-    {
-        return in_array($parentNode::class, [Unset_::class, UnsetCast::class, Isset_::class], true);
+        return in_array($parentNode::class, [Unset_::class, UnsetCast::class, Isset_::class, Empty_::class], true);
     }
 
     private function isAsCoalesceLeft(Node $parentNode, Variable $variable): bool
@@ -144,7 +124,7 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        if ($this->issetOrUnsetParent($parentNode)) {
+        if ($this->issetOrUnsetOrEmptyParent($parentNode)) {
             return true;
         }
 
@@ -162,11 +142,6 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        $originalNode = $variable->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if (! $this->nodeComparator->areNodesEqual($variable, $originalNode)) {
-            return true;
-        }
-
         $variableName = $this->nodeNameResolver->getName($variable);
 
         // skip $this, as probably in outer scope
@@ -178,7 +153,11 @@ final class UndefinedVariableResolver
             return true;
         }
 
-        return $this->hasPreviousCheckedWithIsset($variable);
+        if ($this->hasPreviousCheckedWithIsset($variable)) {
+            return true;
+        }
+
+        return $this->hasPreviousCheckedWithEmpty($variable);
     }
 
     private function hasPreviousCheckedWithIsset(Variable $variable): bool
@@ -201,17 +180,29 @@ final class UndefinedVariableResolver
         });
     }
 
+    private function hasPreviousCheckedWithEmpty(Variable $variable): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (Node $subNode) use (
+            $variable
+        ): bool {
+            if (! $subNode instanceof Empty_) {
+                return false;
+            }
+
+            $subNodeExpr = $subNode->expr;
+            return $this->nodeComparator->areNodesEqual($subNodeExpr, $variable);
+        });
+    }
+
     private function isStaticVariable(Node $parentNode): bool
     {
-        // definition of static variable
-        if ($parentNode instanceof StaticVar) {
-            $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof Static_) {
-                return true;
-            }
+        if (! $parentNode instanceof StaticVar) {
+            return false;
         }
 
-        return false;
+        // definition of static variable
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentParentNode instanceof Static_;
     }
 
     private function isListAssign(Node $node): bool
