@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf335598685e810e881ced0a65d71e1b5
+class ComposerStaticInit50bf88e8c61a679bc82009e906efd09e
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2934,7 +2934,6 @@ class ComposerStaticInitf335598685e810e881ced0a65d71e1b5
         'Rector\\PSR4\\Rector\\FileWithoutNamespace\\NormalizeNamespaceByPSR4ComposerAutoloadRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php',
         'Rector\\PSR4\\Rector\\Namespace_\\MultipleClassFileToPsr4ClassesRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php',
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/packages/Parallel/Application/ParallelFileProcessor.php',
-        'Rector\\Parallel\\Application\\SingleFileProcessor' => __DIR__ . '/../..' . '/packages/Parallel/Application/SingleFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Bridge.php',
         'Rector\\Parallel\\ValueObject\\Name' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Name.php',
@@ -3872,9 +3871,9 @@ class ComposerStaticInitf335598685e810e881ced0a65d71e1b5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf335598685e810e881ced0a65d71e1b5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf335598685e810e881ced0a65d71e1b5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf335598685e810e881ced0a65d71e1b5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit50bf88e8c61a679bc82009e906efd09e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit50bf88e8c61a679bc82009e906efd09e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit50bf88e8c61a679bc82009e906efd09e::$classMap;
 
         }, null, ClassLoader::class);
     }

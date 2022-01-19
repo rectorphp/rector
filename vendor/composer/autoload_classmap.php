@@ -2539,7 +2539,6 @@ return array(
     'Rector\\PSR4\\Rector\\FileWithoutNamespace\\NormalizeNamespaceByPSR4ComposerAutoloadRector' => $baseDir . '/rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php',
     'Rector\\PSR4\\Rector\\Namespace_\\MultipleClassFileToPsr4ClassesRector' => $baseDir . '/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php',
     'Rector\\Parallel\\Application\\ParallelFileProcessor' => $baseDir . '/packages/Parallel/Application/ParallelFileProcessor.php',
-    'Rector\\Parallel\\Application\\SingleFileProcessor' => $baseDir . '/packages/Parallel/Application/SingleFileProcessor.php',
     'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => $baseDir . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
     'Rector\\Parallel\\ValueObject\\Bridge' => $baseDir . '/packages/Parallel/ValueObject/Bridge.php',
     'Rector\\Parallel\\ValueObject\\Name' => $baseDir . '/packages/Parallel/ValueObject/Name.php',
