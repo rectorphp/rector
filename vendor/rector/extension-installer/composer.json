@@ -12,9 +12,9 @@
         "composer\/composer": "^2.0",
         "composer\/xdebug-handler": "^2.0",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/phpstan-rules": "^0.3.4",
-        "symplify\/easy-coding-standard": "^9.4.60",
-        "symplify\/phpstan-extensions": "^9.4.60"
+        "rector\/phpstan-rules": "^0.4",
+        "symplify\/easy-coding-standard": "^10.0",
+        "symplify\/phpstan-extensions": "^10.0"
     },
     "autoload": {
         "psr-4": {
@@ -39,7 +39,11 @@
         }
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan\/extension-installer": true,
+            "cweagans\/composer-patches": true
+        }
     },
     "extra": {
         "class": "Rector\\RectorInstaller\\Plugin",

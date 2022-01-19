@@ -69,10 +69,7 @@ final class CountableAnalyzer
         if (!$callerObjectType instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
-        if (\is_a($callerObjectType->getClassName(), \PhpParser\Node\Stmt::class, \true)) {
-            return \false;
-        }
-        if (\is_a($callerObjectType->getClassName(), \PhpParser\Node\Expr\Array_::class, \true)) {
+        if ($this->isCallerObjectClassNameStmtOrArray($callerObjectType)) {
             return \false;
         }
         // this must be handled reflection, as PHPStan ReflectionProvider does not provide default values for properties in any way
@@ -90,8 +87,18 @@ final class CountableAnalyzer
         if ($this->isIterableOrFilledByConstructParam($nativeType, $expr)) {
             return \false;
         }
+        if ($this->propertyFetchAnalyzer->isFilledViaMethodCallInConstructStmts($expr)) {
+            return \false;
+        }
         $propertyDefaultValue = $propertiesDefaults[$propertyName];
         return $propertyDefaultValue === null;
+    }
+    private function isCallerObjectClassNameStmtOrArray(\PHPStan\Type\TypeWithClassName $typeWithClassName) : bool
+    {
+        if (\is_a($typeWithClassName->getClassName(), \PhpParser\Node\Stmt::class, \true)) {
+            return \true;
+        }
+        return \is_a($typeWithClassName->getClassName(), \PhpParser\Node\Expr\Array_::class, \true);
     }
     private function isIterableOrFilledByConstructParam(\PHPStan\Type\Type $nativeType, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {

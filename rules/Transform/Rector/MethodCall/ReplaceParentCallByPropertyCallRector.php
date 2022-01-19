@@ -10,7 +10,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220118\Webmozart\Assert\Assert;
+use RectorPrefix20220119\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\ReplaceParentCallByPropertyCallRector\ReplaceParentCallByPropertyCallRectorTest
  */
@@ -77,7 +77,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parentCallToProperties = $configuration[self::PARENT_CALLS_TO_PROPERTIES] ?? $configuration;
-        \RectorPrefix20220118\Webmozart\Assert\Assert::allIsAOf($parentCallToProperties, \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall::class);
+        \RectorPrefix20220119\Webmozart\Assert\Assert::allIsAOf($parentCallToProperties, \Rector\Transform\ValueObject\ReplaceParentCallByPropertyCall::class);
         $this->parentCallToProperties = $parentCallToProperties;
     }
 }

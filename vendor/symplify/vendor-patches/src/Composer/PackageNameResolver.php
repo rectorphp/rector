@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220118\Symplify\VendorPatches\Composer;
+namespace RectorPrefix20220119\Symplify\VendorPatches\Composer;
 
-use RectorPrefix20220118\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20220118\Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix20220119\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20220119\Symplify\SmartFileSystem\Json\JsonFileSystem;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220118\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
-use RectorPrefix20220118\Symplify\VendorPatches\FileSystem\PathResolver;
+use RectorPrefix20220119\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20220119\Symplify\VendorPatches\FileSystem\PathResolver;
 /**
  * @see \Symplify\VendorPatches\Tests\Composer\PackageNameResolverTest
  */
@@ -25,7 +25,7 @@ final class PackageNameResolver
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
-    public function __construct(\RectorPrefix20220118\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem, \RectorPrefix20220118\Symplify\VendorPatches\FileSystem\PathResolver $pathResolver, \RectorPrefix20220118\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
+    public function __construct(\RectorPrefix20220119\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem, \RectorPrefix20220119\Symplify\VendorPatches\FileSystem\PathResolver $pathResolver, \RectorPrefix20220119\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
     {
         $this->jsonFileSystem = $jsonFileSystem;
         $this->pathResolver = $pathResolver;
@@ -36,7 +36,7 @@ final class PackageNameResolver
         $packageComposerJsonFilePath = $this->getPackageComposerJsonFilePath($vendorFile);
         $composerJson = $this->jsonFileSystem->loadFilePathToJson($packageComposerJsonFilePath);
         if (!isset($composerJson['name'])) {
-            throw new \RectorPrefix20220118\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
+            throw new \RectorPrefix20220119\Symplify\SymplifyKernel\Exception\ShouldNotHappenException();
         }
         return $composerJson['name'];
     }
