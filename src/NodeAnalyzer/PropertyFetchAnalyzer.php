@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
@@ -23,10 +24,16 @@ use Rector\NodeNameResolver\NodeNameResolver;
 
 final class PropertyFetchAnalyzer
 {
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
+
     public function __construct(
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly NodeComparator $nodeComparator
+        private readonly NodeComparator $nodeComparator,
+        private readonly AstResolver $astResolver
     ) {
     }
 
@@ -37,7 +44,7 @@ final class PropertyFetchAnalyzer
                 return false;
             }
 
-            return $this->nodeNameResolver->isName($node->var, 'this');
+            return $this->nodeNameResolver->isName($node->var, self::THIS);
         }
 
         if ($node instanceof StaticPropertyFetch) {
@@ -70,7 +77,7 @@ final class PropertyFetchAnalyzer
 
     public function isPropertyToSelf(PropertyFetch | StaticPropertyFetch $expr): bool
     {
-        if ($expr instanceof PropertyFetch && ! $this->nodeNameResolver->isName($expr->var, 'this')) {
+        if ($expr instanceof PropertyFetch && ! $this->nodeNameResolver->isName($expr->var, self::THIS)) {
             return false;
         }
 
@@ -165,6 +172,49 @@ final class PropertyFetchAnalyzer
         return $this->isParamFilledStmts($params, $stmts, $propertyName, $kindPropertyFetch);
     }
 
+    public function isFilledViaMethodCallInConstructStmts(PropertyFetch $propertyFetch): bool
+    {
+        $class = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
+        if (! $class instanceof Class_) {
+            return false;
+        }
+
+        $construct = $class->getMethod(MethodName::CONSTRUCT);
+        if (! $construct instanceof ClassMethod) {
+            return false;
+        }
+
+        /** @var MethodCall[] $methodCalls */
+        $methodCalls = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped(
+            $construct,
+            [MethodCall::class]
+        );
+
+        foreach ($methodCalls as $methodCall) {
+            if (! $methodCall->var instanceof Variable) {
+                continue;
+            }
+
+            if (! $this->nodeNameResolver->isName($methodCall->var, self::THIS)) {
+                continue;
+            }
+
+            $classMethod = $this->astResolver->resolveClassMethodFromMethodCall($methodCall);
+            if (! $classMethod instanceof ClassMethod) {
+                continue;
+            }
+
+            $isFound = $this->isPropertyAssignFoundInClassMethod($classMethod, $propertyFetch);
+            if (! $isFound) {
+                continue;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param string[] $propertyNames
      */
@@ -176,6 +226,24 @@ final class PropertyFetchAnalyzer
 
         /** @var PropertyFetch $node */
         return $this->nodeNameResolver->isNames($node->name, $propertyNames);
+    }
+
+    private function isPropertyAssignFoundInClassMethod(ClassMethod $classMethod, PropertyFetch $propertyFetch): bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped(
+            $classMethod,
+            function (Node $subNode) use ($propertyFetch): bool {
+                if (! $subNode instanceof Assign) {
+                    return false;
+                }
+
+                if (! $subNode->var instanceof PropertyFetch) {
+                    return false;
+                }
+
+                return $this->nodeComparator->areNodesEqual($propertyFetch, $subNode->var);
+            }
+        );
     }
 
     /**
