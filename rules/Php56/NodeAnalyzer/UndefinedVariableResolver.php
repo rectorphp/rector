@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\Cast\Unset_ as UnsetCast;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -65,8 +66,7 @@ final class UndefinedVariableResolver
     public function resolve($node) : array
     {
         $undefinedVariables = [];
-        $variableNamesFromParams = $this->collectVariableNamesFromParams($node);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables, $variableNamesFromParams) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables) : ?int {
             // entering new scope - break!
             if ($node instanceof \PhpParser\Node\FunctionLike && !$node instanceof \PhpParser\Node\Expr\ArrowFunction) {
                 return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
@@ -91,31 +91,14 @@ final class UndefinedVariableResolver
             if ($scope->hasVariableType($variableName)->yes()) {
                 return null;
             }
-            if (\in_array($variableName, $variableNamesFromParams, \true)) {
-                return null;
-            }
             $undefinedVariables[] = $variableName;
             return null;
         });
         return \array_unique($undefinedVariables);
     }
-    /**
-     * @return string[]
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
-     */
-    private function collectVariableNamesFromParams($node) : array
+    private function issetOrUnsetOrEmptyParent(\PhpParser\Node $parentNode) : bool
     {
-        $variableNames = [];
-        foreach ($node->getParams() as $param) {
-            if ($param->var instanceof \PhpParser\Node\Expr\Variable) {
-                $variableNames[] = (string) $this->nodeNameResolver->getName($param->var);
-            }
-        }
-        return $variableNames;
-    }
-    private function issetOrUnsetParent(\PhpParser\Node $parentNode) : bool
-    {
-        return \in_array(\get_class($parentNode), [\PhpParser\Node\Stmt\Unset_::class, \PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\Isset_::class], \true);
+        return \in_array(\get_class($parentNode), [\PhpParser\Node\Stmt\Unset_::class, \PhpParser\Node\Expr\Cast\Unset_::class, \PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Expr\Empty_::class], \true);
     }
     private function isAsCoalesceLeft(\PhpParser\Node $parentNode, \PhpParser\Node\Expr\Variable $variable) : bool
     {
@@ -140,7 +123,7 @@ final class UndefinedVariableResolver
         if ($this->isAssignOrStaticVariableParent($parentNode)) {
             return \true;
         }
-        if ($this->issetOrUnsetParent($parentNode)) {
+        if ($this->issetOrUnsetOrEmptyParent($parentNode)) {
             return \true;
         }
         if ($this->isAsCoalesceLeft($parentNode, $variable)) {
@@ -154,10 +137,6 @@ final class UndefinedVariableResolver
         if (!$nodeScope instanceof \PHPStan\Analyser\Scope) {
             return \true;
         }
-        $originalNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-        if (!$this->nodeComparator->areNodesEqual($variable, $originalNode)) {
-            return \true;
-        }
         $variableName = $this->nodeNameResolver->getName($variable);
         // skip $this, as probably in outer scope
         if ($variableName === 'this') {
@@ -166,7 +145,10 @@ final class UndefinedVariableResolver
         if ($variableName === null) {
             return \true;
         }
-        return $this->hasPreviousCheckedWithIsset($variable);
+        if ($this->hasPreviousCheckedWithIsset($variable)) {
+            return \true;
+        }
+        return $this->hasPreviousCheckedWithEmpty($variable);
     }
     private function hasPreviousCheckedWithIsset(\PhpParser\Node\Expr\Variable $variable) : bool
     {
@@ -183,16 +165,24 @@ final class UndefinedVariableResolver
             return \false;
         });
     }
+    private function hasPreviousCheckedWithEmpty(\PhpParser\Node\Expr\Variable $variable) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstPreviousOfNode($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Empty_) {
+                return \false;
+            }
+            $subNodeExpr = $subNode->expr;
+            return $this->nodeComparator->areNodesEqual($subNodeExpr, $variable);
+        });
+    }
     private function isStaticVariable(\PhpParser\Node $parentNode) : bool
     {
-        // definition of static variable
-        if ($parentNode instanceof \PhpParser\Node\Stmt\StaticVar) {
-            $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if ($parentParentNode instanceof \PhpParser\Node\Stmt\Static_) {
-                return \true;
-            }
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\StaticVar) {
+            return \false;
         }
-        return \false;
+        // definition of static variable
+        $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return $parentParentNode instanceof \PhpParser\Node\Stmt\Static_;
     }
     private function isListAssign(\PhpParser\Node $node) : bool
     {
