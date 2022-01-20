@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Output;
 
 use Rector\Core\Contract\Console\OutputStyleInterface;
-use RectorPrefix20220119\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220120\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * This services helps to abstract from Symfony, and allow custom output formatters to use this Rector internal class.
  * It is very helpful while scoping Rector from analysed project.
@@ -16,7 +16,7 @@ final class RectorOutputStyle implements \Rector\Core\Contract\Console\OutputSty
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix20220119\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix20220120\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;
     }
