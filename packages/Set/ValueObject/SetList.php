@@ -129,10 +129,6 @@ final class SetList implements \Rector\Set\Contract\SetListInterface
     /**
      * @var string
      */
-    public const SAFE_07 = __DIR__ . '/../../../config/set/safe07.php';
-    /**
-     * @var string
-     */
     public const TYPE_DECLARATION = __DIR__ . '/../../../config/set/type-declaration.php';
     /**
      * @var string
