@@ -42,6 +42,9 @@ final class PhpDocFromTypeDeclarationDecorator
         'PHPStan\Type\MixedType' => [
             'ArrayAccess' => ['offsetGet'],
         ],
+        'Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType' => [
+            'ArrayAccess' => ['getIterator'],
+        ],
     ];
 
     public function __construct(
