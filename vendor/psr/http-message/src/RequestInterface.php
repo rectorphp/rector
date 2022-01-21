@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220120\Psr\Http\Message;
+namespace RectorPrefix20220121\Psr\Http\Message;
 
 /**
  * Representation of an outgoing, client-side request.
@@ -21,7 +21,7 @@ namespace RectorPrefix20220120\Psr\Http\Message;
  * be implemented such that they retain the internal state of the current
  * message and return an instance that contains the changed state.
  */
-interface RequestInterface extends \RectorPrefix20220120\Psr\Http\Message\MessageInterface
+interface RequestInterface extends \RectorPrefix20220121\Psr\Http\Message\MessageInterface
 {
     /**
      * Retrieves the message's request target.
@@ -120,5 +120,5 @@ interface RequestInterface extends \RectorPrefix20220120\Psr\Http\Message\Messag
      * @param bool $preserveHost Preserve the original state of the Host header.
      * @return static
      */
-    public function withUri(\RectorPrefix20220120\Psr\Http\Message\UriInterface $uri, $preserveHost = \false);
+    public function withUri(\RectorPrefix20220121\Psr\Http\Message\UriInterface $uri, $preserveHost = \false);
 }

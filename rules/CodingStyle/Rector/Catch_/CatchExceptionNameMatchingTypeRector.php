@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Catch_;
 
-use RectorPrefix20220120\Nette\Utils\Strings;
+use RectorPrefix20220121\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -78,7 +78,7 @@ CODE_SAMPLE
         }
         $type = $node->types[0];
         $typeShortName = $this->nodeNameResolver->getShortName($type);
-        $newVariableName = \RectorPrefix20220120\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
+        $newVariableName = \RectorPrefix20220121\Nette\Utils\Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
             $output = '';
             $output .= isset($matches[1]) ? \strtolower($matches[1]) : '';
             $output .= $matches[2] ?? '';
@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
         $newVariable = new \PhpParser\Node\Expr\Variable($newVariableName);
-        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $n) use($newVariable) : bool {
+        $isFoundInPrevious = (bool) $this->betterNodeFinder->findFirstPreviousOfNode($node, function (\PhpParser\Node $n) use($newVariable) : bool {
             return $this->nodeComparator->areNodesEqual($n, $newVariable);
         });
         if ($isFoundInPrevious) {

@@ -48,7 +48,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220120\\Symfony\\Component\\DependencyInjection\\": ""
+            "RectorPrefix20220121\\Symfony\\Component\\DependencyInjection\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

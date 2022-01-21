@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220120\Psr\Http\Message;
+namespace RectorPrefix20220121\Psr\Http\Message;
 
 /**
  * HTTP messages consist of requests from a client to a server and responses
@@ -173,5 +173,5 @@ interface MessageInterface
      * @return static
      * @throws \InvalidArgumentException When the body is not valid.
      */
-    public function withBody(\RectorPrefix20220120\Psr\Http\Message\StreamInterface $body);
+    public function withBody(\RectorPrefix20220121\Psr\Http\Message\StreamInterface $body);
 }

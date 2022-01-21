@@ -14,7 +14,7 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Exception\InvalidNestedAttributeException;
 use Rector\PhpAttribute\NodeFactory\NamedArgsFactory;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
-use RectorPrefix20220120\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220121\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<DoctrineAnnotationTagValueNode>
  */
