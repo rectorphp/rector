@@ -12,7 +12,9 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -118,10 +120,38 @@ CODE_SAMPLE
             return null;
         }
 
+        if ($this->isNextReturnRemoved($node, $ifAssignVar)) {
+            return null;
+        }
+
         $expression = new Expression($assign);
         $this->mirrorComments($expression, $node);
 
         return $expression;
+    }
+
+    private function isNextReturnRemoved(If_ $if, Expr $expr): bool
+    {
+        if (! $this->nodesToRemoveCollector->isActive()) {
+            return false;
+        }
+
+        $next = $if->getAttribute(AttributeKey::NEXT_NODE);
+
+        if ($next instanceof Return_ && $next->expr instanceof Expr && $this->nodeComparator->areNodesEqual(
+            $next->expr,
+            $expr
+        )) {
+            $nodesToRemove = $this->nodesToRemoveCollector->getNodesToRemove();
+
+            foreach ($nodesToRemove as $nodeToRemove) {
+                if ($this->nodeComparator->areNodesEqual($next, $nodeToRemove)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
