@@ -161,11 +161,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    final public const SAFE_07 = __DIR__ . '/../../../config/set/safe07.php';
-
-    /**
-     * @var string
-     */
     final public const TYPE_DECLARATION = __DIR__ . '/../../../config/set/type-declaration.php';
 
     /**
