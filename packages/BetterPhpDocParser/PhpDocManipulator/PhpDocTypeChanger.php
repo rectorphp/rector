@@ -15,7 +15,9 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -29,7 +31,9 @@ final class PhpDocTypeChanger
         private readonly StaticTypeMapper $staticTypeMapper,
         private readonly TypeComparator $typeComparator,
         private readonly ParamPhpDocNodeFactory $paramPhpDocNodeFactory,
-        private readonly NodeNameResolver $nodeNameResolver
+        private readonly NodeNameResolver $nodeNameResolver,
+        private readonly CommentsMerger $commentsMerger,
+        private readonly PhpDocInfoFactory $phpDocInfoFactory
     ) {
     }
 
@@ -136,13 +140,14 @@ final class PhpDocTypeChanger
 
     public function copyPropertyDocToParam(Property $property, Param $param): void
     {
-        $phpDocInfo = $property->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
         if (! $phpDocInfo instanceof PhpDocInfo) {
             return;
         }
 
         $varTag = $phpDocInfo->getVarTagValueNode();
         if (! $varTag instanceof VarTagValueNode) {
+            $this->processKeepComments($property, $param);
             return;
         }
 
@@ -179,5 +184,30 @@ final class PhpDocTypeChanger
         // add completely new one
         $varTagValueNode = new VarTagValueNode($typeNode, '', '');
         $phpDocInfo->addTagValueNode($varTagValueNode);
+    }
+
+    private function processKeepComments(Property $property, Param $param): void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($param);
+        $varTag = $phpDocInfo->getVarTagValueNode();
+
+        $toBeRemoved = ! $varTag instanceof VarTagValueNode;
+        $this->commentsMerger->keepComments($param, [$property]);
+
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($param);
+        $varTag = $phpDocInfo->getVarTagValueNode();
+        if (! $toBeRemoved) {
+            return;
+        }
+
+        if (! $varTag instanceof VarTagValueNode) {
+            return;
+        }
+
+        if ($varTag->description !== '') {
+            return;
+        }
+
+        $phpDocInfo->removeByType(VarTagValueNode::class);
     }
 }
