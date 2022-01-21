@@ -35,7 +35,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @var array<string, array<string, string[]>>
      */
-    public const ADD_RETURN_TYPE_WILL_CHANGE = ['PHPStan\\Type\\MixedType' => ['ArrayAccess' => ['offsetGet']]];
+    public const ADD_RETURN_TYPE_WILL_CHANGE = ['PHPStan\\Type\\MixedType' => ['ArrayAccess' => ['offsetGet']], 'Rector\\StaticTypeMapper\\ValueObject\\Type\\FullyQualifiedObjectType' => ['ArrayAccess' => ['getIterator']]];
     /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
