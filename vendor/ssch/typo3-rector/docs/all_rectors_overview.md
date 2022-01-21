@@ -1,4 +1,4 @@
-# 231 Rules Overview
+# 232 Rules Overview
 
 ## AddArgumentToSymfonyCommandRector
 
@@ -1272,6 +1272,28 @@ Inject EnvironmentService if needed in subclass of Response
      public function myMethod()
      {
 
+     }
+ }
+```
+
+<br>
+
+## InjectMethodToConstructorInjectionRector
+
+
+
+- class: [`Ssch\TYPO3Rector\Rector\General\InjectMethodToConstructorInjectionRector`](../src/Rector/General/InjectMethodToConstructorInjectionRector.php)
+
+```diff
+ namespace App\Service;
+ use \TYPO3\CMS\Core\Cache\CacheManager;
+ class Service
+ {
+     private CacheManager $cacheManager;
+-    public function injectCacheManager(CacheManager $cacheManager): void
++    public function __construct(CacheManager $cacheManager)
+     {
+         $this->cacheManager = $cacheManager;
      }
  }
 ```

@@ -137,9 +137,7 @@ CODE_SAMPLE
         }
         $arguments = [new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::GLOBALS), new \PhpParser\Node\Scalar\String_('TYPO3_REQUEST'))];
         // Message
-        if (isset($node->args[0])) {
-            $arguments[] = $node->args[0]->value;
-        }
+        $arguments[] = isset($node->args[0]) ? $node->args[0]->value : new \PhpParser\Node\Scalar\String_('');
         return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('response'), $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Controller\\ErrorController')]), self::MAP_METHODS[$methodCall], $arguments)));
     }
     private function throwException() : \PhpParser\Node

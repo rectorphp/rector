@@ -3236,6 +3236,7 @@ return array(
     'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v9\\ApacheSolrDocumentToSolariumDocumentRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Extensions/solr/v9/ApacheSolrDocumentToSolariumDocumentRector.php',
     'Ssch\\TYPO3Rector\\Rector\\General\\ConvertImplicitVariablesToExplicitGlobalsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/ConvertImplicitVariablesToExplicitGlobalsRector.php',
     'Ssch\\TYPO3Rector\\Rector\\General\\ExtEmConfRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/ExtEmConfRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\General\\InjectMethodToConstructorInjectionRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/InjectMethodToConstructorInjectionRector.php',
     'Ssch\\TYPO3Rector\\Rector\\General\\MethodGetInstanceToMakeInstanceCallRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/General/MethodGetInstanceToMakeInstanceCallRector.php',
     'Ssch\\TYPO3Rector\\Rector\\Migrations\\RenameClassMapAliasRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/Migrations/RenameClassMapAliasRector.php',
     'Ssch\\TYPO3Rector\\Rector\\PostRector\\FullQualifiedNamePostRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/PostRector/FullQualifiedNamePostRector.php',

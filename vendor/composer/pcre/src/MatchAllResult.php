@@ -21,7 +21,7 @@ final class MatchAllResult
     public $matches;
     /**
      * @readonly
-     * @var int
+     * @var 0|positive-int
      */
     public $count;
     /**
@@ -30,7 +30,7 @@ final class MatchAllResult
      */
     public $matched;
     /**
-     * @param int $count
+     * @param 0|positive-int $count
      * @param array<array<string|null>> $matches
      */
     public function __construct($count, array $matches)

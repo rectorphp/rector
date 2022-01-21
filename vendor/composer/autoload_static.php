@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit070361a864be5532525e6d5fbe0c1808
+class ComposerStaticInit1a5adb26699162f4a3ae2c807a71040f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3631,6 +3631,7 @@ class ComposerStaticInit070361a864be5532525e6d5fbe0c1808
         'Ssch\\TYPO3Rector\\Rector\\Extensions\\solr\\v9\\ApacheSolrDocumentToSolariumDocumentRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Extensions/solr/v9/ApacheSolrDocumentToSolariumDocumentRector.php',
         'Ssch\\TYPO3Rector\\Rector\\General\\ConvertImplicitVariablesToExplicitGlobalsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/ConvertImplicitVariablesToExplicitGlobalsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\General\\ExtEmConfRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/ExtEmConfRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\General\\InjectMethodToConstructorInjectionRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/InjectMethodToConstructorInjectionRector.php',
         'Ssch\\TYPO3Rector\\Rector\\General\\MethodGetInstanceToMakeInstanceCallRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/General/MethodGetInstanceToMakeInstanceCallRector.php',
         'Ssch\\TYPO3Rector\\Rector\\Migrations\\RenameClassMapAliasRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/Migrations/RenameClassMapAliasRector.php',
         'Ssch\\TYPO3Rector\\Rector\\PostRector\\FullQualifiedNamePostRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/PostRector/FullQualifiedNamePostRector.php',
@@ -3871,9 +3872,9 @@ class ComposerStaticInit070361a864be5532525e6d5fbe0c1808
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit070361a864be5532525e6d5fbe0c1808::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit070361a864be5532525e6d5fbe0c1808::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit070361a864be5532525e6d5fbe0c1808::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1a5adb26699162f4a3ae2c807a71040f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1a5adb26699162f4a3ae2c807a71040f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1a5adb26699162f4a3ae2c807a71040f::$classMap;
 
         }, null, ClassLoader::class);
     }

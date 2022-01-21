@@ -69,28 +69,28 @@
         },
         {
             "name": "composer\/pcre",
-            "version": "1.0.0",
-            "version_normalized": "1.0.0.0",
+            "version": "1.0.1",
+            "version_normalized": "1.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/composer\/pcre.git",
-                "reference": "3d322d715c43a1ac36c7fe215fa59336265500f2"
+                "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/3d322d715c43a1ac36c7fe215fa59336265500f2",
-                "reference": "3d322d715c43a1ac36c7fe215fa59336265500f2",
+                "url": "https:\/\/api.github.com\/repos\/composer\/pcre\/zipball\/67a32d7d6f9f560b726ab25a061b38ff3a80c560",
+                "reference": "67a32d7d6f9f560b726ab25a061b38ff3a80c560",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.3.2 || ^7.0 || ^8.0"
             },
             "require-dev": {
-                "phpstan\/phpstan": "^1",
+                "phpstan\/phpstan": "^1.3",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "symfony\/phpunit-bridge": "^4.2 || ^5"
             },
-            "time": "2021-12-06T15:17:27+00:00",
+            "time": "2022-01-21T20:24:37+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -123,7 +123,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/composer\/pcre\/issues",
-                "source": "https:\/\/github.com\/composer\/pcre\/tree\/1.0.0"
+                "source": "https:\/\/github.com\/composer\/pcre\/tree\/1.0.1"
             },
             "funding": [
                 {
@@ -2729,12 +2729,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "d4a362b75299f195f976d0676a592bfaf0a7f8f3"
+                "reference": "b5431a74f80d2812d85c51026650f4b670fa8012"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/d4a362b75299f195f976d0676a592bfaf0a7f8f3",
-                "reference": "d4a362b75299f195f976d0676a592bfaf0a7f8f3",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/b5431a74f80d2812d85c51026650f4b670fa8012",
+                "reference": "b5431a74f80d2812d85c51026650f4b670fa8012",
                 "shasum": ""
             },
             "require": {
@@ -2765,7 +2765,7 @@
                 "symplify\/vendor-patches": "^10.0",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-01-13T12:42:34+00:00",
+            "time": "2022-01-21T21:48:24+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2799,7 +2799,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.37"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
             },
             "funding": [
                 {

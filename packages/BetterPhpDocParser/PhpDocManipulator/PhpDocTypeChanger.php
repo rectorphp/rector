@@ -14,7 +14,9 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -43,12 +45,24 @@ final class PhpDocTypeChanger
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
+     */
+    private $commentsMerger;
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory $paramPhpDocNodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\Comment\CommentsMerger $commentsMerger, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->commentsMerger = $commentsMerger;
+        $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
     public function changeVarType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PHPStan\Type\Type $newType) : void
     {
@@ -126,12 +140,13 @@ final class PhpDocTypeChanger
     }
     public function copyPropertyDocToParam(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
     {
-        $phpDocInfo = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
         if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
             return;
         }
         $varTag = $phpDocInfo->getVarTagValueNode();
         if (!$varTag instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            $this->processKeepComments($property, $param);
             return;
         }
         if ($varTag->description !== '') {
@@ -159,5 +174,24 @@ final class PhpDocTypeChanger
         // add completely new one
         $varTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode($typeNode, '', '');
         $phpDocInfo->addTagValueNode($varTagValueNode);
+    }
+    private function processKeepComments(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Param $param) : void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($param);
+        $varTag = $phpDocInfo->getVarTagValueNode();
+        $toBeRemoved = !$varTag instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+        $this->commentsMerger->keepComments($param, [$property]);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($param);
+        $varTag = $phpDocInfo->getVarTagValueNode();
+        if (!$toBeRemoved) {
+            return;
+        }
+        if (!$varTag instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            return;
+        }
+        if ($varTag->description !== '') {
+            return;
+        }
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
 }

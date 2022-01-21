@@ -13,7 +13,7 @@ namespace RectorPrefix20220121\Composer\Pcre;
 class Regex
 {
     /**
-     * @param string $pattern
+     * @param non-empty-string $pattern
      * @param string $subject
      * @param int    $offset
      * @return bool
@@ -23,7 +23,7 @@ class Regex
         return (bool) \RectorPrefix20220121\Composer\Pcre\Preg::match($pattern, $subject, $matches, 0, $offset);
     }
     /**
-     * @param string $pattern
+     * @param non-empty-string $pattern
      * @param string $subject
      * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int    $offset
@@ -40,7 +40,7 @@ class Regex
     /**
      * Runs preg_match with PREG_OFFSET_CAPTURE
      *
-     * @param string $pattern
+     * @param non-empty-string $pattern
      * @param string $subject
      * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int    $offset
@@ -52,7 +52,7 @@ class Regex
         return new \RectorPrefix20220121\Composer\Pcre\MatchWithOffsetsResult($count, $matches);
     }
     /**
-     * @param string $pattern
+     * @param non-empty-string $pattern
      * @param string $subject
      * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int    $offset
@@ -72,7 +72,7 @@ class Regex
     /**
      * Runs preg_match_all with PREG_OFFSET_CAPTURE
      *
-     * @param string $pattern
+     * @param non-empty-string $pattern
      * @param string $subject
      * @param int    $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int    $offset

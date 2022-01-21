@@ -14,12 +14,12 @@ class Preg
 {
     const ARRAY_MSG = '$subject as an array is not supported. You can use \'foreach\' instead.';
     /**
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<string|null> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int      $offset
-     * @return int
+     * @return 0|1
      */
     public static function match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
     {
@@ -33,14 +33,14 @@ class Preg
         return $result;
     }
     /**
-     * Runs preg_match_all with PREG_OFFSET_CAPTURE
+     * Runs preg_match with PREG_OFFSET_CAPTURE
      *
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<int|string, array{string|null, int}> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int      $offset
-     * @return int
+     * @return 0|1
      *
      * @phpstan-param array<int|string, array{string|null, int<-1, max>}> $matches
      */
@@ -53,12 +53,12 @@ class Preg
         return $result;
     }
     /**
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<int|string, list<string|null>> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int      $offset
-     * @return int
+     * @return 0|positive-int
      */
     public static function matchAll($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
     {
@@ -77,12 +77,12 @@ class Preg
     /**
      * Runs preg_match_all with PREG_OFFSET_CAPTURE
      *
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<int|string, list<array{string|null, int}>> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
      * @param int      $offset
-     * @return int
+     * @return 0|positive-int
      *
      * @phpstan-param array<int|string, list<array{string|null, int<-1, max>}>> $matches
      */
@@ -198,7 +198,6 @@ class Preg
         if ($result === \false) {
             throw \RectorPrefix20220121\Composer\Pcre\PcreException::fromFunction('preg_split', $pattern);
         }
-        // @phpstan-ignore-next-line See https://github.com/phpstan/phpstan/issues/6155
         return $result;
     }
     /**
@@ -217,7 +216,7 @@ class Preg
         return $result;
     }
     /**
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<string|null> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
@@ -229,7 +228,7 @@ class Preg
         return (bool) static::match($pattern, $subject, $matches, $flags, $offset);
     }
     /**
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<int|string, list<string|null>> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
@@ -241,9 +240,9 @@ class Preg
         return (bool) static::matchAll($pattern, $subject, $matches, $flags, $offset);
     }
     /**
-     * Runs preg_match_all with PREG_OFFSET_CAPTURE
+     * Runs preg_match with PREG_OFFSET_CAPTURE
      *
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<int|string, array{string|null, int}> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
@@ -259,7 +258,7 @@ class Preg
     /**
      * Runs preg_match_all with PREG_OFFSET_CAPTURE
      *
-     * @param string   $pattern
+     * @param non-empty-string   $pattern
      * @param string   $subject
      * @param array<int|string, list<array{string|null, int}>> $matches Set by method
      * @param int      $flags PREG_UNMATCHED_AS_NULL, only available on PHP 7.2+
