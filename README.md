@@ -143,7 +143,7 @@ Would you like to apply Rector on your code base but don't have time for the str
 
 ## How to Contribute
 
-See [the contribution guide](/CONTRIBUTING.md).
+See [the contribution guide](/CONTRIBUTING.md) or go to development repository [rector/rector-src](https://github.com/rectorphp/rector-src).
 
 <br>
 
