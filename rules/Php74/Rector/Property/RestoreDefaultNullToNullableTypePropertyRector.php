@@ -90,6 +90,10 @@ CODE_SAMPLE
             return true;
         }
 
+        if ($property->isReadonly()) {
+            return true;
+        }
+
         // is variable assigned in constructor
         $propertyName = $this->getName($property);
 
