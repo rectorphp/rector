@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\Removing\NodeManipulator\ComplexNodeRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,9 +22,15 @@ final class RemoveUnusedConstructorParamRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
+     */
+    private $complexNodeRemover;
+    public function __construct(\Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\Removing\NodeManipulator\ComplexNodeRemover $complexNodeRemover)
     {
         $this->paramAnalyzer = $paramAnalyzer;
+        $this->complexNodeRemover = $complexNodeRemover;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -79,12 +86,21 @@ CODE_SAMPLE
         if ($node->isAbstract()) {
             return null;
         }
-        foreach ($node->params as $param) {
-            if ($this->paramAnalyzer->isParamUsedInClassMethod($node, $param)) {
+        return $this->processRemoveParams($node);
+    }
+    private function processRemoveParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
+    {
+        $paramKeysToBeRemoved = [];
+        foreach ($classMethod->params as $key => $param) {
+            if ($this->paramAnalyzer->isParamUsedInClassMethod($classMethod, $param)) {
                 continue;
             }
-            $this->nodeRemover->removeParam($node, $param);
+            $paramKeysToBeRemoved[] = $key;
         }
-        return null;
+        $removedParamKeys = $this->complexNodeRemover->processRemoveParamWithKeys($classMethod->params, $paramKeysToBeRemoved);
+        if ($removedParamKeys === []) {
+            return null;
+        }
+        return $classMethod;
     }
 }
