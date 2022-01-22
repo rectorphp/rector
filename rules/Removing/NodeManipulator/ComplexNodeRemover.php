@@ -70,6 +70,39 @@ final class ComplexNodeRemover
     }
 
     /**
+     * @param Param[] $params
+     * @param int[] $paramKeysToBeRemoved
+     * @return int[]
+     */
+    public function processRemoveParamWithKeys(array $params, array $paramKeysToBeRemoved): array
+    {
+        $totalKeys = count($params) - 1;
+        $removedParamKeys = [];
+
+        foreach ($paramKeysToBeRemoved as $paramKeyToBeRemoved) {
+            $startNextKey = $paramKeyToBeRemoved + 1;
+            for ($nextKey = $startNextKey; $nextKey <= $totalKeys; ++$nextKey) {
+                if (! isset($params[$nextKey])) {
+                    // no next param, break the inner loop, remove the param
+                    break;
+                }
+
+                if (in_array($nextKey, $paramKeysToBeRemoved, true)) {
+                    // keep searching next key not in $paramKeysToBeRemoved
+                    continue;
+                }
+
+                return [];
+            }
+
+            $this->nodeRemover->removeNode($params[$paramKeyToBeRemoved]);
+            $removedParamKeys[] = $paramKeyToBeRemoved;
+        }
+
+        return $removedParamKeys;
+    }
+
+    /**
      * @param Assign[] $assigns
      */
     private function processRemovePropertyAssigns(array $assigns): void
@@ -214,33 +247,6 @@ final class ComplexNodeRemover
         }
 
         return false;
-    }
-
-    /**
-     * @param Param[] $params
-     * @param int[] $paramKeysToBeRemoved
-     */
-    private function processRemoveParamWithKeys(array $params, array $paramKeysToBeRemoved): void
-    {
-        $totalKeys = count($params) - 1;
-        foreach ($paramKeysToBeRemoved as $paramKeyToBeRemoved) {
-            $startNextKey = $paramKeyToBeRemoved + 1;
-            for ($nextKey = $startNextKey; $nextKey <= $totalKeys; ++$nextKey) {
-                if (! isset($params[$nextKey])) {
-                    // no next param, break the inner loop, remove the param
-                    break;
-                }
-
-                if (in_array($nextKey, $paramKeysToBeRemoved, true)) {
-                    // keep searching next key not in $paramKeysToBeRemoved
-                    continue;
-                }
-
-                return;
-            }
-
-            $this->nodeRemover->removeNode($params[$paramKeyToBeRemoved]);
-        }
     }
 
     private function isExpressionVariableNotAssign(Node $node): bool
