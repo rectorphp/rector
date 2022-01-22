@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220121;
+namespace RectorPrefix20220122;
 
 use Rector\Core\Configuration\Option;
 use Rector\Nette\NodeAnalyzer\BinaryOpAnalyzer;

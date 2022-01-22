@@ -9,10 +9,10 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
-use RectorPrefix20220121\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220122\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220121\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220122\Symplify\SmartFileSystem\SmartFileSystem;
 final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface
 {
     /**
@@ -27,7 +27,7 @@ final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Reso
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20220121\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20220121\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(\RectorPrefix20220122\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \RectorPrefix20220122\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
     {
         $this->parameterProvider = $parameterProvider;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;

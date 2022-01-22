@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220121\Symfony\Component\Finder;
+namespace RectorPrefix20220122\Symfony\Component\Finder;
 
 /**
  * Extends \SplFileInfo to support relative paths.

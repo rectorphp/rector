@@ -12,7 +12,7 @@ use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220121\Webmozart\Assert\Assert;
+use RectorPrefix20220122\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveParentRector\RemoveParentRectorTest
  */
@@ -84,8 +84,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $parentTypesToRemove = $configuration[self::PARENT_TYPES_TO_REMOVE] ?? $configuration;
-        \RectorPrefix20220121\Webmozart\Assert\Assert::isArray($parentTypesToRemove);
-        \RectorPrefix20220121\Webmozart\Assert\Assert::allString($parentTypesToRemove);
+        \RectorPrefix20220122\Webmozart\Assert\Assert::isArray($parentTypesToRemove);
+        \RectorPrefix20220122\Webmozart\Assert\Assert::allString($parentTypesToRemove);
         $this->parentClassesToRemove = $parentTypesToRemove;
     }
 }

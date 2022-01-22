@@ -72,6 +72,9 @@ CODE_SAMPLE
         if ($onlyProperty->default !== null) {
             return \true;
         }
+        if ($property->isReadonly()) {
+            return \true;
+        }
         // is variable assigned in constructor
         $propertyName = $this->getName($property);
         return $this->isPropertyInitiatedInConstuctor($property, $propertyName);

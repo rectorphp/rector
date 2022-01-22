@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220121\Symfony\Component\DependencyInjection\ParameterBag;
+namespace RectorPrefix20220122\Symfony\Component\DependencyInjection\ParameterBag;
 
-use RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException;
-use RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException;
+use RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 /**
  * Holds parameters.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class ParameterBag implements \RectorPrefix20220121\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
+class ParameterBag implements \RectorPrefix20220122\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
 {
     protected $parameters = [];
     protected $resolved = \false;
@@ -56,7 +56,7 @@ class ParameterBag implements \RectorPrefix20220121\Symfony\Component\Dependency
     {
         if (!\array_key_exists($name, $this->parameters)) {
             if (!$name) {
-                throw new \RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name);
+                throw new \RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name);
             }
             $alternatives = [];
             foreach ($this->parameters as $key => $parameterValue) {
@@ -79,7 +79,7 @@ class ParameterBag implements \RectorPrefix20220121\Symfony\Component\Dependency
                     $key = \substr($key, 0, -1 * (1 + \array_pop($namePartsLength)));
                 }
             }
-            throw new \RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name, null, null, null, $alternatives, $nonNestedAlternative);
+            throw new \RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException($name, null, null, null, $alternatives, $nonNestedAlternative);
         }
         return $this->parameters[$name];
     }
@@ -117,7 +117,7 @@ class ParameterBag implements \RectorPrefix20220121\Symfony\Component\Dependency
             try {
                 $value = $this->resolveValue($value);
                 $parameters[$key] = $this->unescapeValue($value);
-            } catch (\RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
+            } catch (\RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
                 $e->setSourceKey($key);
                 throw $e;
             }
@@ -170,7 +170,7 @@ class ParameterBag implements \RectorPrefix20220121\Symfony\Component\Dependency
         if (\preg_match('/^%([^%\\s]+)%$/', $value, $match)) {
             $key = $match[1];
             if (isset($resolving[$key])) {
-                throw new \RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($resolving));
+                throw new \RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($resolving));
             }
             $resolving[$key] = \true;
             return $this->resolved ? $this->get($key) : $this->resolveValue($this->get($key), $resolving);
@@ -182,11 +182,11 @@ class ParameterBag implements \RectorPrefix20220121\Symfony\Component\Dependency
             }
             $key = $match[1];
             if (isset($resolving[$key])) {
-                throw new \RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($resolving));
+                throw new \RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException(\array_keys($resolving));
             }
             $resolved = $this->get($key);
             if (!\is_string($resolved) && !\is_numeric($resolved)) {
-                throw new \RectorPrefix20220121\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('A string value must be composed of strings and/or numbers, but found parameter "%s" of type "%s" inside string value "%s".', $key, \get_debug_type($resolved), $value));
+                throw new \RectorPrefix20220122\Symfony\Component\DependencyInjection\Exception\RuntimeException(\sprintf('A string value must be composed of strings and/or numbers, but found parameter "%s" of type "%s" inside string value "%s".', $key, \get_debug_type($resolved), $value));
             }
             $resolved = (string) $resolved;
             $resolving[$key] = \true;

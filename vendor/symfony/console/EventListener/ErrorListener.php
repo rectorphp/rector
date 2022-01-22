@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220121\Symfony\Component\Console\EventListener;
+namespace RectorPrefix20220122\Symfony\Component\Console\EventListener;
 
-use RectorPrefix20220121\Psr\Log\LoggerInterface;
-use RectorPrefix20220121\Symfony\Component\Console\ConsoleEvents;
-use RectorPrefix20220121\Symfony\Component\Console\Event\ConsoleErrorEvent;
-use RectorPrefix20220121\Symfony\Component\Console\Event\ConsoleEvent;
-use RectorPrefix20220121\Symfony\Component\Console\Event\ConsoleTerminateEvent;
-use RectorPrefix20220121\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix20220122\Psr\Log\LoggerInterface;
+use RectorPrefix20220122\Symfony\Component\Console\ConsoleEvents;
+use RectorPrefix20220122\Symfony\Component\Console\Event\ConsoleErrorEvent;
+use RectorPrefix20220122\Symfony\Component\Console\Event\ConsoleEvent;
+use RectorPrefix20220122\Symfony\Component\Console\Event\ConsoleTerminateEvent;
+use RectorPrefix20220122\Symfony\Component\EventDispatcher\EventSubscriberInterface;
 /**
  * @author James Halsall <james.t.halsall@googlemail.com>
  * @author Robin Chalas <robin.chalas@gmail.com>
  */
-class ErrorListener implements \RectorPrefix20220121\Symfony\Component\EventDispatcher\EventSubscriberInterface
+class ErrorListener implements \RectorPrefix20220122\Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     private $logger;
-    public function __construct(\RectorPrefix20220121\Psr\Log\LoggerInterface $logger = null)
+    public function __construct(\RectorPrefix20220122\Psr\Log\LoggerInterface $logger = null)
     {
         $this->logger = $logger;
     }
-    public function onConsoleError(\RectorPrefix20220121\Symfony\Component\Console\Event\ConsoleErrorEvent $event)
+    public function onConsoleError(\RectorPrefix20220122\Symfony\Component\Console\Event\ConsoleErrorEvent $event)
     {
         if (null === $this->logger) {
             return;
@@ -39,7 +39,7 @@ class ErrorListener implements \RectorPrefix20220121\Symfony\Component\EventDisp
         }
         $this->logger->critical('Error thrown while running command "{command}". Message: "{message}"', ['exception' => $error, 'command' => $inputString, 'message' => $error->getMessage()]);
     }
-    public function onConsoleTerminate(\RectorPrefix20220121\Symfony\Component\Console\Event\ConsoleTerminateEvent $event)
+    public function onConsoleTerminate(\RectorPrefix20220122\Symfony\Component\Console\Event\ConsoleTerminateEvent $event)
     {
         if (null === $this->logger) {
             return;
@@ -56,9 +56,9 @@ class ErrorListener implements \RectorPrefix20220121\Symfony\Component\EventDisp
     }
     public static function getSubscribedEvents() : array
     {
-        return [\RectorPrefix20220121\Symfony\Component\Console\ConsoleEvents::ERROR => ['onConsoleError', -128], \RectorPrefix20220121\Symfony\Component\Console\ConsoleEvents::TERMINATE => ['onConsoleTerminate', -128]];
+        return [\RectorPrefix20220122\Symfony\Component\Console\ConsoleEvents::ERROR => ['onConsoleError', -128], \RectorPrefix20220122\Symfony\Component\Console\ConsoleEvents::TERMINATE => ['onConsoleTerminate', -128]];
     }
-    private static function getInputString(\RectorPrefix20220121\Symfony\Component\Console\Event\ConsoleEvent $event) : ?string
+    private static function getInputString(\RectorPrefix20220122\Symfony\Component\Console\Event\ConsoleEvent $event) : ?string
     {
         $commandName = $event->getCommand() ? $event->getCommand()->getName() : null;
         $input = $event->getInput();

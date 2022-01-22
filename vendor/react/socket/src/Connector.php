@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix20220121\React\Socket;
+namespace RectorPrefix20220122\React\Socket;
 
-use RectorPrefix20220121\React\Dns\Config\Config as DnsConfig;
-use RectorPrefix20220121\React\Dns\Resolver\Factory as DnsFactory;
-use RectorPrefix20220121\React\Dns\Resolver\ResolverInterface;
-use RectorPrefix20220121\React\EventLoop\LoopInterface;
+use RectorPrefix20220122\React\Dns\Config\Config as DnsConfig;
+use RectorPrefix20220122\React\Dns\Resolver\Factory as DnsFactory;
+use RectorPrefix20220122\React\Dns\Resolver\ResolverInterface;
+use RectorPrefix20220122\React\EventLoop\LoopInterface;
 /**
  * The `Connector` class is the main class in this package that implements the
  * `ConnectorInterface` and allows you to create streaming connections.
@@ -21,7 +21,7 @@ use RectorPrefix20220121\React\EventLoop\LoopInterface;
  *
  * @see ConnectorInterface for the base interface
  */
-final class Connector implements \RectorPrefix20220121\React\Socket\ConnectorInterface
+final class Connector implements \RectorPrefix20220122\React\Socket\ConnectorInterface
 {
     private $connectors = array();
     /**
@@ -54,12 +54,12 @@ final class Connector implements \RectorPrefix20220121\React\Socket\ConnectorInt
     public function __construct($context = array(), $loop = null)
     {
         // swap arguments for legacy constructor signature
-        if (($context instanceof \RectorPrefix20220121\React\EventLoop\LoopInterface || $context === null) && (\func_num_args() <= 1 || \is_array($loop))) {
+        if (($context instanceof \RectorPrefix20220122\React\EventLoop\LoopInterface || $context === null) && (\func_num_args() <= 1 || \is_array($loop))) {
             $swap = $loop === null ? array() : $loop;
             $loop = $context;
             $context = $swap;
         }
-        if (!\is_array($context) || $loop !== null && !$loop instanceof \RectorPrefix20220121\React\EventLoop\LoopInterface) {
+        if (!\is_array($context) || $loop !== null && !$loop instanceof \RectorPrefix20220122\React\EventLoop\LoopInterface) {
             throw new \InvalidArgumentException('Expected "array $context" and "?LoopInterface $loop" arguments');
         }
         // apply default options if not explicitly given
@@ -67,53 +67,53 @@ final class Connector implements \RectorPrefix20220121\React\Socket\ConnectorInt
         if ($context['timeout'] === \true) {
             $context['timeout'] = (float) \ini_get("default_socket_timeout");
         }
-        if ($context['tcp'] instanceof \RectorPrefix20220121\React\Socket\ConnectorInterface) {
+        if ($context['tcp'] instanceof \RectorPrefix20220122\React\Socket\ConnectorInterface) {
             $tcp = $context['tcp'];
         } else {
-            $tcp = new \RectorPrefix20220121\React\Socket\TcpConnector($loop, \is_array($context['tcp']) ? $context['tcp'] : array());
+            $tcp = new \RectorPrefix20220122\React\Socket\TcpConnector($loop, \is_array($context['tcp']) ? $context['tcp'] : array());
         }
         if ($context['dns'] !== \false) {
-            if ($context['dns'] instanceof \RectorPrefix20220121\React\Dns\Resolver\ResolverInterface) {
+            if ($context['dns'] instanceof \RectorPrefix20220122\React\Dns\Resolver\ResolverInterface) {
                 $resolver = $context['dns'];
             } else {
                 if ($context['dns'] !== \true) {
                     $config = $context['dns'];
                 } else {
                     // try to load nameservers from system config or default to Google's public DNS
-                    $config = \RectorPrefix20220121\React\Dns\Config\Config::loadSystemConfigBlocking();
+                    $config = \RectorPrefix20220122\React\Dns\Config\Config::loadSystemConfigBlocking();
                     if (!$config->nameservers) {
                         $config->nameservers[] = '8.8.8.8';
                         // @codeCoverageIgnore
                     }
                 }
-                $factory = new \RectorPrefix20220121\React\Dns\Resolver\Factory();
+                $factory = new \RectorPrefix20220122\React\Dns\Resolver\Factory();
                 $resolver = $factory->createCached($config, $loop);
             }
             if ($context['happy_eyeballs'] === \true) {
-                $tcp = new \RectorPrefix20220121\React\Socket\HappyEyeBallsConnector($loop, $tcp, $resolver);
+                $tcp = new \RectorPrefix20220122\React\Socket\HappyEyeBallsConnector($loop, $tcp, $resolver);
             } else {
-                $tcp = new \RectorPrefix20220121\React\Socket\DnsConnector($tcp, $resolver);
+                $tcp = new \RectorPrefix20220122\React\Socket\DnsConnector($tcp, $resolver);
             }
         }
         if ($context['tcp'] !== \false) {
             $context['tcp'] = $tcp;
             if ($context['timeout'] !== \false) {
-                $context['tcp'] = new \RectorPrefix20220121\React\Socket\TimeoutConnector($context['tcp'], $context['timeout'], $loop);
+                $context['tcp'] = new \RectorPrefix20220122\React\Socket\TimeoutConnector($context['tcp'], $context['timeout'], $loop);
             }
             $this->connectors['tcp'] = $context['tcp'];
         }
         if ($context['tls'] !== \false) {
-            if (!$context['tls'] instanceof \RectorPrefix20220121\React\Socket\ConnectorInterface) {
-                $context['tls'] = new \RectorPrefix20220121\React\Socket\SecureConnector($tcp, $loop, \is_array($context['tls']) ? $context['tls'] : array());
+            if (!$context['tls'] instanceof \RectorPrefix20220122\React\Socket\ConnectorInterface) {
+                $context['tls'] = new \RectorPrefix20220122\React\Socket\SecureConnector($tcp, $loop, \is_array($context['tls']) ? $context['tls'] : array());
             }
             if ($context['timeout'] !== \false) {
-                $context['tls'] = new \RectorPrefix20220121\React\Socket\TimeoutConnector($context['tls'], $context['timeout'], $loop);
+                $context['tls'] = new \RectorPrefix20220122\React\Socket\TimeoutConnector($context['tls'], $context['timeout'], $loop);
             }
             $this->connectors['tls'] = $context['tls'];
         }
         if ($context['unix'] !== \false) {
-            if (!$context['unix'] instanceof \RectorPrefix20220121\React\Socket\ConnectorInterface) {
-                $context['unix'] = new \RectorPrefix20220121\React\Socket\UnixConnector($loop);
+            if (!$context['unix'] instanceof \RectorPrefix20220122\React\Socket\ConnectorInterface) {
+                $context['unix'] = new \RectorPrefix20220122\React\Socket\UnixConnector($loop);
             }
             $this->connectors['unix'] = $context['unix'];
         }
@@ -125,7 +125,7 @@ final class Connector implements \RectorPrefix20220121\React\Socket\ConnectorInt
             $scheme = (string) \substr($uri, 0, \strpos($uri, '://'));
         }
         if (!isset($this->connectors[$scheme])) {
-            return \RectorPrefix20220121\React\Promise\reject(new \RuntimeException('No connector available for URI scheme "' . $scheme . '" (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
+            return \RectorPrefix20220122\React\Promise\reject(new \RuntimeException('No connector available for URI scheme "' . $scheme . '" (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22));
         }
         return $this->connectors[$scheme]->connect($uri);
     }
