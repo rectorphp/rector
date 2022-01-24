@@ -146,7 +146,7 @@ class Paginator
      * Sets the total number of items.
      * @return static
      */
-    public function setItemCount(int $itemCount = null)
+    public function setItemCount(?int $itemCount = null)
     {
         $this->itemCount = $itemCount === null ? null : \max(0, $itemCount);
         return $this;

@@ -69,7 +69,7 @@ class Strings
      * Returns a part of UTF-8 string specified by starting position and length. If start is negative,
      * the returned string will start at the start'th character from the end of string.
      */
-    public static function substring(string $s, int $start, int $length = null) : string
+    public static function substring(string $s, int $start, ?int $length = null) : string
     {
         if (\function_exists('mb_substr')) {
             return \mb_substr($s, $start, $length, 'UTF-8');
@@ -175,7 +175,7 @@ class Strings
      * Modifies the UTF-8 string to the form used in the URL, ie removes diacritics and replaces all characters
      * except letters of the English alphabet and numbers with a hyphens.
      */
-    public static function webalize(string $s, string $charlist = null, bool $lower = \true) : string
+    public static function webalize(string $s, ?string $charlist = null, bool $lower = \true) : string
     {
         $s = self::toAscii($s);
         if ($lower) {
@@ -254,7 +254,7 @@ class Strings
      * if it is negative, the corresponding number of characters from the end of the strings is compared,
      * otherwise the appropriate number of characters from the beginning is compared.
      */
-    public static function compare(string $left, string $right, int $length = null) : bool
+    public static function compare(string $left, string $right, ?int $length = null) : bool
     {
         if (\class_exists('Normalizer', \false)) {
             $left = \Normalizer::normalize($left, \Normalizer::FORM_D);

@@ -9,7 +9,7 @@ namespace RectorPrefix20220124\Nette\Utils;
 
 use RectorPrefix20220124\Nette;
 /**
- * Basic manipulation with images. Supported types are JPEG, PNG, GIF, WEBP and BMP.
+ * Basic manipulation with images. Supported types are JPEG, PNG, GIF, WEBP, AVIF and BMP.
  *
  * <code>
  * $image = Image::fromFile('nette.jpg');
@@ -104,9 +104,9 @@ class Image
     /** {@link resize()} fills given area exactly */
     public const EXACT = 0b1000;
     /** image types */
-    public const JPEG = \IMAGETYPE_JPEG, PNG = \IMAGETYPE_PNG, GIF = \IMAGETYPE_GIF, WEBP = \IMAGETYPE_WEBP, BMP = \IMAGETYPE_BMP;
+    public const JPEG = \IMAGETYPE_JPEG, PNG = \IMAGETYPE_PNG, GIF = \IMAGETYPE_GIF, WEBP = \IMAGETYPE_WEBP, AVIF = 19, BMP = \IMAGETYPE_BMP;
     public const EMPTY_GIF = "GIF89a\1\0\1\0€\0\0\0\0\0\0\0\0!ù\4\1\0\0\0\0,\0\0\0\0\1\0\1\0\0\2\2D\1\0;";
-    private const FORMATS = [self::JPEG => 'jpeg', self::PNG => 'png', self::GIF => 'gif', self::WEBP => 'webp', self::BMP => 'bmp'];
+    private const FORMATS = [self::JPEG => 'jpeg', self::PNG => 'png', self::GIF => 'gif', self::WEBP => 'webp', self::AVIF => 'avif', self::BMP => 'bmp'];
     /** @var resource|\GdImage */
     private $image;
     /**
@@ -122,7 +122,7 @@ class Image
      * @throws UnknownImageFileException if file not found or file type is not known
      * @return static
      */
-    public static function fromFile(string $file, int &$type = null)
+    public static function fromFile(string $file, ?int &$type = null)
     {
         if (!\extension_loaded('gd')) {
             throw new \RectorPrefix20220124\Nette\NotSupportedException('PHP extension GD is not loaded.');
@@ -131,10 +131,7 @@ class Image
         if (!$type) {
             throw new \RectorPrefix20220124\Nette\Utils\UnknownImageFileException(\is_file($file) ? "Unknown type of file '{$file}'." : "File '{$file}' not found.");
         }
-        $method = 'imagecreatefrom' . self::FORMATS[$type];
-        return new static(\RectorPrefix20220124\Nette\Utils\Callback::invokeSafe($method, [$file], function (string $message) : void {
-            throw new \RectorPrefix20220124\Nette\Utils\ImageException($message);
-        }));
+        return self::invokeSafe('imagecreatefrom' . self::FORMATS[$type], $file, "Unable to open file '{$file}'.", __METHOD__);
     }
     /**
      * Reads an image from a string and returns its type in $type.
@@ -142,7 +139,7 @@ class Image
      * @throws Nette\NotSupportedException if gd extension is not loaded
      * @throws ImageException
      */
-    public static function fromString(string $s, int &$type = null)
+    public static function fromString(string $s, ?int &$type = null)
     {
         if (!\extension_loaded('gd')) {
             throw new \RectorPrefix20220124\Nette\NotSupportedException('PHP extension GD is not loaded.');
@@ -151,16 +148,27 @@ class Image
         if (!$type) {
             throw new \RectorPrefix20220124\Nette\Utils\UnknownImageFileException('Unknown type of image.');
         }
-        return new static(\RectorPrefix20220124\Nette\Utils\Callback::invokeSafe('imagecreatefromstring', [$s], function (string $message) : void {
-            throw new \RectorPrefix20220124\Nette\Utils\ImageException($message);
-        }));
+        return self::invokeSafe('imagecreatefromstring', $s, 'Unable to open image from string.', __METHOD__);
+    }
+    private static function invokeSafe(string $func, string $arg, string $message, string $callee) : self
+    {
+        $errors = [];
+        $res = \RectorPrefix20220124\Nette\Utils\Callback::invokeSafe($func, [$arg], function (string $message) use(&$errors) : void {
+            $errors[] = $message;
+        });
+        if (!$res) {
+            throw new \RectorPrefix20220124\Nette\Utils\ImageException($message . ' Errors: ' . \implode(', ', $errors));
+        } elseif ($errors) {
+            \trigger_error($callee . '(): ' . \implode(', ', $errors), \E_USER_WARNING);
+        }
+        return new static($res);
     }
     /**
      * Creates a new true color image of the given dimensions. The default color is black.
      * @return static
      * @throws Nette\NotSupportedException if gd extension is not loaded
      */
-    public static function fromBlank(int $width, int $height, array $color = null)
+    public static function fromBlank(int $width, int $height, ?array $color = null)
     {
         if (!\extension_loaded('gd')) {
             throw new \RectorPrefix20220124\Nette\NotSupportedException('PHP extension GD is not loaded.');
@@ -451,10 +459,10 @@ class Image
         return $this;
     }
     /**
-     * Saves image to the file. Quality is in the range 0..100 for JPEG (default 85) and WEBP (default 80) and 0..9 for PNG (default 9).
+     * Saves image to the file. Quality is in the range 0..100 for JPEG (default 85), WEBP (default 80) and AVIF (default 30) and 0..9 for PNG (default 9).
      * @throws ImageException
      */
-    public function save(string $file, int $quality = null, int $type = null) : void
+    public function save(string $file, ?int $quality = null, ?int $type = null) : void
     {
         if ($type === null) {
             $extensions = \array_flip(self::FORMATS) + ['jpg' => self::JPEG];
@@ -467,9 +475,9 @@ class Image
         $this->output($type, $quality, $file);
     }
     /**
-     * Outputs image to string. Quality is in the range 0..100 for JPEG (default 85) and WEBP (default 80) and 0..9 for PNG (default 9).
+     * Outputs image to string. Quality is in the range 0..100 for JPEG (default 85), WEBP (default 80) and AVIF (default 30) and 0..9 for PNG (default 9).
      */
-    public function toString(int $type = self::JPEG, int $quality = null) : string
+    public function toString(int $type = self::JPEG, ?int $quality = null) : string
     {
         return \RectorPrefix20220124\Nette\Utils\Helpers::capture(function () use($type, $quality) {
             $this->output($type, $quality);
@@ -491,10 +499,10 @@ class Image
         }
     }
     /**
-     * Outputs image to browser. Quality is in the range 0..100 for JPEG (default 85) and WEBP (default 80) and 0..9 for PNG (default 9).
+     * Outputs image to browser. Quality is in the range 0..100 for JPEG (default 85), WEBP (default 80) and AVIF (default 30) and 0..9 for PNG (default 9).
      * @throws ImageException
      */
-    public function send(int $type = self::JPEG, int $quality = null) : void
+    public function send(int $type = self::JPEG, ?int $quality = null) : void
     {
         \header('Content-Type: ' . self::typeToMimeType($type));
         $this->output($type, $quality);
@@ -503,7 +511,7 @@ class Image
      * Outputs image to browser or file.
      * @throws ImageException
      */
-    private function output(int $type, ?int $quality, string $file = null) : void
+    private function output(int $type, ?int $quality, ?string $file = null) : void
     {
         switch ($type) {
             case self::JPEG:
@@ -523,6 +531,11 @@ class Image
             case self::WEBP:
                 $quality = $quality === null ? 80 : \max(0, \min(100, $quality));
                 $success = @\imagewebp($this->image, $file, $quality);
+                // @ is escalated to exception
+                break;
+            case self::AVIF:
+                $quality = $quality === null ? 30 : \max(0, \min(100, $quality));
+                $success = @imageavif($this->image, $file, $quality);
                 // @ is escalated to exception
                 break;
             case self::BMP:

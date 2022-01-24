@@ -236,7 +236,7 @@ final class Reflection
     /**
      * Parses PHP code to [class => [alias => class, ...]]
      */
-    private static function parseUseStatements(string $code, string $forClass = null) : array
+    private static function parseUseStatements(string $code, ?string $forClass = null) : array
     {
         try {
             $tokens = \token_get_all($code, \TOKEN_PARSE);

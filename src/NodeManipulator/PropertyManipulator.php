@@ -42,6 +42,10 @@ final class PropertyManipulator
      */
     private const ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Table'];
     /**
+     * @var string[]
+     */
+    private const ALLOWED_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = ['Doctrine\\ORM\\Mapping\\Id', 'Doctrine\\ORM\\Mapping\\Column', 'Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne', 'JMS\\Serializer\\Annotation\\Type'];
+    /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
@@ -110,8 +114,10 @@ final class PropertyManipulator
     public function isPropertyUsedInReadContext($propertyOrPromotedParam) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($propertyOrPromotedParam);
-        // @todo attributes too
-        if ($phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Id', 'Doctrine\\ORM\\Mapping\\Column', 'Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne', 'JMS\\Serializer\\Annotation\\Type'])) {
+        if ($phpDocInfo->hasByAnnotationClasses(self::ALLOWED_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
+            return \true;
+        }
+        if ($this->phpAttributeAnalyzer->hasPhpAttributes($propertyOrPromotedParam, self::ALLOWED_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES)) {
             return \true;
         }
         $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($propertyOrPromotedParam);

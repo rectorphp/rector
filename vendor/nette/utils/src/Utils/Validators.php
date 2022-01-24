@@ -86,7 +86,7 @@ class Validators
      * @param  int|string  $key
      * @throws AssertionException
      */
-    public static function assertField(array $array, $key, string $expected = null, string $label = "item '%' in array") : void
+    public static function assertField(array $array, $key, ?string $expected = null, string $label = "item '%' in array") : void
     {
         if (!\array_key_exists($key, $array)) {
             throw new \RectorPrefix20220124\Nette\Utils\AssertionException('Missing ' . \str_replace('%', $key, $label) . '.');
@@ -181,7 +181,7 @@ class Validators
      */
     public static function isNumeric($value) : bool
     {
-        return \is_float($value) || \is_int($value) || \is_string($value) && \preg_match('#^[+-]?[0-9]*[.]?[0-9]+$#D', $value);
+        return \is_float($value) || \is_int($value) || \is_string($value) && \preg_match('#^[+-]?([0-9]++\\.?[0-9]*|\\.[0-9]+)$#D', $value);
     }
     /**
      * Checks if the value is a syntactically correct callback.

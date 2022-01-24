@@ -23,6 +23,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeUnnecessarilyParenthesizedExpressionRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var array<class-string<Expr>>
+     */
     private const PARENTHESIZABLE_NODES = [\PhpParser\Node\Expr\ArrayDimFetch::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticPropertyFetch::class, \PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\FuncCall::class];
     /**
      * @readonly
@@ -72,7 +75,7 @@ CODE_SAMPLE
             return null;
         }
         $leftSubNode = $this->getLeftSubNode($node);
-        if ($leftSubNode === null) {
+        if (!$leftSubNode instanceof \PhpParser\Node) {
             return null;
         }
         if (!$this->wrappedInParenthesesAnalyzer->isParenthesized($this->file, $leftSubNode)) {

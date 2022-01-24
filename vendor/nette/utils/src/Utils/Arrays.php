@@ -190,7 +190,7 @@ class Arrays
      */
     public static function isList($value) : bool
     {
-        return \is_array($value) && (!$value || \array_keys($value) === \range(0, \count($value) - 1));
+        return \is_array($value) && (\PHP_VERSION_ID < 80100 ? !$value || \array_keys($value) === \range(0, \count($value) - 1) : array_is_list($value));
     }
     /**
      * Reformats table to associative tree. Path looks like 'field|field[]field->field=field'.

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<ruleset name="Custom" namespace="Nette">
+	<rule ref="$presets/php72.xml"/>
+
+	<!-- bug in SlevomatCodingStandard -->
+	<rule ref="SlevomatCodingStandard.Operators.RequireCombinedAssignmentOperator">
+		<severity>0</severity>
+	</rule>
+
+	<!-- bug in FunctionSpacingSniff -->
+	<exclude-pattern>./tests/Utils/Reflection.getDeclaringMethod.alias.phpt</exclude-pattern>
+	<exclude-pattern>./tests/Utils/Reflection.getDeclaringMethod.insteadof.phpt</exclude-pattern>
+</ruleset>
