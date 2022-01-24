@@ -25,6 +25,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeUnnecessarilyParenthesizedExpressionRector extends AbstractRector
 {
+    /**
+     * @var array<class-string<Expr>>
+     */
     private const PARENTHESIZABLE_NODES = [
         ArrayDimFetch::class,
         PropertyFetch::class,
@@ -88,9 +91,10 @@ CODE_SAMPLE
         }
 
         $leftSubNode = $this->getLeftSubNode($node);
-        if ($leftSubNode === null) {
+        if (! $leftSubNode instanceof Node) {
             return null;
         }
+
         if (! $this->wrappedInParenthesesAnalyzer->isParenthesized($this->file, $leftSubNode)) {
             return null;
         }
