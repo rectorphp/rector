@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
@@ -56,8 +57,25 @@ final class DeadReturnTagValueNodeAnalyzer
         if (!$returnTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
             return $returnTagValueNode->description === '';
         }
-        if (!$this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
-            return $returnTagValueNode->description === '';
+        if ($this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
+            return \false;
+        }
+        if ($this->hasTruePseudoType($returnTagValueNode->type)) {
+            return \false;
+        }
+        return $returnTagValueNode->description === '';
+    }
+    private function hasTruePseudoType(\Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
+    {
+        $unionTypes = $bracketsAwareUnionTypeNode->types;
+        foreach ($unionTypes as $unionType) {
+            if (!$unionType instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+                continue;
+            }
+            $name = \strtolower((string) $unionType);
+            if ($name === 'true') {
+                return \true;
+            }
         }
         return \false;
     }
