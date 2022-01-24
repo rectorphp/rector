@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
+use Rector\Core\Configuration\Option;
 use Rector\Core\Util\StringUtils;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\Finder\FinderSanitizer;
@@ -35,7 +37,8 @@ final class FilesFinder
         private readonly FinderSanitizer $finderSanitizer,
         private readonly FileSystemFilter $fileSystemFilter,
         private readonly SkippedPathsResolver $skippedPathsResolver,
-        private readonly UnchangedFilesFilter $unchangedFilesFilter
+        private readonly UnchangedFilesFilter $unchangedFilesFilter,
+        private readonly ParameterProvider $parameterProvider
     ) {
     }
 
@@ -74,12 +77,15 @@ final class FilesFinder
         }
 
         $finder = Finder::create()
-            ->followLinks()
             ->files()
             // skip empty files
             ->size('> 0')
             ->in($directories)
             ->sortByName();
+
+        if ($this->hasFollowLinks()) {
+            $finder->followLinks();
+        }
 
         if ($suffixes !== []) {
             $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
@@ -155,5 +161,14 @@ final class FilesFinder
         }
 
         return $path;
+    }
+
+    private function hasFollowLinks(): bool
+    {
+        if (! $this->parameterProvider->hasParameter(Option::FOLLOW_SYMLINKS)) {
+            return true;
+        }
+
+        return $this->parameterProvider->provideBoolParameter(Option::FOLLOW_SYMLINKS);
     }
 }

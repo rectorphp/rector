@@ -19,6 +19,22 @@ final class FilesFinderTest extends AbstractTestCase
         $this->filesFinder = $this->getService(FilesFinder::class);
     }
 
+    public function testWithoutFollowingSymlinks(): void
+    {
+        $this->bootFromConfigFiles([__DIR__ . '/config/disable_follow_symlinks.php']);
+        $filesFinder = $this->getService(FilesFinder::class);
+        $foundFiles = $filesFinder->findInDirectoriesAndFiles([__DIR__ . '/SourceWithSymlinks'], ['txt']);
+        $this->assertCount(1, $foundFiles);
+    }
+
+    public function testWithFollowingSymlinks(): void
+    {
+        $this->bootFromConfigFiles([__DIR__ . '/config/enable_follow_symlinks.php']);
+        $filesFinder = $this->getService(FilesFinder::class);
+        $foundFiles = $filesFinder->findInDirectoriesAndFiles([__DIR__ . '/SourceWithSymlinks'], ['txt']);
+        $this->assertCount(2, $foundFiles);
+    }
+
     /**
      * @dataProvider provideData()
      */
