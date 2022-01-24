@@ -8,6 +8,7 @@ use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRecto
 use Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector;
 use Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector;
 use Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector;
+use Rector\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector;
 use Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector;
 use Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector;
 use Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector;
@@ -47,4 +48,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(DowngradeGeneratedScalarTypesRector::class);
     $services->set(DowngradeParentTypeDeclarationRector::class);
     $services->set(DowngradeMethodCallOnCloneRector::class);
+    $services->set(DowngradeUnnecessarilyParenthesizedExpressionRector::class);
 };
