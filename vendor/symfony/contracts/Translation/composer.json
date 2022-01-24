@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220122\\Symfony\\Contracts\\Translation\\": ""
+            "RectorPrefix20220124\\Symfony\\Contracts\\Translation\\": ""
         }
     },
     "minimum-stability": "dev",

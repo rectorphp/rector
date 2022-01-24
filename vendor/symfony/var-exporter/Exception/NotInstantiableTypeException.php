@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220122\Symfony\Component\VarExporter\Exception;
+namespace RectorPrefix20220124\Symfony\Component\VarExporter\Exception;
 
-class NotInstantiableTypeException extends \Exception implements \RectorPrefix20220122\Symfony\Component\VarExporter\Exception\ExceptionInterface
+class NotInstantiableTypeException extends \Exception implements \RectorPrefix20220124\Symfony\Component\VarExporter\Exception\ExceptionInterface
 {
     public function __construct(string $type, \Throwable $previous = null)
     {

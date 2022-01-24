@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220122\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220124\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220122\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix20220124\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 /**
  * Abstract class that contains common code of integer and float node definitions.
  *
  * @author David Jeanmonod <david.jeanmonod@gmail.com>
  */
-abstract class NumericNodeDefinition extends \RectorPrefix20220122\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
+abstract class NumericNodeDefinition extends \RectorPrefix20220124\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
 {
     protected $min;
     protected $max;
@@ -61,6 +61,6 @@ abstract class NumericNodeDefinition extends \RectorPrefix20220122\Symfony\Compo
      */
     public function cannotBeEmpty()
     {
-        throw new \RectorPrefix20220122\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException('->cannotBeEmpty() is not applicable to NumericNodeDefinition.');
+        throw new \RectorPrefix20220124\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException('->cannotBeEmpty() is not applicable to NumericNodeDefinition.');
     }
 }

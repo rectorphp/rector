@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220122\Helmich\TypoScriptParser\Tokenizer;
+namespace RectorPrefix20220124\Helmich\TypoScriptParser\Tokenizer;
 
 use ArrayObject;
 /**
@@ -40,7 +40,7 @@ class TokenStreamBuilder
             $this->currentLine = $line;
             $this->currentColumn = 1;
         }
-        $this->tokens->append(new \RectorPrefix20220122\Helmich\TypoScriptParser\Tokenizer\Token($type, $value, $line, $this->currentColumn, $patternMatches));
+        $this->tokens->append(new \RectorPrefix20220124\Helmich\TypoScriptParser\Tokenizer\Token($type, $value, $line, $this->currentColumn, $patternMatches));
         $this->currentColumn += \strlen($value);
     }
     /**
@@ -49,7 +49,7 @@ class TokenStreamBuilder
      * @param TokenInterface $token The token to append
      * @return void
      */
-    public function appendToken(\RectorPrefix20220122\Helmich\TypoScriptParser\Tokenizer\TokenInterface $token) : void
+    public function appendToken(\RectorPrefix20220124\Helmich\TypoScriptParser\Tokenizer\TokenInterface $token) : void
     {
         $this->tokens->append($token);
     }

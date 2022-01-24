@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220122\Psr\Http\Message;
+namespace RectorPrefix20220124\Psr\Http\Message;
 
 /**
  * Value object representing a file uploaded through an HTTP request.

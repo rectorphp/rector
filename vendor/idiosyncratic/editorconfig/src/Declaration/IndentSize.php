@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220122\Idiosyncratic\EditorConfig\Declaration;
+namespace RectorPrefix20220124\Idiosyncratic\EditorConfig\Declaration;
 
-use RectorPrefix20220122\Idiosyncratic\EditorConfig\Exception\InvalidValue;
+use RectorPrefix20220124\Idiosyncratic\EditorConfig\Exception\InvalidValue;
 use function is_int;
-final class IndentSize extends \RectorPrefix20220122\Idiosyncratic\EditorConfig\Declaration\Declaration
+final class IndentSize extends \RectorPrefix20220124\Idiosyncratic\EditorConfig\Declaration\Declaration
 {
     public function getName() : string
     {
@@ -17,7 +17,7 @@ final class IndentSize extends \RectorPrefix20220122\Idiosyncratic\EditorConfig\
     public function validateValue($value) : void
     {
         if ($value !== 'tab' && (\is_int($value) === \false || $value < 1 === \true)) {
-            throw new \RectorPrefix20220122\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
+            throw new \RectorPrefix20220124\Idiosyncratic\EditorConfig\Exception\InvalidValue($this->getStringValue(), $this->getName());
         }
     }
 }

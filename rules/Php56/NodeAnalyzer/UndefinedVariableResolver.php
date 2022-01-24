@@ -29,7 +29,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220122\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220124\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class UndefinedVariableResolver
 {
     /**
@@ -52,7 +52,7 @@ final class UndefinedVariableResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20220122\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20220124\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -66,7 +66,8 @@ final class UndefinedVariableResolver
     public function resolve($node) : array
     {
         $undefinedVariables = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables) : ?int {
+        $variableNamesFromParams = $this->collectVariableNamesFromParams($node);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (\PhpParser\Node $node) use(&$undefinedVariables, $variableNamesFromParams) : ?int {
             // entering new scope - break!
             if ($node instanceof \PhpParser\Node\FunctionLike && !$node instanceof \PhpParser\Node\Expr\ArrowFunction) {
                 return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
@@ -91,10 +92,27 @@ final class UndefinedVariableResolver
             if ($scope->hasVariableType($variableName)->yes()) {
                 return null;
             }
+            if (\in_array($variableName, $variableNamesFromParams, \true)) {
+                return null;
+            }
             $undefinedVariables[] = $variableName;
             return null;
         });
         return \array_unique($undefinedVariables);
+    }
+    /**
+     * @return string[]
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     */
+    private function collectVariableNamesFromParams($node) : array
+    {
+        $variableNames = [];
+        foreach ($node->getParams() as $param) {
+            if ($param->var instanceof \PhpParser\Node\Expr\Variable) {
+                $variableNames[] = (string) $this->nodeNameResolver->getName($param->var);
+            }
+        }
+        return $variableNames;
     }
     private function issetOrUnsetOrEmptyParent(\PhpParser\Node $parentNode) : bool
     {

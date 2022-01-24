@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220122\Psr\Log;
+namespace RectorPrefix20220124\Psr\Log;
 
 /**
  * This is a simple Logger implementation that other Loggers can inherit from.
@@ -9,7 +9,7 @@ namespace RectorPrefix20220122\Psr\Log;
  * reduce boilerplate code that a simple Logger that does the same thing with
  * messages regardless of the error level has to implement.
  */
-abstract class AbstractLogger implements \RectorPrefix20220122\Psr\Log\LoggerInterface
+abstract class AbstractLogger implements \RectorPrefix20220124\Psr\Log\LoggerInterface
 {
     use LoggerTrait;
 }
