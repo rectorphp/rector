@@ -22,10 +22,6 @@ final class TemplateFinder
     {
         return $this->createSmartFileInfo('Commands/Commands.tpl');
     }
-    public function getExtbasePersistenceConfiguration() : \Symplify\SmartFileSystem\SmartFileInfo
-    {
-        return $this->createSmartFileInfo('Extbase/Persistence.tpl');
-    }
     private function createSmartFileInfo(string $template) : \Symplify\SmartFileSystem\SmartFileInfo
     {
         return new \Symplify\SmartFileSystem\SmartFileInfo($this->templateDirectory . $template);

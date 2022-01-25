@@ -7,14 +7,19 @@ use RectorPrefix20220125\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment
 use RectorPrefix20220125\Helmich\TypoScriptParser\Parser\AST\Scalar as ScalarValue;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use RectorPrefix20220125\Nette\Utils\Strings;
+use PhpParser\Comment;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\ConvertToPhpFileInterface;
-use Ssch\TYPO3Rector\Template\TemplateFinder;
-use RectorPrefix20220125\Symfony\Component\VarExporter\VarExporter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/10.0/Breaking-87623-ReplaceConfigpersistenceclassesTyposcriptConfiguration.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\TypoScriptProcessorTest
@@ -32,19 +37,37 @@ final class ExtbasePersistenceTypoScriptRector extends \Ssch\TYPO3Rector\FilePro
     /**
      * @var string
      */
+    private const REMOVE_EMPTY_LINES = '/^[ \\t]*[\\r\\n]+/m';
+    /**
+     * @var string
+     */
+    private const PROPERTIES = 'properties';
+    /**
+     * @var string
+     */
     private $filename;
     /**
      * @var array<string, array<string, mixed>>
      */
     private static $persistenceArray = [];
     /**
-     * @var \Symplify\SmartFileSystem\SmartFileInfo
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $fileTemplate;
-    public function __construct(\Ssch\TYPO3Rector\Template\TemplateFinder $templateFinder)
+    private $reflectionProvider;
+    /**
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+    /**
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     */
+    private $nodeFactory;
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
+        $this->reflectionProvider = $reflectionProvider;
+        $this->betterStandardPrinter = $betterStandardPrinter;
+        $this->nodeFactory = $nodeFactory;
         $this->filename = \getcwd() . '/Configuration_Extbase_Persistence_Classes.php';
-        $this->fileTemplate = $templateFinder->getExtbasePersistenceConfiguration();
     }
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
@@ -87,11 +110,28 @@ CODE_SAMPLE
         if ([] === self::$persistenceArray) {
             return null;
         }
-        $content = \str_replace('__PERSISTENCE_ARRAY__', \RectorPrefix20220125\Symfony\Component\VarExporter\VarExporter::export(self::$persistenceArray), $this->fileTemplate->getContents());
-        $content = \RectorPrefix20220125\Nette\Utils\Strings::replace($content, "#'(.*\\\\.*)'#mU", function (array $match) : string {
-            $string = \str_replace('\\\\', '\\', $match[1]);
-            return \sprintf('\\%s::class', $string);
-        });
+        $persistenceArray = $this->nodeFactory->createArray([]);
+        foreach (self::$persistenceArray as $class => $configuration) {
+            $key = new \PhpParser\Node\Scalar\String_($class);
+            if ($this->reflectionProvider->hasClass($class)) {
+                $key = $this->nodeFactory->createClassConstReference($class);
+            }
+            $subArray = $this->nodeFactory->createArray([]);
+            foreach (['recordType', 'tableName'] as $subKey) {
+                if (\array_key_exists($subKey, $configuration)) {
+                    $subArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($configuration[$subKey]), new \PhpParser\Node\Scalar\String_($subKey), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+                }
+            }
+            foreach ([self::PROPERTIES, 'subclasses'] as $subKey) {
+                if (\array_key_exists($subKey, $configuration)) {
+                    $subArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($configuration[$subKey]), new \PhpParser\Node\Scalar\String_($subKey), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+                }
+            }
+            $persistenceArray->items[] = new \PhpParser\Node\Expr\ArrayItem($subArray, $key, \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+        }
+        $return = new \PhpParser\Node\Stmt\Return_($persistenceArray);
+        $content = $this->betterStandardPrinter->prettyPrintFile([$return]);
+        $content = \RectorPrefix20220125\Nette\Utils\Strings::replace($content, self::REMOVE_EMPTY_LINES, '');
         return new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($this->filename, $content);
     }
     public function getMessage() : string
@@ -145,13 +185,19 @@ CODE_SAMPLE
         if (!\in_array('columns', $paths, \true)) {
             return;
         }
+        if (isset($paths[4]) && 'config' === $paths[4]) {
+            return;
+        }
+        if (isset($paths[5]) && 'type' === $paths[5]) {
+            return;
+        }
         $className = $paths[0];
         if (!\array_key_exists($className, self::$persistenceArray)) {
-            self::$persistenceArray[$className]['properties'] = [];
+            self::$persistenceArray[$className][self::PROPERTIES] = [];
         }
         $fieldName = $paths[3];
         /** @var ScalarValue $scalar */
         $scalar = $statement->value;
-        self::$persistenceArray[$className]['properties'][$scalar->value]['fieldName'] = $fieldName;
+        self::$persistenceArray[$className][self::PROPERTIES][$scalar->value]['fieldName'] = $fieldName;
     }
 }

@@ -2729,19 +2729,18 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sabbelasichon\/typo3-rector.git",
-                "reference": "b5431a74f80d2812d85c51026650f4b670fa8012"
+                "reference": "9394ec97f3239aeae7ebd42e73acef92d32f8e6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/b5431a74f80d2812d85c51026650f4b670fa8012",
-                "reference": "b5431a74f80d2812d85c51026650f4b670fa8012",
+                "url": "https:\/\/api.github.com\/repos\/sabbelasichon\/typo3-rector\/zipball\/9394ec97f3239aeae7ebd42e73acef92d32f8e6a",
+                "reference": "9394ec97f3239aeae7ebd42e73acef92d32f8e6a",
                 "shasum": ""
             },
             "require": {
                 "helmich\/typo3-typoscript-parser": "dev-master#0ccb3a6",
                 "php": ">=8.1",
-                "symfony\/string": "^6.0",
-                "symfony\/var-exporter": "^6.0"
+                "symfony\/string": "^6.0"
             },
             "conflict": {
                 "rector\/rector": "<0.11"
@@ -2765,7 +2764,7 @@
                 "symplify\/vendor-patches": "^10.0",
                 "tracy\/tracy": "^2.8"
             },
-            "time": "2022-01-21T21:48:24+00:00",
+            "time": "2022-01-25T22:43:50+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2799,7 +2798,7 @@
             "description": "Instant fixes for your TYPO3 code by using Rector.",
             "support": {
                 "issues": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/issues",
-                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/main"
+                "source": "https:\/\/github.com\/sabbelasichon\/typo3-rector\/tree\/v0.11.38"
             },
             "funding": [
                 {
@@ -3985,81 +3984,6 @@
                 }
             ],
             "install-path": "..\/symfony\/string"
-        },
-        {
-            "name": "symfony\/var-exporter",
-            "version": "v6.0.0",
-            "version_normalized": "6.0.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/symfony\/var-exporter.git",
-                "reference": "32cf62f12d35d441da1ca4a4c0fc1cd5f2a207af"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/var-exporter\/zipball\/32cf62f12d35d441da1ca4a4c0fc1cd5f2a207af",
-                "reference": "32cf62f12d35d441da1ca4a4c0fc1cd5f2a207af",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.0.2"
-            },
-            "require-dev": {
-                "symfony\/var-dumper": "^5.4|^6.0"
-            },
-            "time": "2021-11-22T10:44:58+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "RectorPrefix20220125\\Symfony\\Component\\VarExporter\\": ""
-                },
-                "exclude-from-classmap": [
-                    "\/Tests\/"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nicolas Grekas",
-                    "email": "p@tchwork.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https:\/\/symfony.com\/contributors"
-                }
-            ],
-            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
-            "homepage": "https:\/\/symfony.com",
-            "keywords": [
-                "clone",
-                "construct",
-                "export",
-                "hydrate",
-                "instantiate",
-                "serialize"
-            ],
-            "support": {
-                "source": "https:\/\/github.com\/symfony\/var-exporter\/tree\/v6.0.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/symfony.com\/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https:\/\/github.com\/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "install-path": "..\/symfony\/var-exporter"
         },
         {
             "name": "symfony\/yaml",

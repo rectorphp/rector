@@ -44,7 +44,6 @@ return array(
     'RectorPrefix20220125\\Symfony\\Polyfill\\Ctype\\' => array($vendorDir . '/symfony/polyfill-ctype'),
     'RectorPrefix20220125\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix20220125\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
-    'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\' => array($vendorDir . '/symfony/var-exporter'),
     'RectorPrefix20220125\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix20220125\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix20220125\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),

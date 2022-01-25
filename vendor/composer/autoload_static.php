@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita689574bbe6f04a09164ff00ad6839c3
+class ComposerStaticInit3bb49e2658ef08d3fc6f26846440602c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -67,7 +67,6 @@ class ComposerStaticInita689574bbe6f04a09164ff00ad6839c3
             'RectorPrefix20220125\\Symfony\\Polyfill\\Ctype\\' => 44,
             'RectorPrefix20220125\\Symfony\\Contracts\\' => 39,
             'RectorPrefix20220125\\Symfony\\Component\\Yaml\\' => 44,
-            'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\' => 51,
             'RectorPrefix20220125\\Symfony\\Component\\String\\' => 46,
             'RectorPrefix20220125\\Symfony\\Component\\Process\\' => 47,
             'RectorPrefix20220125\\Symfony\\Component\\Finder\\' => 46,
@@ -261,10 +260,6 @@ class ComposerStaticInita689574bbe6f04a09164ff00ad6839c3
         'RectorPrefix20220125\\Symfony\\Component\\Yaml\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
-        ),
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/var-exporter',
         ),
         'RectorPrefix20220125\\Symfony\\Component\\String\\' => 
         array (
@@ -1470,16 +1465,6 @@ class ComposerStaticInita689574bbe6f04a09164ff00ad6839c3
         'RectorPrefix20220125\\Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
         'RectorPrefix20220125\\Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
         'RectorPrefix20220125\\Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Exception\\ClassNotFoundException' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/ClassNotFoundException.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/ExceptionInterface.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Exception\\NotInstantiableTypeException' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/NotInstantiableTypeException.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Instantiator' => __DIR__ . '/..' . '/symfony/var-exporter/Instantiator.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Internal\\Exporter' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Exporter.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Internal\\Hydrator' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Hydrator.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Internal\\Reference' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Reference.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Internal\\Registry' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Registry.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\Internal\\Values' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Values.php',
-        'RectorPrefix20220125\\Symfony\\Component\\VarExporter\\VarExporter' => __DIR__ . '/..' . '/symfony/var-exporter/VarExporter.php',
         'RectorPrefix20220125\\Symfony\\Component\\Yaml\\Command\\LintCommand' => __DIR__ . '/..' . '/symfony/yaml/Command/LintCommand.php',
         'RectorPrefix20220125\\Symfony\\Component\\Yaml\\Dumper' => __DIR__ . '/..' . '/symfony/yaml/Dumper.php',
         'RectorPrefix20220125\\Symfony\\Component\\Yaml\\Escaper' => __DIR__ . '/..' . '/symfony/yaml/Escaper.php',
@@ -3879,9 +3864,9 @@ class ComposerStaticInita689574bbe6f04a09164ff00ad6839c3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita689574bbe6f04a09164ff00ad6839c3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita689574bbe6f04a09164ff00ad6839c3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita689574bbe6f04a09164ff00ad6839c3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3bb49e2658ef08d3fc6f26846440602c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3bb49e2658ef08d3fc6f26846440602c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3bb49e2658ef08d3fc6f26846440602c::$classMap;
 
         }, null, ClassLoader::class);
     }
