@@ -93,7 +93,6 @@ parameters:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
-                - rules/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 10#'
@@ -417,7 +416,6 @@ parameters:
             message: '#Offset (.*?) on array(.*?) on left side of \?\? always exists and is not nullable#'
             paths:
                 - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
-                - src/Bootstrap/ExtensionConfigResolver.php
 
         -
             message: '#Method Rector\\VersionBonding\\PhpVersionedFilter\:\:filter\(\) should return array<T of Rector\\Core\\Contract\\Rector\\RectorInterface\> but returns array<int, \(Rector\\VersionBonding\\Contract\\MinPhpVersionInterface&T of Rector\\Core\\Contract\\Rector\\RectorInterface\)\|T of Rector\\Core\\Contract\\Rector\\RectorInterface\>#'
@@ -608,3 +606,9 @@ parameters:
         -
             message: '#Only booleans are allowed in an if condition, array\|null given#'
             path: rules/Naming/Naming/PropertyNaming.php
+
+        - '#Parameter \#1 \$objectOrClass of class ReflectionClass constructor expects class\-string<Rector\\RectorInstaller\\GeneratedConfig\>\|Rector\\RectorInstaller\\GeneratedConfig, string given#'
+
+        -
+            path: src/Bootstrap/ExtensionConfigResolver.php
+            message: '#Offset (.*?)includes(.*?) always exists and is not nullable#'

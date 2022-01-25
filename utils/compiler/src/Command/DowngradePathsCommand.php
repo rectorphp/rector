@@ -8,11 +8,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class DowngradePathsCommand extends Command
 {
     protected function configure(): void
     {
+        $this->setName(CommandNaming::classToName(self::class));
         $this->setDescription('[DEV] Provide vendor paths that require downgrade to required PHP version');
     }
 

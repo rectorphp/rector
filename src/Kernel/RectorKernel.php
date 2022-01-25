@@ -49,7 +49,8 @@ final class RectorKernel implements LightKernelInterface
 
         $containerBuilderFactory = new ContainerBuilderFactory($configureCallMergingLoaderFactory);
 
-        $containerBuilder = $containerBuilderFactory->create([], $compilerPasses, $configFiles);
+        $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses, []);
+
         // @see https://symfony.com/blog/new-in-symfony-4-4-dependency-injection-improvements-part-1
         $containerBuilder->setParameter('container.dumper.inline_factories', true);
         // to fix reincluding files again
