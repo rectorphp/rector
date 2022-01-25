@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220124\Symplify\Astral\ValueObject\NodeBuilder;
+namespace RectorPrefix20220125\Symplify\Astral\ValueObject\NodeBuilder;
 
 use PhpParser\Builder\Use_;
 use PhpParser\Node\Stmt\Use_ as UseStmt;

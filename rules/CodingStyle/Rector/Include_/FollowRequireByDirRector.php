@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Include_;
 
-use RectorPrefix20220124\Nette\Utils\Strings;
+use RectorPrefix20220125\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Include_;
@@ -80,7 +80,7 @@ CODE_SAMPLE
         if (\strncmp($string->value, './', \strlen('./')) !== 0) {
             return;
         }
-        $string->value = \RectorPrefix20220124\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
+        $string->value = \RectorPrefix20220125\Nette\Utils\Strings::replace($string->value, '#^\\.\\/#', '/');
     }
     private function prependSlashIfMissing(\PhpParser\Node\Scalar\String_ $string) : void
     {
