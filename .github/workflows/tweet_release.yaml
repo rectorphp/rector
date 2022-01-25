@@ -16,7 +16,7 @@ jobs:
                 with:
                     # GitHub event payload
                     # https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#release
-                    tweet-message: "New Release: ${{ github.event.repository.name }} ${{ github.event.release.tag_name }} ${{ github.event.release.html_url }} #rectorphp"
+                    tweet-message: "New Release: Rector ${{ github.event.release.tag_name }} ${{ github.event.release.html_url }} #rectorphp"
                 env:
                     # Get your tokens from https://developer.twitter.com/en/portal/projects/1486009292276776963/apps/23201457/keys
                     TWITTER_CONSUMER_API_KEY: ${{ secrets.TWITTER_CONSUMER_API_KEY }}
