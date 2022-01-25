@@ -9,6 +9,9 @@ use RectorPrefix20220125\Symfony\Component\DependencyInjection\Extension\Extensi
 use RectorPrefix20220125\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
 use RectorPrefix20220125\Symplify\SymplifyKernel\DependencyInjection\LoadExtensionConfigsCompilerPass;
 use RectorPrefix20220125\Webmozart\Assert\Assert;
+/**
+ * @see \Symplify\SymplifyKernel\Tests\ContainerBuilderFactory\ContainerBuilderFactoryTest
+ */
 final class ContainerBuilderFactory
 {
     /**
