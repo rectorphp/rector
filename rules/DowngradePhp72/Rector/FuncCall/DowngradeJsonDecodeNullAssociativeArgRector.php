@@ -5,11 +5,18 @@ declare(strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\BooleanType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,7 +28,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeJsonDecodeNullAssociativeArgRector extends AbstractRector
 {
     public function __construct(
-        private readonly ArgsAnalyzer $argsAnalyzer
+        private readonly ArgsAnalyzer $argsAnalyzer,
+        private readonly IfManipulator $ifManipulator
     ) {
     }
 
@@ -49,12 +57,15 @@ declare(strict_types=1);
 
 function exactlyNull(string $json)
 {
-    $value = json_decode($json, false);
+    $value = json_decode($json, true);
 }
 
 function possiblyNull(string $json, ?bool $associative)
 {
-    $value = json_decode($json, (bool) $associative);
+    if ($associative === null) {
+        $associative = true;
+    }
+    $value = json_decode($json, $associative);
 }
 CODE_SAMPLE
             ),
@@ -105,11 +116,25 @@ CODE_SAMPLE
         }
 
         if ($associativeValue instanceof ConstFetch && $this->valueResolver->isNull($associativeValue)) {
-            $node->args[1]->value = $this->nodeFactory->createFalse();
+            $node->args[1]->value = $this->nodeFactory->createTrue();
             return $node;
         }
 
-        $node->args[1]->value = new Bool_($associativeValue);
+        if (! in_array(
+            $associativeValue::class,
+            [Variable::class, PropertyFetch::class, StaticPropertyFetch::class],
+            true
+        )) {
+            return null;
+        }
+
+        $currentExpression = $node->getAttribute(AttributeKey::CURRENT_STATEMENT);
+        $if = $this->ifManipulator->createIfExpr(
+            new Identical($associativeValue, $this->nodeFactory->createNull()),
+            new Expression(new Assign($associativeValue, $this->nodeFactory->createTrue()))
+        );
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $currentExpression);
+
         return $node;
     }
 }
