@@ -5,8 +5,6 @@ namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use RectorPrefix20220125\Nette\NotImplementedException;
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -14,7 +12,6 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
@@ -25,6 +22,8 @@ use PhpParser\Node\Stmt\If_;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer;
+use Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,21 +33,30 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const REGEX_FUNCTION_NAMES = ['preg_match', 'preg_match_all'];
-    /**
+     * @see https://www.php.net/manual/en/function.preg-match.php
      * @var string
      */
-    private const FLAG = 'PREG_UNMATCHED_AS_NULL';
+    private const UNMATCHED_NULL_FLAG = 'PREG_UNMATCHED_AS_NULL';
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner
+     */
+    private $bitwiseFlagCleaner;
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer
+     */
+    private $regexFuncAnalyzer;
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner $bitwiseFlagCleaner, \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer $regexFuncAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
+        $this->bitwiseFlagCleaner = $bitwiseFlagCleaner;
+        $this->regexFuncAnalyzer = $regexFuncAnalyzer;
     }
     /**
      * @return array<class-string<Node>>
@@ -63,9 +71,9 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node instanceof \PhpParser\Node\Stmt\ClassConst) {
-            return $this->processsClassConst($node);
+            return $this->refactorClassConst($node);
         }
-        if (!$this->isRegexFunctionNames($node)) {
+        if (!$this->regexFuncAnalyzer->isRegexFunctionNames($node)) {
             return null;
         }
         $args = $node->args;
@@ -76,7 +84,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         /** @var Variable $variable */
         $variable = $args[2]->value;
         if ($flags instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-            $this->cleanBitwiseOrFlags($node, $flags);
+            $this->bitwiseFlagCleaner->cleanFuncCall($node, $flags, null, self::UNMATCHED_NULL_FLAG);
             if (!$this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
                 return $this->handleEmptyStringToNullMatch($node, $variable);
             }
@@ -85,7 +93,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends \Rector\Core\Rect
         if (!$flags instanceof \PhpParser\Node\Expr\ConstFetch) {
             return null;
         }
-        if (!$this->isName($flags, self::FLAG)) {
+        if (!$this->isName($flags, self::UNMATCHED_NULL_FLAG)) {
             return null;
         }
         $node = $this->handleEmptyStringToNullMatch($node, $variable);
@@ -119,85 +127,19 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function processsClassConst(\PhpParser\Node\Stmt\ClassConst $classConst) : \PhpParser\Node\Stmt\ClassConst
+    private function refactorClassConst(\PhpParser\Node\Stmt\ClassConst $classConst) : \PhpParser\Node\Stmt\ClassConst
     {
         foreach ($classConst->consts as $key => $singleClassConst) {
             if (!$singleClassConst->value instanceof \PhpParser\Node\Expr\ConstFetch) {
                 continue;
             }
-            if (!$this->isName($singleClassConst->value, self::FLAG)) {
+            if (!$this->isName($singleClassConst->value, self::UNMATCHED_NULL_FLAG)) {
                 continue;
             }
             $classConst->consts[$key]->value = new \PhpParser\Node\Scalar\LNumber(512);
             return $classConst;
         }
         return $classConst;
-    }
-    private function isRegexFunctionNames(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
-    {
-        if ($this->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
-            return \true;
-        }
-        $variable = $funcCall->name;
-        if (!$variable instanceof \PhpParser\Node\Expr\Variable) {
-            return \false;
-        }
-        /** @var Assign|null $assignExprVariable */
-        $assignExprVariable = $this->betterNodeFinder->findFirstPreviousOfNode($funcCall, function (\PhpParser\Node $node) use($variable) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
-                return \false;
-            }
-            return $this->nodeComparator->areNodesEqual($node->var, $variable);
-        });
-        if (!$assignExprVariable instanceof \PhpParser\Node\Expr\Assign) {
-            return \false;
-        }
-        $expr = $assignExprVariable->expr;
-        if (!$expr instanceof \PhpParser\Node\Expr\Ternary) {
-            return \false;
-        }
-        if (!$expr->if instanceof \PhpParser\Node\Scalar\String_) {
-            return \false;
-        }
-        if (!$expr->else instanceof \PhpParser\Node\Scalar\String_) {
-            return \false;
-        }
-        return \in_array($expr->if->value, self::REGEX_FUNCTION_NAMES, \true) && \in_array($expr->else->value, self::REGEX_FUNCTION_NAMES, \true);
-    }
-    private function cleanBitwiseOrFlags(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, \PhpParser\Node\Expr $expr = null) : void
-    {
-        if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-            /** @var BitwiseOr $leftLeft */
-            $leftLeft = $bitwiseOr->left;
-            if ($leftLeft->left instanceof \PhpParser\Node\Expr\ConstFetch && $this->isName($leftLeft->left, self::FLAG)) {
-                $bitwiseOr = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($leftLeft->right, $bitwiseOr->right);
-            }
-            /** @var BitwiseOr $leftRight */
-            $leftRight = $bitwiseOr->left;
-            if ($leftRight->right instanceof \PhpParser\Node\Expr\ConstFetch && $this->isName($leftRight->right, self::FLAG)) {
-                $bitwiseOr = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($leftRight->left, $bitwiseOr->right);
-            }
-            if ($bitwiseOr->left instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
-                $this->cleanBitwiseOrFlags($funcCall, $bitwiseOr->left, $bitwiseOr->right);
-                return;
-            }
-        }
-        if ($expr instanceof \PhpParser\Node\Expr) {
-            $bitwiseOr = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($bitwiseOr, $expr);
-        }
-        $this->assignThirdArgsValue($funcCall, $bitwiseOr);
-    }
-    private function assignThirdArgsValue(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr) : void
-    {
-        if ($bitwiseOr->right instanceof \PhpParser\Node\Expr\ConstFetch && $this->isName($bitwiseOr->right, self::FLAG)) {
-            $bitwiseOr = $bitwiseOr->left;
-        } elseif ($bitwiseOr->left instanceof \PhpParser\Node\Expr\ConstFetch && $this->isName($bitwiseOr->left, self::FLAG)) {
-            $bitwiseOr = $bitwiseOr->right;
-        }
-        if (!$funcCall->args[3] instanceof \PhpParser\Node\Arg) {
-            return;
-        }
-        $funcCall->args[3]->value = $bitwiseOr;
     }
     private function handleEmptyStringToNullMatch(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Expr\FuncCall
     {
@@ -210,8 +152,8 @@ CODE_SAMPLE
         $if = $this->ifManipulator->createIfExpr(new \PhpParser\Node\Expr\BinaryOp\Identical($variablePass, new \PhpParser\Node\Scalar\String_('')), new \PhpParser\Node\Stmt\Expression($assign));
         $closure->stmts[0] = $if;
         $arguments = $this->nodeFactory->createArgs([$variable, $closure]);
-        $replaceEmptystringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
-        return $this->processReplace($funcCall, $replaceEmptystringToNull);
+        $replaceEmptyStringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
+        return $this->processReplace($funcCall, $replaceEmptyStringToNull);
     }
     private function processReplace(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptystringToNull) : \PhpParser\Node\Expr\FuncCall
     {
@@ -238,20 +180,20 @@ CODE_SAMPLE
         }
         return $this->processInIf($if, $funcCall, $replaceEmptystringToNull);
     }
-    private function processInIf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptystringToNull) : \PhpParser\Node\Expr\FuncCall
+    private function processInIf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\FuncCall $replaceEmptyStringToNull) : \PhpParser\Node\Expr\FuncCall
     {
         $cond = $if->cond;
         if (!$cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical && !$cond instanceof \PhpParser\Node\Expr\BooleanNot) {
-            $this->handleNotInIdenticalAndBooleanNot($if, $replaceEmptystringToNull);
+            $this->handleNotInIdenticalAndBooleanNot($if, $replaceEmptyStringToNull);
         }
         if ($cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $valueCompare = $cond->left === $funcCall ? $cond->right : $cond->left;
             if ($this->valueResolver->isFalse($valueCompare)) {
-                $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $if);
+                $this->nodesToAddCollector->addNodeAfterNode($replaceEmptyStringToNull, $if);
             }
         }
         if ($cond instanceof \PhpParser\Node\Expr\BooleanNot) {
-            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptystringToNull, $if);
+            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptyStringToNull, $if);
         }
         return $funcCall;
     }

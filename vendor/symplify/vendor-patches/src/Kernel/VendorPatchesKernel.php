@@ -15,6 +15,6 @@ final class VendorPatchesKernel extends \RectorPrefix20220125\Symplify\SymplifyK
     {
         $configFiles[] = __DIR__ . '/../../config/config.php';
         $configFiles[] = \RectorPrefix20220125\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig::FILE_PATH;
-        return $this->create([], [], $configFiles);
+        return $this->create($configFiles);
     }
 }

@@ -18,12 +18,12 @@
         "issues": "https:\/\/github.com\/composer\/xdebug-handler\/issues"
     },
     "require": {
-        "php": "^5.3.2 || ^7.0 || ^8.0",
+        "php": "^7.2.5 || ^8.0",
         "psr\/log": "^1 || ^2 || ^3",
         "composer\/pcre": "^1"
     },
     "require-dev": {
-        "symfony\/phpunit-bridge": "^4.2 || ^5.0 || ^6.0",
+        "symfony\/phpunit-bridge": "^6.0",
         "phpstan\/phpstan": "^1.0",
         "phpstan\/phpstan-strict-rules": "^1.1"
     },
@@ -38,7 +38,7 @@
         }
     },
     "scripts": {
-        "test": "vendor\/bin\/simple-phpunit",
-        "phpstan": "vendor\/bin\/phpstan analyse"
+        "test": "@php vendor\/bin\/simple-phpunit",
+        "phpstan": "@php vendor\/bin\/phpstan analyse"
     }
 }

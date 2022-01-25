@@ -20,12 +20,14 @@ final class ContainerBuilderFactory
         $this->loaderFactory = $loaderFactory;
     }
     /**
-     * @param ExtensionInterface[] $extensions
-     * @param CompilerPassInterface[] $compilerPasses
      * @param string[] $configFiles
+     * @param CompilerPassInterface[] $compilerPasses
+     * @param ExtensionInterface[] $extensions
      */
-    public function create(array $extensions, array $compilerPasses, array $configFiles) : \RectorPrefix20220125\Symfony\Component\DependencyInjection\ContainerBuilder
+    public function create(array $configFiles, array $compilerPasses, array $extensions) : \RectorPrefix20220125\Symfony\Component\DependencyInjection\ContainerBuilder
     {
+        \RectorPrefix20220125\Webmozart\Assert\Assert::allIsAOf($extensions, \RectorPrefix20220125\Symfony\Component\DependencyInjection\Extension\ExtensionInterface::class);
+        \RectorPrefix20220125\Webmozart\Assert\Assert::allIsAOf($compilerPasses, \RectorPrefix20220125\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface::class);
         \RectorPrefix20220125\Webmozart\Assert\Assert::allString($configFiles);
         \RectorPrefix20220125\Webmozart\Assert\Assert::allFile($configFiles);
         $containerBuilder = new \RectorPrefix20220125\Symfony\Component\DependencyInjection\ContainerBuilder();

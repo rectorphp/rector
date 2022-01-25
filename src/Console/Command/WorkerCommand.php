@@ -13,6 +13,7 @@ use RectorPrefix20220125\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220125\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20220125\Symplify\EasyParallel\Enum\Action;
 use RectorPrefix20220125\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix20220125\Symplify\PackageBuilder\Console\Command\CommandNaming;
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92
  * https://github.com/phpstan/phpstan-src/blob/c471c7b050e0929daf432288770de673b394a983/src/Command/WorkerCommand.php
@@ -34,6 +35,7 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
     }
     protected function configure() : void
     {
+        $this->setName(\RectorPrefix20220125\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
         $this->setDescription('(Internal) Support for parallel process');
         parent::configure();
     }

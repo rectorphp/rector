@@ -3,8 +3,10 @@
 declare (strict_types=1);
 namespace RectorPrefix20220125\Symplify\SymplifyKernel\HttpKernel;
 
+use RectorPrefix20220125\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix20220125\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix20220125\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220125\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use RectorPrefix20220125\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use RectorPrefix20220125\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
 use RectorPrefix20220125\Symplify\SymplifyKernel\ContainerBuilderFactory;
@@ -22,13 +24,15 @@ abstract class AbstractSymplifyKernel implements \RectorPrefix20220125\Symplify\
     private $container = null;
     /**
      * @param string[] $configFiles
+     * @param CompilerPassInterface[] $compilerPasses
+     * @param ExtensionInterface[] $extensions
      */
-    public function create(array $extensions, array $compilerPasses, array $configFiles) : \RectorPrefix20220125\Symfony\Component\DependencyInjection\ContainerInterface
+    public function create(array $configFiles, array $compilerPasses = [], array $extensions = []) : \RectorPrefix20220125\Symfony\Component\DependencyInjection\ContainerInterface
     {
         $containerBuilderFactory = new \RectorPrefix20220125\Symplify\SymplifyKernel\ContainerBuilderFactory(new \RectorPrefix20220125\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory());
         $compilerPasses[] = new \RectorPrefix20220125\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass();
         $configFiles[] = \RectorPrefix20220125\Symplify\SymplifyKernel\ValueObject\SymplifyKernelConfig::FILE_PATH;
-        $containerBuilder = $containerBuilderFactory->create($extensions, $compilerPasses, $configFiles);
+        $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses, $extensions);
         $containerBuilder->compile();
         $this->container = $containerBuilder;
         return $containerBuilder;

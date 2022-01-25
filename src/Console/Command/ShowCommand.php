@@ -10,6 +10,7 @@ use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20220125\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220125\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220125\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220125\Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class ShowCommand extends \RectorPrefix20220125\Symfony\Component\Console\Command\Command
 {
     /**
@@ -33,6 +34,7 @@ final class ShowCommand extends \RectorPrefix20220125\Symfony\Component\Console\
     }
     protected function configure() : void
     {
+        $this->setName(\RectorPrefix20220125\Symplify\PackageBuilder\Console\Command\CommandNaming::classToName(self::class));
         $this->setDescription('Show loaded Rectors with their configuration');
     }
     protected function execute(\RectorPrefix20220125\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220125\Symfony\Component\Console\Output\OutputInterface $output) : int

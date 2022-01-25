@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0a0148fc78d37cef2aabcd1b59814168
+class ComposerStaticInitd3faf3b21f2dcfec88f6af350c08c862
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2402,7 +2402,9 @@ class ComposerStaticInit0a0148fc78d37cef2aabcd1b59814168
         'Rector\\DowngradePhp72\\NodeAnalyzer\\BuiltInMethodAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/BuiltInMethodAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\FunctionExistsFunCallAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/FunctionExistsFunCallAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\OverrideFromAnonymousClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/OverrideFromAnonymousClassMethodAnalyzer.php',
+        'Rector\\DowngradePhp72\\NodeAnalyzer\\RegexFuncAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/RegexFuncAnalyzer.php',
         'Rector\\DowngradePhp72\\NodeAnalyzer\\SealedClassAnalyzer' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeAnalyzer/SealedClassAnalyzer.php',
+        'Rector\\DowngradePhp72\\NodeManipulator\\BitwiseFlagCleaner' => __DIR__ . '/../..' . '/rules/DowngradePhp72/NodeManipulator/BitwiseFlagCleaner.php',
         'Rector\\DowngradePhp72\\PhpDoc\\NativeParamToPhpDocDecorator' => __DIR__ . '/../..' . '/rules/DowngradePhp72/PhpDoc/NativeParamToPhpDocDecorator.php',
         'Rector\\DowngradePhp72\\Rector\\ClassMethod\\DowngradeParameterTypeWideningRector' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php',
         'Rector\\DowngradePhp72\\Rector\\FuncCall\\DowngradeJsonDecodeNullAssociativeArgRector' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Rector/FuncCall/DowngradeJsonDecodeNullAssociativeArgRector.php',
@@ -3876,9 +3878,9 @@ class ComposerStaticInit0a0148fc78d37cef2aabcd1b59814168
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0a0148fc78d37cef2aabcd1b59814168::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0a0148fc78d37cef2aabcd1b59814168::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0a0148fc78d37cef2aabcd1b59814168::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd3faf3b21f2dcfec88f6af350c08c862::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd3faf3b21f2dcfec88f6af350c08c862::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd3faf3b21f2dcfec88f6af350c08c862::$classMap;
 
         }, null, ClassLoader::class);
     }

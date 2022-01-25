@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of composer/xdebug-handler.
  *
@@ -22,45 +23,44 @@ class PhpConfig
      *
      * @return string[] Empty array of PHP cli options
      */
-    public function useOriginal()
+    public function useOriginal() : array
     {
         $this->getDataAndReset();
-        return array();
+        return [];
     }
     /**
      * Use standard restart settings
      *
      * @return string[] PHP cli options
      */
-    public function useStandard()
+    public function useStandard() : array
     {
         $data = $this->getDataAndReset();
         if ($data !== null) {
-            return array('-n', '-c', $data['tmpIni']);
+            return ['-n', '-c', $data['tmpIni']];
         }
-        return array();
+        return [];
     }
     /**
      * Use environment variables to persist settings
      *
      * @return string[] Empty array of PHP cli options
      */
-    public function usePersistent()
+    public function usePersistent() : array
     {
         $data = $this->getDataAndReset();
         if ($data !== null) {
             $this->updateEnv('PHPRC', $data['tmpIni']);
             $this->updateEnv('PHP_INI_SCAN_DIR', '');
         }
-        return array();
+        return [];
     }
     /**
      * Returns restart data if available and resets the environment
      *
-     * @return array|null
      * @phpstan-return restartData|null
      */
-    private function getDataAndReset()
+    private function getDataAndReset() : ?array
     {
         $data = \RectorPrefix20220125\Composer\XdebugHandler\XdebugHandler::getRestartSettings();
         if ($data !== null) {
@@ -74,10 +74,8 @@ class PhpConfig
      *
      * @param string $name
      * @param string|false $value
-     *
-     * @return void
      */
-    private function updateEnv($name, $value)
+    private function updateEnv(string $name, $value) : void
     {
         \RectorPrefix20220125\Composer\XdebugHandler\Process::setEnv($name, \false !== $value ? $value : null);
     }
