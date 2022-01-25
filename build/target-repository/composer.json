@@ -1,6 +1,6 @@
 {
     "name": "rector/rector",
-    "description": "Prefixed and PHP 7.1 downgraded version of rector/rector",
+    "description": "Instant Upgrade and Automated Refactoring of any PHP code",
     "license": "MIT",
     "bin": [
         "bin/rector"

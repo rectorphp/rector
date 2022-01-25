@@ -1,6 +1,6 @@
 {
     "name": "rector/rector-src",
-    "description": "Instant upgrade and refactoring of your PHP code",
+    "description": "Instant Upgrade and Automated Refactoring of any PHP code",
     "bin": [
         "bin/rector"
     ],
