@@ -49,6 +49,9 @@ final class ConfigurationFactory
         $parallelPort = (string) $input->getOption(Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(Option::PARALLEL_IDENTIFIER);
 
+        /** @var string|null $memoryLimit */
+        $memoryLimit = $input->getOption(Option::MEMORY_LIMIT);
+
         return new Configuration(
             $isDryRun,
             $showProgressBar,
@@ -59,7 +62,8 @@ final class ConfigurationFactory
             $showDiffs,
             $parallelPort,
             $parallelIdentifier,
-            $isParallel
+            $isParallel,
+            $memoryLimit
         );
     }
 

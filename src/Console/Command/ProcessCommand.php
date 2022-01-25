@@ -15,6 +15,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
@@ -44,6 +45,7 @@ final class ProcessCommand extends AbstractProcessCommand
         private readonly EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker,
         private readonly OutputFormatterCollector $outputFormatterCollector,
         private readonly SymfonyStyle $symfonyStyle,
+        private readonly MemoryLimiter $memoryLimiter,
         private readonly array $rectors
     ) {
         parent::__construct();
@@ -65,6 +67,7 @@ final class ProcessCommand extends AbstractProcessCommand
         }
 
         $configuration = $this->configurationFactory->createFromInput($input);
+        $this->memoryLimiter->adjust($configuration);
 
         // disable console output in case of json output formatter
         if ($configuration->getOutputFormat() === JsonOutputFormatter::NAME) {

@@ -9,6 +9,7 @@ use Clue\React\NDJson\Encoder;
 use React\EventLoop\StreamSelectLoop;
 use React\Socket\ConnectionInterface;
 use React\Socket\TcpConnector;
+use Rector\Core\Util\MemoryLimiter;
 use Rector\Parallel\WorkerRunner;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,6 +28,7 @@ final class WorkerCommand extends AbstractProcessCommand
 {
     public function __construct(
         private readonly WorkerRunner $workerRunner,
+        private readonly MemoryLimiter $memoryLimiter,
     ) {
         parent::__construct();
     }
@@ -41,6 +43,7 @@ final class WorkerCommand extends AbstractProcessCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $configuration = $this->configurationFactory->createFromInput($input);
+        $this->memoryLimiter->adjust($configuration);
 
         $streamSelectLoop = new StreamSelectLoop();
         $parallelIdentifier = $configuration->getParallelIdentifier();

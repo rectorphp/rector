@@ -215,4 +215,9 @@ final class Option
      * @var string
      */
     final public const FOLLOW_SYMLINKS = 'follow-symlinks';
+
+    /**
+     * @var string
+     */
+    final public const MEMORY_LIMIT = 'memory-limit';
 }
