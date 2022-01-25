@@ -4,7 +4,7 @@
 
 <br>
 
-Rector instantly upgrades and refactors the PHP code of your application.  It can help you 2 major areas:
+Rector instantly upgrades and refactors the PHP code of your application.  It can help you in 2 major areas:
 
 ### 1. Instant Upgrades
 
@@ -61,7 +61,7 @@ composer require rector/rector --dev
 
 ## Running Rector
 
-There a 2 main ways to use Rector:
+There are 2 main ways to use Rector:
 
 - a *single rule*, to have the change under control
 - or group of rules called *sets*
@@ -126,7 +126,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // is your PHP version different from the one your refactor to? [default: your PHP version], uses PHP_VERSION_ID format
     $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_72);
 
-    // Path to phpstan with extensions, that PHPSTan in Rector uses to determine types
+    // Path to phpstan with extensions, that PHPStan in Rector uses to determine types
     $parameters->set(Option::PHPSTAN_FOR_RECTOR_PATH, getcwd() . '/phpstan-for-config.neon');
 };
 ```
@@ -164,7 +164,7 @@ Or with Xdebug:
 vendor/bin/rector process src/Controller --dry-run --xdebug
 ```
 
-To assist with simple debugging Rector provides a 2 helpers to pretty-print AST-nodes:
+To assist with simple debugging Rector provides 2 helpers to pretty-print AST-nodes:
 
 ```php
 use PhpParser\Node\Scalar\String_;
