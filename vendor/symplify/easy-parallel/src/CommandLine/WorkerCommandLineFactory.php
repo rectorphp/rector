@@ -114,8 +114,13 @@ final class WorkerCommandLineFactory
                 }
                 continue;
             }
-            $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
-            $processCommandOptions[] = \escapeshellarg($optionValue);
+            if ($mainCommandOptionName === 'memory-limit') {
+                // symfony/console does not accept -1 as value without assign
+                $processCommandOptions[] = '--' . $mainCommandOptionName . '=' . $optionValue;
+            } else {
+                $processCommandOptions[] = self::OPTION_DASHES . $mainCommandOptionName;
+                $processCommandOptions[] = \escapeshellarg($optionValue);
+            }
         }
         return $processCommandOptions;
     }

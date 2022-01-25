@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use RectorPrefix20220125\Symplify\PackageBuilder\Composer\VendorDirProvider;
 use RectorPrefix20220125\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix20220125\Symplify\SmartFileSystem\Json\JsonFileSystem;
-use RectorPrefix20220125\Symplify\VendorPatches\Command\GenerateCommand;
+use RectorPrefix20220125\Symplify\VendorPatches\Console\VendorPatchesApplication;
 use function RectorPrefix20220125\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
@@ -20,6 +20,7 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\RectorPrefix20220125\SebastianBergmann\Diff\Differ::class)->args(['$outputBuilder' => \RectorPrefix20220125\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220125\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder::class)]);
     $services->set(\RectorPrefix20220125\Symplify\PackageBuilder\Composer\VendorDirProvider::class);
     $services->set(\RectorPrefix20220125\Symplify\SmartFileSystem\Json\JsonFileSystem::class);
-    $services->set(\RectorPrefix20220125\Symfony\Component\Console\Application::class)->call('addCommands', [[\RectorPrefix20220125\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220125\Symplify\VendorPatches\Command\GenerateCommand::class)]]);
+    // for autowired commands
+    $services->alias(\RectorPrefix20220125\Symfony\Component\Console\Application::class, \RectorPrefix20220125\Symplify\VendorPatches\Console\VendorPatchesApplication::class);
     $services->set(\RectorPrefix20220125\Symplify\PackageBuilder\Yaml\ParametersMerger::class);
 };

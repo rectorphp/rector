@@ -4,11 +4,18 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\BooleanType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,9 +30,15 @@ final class DowngradeJsonDecodeNullAssociativeArgRector extends \Rector\Core\Rec
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\IfManipulator
+     */
+    private $ifManipulator;
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer, \Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
     {
         $this->argsAnalyzer = $argsAnalyzer;
+        $this->ifManipulator = $ifManipulator;
     }
     public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
@@ -47,12 +60,15 @@ declare(strict_types=1);
 
 function exactlyNull(string $json)
 {
-    $value = json_decode($json, false);
+    $value = json_decode($json, true);
 }
 
 function possiblyNull(string $json, ?bool $associative)
 {
-    $value = json_decode($json, (bool) $associative);
+    if ($associative === null) {
+        $associative = true;
+    }
+    $value = json_decode($json, $associative);
 }
 CODE_SAMPLE
 )]);
@@ -92,10 +108,15 @@ CODE_SAMPLE
             return null;
         }
         if ($associativeValue instanceof \PhpParser\Node\Expr\ConstFetch && $this->valueResolver->isNull($associativeValue)) {
-            $node->args[1]->value = $this->nodeFactory->createFalse();
+            $node->args[1]->value = $this->nodeFactory->createTrue();
             return $node;
         }
-        $node->args[1]->value = new \PhpParser\Node\Expr\Cast\Bool_($associativeValue);
+        if (!\in_array(\get_class($associativeValue), [\PhpParser\Node\Expr\Variable::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class], \true)) {
+            return null;
+        }
+        $currentExpression = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::CURRENT_STATEMENT);
+        $if = $this->ifManipulator->createIfExpr(new \PhpParser\Node\Expr\BinaryOp\Identical($associativeValue, $this->nodeFactory->createNull()), new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($associativeValue, $this->nodeFactory->createTrue())));
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $currentExpression);
         return $node;
     }
 }

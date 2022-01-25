@@ -1311,6 +1311,7 @@ return array(
     'RectorPrefix20220125\\Symplify\\VendorPatches\\Composer\\ComposerPatchesConfigurationUpdater' => $vendorDir . '/symplify/vendor-patches/src/Composer/ComposerPatchesConfigurationUpdater.php',
     'RectorPrefix20220125\\Symplify\\VendorPatches\\Composer\\PackageNameResolver' => $vendorDir . '/symplify/vendor-patches/src/Composer/PackageNameResolver.php',
     'RectorPrefix20220125\\Symplify\\VendorPatches\\Console\\GenerateCommandReporter' => $vendorDir . '/symplify/vendor-patches/src/Console/GenerateCommandReporter.php',
+    'RectorPrefix20220125\\Symplify\\VendorPatches\\Console\\VendorPatchesApplication' => $vendorDir . '/symplify/vendor-patches/src/Console/VendorPatchesApplication.php',
     'RectorPrefix20220125\\Symplify\\VendorPatches\\Differ\\PatchDiffer' => $vendorDir . '/symplify/vendor-patches/src/Differ/PatchDiffer.php',
     'RectorPrefix20220125\\Symplify\\VendorPatches\\FileSystem\\PathResolver' => $vendorDir . '/symplify/vendor-patches/src/FileSystem/PathResolver.php',
     'RectorPrefix20220125\\Symplify\\VendorPatches\\Finder\\OldToNewFilesFinder' => $vendorDir . '/symplify/vendor-patches/src/Finder/OldToNewFilesFinder.php',
