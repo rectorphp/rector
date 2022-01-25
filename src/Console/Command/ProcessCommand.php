@@ -14,6 +14,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
@@ -83,6 +84,11 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      */
     private $symfonyStyle;
     /**
+     * @readonly
+     * @var \Rector\Core\Util\MemoryLimiter
+     */
+    private $memoryLimiter;
+    /**
      * @var RectorInterface[]
      * @readonly
      */
@@ -90,7 +96,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \RectorPrefix20220125\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, array $rectors)
+    public function __construct(\Rector\Core\Autoloading\AdditionalAutoloader $additionalAutoloader, \Rector\Caching\Detector\ChangedFilesDetector $changedFilesDetector, \Rector\Core\Reporting\MissingRectorRulesReporter $missingRectorRulesReporter, \Rector\Core\Application\ApplicationFileProcessor $applicationFileProcessor, \Rector\Core\Autoloading\BootstrapFilesIncluder $bootstrapFilesIncluder, \Rector\Core\ValueObjectFactory\ProcessResultFactory $processResultFactory, \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, \Rector\VersionBonding\Application\MissedRectorDueVersionChecker $missedRectorDueVersionChecker, \Rector\Core\Validation\EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, \Rector\Core\Console\Output\OutputFormatterCollector $outputFormatterCollector, \RectorPrefix20220125\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\Core\Util\MemoryLimiter $memoryLimiter, array $rectors)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -103,6 +109,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $this->emptyConfigurableRectorChecker = $emptyConfigurableRectorChecker;
         $this->outputFormatterCollector = $outputFormatterCollector;
         $this->symfonyStyle = $symfonyStyle;
+        $this->memoryLimiter = $memoryLimiter;
         $this->rectors = $rectors;
         parent::__construct();
     }
@@ -119,6 +126,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
             return $exitCode;
         }
         $configuration = $this->configurationFactory->createFromInput($input);
+        $this->memoryLimiter->adjust($configuration);
         // disable console output in case of json output formatter
         if ($configuration->getOutputFormat() === \Rector\ChangesReporting\Output\JsonOutputFormatter::NAME) {
             $this->symfonyStyle->setVerbosity(\RectorPrefix20220125\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET);

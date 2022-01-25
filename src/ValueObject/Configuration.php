@@ -59,12 +59,18 @@ final class Configuration
      */
     private $isParallel = \false;
     /**
+     * @readonly
+     * @var string|null
+     */
+    private $memoryLimit = null;
+    /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param string|null $parallelPort
      * @param string|null $parallelIdentifier
+     * @param string|null $memoryLimit
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = \Rector\ChangesReporting\Output\ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false, $memoryLimit = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;
@@ -76,6 +82,7 @@ final class Configuration
         $this->parallelPort = $parallelPort;
         $this->parallelIdentifier = $parallelIdentifier;
         $this->isParallel = $isParallel;
+        $this->memoryLimit = $memoryLimit;
     }
     public function isDryRun() : bool
     {
@@ -122,5 +129,9 @@ final class Configuration
     public function isParallel() : bool
     {
         return $this->isParallel;
+    }
+    public function getMemoryLimit() : ?string
+    {
+        return $this->memoryLimit;
     }
 }

@@ -8,6 +8,7 @@ use RectorPrefix20220125\Clue\React\NDJson\Encoder;
 use RectorPrefix20220125\React\EventLoop\StreamSelectLoop;
 use RectorPrefix20220125\React\Socket\ConnectionInterface;
 use RectorPrefix20220125\React\Socket\TcpConnector;
+use Rector\Core\Util\MemoryLimiter;
 use Rector\Parallel\WorkerRunner;
 use RectorPrefix20220125\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220125\Symfony\Component\Console\Output\OutputInterface;
@@ -28,9 +29,15 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
      * @var \Rector\Parallel\WorkerRunner
      */
     private $workerRunner;
-    public function __construct(\Rector\Parallel\WorkerRunner $workerRunner)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\MemoryLimiter
+     */
+    private $memoryLimiter;
+    public function __construct(\Rector\Parallel\WorkerRunner $workerRunner, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
     {
         $this->workerRunner = $workerRunner;
+        $this->memoryLimiter = $memoryLimiter;
         parent::__construct();
     }
     protected function configure() : void
@@ -42,6 +49,7 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
     protected function execute(\RectorPrefix20220125\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220125\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $configuration = $this->configurationFactory->createFromInput($input);
+        $this->memoryLimiter->adjust($configuration);
         $streamSelectLoop = new \RectorPrefix20220125\React\EventLoop\StreamSelectLoop();
         $parallelIdentifier = $configuration->getParallelIdentifier();
         $tcpConnector = new \RectorPrefix20220125\React\Socket\TcpConnector($streamSelectLoop);
