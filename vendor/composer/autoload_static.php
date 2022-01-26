@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0a1f5df9c18befc9312934b1e1f5eb8c
+class ComposerStaticInit4e65de1314d6f2c0bef87360875202fc
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2826,7 +2826,9 @@ class ComposerStaticInit0a1f5df9c18befc9312934b1e1f5eb8c
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClassStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ClassStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ClosureTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\FloatTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/FloatTypeMapper.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasMethodTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasMethodTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasOffsetTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasOffsetTypeMapper.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasPropertyTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasPropertyTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\IntegerTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/IntegerTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\IntersectionTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/IntersectionTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\IterableTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/IterableTypeMapper.php',
@@ -3864,9 +3866,9 @@ class ComposerStaticInit0a1f5df9c18befc9312934b1e1f5eb8c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0a1f5df9c18befc9312934b1e1f5eb8c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0a1f5df9c18befc9312934b1e1f5eb8c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0a1f5df9c18befc9312934b1e1f5eb8c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4e65de1314d6f2c0bef87360875202fc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4e65de1314d6f2c0bef87360875202fc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4e65de1314d6f2c0bef87360875202fc::$classMap;
 
         }, null, ClassLoader::class);
     }
