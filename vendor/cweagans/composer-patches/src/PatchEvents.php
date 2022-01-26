@@ -4,7 +4,7 @@
  * @file
  * Dispatch events when patches are applied.
  */
-namespace RectorPrefix20220125\cweagans\Composer;
+namespace RectorPrefix20220126\cweagans\Composer;
 
 class PatchEvents
 {

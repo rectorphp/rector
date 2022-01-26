@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220125\Symfony\Component\Config;
+namespace RectorPrefix20220126\Symfony\Component\Config;
 
-use RectorPrefix20220125\Symfony\Component\Config\Resource\SelfCheckingResourceChecker;
+use RectorPrefix20220126\Symfony\Component\Config\Resource\SelfCheckingResourceChecker;
 /**
  * ConfigCache caches arbitrary content in files on disk.
  *
@@ -21,7 +21,7 @@ use RectorPrefix20220125\Symfony\Component\Config\Resource\SelfCheckingResourceC
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class ConfigCache extends \RectorPrefix20220125\Symfony\Component\Config\ResourceCheckerConfigCache
+class ConfigCache extends \RectorPrefix20220126\Symfony\Component\Config\ResourceCheckerConfigCache
 {
     private $debug;
     /**
@@ -33,7 +33,7 @@ class ConfigCache extends \RectorPrefix20220125\Symfony\Component\Config\Resourc
         $this->debug = $debug;
         $checkers = [];
         if (\true === $this->debug) {
-            $checkers = [new \RectorPrefix20220125\Symfony\Component\Config\Resource\SelfCheckingResourceChecker()];
+            $checkers = [new \RectorPrefix20220126\Symfony\Component\Config\Resource\SelfCheckingResourceChecker()];
         }
         parent::__construct($file, $checkers);
     }

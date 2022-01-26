@@ -55,6 +55,13 @@ CODE_SAMPLE
      */
     public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
+        $parentClass = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
+        if (!$parentClass instanceof \PhpParser\Node\Stmt\Class_) {
+            return null;
+        }
+        if ($parentClass->isFinal()) {
+            return null;
+        }
         if ($node->isPrivate()) {
             return null;
         }

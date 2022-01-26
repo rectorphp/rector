@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220125;
+namespace RectorPrefix20220126;
 
 use PHPStan\Type\MixedType;
 use PHPStan\Type\VoidType;

@@ -13,7 +13,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
 use Ssch\TYPO3Rector\FileProcessor\Yaml\YamlIndentResolver;
-use RectorPrefix20220125\Symfony\Component\Yaml\Yaml;
+use RectorPrefix20220126\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Yaml\Form\FormYamlProcessorTest
  */
@@ -58,7 +58,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
         $this->currentFileProvider->setFile($file);
         $smartFileInfo = $file->getSmartFileInfo();
         $oldYamlContent = $smartFileInfo->getContents();
-        $yaml = \RectorPrefix20220125\Symfony\Component\Yaml\Yaml::parse($oldYamlContent);
+        $yaml = \RectorPrefix20220126\Symfony\Component\Yaml\Yaml::parse($oldYamlContent);
         if (!\is_array($yaml)) {
             return $systemErrorsAndFileDiffs;
         }
@@ -71,7 +71,7 @@ final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\Fil
             return $systemErrorsAndFileDiffs;
         }
         $spaceCount = $this->yamlIndentResolver->resolveIndentSpaceCount($oldYamlContent);
-        $newFileContent = \RectorPrefix20220125\Symfony\Component\Yaml\Yaml::dump($newYaml, 99, $spaceCount);
+        $newFileContent = \RectorPrefix20220126\Symfony\Component\Yaml\Yaml::dump($newYaml, 99, $spaceCount);
         $file->changeFileContent($newFileContent);
         $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldYamlContent, $newFileContent);
         $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = $fileDiff;
