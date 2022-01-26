@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration;
 
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
@@ -21,7 +22,7 @@ final class PhpParserTypeAnalyzer
         $this->staticTypeMapper = $staticTypeMapper;
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleSubtype
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\IntersectionType|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleSubtype
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleParentType
      */
     public function isCovariantSubtypeOf($possibleSubtype, $possibleParentType) : bool
@@ -43,7 +44,7 @@ final class PhpParserTypeAnalyzer
         return $parentType->isSuperTypeOf($subtypeType)->yes();
     }
     /**
-     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleSubtype
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\IntersectionType|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $possibleSubtype
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $possibleParentType
      */
     private function isUnionType($possibleSubtype, $possibleParentType) : bool

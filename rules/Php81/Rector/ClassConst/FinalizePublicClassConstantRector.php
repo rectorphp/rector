@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php81\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;

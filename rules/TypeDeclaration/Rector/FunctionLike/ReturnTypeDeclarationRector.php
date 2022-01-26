@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
@@ -203,7 +204,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $inferredReturnNode
+     * @param \PhpParser\Node\IntersectionType|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType $inferredReturnNode
      */
     private function addReturnType($functionLike, $inferredReturnNode) : void
     {

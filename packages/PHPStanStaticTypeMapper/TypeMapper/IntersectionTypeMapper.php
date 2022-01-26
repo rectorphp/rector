@@ -78,7 +78,7 @@ final class IntersectionTypeMapper implements \Rector\PHPStanStaticTypeMapper\Co
                 throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $resolvedTypeName = (string) $resolvedType;
-            if ($resolvedTypeName === 'string') {
+            if (\in_array($resolvedTypeName, ['string', 'object'], \true)) {
                 return $resolvedType;
             }
             $intersectionedTypeNodes[] = $resolvedType;
