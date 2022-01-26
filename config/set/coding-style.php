@@ -6,6 +6,7 @@ use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
+use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector;
 use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
@@ -68,4 +69,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PostIncDecToPreIncDecRector::class);
     $services->set(UnSpreadOperatorRector::class);
     $services->set(NewlineAfterStatementRector::class);
+    $services->set(RemoveFinalFromConstRector::class);
 };
