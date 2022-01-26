@@ -612,3 +612,6 @@ parameters:
         -
             path: src/Bootstrap/ExtensionConfigResolver.php
             message: '#Offset (.*?)includes(.*?) always exists and is not nullable#'
+
+        # mapper re-use
+        - '#Parameter \#1 \$type of method Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper\:\:mapToPhpParserNode\(\) expects PHPStan\\Type\\ObjectWithoutClassType, PHPStan\\Type\\Accessory\\Has(Property|Method)Type given#'
