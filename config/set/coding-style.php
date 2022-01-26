@@ -7,6 +7,7 @@ use Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\Class_\AddArrayDefaultToArrayPropertyRector;
+use Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector;
 use Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector;
 use Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector;
 use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
@@ -62,4 +63,5 @@ return static function (\Symfony\Component\DependencyInjection\Loader\Configurat
     $services->set(\Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector::class);
     $services->set(\Rector\CodingStyle\Rector\ClassMethod\UnSpreadOperatorRector::class);
     $services->set(\Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector::class);
+    $services->set(\Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector::class);
 };

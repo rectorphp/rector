@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v5\ExtbaseCommandControllerToSymfonyCommand;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -10,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -68,7 +70,9 @@ CODE_SAMPLE
             }, \true);
         });
         foreach ($commands as $commandName => $command) {
-            $node->expr->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray(['class' => $this->nodeFactory->createClassConstReference($command)]), new \PhpParser\Node\Scalar\String_($commandName));
+            $commandArray = new \PhpParser\Node\Expr\Array_();
+            $commandArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createClassConstReference($command), new \PhpParser\Node\Scalar\String_('class'), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
+            $node->expr->items[] = new \PhpParser\Node\Expr\ArrayItem($commandArray, new \PhpParser\Node\Scalar\String_($commandName), \false, [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]]);
         }
         return $node;
     }

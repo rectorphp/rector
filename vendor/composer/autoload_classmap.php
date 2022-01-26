@@ -1556,6 +1556,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\Assign\\PHPStormVarAnnotationRector' => $baseDir . '/rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php',
     'Rector\\CodingStyle\\Rector\\Assign\\SplitDoubleAssignRector' => $baseDir . '/rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php',
     'Rector\\CodingStyle\\Rector\\Catch_\\CatchExceptionNameMatchingTypeRector' => $baseDir . '/rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php',
+    'Rector\\CodingStyle\\Rector\\ClassConst\\RemoveFinalFromConstRector' => $baseDir . '/rules/CodingStyle/Rector/ClassConst/RemoveFinalFromConstRector.php',
     'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedConstantsAndPropertiesRector' => $baseDir . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedConstantsAndPropertiesRector.php',
     'Rector\\CodingStyle\\Rector\\ClassConst\\VarConstantCommentRector' => $baseDir . '/rules/CodingStyle/Rector/ClassConst/VarConstantCommentRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',

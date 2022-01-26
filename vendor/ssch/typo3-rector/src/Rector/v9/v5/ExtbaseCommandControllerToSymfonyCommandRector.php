@@ -8,6 +8,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
@@ -31,6 +32,10 @@ use RectorPrefix20220126\Symplify\SmartFileSystem\SmartFileSystem;
  */
 final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\Rector\AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const REMOVE_EMPTY_LINES = '/^[ \\t]*[\\r\\n]+/m';
     /**
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
@@ -232,8 +237,7 @@ CODE_SAMPLE
             $commandsSmartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($commandsFilePath);
             $nodes = $this->rectorParser->parseFile($commandsSmartFileInfo);
         } else {
-            $defaultsCommandsTemplate = $this->templateFinder->getCommandsConfiguration();
-            $nodes = $this->rectorParser->parseFile($defaultsCommandsTemplate);
+            $nodes = [new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray([]))];
         }
         $this->decorateNamesToFullyQualified($nodes);
         $nodeTraverser = new \PhpParser\NodeTraverser();
@@ -241,6 +245,7 @@ CODE_SAMPLE
         $nodeTraverser->addVisitor($this->addCommandsToReturnRector);
         $nodes = $nodeTraverser->traverse($nodes);
         $changedCommandsContent = $this->betterStandardPrinter->prettyPrintFile($nodes);
+        $changedCommandsContent = \RectorPrefix20220126\Nette\Utils\Strings::replace($changedCommandsContent, self::REMOVE_EMPTY_LINES, '');
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($commandsFilePath, $changedCommandsContent));
     }
     /**

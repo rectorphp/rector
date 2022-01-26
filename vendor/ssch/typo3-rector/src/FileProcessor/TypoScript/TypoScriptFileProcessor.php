@@ -10,6 +10,7 @@ use RectorPrefix20220126\Helmich\TypoScriptParser\Parser\Printer\PrettyPrinterCo
 use Helmich\TypoScriptParser\Parser\Traverser\Traverser;
 use RectorPrefix20220126\Helmich\TypoScriptParser\Parser\Traverser\Visitor;
 use RectorPrefix20220126\Helmich\TypoScriptParser\Tokenizer\TokenizerException;
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -43,6 +44,10 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $allowedFileExtensions = ['typoscript', 'ts', 'txt'];
     /**
+     * @var FileDiff[]
+     */
+    private $fileDiffs = [];
+    /**
      * @var \Helmich\TypoScriptParser\Parser\ParserInterface
      */
     private $typoscriptParser;
@@ -71,6 +76,10 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      */
     private $rectorOutputStyle;
     /**
+     * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
+     */
+    private $fileDiffFactory;
+    /**
      * @var TypoScriptRectorInterface[]
      */
     private $typoScriptRectors = [];
@@ -82,7 +91,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
      * @param TypoScriptRectorInterface[] $typoScriptRectors
      * @param TypoScriptPostRectorInterface[] $typoScriptPostRectors
      */
-    public function __construct(\RectorPrefix20220126\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20220126\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20220126\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, array $typoScriptRectors = [], array $typoScriptPostRectors = [])
+    public function __construct(\RectorPrefix20220126\Helmich\TypoScriptParser\Parser\ParserInterface $typoscriptParser, \RectorPrefix20220126\Symfony\Component\Console\Output\BufferedOutput $output, \RectorPrefix20220126\Helmich\TypoScriptParser\Parser\Printer\ASTPrinterInterface $typoscriptPrinter, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\FileFormatter\EditorConfig\EditorConfigParser $editorConfigParser, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Console\Output\RectorOutputStyle $rectorOutputStyle, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, array $typoScriptRectors = [], array $typoScriptPostRectors = [])
     {
         $this->typoscriptParser = $typoscriptParser;
         $this->output = $output;
@@ -91,6 +100,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
         $this->editorConfigParser = $editorConfigParser;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->fileDiffFactory = $fileDiffFactory;
         $this->typoScriptRectors = $typoScriptRectors;
         $this->typoScriptPostRectors = $typoScriptPostRectors;
     }
@@ -109,8 +119,7 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
     {
         $this->processFile($file);
         $this->convertTypoScriptToPhpFiles();
-        // to keep parent contract with return values
-        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
+        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => $this->fileDiffs];
     }
     /**
      * @return string[]
@@ -161,7 +170,9 @@ final class TypoScriptFileProcessor implements \Ssch\TYPO3Rector\Contract\Proces
             $this->typoscriptPrinter->printStatements($originalStatements, $this->output);
             $newTypoScriptContent = $this->applyTypoScriptPostRectors($this->output->fetch());
             $typoScriptContent = \rtrim($newTypoScriptContent) . $editorConfiguration->getNewLine();
+            $oldFileContents = $file->getFileContent();
             $file->changeFileContent($typoScriptContent);
+            $this->fileDiffs[] = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $file->getFileContent());
         } catch (\RectorPrefix20220126\Helmich\TypoScriptParser\Tokenizer\TokenizerException $exception) {
             return;
         } catch (\RectorPrefix20220126\Helmich\TypoScriptParser\Parser\ParseError $exception) {

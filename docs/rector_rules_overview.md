@@ -1,4 +1,4 @@
-# 519 Rules Overview
+# 520 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodeQuality](#codequality) (70)
 
-- [CodingStyle](#codingstyle) (34)
+- [CodingStyle](#codingstyle) (35)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2248,6 +2248,22 @@ Non-magic PHP object methods cannot start with "__"
 -        $anotherObject->__getSurname();
 +        $anotherObject->getSurname();
      }
+ }
+```
+
+<br>
+
+### RemoveFinalFromConstRector
+
+Remove final from constants in classes defined as final
+
+- class: [`Rector\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector`](../rules/CodingStyle/Rector/ClassConst/RemoveFinalFromConstRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    final public const NAME = 'value';
++    public const NAME = 'value';
  }
 ```
 
