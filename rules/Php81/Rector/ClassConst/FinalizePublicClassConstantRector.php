@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\Php81\Rector\ClassConst;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -60,9 +61,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $parentClass = $this->betterNodeFinder->findParentType($node, Node\Stmt\Class_::class);
+        $parentClass = $this->betterNodeFinder->findParentType($node, Class_::class);
 
-        if (! $parentClass instanceof Node\Stmt\Class_) {
+        if (! $parentClass instanceof Class_) {
             return null;
         }
 

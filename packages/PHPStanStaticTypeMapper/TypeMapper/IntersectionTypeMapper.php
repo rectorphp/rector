@@ -85,7 +85,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
             }
 
             $resolvedTypeName = (string) $resolvedType;
-            if ($resolvedTypeName === 'string') {
+            if (in_array($resolvedTypeName, ['string', 'object'], true)) {
                 return $resolvedType;
             }
 
